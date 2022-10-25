@@ -35,7 +35,8 @@ public class Lexer {
     }
 
     private static Token HandleNextToken(string line, int lineIndex) {
-        string nextCharacters = line.Substring(lineIndex, 2);
+        int charactersToFetch = Math.Min(line.Length - lineIndex, 2);
+        string nextCharacters = line.Substring(lineIndex, charactersToFetch);
 
         if (Consts.Whitespace.Contains(nextCharacters[0])) {
             return new Token(Consts.TokenTypes.Whitespace, "");
@@ -43,8 +44,8 @@ public class Lexer {
             return HandleNumber(line, lineIndex);
         } else if (Consts.Quotes.Contains(nextCharacters[0])) {
             return HandleString(line, lineIndex);
-            // } else if (Consts.Separators.Contains(nextCharacters[0])) {
-            //     
+        } else if (Consts.Separators.Contains(nextCharacters[0])) {
+            return new Token(Consts.TokenTypes.Separator, nextCharacters[0].ToString());
             // } else if (Consts.StartingIdentifierCharacters.Contains(nextCharacters[0])) {
             //     
             // } else if (Consts.Operators.Contains(nextCharacters)) {
