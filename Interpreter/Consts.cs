@@ -14,8 +14,9 @@ public class Consts {
 		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
 		'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
 	};
-	public static char[] StartingIdentifierCharacters = Letters.Concat(new char[] { '_' }).ToArray();
-	
+	public static char[] StartingWordCharacters = Letters.Concat(new char[] { '_' }).ToArray();
+	public static char[] WordCharacters = StartingWordCharacters.Concat(Digits).ToArray();
+
 	public static string[] Keywords = new string[] {
 		"var", "if", "else", "while", "function", "return", "import", "export", "class", "extends", 
 		"Btl", "constructor"

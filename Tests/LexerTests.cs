@@ -53,4 +53,31 @@ public class LexerTests {
         };
         Assertions.AssertTokens(tokens, expectedTokens);
     }
+    
+    [Test]
+    public void Keywords() {
+        var tokens = Lexer.Run("constructor");
+        var expectedTokens = new List<Token>() {
+            new Token(Consts.TokenTypes.Keyword, "constructor")
+        };
+        Assertions.AssertTokens(tokens, expectedTokens);
+    }
+    
+    [Test]
+    public void Booleans() {
+        var tokens = Lexer.Run("true");
+        var expectedTokens = new List<Token>() {
+            new Token(Consts.TokenTypes.Boolean, "true")
+        };
+        Assertions.AssertTokens(tokens, expectedTokens);
+    }
+    
+    [Test]
+    public void Identifiers() {
+        var tokens = Lexer.Run("my_identifier1");
+        var expectedTokens = new List<Token>() {
+            new Token(Consts.TokenTypes.Identifier, "my_identifier1")
+        };
+        Assertions.AssertTokens(tokens, expectedTokens);
+    }
 }
