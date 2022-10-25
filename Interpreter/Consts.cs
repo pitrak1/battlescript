@@ -2,7 +2,7 @@ namespace BattleScript;
 
 using System.Collections.Generic;
 
-class Consts {
+public class Consts {
 	public static char[] Quotes = new char[] {'\'', '\"'};
 	public static char[] Whitespace = new char[] {'\t', '\n', ' '};
 	public static char[] Digits = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
