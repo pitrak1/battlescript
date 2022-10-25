@@ -39,13 +39,13 @@ public class Lexer {
 
         if (Consts.Whitespace.Contains(nextCharacters[0])) {
             return new Token(Consts.TokenTypes.Whitespace, "");
-        // } else if (Consts.Digits.Contains(nextCharacters[0])) {
-        //
+        } else if (Consts.Digits.Contains(nextCharacters[0])) {
+            return HandleNumber(line, lineIndex);
         } else if (Consts.Quotes.Contains(nextCharacters[0])) {
             return HandleString(line, lineIndex);
             // } else if (Consts.Separators.Contains(nextCharacters[0])) {
             //     
-            // } else if (Consts.Letters.Contains(nextCharacters[0]) || nextCharacters[0] == '_') {
+            // } else if (Consts.StartingIdentifierCharacters.Contains(nextCharacters[0])) {
             //     
             // } else if (Consts.Operators.Contains(nextCharacters)) {
             //     
@@ -61,11 +61,16 @@ public class Lexer {
             throw new SystemException("Invalid character found");
         }
     }
+    
+    private static Token HandleNumber(string line, int lineIndex) {
+        string result = LexerUtilities.GetLineWhileCharactersInCollection(line, lineIndex, Consts.NumberCharacters);
+        return new Token(Consts.TokenTypes.Number, result);
+    }
 
     private static Token HandleString(string line, int lineIndex) {
         char startingQuote = line[lineIndex];
         lineIndex++;
-        string result = LexerUtilities.GetLineUntilCharacters(line, lineIndex, new char[] {startingQuote});
+        string result = LexerUtilities.GetLineUntilCharacterInCollection(line, lineIndex, new char[] {startingQuote});
         string finalString = startingQuote + result + startingQuote;
         return new Token(Consts.TokenTypes.String, finalString);
     }
