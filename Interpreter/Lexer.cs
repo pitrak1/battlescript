@@ -48,16 +48,16 @@ public class Lexer {
             return new Token(Consts.TokenTypes.Separator, nextCharacters[0].ToString());
         } else if (Consts.StartingWordCharacters.Contains(nextCharacters[0])) {
             return HandleWord(line, lineIndex);
-            // } else if (Consts.Operators.Contains(nextCharacters)) {
-            //     
-            // } else if (Consts.Operators.Contains(nextCharacters[0].ToString())) {
-            //     
-            // } else if (nextCharacters[0] == '=') {
-            //     
-            // } else if (nextCharacters[0] == ';') {
-            //     
-            // } else if (nextCharacters == "//") {
-
+        } else if (Consts.Operators.Contains(nextCharacters)) {
+            return new Token(Consts.TokenTypes.Operator, nextCharacters);
+        } else if (Consts.Operators.Contains(nextCharacters[0].ToString())) {
+            return new Token(Consts.TokenTypes.Operator, nextCharacters[0].ToString());
+        } else if (nextCharacters[0] == '=') {
+            return new Token(Consts.TokenTypes.Assignment, nextCharacters[0].ToString());
+        } else if (nextCharacters[0] == ';') {
+            return new Token(Consts.TokenTypes.Semicolon, nextCharacters[0].ToString());
+        } else if (nextCharacters == "//") {
+            return new Token(Consts.TokenTypes.Comment, "");
         } else {
             throw new SystemException("Invalid character found");
         }

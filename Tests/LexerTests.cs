@@ -80,4 +80,38 @@ public class LexerTests {
         };
         Assertions.AssertTokens(tokens, expectedTokens);
     }
+    
+    [Test]
+    public void SingleCharacterOperators() {
+        var tokens = Lexer.Run("+");
+        var expectedTokens = new List<Token>() {
+            new Token(Consts.TokenTypes.Operator, "+")
+        };
+        Assertions.AssertTokens(tokens, expectedTokens);
+    }
+    
+    [Test]
+    public void MultipleCharacterOperators() {
+        var tokens = Lexer.Run("==");
+        var expectedTokens = new List<Token>() {
+            new Token(Consts.TokenTypes.Operator, "==")
+        };
+        Assertions.AssertTokens(tokens, expectedTokens);
+    }
+    
+    [Test]
+    public void Assignments() {
+        var tokens = Lexer.Run("=");
+        var expectedTokens = new List<Token>() {
+            new Token(Consts.TokenTypes.Assignment, "=")
+        };
+        Assertions.AssertTokens(tokens, expectedTokens);
+    }
+    
+    [Test]
+    public void Comments() {
+        var tokens = Lexer.Run("//");
+        var expectedTokens = new List<Token>() {};
+        Assertions.AssertTokens(tokens, expectedTokens);
+    }
 }
