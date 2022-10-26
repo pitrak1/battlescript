@@ -2,10 +2,7 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7d5ff51a_002Db729_002D43e7_002Da946_002Dd1357f939e86/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Tests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;NUnit3x::88ABC911-A84B-4BAB-A82A-7898FB16E1C5::net6.0::BattleScript.Tests.LexerTests&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::88ABC911-A84B-4BAB-A82A-7898FB16E1C5::net6.0::BattleScript.Tests.ParserTests&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=80775e15_002Da59f_002D4d9d_002Dbb64_002Dfe4b1e14b04d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Tests #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;NUnit3x::88ABC911-A84B-4BAB-A82A-7898FB16E1C5::net6.0::BattleScript.Tests&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
-&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
+	</wpf:ResourceDictionary>

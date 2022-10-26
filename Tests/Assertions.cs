@@ -8,4 +8,12 @@ public class Assertions {
             Assert.That(expectedTokens[i] == tokens[i]);
         }
     }
+
+    public static void AssertInstructions(List<Instruction> instructions, List<Instruction> expectedInstructions) {
+        for (int i = 0; i < expectedInstructions.Count; i++) {
+            Console.WriteLine(expectedInstructions[i].Type);
+            Console.WriteLine(instructions[i].Type);
+            Assert.That(expectedInstructions[i] == instructions[i]);
+        }
+    }
 }

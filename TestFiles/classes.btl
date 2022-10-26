@@ -1,0 +1,13 @@
+var Class1 = class {
+	var a = 5;
+	var b = 6;
+
+	var my_function = function() {
+		return 9;
+	}
+}
+
+var x = Class1();
+var y = x.b;
+var z = x.my_function();
+x.b = 10;

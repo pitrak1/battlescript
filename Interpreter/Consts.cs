@@ -25,16 +25,16 @@ public class Consts {
 	public static string[] Operators = new string[] {"==", "<", ">", "+", "*"};
 	public static string[] Booleans = new string[] {"true", "false"};
 	
-	public static char[] OpeningSeparators = new char[] {'(', '{', '['};
-	public static char[] ClosingSeparators = new char[] {')', '}', ']'};
-	public static char[] MatchedSeparators = new char[] {'(', ')', '{', '}', '[', ']'};
-	public static Dictionary<char, char> MatchingSeparatorsMap = new Dictionary<char, char>() {
-		{'(', ')'},
-		{'{', '}'},
-		{'[', ']'},
-		{')', '('},
-		{'}', '{'},
-		{']', '['}
+	public static string[] OpeningSeparators = new string[] {"(", "{", "["};
+	public static string[] ClosingSeparators = new string[] {")", "}", "]"};
+	public static string[] MatchedSeparators = new string[] {"(", ")", "{", "}", "[", "]"};
+	public static Dictionary<string, string> MatchingSeparatorsMap = new Dictionary<string, string>() {
+		{"(", ")"},
+		{"{", "}"},
+		{"[", "]"},
+		{")", "("},
+		{"}", "{"},
+		{"]", "["}
 	};
 	
 	public enum OutputTypes {Error, Log};

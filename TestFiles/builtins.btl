@@ -1,0 +1,12 @@
+Btl.get_tile_info(4, 6);
+Btl.print('hello');
+Btl.highlight(5, 5);
+Btl.get_actor_by_name('Paladin Boy');
+Btl.get_actor_by_grid_position(3, 4);
+Btl.get_actors();
+Btl.get_player_actors();
+Btl.get_enemy_actors();
+Btl.get_shortest_path(3, 4, 5, 6);
+Btl.move_actor_to_adjacent_tile('Paladin Boy', 2, 4);
+Btl.perform_ability('Paladin Boy', 'Swing', 'Warrior Girl');
+Btl.get_actor_health('Warrior Girl');
