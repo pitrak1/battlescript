@@ -31,6 +31,9 @@ public class Parser {
         else if (currentTokenSet[0].Type == Consts.TokenTypes.Keyword) {
             return HandleKeyword(currentTokenSet);
         } 
+        else if (currentTokenSet[0].Type == Consts.TokenTypes.Identifier) {
+            return HandleIdentifier(currentTokenSet);
+        }
         else if (currentTokenSet[0].Type == Consts.TokenTypes.Number) {
             return HandleNumber(currentTokenSet);
         } 
@@ -86,6 +89,11 @@ public class Parser {
         Debug.Assert(tokens[1].Type == Consts.TokenTypes.Identifier);
 
         return new Instruction().SetVariableValues(Consts.InstructionTypes.Declaration, tokens[1].Value)
+            .SetDebugValues(tokens[0].Line, tokens[0].Column);
+    }
+
+    private static Instruction HandleIdentifier(List<Token> tokens) {
+        return new Instruction().SetVariableValues(Consts.InstructionTypes.Variable, tokens[0].Value)
             .SetDebugValues(tokens[0].Line, tokens[0].Column);
     }
 

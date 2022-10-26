@@ -1,0 +1,57 @@
+[
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Declaration",
+      "value": "x"
+    },
+    "right": {
+      "type": "Number",
+      "value": 15
+    }
+  },
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Declaration",
+      "value": "y"
+    },
+    "right": {
+      "type": "String",
+      "value": "1234"
+    }
+  },
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Declaration",
+      "value": "z"
+    },
+    "right": {
+      "type": "String",
+      "value": "2345"
+    }
+  },
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Declaration",
+      "value": "a"
+    },
+    "right": {
+      "type": "Boolean",
+      "value": true
+    }
+  },
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Declaration",
+      "value": "b"
+    },
+    "right": {
+      "type": "Variable",
+      "value": "a"
+    }
+  }
+]
