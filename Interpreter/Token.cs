@@ -17,12 +17,4 @@ public class Token {
         Line = line;
         Column = column;
     }
-    
-    public static bool operator ==(Token a, Token b) {
-        return a.Type == b.Type && a.Value == b.Value;
-    }
-
-    public static bool operator !=(Token a, Token b) {
-        return a.Type != b.Type || a.Value != b.Value;
-    }
 }
