@@ -11,8 +11,112 @@
         {
           "type": "Number",
           "integerValue": 1
+        },
+        {
+          "type": "Operation",
+          "stringValue": "+",
+          "left": {
+            "type": "Number",
+            "integerValue": 1
+          },
+          "right": {
+            "type": "Number",
+            "integerValue": 1
+          }
+        },
+        {
+          "type": "Number",
+          "integerValue": 3
         }
       ]
     }
   },
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Declaration",
+      "stringValue": "y"
+    },
+    "right": {
+      "type": "SquareBraces",
+      "instructionListValue": [
+        {
+          "type": "String",
+          "stringValue": "1234"
+        },
+        {
+          "type": "String",
+          "stringValue": "2345"
+        }
+      ]
+    }
+  },
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Declaration",
+      "stringValue": "z"
+    },
+    "right": {
+      "type": "Variable",
+      "stringValue": "x",
+      "next": {
+        "type": "SquareBraces",
+        "instructionListValue": [
+          {
+            "type": "Operation",
+            "stringValue": "+",
+            "left": {
+              "type": "Number",
+              "integerValue": 0
+            },
+            "right": {
+              "type": "Number",
+              "integerValue": 2
+            }
+          },
+        ]
+      },
+    }
+  },
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Declaration",
+      "stringValue": "a"
+    },
+    "right": {
+      "type": "Variable",
+      "stringValue": "x",
+      "next": {
+        "type": "SquareBraces",
+        "instructionListValue": [
+          {
+            "type": "Number",
+            "integerValue": 1
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Declaration",
+      "stringValue": "b"
+    },
+    "right": {
+      "type": "SquareBraces",
+      "instructionListValue": [
+        {
+          "type": "Variable",
+          "stringValue": "z"
+        },
+        {
+          "type": "Variable",
+          "stringValue": "a"
+        }
+      ]
+    }
+  }
 ]

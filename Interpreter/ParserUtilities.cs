@@ -27,7 +27,7 @@ public class ParserUtilities {
                 separatorStack.Add(currentValue);
             } else if (separatorStack.Count > 0 && separatorStack[^1] == matchingSeparator) {
                 separatorStack.RemoveAt(separatorStack.Count - 1);
-            } else {
+            } else if (tokens[i].Type == Consts.TokenTypes.Operator && separatorStack.Count == 0) {
                 int currentOperatorPriority = Array.FindIndex(Consts.Operators, element => element == currentValue);
                 if (currentOperatorPriority != -1 && currentOperatorPriority < lowestOperatorPriority) {
                     lowestOperatorPriority = currentOperatorPriority;

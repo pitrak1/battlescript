@@ -42,6 +42,13 @@ public class ParserUtilitiesTests {
         }
         
         [Test]
+        public void SkipsTokensInSeparatorBlocks() {
+            var tokens = Lexer.Run("var x = 1 + x[1 + 2];");
+            int index = ParserUtilities.GetMathematicalOperatorIndex(tokens);
+            Assert.That(index, Is.EqualTo(4));
+        }
+        
+        [Test]
         public void DoesNotExist() {
             var tokens = Lexer.Run("var x = 12;");
             int index = ParserUtilities.GetMathematicalOperatorIndex(tokens);

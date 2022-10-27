@@ -146,9 +146,15 @@ public class Parser {
     }
 
     private static Instruction HandleIdentifier(List<Token> tokens) {
+        Instruction next = null;
+        if (tokens.Count > 1) {
+            next = ParseTokenSet(tokens.GetRange(1, tokens.Count - 1));
+        }
+        
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.Variable;
         instruction.StringValue = tokens[0].Value;
+        instruction.Next = next;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
