@@ -39,6 +39,18 @@ public class ParserTests {
         
         Assertions.AssertInstructions(instructions, expected);
     }
+    
+    [Test]
+    public void Dictionaries() {
+        string contents = LoadFile("dictionaries.btl");
+        var tokens = Lexer.Run(contents);
+        var instructions = Parser.Run(tokens);
+    
+        contents = LoadFile("dictionaries_parser.json");
+        var expected = JsonConvert.DeserializeObject<List<Instruction>>(contents);
+        
+        Assertions.AssertInstructions(instructions, expected);
+    }
 
     private string LoadFile(string filename) {
         return File.ReadAllText($"/Users/nickpitrak/Desktop/BattleScript/TestFiles/{filename}");

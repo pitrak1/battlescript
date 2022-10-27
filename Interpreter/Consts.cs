@@ -98,11 +98,10 @@ public class Consts {
 		Parens,					// 14
 		Return,					// 15
 		Class,					// 16
-		Member,					// 17
-		Else,					// 18
-		Constructor,			// 19
-		Self, 					// 20
-		Super					// 21
+		Else,					// 17
+		Constructor,			// 18
+		Self, 					// 19
+		Super					// 20
 	};
 
 	public static string[] InstructionTypeStrings = new string[] {

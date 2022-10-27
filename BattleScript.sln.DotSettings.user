@@ -1,33 +1,19 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7d5ff51a_002Db729_002D43e7_002Da946_002Dd1357f939e86/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Tests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;NUnit3x::88ABC911-A84B-4BAB-A82A-7898FB16E1C5::net6.0::BattleScript.Tests.LexerTests&lt;/TestId&gt;
-    &lt;TestId&gt;NUnit3x::88ABC911-A84B-4BAB-A82A-7898FB16E1C5::net6.0::BattleScript.Tests.ParserTests&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8c69a0e5_002D898d_002D4ceb_002D9aff_002Ddd144988d83c/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Solution /&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=afdf4a0b_002D4e23_002D4908_002Db69e_002D84746b9dd094/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="LexerTests #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;NUnit3x::88ABC911-A84B-4BAB-A82A-7898FB16E1C5::net6.0::BattleScript.Tests.LexerTests&lt;/TestId&gt;
-    &lt;TestId&gt;NUnit3x::88ABC911-A84B-4BAB-A82A-7898FB16E1C5::net6.0::BattleScript.Tests.ParserTests&lt;/TestId&gt;
-    &lt;TestId&gt;NUnit3x::88ABC911-A84B-4BAB-A82A-7898FB16E1C5::net6.0::BattleScript.Tests.ParserUtilitiesTests+GetAssignmentOperatorIndexTests&lt;/TestId&gt;
-    &lt;TestId&gt;NUnit3x::88ABC911-A84B-4BAB-A82A-7898FB16E1C5::net6.0::BattleScript.Tests.ParserUtilitiesTests+GetMathematicalOperatorIndexTests&lt;/TestId&gt;
-    &lt;TestId&gt;NUnit3x::88ABC911-A84B-4BAB-A82A-7898FB16E1C5::net6.0::BattleScript.Tests.ParserUtilitiesTests+ParseUntilMatchingSeparator&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
-&lt;/SessionState&gt;</s:String>
+	
+	
+	
+	
+	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b0005c28_002D7d2a_002D4578_002Dbc30_002D65e088500964/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="LexerTests #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;NUnit3x::88ABC911-A84B-4BAB-A82A-7898FB16E1C5::net6.0::BattleScript.Tests.LexerTests&lt;/TestId&gt;
     &lt;TestId&gt;NUnit3x::88ABC911-A84B-4BAB-A82A-7898FB16E1C5::net6.0::BattleScript.Tests.ParserTests&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c3308ed1_002D7a8a_002D4705_002Db512_002D1cb6fd364dcf/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="LexerTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;NUnit3x::88ABC911-A84B-4BAB-A82A-7898FB16E1C5::net6.0::BattleScript.Tests.LexerTests&lt;/TestId&gt;
-    &lt;TestId&gt;NUnit3x::88ABC911-A84B-4BAB-A82A-7898FB16E1C5::net6.0::BattleScript.Tests.ParserTests&lt;/TestId&gt;
-    &lt;TestId&gt;NUnit3x::88ABC911-A84B-4BAB-A82A-7898FB16E1C5::net6.0::BattleScript.Tests.ParserUtilitiesTests+GetAssignmentOperatorIndexTests&lt;/TestId&gt;
-    &lt;TestId&gt;NUnit3x::88ABC911-A84B-4BAB-A82A-7898FB16E1C5::net6.0::BattleScript.Tests.ParserUtilitiesTests+GetMathematicalOperatorIndexTests&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
-&lt;/SessionState&gt;</s:String>
+	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f8601fc1_002D45e2_002D42f9_002D81ab_002D35bcbc0cfa41/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="LexerTests #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;NUnit3x::88ABC911-A84B-4BAB-A82A-7898FB16E1C5::net6.0::BattleScript.Tests.LexerTests&lt;/TestId&gt;

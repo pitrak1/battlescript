@@ -40,6 +40,10 @@ public class Assertions {
         path.Add("right");
         AssertInstruction(instruction.Right, expected.Right, path);
         path.RemoveAt(path.Count - 1);
+        
+        path.Add("next");
+        AssertInstruction(instruction.Next, expected.Next, path);
+        path.RemoveAt(path.Count - 1);
 
         Assert.That(instruction.IntegerValue, Is.EqualTo(expected.IntegerValue), GetErrorString("IntegerValue", expected.IntegerValue, instruction.IntegerValue, path));
         Assert.That(instruction.StringValue, Is.EqualTo(expected.StringValue), GetErrorString("StringValue", expected.StringValue, instruction.StringValue, path));

@@ -1,0 +1,166 @@
+[
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Declaration",
+      "stringValue": "x"
+    },
+    "right": {
+      "type": "Dictionary",
+      "instructionListValue": [
+        {
+          "type": "Number",
+          "integerValue": 1
+        },
+        {
+          "type": "String",
+          "stringValue": "asdf"
+        },
+        {
+          "type": "String",
+          "stringValue": "qwer"
+        },
+        {
+          "type": "Operation",
+          "stringValue": "+",
+          "left": {
+            "type": "Number",
+            "integerValue": 3
+          },
+          "right": {
+            "type": "Number",
+            "integerValue": 2
+          }
+        }
+      ]
+    }
+  },
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Declaration",
+      "stringValue": "y"
+    },
+    "right": {
+      "type": "Variable",
+      "stringValue": "x",
+      "next": {
+        "type": "SquareBraces",
+        "instructionListValue": [
+          {
+            "type": "String",
+            "stringValue": "qwer"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Declaration",
+      "stringValue": "z"
+    },
+    "right": {
+      "type": "Variable",
+      "stringValue": "x",
+      "next": {
+        "type": "SquareBraces",
+        "instructionListValue": [
+          {
+            "type": "String",
+            "stringValue": "qwer"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Declaration",
+      "stringValue": "a"
+    },
+    "right": {
+      "type": "Dictionary",
+      "instructionListValue": [
+        {
+          "type": "Number",
+          "integerValue": 5
+        },
+        {
+          "type": "Operation",
+          "stringValue": "+",
+          "left": {
+            "type": "Number",
+            "integerValue": 4
+          },
+          "right": {
+            "type": "Number",
+            "integerValue": 5
+          }
+        }
+      ]
+    }
+  },
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Declaration",
+      "stringValue": "b"
+    },
+    "right": {
+      "type": "Variable",
+      "stringValue": "a",
+      "next": {
+        "type": "SquareBraces",
+        "instructionListValue": [
+          {
+            "type": "Variable",
+            "stringValue": "y"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Variable",
+      "stringValue": "x",
+      "next": {
+        "type": "SquareBraces",
+        "instructionListValue": [
+          {
+            "type": "Number",
+            "integerValue": 1
+          }
+        ]
+      }
+    },
+    "right": {
+      "type": "String",
+      "stringValue": "sdfg"
+    }
+  },
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Variable",
+      "stringValue": "a",
+      "next": {
+        "type": "SquareBraces",
+        "instructionListValue": [
+          {
+            "type": "Variable",
+            "stringValue": "y"
+          }
+        ]
+      }
+    },
+    "right": {
+      "type": "Number",
+      "integerValue": 10
+    }
+  }
+]

@@ -68,11 +68,15 @@ public class Parser {
     }
 
     private static Instruction HandleSeparator(List<Token> tokens) {
-        if (tokens[0].Value == "[") {
-            return HandleSquareBraces(tokens);
-        }
-        else {
-            throw new SystemException("Invalid separator found");
+        switch (tokens[0].Value) {
+            case "[":
+                return HandleSquareBraces(tokens);
+            case "{":
+                return HandleCurlyBraces(tokens);
+            case ".":
+                return HandleMember(tokens);
+            default:
+                throw new SystemException("Invalid separator found");
         }
     }
     
@@ -85,6 +89,38 @@ public class Parser {
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.SquareBraces;
         instruction.InstructionListValue = values;
+        instruction.Line = tokens[0].Line;
+        instruction.Column = tokens[0].Column;
+        return instruction;
+    }
+
+    private static Instruction HandleCurlyBraces(List<Token> tokens) {
+        List<List<Token>> entries = ParserUtilities.ParseUntilMatchingSeparator(tokens, new List<string>() {",", ":"});
+        Debug.Assert(entries.Count % 2 == 0);
+        
+        List<Instruction> values = new List<Instruction>();
+        foreach (List<Token> entry in entries) {
+            values.Add(ParseTokenSet(entry));
+        }
+        
+        Instruction instruction = new Instruction();
+        instruction.Type = Consts.InstructionTypes.Dictionary;
+        instruction.InstructionListValue = values;
+        instruction.Line = tokens[0].Line;
+        instruction.Column = tokens[0].Column;
+        return instruction;
+    }
+
+    private static Instruction HandleMember(List<Token> tokens) {
+        Instruction property = new Instruction();
+        property.Type = Consts.InstructionTypes.String;
+        property.StringValue = tokens[1].Value;
+        property.Column = tokens[1].Column;
+        property.Line = tokens[1].Line;
+
+        Instruction instruction = new Instruction();
+        instruction.Type = Consts.InstructionTypes.SquareBraces;
+        instruction.InstructionListValue = new List<Instruction>() {property};
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
