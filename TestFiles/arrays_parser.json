@@ -118,5 +118,45 @@
         }
       ]
     }
+  },
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Variable",
+      "stringValue": "x",
+      "next": {
+        "type": "SquareBraces",
+        "instructionListValue": [
+          {
+            "type": "Number",
+            "integerValue": 1
+          }
+        ]
+      }
+    },
+    "right": {
+      "type": "Number",
+      "integerValue": 5
+    }
+  },
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Variable",
+      "stringValue": "x",
+      "next": {
+        "type": "SquareBraces",
+        "instructionListValue": [
+          {
+            "type": "Variable",
+            "stringValue": "a"
+          }
+        ]
+      }
+    },
+    "right": {
+      "type": "Number",
+      "integerValue": 6
+    }
   }
 ]
