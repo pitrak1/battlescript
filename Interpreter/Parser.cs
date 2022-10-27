@@ -28,9 +28,15 @@ public class Parser {
         if (assignmentOperatorIndex != -1) {
             return HandleAssignment(currentTokenSet, assignmentOperatorIndex);
         } 
+        else if (currentTokenSet[0].Type == Consts.TokenTypes.Separator) {
+            return HandleSeparator(currentTokenSet);
+        }
         else if (currentTokenSet[0].Type == Consts.TokenTypes.Keyword) {
             return HandleKeyword(currentTokenSet);
         } 
+        else if (mathematicalOperatorIndex != -1) {
+            return HandleOperation(currentTokenSet, mathematicalOperatorIndex);
+        }
         else if (currentTokenSet[0].Type == Consts.TokenTypes.Identifier) {
             return HandleIdentifier(currentTokenSet);
         }
@@ -52,7 +58,36 @@ public class Parser {
         Instruction left = ParseTokenSet(tokens.GetRange(0, assignmentOperatorIndex));
         Instruction right = ParseTokenSet(tokens.GetRange(assignmentOperatorIndex + 1, tokens.Count - assignmentOperatorIndex - 1));
 
-        return new Instruction().SetAssignmentValues(Consts.InstructionTypes.Assignment, left, right).SetDebugValues(tokens[0].Line, tokens[0].Column);
+        Instruction instruction = new Instruction();
+        instruction.Type = Consts.InstructionTypes.Assignment;
+        instruction.Left = left;
+        instruction.Right = right;
+        instruction.Line = tokens[0].Line;
+        instruction.Column = tokens[0].Column;
+        return instruction;
+    }
+
+    private static Instruction HandleSeparator(List<Token> tokens) {
+        if (tokens[0].Value == "[") {
+            return HandleSquareBraces(tokens);
+        }
+        else {
+            throw new SystemException("Invalid separator found");
+        }
+    }
+    
+    private static Instruction HandleSquareBraces(List<Token> tokens) {
+        List<List<Token>> entries = ParserUtilities.ParseUntilMatchingSeparator(tokens, new List<string>() {","});
+        List<Instruction> values = new List<Instruction>();
+        foreach (List<Token> entry in entries) {
+            values.Add(ParseTokenSet(entry));
+        }
+        Instruction instruction = new Instruction();
+        instruction.Type = Consts.InstructionTypes.SquareBraces;
+        instruction.InstructionListValue = values;
+        instruction.Line = tokens[0].Line;
+        instruction.Column = tokens[0].Column;
+        return instruction;
     }
 
     private static Instruction HandleKeyword(List<Token> tokens) {
@@ -88,20 +123,47 @@ public class Parser {
         Debug.Assert(tokens[0].Value == "var");
         Debug.Assert(tokens[1].Type == Consts.TokenTypes.Identifier);
 
-        return new Instruction().SetVariableValues(Consts.InstructionTypes.Declaration, tokens[1].Value)
-            .SetDebugValues(tokens[0].Line, tokens[0].Column);
+        Instruction instruction = new Instruction();
+        instruction.Type = Consts.InstructionTypes.Declaration;
+        instruction.StringValue = tokens[1].Value;
+        instruction.Line = tokens[0].Line;
+        instruction.Column = tokens[0].Column;
+        return instruction;
+    }
+    
+    private static Instruction HandleOperation(List<Token> tokens, int mathematicalOperatorIndex) {
+        Instruction left = ParseTokenSet(tokens.GetRange(0, mathematicalOperatorIndex));
+        Instruction right = ParseTokenSet(tokens.GetRange(mathematicalOperatorIndex + 1, tokens.Count - mathematicalOperatorIndex - 1));
+
+        Instruction instruction = new Instruction();
+        instruction.Type = Consts.InstructionTypes.Operation;
+        instruction.Left = left;
+        instruction.Right = right;
+        instruction.StringValue = tokens[mathematicalOperatorIndex].Value;
+        instruction.Line = tokens[0].Line;
+        instruction.Column = tokens[0].Column;
+        return instruction;
     }
 
     private static Instruction HandleIdentifier(List<Token> tokens) {
-        return new Instruction().SetVariableValues(Consts.InstructionTypes.Variable, tokens[0].Value)
-            .SetDebugValues(tokens[0].Line, tokens[0].Column);
+        Instruction instruction = new Instruction();
+        instruction.Type = Consts.InstructionTypes.Variable;
+        instruction.StringValue = tokens[0].Value;
+        instruction.Line = tokens[0].Line;
+        instruction.Column = tokens[0].Column;
+        return instruction;
     }
 
     private static Instruction HandleNumber(List<Token> tokens) {
         Debug.Assert(tokens.Count == 1);
         Debug.Assert(tokens[0].Type == Consts.TokenTypes.Number);
 
-        return new Instruction().SetVariableValues(Consts.InstructionTypes.Number, float.Parse(tokens[0].Value));
+        Instruction instruction = new Instruction();
+        instruction.Type = Consts.InstructionTypes.Number;
+        instruction.IntegerValue = int.Parse(tokens[0].Value);
+        instruction.Line = tokens[0].Line;
+        instruction.Column = tokens[0].Column;
+        return instruction;
     }
     
     private static Instruction HandleString(List<Token> tokens) {
@@ -109,7 +171,12 @@ public class Parser {
         Debug.Assert(tokens[0].Type == Consts.TokenTypes.String);
 
         string trimmedValue = tokens[0].Value.Substring(1, tokens[0].Value.Length - 2);
-        return new Instruction().SetVariableValues(Consts.InstructionTypes.String, trimmedValue).SetDebugValues(tokens[0].Line, tokens[0].Column);
+        Instruction instruction = new Instruction();
+        instruction.Type = Consts.InstructionTypes.String;
+        instruction.StringValue = trimmedValue;
+        instruction.Line = tokens[0].Line;
+        instruction.Column = tokens[0].Column;
+        return instruction;
     }
     
     private static Instruction HandleBoolean(List<Token> tokens) {
@@ -117,6 +184,11 @@ public class Parser {
         Debug.Assert(tokens[0].Type == Consts.TokenTypes.Boolean);
 
         bool value = tokens[0].Value == "true";
-        return new Instruction().SetVariableValues(Consts.InstructionTypes.Boolean, value).SetDebugValues(tokens[0].Line, tokens[0].Column);
+        Instruction instruction = new Instruction();
+        instruction.Type = Consts.InstructionTypes.Boolean;
+        instruction.BoolValue = value;
+        instruction.Line = tokens[0].Line;
+        instruction.Column = tokens[0].Column;
+        return instruction;
     }
 }

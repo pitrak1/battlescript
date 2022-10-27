@@ -1,0 +1,18 @@
+[
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Declaration",
+      "stringValue": "x"
+    },
+    "right": {
+      "type": "SquareBraces",
+      "instructionListValue": [
+        {
+          "type": "Number",
+          "integerValue": 1
+        }
+      ]
+    }
+  },
+]

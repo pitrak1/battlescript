@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace BattleScript; 
 
 public class ParserUtilities {
@@ -19,14 +21,15 @@ public class ParserUtilities {
         
         for (int i = tokens.Count - 1; i >= 0; i--) {
             var currentValue = tokens[i].Value;
+            string matchingSeparator;
+            Consts.MatchingSeparatorsMap.TryGetValue(currentValue, out matchingSeparator);
             if (Consts.ClosingSeparators.Contains(currentValue)) {
                 separatorStack.Add(currentValue);
-            } else if (separatorStack.Count > 0 &&
-                       separatorStack[^0] == Consts.MatchingSeparatorsMap[currentValue]) {
+            } else if (separatorStack.Count > 0 && separatorStack[^1] == matchingSeparator) {
                 separatorStack.RemoveAt(separatorStack.Count - 1);
             } else {
                 int currentOperatorPriority = Array.FindIndex(Consts.Operators, element => element == currentValue);
-                if (currentOperatorPriority < lowestOperatorPriority) {
+                if (currentOperatorPriority != -1 && currentOperatorPriority < lowestOperatorPriority) {
                     lowestOperatorPriority = currentOperatorPriority;
                     lowestOperatorLocation = i;
                 }
@@ -38,5 +41,44 @@ public class ParserUtilities {
         } else {
             return -1;
         }
+    }
+
+    public static List<List<Token>> ParseUntilMatchingSeparator(List<Token> tokens, List<string> separatingCharacters) {
+        Debug.Assert(Consts.OpeningSeparators.Contains(tokens[0].Value));
+        
+        List<string> separatorStack = new List<string>();
+        List<List<Token>> entries = new List<List<Token>>();
+        List<Token> currentTokenSet = new List<Token>();
+
+        foreach (Token token in tokens) {
+            if (Consts.OpeningSeparators.Contains(token.Value)) {
+                separatorStack.Add(token.Value);
+                if (separatorStack.Count > 1) {
+                    currentTokenSet.Add(token);
+                }
+            } else if (Consts.ClosingSeparators.Contains(token.Value)) {
+                string matchingValue = Consts.MatchingSeparatorsMap[token.Value];
+                if (matchingValue == separatorStack[^1]) {
+                    separatorStack.RemoveAt(separatorStack.Count - 1);
+                    if (separatorStack.Count == 0) {
+                        entries.Add(currentTokenSet);
+                        break;
+                    }
+                    
+                    currentTokenSet.Add(token);
+                }
+                else {
+                    throw new SystemException("Unexpected closing separator");
+                }
+            } else if (separatorStack.Count == 1 && separatingCharacters.Contains(token.Value)) {
+                entries.Add(currentTokenSet);
+                currentTokenSet = new List<Token>();
+            }
+            else {
+                currentTokenSet.Add(token);
+            }
+        }
+
+        return entries;
     }
 }
