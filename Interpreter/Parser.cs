@@ -167,8 +167,8 @@ public class Parser {
                 return HandleIf(tokens);
             case "else":
                 return HandleElse(tokens);
-            // case "while":
-            //     return HandleWhile(tokens);
+            case "while":
+                return HandleWhile(tokens);
             // case "function":
             //     return HandleFunction(tokens);
             // case "return":
@@ -222,6 +222,18 @@ public class Parser {
         }
         
         instruction.Type = Consts.InstructionTypes.Else;
+        instruction.Line = tokens[0].Line;
+        instruction.Column = tokens[0].Column;
+        return instruction;
+    }
+    
+    private static Instruction HandleWhile(List<Token> tokens) {
+        // exclude the while itself and the start and ending parens
+        Instruction condition = ParseTokenSet(tokens.GetRange(2, tokens.Count - 3));
+        
+        Instruction instruction = new Instruction();
+        instruction.Type = Consts.InstructionTypes.While;
+        instruction.InstructionValue = condition;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
