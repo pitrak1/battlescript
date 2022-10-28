@@ -19,9 +19,18 @@ public class Parser {
             }
             else if (token.Value == "{" && ParserUtilities.BlockContainsSemicolon(tokens, i)) {
                 Instruction instruction = ParseTokenSet(currentTokenSet);
+
+                if (instruction.Type == Consts.InstructionTypes.Else) {
+                    Instruction mostRecentInstruction = scopes[^1][^1];
+                    while (mostRecentInstruction.Next is not null) {
+                        mostRecentInstruction = mostRecentInstruction.Next;
+                    }
+                    mostRecentInstruction.Next = instruction;
+                }
+                else {
+                    scopes[^1].Add(instruction);
+                }
                 
-                scopes[^1].Add(instruction);
-        
                 // If this is an assignment, it means that it is a dictionary or class.  If it's not, it's an if/else/while.
                 if (instruction.Type == Consts.InstructionTypes.Assignment) {
                     scopes.Add(instruction.Right.Instructions);
@@ -156,8 +165,8 @@ public class Parser {
             //     return HandleExport(tokens);
             case "if":
                 return HandleIf(tokens);
-            // case "else":
-            //     return HandleElse(tokens);
+            case "else":
+                return HandleElse(tokens);
             // case "while":
             //     return HandleWhile(tokens);
             // case "function":
@@ -196,6 +205,23 @@ public class Parser {
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.If;
         instruction.InstructionValue = condition;
+        instruction.Line = tokens[0].Line;
+        instruction.Column = tokens[0].Column;
+        return instruction;
+    }
+
+    private static Instruction HandleElse(List<Token> tokens) {
+        Instruction instruction = new Instruction();
+        
+        // this is an else if block
+        if (tokens.Count > 1) {
+            Debug.Assert(tokens[1].Value == "if");
+            // exclude the else if and the start and ending parens
+            Instruction condition = ParseTokenSet(tokens.GetRange(3, tokens.Count - 4));
+            instruction.InstructionValue = condition;
+        }
+        
+        instruction.Type = Consts.InstructionTypes.Else;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
