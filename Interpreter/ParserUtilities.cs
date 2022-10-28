@@ -49,7 +49,7 @@ public class ParserUtilities {
         List<string> separatorStack = new List<string>();
         List<List<Token>> entries = new List<List<Token>>();
         List<Token> currentTokenSet = new List<Token>();
-
+        
         foreach (Token token in tokens) {
             if (Consts.OpeningSeparators.Contains(token.Value)) {
                 separatorStack.Add(token.Value);
@@ -80,5 +80,35 @@ public class ParserUtilities {
         }
 
         return entries;
+    }
+
+    public static bool BlockContainsSemicolon(List<Token> tokens, int tokenIndex) {
+        while (tokenIndex < tokens.Count) {
+            switch (tokens[tokenIndex].Value) {
+                case "}":
+                    return false;
+                case ";":
+                    return true;
+                default:
+                    tokenIndex++;
+                    break;
+            }
+        }
+        return false;
+    }
+    
+    public static bool BlockContainsSemicolonReverse(List<Token> tokens, int tokenIndex) {
+        while (tokenIndex >= 0) {
+            switch (tokens[tokenIndex].Value) {
+                case "{":
+                    return false;
+                case ";":
+                    return true;
+                default:
+                    tokenIndex--;
+                    break;
+            }
+        }
+        return false;
     }
 }

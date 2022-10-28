@@ -6,12 +6,34 @@ public class Parser {
     public static List<Instruction> Run(List<Token> tokens) {
         List<Token> currentTokenSet = new List<Token>();
         List<Instruction> instructions = new List<Instruction>();
-        
-        foreach (Token token in tokens) {
+
+        List<List<Instruction>> scopes = new List<List<Instruction>>();
+        scopes.Add(instructions);
+
+        for (int i = 0; i < tokens.Count; i++) {
+            Token token = tokens[i];
             if (token.Type == Consts.TokenTypes.Semicolon) {
                 Instruction parsedInstruction = ParseTokenSet(currentTokenSet);
-                instructions.Add(parsedInstruction);
+                scopes[^1].Add(parsedInstruction);
                 currentTokenSet = new List<Token>();
+            }
+            else if (token.Value == "{" && ParserUtilities.BlockContainsSemicolon(tokens, i)) {
+                Instruction instruction = ParseTokenSet(currentTokenSet);
+                
+                scopes[^1].Add(instruction);
+        
+                // If this is an assignment, it means that it is a dictionary or class.  If it's not, it's an if/else/while.
+                if (instruction.Type == Consts.InstructionTypes.Assignment) {
+                    scopes.Add(instruction.Right.Instructions);
+                }
+                else {
+                    scopes.Add(instruction.Instructions);
+                }
+                currentTokenSet = new List<Token>();
+            }
+            else if (token.Value == "}" && ParserUtilities.BlockContainsSemicolonReverse(tokens, i)) {
+                currentTokenSet = new List<Token>();
+                scopes.RemoveAt(scopes.Count - 1);
             }
             else {
                 currentTokenSet.Add(token);
@@ -132,8 +154,8 @@ public class Parser {
                 return HandleVar(tokens);
             // case "export":
             //     return HandleExport(tokens);
-            // case "if":
-            //     return HandleIf(tokens);
+            case "if":
+                return HandleIf(tokens);
             // case "else":
             //     return HandleElse(tokens);
             // case "while":
@@ -162,6 +184,18 @@ public class Parser {
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.Declaration;
         instruction.StringValue = tokens[1].Value;
+        instruction.Line = tokens[0].Line;
+        instruction.Column = tokens[0].Column;
+        return instruction;
+    }
+
+    private static Instruction HandleIf(List<Token> tokens) {
+        // exclude the if itself and the start and ending parens
+        Instruction condition = ParseTokenSet(tokens.GetRange(2, tokens.Count - 3));
+        
+        Instruction instruction = new Instruction();
+        instruction.Type = Consts.InstructionTypes.If;
+        instruction.InstructionValue = condition;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
