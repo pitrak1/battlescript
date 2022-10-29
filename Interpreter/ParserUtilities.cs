@@ -45,6 +45,10 @@ public class ParserUtilities {
 
     public static List<List<Token>> ParseUntilMatchingSeparator(List<Token> tokens, List<string> separatingCharacters) {
         Debug.Assert(Consts.OpeningSeparators.Contains(tokens[0].Value));
+
+        if (tokens.Count == 0) {
+            return new List<List<Token>>();
+        }
         
         List<string> separatorStack = new List<string>();
         List<List<Token>> entries = new List<List<Token>>();

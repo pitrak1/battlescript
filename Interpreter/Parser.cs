@@ -104,6 +104,8 @@ public class Parser {
                 return HandleSquareBraces(tokens);
             case "{":
                 return HandleCurlyBraces(tokens);
+            case "(":
+                return HandleParens(tokens);
             case ".":
                 return HandleMember(tokens);
             default:
@@ -142,6 +144,22 @@ public class Parser {
         return instruction;
     }
 
+    private static Instruction HandleParens(List<Token> tokens) {
+        List<List<Token>> entries = ParserUtilities.ParseUntilMatchingSeparator(tokens, new List<string>() {","});
+        List<Instruction> values = new List<Instruction>();
+        foreach (List<Token> entry in entries) {
+            if (entry.Count > 0) {
+                values.Add(ParseTokenSet(entry));
+            }
+        }
+        Instruction instruction = new Instruction();
+        instruction.Type = Consts.InstructionTypes.Parens;
+        instruction.InstructionListValue = values;
+        instruction.Line = tokens[0].Line;
+        instruction.Column = tokens[0].Column;
+        return instruction;
+    }
+
     private static Instruction HandleMember(List<Token> tokens) {
         Instruction property = new Instruction();
         property.Type = Consts.InstructionTypes.String;
@@ -169,10 +187,10 @@ public class Parser {
                 return HandleElse(tokens);
             case "while":
                 return HandleWhile(tokens);
-            // case "function":
-            //     return HandleFunction(tokens);
-            // case "return":
-            //     return HandleReturn(tokens);
+            case "function":
+                return HandleFunction(tokens);
+            case "return":
+                return HandleReturn(tokens);
             // case "import":
             //     return HandleImport(tokens);
             // case "class":
@@ -234,6 +252,39 @@ public class Parser {
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.While;
         instruction.InstructionValue = condition;
+        instruction.Line = tokens[0].Line;
+        instruction.Column = tokens[0].Column;
+        return instruction;
+    }
+    
+    private static Instruction HandleFunction(List<Token> tokens) {
+        // exclude the function itself and the start and ending parens
+        List<Token> argTokens = tokens.GetRange(1, tokens.Count - 1);
+        List<List<Token>> tokenizedArgs =
+            ParserUtilities.ParseUntilMatchingSeparator(argTokens, new List<string>() { "," });
+
+        List<Instruction> instructionArgs = new List<Instruction>();
+        foreach (List<Token> arg in tokenizedArgs) {
+            if (arg.Count > 0) {
+                Instruction instructionArg = ParseTokenSet(arg);
+                Debug.Assert(instructionArg.Type == Consts.InstructionTypes.Variable);
+                instructionArgs.Add(instructionArg);
+            }
+        }
+        
+        Instruction instruction = new Instruction();
+        instruction.Type = Consts.InstructionTypes.Function;
+        instruction.InstructionListValue = instructionArgs;
+        instruction.Line = tokens[0].Line;
+        instruction.Column = tokens[0].Column;
+        return instruction;
+    }
+    
+    private static Instruction HandleReturn(List<Token> tokens) {
+        Instruction returnValue = ParseTokenSet(tokens.GetRange(1, tokens.Count - 1));
+        Instruction instruction = new Instruction();
+        instruction.Type = Consts.InstructionTypes.Return;
+        instruction.InstructionValue = returnValue;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;

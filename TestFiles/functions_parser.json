@@ -1,0 +1,90 @@
+[
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Declaration",
+      "stringValue": "my_function"
+    },
+    "right": {
+      "type": "Function",
+      "instructionListValue": [],
+      "instructions": [
+        {
+          "type": "Return",
+          "instructionValue": {
+            "type": "Number",
+            "integerValue": 5
+          }
+        }
+      ]
+    }
+  },
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Declaration",
+      "stringValue": "x"
+    },
+    "right": {
+      "type": "Variable",
+      "stringValue": "my_function",
+      "next": {
+        "type": "Parens",
+        "instructionListValue": []
+      }
+    }
+  },
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Declaration",
+      "stringValue": "my_other_function"
+    },
+    "right": {
+      "type": "Function",
+      "instructionListValue": [
+        {
+          "type": "Variable",
+          "stringValue": "my_variable"
+        }
+      ],
+      "instructions": [
+        {
+          "type": "Return",
+          "instructionValue": {
+            "type": "Operation",
+            "stringValue": "+",
+            "left": {
+              "type": "Variable",
+              "stringValue": "my_variable"
+            },
+            "right": {
+              "type": "Number",
+              "integerValue": 5
+            },
+          }
+        }
+      ]
+    }
+  },
+  {
+    "type": "Assignment",
+    "left": {
+      "type": "Declaration",
+      "stringValue": "y"
+    },
+    "right": {
+      "type": "Variable",
+      "stringValue": "my_other_function",
+      "next": {
+        "type": "Parens",
+        "instructionListValue": [
+          {
+            "type": "Number",
+            "integerValue": 3
+          }
+        ]
+      }
+    }
+  }
+]
