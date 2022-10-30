@@ -25,6 +25,8 @@ public class Interpreter {
                 return HandleDeclaration(instruction, scopeStack, leftSide);
             case Consts.InstructionTypes.Variable:
                 return HandleVariable(instruction, scopeStack, leftSide);
+            case Consts.InstructionTypes.Operation:
+                return HandleOperation(instruction, scopeStack, leftSide);
         }
 
         return new ScopeVariable();
@@ -50,5 +52,36 @@ public class Interpreter {
 
     private static ScopeVariable HandleVariable(Instruction instruction, ScopeStack scopeStack, bool leftSide) {
         return scopeStack.Get(instruction.Value);
+    }
+    
+    private static ScopeVariable HandleOperation(Instruction instruction, ScopeStack scopeStack, bool leftSide) {
+        ScopeVariable left = InterpretInstruction(instruction.Left, scopeStack);
+        ScopeVariable right = InterpretInstruction(instruction.Right, scopeStack);
+        
+        Debug.Assert(left.Value is int);
+        Debug.Assert(right.Value is int);
+
+        dynamic? result;
+        switch (instruction.Value) {
+            case "==":
+                result = left.Value == right.Value;
+                break;
+            case "<":
+                result = left.Value < right.Value;
+                break;
+            case ">":
+                result = left.Value > right.Value;
+                break;
+            case "+":
+                result = left.Value + right.Value;
+                break;
+            case "*":
+                result = left.Value * right.Value;
+                break;
+            default:
+                throw new SystemException("Invalid operator");
+        }
+
+        return new ScopeVariable(Consts.VariableTypes.Value, result);
     }
 }

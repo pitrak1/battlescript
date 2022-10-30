@@ -92,9 +92,9 @@ public class Assertions {
 
             ScopeVariable expectedValue = entry.Value;
             ScopeVariable actualValue = scope[entry.Key];
-            Assert.That(actualValue.Type, Is.EqualTo(expectedValue.Type), $"expected {entry.Key} {expectedValue.Type}, got {actualValue.Type}");
+            Assert.That(actualValue.Type, Is.EqualTo(expectedValue.Type), $"expected {entry.Key} to be of type {expectedValue.Type}, got {actualValue.Type}");
             if (expectedValue.Value is int || expectedValue.Value is string || expectedValue.Value is bool) {
-                Assert.That(actualValue.Value, Is.EqualTo(expectedValue.Value), $"expected {entry.Key} {expectedValue.Value}, got {actualValue.Value}");
+                Assert.That(actualValue.Value, Is.EqualTo(expectedValue.Value), $"expected {entry.Key} to equal {expectedValue.Value}, got {actualValue.Value}");
             }
         }
     }
