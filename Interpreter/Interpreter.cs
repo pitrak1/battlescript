@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace BattleScript; 
 
 public class Interpreter {
@@ -11,38 +13,42 @@ public class Interpreter {
         return scopeStack;
     }
 
-    private static InstructionResult InterpretInstruction(Instruction instruction, ScopeStack scopeStack, bool leftSide = false) {
+    private static ScopeVariable InterpretInstruction(Instruction instruction, ScopeStack scopeStack, bool leftSide = false) {
         switch (instruction.Type) {
             case Consts.InstructionTypes.Assignment:
                 return HandleAssignment(instruction, scopeStack, leftSide);
-            case Consts.InstructionTypes.Number:
-                return HandleNumber(instruction, scopeStack, leftSide);
-            // case Consts.InstructionTypes.String:
-            //     return HandleString(instruction, scopeStack, leftSide);
-            // case Consts.InstructionTypes.Boolean:
-            //     return HandleBoolean(instruction, scopeStack, leftSide);
-            // case Consts.InstructionTypes.Declaration:
-            //     return HandleDeclaration(instruction, scopeStack, leftSide);
-            // case Consts.InstructionTypes.Variable:
-            //     return HandleVariable(instruction, scopeStack, leftSide);
+            case Consts.InstructionTypes.Number: 
+            case Consts.InstructionTypes.String: 
+            case Consts.InstructionTypes.Boolean:
+                return HandleValueType(instruction, scopeStack, leftSide);
+            case Consts.InstructionTypes.Declaration:
+                return HandleDeclaration(instruction, scopeStack, leftSide);
+            case Consts.InstructionTypes.Variable:
+                return HandleVariable(instruction, scopeStack, leftSide);
         }
 
-        return new InstructionResult();
+        return new ScopeVariable();
     }
 
-    private static InstructionResult HandleAssignment(Instruction instruction, ScopeStack scopeStack, bool leftSide) {
-        InstructionResult left = InterpretInstruction(instruction.Left, scopeStack, true);
-        InstructionResult right = InterpretInstruction(instruction.Right, scopeStack);
-
-        return new InstructionResult();
+    private static ScopeVariable HandleAssignment(Instruction instruction, ScopeStack scopeStack, bool leftSide) {
+        ScopeVariable left = InterpretInstruction(instruction.Left, scopeStack, true);
+        ScopeVariable right = InterpretInstruction(instruction.Right, scopeStack);
+        left.Copy(right);
+        return left;
     }
     
-    private static InstructionResult HandleNumber(Instruction instruction, ScopeStack scopeStack, bool leftSide) {
-        ScopeVariable variable = new ScopeVariable();
-        variable.IntegerValue = instruction.Value;
-        
-        InstructionResult result = new InstructionResult();
-        result.VariableValue = variable;
-        return result;
+    private static ScopeVariable HandleValueType(Instruction instruction, ScopeStack scopeStack, bool leftSide) {
+        return new ScopeVariable(Consts.VariableTypes.Value, instruction.Value);
+    }
+    
+    private static ScopeVariable HandleDeclaration(Instruction instruction, ScopeStack scopeStack, bool leftSide) {
+        Debug.Assert(leftSide);
+        Debug.Assert(instruction.Value is string);
+        List<string> path = new List<string>() { instruction.Value };
+        return scopeStack.Add(path);
+    }
+
+    private static ScopeVariable HandleVariable(Instruction instruction, ScopeStack scopeStack, bool leftSide) {
+        return scopeStack.Get(instruction.Value);
     }
 }

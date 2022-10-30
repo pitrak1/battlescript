@@ -72,7 +72,7 @@ public class Assertions {
         }
         path.RemoveAt(path.Count - 1);
     }
-
+    
     private static string GetErrorString(string property, dynamic expected, dynamic actual, List<string> path) {
         string result = $"expected {property} {expected}, got {actual} (";
         foreach (string entry in path) {
@@ -80,5 +80,22 @@ public class Assertions {
         }
         result += ")";
         return result;
+    }
+
+    public static void AssertScope(
+        Dictionary<string, ScopeVariable> scope,
+        Dictionary<string, ScopeVariable> expected
+    ) {
+        Assert.That(scope.Keys.Count, Is.EqualTo(expected.Keys.Count));
+        foreach (KeyValuePair<string, ScopeVariable> entry in expected) {
+            Assert.That(scope, Contains.Key(entry.Key), $"expected {entry.Key} to exist");
+
+            ScopeVariable expectedValue = entry.Value;
+            ScopeVariable actualValue = scope[entry.Key];
+            Assert.That(actualValue.Type, Is.EqualTo(expectedValue.Type), $"expected {entry.Key} {expectedValue.Type}, got {actualValue.Type}");
+            if (expectedValue.Value is int || expectedValue.Value is string || expectedValue.Value is bool) {
+                Assert.That(actualValue.Value, Is.EqualTo(expectedValue.Value), $"expected {entry.Key} {expectedValue.Value}, got {actualValue.Value}");
+            }
+        }
     }
 }
