@@ -7,6 +7,8 @@ public class Interpreter {
         foreach (Instruction instruction in instructions) {
             InterpretInstruction(instruction, scopeStack);
         }
+
+        return scopeStack;
     }
 
     private static InstructionResult InterpretInstruction(Instruction instruction, ScopeStack scopeStack, bool leftSide = false) {
@@ -24,16 +26,20 @@ public class Interpreter {
             // case Consts.InstructionTypes.Variable:
             //     return HandleVariable(instruction, scopeStack, leftSide);
         }
+
+        return new InstructionResult();
     }
 
     private static InstructionResult HandleAssignment(Instruction instruction, ScopeStack scopeStack, bool leftSide) {
         InstructionResult left = InterpretInstruction(instruction.Left, scopeStack, true);
         InstructionResult right = InterpretInstruction(instruction.Right, scopeStack);
+
+        return new InstructionResult();
     }
     
     private static InstructionResult HandleNumber(Instruction instruction, ScopeStack scopeStack, bool leftSide) {
         ScopeVariable variable = new ScopeVariable();
-        variable.IntegerValue = instruction.IntegerValue;
+        variable.IntegerValue = instruction.Value;
         
         InstructionResult result = new InstructionResult();
         result.VariableValue = variable;

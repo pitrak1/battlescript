@@ -121,7 +121,7 @@ public class Parser {
         }
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.SquareBraces;
-        instruction.InstructionListValue = values;
+        instruction.Value = values;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
@@ -138,7 +138,7 @@ public class Parser {
         
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.Dictionary;
-        instruction.InstructionListValue = values;
+        instruction.Value = values;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
@@ -154,7 +154,7 @@ public class Parser {
         }
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.Parens;
-        instruction.InstructionListValue = values;
+        instruction.Value = values;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
@@ -163,13 +163,13 @@ public class Parser {
     private static Instruction HandleMember(List<Token> tokens) {
         Instruction property = new Instruction();
         property.Type = Consts.InstructionTypes.String;
-        property.StringValue = tokens[1].Value;
+        property.Value = tokens[1].Value;
         property.Column = tokens[1].Column;
         property.Line = tokens[1].Line;
 
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.SquareBraces;
-        instruction.InstructionListValue = new List<Instruction>() {property};
+        instruction.Value = new List<Instruction>() {property};
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
@@ -210,7 +210,7 @@ public class Parser {
 
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.Declaration;
-        instruction.StringValue = tokens[1].Value;
+        instruction.Value = tokens[1].Value;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
@@ -222,7 +222,7 @@ public class Parser {
         
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.If;
-        instruction.InstructionValue = condition;
+        instruction.Value = condition;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
@@ -236,7 +236,7 @@ public class Parser {
             Debug.Assert(tokens[1].Value == "if");
             // exclude the else if and the start and ending parens
             Instruction condition = ParseTokenSet(tokens.GetRange(3, tokens.Count - 4));
-            instruction.InstructionValue = condition;
+            instruction.Value = condition;
         }
         
         instruction.Type = Consts.InstructionTypes.Else;
@@ -251,7 +251,7 @@ public class Parser {
         
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.While;
-        instruction.InstructionValue = condition;
+        instruction.Value = condition;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
@@ -274,7 +274,7 @@ public class Parser {
         
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.Function;
-        instruction.InstructionListValue = instructionArgs;
+        instruction.Value = instructionArgs;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
@@ -284,7 +284,7 @@ public class Parser {
         Instruction returnValue = ParseTokenSet(tokens.GetRange(1, tokens.Count - 1));
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.Return;
-        instruction.InstructionValue = returnValue;
+        instruction.Value = returnValue;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
@@ -298,7 +298,7 @@ public class Parser {
         instruction.Type = Consts.InstructionTypes.Operation;
         instruction.Left = left;
         instruction.Right = right;
-        instruction.StringValue = tokens[mathematicalOperatorIndex].Value;
+        instruction.Value = tokens[mathematicalOperatorIndex].Value;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
@@ -312,7 +312,7 @@ public class Parser {
         
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.Variable;
-        instruction.StringValue = tokens[0].Value;
+        instruction.Value = tokens[0].Value;
         instruction.Next = next;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
@@ -325,7 +325,7 @@ public class Parser {
 
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.Number;
-        instruction.IntegerValue = int.Parse(tokens[0].Value);
+        instruction.Value = int.Parse(tokens[0].Value);
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
@@ -338,7 +338,7 @@ public class Parser {
         string trimmedValue = tokens[0].Value.Substring(1, tokens[0].Value.Length - 2);
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.String;
-        instruction.StringValue = trimmedValue;
+        instruction.Value = trimmedValue;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
@@ -351,7 +351,7 @@ public class Parser {
         bool value = tokens[0].Value == "true";
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.Boolean;
-        instruction.BoolValue = value;
+        instruction.Value = value;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
