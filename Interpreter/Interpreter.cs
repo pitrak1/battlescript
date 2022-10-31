@@ -35,6 +35,8 @@ public class Interpreter {
                 return HandleOperation(instruction);
             case Consts.InstructionTypes.SquareBraces:
                 return HandleSquareBraces(instruction);
+            case Consts.InstructionTypes.Dictionary:
+                return HandleDictionary(instruction);
         }
 
         return new ScopeVariable();
@@ -113,5 +115,17 @@ public class Interpreter {
             ScopeVariable index = InterpretInstruction(instruction.Value[0]);
             return ongoingContexts.GetCurrentContext().Value[index.Value];
         }
+    }
+
+    private ScopeVariable HandleDictionary(Instruction instruction) {
+        Dictionary<dynamic, ScopeVariable> entries = new Dictionary<dynamic, ScopeVariable>();
+        
+        for (int i = 0; i < instruction.Value.Count; i = i + 2) {
+            ScopeVariable key = InterpretInstruction(instruction.Value[i]);
+            ScopeVariable value = InterpretInstruction(instruction.Value[i + 1]);
+            entries.Add(key.Value, value);
+        }
+
+        return new ScopeVariable(Consts.VariableTypes.Dictionary, entries);
     }
 }

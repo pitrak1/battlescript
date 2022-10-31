@@ -77,6 +77,45 @@ public class InterpreterTests {
         Assertions.AssertScope(scopeStack.CurrentScope().Value, expected);
     }
     
+    [Test]
+    public void Dictionaries() {
+        string contents = LoadFile("dictionaries.btl");
+        var tokens = Lexer.Run(contents);
+        var instructions = Parser.Run(tokens);
+        
+        var interpreter = new Interpreter();
+        var scopeStack = interpreter.Run(instructions);
+
+        Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
+        expected.Add("x", new ScopeVariable(
+            Consts.VariableTypes.Dictionary, 
+            new Dictionary<dynamic, ScopeVariable> {
+                {
+                    1,
+                    new ScopeVariable(Consts.VariableTypes.Value, "asdf")
+                },
+                {
+                    "qwer",
+                    new ScopeVariable(Consts.VariableTypes.Value, 5)
+                }
+            }
+        ));
+        expected.Add("y", new ScopeVariable(Consts.VariableTypes.Value, 5));
+        expected.Add("z", new ScopeVariable(Consts.VariableTypes.Value, 5));
+        expected.Add("a", new ScopeVariable(
+            Consts.VariableTypes.Dictionary, 
+            new Dictionary<dynamic, ScopeVariable> {
+                {
+                    5,
+                    new ScopeVariable(Consts.VariableTypes.Value, 9)
+                }
+            }
+        ));
+        expected.Add("b", new ScopeVariable(Consts.VariableTypes.Value, 9));
+        
+        Assertions.AssertScope(scopeStack.CurrentScope().Value, expected);
+    }
+    
     private string LoadFile(string filename) {
         return File.ReadAllText($"/Users/nickpitrak/Desktop/BattleScript/TestFiles/{filename}");
     }
