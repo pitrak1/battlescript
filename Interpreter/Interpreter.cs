@@ -37,6 +37,8 @@ public class Interpreter {
                 return HandleSquareBraces(instruction);
             case Consts.InstructionTypes.Dictionary:
                 return HandleDictionary(instruction);
+            case Consts.InstructionTypes.If:
+                return HandleIf(instruction);
         }
 
         return new ScopeVariable();
@@ -56,11 +58,11 @@ public class Interpreter {
     private ScopeVariable HandleDeclaration(Instruction instruction) {
         Debug.Assert(instruction.Value is string);
         List<string> path = new List<string>() { instruction.Value };
-        return lexicalContexts.Add(path);
+        return lexicalContexts.AddVariable(path);
     }
 
     private ScopeVariable HandleVariable(Instruction instruction) {
-        ScopeVariable var = lexicalContexts.Get(instruction.Value);
+        ScopeVariable var = lexicalContexts.GetVariable(instruction.Value);
         if (instruction.Next is not null) {
             ongoingContexts.Add(var);
             var = InterpretInstruction(instruction.Next);
@@ -127,5 +129,20 @@ public class Interpreter {
         }
 
         return new ScopeVariable(Consts.VariableTypes.Dictionary, entries);
+    }
+
+    private ScopeVariable HandleIf(Instruction instruction) {
+        ScopeVariable condition = InterpretInstruction(instruction.Value);
+        if (InterpreterUtilities.isTruthy(condition)) {
+            lexicalContexts.Add(new ScopeVariable());
+            foreach (Instruction ifInstruction in instruction.Instructions) {
+                InterpretInstruction(ifInstruction);
+            }
+            lexicalContexts.Pop();
+            return new ScopeVariable(Consts.VariableTypes.Value, true);
+        }
+        else {
+            return new ScopeVariable(Consts.VariableTypes.Value, false);
+        }
     }
 }

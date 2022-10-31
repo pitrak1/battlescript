@@ -17,7 +17,7 @@ public class InterpreterTests {
         expected.Add("a", new ScopeVariable(Consts.VariableTypes.Value, true));
         expected.Add("b", new ScopeVariable(Consts.VariableTypes.Value, true));
         
-        Assertions.AssertScope(scopeStack.CurrentScope().Value, expected);
+        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
     }
     
     [Test]
@@ -36,7 +36,7 @@ public class InterpreterTests {
         expected.Add("a", new ScopeVariable(Consts.VariableTypes.Value, true));
         expected.Add("b", new ScopeVariable(Consts.VariableTypes.Value, false));
         
-        Assertions.AssertScope(scopeStack.CurrentScope().Value, expected);
+        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
     }
     
     [Test]
@@ -74,7 +74,7 @@ public class InterpreterTests {
             }
         ));
         
-        Assertions.AssertScope(scopeStack.CurrentScope().Value, expected);
+        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
     }
     
     [Test]
@@ -113,7 +113,23 @@ public class InterpreterTests {
         ));
         expected.Add("b", new ScopeVariable(Consts.VariableTypes.Value, 9));
         
-        Assertions.AssertScope(scopeStack.CurrentScope().Value, expected);
+        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    }
+    
+    [Test]
+    public void If() {
+        string contents = LoadFile("if.btl");
+        var tokens = Lexer.Run(contents);
+        var instructions = Parser.Run(tokens);
+        
+        var interpreter = new Interpreter();
+        var scopeStack = interpreter.Run(instructions);
+
+        Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
+        expected.Add("x", new ScopeVariable(Consts.VariableTypes.Value, 5));
+        expected.Add("y", new ScopeVariable(Consts.VariableTypes.Value, 6));
+
+        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
     }
     
     private string LoadFile(string filename) {

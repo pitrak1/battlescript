@@ -1,21 +1,36 @@
+using BattleScript.Exceptions;
+
 namespace BattleScript; 
 
-public class ScopeStack {
-    private List<ScopeVariable> scopes = new List<ScopeVariable>();
-
+public class ScopeStack : ContextStack {
     public ScopeStack() {
-        scopes.Add(new ScopeVariable(null, new Dictionary<string, ScopeVariable>()));
+        contexts.Add(new ScopeVariable(null, new Dictionary<string, ScopeVariable>()));
     }
 
-    public ScopeVariable Add(List<string> path) {
-        return CurrentScope().Add(path);
+    public override void Add(ScopeVariable context) {
+        contexts.Add(new ScopeVariable(null, new Dictionary<string, ScopeVariable>()));
     }
 
-    public ScopeVariable Get(string key) {
-        return CurrentScope().Get(key);
+    public ScopeVariable AddVariable(List<string> path) {
+        return GetCurrentContext().AddVariable(path);
     }
 
-    public ScopeVariable CurrentScope() {
-        return scopes[^1];
+    public ScopeVariable GetVariable(string key) {
+        ScopeVariable? result = null;
+        for (int i = (contexts.Count - 1); i >= 0; i--) {
+            try {
+                result = contexts[i].GetVariable(key);
+            }
+            catch (VariableNotFoundException ex) {
+                continue;
+            }
+        }
+
+        if (result is null) {
+            throw new VariableNotFoundException(key);
+        }
+        else {
+            return result;
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using BattleScript.Exceptions;
 using Newtonsoft.Json;
 
 namespace BattleScript; 
@@ -15,7 +16,7 @@ public class ScopeVariable {
         Value = value;
     }
     
-    public ScopeVariable Add(List<string> path) {
+    public ScopeVariable AddVariable(List<string> path) {
         Debug.Assert(Value is Dictionary<string, ScopeVariable>);
         Debug.Assert(path.Count == 1);
         ScopeVariable var = new ScopeVariable();
@@ -23,9 +24,14 @@ public class ScopeVariable {
         return var;
     }
 
-    public ScopeVariable Get(string key) {
+    public ScopeVariable GetVariable(string key) {
         Debug.Assert(Value is Dictionary<string, ScopeVariable>);
-        return Value[key];
+        if (Value.ContainsKey(key)) {
+            return Value[key];
+        }
+        else {
+            throw new VariableNotFoundException(key);
+        }
     }
 
     public void Copy(ScopeVariable var) {

@@ -11,7 +11,7 @@ public class ContextStack {
         return contexts[^1];
     }
 
-    public void Add(ScopeVariable context) {
+    public virtual void Add(ScopeVariable context) {
         contexts.Add(context);
     }
 
