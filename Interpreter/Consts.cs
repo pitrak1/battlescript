@@ -131,6 +131,7 @@ public class Consts {
 
 	public enum VariableTypes {
 		Value,
+		Array,
 		Function,
 		Class,
 		Object

@@ -6,7 +6,9 @@ public class InterpreterTests {
         string contents = LoadFile("variables.btl");
         var tokens = Lexer.Run(contents);
         var instructions = Parser.Run(tokens);
-        var scopeStack = Interpreter.Run(instructions);
+        
+        var interpreter = new Interpreter();
+        var scopeStack = interpreter.Run(instructions);
 
         Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
         expected.Add("x", new ScopeVariable(Consts.VariableTypes.Value, 15));
@@ -23,7 +25,9 @@ public class InterpreterTests {
         string contents = LoadFile("operators.btl");
         var tokens = Lexer.Run(contents);
         var instructions = Parser.Run(tokens);
-        var scopeStack = Interpreter.Run(instructions);
+        
+        var interpreter = new Interpreter();
+        var scopeStack = interpreter.Run(instructions);
 
         Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
         expected.Add("x", new ScopeVariable(Consts.VariableTypes.Value, 11));
@@ -31,6 +35,44 @@ public class InterpreterTests {
         expected.Add("z", new ScopeVariable(Consts.VariableTypes.Value, false));
         expected.Add("a", new ScopeVariable(Consts.VariableTypes.Value, true));
         expected.Add("b", new ScopeVariable(Consts.VariableTypes.Value, false));
+        
+        Assertions.AssertScope(scopeStack.CurrentScope().Value, expected);
+    }
+    
+    [Test]
+    public void Arrays() {
+        string contents = LoadFile("arrays.btl");
+        var tokens = Lexer.Run(contents);
+        var instructions = Parser.Run(tokens);
+        
+        var interpreter = new Interpreter();
+        var scopeStack = interpreter.Run(instructions);
+
+        Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
+        expected.Add("x", new ScopeVariable(
+            Consts.VariableTypes.Array, 
+            new List<ScopeVariable>() {
+                new (Consts.VariableTypes.Value, 1),
+                new (Consts.VariableTypes.Value, 5),
+                new (Consts.VariableTypes.Value, 6)
+            }
+        ));
+        expected.Add("y", new ScopeVariable(
+            Consts.VariableTypes.Array, 
+            new List<ScopeVariable>() {
+                new (Consts.VariableTypes.Value, "1234"),
+                new (Consts.VariableTypes.Value, "2345")
+            }
+        ));
+        expected.Add("z", new ScopeVariable(Consts.VariableTypes.Value, 3));
+        expected.Add("a", new ScopeVariable(Consts.VariableTypes.Value, 2));
+        expected.Add("b", new ScopeVariable(
+            Consts.VariableTypes.Array, 
+            new List<ScopeVariable>() {
+                new (Consts.VariableTypes.Value, 3),
+                new (Consts.VariableTypes.Value, 2)
+            }
+        ));
         
         Assertions.AssertScope(scopeStack.CurrentScope().Value, expected);
     }

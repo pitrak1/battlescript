@@ -3,60 +3,73 @@ using System.Diagnostics;
 namespace BattleScript; 
 
 public class Interpreter {
-    public static ScopeStack Run(List<Instruction> instructions) {
-        ScopeStack scopeStack = new ScopeStack();
-        
-        foreach (Instruction instruction in instructions) {
-            InterpretInstruction(instruction, scopeStack);
-        }
+    public ScopeStack lexicalContexts { get; set; }
+    public ContextStack ongoingContexts { get; set; }
 
-        return scopeStack;
+    public Interpreter() {
+        lexicalContexts = new ScopeStack();
+        ongoingContexts = new ContextStack();
     }
 
-    private static ScopeVariable InterpretInstruction(Instruction instruction, ScopeStack scopeStack, bool leftSide = false) {
+    public ScopeStack Run(List<Instruction> instructions) {
+        foreach (Instruction instruction in instructions) {
+            InterpretInstruction(instruction);
+        }
+
+        return lexicalContexts;
+    }
+
+    private ScopeVariable InterpretInstruction(Instruction instruction) {
         switch (instruction.Type) {
             case Consts.InstructionTypes.Assignment:
-                return HandleAssignment(instruction, scopeStack, leftSide);
+                return HandleAssignment(instruction);
             case Consts.InstructionTypes.Number: 
             case Consts.InstructionTypes.String: 
             case Consts.InstructionTypes.Boolean:
-                return HandleValueType(instruction, scopeStack, leftSide);
+                return HandleValueType(instruction);
             case Consts.InstructionTypes.Declaration:
-                return HandleDeclaration(instruction, scopeStack, leftSide);
+                return HandleDeclaration(instruction);
             case Consts.InstructionTypes.Variable:
-                return HandleVariable(instruction, scopeStack, leftSide);
+                return HandleVariable(instruction);
             case Consts.InstructionTypes.Operation:
-                return HandleOperation(instruction, scopeStack, leftSide);
+                return HandleOperation(instruction);
+            case Consts.InstructionTypes.SquareBraces:
+                return HandleSquareBraces(instruction);
         }
 
         return new ScopeVariable();
     }
 
-    private static ScopeVariable HandleAssignment(Instruction instruction, ScopeStack scopeStack, bool leftSide) {
-        ScopeVariable left = InterpretInstruction(instruction.Left, scopeStack, true);
-        ScopeVariable right = InterpretInstruction(instruction.Right, scopeStack);
+    private ScopeVariable HandleAssignment(Instruction instruction) {
+        ScopeVariable left = InterpretInstruction(instruction.Left);
+        ScopeVariable right = InterpretInstruction(instruction.Right);
         left.Copy(right);
         return left;
     }
     
-    private static ScopeVariable HandleValueType(Instruction instruction, ScopeStack scopeStack, bool leftSide) {
+    private ScopeVariable HandleValueType(Instruction instruction) {
         return new ScopeVariable(Consts.VariableTypes.Value, instruction.Value);
     }
     
-    private static ScopeVariable HandleDeclaration(Instruction instruction, ScopeStack scopeStack, bool leftSide) {
-        Debug.Assert(leftSide);
+    private ScopeVariable HandleDeclaration(Instruction instruction) {
         Debug.Assert(instruction.Value is string);
         List<string> path = new List<string>() { instruction.Value };
-        return scopeStack.Add(path);
+        return lexicalContexts.Add(path);
     }
 
-    private static ScopeVariable HandleVariable(Instruction instruction, ScopeStack scopeStack, bool leftSide) {
-        return scopeStack.Get(instruction.Value);
+    private ScopeVariable HandleVariable(Instruction instruction) {
+        ScopeVariable var = lexicalContexts.Get(instruction.Value);
+        if (instruction.Next is not null) {
+            ongoingContexts.Add(var);
+            var = InterpretInstruction(instruction.Next);
+            ongoingContexts.Pop();
+        }
+        return var;
     }
     
-    private static ScopeVariable HandleOperation(Instruction instruction, ScopeStack scopeStack, bool leftSide) {
-        ScopeVariable left = InterpretInstruction(instruction.Left, scopeStack);
-        ScopeVariable right = InterpretInstruction(instruction.Right, scopeStack);
+    private ScopeVariable HandleOperation(Instruction instruction) {
+        ScopeVariable left = InterpretInstruction(instruction.Left);
+        ScopeVariable right = InterpretInstruction(instruction.Right);
         
         Debug.Assert(left.Value is int);
         Debug.Assert(right.Value is int);
@@ -83,5 +96,22 @@ public class Interpreter {
         }
 
         return new ScopeVariable(Consts.VariableTypes.Value, result);
+    }
+
+    private ScopeVariable HandleSquareBraces(Instruction instruction) {
+        if (ongoingContexts.Empty()) {
+            // Handle array
+            List<ScopeVariable> entries = new List<ScopeVariable>();
+            foreach (Instruction entryInstruction in instruction.Value) {
+                ScopeVariable entryResult = InterpretInstruction(entryInstruction);
+                entries.Add(entryResult);
+            }
+            return new ScopeVariable(Consts.VariableTypes.Array, entries);
+        }
+        else {
+            // Handle index
+            ScopeVariable index = InterpretInstruction(instruction.Value[0]);
+            return ongoingContexts.GetCurrentContext().Value[index.Value];
+        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8c69a0e5_002D898d_002D4ceb_002D9aff_002Ddd144988d83c/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8c69a0e5_002D898d_002D4ceb_002D9aff_002Ddd144988d83c/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Solution /&gt;
 &lt;/SessionState&gt;</s:String>
 	
@@ -12,6 +12,9 @@
     &lt;TestId&gt;NUnit3x::88ABC911-A84B-4BAB-A82A-7898FB16E1C5::net6.0::BattleScript.Tests.LexerTests&lt;/TestId&gt;
     &lt;TestId&gt;NUnit3x::88ABC911-A84B-4BAB-A82A-7898FB16E1C5::net6.0::BattleScript.Tests.ParserTests&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d965aa60_002D9829_002D4b6b_002D84e9_002D0959189d01a7/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Solution /&gt;
 &lt;/SessionState&gt;</s:String>
 	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f8601fc1_002D45e2_002D42f9_002D81ab_002D35bcbc0cfa41/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="LexerTests #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
