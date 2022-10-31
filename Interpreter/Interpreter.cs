@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using BattleScript.Exceptions;
 
 namespace BattleScript; 
 
@@ -39,6 +40,16 @@ public class Interpreter {
                 return HandleDictionary(instruction);
             case Consts.InstructionTypes.If:
                 return HandleIf(instruction);
+            case Consts.InstructionTypes.Else:
+                return HandleElse(instruction);
+            case Consts.InstructionTypes.While:
+                return HandleWhile(instruction);
+            case Consts.InstructionTypes.Function:
+                return HandleFunction(instruction);
+            case Consts.InstructionTypes.Parens:
+                return HandleParens(instruction);
+            case Consts.InstructionTypes.Return:
+                return HandleReturn(instruction);
         }
 
         return new ScopeVariable();
@@ -139,10 +150,95 @@ public class Interpreter {
                 InterpretInstruction(ifInstruction);
             }
             lexicalContexts.Pop();
-            return new ScopeVariable(Consts.VariableTypes.Value, true);
+        }
+        else if (instruction.Next is not null) {
+            InterpretInstruction(instruction.Next);
+        }
+        
+        return new ScopeVariable(Consts.VariableTypes.Value);
+    }
+
+    private ScopeVariable HandleElse(Instruction instruction) {
+        ScopeVariable condition = new ScopeVariable();
+        if (instruction.Value is not null) {
+            condition = InterpretInstruction(instruction.Value);
+        }
+
+        if (instruction.Value is null || InterpreterUtilities.isTruthy(condition)) {
+            lexicalContexts.Add(new ScopeVariable());
+            foreach (Instruction elseInstruction in instruction.Instructions) {
+                InterpretInstruction(elseInstruction);
+            }
+            lexicalContexts.Pop();
+        } else if (instruction.Next is not null) {
+            InterpretInstruction(instruction.Next);
+        }
+        return new ScopeVariable(Consts.VariableTypes.Value);
+    }
+
+    private ScopeVariable HandleWhile(Instruction instruction) {
+        ScopeVariable condition = InterpretInstruction(instruction.Value);
+        while (InterpreterUtilities.isTruthy(condition)) {
+            lexicalContexts.Add(new ScopeVariable());
+            foreach (Instruction ifInstruction in instruction.Instructions) {
+                InterpretInstruction(ifInstruction);
+            }
+            lexicalContexts.Pop();
+            condition = InterpretInstruction(instruction.Value);
+        }
+
+        return new ScopeVariable(Consts.VariableTypes.Value);
+    }
+    
+    private ScopeVariable HandleFunction(Instruction instruction) {
+        List<ScopeVariable> args = new List<ScopeVariable>();
+        foreach (Instruction inst in instruction.Value) {
+            args.Add(new ScopeVariable(Consts.VariableTypes.Value, inst.Value));
+        }
+        return new ScopeVariable(Consts.VariableTypes.Function, args, instruction.Instructions);
+    }
+    
+    private ScopeVariable HandleParens(Instruction instruction) {
+        Debug.Assert(!ongoingContexts.Empty());
+        Debug.Assert(ongoingContexts.GetCurrentContext().Type == Consts.VariableTypes.Function);
+
+        List<ScopeVariable> functionArgs = ongoingContexts.GetCurrentContext().Value;
+
+        int expectedArgCount = instruction.Value.Count;
+        if (instruction.Value.Count != functionArgs.Count) {
+            throw new WrongNumberOfArgumentsException(expectedArgCount, functionArgs.Count);
+        }
+
+        lexicalContexts.Add(new ScopeVariable());
+        
+        for (int i = 0; i < functionArgs.Count; i++) {
+            string argName = functionArgs[i].Value;
+            ScopeVariable argValue = InterpretInstruction(instruction.Value[i]);
+            lexicalContexts.AddVariable(new List<string>() { argName }, argValue);
+        }
+        
+        foreach (Instruction funcInstruction in ongoingContexts.GetCurrentContext().Instructions) {
+            InterpretInstruction(funcInstruction);
+        }
+
+        ScopeVariable? returnValue = null;
+        if (lexicalContexts.GetCurrentContext().HasVariable("return")) {
+            returnValue = lexicalContexts.GetCurrentContext().GetVariable("return");
+        }
+        
+        lexicalContexts.Pop();
+
+        if (returnValue is not null) {
+            return returnValue;
         }
         else {
-            return new ScopeVariable(Consts.VariableTypes.Value, false);
+            return new ScopeVariable(Consts.VariableTypes.Value);
         }
+    }
+
+    private ScopeVariable HandleReturn(Instruction instruction) {
+        ScopeVariable result = InterpretInstruction(instruction.Value);
+        lexicalContexts.AddVariable(new List<string>() { "return" }, result);
+        return result;
     }
 }

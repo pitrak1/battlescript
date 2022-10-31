@@ -132,6 +132,66 @@ public class InterpreterTests {
         Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
     }
     
+    [Test]
+    public void IfElse() {
+        string contents = LoadFile("ifelse.btl");
+        var tokens = Lexer.Run(contents);
+        var instructions = Parser.Run(tokens);
+        
+        var interpreter = new Interpreter();
+        var scopeStack = interpreter.Run(instructions);
+
+        Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
+        expected.Add("x", new ScopeVariable(Consts.VariableTypes.Value, 3));
+        expected.Add("y", new ScopeVariable(Consts.VariableTypes.Value, 3));
+        expected.Add("z", new ScopeVariable(Consts.VariableTypes.Value, 2));
+        expected.Add("a", new ScopeVariable(Consts.VariableTypes.Value, 5));
+
+        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    }
+    
+    [Test]
+    public void While() {
+        string contents = LoadFile("while.btl");
+        var tokens = Lexer.Run(contents);
+        var instructions = Parser.Run(tokens);
+        
+        var interpreter = new Interpreter();
+        var scopeStack = interpreter.Run(instructions);
+
+        Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
+        expected.Add("z", new ScopeVariable(Consts.VariableTypes.Value, 8));
+        expected.Add("a", new ScopeVariable(Consts.VariableTypes.Value, 11));
+
+        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    }
+    
+    [Test]
+    public void Functions() {
+        string contents = LoadFile("functions.btl");
+        var tokens = Lexer.Run(contents);
+        var instructions = Parser.Run(tokens);
+        
+        var interpreter = new Interpreter();
+        var scopeStack = interpreter.Run(instructions);
+
+        Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
+        expected.Add("my_function", new ScopeVariable(
+            Consts.VariableTypes.Function, 
+            new List<ScopeVariable>()
+        ));
+        expected.Add("x", new ScopeVariable(Consts.VariableTypes.Value, 5));
+        expected.Add("my_other_function", new ScopeVariable(
+            Consts.VariableTypes.Function, 
+            new List<ScopeVariable>() {
+                new ScopeVariable(Consts.VariableTypes.Value, "my_variable")
+            }
+        ));
+        expected.Add("y", new ScopeVariable(Consts.VariableTypes.Value, 8));
+
+        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    }
+    
     private string LoadFile(string filename) {
         return File.ReadAllText($"/Users/nickpitrak/Desktop/BattleScript/TestFiles/{filename}");
     }

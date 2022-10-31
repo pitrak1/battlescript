@@ -11,26 +11,16 @@ public class ScopeStack : ContextStack {
         contexts.Add(new ScopeVariable(null, new Dictionary<string, ScopeVariable>()));
     }
 
-    public ScopeVariable AddVariable(List<string> path) {
-        return GetCurrentContext().AddVariable(path);
+    public ScopeVariable AddVariable(List<string> path, ScopeVariable? var = null) {
+        return GetCurrentContext().AddVariable(path, var);
     }
 
     public ScopeVariable GetVariable(string key) {
-        ScopeVariable? result = null;
         for (int i = (contexts.Count - 1); i >= 0; i--) {
-            try {
-                result = contexts[i].GetVariable(key);
-            }
-            catch (VariableNotFoundException ex) {
-                continue;
+            if (contexts[i].HasVariable(key)) {
+                return contexts[i].GetVariable(key);
             }
         }
-
-        if (result is null) {
-            throw new VariableNotFoundException(key);
-        }
-        else {
-            return result;
-        }
+        throw new VariableNotFoundException(key);
     }
 }

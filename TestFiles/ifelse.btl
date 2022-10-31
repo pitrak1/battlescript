@@ -1,7 +1,7 @@
 var x = 5;
 var y = 3;
 
-if (x == 5) {
+if (x == 3) {
 	y = 6;
 } else {
     x = 3;

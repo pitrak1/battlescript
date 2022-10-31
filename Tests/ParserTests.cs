@@ -461,7 +461,7 @@ public class ParserTests {
                     Consts.InstructionTypes.Operation,
                     "==",
                     new Instruction(Consts.InstructionTypes.Variable, "x"),
-                    new Instruction(Consts.InstructionTypes.Number, 5)
+                    new Instruction(Consts.InstructionTypes.Number, 3)
                 ),
                 null,
                 null,
