@@ -31,7 +31,6 @@ public class Parser {
                     scopes[^1].Add(instruction);
                 }
                 
-                // If this is an assignment, it means that it is a dictionary or class.  If it's not, it's an if/else/while.
                 if (instruction.Type == Consts.InstructionTypes.Assignment) {
                     scopes.Add(instruction.Right.Instructions);
                 }
@@ -79,7 +78,7 @@ public class Parser {
         } 
         else if (currentTokenSet[0].Type == Consts.TokenTypes.Boolean) {
             return HandleBoolean(currentTokenSet);
-        } 
+        }
         else {
             return new Instruction();
         }
@@ -193,8 +192,8 @@ public class Parser {
                 return HandleReturn(tokens);
             // case "import":
             //     return HandleImport(tokens);
-            // case "class":
-            //     return HandleClass(tokens);
+            case "class":
+                return HandleClass(tokens);
             // case "constructor":
             //     return HandleConstructor(tokens);
             default:
@@ -285,6 +284,14 @@ public class Parser {
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.Return;
         instruction.Value = returnValue;
+        instruction.Line = tokens[0].Line;
+        instruction.Column = tokens[0].Column;
+        return instruction;
+    }
+
+    private static Instruction HandleClass(List<Token> tokens) {
+        Instruction instruction = new Instruction();
+        instruction.Type = Consts.InstructionTypes.Class;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
