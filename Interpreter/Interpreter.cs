@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Security.Cryptography;
 using BattleScript.Exceptions;
 
 namespace BattleScript; 
@@ -50,6 +51,8 @@ public class Interpreter {
                 return HandleParens(instruction);
             case Consts.InstructionTypes.Return:
                 return HandleReturn(instruction);
+            case Consts.InstructionTypes.Class:
+                return HandleClass(instruction);
         }
 
         return new ScopeVariable();
@@ -200,39 +203,24 @@ public class Interpreter {
     
     private ScopeVariable HandleParens(Instruction instruction) {
         Debug.Assert(!ongoingContexts.Empty());
-        Debug.Assert(ongoingContexts.GetCurrentContext().Type == Consts.VariableTypes.Function);
 
-        List<ScopeVariable> functionArgs = ongoingContexts.GetCurrentContext().Value;
-
-        int expectedArgCount = instruction.Value.Count;
-        if (instruction.Value.Count != functionArgs.Count) {
-            throw new WrongNumberOfArgumentsException(expectedArgCount, functionArgs.Count);
-        }
-
-        lexicalContexts.Add(new ScopeVariable());
+        ScopeVariable called = ongoingContexts.GetCurrentContext();
         
-        for (int i = 0; i < functionArgs.Count; i++) {
-            string argName = functionArgs[i].Value;
-            ScopeVariable argValue = InterpretInstruction(instruction.Value[i]);
-            lexicalContexts.AddVariable(new List<string>() { argName }, argValue);
-        }
-        
-        foreach (Instruction funcInstruction in ongoingContexts.GetCurrentContext().Instructions) {
-            InterpretInstruction(funcInstruction);
-        }
-
-        ScopeVariable? returnValue = null;
-        if (lexicalContexts.GetCurrentContext().HasVariable("return")) {
-            returnValue = lexicalContexts.GetCurrentContext().GetVariable("return");
-        }
-        
-        lexicalContexts.Pop();
-
-        if (returnValue is not null) {
-            return returnValue;
-        }
-        else {
-            return new ScopeVariable(Consts.VariableTypes.Value);
+        switch (called.Type) {
+            case Consts.VariableTypes.Function:
+                ScopeVariable functionScope = RunFunction(called.Value, called.Instructions, instruction.Value);
+                ScopeVariable? returnValue = new ScopeVariable(Consts.VariableTypes.Value);
+                if (functionScope.HasVariable("return")) {
+                    returnValue = functionScope.GetVariable("return");
+                }
+                return returnValue;
+            case Consts.VariableTypes.Class:
+                ScopeVariable objectScope = new ScopeVariable();
+                objectScope.Copy(called);
+                objectScope.Type = Consts.VariableTypes.Object;
+                return objectScope;
+            default:
+                throw new SystemException("Invalid instruction type to call");
         }
     }
 
@@ -240,5 +228,34 @@ public class Interpreter {
         ScopeVariable result = InterpretInstruction(instruction.Value);
         lexicalContexts.AddVariable(new List<string>() { "return" }, result);
         return result;
+    }
+    
+    private ScopeVariable HandleClass(Instruction instruction) {
+        ScopeVariable resultingScope = RunFunction(
+            new List<ScopeVariable>(), 
+            instruction.Instructions, 
+            new List<Instruction>()
+        );
+        return new ScopeVariable(Consts.VariableTypes.Class, resultingScope.Value);
+    }
+
+    private ScopeVariable RunFunction(List<ScopeVariable> functionValue, List<Instruction> instructions, List<Instruction> args) {
+        lexicalContexts.Add(new ScopeVariable());
+        
+        if (args.Count != functionValue.Count) {
+            throw new WrongNumberOfArgumentsException(args.Count, functionValue.Count);
+        }
+
+        for (int i = 0; i < args.Count; i++) {
+            string argName = functionValue[i].Value;
+            ScopeVariable argValue = InterpretInstruction(args[i]);
+            lexicalContexts.AddVariable(new List<string>() { argName }, argValue);
+        }
+        
+        foreach (Instruction funcInstruction in instructions) {
+            InterpretInstruction(funcInstruction);
+        }
+
+        return lexicalContexts.Pop();
     }
 }

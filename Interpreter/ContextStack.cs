@@ -15,8 +15,10 @@ public class ContextStack {
         contexts.Add(context);
     }
 
-    public void Pop() {
+    public ScopeVariable Pop() {
+        ScopeVariable removed = contexts[^1];
         contexts.RemoveAt(contexts.Count - 1);
+        return removed;
     }
 
     public bool Empty() {
