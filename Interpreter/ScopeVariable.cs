@@ -42,15 +42,38 @@ public class ScopeVariable {
         Debug.Assert(Value is Dictionary<string, ScopeVariable>);
         if (Value.ContainsKey(key)) {
             return Value[key];
+        } 
+        else if (Value.ContainsKey("class")) {
+            return Value["class"].GetVariable(key);
         }
         else {
             throw new VariableNotFoundException(key);
         }
     }
 
-    public void Copy(ScopeVariable var) {
+    public ScopeVariable Copy(ScopeVariable var) {
         Type = var.Type;
         Value = var.Value;
         Instructions = var.Instructions;
+        return this;
+    }
+
+    public ScopeVariable CreateObject(ScopeVariable var) {
+        Type = Consts.VariableTypes.Object;
+        Value = new Dictionary<string, ScopeVariable>();
+        foreach (KeyValuePair<string, ScopeVariable> pair in var.Value) {
+            if (
+                pair.Value.Type is
+                Consts.VariableTypes.Array or
+                Consts.VariableTypes.Dictionary or
+                Consts.VariableTypes.Object or
+                Consts.VariableTypes.Value
+            ) {
+                Value.Add(pair.Key, new ScopeVariable().Copy(pair.Value));
+            }
+        }
+
+        Value.Add("class", var);
+        return this;
     }
 }

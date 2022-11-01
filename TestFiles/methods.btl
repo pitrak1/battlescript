@@ -7,7 +7,6 @@ var Class1 = class {
 }
 
 var x = Class1();
-var y = x.b;
-var z = x.my_function();
+var y = x.my_function();
 x.a = 10;
-var a = x.my_function();
+var z = x.my_function();

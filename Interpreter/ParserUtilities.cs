@@ -86,6 +86,16 @@ public class ParserUtilities {
         return entries;
     }
 
+    public static int GetTokenLengthOfEntries(List<List<Token>> entries) {
+        int total = 0;
+        foreach (List<Token> entry in entries) {
+            total += entry.Count;
+        }
+        // Add breaking characters and starting and ending seaprators
+        total += entries.Count + 1;
+        return total;
+    }
+
     public static bool BlockContainsSemicolon(List<Token> tokens, int tokenIndex) {
         while (tokenIndex < tokens.Count) {
             switch (tokens[tokenIndex].Value) {

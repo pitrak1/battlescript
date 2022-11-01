@@ -135,9 +135,16 @@ public class Parser {
             values.Add(ParseTokenSet(entry));
         }
         
+        Instruction next = null;
+        int entriesLength = ParserUtilities.GetTokenLengthOfEntries(entries);
+        if (tokens.Count > entriesLength) {
+            next = ParseTokenSet(tokens.GetRange(entriesLength, tokens.Count - entriesLength));
+        }
+        
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.Dictionary;
         instruction.Value = values;
+        instruction.Next = next;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
@@ -151,9 +158,17 @@ public class Parser {
                 values.Add(ParseTokenSet(entry));
             }
         }
+        
+        Instruction next = null;
+        int entriesLength = ParserUtilities.GetTokenLengthOfEntries(entries);
+        if (tokens.Count > entriesLength) {
+            next = ParseTokenSet(tokens.GetRange(entriesLength, tokens.Count - entriesLength));
+        }
+        
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.Parens;
         instruction.Value = values;
+        instruction.Next = next;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
@@ -165,10 +180,16 @@ public class Parser {
         property.Value = tokens[1].Value;
         property.Column = tokens[1].Column;
         property.Line = tokens[1].Line;
+        
+        Instruction next = null;
+        if (tokens.Count > 2) {
+            next = ParseTokenSet(tokens.GetRange(2, tokens.Count - 2));
+        }
 
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.SquareBraces;
         instruction.Value = new List<Instruction>() {property};
+        instruction.Next = next;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;

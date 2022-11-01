@@ -61,8 +61,7 @@ public class Interpreter {
     private ScopeVariable HandleAssignment(Instruction instruction) {
         ScopeVariable left = InterpretInstruction(instruction.Left);
         ScopeVariable right = InterpretInstruction(instruction.Right);
-        left.Copy(right);
-        return left;
+        return left.Copy(right);
     }
     
     private ScopeVariable HandleValueType(Instruction instruction) {
@@ -215,10 +214,7 @@ public class Interpreter {
                 }
                 return returnValue;
             case Consts.VariableTypes.Class:
-                ScopeVariable objectScope = new ScopeVariable();
-                objectScope.Copy(called);
-                objectScope.Type = Consts.VariableTypes.Object;
-                return objectScope;
+                return new ScopeVariable().CreateObject(called);
             default:
                 throw new SystemException("Invalid instruction type to call");
         }
