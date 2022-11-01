@@ -27,5 +27,11 @@ public class Instruction {
             Instructions = instructions;
         }
     }
+
+    public Instruction SetDebugInfo(int? line, int? column) {
+        Line = line;
+        Column = column;
+        return this;
+    }
 }
 
