@@ -8,20 +8,17 @@ public class ScopeVariable {
     public Consts.VariableTypes? Type { get; set; }
     public dynamic? Value { get; set; }
     public List<Instruction>? Instructions { get; set; } = new();
-    public ScopeVariable? ClassScope { get; set; }
 
     public ScopeVariable(
         Consts.VariableTypes? type = null,
         dynamic? value = null,
-        List<Instruction>? instructions = null,
-        ScopeVariable? classScope = null
+        List<Instruction>? instructions = null
     ) {
         Type = type;
         Value = value;
         if (instructions is not null) {
             Instructions = instructions;
         }
-        ClassScope = classScope;
     }
     
     public ScopeVariable AddVariable(List<string> path, ScopeVariable? var = null) {
@@ -54,25 +51,19 @@ public class ScopeVariable {
             if (Value.ContainsKey(key)) {
                 return Value[key];
             } 
-            else if (ClassScope is not null) {
-                return ClassScope.GetVariable(key);
+            else if (Value.ContainsKey("class") && Type == Consts.VariableTypes.Object) {
+                return Value["class"].GetVariable(key);
             }
             else {
                 throw new VariableNotFoundException(key);
             }
         }
     }
-
-    public ScopeVariable GetIntIndex(int index) {
-        Debug.Assert(Value is List<ScopeVariable>);
-        return Value[index];
-    }
-
+    
     public ScopeVariable Copy(ScopeVariable var) {
         Type = var.Type;
         Value = var.Value;
         Instructions = var.Instructions;
-        ClassScope = var.ClassScope;
         return this;
     }
 
@@ -90,7 +81,7 @@ public class ScopeVariable {
                 Value.Add(pair.Key, new ScopeVariable().Copy(pair.Value));
             }
         }
-        ClassScope = var;
+        Value.Add("class", var);
         return this;
     }
 }

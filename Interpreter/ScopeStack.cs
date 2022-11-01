@@ -8,9 +8,14 @@ public class ScopeStack : ContextStack {
         contexts.Add(new ScopeVariable(null, new Dictionary<string, ScopeVariable>()));
     }
 
-    public override void Add(ScopeVariable context) {
-        Debug.Assert(context.Value is Dictionary<string, ScopeVariable>);
-        contexts.Add(new ScopeVariable(null, context.Value));
+    public override void Add(ScopeVariable? context = null) {
+        if (context is not null) {
+            Debug.Assert(context.Value is Dictionary<string, ScopeVariable>);
+            contexts.Add(new ScopeVariable(null, context.Value));
+        }
+        else {
+            contexts.Add(new ScopeVariable(null, new Dictionary<string, ScopeVariable>()));  
+        }
     }
 
     public ScopeVariable AddVariable(List<string> path, ScopeVariable? var = null) {
