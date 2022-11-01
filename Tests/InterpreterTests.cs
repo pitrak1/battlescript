@@ -205,7 +205,7 @@ public class InterpreterTests {
         class1Scope.Add("a", new ScopeVariable(Consts.VariableTypes.Value, 10));
 
         Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
-        expected.Add("Class1", new ScopeVariable(Consts.VariableTypes.Class));
+        expected.Add("Class1", new ScopeVariable(Consts.VariableTypes.Class, class1Scope));
         expected.Add("x", new ScopeVariable(Consts.VariableTypes.Object, class1Scope));
         expected.Add("y", new ScopeVariable(Consts.VariableTypes.Value, 5));
         expected.Add("z", new ScopeVariable(Consts.VariableTypes.Value, 10));
@@ -215,7 +215,7 @@ public class InterpreterTests {
     
     [Test]
     public void Methods() {
-        string contents = LoadFile("classes.btl");
+        string contents = LoadFile("methods.btl");
         var tokens = Lexer.Run(contents);
         var instructions = Parser.Run(tokens);
         
@@ -223,16 +223,42 @@ public class InterpreterTests {
         var scopeStack = interpreter.Run(instructions);
         
         Dictionary<string, ScopeVariable> class1Scope = new Dictionary<string, ScopeVariable>();
-        class1Scope.Add("a", new ScopeVariable(Consts.VariableTypes.Value, 10));
+        class1Scope.Add("a", new ScopeVariable(Consts.VariableTypes.Value, 5));
+        class1Scope.Add("my_function", new ScopeVariable(Consts.VariableTypes.Function, new List<ScopeVariable>()));
+        
+        Dictionary<string, ScopeVariable> xScope = new Dictionary<string, ScopeVariable>();
+        xScope.Add("a", new ScopeVariable(Consts.VariableTypes.Value, 10));
+        xScope.Add("class", new ScopeVariable(Consts.VariableTypes.Class, class1Scope));
 
         Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
-        expected.Add("Class1", new ScopeVariable(Consts.VariableTypes.Class));
-        expected.Add("x", new ScopeVariable(Consts.VariableTypes.Object, class1Scope));
+        expected.Add("Class1", new ScopeVariable(Consts.VariableTypes.Class, class1Scope));
+        expected.Add("x", new ScopeVariable(Consts.VariableTypes.Object, xScope));
         expected.Add("y", new ScopeVariable(Consts.VariableTypes.Value, 5));
         expected.Add("z", new ScopeVariable(Consts.VariableTypes.Value, 10));
 
         Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
     }
+    
+    // [Test]
+    // public void Inheritance() {
+    //     string contents = LoadFile("classes.btl");
+    //     var tokens = Lexer.Run(contents);
+    //     var instructions = Parser.Run(tokens);
+    //     
+    //     var interpreter = new Interpreter();
+    //     var scopeStack = interpreter.Run(instructions);
+    //     
+    //     Dictionary<string, ScopeVariable> class1Scope = new Dictionary<string, ScopeVariable>();
+    //     class1Scope.Add("a", new ScopeVariable(Consts.VariableTypes.Value, 10));
+    //
+    //     Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
+    //     expected.Add("Class1", new ScopeVariable(Consts.VariableTypes.Class));
+    //     expected.Add("x", new ScopeVariable(Consts.VariableTypes.Object, class1Scope));
+    //     expected.Add("y", new ScopeVariable(Consts.VariableTypes.Value, 5));
+    //     expected.Add("z", new ScopeVariable(Consts.VariableTypes.Value, 10));
+    //
+    //     Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    // }
     
     private string LoadFile(string filename) {
         return File.ReadAllText($"/Users/nickpitrak/Desktop/BattleScript/TestFiles/{filename}");

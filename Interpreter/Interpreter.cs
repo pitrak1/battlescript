@@ -7,10 +7,12 @@ namespace BattleScript;
 public class Interpreter {
     public ScopeStack lexicalContexts { get; set; }
     public ContextStack ongoingContexts { get; set; }
+    public ContextStack objectContexts { get; set; }
 
     public Interpreter() {
         lexicalContexts = new ScopeStack();
         ongoingContexts = new ContextStack();
+        objectContexts = new ContextStack();
     }
 
     public ScopeStack Run(List<Instruction> instructions) {
@@ -78,7 +80,15 @@ public class Interpreter {
         ScopeVariable var = lexicalContexts.GetVariable(instruction.Value);
         if (instruction.Next is not null) {
             ongoingContexts.Add(var);
+            bool popContext = false;
+            if (var.Type == Consts.VariableTypes.Object) {
+                objectContexts.Add(var);
+                popContext = true;
+            }
             var = InterpretInstruction(instruction.Next);
+            if (popContext) {
+                objectContexts.Pop();
+            }
             ongoingContexts.Pop();
         }
         return var;
@@ -128,7 +138,15 @@ public class Interpreter {
         else {
             // Handle index
             ScopeVariable index = InterpretInstruction(instruction.Value[0]);
-            return ongoingContexts.GetCurrentContext().Value[index.Value];
+            ScopeVariable var = ongoingContexts.GetCurrentContext().GetVariable(index.Value);
+            
+            if (instruction.Next is not null) {
+                ongoingContexts.Add(var);
+                var = InterpretInstruction(instruction.Next);
+                ongoingContexts.Pop();
+            }
+            
+            return var;
         }
     }
 
@@ -147,7 +165,7 @@ public class Interpreter {
     private ScopeVariable HandleIf(Instruction instruction) {
         ScopeVariable condition = InterpretInstruction(instruction.Value);
         if (InterpreterUtilities.isTruthy(condition)) {
-            lexicalContexts.Add(new ScopeVariable());
+            lexicalContexts.Add(new ScopeVariable(null, new Dictionary<string, ScopeVariable>()));
             foreach (Instruction ifInstruction in instruction.Instructions) {
                 InterpretInstruction(ifInstruction);
             }
@@ -167,7 +185,7 @@ public class Interpreter {
         }
 
         if (instruction.Value is null || InterpreterUtilities.isTruthy(condition)) {
-            lexicalContexts.Add(new ScopeVariable());
+            lexicalContexts.Add(new ScopeVariable(null, new Dictionary<string, ScopeVariable>()));
             foreach (Instruction elseInstruction in instruction.Instructions) {
                 InterpretInstruction(elseInstruction);
             }
@@ -181,7 +199,7 @@ public class Interpreter {
     private ScopeVariable HandleWhile(Instruction instruction) {
         ScopeVariable condition = InterpretInstruction(instruction.Value);
         while (InterpreterUtilities.isTruthy(condition)) {
-            lexicalContexts.Add(new ScopeVariable());
+            lexicalContexts.Add(new ScopeVariable(null, new Dictionary<string, ScopeVariable>()));
             foreach (Instruction ifInstruction in instruction.Instructions) {
                 InterpretInstruction(ifInstruction);
             }
@@ -197,7 +215,12 @@ public class Interpreter {
         foreach (Instruction inst in instruction.Value) {
             args.Add(new ScopeVariable(Consts.VariableTypes.Value, inst.Value));
         }
-        return new ScopeVariable(Consts.VariableTypes.Function, args, instruction.Instructions);
+
+        ScopeVariable? var = null;
+        if (!ongoingContexts.Empty() && ongoingContexts.GetCurrentContext().Type == Consts.VariableTypes.Class) {
+            var = ongoingContexts.GetCurrentContext();
+        }
+        return new ScopeVariable(Consts.VariableTypes.Function, args, instruction.Instructions, var);
     }
     
     private ScopeVariable HandleParens(Instruction instruction) {
@@ -207,10 +230,17 @@ public class Interpreter {
         
         switch (called.Type) {
             case Consts.VariableTypes.Function:
+                if (!objectContexts.Empty()) {
+                    lexicalContexts.Add(objectContexts.GetCurrentContext());
+                }
                 ScopeVariable functionScope = RunFunction(called.Value, called.Instructions, instruction.Value);
                 ScopeVariable? returnValue = new ScopeVariable(Consts.VariableTypes.Value);
                 if (functionScope.HasVariable("return")) {
                     returnValue = functionScope.GetVariable("return");
+                }
+                
+                if (!objectContexts.Empty()) {
+                    lexicalContexts.Pop();
                 }
                 return returnValue;
             case Consts.VariableTypes.Class:
@@ -227,16 +257,20 @@ public class Interpreter {
     }
     
     private ScopeVariable HandleClass(Instruction instruction) {
+        ScopeVariable var = new ScopeVariable(Consts.VariableTypes.Class);
+        ongoingContexts.Add(var);
         ScopeVariable resultingScope = RunFunction(
             new List<ScopeVariable>(), 
             instruction.Instructions, 
             new List<Instruction>()
         );
-        return new ScopeVariable(Consts.VariableTypes.Class, resultingScope.Value);
+        ongoingContexts.Pop();
+        var.Value = resultingScope.Value;
+        return var;
     }
 
     private ScopeVariable RunFunction(List<ScopeVariable> functionValue, List<Instruction> instructions, List<Instruction> args) {
-        lexicalContexts.Add(new ScopeVariable());
+        lexicalContexts.Add(new ScopeVariable(null, new Dictionary<string, ScopeVariable>()));
         
         if (args.Count != functionValue.Count) {
             throw new WrongNumberOfArgumentsException(args.Count, functionValue.Count);

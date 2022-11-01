@@ -49,11 +49,11 @@ public class Assertions {
         path.RemoveAt(path.Count - 1);
 
         path.Add("value");
-        if (instruction.Value is string || instruction.Value is int || instruction.Value is bool) {
+        if (expected.Value is string || expected.Value is int || expected.Value is bool) {
             Assert.That(instruction.Value, Is.EqualTo(expected.Value), GetErrorString("Value", expected.Value, instruction.Value, path));
-        } else if (instruction.Value is Instruction) {
+        } else if (expected.Value is Instruction) {
             AssertInstruction(instruction.Value, expected.Value, path);
-        } else if (instruction.Value is List<Instruction>) {
+        } else if (expected.Value is List<Instruction>) {
             Assert.That(instruction.Value.Count, Is.EqualTo(expected.Value.Count), GetErrorString("Value.Count", expected.Value.Count, instruction.Value.Count, path));
             for (int i = 0; i < instruction.Value.Count; i++) {
                 path.Add(i.ToString());

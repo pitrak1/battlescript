@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using BattleScript.Exceptions;
 
 namespace BattleScript; 
@@ -8,7 +9,8 @@ public class ScopeStack : ContextStack {
     }
 
     public override void Add(ScopeVariable context) {
-        contexts.Add(new ScopeVariable(null, new Dictionary<string, ScopeVariable>()));
+        Debug.Assert(context.Value is Dictionary<string, ScopeVariable>);
+        contexts.Add(new ScopeVariable(null, context.Value));
     }
 
     public ScopeVariable AddVariable(List<string> path, ScopeVariable? var = null) {

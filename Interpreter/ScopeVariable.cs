@@ -8,17 +8,20 @@ public class ScopeVariable {
     public Consts.VariableTypes? Type { get; set; }
     public dynamic? Value { get; set; }
     public List<Instruction>? Instructions { get; set; } = new();
+    public ScopeVariable? ClassScope { get; set; }
 
     public ScopeVariable(
         Consts.VariableTypes? type = null,
         dynamic? value = null,
-        List<Instruction>? instructions = null
+        List<Instruction>? instructions = null,
+        ScopeVariable? classScope = null
     ) {
         Type = type;
         Value = value;
         if (instructions is not null) {
             Instructions = instructions;
         }
+        ClassScope = classScope;
     }
     
     public ScopeVariable AddVariable(List<string> path, ScopeVariable? var = null) {
@@ -38,23 +41,38 @@ public class ScopeVariable {
         return Value.ContainsKey(key);
     }
 
-    public ScopeVariable GetVariable(string key) {
-        Debug.Assert(Value is Dictionary<string, ScopeVariable>);
-        if (Value.ContainsKey(key)) {
-            return Value[key];
-        } 
-        else if (Value.ContainsKey("class")) {
-            return Value["class"].GetVariable(key);
+    public ScopeVariable GetVariable(dynamic key) {
+        if (Value is List<ScopeVariable>) {
+            Debug.Assert(key is int);
+            if (key < Value.Count) {
+                return Value[key];
+            }
+            else {
+                throw new ArrayOutOfBoundsException(key);
+            }
+        } else {
+            if (Value.ContainsKey(key)) {
+                return Value[key];
+            } 
+            else if (ClassScope is not null) {
+                return ClassScope.GetVariable(key);
+            }
+            else {
+                throw new VariableNotFoundException(key);
+            }
         }
-        else {
-            throw new VariableNotFoundException(key);
-        }
+    }
+
+    public ScopeVariable GetIntIndex(int index) {
+        Debug.Assert(Value is List<ScopeVariable>);
+        return Value[index];
     }
 
     public ScopeVariable Copy(ScopeVariable var) {
         Type = var.Type;
         Value = var.Value;
         Instructions = var.Instructions;
+        ClassScope = var.ClassScope;
         return this;
     }
 
@@ -72,8 +90,7 @@ public class ScopeVariable {
                 Value.Add(pair.Key, new ScopeVariable().Copy(pair.Value));
             }
         }
-
-        Value.Add("class", var);
+        ClassScope = var;
         return this;
     }
 }

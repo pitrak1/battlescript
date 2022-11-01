@@ -311,8 +311,16 @@ public class Parser {
     }
 
     private static Instruction HandleClass(List<Token> tokens) {
+        Instruction? value = null;
+        if (tokens.Count > 1) {
+            Debug.Assert(tokens.Count == 3);
+            Debug.Assert(tokens[1].Value == "extends");
+            value = new Instruction(Consts.InstructionTypes.Variable, tokens[2].Value);
+        }
+        
         Instruction instruction = new Instruction();
         instruction.Type = Consts.InstructionTypes.Class;
+        instruction.Value = value;
         instruction.Line = tokens[0].Line;
         instruction.Column = tokens[0].Column;
         return instruction;
