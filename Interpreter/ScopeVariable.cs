@@ -54,6 +54,9 @@ public class ScopeVariable {
             else if (Value.ContainsKey("class") && Type == Consts.VariableTypes.Object) {
                 return Value["class"].GetVariable(key);
             }
+            else if (Value.ContainsKey("super") && Type == Consts.VariableTypes.Class) {
+                return Value["super"].GetVariable(key);
+            }
             else {
                 throw new VariableNotFoundException(key);
             }
@@ -70,6 +73,31 @@ public class ScopeVariable {
     public ScopeVariable CreateObject(ScopeVariable var) {
         Type = Consts.VariableTypes.Object;
         Value = new Dictionary<string, ScopeVariable>();
+        List<ScopeVariable> chain = GatherClassChain(var);
+        foreach (ScopeVariable scope in chain) {
+            MergeScope(scope);
+        }
+        Value.Add("class", var);
+        return this;
+    }
+
+    private List<ScopeVariable> GatherClassChain(ScopeVariable var) {
+        List<ScopeVariable> chain = new List<ScopeVariable>();
+        ScopeVariable? currentScope = var;
+        while (currentScope is not null) {
+            chain.Add(currentScope);
+            if (currentScope.HasVariable("super")) {
+                currentScope = currentScope.Value["super"];
+            }
+            else {
+                currentScope = null;
+            }
+        }
+        chain.Reverse();
+        return chain;
+    }
+
+    private void MergeScope(ScopeVariable var) {
         foreach (KeyValuePair<string, ScopeVariable> pair in var.Value) {
             if (
                 pair.Value.Type is
@@ -78,10 +106,13 @@ public class ScopeVariable {
                 Consts.VariableTypes.Object or
                 Consts.VariableTypes.Value
             ) {
-                Value.Add(pair.Key, new ScopeVariable().Copy(pair.Value));
+                if (HasVariable(pair.Key)) {
+                    Value[pair.Key] = new ScopeVariable().Copy(pair.Value);
+                }
+                else { 
+                    Value.Add(pair.Key, new ScopeVariable().Copy(pair.Value));
+                }
             }
         }
-        Value.Add("class", var);
-        return this;
     }
 }

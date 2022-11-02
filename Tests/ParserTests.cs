@@ -989,7 +989,7 @@ public class ParserTests {
                             Consts.InstructionTypes.Assignment,
                             null,
                             new Instruction(Consts.InstructionTypes.Declaration, "d"),
-                            new Instruction(Consts.InstructionTypes.Number, 15)
+                            new Instruction(Consts.InstructionTypes.Number, 12)
                         ),
                         new (
                             Consts.InstructionTypes.Assignment,
