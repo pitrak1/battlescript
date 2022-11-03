@@ -28,7 +28,6 @@ public class Interpreter {
      * - An object variable is found with a next instruction
      */
     public ContextStack SelfContexts { get; set; }
-    public ContextStack SuperContexts { get; set; }
 
     public Interpreter() {
         OngoingContexts = new ContextStack();
@@ -156,12 +155,12 @@ public class Interpreter {
         else {
             // Handle index
             ScopeVariable index = InterpretInstruction(instruction.Value[0]);
-            ScopeVariable var = OngoingContexts.GetCurrentContext().GetVariable(index.Value);
+            ScopeVariable indexed = OngoingContexts.GetCurrentContext();
+            ScopeVariable var = indexed.GetVariable(index.Value);
             
             if (instruction.Next is not null) {
-                OngoingContexts.Add(var);
+                OngoingContexts.SetCurrentContext(var);
                 var = InterpretInstruction(instruction.Next);
-                OngoingContexts.Pop();
             }
             
             return var;

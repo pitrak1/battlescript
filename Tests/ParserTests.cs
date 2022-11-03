@@ -1189,6 +1189,146 @@ public class ParserTests {
         
         Assertions.AssertInstructions(instructions, expected);
     }
+    
+    [Test]
+    public void Super() {
+        string contents = LoadFile("super.btl");
+        var tokens = Lexer.Run(contents);
+        var instructions = Parser.Run(tokens);
+
+        List<Instruction> expected = new List<Instruction>() {
+            new (
+                Consts.InstructionTypes.Assignment,
+                null,
+                new Instruction(Consts.InstructionTypes.Declaration, "Class1"),
+                new Instruction(
+                    Consts.InstructionTypes.Class,
+                    null,
+                    null,
+                    null,
+                    null,
+                    new List<Instruction>() {
+                        new (
+                            Consts.InstructionTypes.Assignment,
+                            null,
+                            new Instruction(Consts.InstructionTypes.Declaration, "my_function"),
+                            new Instruction(
+                                Consts.InstructionTypes.Function,
+                                new List<ScopeVariable>(),
+                                null,
+                                null,
+                                null,
+                                new List<Instruction>() {
+                                    new (
+                                        Consts.InstructionTypes.Return,
+                                        new Instruction(Consts.InstructionTypes.Number, 9)
+                                    )
+                                }
+                            )
+                        )
+                    }
+                )
+            ),
+            new (
+                Consts.InstructionTypes.Assignment,
+                null,
+                new Instruction(Consts.InstructionTypes.Declaration, "Class2"),
+                new Instruction(
+                    Consts.InstructionTypes.Class,
+                    new Instruction(Consts.InstructionTypes.Variable, "Class1"),
+                    null,
+                    null,
+                    null,
+                    new List<Instruction>() {
+                        new (
+                            Consts.InstructionTypes.Assignment,
+                            null,
+                            new Instruction(Consts.InstructionTypes.Declaration, "my_function"),
+                            new Instruction(
+                                Consts.InstructionTypes.Function,
+                                new List<ScopeVariable>(),
+                                null,
+                                null,
+                                null,
+                                new List<Instruction>() {
+                                    new (
+                                        Consts.InstructionTypes.Return,
+                                        new Instruction(Consts.InstructionTypes.Number, 4)
+                                    )
+                                }
+                            )
+                        ),
+                        new (
+                            Consts.InstructionTypes.Assignment,
+                            null,
+                            new Instruction(Consts.InstructionTypes.Declaration, "my_other_function"),
+                            new Instruction(
+                                Consts.InstructionTypes.Function,
+                                new List<ScopeVariable>(),
+                                null,
+                                null,
+                                null,
+                                new List<Instruction>() {
+                                    new (
+                                        Consts.InstructionTypes.Return,
+                                        new Instruction(
+                                            Consts.InstructionTypes.Variable, 
+                                            "super",
+                                            null,
+                                            null,
+                                            new Instruction(
+                                                Consts.InstructionTypes.SquareBraces,
+                                                new List<Instruction>() {
+                                                    new (Consts.InstructionTypes.String, "my_function")
+                                                },
+                                                null,
+                                                null,
+                                                new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                                            )
+                                        )
+                                    )
+                                }
+                            )
+                        )
+                    }
+                )
+            ),
+            new (
+                Consts.InstructionTypes.Assignment,
+                null,
+                new Instruction(Consts.InstructionTypes.Declaration, "a"),
+                new Instruction(
+                    Consts.InstructionTypes.Variable,
+                    "Class2",
+                    null,
+                    null,
+                    new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                )
+            ),
+            new (
+                Consts.InstructionTypes.Assignment,
+                null,
+                new Instruction(Consts.InstructionTypes.Declaration, "b"),
+                new Instruction(
+                    Consts.InstructionTypes.Variable,
+                    "a",
+                    null,
+                    null,
+                    new Instruction(
+                        Consts.InstructionTypes.SquareBraces, 
+                        new List<Instruction>() {
+                            new (Consts.InstructionTypes.String, "my_other_function")
+                        },
+                        null,
+                        null,
+                        new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                    )
+                )
+            )
+        };
+        
+        Assertions.AssertInstructions(instructions, expected);
+    }
 
     private string LoadFile(string filename) {
         return File.ReadAllText($"/Users/nickpitrak/Desktop/BattleScript/TestFiles/{filename}");
