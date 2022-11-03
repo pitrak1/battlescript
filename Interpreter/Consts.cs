@@ -19,7 +19,7 @@ public class Consts {
 
 	public static string[] Keywords = new string[] {
 		"var", "if", "else", "while", "function", "return", "import", "export", "class", "extends", 
-		"Btl", "constructor", "self"
+		"Btl", "constructor", "self", "const"
 	};
 	public static char[] Separators = new char[] {'(', ')', '{', '}', ',', '[', ']', ':', '.'};
 	public static string[] Operators = new string[] {"==", "<", ">", "+", "*"};
@@ -101,7 +101,8 @@ public class Consts {
 		Else,					// 17
 		Constructor,			// 18
 		Self, 					// 19
-		Super					// 20
+		Super,					// 20
+		ConstDeclaration		// 21
 	};
 
 	public static string[] InstructionTypeStrings = new string[] {

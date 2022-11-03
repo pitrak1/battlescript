@@ -1329,6 +1329,41 @@ public class ParserTests {
         
         Assertions.AssertInstructions(instructions, expected);
     }
+    
+    [Test]
+    public void ConstVariables() {
+        string contents = LoadFile("const_variables.btl");
+        var tokens = Lexer.Run(contents);
+        var instructions = Parser.Run(tokens);
+
+        List<Instruction> expected = new List<Instruction>() {
+            new (
+                Consts.InstructionTypes.Assignment,
+                null,
+                new Instruction(Consts.InstructionTypes.ConstDeclaration, "x"),
+                new Instruction(Consts.InstructionTypes.Number, 5)
+            ),
+            new (
+                Consts.InstructionTypes.Assignment,
+                null,
+                new Instruction(Consts.InstructionTypes.Declaration, "y"),
+                new Instruction(Consts.InstructionTypes.Number, 3)
+            ),
+            new (
+                Consts.InstructionTypes.Assignment,
+                null,
+                new Instruction(Consts.InstructionTypes.ConstDeclaration, "z"),
+                new Instruction(
+                    Consts.InstructionTypes.Operation,
+                    "+",
+                    new Instruction(Consts.InstructionTypes.Variable, "x"),
+                    new Instruction(Consts.InstructionTypes.Variable, "y")
+                )
+            )
+        };
+        
+        Assertions.AssertInstructions(instructions, expected);
+    }
 
     private string LoadFile(string filename) {
         return File.ReadAllText($"/Users/nickpitrak/Desktop/BattleScript/TestFiles/{filename}");

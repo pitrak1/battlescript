@@ -196,6 +196,8 @@ public class Parser {
         switch (tokens[0].Value) {
             case "var":
                 return HandleVar(tokens);
+            case "const":
+                return HandleConst(tokens);
             case "if":
                 return HandleIf(tokens);
             case "else":
@@ -223,6 +225,18 @@ public class Parser {
         
         return new Instruction(
             Consts.InstructionTypes.Declaration,
+            tokens[1].Value
+        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+    }
+    
+    private static Instruction HandleConst(List<Token> tokens) {
+        Debug.Assert(tokens.Count == 2);
+        Debug.Assert(tokens[0].Type == Consts.TokenTypes.Keyword);
+        Debug.Assert(tokens[0].Value == "const");
+        Debug.Assert(tokens[1].Type == Consts.TokenTypes.Identifier);
+        
+        return new Instruction(
+            Consts.InstructionTypes.ConstDeclaration,
             tokens[1].Value
         ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
     }
