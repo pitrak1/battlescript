@@ -1,9 +1,4 @@
 var Class1 = class {
-	constructor(a) {
-		self.a = a;
-	}
-
-	var a = 15;
 	var b = 8;
 
 	var my_function = function() {
@@ -12,5 +7,5 @@ var Class1 = class {
 	}
 }
 
-var x = Class1(12);
+var x = Class1();
 var y = x.my_function();

@@ -76,6 +76,8 @@ public class Interpreter {
                 return HandleReturn(instruction);
             case Consts.InstructionTypes.Class:
                 return HandleClass(instruction);
+            case Consts.InstructionTypes.Self:
+                return HandleSelf(instruction);
         }
 
         return new ScopeVariable();
@@ -281,6 +283,16 @@ public class Interpreter {
             var.Value.Add("super", InterpretInstruction(instruction.Value));
         }
         
+        return var;
+    }
+
+    private ScopeVariable HandleSelf(Instruction instruction) {
+        ScopeVariable var = SelfContexts.GetCurrentContext();
+        if (instruction.Next is not null) {
+            OngoingContexts.Add(var);
+            var = InterpretInstruction(instruction.Next);
+            OngoingContexts.Pop();
+        }
         return var;
     }
 

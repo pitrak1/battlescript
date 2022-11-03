@@ -208,6 +208,8 @@ public class Parser {
                 return HandleReturn(tokens);
             case "class":
                 return HandleClass(tokens);
+            case "self":
+                return HandleSelf(tokens);
             default:
                 return new Instruction();
         }
@@ -366,5 +368,20 @@ public class Parser {
             Consts.InstructionTypes.Boolean,
             value
         ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+    }
+
+    private static Instruction HandleSelf(List<Token> tokens) {
+        Instruction? next = null;
+        if (tokens.Count > 1) {
+            next = ParseTokenSet(tokens.GetRange(1, tokens.Count - 1));
+        }
+
+        return new Instruction(
+            Consts.InstructionTypes.Self,
+            null,
+            null,
+            null,
+            next
+        );
     }
 }
