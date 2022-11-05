@@ -214,6 +214,8 @@ public class Parser {
                 return HandleSelf(tokens);
             case "super":
                 return HandleSuper(tokens);
+            case "constructor":
+                return HandleConstructor(tokens);
             default:
                 return new Instruction();
         }
@@ -414,5 +416,26 @@ public class Parser {
             null,
             next
         );
+    }
+    
+    private static Instruction HandleConstructor(List<Token> tokens) {
+        // exclude the function itself and the start and ending parens
+        List<Token> argTokens = tokens.GetRange(1, tokens.Count - 1);
+        List<List<Token>> tokenizedArgs =
+            ParserUtilities.ParseUntilMatchingSeparator(argTokens, new List<string>() { "," });
+
+        List<Instruction> instructionArgs = new List<Instruction>();
+        foreach (List<Token> arg in tokenizedArgs) {
+            if (arg.Count > 0) {
+                Instruction instructionArg = ParseTokenSet(arg);
+                Debug.Assert(instructionArg.Type == Consts.InstructionTypes.Variable);
+                instructionArgs.Add(instructionArg);
+            }
+        }
+        
+        return new Instruction(
+            Consts.InstructionTypes.Constructor,
+            instructionArgs
+        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
     }
 }

@@ -88,6 +88,8 @@ public class Interpreter {
                 return HandleSelf(instruction);
             case Consts.InstructionTypes.Super:
                 return HandleSuper(instruction);
+            case Consts.InstructionTypes.Constructor:
+                return HandleConstructor(instruction);
         }
 
         return new ScopeVariable();
@@ -281,7 +283,24 @@ public class Interpreter {
                 }
                 return returnValue;
             case Consts.VariableTypes.Class:
-                return new ScopeVariable().CreateObject(called);
+                ScopeVariable createdObject = null;
+                ScopeVariable constructor = null;
+                if (SelfContexts.Empty()) {
+                    createdObject = new ScopeVariable().CreateObject(called);
+                    constructor = createdObject.ClassObject.GetConstructorForClass();
+                }
+                else {
+                    createdObject = SelfContexts.GetCurrentContext();
+                    constructor = OngoingContexts.GetCurrentContext().GetConstructorForClass();
+                }
+                if (constructor is not null) {
+                    SelfContexts.Add(createdObject);
+                    LexicalContexts.Add(createdObject);
+                    RunFunction(constructor.Value, constructor.Instructions, instruction.Value, constructor.ClassObject);
+                    SelfContexts.Pop();
+                    LexicalContexts.Pop();
+                }
+                return createdObject;
             default:
                 throw new SystemException("Invalid instruction type to call");
         }
@@ -332,6 +351,22 @@ public class Interpreter {
             OngoingContexts.Pop();
         }
         return superObject;
+    }
+    
+    private ScopeVariable HandleConstructor(Instruction instruction) {
+        List<ScopeVariable> args = new List<ScopeVariable>();
+        foreach (Instruction inst in instruction.Value) {
+            args.Add(new ScopeVariable(Consts.VariableTypes.Value, inst.Value));
+        }
+
+        ScopeVariable? classObject = null;
+        if (!ClassContexts.Empty()) {
+            classObject = ClassContexts.GetCurrentContext();
+        }
+        
+        List<string> path = new List<string>() { "constructor" };
+        ScopeVariable left = LexicalContexts.AddVariable(path);
+        return left.Copy(new ScopeVariable(Consts.VariableTypes.Function, args, instruction.Instructions, classObject));
     }
 
     private ScopeVariable RunFunction(List<ScopeVariable> functionValue, List<Instruction> instructions, List<Instruction> args, ScopeVariable? classObject = null) {

@@ -79,11 +79,24 @@ public class ScopeVariable {
         Type = Consts.VariableTypes.Object;
         Value = new Dictionary<string, ScopeVariable>();
         List<ScopeVariable> chain = GatherClassChain(var);
+        chain.Reverse();
         foreach (ScopeVariable scope in chain) {
             MergeScope(scope);
         }
         Value.Add("class", var);
+        ClassObject = var;
         return this;
+    }
+
+    public ScopeVariable? GetConstructorForClass() {
+        List<ScopeVariable> chain = GatherClassChain(this);
+        foreach (ScopeVariable scope in chain) {
+            if (scope.HasVariable("constructor")) {
+                return scope.GetVariable("constructor");
+            }
+        }
+
+        return null;
     }
 
     private List<ScopeVariable> GatherClassChain(ScopeVariable var) {
@@ -98,7 +111,6 @@ public class ScopeVariable {
                 currentScope = null;
             }
         }
-        chain.Reverse();
         return chain;
     }
 
