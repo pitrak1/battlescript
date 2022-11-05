@@ -370,6 +370,36 @@ public class InterpreterTests {
         Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
     }
     
+    [Test]
+    public void SelfSuper() {
+        string contents = LoadFile("self_super.btl");
+        var tokens = Lexer.Run(contents);
+        var instructions = Parser.Run(tokens);
+        
+        var interpreter = new Interpreter();
+        var scopeStack = interpreter.Run(instructions);
+        
+        Dictionary<string, ScopeVariable> class1Scope = new Dictionary<string, ScopeVariable>();
+        class1Scope.Add("x", new ScopeVariable(Consts.VariableTypes.Value, 5));
+        class1Scope.Add("my_function", new ScopeVariable(Consts.VariableTypes.Function, new List<ScopeVariable>()));
+    
+        Dictionary<string, ScopeVariable> class2Scope = new Dictionary<string, ScopeVariable>();
+        class2Scope.Add("my_other_function", new ScopeVariable(Consts.VariableTypes.Function, new List<ScopeVariable>()));
+        class2Scope.Add("super", new ScopeVariable(Consts.VariableTypes.Class, class1Scope));
+        
+        Dictionary<string, ScopeVariable> aScope = new Dictionary<string, ScopeVariable>();
+        aScope.Add("x", new ScopeVariable(Consts.VariableTypes.Value, 10));
+        aScope.Add("class", new ScopeVariable(Consts.VariableTypes.Class, class2Scope));
+        
+        Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
+        expected.Add("Class1", new ScopeVariable(Consts.VariableTypes.Class, class1Scope));
+        expected.Add("Class2", new ScopeVariable(Consts.VariableTypes.Class, class2Scope));
+        expected.Add("a", new ScopeVariable(Consts.VariableTypes.Object, aScope));
+        expected.Add("b", new ScopeVariable(Consts.VariableTypes.Value, 10));
+    
+        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    }
+    
     private string LoadFile(string filename) {
         return File.ReadAllText($"/Users/nickpitrak/Desktop/BattleScript/TestFiles/{filename}");
     }
