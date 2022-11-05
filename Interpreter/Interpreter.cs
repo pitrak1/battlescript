@@ -169,6 +169,13 @@ public class Interpreter {
             ScopeVariable indexed = OngoingContexts.GetCurrentContext();
             ScopeVariable var = indexed.GetVariable(index.Value);
             
+            if (index.Value is string && index.Value == "super") {
+                ClassContexts.Add(OngoingContexts.GetCurrentContext());
+                ScopeVariable result = HandleSuper(instruction);
+                ClassContexts.Pop();
+                return result;
+            }
+            
             if (instruction.Next is not null) {
                 OngoingContexts.SetCurrentContext(var);
                 var = InterpretInstruction(instruction.Next);

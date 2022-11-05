@@ -1,0 +1,37 @@
+var Class1 = class {
+	var my_function = function() {
+		return 9;
+	}
+
+	var my_other_function = function() {
+		return 3;
+	}
+}
+
+var Class2 = class extends Class1 {
+	var my_function = function() {
+		return 4;
+	}
+
+	var my_other_function = function() {
+		return super.my_other_function();
+	}
+}
+
+var Class3 = class extends Class2 {
+	var my_function = function() {
+		return 2;
+	}
+
+	var my_other_function = function() {
+		return super.my_other_function();
+	}
+
+	var my_other_other_function = function() {
+		return super.super.my_function();
+	}
+}
+
+var a = Class3();
+var b = a.my_other_function();
+var c = a.my_other_other_function();
