@@ -62,24 +62,9 @@ public class Consts {
 		Operator,
 		Semicolon,
 		Whitespace,
-		Comment,
-		Error
+		Comment
 	};
-	public static string[] TokenTypeStrings = new string[] {
-		"Number",
-		"String",
-		"Boolean",
-		"Keyword",
-		"Identifier",
-		"Assignment",
-		"Separator",
-		"Operator",
-		"Semicolon",
-		"Whitespace",
-		"Comment",
-		"Error"
-	};
-	
+
 	public enum InstructionTypes {
 		Assignment,				// 0
 		Declaration,			// 1

@@ -1,16 +1,14 @@
 namespace BattleScript;
 
 public class Token {
-    public Consts.TokenTypes Type { get; }
-    public string Value { get; }
+    public Consts.TokenTypes Type { get; set; }
+    public string Value { get; set;  }
     public int? Line { get; set; }
     public int? Column { get; set; }
 
-    public Token(Consts.TokenTypes type, string value, int? line = null, int? column = null) {
+    public Token(Consts.TokenTypes type, string value) {
         Type = type;
         Value = value;
-        Line = line;
-        Column = column;
     }
 
     public void SetDebugInfo(int line, int column) {

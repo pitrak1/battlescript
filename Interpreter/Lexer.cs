@@ -39,25 +39,25 @@ public class Lexer {
         string nextCharacters = line.Substring(lineIndex, charactersToFetch);
 
         if (Consts.Whitespace.Contains(nextCharacters[0])) {
-            return new Token(Consts.TokenTypes.Whitespace, "");
+            return new WhitespaceToken();
         } else if (Consts.Digits.Contains(nextCharacters[0])) {
             return HandleNumber(line, lineIndex);
         } else if (Consts.Quotes.Contains(nextCharacters[0])) {
             return HandleString(line, lineIndex);
         } else if (Consts.Separators.Contains(nextCharacters[0])) {
-            return new Token(Consts.TokenTypes.Separator, nextCharacters[0].ToString());
+            return new SeparatorToken(nextCharacters[0].ToString());
         } else if (Consts.StartingWordCharacters.Contains(nextCharacters[0])) {
             return HandleWord(line, lineIndex);
         } else if (Consts.Operators.Contains(nextCharacters)) {
-            return new Token(Consts.TokenTypes.Operator, nextCharacters);
+            return new OperatorToken(nextCharacters);
         } else if (Consts.Operators.Contains(nextCharacters[0].ToString())) {
-            return new Token(Consts.TokenTypes.Operator, nextCharacters[0].ToString());
+            return new OperatorToken(nextCharacters[0].ToString());
         } else if (nextCharacters[0] == '=') {
-            return new Token(Consts.TokenTypes.Assignment, nextCharacters[0].ToString());
+            return new AssignmentToken();
         } else if (nextCharacters[0] == ';') {
-            return new Token(Consts.TokenTypes.Semicolon, nextCharacters[0].ToString());
+            return new SemicolonToken();
         } else if (nextCharacters == "//") {
-            return new Token(Consts.TokenTypes.Comment, "");
+            return new CommentToken();
         } else {
             throw new SystemException("Invalid character found");
         }
@@ -65,7 +65,7 @@ public class Lexer {
     
     private static Token HandleNumber(string line, int lineIndex) {
         string result = LexerUtilities.GetLineWhileCharactersInCollection(line, lineIndex, Consts.NumberCharacters);
-        return new Token(Consts.TokenTypes.Number, result);
+        return new NumberToken(result);
     }
 
     private static Token HandleString(string line, int lineIndex) {
@@ -73,7 +73,7 @@ public class Lexer {
         lineIndex++;
         string result = LexerUtilities.GetLineUntilCharacterInCollection(line, lineIndex, new char[] {startingQuote});
         string finalString = startingQuote + result + startingQuote;
-        return new Token(Consts.TokenTypes.String, finalString);
+        return new StringToken(finalString);
     }
 
     private static Token HandleWord(string line, int lineIndex) {

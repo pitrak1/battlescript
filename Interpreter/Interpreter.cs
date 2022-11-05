@@ -26,6 +26,7 @@ public class Interpreter {
      * This is to keep track of the current value of self.
      * This is altered when:
      * - An object variable is found with a next instruction
+     * - Super is used to keep track of the object that's changing
      */
     public ContextStack SelfContexts { get; set; }
     
@@ -34,6 +35,7 @@ public class Interpreter {
      * This is altered when:
      * - a class is defined
      * - a class method is called
+     * - When we use super so we know what our anchor class is
      */
     public ContextStack ClassContexts { get; set; }
 
