@@ -212,6 +212,8 @@ public class Parser {
                 return HandleClass(tokens);
             case "self":
                 return HandleSelf(tokens);
+            case "super":
+                return HandleSuper(tokens);
             default:
                 return new Instruction();
         }
@@ -392,6 +394,21 @@ public class Parser {
 
         return new Instruction(
             Consts.InstructionTypes.Self,
+            null,
+            null,
+            null,
+            next
+        );
+    }
+    
+    private static Instruction HandleSuper(List<Token> tokens) {
+        Instruction? next = null;
+        if (tokens.Count > 1) {
+            next = ParseTokenSet(tokens.GetRange(1, tokens.Count - 1));
+        }
+
+        return new Instruction(
+            Consts.InstructionTypes.Super,
             null,
             null,
             null,

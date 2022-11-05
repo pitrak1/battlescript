@@ -8,17 +8,21 @@ public class ScopeVariable {
     public Consts.VariableTypes? Type { get; set; }
     public dynamic? Value { get; set; }
     public List<Instruction>? Instructions { get; set; } = new();
+    
+    public ScopeVariable? ClassObject { get; set; }
 
     public ScopeVariable(
         Consts.VariableTypes? type = null,
         dynamic? value = null,
-        List<Instruction>? instructions = null
+        List<Instruction>? instructions = null,
+        ScopeVariable? classObject = null
     ) {
         Type = type;
         Value = value;
         if (instructions is not null) {
             Instructions = instructions;
         }
+        ClassObject = classObject;
     }
     
     public ScopeVariable AddVariable(List<string> path, ScopeVariable? var = null) {
@@ -67,6 +71,7 @@ public class ScopeVariable {
         Type = var.Type;
         Value = var.Value;
         Instructions = var.Instructions;
+        ClassObject = var.ClassObject;
         return this;
     }
 

@@ -1272,8 +1272,8 @@ public class ParserTests {
                                     new (
                                         Consts.InstructionTypes.Return,
                                         new Instruction(
-                                            Consts.InstructionTypes.Variable, 
-                                            "super",
+                                            Consts.InstructionTypes.Super, 
+                                            null,
                                             null,
                                             null,
                                             new Instruction(

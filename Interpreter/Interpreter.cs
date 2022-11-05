@@ -28,11 +28,20 @@ public class Interpreter {
      * - An object variable is found with a next instruction
      */
     public ContextStack SelfContexts { get; set; }
+    
+    /*
+     * This is to keep track of the current class being defined or the class context that a method is being called in
+     * This is altered when:
+     * - a class is defined
+     * - a class method is called
+     */
+    public ContextStack ClassContexts { get; set; }
 
     public Interpreter() {
         OngoingContexts = new ContextStack();
         LexicalContexts = new ScopeStack();
         SelfContexts = new ContextStack();
+        ClassContexts = new ContextStack();
     }
 
     public ScopeStack Run(List<Instruction> instructions) {
@@ -77,6 +86,8 @@ public class Interpreter {
                 return HandleClass(instruction);
             case Consts.InstructionTypes.Self:
                 return HandleSelf(instruction);
+            case Consts.InstructionTypes.Super:
+                return HandleSuper(instruction);
         }
 
         return new ScopeVariable();
@@ -232,7 +243,12 @@ public class Interpreter {
         foreach (Instruction inst in instruction.Value) {
             args.Add(new ScopeVariable(Consts.VariableTypes.Value, inst.Value));
         }
-        return new ScopeVariable(Consts.VariableTypes.Function, args, instruction.Instructions);
+
+        ScopeVariable? classObject = null;
+        if (!ClassContexts.Empty()) {
+            classObject = ClassContexts.GetCurrentContext();
+        }
+        return new ScopeVariable(Consts.VariableTypes.Function, args, instruction.Instructions, classObject);
     }
     
     private ScopeVariable HandleParens(Instruction instruction) {
@@ -245,7 +261,9 @@ public class Interpreter {
                 if (!SelfContexts.Empty()) {
                     LexicalContexts.Add(SelfContexts.GetCurrentContext());
                 }
-                ScopeVariable functionScope = RunFunction(called.Value, called.Instructions, instruction.Value);
+                
+                ScopeVariable functionScope = RunFunction(called.Value, called.Instructions, instruction.Value, called.ClassObject);
+
                 ScopeVariable? returnValue = new ScopeVariable(Consts.VariableTypes.Value);
                 if (functionScope.HasVariable("return")) {
                     returnValue = functionScope.GetVariable("return");
@@ -271,11 +289,13 @@ public class Interpreter {
     private ScopeVariable HandleClass(Instruction instruction) {
         ScopeVariable var = new ScopeVariable(Consts.VariableTypes.Class);
         
+        ClassContexts.Add(var);
         ScopeVariable resultingScope = RunFunction(
             new List<ScopeVariable>(), 
             instruction.Instructions, 
             new List<Instruction>()
         );
+        ClassContexts.Pop();
         
         var.Value = resultingScope.Value;
         if (instruction.Value is not null) {
@@ -294,12 +314,28 @@ public class Interpreter {
         }
         return var;
     }
+    
+    private ScopeVariable HandleSuper(Instruction instruction) {
+        ScopeVariable classObject = ClassContexts.GetCurrentContext();
+        ScopeVariable superObject = classObject.GetVariable("super");
+        
+        if (instruction.Next is not null) {
+            OngoingContexts.Add(superObject);
+            superObject = InterpretInstruction(instruction.Next);
+            OngoingContexts.Pop();
+        }
+        return superObject;
+    }
 
-    private ScopeVariable RunFunction(List<ScopeVariable> functionValue, List<Instruction> instructions, List<Instruction> args) {
+    private ScopeVariable RunFunction(List<ScopeVariable> functionValue, List<Instruction> instructions, List<Instruction> args, ScopeVariable? classObject = null) {
         LexicalContexts.Add();
         
         if (args.Count != functionValue.Count) {
             throw new WrongNumberOfArgumentsException(args.Count, functionValue.Count);
+        }
+        
+        if (classObject != null) {
+            ClassContexts.Add(classObject);
         }
 
         for (int i = 0; i < args.Count; i++) {
@@ -310,6 +346,10 @@ public class Interpreter {
         
         foreach (Instruction funcInstruction in instructions) {
             InterpretInstruction(funcInstruction);
+        }
+        
+        if (classObject != null) {
+            ClassContexts.Pop();
         }
 
         return LexicalContexts.Pop();
