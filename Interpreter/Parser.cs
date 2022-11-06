@@ -88,12 +88,7 @@ public class Parser {
         Instruction left = ParseTokenSet(tokens.GetRange(0, assignmentOperatorIndex));
         Instruction right = ParseTokenSet(tokens.GetRange(assignmentOperatorIndex + 1, tokens.Count - assignmentOperatorIndex - 1));
 
-        return new Instruction(
-            Consts.InstructionTypes.Assignment,
-            null,
-            left,
-            right
-        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new AssignmentInstruction(left, right).SetDebugInfo(tokens[0].Line, tokens[0].Column);
     }
 
     private static Instruction HandleSeparator(List<Token> tokens) {
@@ -117,10 +112,7 @@ public class Parser {
         foreach (List<Token> entry in entries) {
             values.Add(ParseTokenSet(entry));
         }
-        return new Instruction(
-            Consts.InstructionTypes.SquareBraces,
-            values
-        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new SquareBracesInstruction(values).SetDebugInfo(tokens[0].Line, tokens[0].Column);
     }
 
     private static Instruction HandleCurlyBraces(List<Token> tokens) {
@@ -138,13 +130,7 @@ public class Parser {
             next = ParseTokenSet(tokens.GetRange(entriesLength, tokens.Count - entriesLength));
         }
         
-        return new Instruction(
-            Consts.InstructionTypes.Dictionary,
-            values,
-            null,
-            null,
-            next
-        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new DictionaryInstruction(values, next).SetDebugInfo(tokens[0].Line, tokens[0].Column);
     }
 
     private static Instruction HandleParens(List<Token> tokens) {
@@ -162,34 +148,18 @@ public class Parser {
             next = ParseTokenSet(tokens.GetRange(entriesLength, tokens.Count - entriesLength));
         }
         
-        return new Instruction(
-            Consts.InstructionTypes.Parens,
-            values,
-            null,
-            null,
-            next
-        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new ParensInstruction(values, next).SetDebugInfo(tokens[0].Line, tokens[0].Column);
     }
 
     private static Instruction HandleMember(List<Token> tokens) {
-        Instruction property = new Instruction();
-        property.Type = Consts.InstructionTypes.String;
-        property.Value = tokens[1].Value;
-        property.Column = tokens[1].Column;
-        property.Line = tokens[1].Line;
-        
+        Instruction property = new StringInstruction(tokens[1].Value).SetDebugInfo(tokens[1].Line, tokens[1].Column);
+
         Instruction next = null;
         if (tokens.Count > 2) {
             next = ParseTokenSet(tokens.GetRange(2, tokens.Count - 2));
         }
         
-        return new Instruction(
-            Consts.InstructionTypes.SquareBraces,
-            new List<Instruction>() {property},
-            null,
-            null,
-            next
-        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new SquareBracesInstruction(new List<Instruction>() {property}, next).SetDebugInfo(tokens[0].Line, tokens[0].Column);
     }
 
     private static Instruction HandleKeyword(List<Token> tokens) {
@@ -227,10 +197,7 @@ public class Parser {
         Debug.Assert(tokens[0].Value == "var");
         Debug.Assert(tokens[1].Type == Consts.TokenTypes.Identifier);
         
-        return new Instruction(
-            Consts.InstructionTypes.Declaration,
-            tokens[1].Value
-        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new DeclarationInstruction(tokens[1].Value).SetDebugInfo(tokens[0].Line, tokens[0].Column);
     }
     
     private static Instruction HandleConst(List<Token> tokens) {
@@ -249,10 +216,7 @@ public class Parser {
         // exclude the if itself and the start and ending parens
         Instruction condition = ParseTokenSet(tokens.GetRange(2, tokens.Count - 3));
         
-        return new Instruction(
-            Consts.InstructionTypes.If,
-            condition
-        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new IfInstruction(condition).SetDebugInfo(tokens[0].Line, tokens[0].Column);
     }
 
     private static Instruction HandleElse(List<Token> tokens) {
@@ -267,20 +231,14 @@ public class Parser {
             instruction.Value = condition;
         }
         
-        return new Instruction(
-            Consts.InstructionTypes.Else,
-            condition
-        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new ElseInstruction(condition).SetDebugInfo(tokens[0].Line, tokens[0].Column);
     }
     
     private static Instruction HandleWhile(List<Token> tokens) {
         // exclude the while itself and the start and ending parens
         Instruction condition = ParseTokenSet(tokens.GetRange(2, tokens.Count - 3));
         
-        return new Instruction(
-            Consts.InstructionTypes.While,
-            condition
-        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new WhileInstruction(condition).SetDebugInfo(tokens[0].Line, tokens[0].Column);
     }
     
     private static Instruction HandleFunction(List<Token> tokens) {
@@ -298,19 +256,13 @@ public class Parser {
             }
         }
         
-        return new Instruction(
-            Consts.InstructionTypes.Function,
-            instructionArgs
-        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new FunctionInstruction(instructionArgs).SetDebugInfo(tokens[0].Line, tokens[0].Column);
     }
     
     private static Instruction HandleReturn(List<Token> tokens) {
         Instruction returnValue = ParseTokenSet(tokens.GetRange(1, tokens.Count - 1));
         
-        return new Instruction(
-            Consts.InstructionTypes.Return,
-            returnValue
-        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new ReturnInstruction(returnValue).SetDebugInfo(tokens[0].Line, tokens[0].Column);
     }
 
     private static Instruction HandleClass(List<Token> tokens) {
@@ -318,21 +270,17 @@ public class Parser {
         if (tokens.Count > 1) {
             Debug.Assert(tokens.Count == 3);
             Debug.Assert(tokens[1].Value == "extends");
-            value = new Instruction(Consts.InstructionTypes.Variable, tokens[2].Value);
+            value = new VariableInstruction(tokens[2].Value);
         }
         
-        return new Instruction(
-            Consts.InstructionTypes.Class,
-            value
-        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new ClassInstruction(value).SetDebugInfo(tokens[0].Line, tokens[0].Column);
     }
     
     private static Instruction HandleOperation(List<Token> tokens, int mathematicalOperatorIndex) {
         Instruction left = ParseTokenSet(tokens.GetRange(0, mathematicalOperatorIndex));
         Instruction right = ParseTokenSet(tokens.GetRange(mathematicalOperatorIndex + 1, tokens.Count - mathematicalOperatorIndex - 1));
 
-        return new Instruction(
-            Consts.InstructionTypes.Operation,
+        return new OperationInstruction(
             tokens[mathematicalOperatorIndex].Value,
             left,
             right
@@ -345,23 +293,14 @@ public class Parser {
             next = ParseTokenSet(tokens.GetRange(1, tokens.Count - 1));
         }
         
-        return new Instruction(
-            Consts.InstructionTypes.Variable,
-            tokens[0].Value,
-            null,
-            null,
-            next
-        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new VariableInstruction(tokens[0].Value, next).SetDebugInfo(tokens[0].Line, tokens[0].Column);
     }
 
     private static Instruction HandleNumber(List<Token> tokens) {
         Debug.Assert(tokens.Count == 1);
         Debug.Assert(tokens[0].Type == Consts.TokenTypes.Number);
         
-        return new Instruction(
-            Consts.InstructionTypes.Number,
-            int.Parse(tokens[0].Value)
-        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new NumberInstruction(int.Parse(tokens[0].Value)).SetDebugInfo(tokens[0].Line, tokens[0].Column);
     }
     
     private static Instruction HandleString(List<Token> tokens) {
@@ -370,10 +309,7 @@ public class Parser {
 
         string trimmedValue = tokens[0].Value.Substring(1, tokens[0].Value.Length - 2);
         
-        return new Instruction(
-            Consts.InstructionTypes.String,
-            trimmedValue
-        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new StringInstruction(trimmedValue).SetDebugInfo(tokens[0].Line, tokens[0].Column);
     }
     
     private static Instruction HandleBoolean(List<Token> tokens) {
@@ -382,10 +318,7 @@ public class Parser {
 
         bool value = tokens[0].Value == "true";
         
-        return new Instruction(
-            Consts.InstructionTypes.Boolean,
-            value
-        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new BooleanInstruction(value).SetDebugInfo(tokens[0].Line, tokens[0].Column);
     }
 
     private static Instruction HandleSelf(List<Token> tokens) {
@@ -394,13 +327,7 @@ public class Parser {
             next = ParseTokenSet(tokens.GetRange(1, tokens.Count - 1));
         }
 
-        return new Instruction(
-            Consts.InstructionTypes.Self,
-            null,
-            null,
-            null,
-            next
-        );
+        return new SelfInstruction(next);
     }
     
     private static Instruction HandleSuper(List<Token> tokens) {
@@ -409,13 +336,7 @@ public class Parser {
             next = ParseTokenSet(tokens.GetRange(1, tokens.Count - 1));
         }
 
-        return new Instruction(
-            Consts.InstructionTypes.Super,
-            null,
-            null,
-            null,
-            next
-        );
+        return new SuperInstruction(next);
     }
     
     private static Instruction HandleConstructor(List<Token> tokens) {
@@ -433,9 +354,6 @@ public class Parser {
             }
         }
         
-        return new Instruction(
-            Consts.InstructionTypes.Constructor,
-            instructionArgs
-        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new ConstructorInstruction(instructionArgs).SetDebugInfo(tokens[0].Line, tokens[0].Column);
     }
 }

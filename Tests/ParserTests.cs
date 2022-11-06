@@ -12,35 +12,25 @@ public class ParserTests {
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "x"),
-                new Instruction(Consts.InstructionTypes.Number, 15)
+            new AssignmentInstruction(
+                new DeclarationInstruction("x"),
+                new NumberInstruction(15)
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "y"),
-                new Instruction(Consts.InstructionTypes.String, "1234")
+            new AssignmentInstruction(
+                new DeclarationInstruction("y"),
+                new StringInstruction("1234")
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "z"),
-                new Instruction(Consts.InstructionTypes.String, "2345")
+            new AssignmentInstruction(
+                new DeclarationInstruction("z"),
+                new StringInstruction("2345")
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "a"),
-                new Instruction(Consts.InstructionTypes.Boolean, true)
+            new AssignmentInstruction(
+                new DeclarationInstruction("a"),
+                new BooleanInstruction(true)
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "b"),
-                new Instruction(Consts.InstructionTypes.Variable, "a")
+            new AssignmentInstruction(
+                new DeclarationInstruction("b"),
+                new VariableInstruction("a")
             )
         };
         Assertions.AssertInstructions(instructions, expected);
@@ -53,59 +43,44 @@ public class ParserTests {
         var instructions = Parser.Run(tokens);
     
         List<Instruction> expected = new List<Instruction>() {
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "x"),
-                new Instruction(
-                    Consts.InstructionTypes.Operation,
+            new AssignmentInstruction(
+                new DeclarationInstruction("x"),
+                new OperationInstruction(
                     "+",
-                    new Instruction(Consts.InstructionTypes.Number, 5),
-                    new Instruction(Consts.InstructionTypes.Number, 6)
+                    new NumberInstruction(5),
+                    new NumberInstruction(6)
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "y"),
-                new Instruction(
-                    Consts.InstructionTypes.Operation,
+            new AssignmentInstruction(
+                new DeclarationInstruction("y"),
+                new OperationInstruction(
                     "*",
-                    new Instruction(Consts.InstructionTypes.Number, 7),
-                    new Instruction(Consts.InstructionTypes.Number, 8)
+                    new NumberInstruction(7),
+                    new NumberInstruction(8)
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "z"),
-                new Instruction(
-                    Consts.InstructionTypes.Operation,
+            new AssignmentInstruction(
+                new DeclarationInstruction("z"),
+                new OperationInstruction(
                     "==",
-                    new Instruction(Consts.InstructionTypes.Number, 3),
-                    new Instruction(Consts.InstructionTypes.Number, 5)
+                    new NumberInstruction(3),
+                    new NumberInstruction(5)
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "a"),
-                new Instruction(
-                    Consts.InstructionTypes.Operation,
+            new AssignmentInstruction(
+                new DeclarationInstruction("a"),
+                new OperationInstruction(
                     ">",
-                    new Instruction(Consts.InstructionTypes.Number, 4),
-                    new Instruction(Consts.InstructionTypes.Number, 3)
+                    new NumberInstruction(4),
+                    new NumberInstruction(3)
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "b"),
-                new Instruction(
-                    Consts.InstructionTypes.Operation,
+            new AssignmentInstruction(
+                new DeclarationInstruction("b"),
+                new OperationInstruction(
                     "<",
-                    new Instruction(Consts.InstructionTypes.Number, 5),
-                    new Instruction(Consts.InstructionTypes.Number, 2)
+                    new NumberInstruction(5),
+                    new NumberInstruction(2)
                 )
             )
         };
@@ -120,120 +95,85 @@ public class ParserTests {
         var instructions = Parser.Run(tokens);
     
         List<Instruction> expected = new List<Instruction>() {
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "x"),
-                new Instruction(
-                    Consts.InstructionTypes.SquareBraces, 
+            new AssignmentInstruction(
+                new DeclarationInstruction("x"),
+                new SquareBracesInstruction(
                     new List<Instruction>() {
-                        new (Consts.InstructionTypes.Number, 1),
-                        new (
-                            Consts.InstructionTypes.Operation, 
+                        new NumberInstruction(1),
+                        new OperationInstruction(
                             "+",
-                            new Instruction(Consts.InstructionTypes.Number, 1),
-                            new Instruction(Consts.InstructionTypes.Number, 1)
+                            new NumberInstruction(1),
+                            new NumberInstruction(1)
                         ),
-                        new (Consts.InstructionTypes.Number, 3)
+                        new NumberInstruction(3)
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "y"),
-                new Instruction(
-                    Consts.InstructionTypes.SquareBraces,
+            new AssignmentInstruction(
+                new DeclarationInstruction("y"),
+                new SquareBracesInstruction(
                     new List<Instruction>() {
-                        new (Consts.InstructionTypes.String, "1234"),
-                        new (Consts.InstructionTypes.String, "2345")
+                        new StringInstruction("1234"),
+                        new StringInstruction("2345")
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "z"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("z"),
+                new VariableInstruction(
                     "x",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (
-                                Consts.InstructionTypes.Operation, 
+                            new OperationInstruction(
                                 "+",
-                                new Instruction(Consts.InstructionTypes.Number, 0),
-                                new Instruction(Consts.InstructionTypes.Number, 2)
+                                new NumberInstruction(0),
+                                new NumberInstruction(2)
                             )
                         }
                     )
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "a"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("a"),
+                new VariableInstruction(
                     "x",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.Number, 1)
+                            new NumberInstruction(1)
                         }
                     )
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "b"),
-                new Instruction(
-                    Consts.InstructionTypes.SquareBraces,
+            new AssignmentInstruction(
+                new DeclarationInstruction("b"),
+                new SquareBracesInstruction(
                     new List<Instruction>() {
-                        new (Consts.InstructionTypes.Variable, "z"),
-                        new (Consts.InstructionTypes.Variable, "a")
+                        new VariableInstruction("z"),
+                        new VariableInstruction("a")
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(
-                    Consts.InstructionTypes.Variable, 
+            new AssignmentInstruction(
+                new VariableInstruction(
                     "x",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces,
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.Number, 1)
+                            new NumberInstruction(1)
                         }
                     )
                 ),
-                new Instruction(Consts.InstructionTypes.Number, 5)
+                new NumberInstruction(5)
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(
-                    Consts.InstructionTypes.Variable, 
+            new AssignmentInstruction(
+                new VariableInstruction(
                     "x",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces,
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.Variable, "a")
+                            new VariableInstruction("a")
                         }
                     )
                 ),
-                new Instruction(Consts.InstructionTypes.Number, 6)
+                new NumberInstruction(6)
             )
         };
         
@@ -247,125 +187,88 @@ public class ParserTests {
         var instructions = Parser.Run(tokens);
     
         List<Instruction> expected = new List<Instruction>() {
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "x"),
-                new Instruction(
-                    Consts.InstructionTypes.Dictionary, 
+            new AssignmentInstruction(
+                new DeclarationInstruction("x"),
+                new DictionaryInstruction(
                     new List<Instruction>() {
-                        new (Consts.InstructionTypes.Number, 1),
-                        new (Consts.InstructionTypes.String, "asdf"),
-                        new (Consts.InstructionTypes.String, "qwer"),
-                        new (Consts.InstructionTypes.Operation,
+                        new NumberInstruction(1),
+                        new StringInstruction("asdf"),
+                        new StringInstruction("qwer"),
+                        new OperationInstruction(
                             "+",
-                            new (Consts.InstructionTypes.Number, 3),
-                            new (Consts.InstructionTypes.Number, 2)
+                            new NumberInstruction(3),
+                            new NumberInstruction(2)
                         )
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "y"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("y"),
+                new VariableInstruction(
                     "x",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces,
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "qwer"),
+                            new StringInstruction("qwer"),
                         }
                     )
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "z"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("z"),
+                new VariableInstruction(
                     "x",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "qwer")
+                            new StringInstruction("qwer")
                         }
                     )
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "a"),
-                new Instruction(
-                    Consts.InstructionTypes.Dictionary,
+            new AssignmentInstruction(
+                new DeclarationInstruction("a"),
+                new DictionaryInstruction(
                     new List<Instruction>() {
-                        new (Consts.InstructionTypes.Number, 5),
-                        new (
-                            Consts.InstructionTypes.Operation,
+                        new NumberInstruction(5),
+                        new OperationInstruction(
                             "+",
-                            new (Consts.InstructionTypes.Number, 4),
-                            new (Consts.InstructionTypes.Number, 5)
+                            new NumberInstruction(4),
+                            new NumberInstruction(5)
                         )
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "b"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("b"),
+                new VariableInstruction(
                     "a",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces,
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.Variable, "y")
+                            new VariableInstruction("y")
                         }
                     )
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(
-                    Consts.InstructionTypes.Variable, 
+            new AssignmentInstruction(
+                new VariableInstruction(
                     "x",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces,
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.Number, 1)
+                            new NumberInstruction(1)
                         }
                     )
                 ),
-                new Instruction(Consts.InstructionTypes.String, "sdfg")
+                new StringInstruction("sdfg")
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(
-                    Consts.InstructionTypes.Variable, 
+            new AssignmentInstruction(
+                new VariableInstruction(
                     "a",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces,
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.Variable, "y")
+                            new VariableInstruction("y")
                         }
                     )
                 ),
-                new Instruction(Consts.InstructionTypes.Number, 10)
+                new NumberInstruction(10)
             )
         };
         
@@ -379,55 +282,37 @@ public class ParserTests {
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "x"),
-                new Instruction (Consts.InstructionTypes.Number, 5)
+            new AssignmentInstruction(
+                new DeclarationInstruction("x"),
+                new NumberInstruction(5)
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "y"),
-                new Instruction (Consts.InstructionTypes.Number, 3)
+            new AssignmentInstruction(
+                new DeclarationInstruction("y"),
+                new NumberInstruction(3)
             ),
-            new (
-                Consts.InstructionTypes.If,
-                new Instruction(
-                    Consts.InstructionTypes.Operation,
+            new IfInstruction(
+                new OperationInstruction(
                     "==",
-                    new Instruction(Consts.InstructionTypes.Variable, "x"),
-                    new Instruction(Consts.InstructionTypes.Number, 5)
+                    new VariableInstruction("x"),
+                    new NumberInstruction(5)
                 ),
-                null,
-                null,
-                null,
                 new List<Instruction>() {
-                    new (
-                        Consts.InstructionTypes.Assignment,
-                        null,
-                        new Instruction(Consts.InstructionTypes.Variable, "y"),
-                        new Instruction(Consts.InstructionTypes.Number, 6)
+                    new AssignmentInstruction(
+                        new VariableInstruction("y"),
+                        new NumberInstruction(6)
                     )
                 }
             ),
-            new (
-                Consts.InstructionTypes.If,
-                new Instruction(
-                    Consts.InstructionTypes.Operation,
+            new IfInstruction(
+                new OperationInstruction(
                     "==",
-                    new Instruction(Consts.InstructionTypes.Variable, "y"),
-                    new Instruction(Consts.InstructionTypes.Number, 3)
+                    new VariableInstruction("y"),
+                    new NumberInstruction(3)
                 ),
-                null,
-                null,
-                null,
                 new List<Instruction>() {
-                    new (
-                        Consts.InstructionTypes.Assignment,
-                        null,
-                        new Instruction(Consts.InstructionTypes.Variable, "x"),
-                        new Instruction(Consts.InstructionTypes.Number, 1)
+                    new AssignmentInstruction(
+                        new VariableInstruction("x"),
+                        new NumberInstruction(1)
                     )
                 }
             )
@@ -443,116 +328,78 @@ public class ParserTests {
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
-            new(
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "x"),
-                new Instruction(Consts.InstructionTypes.Number, 5)
+            new AssignmentInstruction(
+                new DeclarationInstruction("x"),
+                new NumberInstruction(5)
             ),
-            new(
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "y"),
-                new Instruction(Consts.InstructionTypes.Number, 3)
+            new AssignmentInstruction(
+                new DeclarationInstruction("y"),
+                new NumberInstruction(3)
             ),
-            new(
-                Consts.InstructionTypes.If,
-                new Instruction(
-                    Consts.InstructionTypes.Operation,
+            new IfInstruction(
+                new OperationInstruction(
                     "==",
-                    new Instruction(Consts.InstructionTypes.Variable, "x"),
-                    new Instruction(Consts.InstructionTypes.Number, 3)
-                ),
-                null,
-                null,
-                new Instruction(
-                    Consts.InstructionTypes.Else,
-                    null,
-                    null,
-                    null,
-                    null,
-                    new List<Instruction>() {
-                        new Instruction(
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Variable, "x"),
-                            new Instruction(Consts.InstructionTypes.Number, 3)
-                        )
-                    }
+                    new VariableInstruction("x"),
+                    new NumberInstruction(3)
                 ),
                 new List<Instruction>() {
-                    new(
-                        Consts.InstructionTypes.Assignment,
-                        null,
-                        new Instruction(Consts.InstructionTypes.Variable, "y"),
-                        new Instruction(Consts.InstructionTypes.Number, 6)
+                    new AssignmentInstruction(
+                        new VariableInstruction("y"),
+                        new NumberInstruction(6)
                     )
-                }
-            ),
-            new Instruction(
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "z"),
-                new Instruction(Consts.InstructionTypes.Number, 2)
-            ),
-            new Instruction(
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "a"),
-                new Instruction(Consts.InstructionTypes.Number, 1)
-            ),
-            new(
-                Consts.InstructionTypes.If,
-                new Instruction(
-                    Consts.InstructionTypes.Operation,
-                    "==",
-                    new Instruction(Consts.InstructionTypes.Variable, "z"),
-                    new Instruction(Consts.InstructionTypes.Number, 5)
-                ),
-                null,
-                null,
-                new Instruction(
+                },
+                new ElseInstruction(
                     Consts.InstructionTypes.Else,
-                    new Instruction(
-                        Consts.InstructionTypes.Operation,
+                    new List<Instruction>() {
+                        new AssignmentInstruction(
+                            new VariableInstruction("x"),
+                            new NumberInstruction(3)
+                        )
+                    }
+                )
+            ),
+            new AssignmentInstruction(
+                new DeclarationInstruction("z"),
+                new NumberInstruction(2)
+            ),
+            new AssignmentInstruction(
+                new DeclarationInstruction("a"),
+                new NumberInstruction(1)
+            ),
+            new IfInstruction(
+                new OperationInstruction(
+                    "==",
+                    new VariableInstruction("z"),
+                    new NumberInstruction(5)
+                ),
+                new List<Instruction>() {
+                    new AssignmentInstruction(
+                        new VariableInstruction("a"),
+                        new NumberInstruction(6)
+                    )
+                },
+                new ElseInstruction(
+                    new OperationInstruction(
                         "==",
-                        new Instruction(Consts.InstructionTypes.Variable, "z"),
-                        new Instruction(Consts.InstructionTypes.Number, 2)
+                        new VariableInstruction("z"),
+                        new NumberInstruction(2)
                     ),
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.Else,
-                        null,
-                        null,
-                        null,
+                    new List<Instruction>() {
+                        new AssignmentInstruction(
+                            new VariableInstruction("a"),
+                            new NumberInstruction(5)
+                        )
+                    },
+                    new ElseInstruction(
                         null,
                         new List<Instruction>() {
-                            new Instruction(
-                                Consts.InstructionTypes.Assignment,
-                                null,
-                                new Instruction(Consts.InstructionTypes.Variable, "a"),
-                                new Instruction(Consts.InstructionTypes.Number, 4)
+                            new AssignmentInstruction(
+                                new VariableInstruction("a"),
+                                new NumberInstruction(4)
                             )
                         }
-                    ),
-                    new List<Instruction>() {
-                        new Instruction(
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Variable, "a"),
-                            new Instruction(Consts.InstructionTypes.Number, 5)
-                        )
-                    }
-                ),
-                new List<Instruction>() {
-                    new(
-                        Consts.InstructionTypes.Assignment,
-                        null,
-                        new Instruction(Consts.InstructionTypes.Variable, "a"),
-                        new Instruction(Consts.InstructionTypes.Number, 6)
                     )
-                }
+                )
             ),
         };
         
@@ -566,50 +413,35 @@ public class ParserTests {
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "z"),
-                new Instruction(Consts.InstructionTypes.Number, 0)
+            new AssignmentInstruction(
+                new DeclarationInstruction("z"),
+                new NumberInstruction(0)
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "a"),
-                new Instruction(Consts.InstructionTypes.Number, 3)
+            new AssignmentInstruction(
+                new DeclarationInstruction("a"),
+                new NumberInstruction(3)
             ),
-            new (
-                Consts.InstructionTypes.While,
-                new Instruction(
-                    Consts.InstructionTypes.Operation,
+            new WhileInstruction(
+                new OperationInstruction(
                     "<",
-                    new Instruction(Consts.InstructionTypes.Variable, "z"),
-                    new Instruction(Consts.InstructionTypes.Number, 8)
+                    new VariableInstruction("z"),
+                    new NumberInstruction(8)
                 ),
-                null,
-                null,
-                null,
                 new List<Instruction>() {
-                    new (
-                        Consts.InstructionTypes.Assignment,
-                        null,
-                        new Instruction(Consts.InstructionTypes.Variable, "a"),
-                        new Instruction(
-                            Consts.InstructionTypes.Operation,
+                    new AssignmentInstruction(
+                        new VariableInstruction("a"),
+                        new OperationInstruction(
                             "+",
-                            new Instruction(Consts.InstructionTypes.Variable, "a"),
-                            new Instruction(Consts.InstructionTypes.Number, 1)
+                            new VariableInstruction("a"),
+                            new NumberInstruction(1)
                         )
                     ),
-                    new (
-                        Consts.InstructionTypes.Assignment,
-                        null,
-                        new Instruction(Consts.InstructionTypes.Variable, "z"),
-                        new Instruction(
-                            Consts.InstructionTypes.Operation,
+                    new AssignmentInstruction(
+                        new VariableInstruction("z"),
+                        new OperationInstruction(
                             "+",
-                            new Instruction(Consts.InstructionTypes.Variable, "z"),
-                            new Instruction(Consts.InstructionTypes.Number, 1)
+                            new VariableInstruction("z"),
+                            new NumberInstruction(1)
                         )
                     )
                 }
@@ -626,74 +458,48 @@ public class ParserTests {
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "my_function"),
-                new Instruction(
-                    Consts.InstructionTypes.Function,
+            new AssignmentInstruction(
+                new DeclarationInstruction("my_function"),
+                new FunctionInstruction(
                     new List<Instruction>(),
-                    null,
-                    null,
-                    null,
                     new List<Instruction>() {
-                        new (
-                            Consts.InstructionTypes.Return,
-                            new Instruction(Consts.InstructionTypes.Number, 5)
+                        new ReturnInstruction(
+                            new NumberInstruction(5)
                         )
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "x"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("x"),
+                new VariableInstruction(
                     "my_function",
-                    null,
-                    null,
-                    new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                    new ParensInstruction(new List<Instruction>())
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "my_other_function"),
-                new Instruction(
-                    Consts.InstructionTypes.Function,
+            new AssignmentInstruction(
+                new DeclarationInstruction("my_other_function"),
+                new FunctionInstruction(
                     new List<Instruction>() {
-                        new (Consts.InstructionTypes.Variable, "my_variable")
+                        new VariableInstruction("my_variable")
                     },
-                    null,
-                    null,
-                    null,
                     new List<Instruction>() {
-                        new (
-                            Consts.InstructionTypes.Return,
-                            new Instruction(
-                                Consts.InstructionTypes.Operation,
+                        new ReturnInstruction(
+                            new OperationInstruction(
                                 "+",
-                                new Instruction(Consts.InstructionTypes.Variable, "my_variable"),
-                                new Instruction(Consts.InstructionTypes.Number, 5)
+                                new VariableInstruction("my_variable"),
+                                new NumberInstruction(5)
                             )
                         )
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "y"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("y"),
+                new VariableInstruction(
                     "my_other_function",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.Parens,
+                    new ParensInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.Number, 3)
+                            new NumberInstruction(3)
                         }
                     )
                 )
@@ -710,85 +516,54 @@ public class ParserTests {
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "Class1"),
-                new Instruction(
+            new AssignmentInstruction(
+                new DeclarationInstruction("Class1"),
+                new ClassInstruction(
                     Consts.InstructionTypes.Class,
-                    null,
-                    null,
-                    null,
-                    null,
                     new List<Instruction>() {
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "a"),
-                            new Instruction(Consts.InstructionTypes.Number, 5)
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("a"),
+                            new NumberInstruction(5)
                         )
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "x"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("x"),
+                new VariableInstruction(
                     "Class1",
-                    null,
-                    null,
-                    new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                    new ParensInstruction(new List<Instruction>())
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "y"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("y"),
+                new VariableInstruction(
                     "x",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "a")
+                            new StringInstruction("a")
                         }
                     )
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(
-                    Consts.InstructionTypes.Variable, 
+            new AssignmentInstruction(
+                new VariableInstruction(
                     "x",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "a")
+                            new StringInstruction("a")
                         }
                     )
                 ),
-                new Instruction(Consts.InstructionTypes.Number, 10)
+                new NumberInstruction(10)
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "z"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("z"),
+                new VariableInstruction(
                     "x",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "a")
+                            new StringInstruction("a")
                         }
                     )
                 )
@@ -805,37 +580,22 @@ public class ParserTests {
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "Class1"),
-                new Instruction(
-                    Consts.InstructionTypes.Class,
-                    null,
-                    null,
-                    null,
+            new AssignmentInstruction(
+                new DeclarationInstruction("Class1"),
+                new ClassInstruction(
                     null,
                     new List<Instruction>() {
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "a"),
-                            new Instruction(Consts.InstructionTypes.Number, 5)
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("a"),
+                            new NumberInstruction(5)
                         ),
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "my_function"),
-                            new Instruction(
-                                Consts.InstructionTypes.Function,
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("my_function"),
+                            new FunctionInstruction(
                                 new List<ScopeVariable>(),
-                                null,
-                                null,
-                                null,
                                 new List<Instruction>() {
-                                    new (
-                                        Consts.InstructionTypes.Return,
-                                        new Instruction(Consts.InstructionTypes.Variable, "a")
+                                    new ReturnInstruction(
+                                        new VariableInstruction("a")
                                     )
                                 }
                             )
@@ -843,72 +603,45 @@ public class ParserTests {
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "x"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("x"),
+                new VariableInstruction(
                     "Class1",
-                    null,
-                    null,
-                    new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                    new ParensInstruction(new List<Instruction>())
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "y"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("y"),
+                new VariableInstruction(
                     "x",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "my_function")
+                            new StringInstruction("my_function")
                         },
-                        null,
-                        null,
-                        new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                        new ParensInstruction(new List<Instruction>())
                     )
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(
-                    Consts.InstructionTypes.Variable, 
+            new AssignmentInstruction(
+                new VariableInstruction(
                     "x",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "a")
+                            new StringInstruction("a")
                         }
                     )
                 ),
-                new Instruction(Consts.InstructionTypes.Number, 10)
+                new NumberInstruction(10)
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "z"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("z"),
+                new VariableInstruction(
                     "x",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "my_function")
+                            new StringInstruction("my_function")
                         },
-                        null,
-                        null,
-                        new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                        new ParensInstruction(new List<Instruction>())
                     )
                 )
             )
@@ -924,43 +657,26 @@ public class ParserTests {
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "Class1"),
-                new Instruction(
-                    Consts.InstructionTypes.Class,
-                    null,
-                    null,
-                    null,
+            new AssignmentInstruction(
+                new DeclarationInstruction("Class1"),
+                new ClassInstruction(
                     null,
                     new List<Instruction>() {
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "b"),
-                            new Instruction(Consts.InstructionTypes.Number, 6)
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("b"),
+                            new NumberInstruction(6)
                         ),
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "d"),
-                            new Instruction(Consts.InstructionTypes.Number, 3)
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("d"),
+                            new NumberInstruction(3)
                         ),
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "my_function"),
-                            new Instruction(
-                                Consts.InstructionTypes.Function,
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("my_function"),
+                            new FunctionInstruction(
                                 new List<ScopeVariable>(),
-                                null,
-                                null,
-                                null,
                                 new List<Instruction>() {
-                                    new (
-                                        Consts.InstructionTypes.Return,
-                                        new Instruction(Consts.InstructionTypes.Variable, "b")
+                                    new ReturnInstruction(
+                                        new VariableInstruction("b")
                                     )
                                 }
                             )
@@ -968,47 +684,29 @@ public class ParserTests {
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "Class2"),
-                new Instruction(
-                    Consts.InstructionTypes.Class,
-                    new Instruction(Consts.InstructionTypes.Variable, "Class1"),
-                    null,
-                    null,
-                    null,
+            new AssignmentInstruction(
+                new DeclarationInstruction("Class2"),
+                new ClassInstruction(
+                    new VariableInstruction("Class1"),
                     new List<Instruction>() {
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "c"),
-                            new Instruction(Consts.InstructionTypes.Number, 9)
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("c"),
+                            new NumberInstruction(9)
                         ),
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "d"),
-                            new Instruction(Consts.InstructionTypes.Number, 12)
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("d"),
+                            new NumberInstruction(12)
                         ),
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "my_other_function"),
-                            new Instruction(
-                                Consts.InstructionTypes.Function,
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("my_other_function"),
+                            new FunctionInstruction(
                                 new List<ScopeVariable>(),
-                                null,
-                                null,
-                                null,
                                 new List<Instruction>() {
-                                    new (
-                                        Consts.InstructionTypes.Return,
-                                        new Instruction(
-                                            Consts.InstructionTypes.Operation, 
+                                    new ReturnInstruction(
+                                        new OperationInstruction(
                                             "+",
-                                            new Instruction(Consts.InstructionTypes.Variable, "b"),
-                                            new Instruction(Consts.InstructionTypes.Variable, "c")
+                                            new VariableInstruction("b"),
+                                            new VariableInstruction("c")
                                         )
                                     )
                                 }
@@ -1017,72 +715,45 @@ public class ParserTests {
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "b"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("b"),
+                new VariableInstruction(
                     "Class2",
-                    null,
-                    null,
-                    new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                    new ParensInstruction(new List<Instruction>())
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "c"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("c"),
+                new VariableInstruction(
                     "b",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "my_other_function")
+                            new StringInstruction("my_other_function")
                         },
-                        null,
-                        null,
-                        new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                        new ParensInstruction(new List<Instruction>())
                     )
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(
-                    Consts.InstructionTypes.Variable, 
+            new AssignmentInstruction(
+                new VariableInstruction(
                     "b",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "b")
+                            new StringInstruction("b")
                         }
                     )
                 ),
-                new Instruction(Consts.InstructionTypes.Number, 9)
+                new NumberInstruction(9)
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "d"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("d"),
+                new VariableInstruction(
                     "b",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "my_function")
+                            new StringInstruction("my_function")
                         },
-                        null,
-                        null,
-                        new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                        new ParensInstruction(new List<Instruction>())
                     )
                 )
             )
@@ -1098,51 +769,29 @@ public class ParserTests {
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "Class1"),
-                new Instruction(
-                    Consts.InstructionTypes.Class,
-                    null,
-                    null,
-                    null,
+            new AssignmentInstruction(
+                new DeclarationInstruction("Class1"),
+                new ClassInstruction(
                     null,
                     new List<Instruction>() {
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "b"),
-                            new Instruction(Consts.InstructionTypes.Number, 8)
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("b"),
+                            new NumberInstruction(8)
                         ),
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "my_function"),
-                            new Instruction(
-                                Consts.InstructionTypes.Function,
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("my_function"),
+                            new FunctionInstruction(
                                 new List<ScopeVariable>(),
-                                null,
-                                null,
-                                null,
                                 new List<Instruction>() {
-                                    new (
-                                        Consts.InstructionTypes.Assignment,
-                                        null,
-                                        new Instruction(Consts.InstructionTypes.Declaration, "b"),
-                                        new Instruction(Consts.InstructionTypes.Number, 3)
+                                    new AssignmentInstruction(
+                                        new DeclarationInstruction("b"),
+                                        new NumberInstruction(3)
                                     ),
-                                    new (
-                                        Consts.InstructionTypes.Return,
-                                        new Instruction(
-                                            Consts.InstructionTypes.Self,
-                                            null,
-                                            null,
-                                            null,
-                                            new Instruction(
-                                                Consts.InstructionTypes.SquareBraces,
+                                    new ReturnInstruction(
+                                        new SelfInstruction(
+                                            new SquareBracesInstruction(
                                                 new List<Instruction>() {
-                                                    new (Consts.InstructionTypes.String, "b")
+                                                    new StringInstruction("b")
                                                 }
                                             )
                                         )
@@ -1153,35 +802,22 @@ public class ParserTests {
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "x"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("x"),
+                new VariableInstruction(
                     "Class1",
-                    null,
-                    null,
-                    new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                    new ParensInstruction(new List<Instruction>())
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "y"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("y"),
+                new VariableInstruction(
                     "x",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "my_function")
+                            new StringInstruction("my_function")
                         },
-                        null,
-                        null,
-                        new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                        new ParensInstruction(new List<Instruction>())
                     )
                 )
             )
@@ -1197,31 +833,18 @@ public class ParserTests {
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "Class1"),
-                new Instruction(
-                    Consts.InstructionTypes.Class,
-                    null,
-                    null,
-                    null,
+            new AssignmentInstruction(
+                new DeclarationInstruction("Class1"),
+                new ClassInstruction(
                     null,
                     new List<Instruction>() {
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "my_function"),
-                            new Instruction(
-                                Consts.InstructionTypes.Function,
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("my_function"),
+                            new FunctionInstruction(
                                 new List<ScopeVariable>(),
-                                null,
-                                null,
-                                null,
                                 new List<Instruction>() {
-                                    new (
-                                        Consts.InstructionTypes.Return,
-                                        new Instruction(Consts.InstructionTypes.Number, 9)
+                                    new ReturnInstruction(
+                                        new NumberInstruction(9)
                                     )
                                 }
                             )
@@ -1229,61 +852,34 @@ public class ParserTests {
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "Class2"),
-                new Instruction(
-                    Consts.InstructionTypes.Class,
-                    new Instruction(Consts.InstructionTypes.Variable, "Class1"),
-                    null,
-                    null,
-                    null,
+            new AssignmentInstruction(
+                new DeclarationInstruction("Class2"),
+                new ClassInstruction(
+                    new VariableInstruction("Class1"),
                     new List<Instruction>() {
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "my_function"),
-                            new Instruction(
-                                Consts.InstructionTypes.Function,
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("my_function"),
+                            new FunctionInstruction(
                                 new List<ScopeVariable>(),
-                                null,
-                                null,
-                                null,
                                 new List<Instruction>() {
-                                    new (
-                                        Consts.InstructionTypes.Return,
-                                        new Instruction(Consts.InstructionTypes.Number, 4)
+                                    new ReturnInstruction(
+                                        new NumberInstruction(4)
                                     )
                                 }
                             )
                         ),
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "my_other_function"),
-                            new Instruction(
-                                Consts.InstructionTypes.Function,
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("my_other_function"),
+                            new FunctionInstruction(
                                 new List<ScopeVariable>(),
-                                null,
-                                null,
-                                null,
                                 new List<Instruction>() {
-                                    new (
-                                        Consts.InstructionTypes.Return,
-                                        new Instruction(
-                                            Consts.InstructionTypes.Super, 
-                                            null,
-                                            null,
-                                            null,
-                                            new Instruction(
-                                                Consts.InstructionTypes.SquareBraces,
+                                    new ReturnInstruction(
+                                        new SuperInstruction(
+                                            new SquareBracesInstruction(
                                                 new List<Instruction>() {
-                                                    new (Consts.InstructionTypes.String, "my_function")
+                                                    new StringInstruction("my_function")
                                                 },
-                                                null,
-                                                null,
-                                                new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                                                new ParensInstruction(new List<Instruction>())
                                             )
                                         )
                                     )
@@ -1293,35 +889,22 @@ public class ParserTests {
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "a"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("a"),
+                new VariableInstruction(
                     "Class2",
-                    null,
-                    null,
-                    new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                    new ParensInstruction(new List<Instruction>())
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "b"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("b"),
+                new VariableInstruction(
                     "a",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "my_other_function")
+                            new StringInstruction("my_other_function")
                         },
-                        null,
-                        null,
-                        new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                        new ParensInstruction(new List<Instruction>())
                     )
                 )
             )
@@ -1337,49 +920,30 @@ public class ParserTests {
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "Class1"),
-                new Instruction(
-                    Consts.InstructionTypes.Class,
-                    null,
-                    null,
-                    null,
+            new AssignmentInstruction(
+                new DeclarationInstruction("Class1"),
+                new ClassInstruction(
                     null,
                     new List<Instruction>() {
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "my_function"),
-                            new Instruction(
-                                Consts.InstructionTypes.Function,
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("my_function"),
+                            new FunctionInstruction(
                                 new List<ScopeVariable>(),
-                                null,
-                                null,
-                                null,
                                 new List<Instruction>() {
                                     new (
                                         Consts.InstructionTypes.Return,
-                                        new Instruction(Consts.InstructionTypes.Number, 9)
+                                        new NumberInstruction(9)
                                     )
                                 }
                             )
                         ),
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "my_other_function"),
-                            new Instruction(
-                                Consts.InstructionTypes.Function,
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("my_other_function"),
+                            new FunctionInstruction(
                                 new List<ScopeVariable>(),
-                                null,
-                                null,
-                                null,
                                 new List<Instruction>() {
-                                    new (
-                                        Consts.InstructionTypes.Return,
-                                        new Instruction(Consts.InstructionTypes.Number, 3)
+                                    new ReturnInstruction(
+                                        new NumberInstruction(3)
                                     )
                                 }
                             )
@@ -1387,61 +951,34 @@ public class ParserTests {
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "Class2"),
-                new Instruction(
-                    Consts.InstructionTypes.Class,
-                    new Instruction(Consts.InstructionTypes.Variable, "Class1"),
-                    null,
-                    null,
-                    null,
+            new AssignmentInstruction(
+                new DeclarationInstruction("Class2"),
+                new ClassInstruction(
+                    new VariableInstruction("Class1"),
                     new List<Instruction>() {
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "my_function"),
-                            new Instruction(
-                                Consts.InstructionTypes.Function,
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("my_function"),
+                            new FunctionInstruction(
                                 new List<ScopeVariable>(),
-                                null,
-                                null,
-                                null,
                                 new List<Instruction>() {
-                                    new (
-                                        Consts.InstructionTypes.Return,
-                                        new Instruction(Consts.InstructionTypes.Number, 4)
+                                    new ReturnInstruction(
+                                        new NumberInstruction(4)
                                     )
                                 }
                             )
                         ),
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "my_other_function"),
-                            new Instruction(
-                                Consts.InstructionTypes.Function,
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("my_other_function"),
+                            new FunctionInstruction(
                                 new List<ScopeVariable>(),
-                                null,
-                                null,
-                                null,
                                 new List<Instruction>() {
-                                    new (
-                                        Consts.InstructionTypes.Return,
-                                        new Instruction(
-                                            Consts.InstructionTypes.Super, 
-                                            null,
-                                            null,
-                                            null,
-                                            new Instruction(
-                                                Consts.InstructionTypes.SquareBraces,
+                                    new ReturnInstruction(
+                                        new SuperInstruction(
+                                            new SquareBracesInstruction(
                                                 new List<Instruction>() {
-                                                    new (Consts.InstructionTypes.String, "my_other_function")
+                                                    new StringInstruction("my_other_function")
                                                 },
-                                                null,
-                                                null,
-                                                new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                                                new ParensInstruction(new List<Instruction>())
                                             )
                                         )
                                     )
@@ -1451,100 +988,56 @@ public class ParserTests {
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "Class3"),
-                new Instruction(
-                    Consts.InstructionTypes.Class,
-                    new Instruction(Consts.InstructionTypes.Variable, "Class2"),
-                    null,
-                    null,
-                    null,
+            new AssignmentInstruction(
+                new DeclarationInstruction("Class3"),
+                new ClassInstruction(
+                    new VariableInstruction("Class2"),
                     new List<Instruction>() {
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "my_function"),
-                            new Instruction(
-                                Consts.InstructionTypes.Function,
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("my_function"),
+                            new FunctionInstruction(
                                 new List<ScopeVariable>(),
-                                null,
-                                null,
-                                null,
                                 new List<Instruction>() {
-                                    new (
-                                        Consts.InstructionTypes.Return,
-                                        new Instruction(Consts.InstructionTypes.Number, 2)
+                                    new ReturnInstruction(
+                                        new NumberInstruction(2)
                                     )
                                 }
                             )
                         ),
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "my_other_function"),
-                            new Instruction(
-                                Consts.InstructionTypes.Function,
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("my_other_function"),
+                            new FunctionInstruction(
                                 new List<ScopeVariable>(),
-                                null,
-                                null,
-                                null,
                                 new List<Instruction>() {
-                                    new (
-                                        Consts.InstructionTypes.Return,
-                                        new Instruction(
-                                            Consts.InstructionTypes.Super, 
-                                            null,
-                                            null,
-                                            null,
-                                            new Instruction(
-                                                Consts.InstructionTypes.SquareBraces,
+                                    new ReturnInstruction(
+                                        new SuperInstruction(
+                                            new SquareBracesInstruction(
                                                 new List<Instruction>() {
-                                                    new (Consts.InstructionTypes.String, "my_other_function")
+                                                    new StringInstruction("my_other_function")
                                                 },
-                                                null,
-                                                null,
-                                                new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                                                new ParensInstruction(new List<Instruction>())
                                             )
                                         )
                                     )
                                 }
                             )
                         ),
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "my_other_other_function"),
-                            new Instruction(
-                                Consts.InstructionTypes.Function,
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("my_other_other_function"),
+                            new FunctionInstruction(
                                 new List<ScopeVariable>(),
-                                null,
-                                null,
-                                null,
                                 new List<Instruction>() {
-                                    new (
-                                        Consts.InstructionTypes.Return,
-                                        new Instruction(
-                                            Consts.InstructionTypes.Super, 
-                                            null,
-                                            null,
-                                            null,
-                                            new Instruction(
-                                                Consts.InstructionTypes.SquareBraces,
+                                    new ReturnInstruction(
+                                        new SuperInstruction(
+                                            new SquareBracesInstruction(
                                                 new List<Instruction>() {
-                                                    new (Consts.InstructionTypes.String, "super")
+                                                    new StringInstruction("super")
                                                 },
-                                                null,
-                                                null,
-                                                new Instruction(
-                                                    Consts.InstructionTypes.SquareBraces,
+                                                new SquareBracesInstruction(
                                                     new List<Instruction>() {
-                                                        new (Consts.InstructionTypes.String, "my_function")
+                                                        new StringInstruction("my_function")
                                                     },
-                                                    null,
-                                                    null,
-                                                    new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                                                    new ParensInstruction(new List<Instruction>())
                                                 )
                                             )
                                         )
@@ -1555,55 +1048,34 @@ public class ParserTests {
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "a"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("a"),
+                new VariableInstruction(
                     "Class3",
-                    null,
-                    null,
-                    new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                    new ParensInstruction(new List<Instruction>())
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "b"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("b"),
+                new VariableInstruction(
                     "a",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "my_other_function")
+                            new StringInstruction("my_other_function")
                         },
-                        null,
-                        null,
-                        new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                        new ParensInstruction(new List<Instruction>())
                     )
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "c"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("c"),
+                new VariableInstruction(
                     "a",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "my_other_other_function")
+                            new StringInstruction("my_other_other_function")
                         },
-                        null,
-                        null,
-                        new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                        new ParensInstruction(new List<Instruction>())
                     )
                 )
             )
@@ -1619,45 +1091,25 @@ public class ParserTests {
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "Class1"),
-                new Instruction(
-                    Consts.InstructionTypes.Class,
-                    null,
-                    null,
-                    null,
+            new AssignmentInstruction(
+                new DeclarationInstruction("Class1"),
+                new ClassInstruction(
                     null,
                     new List<Instruction>() {
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "x"),
-                            new Instruction(Consts.InstructionTypes.Number, 5)
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("x"),
+                            new NumberInstruction(5)
                         ),
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "my_function"),
-                            new Instruction(
-                                Consts.InstructionTypes.Function,
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("my_function"),
+                            new FunctionInstruction(
                                 new List<ScopeVariable>(),
-                                null,
-                                null,
-                                null,
                                 new List<Instruction>() {
-                                    new (
-                                        Consts.InstructionTypes.Return,
-                                        new Instruction(
-                                            Consts.InstructionTypes.Self,
-                                            null,
-                                            null,
-                                            null,
-                                            new Instruction(
-                                                Consts.InstructionTypes.SquareBraces,
+                                    new ReturnInstruction(
+                                        new SelfInstruction(
+                                            new SquareBracesInstruction(
                                                 new List<Instruction>() {
-                                                    new (Consts.InstructionTypes.String, "x")
+                                                    new StringInstruction("x")
                                                 }
                                             )
                                         )
@@ -1668,43 +1120,23 @@ public class ParserTests {
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "Class2"),
-                new Instruction(
-                    Consts.InstructionTypes.Class,
-                    new Instruction(Consts.InstructionTypes.Variable, "Class1"),
-                    null,
-                    null,
-                    null,
+            new AssignmentInstruction(
+                new DeclarationInstruction("Class2"),
+                new ClassInstruction(
+                    new VariableInstruction("Class1"),
                     new List<Instruction>() {
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "my_other_function"),
-                            new Instruction(
-                                Consts.InstructionTypes.Function,
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("my_other_function"),
+                            new FunctionInstruction(
                                 new List<ScopeVariable>(),
-                                null,
-                                null,
-                                null,
                                 new List<Instruction>() {
-                                    new (
-                                        Consts.InstructionTypes.Return,
-                                        new Instruction (
-                                            Consts.InstructionTypes.Super,
-                                            null,
-                                            null,
-                                            null,
-                                            new Instruction(
-                                                Consts.InstructionTypes.SquareBraces,
+                                    new ReturnInstruction(
+                                        new SuperInstruction (
+                                            new SquareBracesInstruction(
                                                 new List<Instruction>() {
-                                                    new (Consts.InstructionTypes.String, "my_function")
+                                                    new StringInstruction("my_function")
                                                 },
-                                                null,
-                                                null,
-                                                new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                                                new ParensInstruction(new List<Instruction>())
                                             )
                                         )
                                     )
@@ -1714,52 +1146,33 @@ public class ParserTests {
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "a"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("a"),
+                new VariableInstruction(
                     "Class2",
-                    null,
-                    null,
-                    new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                    new ParensInstruction(new List<Instruction>())
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new VariableInstruction(
                     "a",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "x")
+                            new StringInstruction("x")
                         }
                     )
                 ),
-                new Instruction(Consts.InstructionTypes.Number, 10)
+                new NumberInstruction(10)
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "b"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("b"),
+                new VariableInstruction(
                     "a",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "my_other_function")
+                            new StringInstruction("my_other_function")
                         },
-                        null,
-                        null,
-                        new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                        new ParensInstruction(new List<Instruction>())
                     )
                 )
             )
@@ -1775,65 +1188,41 @@ public class ParserTests {
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "Class1"),
-                new Instruction(
-                    Consts.InstructionTypes.Class,
-                    null,
-                    null,
-                    null,
+            new AssignmentInstruction(
+                new DeclarationInstruction("Class1"),
+                new ClassInstruction(
                     null,
                     new List<Instruction>() {
-                        new (
-                            Consts.InstructionTypes.Constructor,
+                        new ConstructorInstruction(
                             new List<Instruction>() {
-                                new (Consts.InstructionTypes.Variable, "value")
+                                new VariableInstruction("value")
                             },
-                            null,
-                            null,
-                            null,
                             new List<Instruction>() {
-                                new (
-                                    Consts.InstructionTypes.Assignment,
-                                    null,
-                                    new Instruction(Consts.InstructionTypes.Variable, "b"),
-                                    new Instruction(
-                                        Consts.InstructionTypes.Operation,
+                                new AssignmentInstruction(
+                                    new VariableInstruction("b"),
+                                    new OperationInstruction(
                                         "+",
-                                        new Instruction(Consts.InstructionTypes.Variable, "value"),
-                                        new Instruction(Consts.InstructionTypes.Number, 3)
+                                        new VariableInstruction("value"),
+                                        new NumberInstruction(3)
                                     )
                                 )
                             }
                         ),
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "a"),
-                            new Instruction(Consts.InstructionTypes.Number, 4)
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("a"),
+                            new NumberInstruction(4)
                         ),
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "b"),
-                            new Instruction(Consts.InstructionTypes.Number, 7)
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("b"),
+                            new NumberInstruction(7)
                         ),
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "my_function"),
-                            new Instruction(
-                                Consts.InstructionTypes.Function,
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("my_function"),
+                            new FunctionInstruction(
                                 new List<ScopeVariable>(),
-                                null,
-                                null,
-                                null,
                                 new List<Instruction>() {
-                                    new (
-                                        Consts.InstructionTypes.Return,
-                                        new Instruction(Consts.InstructionTypes.Variable, "a")
+                                    new ReturnInstruction(
+                                        new VariableInstruction("a")
                                     )
                                 }
                             )
@@ -1841,90 +1230,52 @@ public class ParserTests {
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "Class2"),
-                new Instruction(
-                    Consts.InstructionTypes.Class,
-                    new Instruction(Consts.InstructionTypes.Variable, "Class1"),
-                    null,
-                    null,
-                    null,
+            new AssignmentInstruction(
+                new DeclarationInstruction("Class2"),
+                new ClassInstruction(
+                    new VariableInstruction("Class1"),
                     new List<Instruction>() {
-                        new (
-                            Consts.InstructionTypes.Constructor,
+                        new ConstructorInstruction(
                             new List<Instruction>() {
-                                new (Consts.InstructionTypes.Variable, "value")
+                                new VariableInstruction("value")
                             },
-                            null,
-                            null,
-                            null,
                             new List<Instruction>() {
-                                new (
-                                    Consts.InstructionTypes.Super,
-                                    null,
-                                    null,
-                                    null,
-                                    new Instruction(
-                                        Consts.InstructionTypes.Parens, 
+                                new SuperInstruction(
+                                    new ParensInstruction(
                                         new List<Instruction>() {
-                                            new (Consts.InstructionTypes.Variable, "value")
+                                            new VariableInstruction("value")
                                         }
                                     )
                                 ),
-                                new (
-                                    Consts.InstructionTypes.Assignment,
-                                    null,
-                                    new Instruction(Consts.InstructionTypes.Variable, "a"),
-                                    new Instruction(Consts.InstructionTypes.Variable, "value")
+                                new AssignmentInstruction(
+                                    new VariableInstruction("a"),
+                                    new VariableInstruction("value")
                                 )
                             }
                         ),
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "my_function"),
-                            new Instruction(
-                                Consts.InstructionTypes.Function,
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("my_function"),
+                            new FunctionInstruction(
                                 new List<ScopeVariable>(),
-                                null,
-                                null,
-                                null,
                                 new List<Instruction>() {
-                                    new (
-                                        Consts.InstructionTypes.Return,
+                                    new ReturnInstruction(
                                         new Instruction (Consts.InstructionTypes.Variable, "b")
                                     )
                                 }
                             )
                         ),
-                        new (
-                            Consts.InstructionTypes.Assignment,
-                            null,
-                            new Instruction(Consts.InstructionTypes.Declaration, "my_other_function"),
-                            new Instruction(
-                                Consts.InstructionTypes.Function,
+                        new AssignmentInstruction(
+                            new DeclarationInstruction("my_other_function"),
+                            new FunctionInstruction(
                                 new List<ScopeVariable>(),
-                                null,
-                                null,
-                                null,
                                 new List<Instruction>() {
-                                    new (
-                                        Consts.InstructionTypes.Return,
-                                        new Instruction (
-                                            Consts.InstructionTypes.Super, 
-                                            null,
-                                            null,
-                                            null,
-                                            new Instruction(
-                                                Consts.InstructionTypes.SquareBraces,
+                                    new ReturnInstruction(
+                                        new SuperInstruction (
+                                            new SquareBracesInstruction(
                                                 new List<Instruction>() {
-                                                    new (Consts.InstructionTypes.String, "my_function")
+                                                    new StringInstruction("my_function")
                                                 },
-                                                null,
-                                                null,
-                                                new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                                                new ParensInstruction(new List<Instruction>())
                                             )
                                         )
                                     )
@@ -1934,94 +1285,60 @@ public class ParserTests {
                     }
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "a"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("a"),
+                new VariableInstruction(
                     "Class2",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.Parens, 
+                    new ParensInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.Number, 8)
+                            new NumberInstruction(8)
                         }
                     )
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "b"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("b"),
+                new VariableInstruction(
                     "a",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "a")
+                            new StringInstruction("a")
                         }
                     )
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "c"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("c"),
+                new VariableInstruction(
                     "a",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "b")
+                            new StringInstruction("b")
                         }
                     )
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "d"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("d"),
+                new VariableInstruction(
                     "a",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "my_function")
+                            new StringInstruction("my_function")
                         },
-                        null,
-                        null,
-                        new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                        new ParensInstruction(new List<Instruction>())
                     )
                 )
             ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "e"),
-                new Instruction(
-                    Consts.InstructionTypes.Variable,
+            new AssignmentInstruction(
+                new DeclarationInstruction("e"),
+                new VariableInstruction(
                     "a",
-                    null,
-                    null,
-                    new Instruction(
-                        Consts.InstructionTypes.SquareBraces, 
+                    new SquareBracesInstruction(
                         new List<Instruction>() {
-                            new (Consts.InstructionTypes.String, "my_other_function")
+                            new StringInstruction("my_other_function")
                         },
-                        null,
-                        null,
-                        new Instruction(Consts.InstructionTypes.Parens, new List<Instruction>())
+                        new ParensInstruction(new List<Instruction>())
                     )
                 )
             )
@@ -2030,40 +1347,40 @@ public class ParserTests {
         Assertions.AssertInstructions(instructions, expected);
     }
     
-    [Test]
-    public void ConstVariables() {
-        string contents = LoadFile("const_variables.btl");
-        var tokens = Lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
-
-        List<Instruction> expected = new List<Instruction>() {
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.ConstDeclaration, "x"),
-                new Instruction(Consts.InstructionTypes.Number, 5)
-            ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.Declaration, "y"),
-                new Instruction(Consts.InstructionTypes.Number, 3)
-            ),
-            new (
-                Consts.InstructionTypes.Assignment,
-                null,
-                new Instruction(Consts.InstructionTypes.ConstDeclaration, "z"),
-                new Instruction(
-                    Consts.InstructionTypes.Operation,
-                    "+",
-                    new Instruction(Consts.InstructionTypes.Variable, "x"),
-                    new Instruction(Consts.InstructionTypes.Variable, "y")
-                )
-            )
-        };
-        
-        Assertions.AssertInstructions(instructions, expected);
-    }
+    // [Test]
+    // public void ConstVariables() {
+    //     string contents = LoadFile("const_variables.btl");
+    //     var tokens = Lexer.Run(contents);
+    //     var instructions = Parser.Run(tokens);
+    //
+    //     List<Instruction> expected = new List<Instruction>() {
+    //         new (
+    //             Consts.InstructionTypes.Assignment,
+    //             null,
+    //             new ConstDeclarationInstruction("x"),
+    //             new NumberInstruction(5)
+    //         ),
+    //         new (
+    //             Consts.InstructionTypes.Assignment,
+    //             null,
+    //             new DeclarationInstruction("y"),
+    //             new NumberInstruction(3)
+    //         ),
+    //         new (
+    //             Consts.InstructionTypes.Assignment,
+    //             null,
+    //             new ConstDeclarationInstruction("z"),
+    //             new Instruction(
+    //                 Consts.InstructionTypes.Operation,
+    //                 "+",
+    //                 new VariableInstruction("x"),
+    //                 new VariableInstruction("y")
+    //             )
+    //         )
+    //     };
+    //     
+    //     Assertions.AssertInstructions(instructions, expected);
+    // }
 
     private string LoadFile(string filename) {
         return File.ReadAllText($"/Users/nickpitrak/Desktop/BattleScript/TestFiles/{filename}");

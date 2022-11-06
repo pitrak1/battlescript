@@ -6,7 +6,7 @@ public class Instruction {
     public Instruction? Left { get; set; }
     public Instruction? Right { get; set; }
     public Instruction? Next { get; set; }
-    public List<Instruction> Instructions { get; set; } = new();
+    public List<Instruction> Instructions { get; set; }
     public int? Line { get; set; }
     public int? Column { get; set; }
 
@@ -25,6 +25,8 @@ public class Instruction {
         Next = next;
         if (instructions is not null) {
             Instructions = instructions;
+        } else {
+            Instructions = new List<Instruction>();
         }
     }
 

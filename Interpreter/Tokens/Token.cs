@@ -11,8 +11,9 @@ public class Token {
         Value = value;
     }
 
-    public void SetDebugInfo(int line, int column) {
+    public Token SetDebugInfo(int? line, int? column) {
         Line = line;
         Column = column;
+        return this;
     }
 }

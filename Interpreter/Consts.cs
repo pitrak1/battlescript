@@ -44,13 +44,7 @@ public class Consts {
 		WrongNumberOfArgs,
 		UndefinedIdentifier
 	};
-	public static string[] ErrorTypeStrings = new string[] {
-		"InvalidToken",
-		"MisplacedToken",
-		"WrongNumberOfArgs",
-		"UndefinedIdentifier"
-	};
-	
+
 	public enum TokenTypes {
 		Number,
 		String,
@@ -66,53 +60,26 @@ public class Consts {
 	};
 
 	public enum InstructionTypes {
-		Assignment,				// 0
-		Declaration,			// 1
-		Builtin,				// 2
-		Operation,				// 3
-		Variable,				// 4
-		Number,					// 5
-		String,					// 6
-		Boolean,				// 7
-		If,						// 8
-		While,					// 9
-		SquareBraces,			// 10
-		Dictionary,				// 11
-		Import,					// 12
-		Function,				// 13
-		Parens,					// 14
-		Return,					// 15
-		Class,					// 16
-		Else,					// 17
-		Constructor,			// 18
-		Self, 					// 19
-		Super,					// 20
-		ConstDeclaration		// 21
-	};
-
-	public static string[] InstructionTypeStrings = new string[] {
- 		"Assignment",
-		"Declaration",
-		"Builtin",
-		"Operation",
-		"Variable",
-		"Number",
-		"String",
-		"Boolean",
-		"If",
-		"While",
-		"SquareBraces",
-		"Dictionary",
-		"Import",
-		"Function",
-		"Parens",
-		"Return", 
-		"Class",
-		"Member",
-		"Else",
-		"Constructor",
-		"Self",
-		"Super"
+		Assignment,
+		Declaration,
+		Operation,
+		Variable,
+		Number,
+		String,
+		Boolean,
+		If,
+		While,
+		SquareBraces,
+		Dictionary,
+		Function,
+		Parens,
+		Return,
+		Class,
+		Else,
+		Constructor,
+		Self,
+		Super,
+		ConstDeclaration // Does not yet have an instruction class
 	};
 
 	public enum VariableTypes {
