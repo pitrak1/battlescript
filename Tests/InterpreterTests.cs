@@ -1,15 +1,17 @@
 namespace BattleScript.Tests; 
 
 public class InterpreterTests {
+    private Runner? _runner;
+    
+    [SetUp]
+    public void SetUp() {
+        _runner = new Runner("/Users/nickpitrak/Desktop/BattleScript/TestFiles/");
+    }
+    
     [Test]
     public void Variables() {
-        string contents = LoadFile("variables.btl");
-        var tokens = Lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
-        
-        var interpreter = new Interpreter();
-        var scopeStack = interpreter.Run(instructions);
-
+        var scopeStack = _runner.Run("variables.btl");
+    
         Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
         expected.Add("x", new ScopeVariable(Consts.VariableTypes.Value, 15));
         expected.Add("y", new ScopeVariable(Consts.VariableTypes.Value, "1234"));
@@ -22,12 +24,7 @@ public class InterpreterTests {
     
     [Test]
     public void Operators() {
-        string contents = LoadFile("operators.btl");
-        var tokens = Lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
-        
-        var interpreter = new Interpreter();
-        var scopeStack = interpreter.Run(instructions);
+        var scopeStack  = _runner.Run("operators.btl");
 
         Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
         expected.Add("x", new ScopeVariable(Consts.VariableTypes.Value, 11));
@@ -41,12 +38,7 @@ public class InterpreterTests {
     
     [Test]
     public void Arrays() {
-        string contents = LoadFile("arrays.btl");
-        var tokens = Lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
-        
-        var interpreter = new Interpreter();
-        var scopeStack = interpreter.Run(instructions);
+        var scopeStack  = _runner.Run("arrays.btl");
 
         Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
         expected.Add("x", new ScopeVariable(
@@ -79,12 +71,7 @@ public class InterpreterTests {
     
     [Test]
     public void Dictionaries() {
-        string contents = LoadFile("dictionaries.btl");
-        var tokens = Lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
-        
-        var interpreter = new Interpreter();
-        var scopeStack = interpreter.Run(instructions);
+        var scopeStack  = _runner.Run("dictionaries.btl");
 
         Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
         expected.Add("x", new ScopeVariable(
@@ -118,12 +105,7 @@ public class InterpreterTests {
     
     [Test]
     public void If() {
-        string contents = LoadFile("if.btl");
-        var tokens = Lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
-        
-        var interpreter = new Interpreter();
-        var scopeStack = interpreter.Run(instructions);
+        var scopeStack  = _runner.Run("if.btl");
 
         Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
         expected.Add("x", new ScopeVariable(Consts.VariableTypes.Value, 5));
@@ -134,12 +116,7 @@ public class InterpreterTests {
     
     [Test]
     public void IfElse() {
-        string contents = LoadFile("ifelse.btl");
-        var tokens = Lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
-        
-        var interpreter = new Interpreter();
-        var scopeStack = interpreter.Run(instructions);
+        var scopeStack  = _runner.Run("ifelse.btl");
 
         Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
         expected.Add("x", new ScopeVariable(Consts.VariableTypes.Value, 3));
@@ -152,12 +129,7 @@ public class InterpreterTests {
     
     [Test]
     public void While() {
-        string contents = LoadFile("while.btl");
-        var tokens = Lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
-        
-        var interpreter = new Interpreter();
-        var scopeStack = interpreter.Run(instructions);
+        var scopeStack  = _runner.Run("while.btl");
 
         Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
         expected.Add("z", new ScopeVariable(Consts.VariableTypes.Value, 8));
@@ -168,12 +140,7 @@ public class InterpreterTests {
     
     [Test]
     public void Functions() {
-        string contents = LoadFile("functions.btl");
-        var tokens = Lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
-        
-        var interpreter = new Interpreter();
-        var scopeStack = interpreter.Run(instructions);
+        var scopeStack  = _runner.Run("functions.btl");
 
         Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
         expected.Add("my_function", new ScopeVariable(
@@ -194,12 +161,7 @@ public class InterpreterTests {
     
     [Test]
     public void Classes() {
-        string contents = LoadFile("classes.btl");
-        var tokens = Lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
-        
-        var interpreter = new Interpreter();
-        var scopeStack = interpreter.Run(instructions);
+        var scopeStack  = _runner.Run("classes.btl");
         
         Dictionary<string, ScopeVariable> class1Scope = new Dictionary<string, ScopeVariable>();
         class1Scope.Add("a", new ScopeVariable(Consts.VariableTypes.Value, 10));
@@ -215,12 +177,7 @@ public class InterpreterTests {
     
     [Test]
     public void Methods() {
-        string contents = LoadFile("methods.btl");
-        var tokens = Lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
-        
-        var interpreter = new Interpreter();
-        var scopeStack = interpreter.Run(instructions);
+        var scopeStack  = _runner.Run("methods.btl");
         
         Dictionary<string, ScopeVariable> class1Scope = new Dictionary<string, ScopeVariable>();
         class1Scope.Add("a", new ScopeVariable(Consts.VariableTypes.Value, 5));
@@ -241,12 +198,7 @@ public class InterpreterTests {
     
     [Test]
     public void Inheritance() {
-        string contents = LoadFile("inheritance.btl");
-        var tokens = Lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
-        
-        var interpreter = new Interpreter();
-        var scopeStack = interpreter.Run(instructions);
+        var scopeStack  = _runner.Run("inheritance.btl");
         
         Dictionary<string, ScopeVariable> class1Scope = new Dictionary<string, ScopeVariable>();
         class1Scope.Add("b", new ScopeVariable(Consts.VariableTypes.Value, 6));
@@ -277,12 +229,7 @@ public class InterpreterTests {
     
     [Test]
     public void Self() {
-        string contents = LoadFile("self.btl");
-        var tokens = Lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
-        
-        var interpreter = new Interpreter();
-        var scopeStack = interpreter.Run(instructions);
+        var scopeStack  = _runner.Run("self.btl");
         
         Dictionary<string, ScopeVariable> class1Scope = new Dictionary<string, ScopeVariable>();
         class1Scope.Add("b", new ScopeVariable(Consts.VariableTypes.Value, 8));
@@ -302,12 +249,7 @@ public class InterpreterTests {
     
     [Test]
     public void Super() {
-        string contents = LoadFile("super.btl");
-        var tokens = Lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
-        
-        var interpreter = new Interpreter();
-        var scopeStack = interpreter.Run(instructions);
+        var scopeStack  = _runner.Run("super.btl");
         
         Dictionary<string, ScopeVariable> class1Scope = new Dictionary<string, ScopeVariable>();
         class1Scope.Add("my_function", new ScopeVariable(Consts.VariableTypes.Function, new List<ScopeVariable>()));
@@ -334,12 +276,7 @@ public class InterpreterTests {
     
     [Test]
     public void SuperSuper() {
-        string contents = LoadFile("super_super.btl");
-        var tokens = Lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
-        
-        var interpreter = new Interpreter();
-        var scopeStack = interpreter.Run(instructions);
+        var scopeStack  = _runner.Run("super_super.btl");
         
         Dictionary<string, ScopeVariable> class1Scope = new Dictionary<string, ScopeVariable>();
         class1Scope.Add("my_function", new ScopeVariable(Consts.VariableTypes.Function, new List<ScopeVariable>()));
@@ -372,12 +309,7 @@ public class InterpreterTests {
     
     [Test]
     public void SelfSuper() {
-        string contents = LoadFile("self_super.btl");
-        var tokens = Lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
-        
-        var interpreter = new Interpreter();
-        var scopeStack = interpreter.Run(instructions);
+        var scopeStack  = _runner.Run("self_super.btl");
         
         Dictionary<string, ScopeVariable> class1Scope = new Dictionary<string, ScopeVariable>();
         class1Scope.Add("x", new ScopeVariable(Consts.VariableTypes.Value, 5));
@@ -402,12 +334,7 @@ public class InterpreterTests {
     
     [Test]
     public void Constructors() {
-        string contents = LoadFile("constructors.btl");
-        var tokens = Lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
-        
-        var interpreter = new Interpreter();
-        var scopeStack = interpreter.Run(instructions);
+        var scopeStack  = _runner.Run("constructors.btl");
         
         Dictionary<string, ScopeVariable> class1Scope = new Dictionary<string, ScopeVariable>();
         class1Scope.Add("constructor", new ScopeVariable(
@@ -444,9 +371,5 @@ public class InterpreterTests {
         expected.Add("e", new ScopeVariable(Consts.VariableTypes.Value, 8));
     
         Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
-    }
-    
-    private string LoadFile(string filename) {
-        return File.ReadAllText($"/Users/nickpitrak/Desktop/BattleScript/TestFiles/{filename}");
     }
 }
