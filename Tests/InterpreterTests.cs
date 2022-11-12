@@ -372,4 +372,31 @@ public class InterpreterTests {
     
         Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
     }
+    
+    [Test]
+    public void DictionaryAssignment() {
+        var scopeStack  = _runner.Run("dictionary_assignment.btl");
+        
+        Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
+        expected.Add("x", new ScopeVariable(
+            Consts.VariableTypes.Dictionary, 
+            new Dictionary<dynamic, ScopeVariable> {
+                {
+                    "x",
+                    new ScopeVariable(Consts.VariableTypes.Value, 1)
+                },
+                {
+                    "y",
+                    new ScopeVariable(Consts.VariableTypes.Value, 2)
+                },
+                {
+                    "z",
+                    new ScopeVariable(Consts.VariableTypes.Value, 5)
+                }
+            }
+        ));
+        expected.Add("y", new ScopeVariable(Consts.VariableTypes.Value, 5));
+
+        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    }
 }

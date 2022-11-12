@@ -42,7 +42,22 @@ public class ScopeVariable {
         return Value.ContainsKey(key);
     }
 
-    public ScopeVariable GetVariable(dynamic key) {
+    public ScopeVariable GetVariable(string key) {
+        if (Value.ContainsKey(key)) {
+            return Value[key];
+        } 
+        else if (Value.ContainsKey("class") && Type == Consts.VariableTypes.Object) {
+            return Value["class"].GetVariable(key);
+        }
+        else if (Value.ContainsKey("super") && Type == Consts.VariableTypes.Class) {
+            return Value["super"].GetVariable(key);
+        }
+        else {
+            throw new VariableNotFoundException(key);
+        }
+    }
+
+    public ScopeVariable GetIndex(dynamic key) {
         if (Value is List<ScopeVariable>) {
             Debug.Assert(key is int);
             if (key < Value.Count) {
@@ -56,13 +71,15 @@ public class ScopeVariable {
                 return Value[key];
             } 
             else if (Value.ContainsKey("class") && Type == Consts.VariableTypes.Object) {
-                return Value["class"].GetVariable(key);
+                return Value["class"].GetIndex(key);
             }
             else if (Value.ContainsKey("super") && Type == Consts.VariableTypes.Class) {
-                return Value["super"].GetVariable(key);
+                return Value["super"].GetIndex(key);
             }
             else {
-                throw new VariableNotFoundException(key);
+                var variable = new ScopeVariable(Consts.VariableTypes.Value);
+                Value[key] = variable;
+                return variable;
             }
         }
     }

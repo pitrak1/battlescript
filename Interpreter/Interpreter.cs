@@ -94,7 +94,7 @@ public class Interpreter {
                 return HandleConstructor(instruction);
         }
 
-        return new ScopeVariable();
+        return new ScopeVariable(Consts.VariableTypes.Value);
     }
 
     private ScopeVariable HandleAssignment(Instruction instruction) {
@@ -171,7 +171,7 @@ public class Interpreter {
             // Handle index
             ScopeVariable index = InterpretInstruction(instruction.Value[0]);
             ScopeVariable indexed = OngoingContexts.GetCurrentContext();
-            ScopeVariable var = indexed.GetVariable(index.Value);
+            ScopeVariable var = indexed.GetIndex(index.Value);
             
             if (index.Value is string && index.Value == "super") {
                 ClassContexts.Add(OngoingContexts.GetCurrentContext());
@@ -218,7 +218,7 @@ public class Interpreter {
     }
 
     private ScopeVariable HandleElse(Instruction instruction) {
-        ScopeVariable condition = new ScopeVariable();
+        ScopeVariable condition = new ScopeVariable(Consts.VariableTypes.Value);
         if (instruction.Value is not null) {
             condition = InterpretInstruction(instruction.Value);
         }
