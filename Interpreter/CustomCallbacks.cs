@@ -11,19 +11,24 @@ public class CustomCallbacks {
     public Dictionary<string, Delegate> Callbacks = new ();
 
     public CustomCallbacks() {
-        Callbacks["print"] = new Action<string>(PrintFunction);
         Callbacks["test"] = new Func<int>(TestFunction);
+        Callbacks["test2"] = new Func<string, string>(TestFunction2);
+        Callbacks["test3"] = new Action(TestFunction3);
     }
 
     public object? Run(string key, List<dynamic> args) {
         return Callbacks[key].DynamicInvoke(args.ToArray());
     }
     
-    public void PrintFunction(string stringToPrint) {
-        Debug.Print(stringToPrint);
-    }
-
     public int TestFunction() {
         return 5;
+    }
+
+    public string TestFunction2(string stringToReturn) {
+        return $"{stringToReturn}asdf";
+    }
+    
+    public void TestFunction3() {
+        Debug.Print("some message");
     }
 }

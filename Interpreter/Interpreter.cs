@@ -379,9 +379,16 @@ public class Interpreter {
     private ScopeVariable HandleBtl(Instruction instruction) {
         Debug.Assert(instruction.Next is not null);
         Debug.Assert(instruction.Next.Type == Consts.InstructionTypes.SquareBraces);
-
+        
+        List<dynamic> args = new List<dynamic>();
+        if (instruction.Next.Next.Type == Consts.InstructionTypes.Parens) {
+            foreach (Instruction inst in instruction.Next.Next.Value) {
+                args.Add(InterpretInstruction(inst).Value);
+            }
+        }
+        
         string indexValue = instruction.Next.Value[0].Value;
-        int returnValue = Convert.ToInt32(Callbacks.Run("test", new List<dynamic>()));
+        dynamic returnValue = Callbacks.Run(indexValue, args);
         return new ScopeVariable(Consts.VariableTypes.Value, returnValue);
     }
 
