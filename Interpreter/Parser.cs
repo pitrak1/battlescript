@@ -186,6 +186,8 @@ public class Parser {
                 return HandleSuper(tokens);
             case "constructor":
                 return HandleConstructor(tokens);
+            case "Btl":
+                return HandleBtl(tokens);
             default:
                 return new Instruction();
         }
@@ -355,5 +357,14 @@ public class Parser {
         }
         
         return new ConstructorInstruction(instructionArgs).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+    }
+
+    private static Instruction HandleBtl(List<Token> tokens) {
+        Instruction? next = null;
+        if (tokens.Count > 1) {
+            next = ParseTokenSet(tokens.GetRange(1, tokens.Count - 1));
+        }
+
+        return new BtlInstruction(next);
     }
 }

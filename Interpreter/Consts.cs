@@ -79,6 +79,7 @@ public class Consts {
 		Constructor,
 		Self,
 		Super,
+		Btl,
 		ConstDeclaration // Does not yet have an instruction class
 	};
 

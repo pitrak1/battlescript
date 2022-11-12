@@ -38,12 +38,15 @@ public class Interpreter {
      * - When we use super so we know what our anchor class is
      */
     public ContextStack ClassContexts { get; set; }
+    
+    public CustomCallbacks Callbacks { get; set; }
 
-    public Interpreter() {
+    public Interpreter(CustomCallbacks callbacks) {
         OngoingContexts = new ContextStack();
         LexicalContexts = new ScopeStack();
         SelfContexts = new ContextStack();
         ClassContexts = new ContextStack();
+        Callbacks = callbacks;
     }
 
     public ScopeStack Run(List<Instruction> instructions) {
@@ -92,6 +95,8 @@ public class Interpreter {
                 return HandleSuper(instruction);
             case Consts.InstructionTypes.Constructor:
                 return HandleConstructor(instruction);
+            case Consts.InstructionTypes.Btl:
+                return HandleBtl(instruction);
         }
 
         return new ScopeVariable(Consts.VariableTypes.Value);
@@ -369,6 +374,15 @@ public class Interpreter {
         List<string> path = new List<string>() { "constructor" };
         ScopeVariable left = LexicalContexts.AddVariable(path);
         return left.Copy(new ScopeVariable(Consts.VariableTypes.Function, args, instruction.Instructions, classObject));
+    }
+    
+    private ScopeVariable HandleBtl(Instruction instruction) {
+        Debug.Assert(instruction.Next is not null);
+        Debug.Assert(instruction.Next.Type == Consts.InstructionTypes.SquareBraces);
+
+        string indexValue = instruction.Next.Value[0].Value;
+        int returnValue = Convert.ToInt32(Callbacks.Run("test", new List<dynamic>()));
+        return new ScopeVariable(Consts.VariableTypes.Value, returnValue);
     }
 
     private ScopeVariable RunFunction(List<ScopeVariable> functionValue, List<Instruction> instructions, List<Instruction> args, ScopeVariable? classObject = null) {
