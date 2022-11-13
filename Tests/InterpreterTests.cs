@@ -392,10 +392,15 @@ public class InterpreterTests {
                 {
                     "z",
                     new ScopeVariable(Consts.VariableTypes.Value, 5)
+                },
+                {
+                    "a",
+                    new ScopeVariable(Consts.VariableTypes.Value, 6)
                 }
             }
         ));
         expected.Add("y", new ScopeVariable(Consts.VariableTypes.Value, 5));
+        expected.Add("z", new ScopeVariable(Consts.VariableTypes.Value, 6));
 
         Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
     }
