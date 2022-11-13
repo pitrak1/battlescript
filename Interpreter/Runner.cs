@@ -11,15 +11,10 @@ public class Runner {
 
     public ScopeStack Run(string path) {
         string contents = ReadFile(path);
-        try {
-            var tokens = Lexer.Run(contents);
-            var instructions = Parser.Run(tokens);
-            var interpreter = new Interpreter();
-            return interpreter.Run(instructions);
-        }
-        catch (BattleScriptException e) {
-            return new ScopeStack();
-        }
+        var tokens = Lexer.Run(contents);
+        var instructions = Parser.Run(tokens);
+        var interpreter = new Interpreter();
+        return interpreter.Run(instructions);
     }
 
     public ScopeStack RunString(string contents) {

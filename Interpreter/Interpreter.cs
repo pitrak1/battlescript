@@ -387,6 +387,12 @@ public class Interpreter {
         string indexValue = instruction.Next.Value[0].Value;
         if (indexValue == "context") {
             var = BtlContext;
+            
+            if (instruction.Next is not null) {
+                OngoingContexts.Add(var);
+                var = InterpretInstruction(instruction.Next.Next);
+                OngoingContexts.Pop();
+            }
         }
         else {
             List<dynamic> args = new List<dynamic>();
@@ -397,14 +403,14 @@ public class Interpreter {
             }
             dynamic returnValue = Callbacks.Run(indexValue, args);
             var = new ScopeVariable(Consts.VariableTypes.Value, returnValue);
+            
+            if (instruction.Next.Next.Next is not null) {
+                OngoingContexts.Add(var);
+                var = InterpretInstruction(instruction.Next.Next.Next);
+                OngoingContexts.Pop();
+            }
         }
         
-        if (instruction.Next is not null) {
-            OngoingContexts.Add(var);
-            var = InterpretInstruction(instruction.Next.Next);
-            OngoingContexts.Pop();
-        }
-
         return var;
     }
 
