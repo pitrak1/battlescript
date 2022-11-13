@@ -30,4 +30,14 @@ public class E2ETests {
 
         Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
     }
+    
+    [Test]
+    public void RunsCustomCallbacksWithNoReturnValue() {
+        var scopeStack = _runner.RunString("var x = Btl.test3();");
+
+        Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
+        expected.Add("x", new ScopeVariable(Consts.VariableTypes.Value, null));
+
+        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    }
 }
