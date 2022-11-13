@@ -1,3 +1,5 @@
+using BattleScript.Exceptions;
+
 namespace BattleScript; 
 
 public class Runner {
@@ -9,10 +11,15 @@ public class Runner {
 
     public ScopeStack Run(string path) {
         string contents = ReadFile(path);
-        var tokens = Lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
-        var interpreter = new Interpreter();
-        return interpreter.Run(instructions);
+        try {
+            var tokens = Lexer.Run(contents);
+            var instructions = Parser.Run(tokens);
+            var interpreter = new Interpreter();
+            return interpreter.Run(instructions);
+        }
+        catch (BattleScriptException e) {
+            return new ScopeStack();
+        }
     }
 
     public ScopeStack RunString(string contents) {
