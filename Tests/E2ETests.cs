@@ -2,12 +2,10 @@ namespace BattleScript.Tests;
 
 public class E2ETests {
     private Runner? _runner;
-    private CustomCallbacks? _callbacks;
     
     [SetUp]
     public void SetUp() {
-        _callbacks = new CustomCallbacks();
-        _runner = new Runner("/Users/nickpitrak/Desktop/BattleScript/TestFiles/", _callbacks);
+        _runner = new Runner("/Users/nickpitrak/Desktop/BattleScript/TestFiles/");
     }
 
     [Test]
@@ -35,6 +33,17 @@ public class E2ETests {
     public void RunsCustomCallbacksWithNoReturnValue() {
         var scopeStack = _runner.RunString("var x = Btl.test3();");
 
+        Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
+        expected.Add("x", new ScopeVariable(Consts.VariableTypes.Value, null));
+
+        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    }
+
+    [Test]
+    public void AllowsContextToBePassedBetweenRuns() {
+        _runner.RunString("Btl.context.x = 5;");
+        var scopeStack = _runner.RunString("var x = Btl.context.x;");
+        
         Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
         expected.Add("x", new ScopeVariable(Consts.VariableTypes.Value, null));
 

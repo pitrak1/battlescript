@@ -40,13 +40,16 @@ public class Interpreter {
     public ContextStack ClassContexts { get; set; }
     
     public CustomCallbacks Callbacks { get; set; }
+    
+    public ScopeVariable BtlContext { get; set; }
 
-    public Interpreter(CustomCallbacks callbacks) {
+    public Interpreter() {
         OngoingContexts = new ContextStack();
         LexicalContexts = new ScopeStack();
         SelfContexts = new ContextStack();
         ClassContexts = new ContextStack();
-        Callbacks = callbacks;
+        Callbacks = new CustomCallbacks();
+        BtlContext = new ScopeVariable(Consts.VariableTypes.Dictionary, new Dictionary<dynamic, ScopeVariable>());
     }
 
     public ScopeStack Run(List<Instruction> instructions) {
@@ -379,17 +382,30 @@ public class Interpreter {
     private ScopeVariable HandleBtl(Instruction instruction) {
         Debug.Assert(instruction.Next is not null);
         Debug.Assert(instruction.Next.Type == Consts.InstructionTypes.SquareBraces);
-        
-        List<dynamic> args = new List<dynamic>();
-        if (instruction.Next.Next.Type == Consts.InstructionTypes.Parens) {
-            foreach (Instruction inst in instruction.Next.Next.Value) {
-                args.Add(InterpretInstruction(inst).Value);
+
+        ScopeVariable var;
+        string indexValue = instruction.Next.Value[0].Value;
+        if (indexValue == "context") {
+            var = BtlContext;
+        }
+        else {
+            List<dynamic> args = new List<dynamic>();
+            if (instruction.Next.Next.Type == Consts.InstructionTypes.Parens) {
+                foreach (Instruction inst in instruction.Next.Next.Value) {
+                    args.Add(InterpretInstruction(inst).Value);
+                }
             }
+            dynamic returnValue = Callbacks.Run(indexValue, args);
+            var = new ScopeVariable(Consts.VariableTypes.Value, returnValue);
         }
         
-        string indexValue = instruction.Next.Value[0].Value;
-        dynamic returnValue = Callbacks.Run(indexValue, args);
-        return new ScopeVariable(Consts.VariableTypes.Value, returnValue);
+        if (instruction.Next is not null) {
+            OngoingContexts.Add(var);
+            var = InterpretInstruction(instruction.Next.Next);
+            OngoingContexts.Pop();
+        }
+
+        return var;
     }
 
     private ScopeVariable RunFunction(List<ScopeVariable> functionValue, List<Instruction> instructions, List<Instruction> args, ScopeVariable? classObject = null) {
