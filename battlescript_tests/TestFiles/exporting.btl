@@ -1,0 +1,3 @@
+// NOT TESTED IN INTERPRETER YET
+
+export var x = 9;

@@ -1,0 +1,5 @@
+// NOT TESTED IN INTERPRETER YET
+
+var imported = import 'test-files/exporting.btl';
+var x = imported.x;
+export var y = x;

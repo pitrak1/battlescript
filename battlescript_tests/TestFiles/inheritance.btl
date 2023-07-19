@@ -1,0 +1,22 @@
+var Class1 = class {
+	var b = 6;
+	var d = 3;
+
+	var my_function = function() {
+		return b;
+	}
+}
+
+var Class2 = class extends Class1 {
+	var c = 9;
+	var d = 12;
+
+	var my_other_function = function() {
+		return b + c;
+	}
+}
+
+var b = Class2();
+var c = b.my_other_function();
+b.b = 9;
+var d = b.my_function();

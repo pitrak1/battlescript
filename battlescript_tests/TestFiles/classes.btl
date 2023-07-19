@@ -1,0 +1,8 @@
+var Class1 = class {
+	var a = 5;
+}
+
+var x = Class1();
+var y = x.a;
+x.a = 10;
+var z = x.a;

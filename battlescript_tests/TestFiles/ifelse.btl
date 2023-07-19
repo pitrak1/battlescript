@@ -1,0 +1,19 @@
+var x = 5;
+var y = 3;
+
+if (x == 3) {
+	y = 6;
+} else {
+    x = 3;
+}
+
+var z = 2;
+var a = 1;
+
+if (z == 5) {
+	a = 6;
+} else if (z == 2) {
+    a = 5;
+} else {
+    a = 4;
+}

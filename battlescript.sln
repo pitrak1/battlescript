@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "battlescript", "battlescript\battlescript.csproj", "{34D7D841-B1A8-46A5-A317-239B00FD45DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "battlescript_tests", "battlescript_tests\battlescript_tests.csproj", "{73C0928C-BA7D-49E7-8D58-91E0DF9789EF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{34D7D841-B1A8-46A5-A317-239B00FD45DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34D7D841-B1A8-46A5-A317-239B00FD45DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34D7D841-B1A8-46A5-A317-239B00FD45DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34D7D841-B1A8-46A5-A317-239B00FD45DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73C0928C-BA7D-49E7-8D58-91E0DF9789EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73C0928C-BA7D-49E7-8D58-91E0DF9789EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73C0928C-BA7D-49E7-8D58-91E0DF9789EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73C0928C-BA7D-49E7-8D58-91E0DF9789EF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

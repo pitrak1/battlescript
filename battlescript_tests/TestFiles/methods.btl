@@ -1,0 +1,12 @@
+var Class1 = class {
+	var a = 5;
+
+	var my_function = function() {
+		return a;
+	}
+}
+
+var x = Class1();
+var y = x.my_function();
+x.a = 10;
+var z = x.my_function();

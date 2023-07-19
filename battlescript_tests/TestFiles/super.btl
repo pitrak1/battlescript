@@ -1,0 +1,18 @@
+var Class1 = class {
+	var my_function = function() {
+		return 9;
+	}
+}
+
+var Class2 = class extends Class1 {
+	var my_function = function() {
+		return 4;
+	}
+
+	var my_other_function = function() {
+		return super.my_function();
+	}
+}
+
+var a = Class2();
+var b = a.my_other_function();

@@ -1,0 +1,5 @@
+var x = {'x': 1, 'y': 2};
+x['z'] = 5;
+x.a = 6;
+var y = x['z'];
+var z = x.a;

@@ -1,0 +1,5 @@
+var x = 15;
+var y = '1234';
+var z = "2345";
+var a = true;
+var b = a;

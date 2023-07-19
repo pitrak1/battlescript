@@ -1,0 +1,12 @@
+/Users/nickpitrak/Desktop/battlescript/battlescript/bin/Debug/net6.0/battlescript.deps.json
+/Users/nickpitrak/Desktop/battlescript/battlescript/bin/Debug/net6.0/battlescript.dll
+/Users/nickpitrak/Desktop/battlescript/battlescript/bin/Debug/net6.0/battlescript.pdb
+/Users/nickpitrak/Desktop/battlescript/battlescript/obj/Debug/net6.0/battlescript.csproj.AssemblyReference.cache
+/Users/nickpitrak/Desktop/battlescript/battlescript/obj/Debug/net6.0/battlescript.GeneratedMSBuildEditorConfig.editorconfig
+/Users/nickpitrak/Desktop/battlescript/battlescript/obj/Debug/net6.0/battlescript.AssemblyInfoInputs.cache
+/Users/nickpitrak/Desktop/battlescript/battlescript/obj/Debug/net6.0/battlescript.AssemblyInfo.cs
+/Users/nickpitrak/Desktop/battlescript/battlescript/obj/Debug/net6.0/battlescript.csproj.CoreCompileInputs.cache
+/Users/nickpitrak/Desktop/battlescript/battlescript/obj/Debug/net6.0/battlescript.dll
+/Users/nickpitrak/Desktop/battlescript/battlescript/obj/Debug/net6.0/refint/battlescript.dll
+/Users/nickpitrak/Desktop/battlescript/battlescript/obj/Debug/net6.0/battlescript.pdb
+/Users/nickpitrak/Desktop/battlescript/battlescript/obj/Debug/net6.0/ref/battlescript.dll

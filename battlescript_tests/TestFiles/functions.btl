@@ -1,0 +1,11 @@
+var my_function = function() {
+	return 5;
+}
+
+var x = my_function();
+
+var my_other_function = function(my_variable) {
+	return my_variable + 5;
+}
+
+var y = my_other_function(3);

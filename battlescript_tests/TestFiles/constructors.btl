@@ -1,0 +1,33 @@
+var Class1 = class {
+	constructor(value) {
+		b = value + 3;
+	}
+
+	var a = 4;
+	var b = 7;
+
+	var my_function = function() {
+		return a;
+	}
+}
+
+var Class2 = class extends Class1 {
+	constructor(value) {
+		super(value);
+		a = value;
+	}
+
+	var my_function = function() {
+		return b;
+	}
+
+	var my_other_function = function() {
+		return super.my_function();
+	}
+}
+
+var a = Class2(8);
+var b = a.a;
+var c = a.b;
+var d = a.my_function();
+var e = a.my_other_function();

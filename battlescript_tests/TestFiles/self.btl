@@ -1,0 +1,11 @@
+var Class1 = class {
+	var b = 8;
+
+	var my_function = function() {
+		var b = 3;
+		return self.b;
+	}
+}
+
+var x = Class1();
+var y = x.my_function();

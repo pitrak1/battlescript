@@ -1,0 +1,5 @@
+// NOT TESTED IN INTERPRETER YET
+
+const x = 5;
+var y = 3;
+const z = x + y;
