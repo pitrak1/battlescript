@@ -1,5 +1,7 @@
 namespace BattleScript.Tests;
 
+using BattleScript.Core;
+
 public class E2ETests
 {
     private Runner? _runner;

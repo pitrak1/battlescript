@@ -1,5 +1,7 @@
 namespace BattleScript.Tests;
 
+using BattleScript.Core;
+
 public class InterpreterTests
 {
     private Runner? _runner;

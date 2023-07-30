@@ -1,6 +1,8 @@
 using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NUnit.Framework;
+using BattleScript.Core;
 
 namespace BattleScript.Tests;
 
