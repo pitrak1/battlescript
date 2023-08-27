@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Newtonsoft.Json;
 using BattleScript.Exceptions;
+using BattleScript.Instructions;
 
 namespace BattleScript.Core;
 

@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using BattleScript.Tokens;
+using BattleScript.Instructions;
 
 namespace BattleScript.Core;
 

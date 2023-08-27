@@ -1,5 +1,6 @@
 namespace BattleScript.Tests;
 using BattleScript.Core;
+using BattleScript.Tokens;
 
 public class ParserUtilitiesTests
 {

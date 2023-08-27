@@ -1,6 +1,8 @@
 using System.Text.Json;
 using Newtonsoft.Json;
 using BattleScript.Core;
+using BattleScript.Tokens;
+using BattleScript.Instructions;
 
 namespace BattleScript.Tests;
 

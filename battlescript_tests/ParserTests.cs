@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using BattleScript.Core;
+using BattleScript.Tokens;
+using BattleScript.Instructions;
 
 namespace BattleScript.Tests;
 

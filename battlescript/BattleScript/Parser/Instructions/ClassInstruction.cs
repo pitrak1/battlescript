@@ -1,4 +1,7 @@
-namespace BattleScript.Core;
+using BattleScript.Core;
+
+namespace BattleScript.Instructions;
+
 public class ClassInstruction : Instruction
 {
     public ClassInstruction(

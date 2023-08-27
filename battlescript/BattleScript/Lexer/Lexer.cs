@@ -1,3 +1,5 @@
+using BattleScript.Tokens;
+
 namespace BattleScript.Core;
 
 public class Lexer
