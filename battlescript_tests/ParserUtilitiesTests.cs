@@ -12,7 +12,8 @@ public class ParserUtilitiesTests
         [Test]
         public void Exists()
         {
-            var tokens = Lexer.Run("var x = 1 + 2;");
+            Lexer lexer = new Lexer();
+            var tokens = lexer.Run("var x = 1 + 2;");
             int index = ParserUtilities.GetAssignmentOperatorIndex(tokens);
             Assert.That(index, Is.EqualTo(2));
         }
@@ -20,7 +21,8 @@ public class ParserUtilitiesTests
         [Test]
         public void DoesNotExist()
         {
-            var tokens = Lexer.Run("var x 1 + 2;");
+            Lexer lexer = new Lexer();
+            var tokens = lexer.Run("var x 1 + 2;");
             int index = ParserUtilities.GetAssignmentOperatorIndex(tokens);
             Assert.That(index, Is.EqualTo(-1));
         }
@@ -32,7 +34,8 @@ public class ParserUtilitiesTests
         [Test]
         public void Exists()
         {
-            var tokens = Lexer.Run("var x = 1 + 2;");
+            Lexer lexer = new Lexer();
+            var tokens = lexer.Run("var x = 1 + 2;");
             int index = ParserUtilities.GetMathematicalOperatorIndex(tokens);
             Assert.That(index, Is.EqualTo(4));
         }
@@ -40,7 +43,8 @@ public class ParserUtilitiesTests
         [Test]
         public void EvaluatesRightToLeft()
         {
-            var tokens = Lexer.Run("var x = 1 + 2 + 3;");
+            Lexer lexer = new Lexer();
+            var tokens = lexer.Run("var x = 1 + 2 + 3;");
             int index = ParserUtilities.GetMathematicalOperatorIndex(tokens);
             Assert.That(index, Is.EqualTo(6));
         }
@@ -48,7 +52,8 @@ public class ParserUtilitiesTests
         [Test]
         public void EvaluatesLowestToHighestPriority()
         {
-            var tokens = Lexer.Run("var x = 1 + 2 * 3;");
+            Lexer lexer = new Lexer();
+            var tokens = lexer.Run("var x = 1 + 2 * 3;");
             int index = ParserUtilities.GetMathematicalOperatorIndex(tokens);
             Assert.That(index, Is.EqualTo(4));
         }
@@ -56,7 +61,8 @@ public class ParserUtilitiesTests
         [Test]
         public void SkipsTokensInSeparatorBlocks()
         {
-            var tokens = Lexer.Run("var x = 1 + x[1 + 2];");
+            Lexer lexer = new Lexer();
+            var tokens = lexer.Run("var x = 1 + x[1 + 2];");
             int index = ParserUtilities.GetMathematicalOperatorIndex(tokens);
             Assert.That(index, Is.EqualTo(4));
         }
@@ -64,7 +70,8 @@ public class ParserUtilitiesTests
         [Test]
         public void DoesNotExist()
         {
-            var tokens = Lexer.Run("var x = 12;");
+            Lexer lexer = new Lexer();
+            var tokens = lexer.Run("var x = 12;");
             int index = ParserUtilities.GetMathematicalOperatorIndex(tokens);
             Assert.That(index, Is.EqualTo(-1));
         }
@@ -76,7 +83,8 @@ public class ParserUtilitiesTests
         [Test]
         public void NoSeparators()
         {
-            var tokens = Lexer.Run("[1]");
+            Lexer lexer = new Lexer();
+            var tokens = lexer.Run("[1]");
             List<List<Token>> entries = ParserUtilities.ParseUntilMatchingSeparator(tokens, new List<string>());
 
             Assert.That(entries.Count, Is.EqualTo(1));
@@ -88,7 +96,8 @@ public class ParserUtilitiesTests
         [Test]
         public void WithSeparatingCharacters()
         {
-            var tokens = Lexer.Run("[1, 2]");
+            Lexer lexer = new Lexer();
+            var tokens = lexer.Run("[1, 2]");
             List<string> separatingCharacters = new List<string>() { "," };
             List<List<Token>> entries = ParserUtilities.ParseUntilMatchingSeparator(tokens, separatingCharacters);
 
@@ -104,7 +113,8 @@ public class ParserUtilitiesTests
         [Test]
         public void RespectsInnerSeparators()
         {
-            var tokens = Lexer.Run("[[1], [2]]");
+            Lexer lexer = new Lexer();
+            var tokens = lexer.Run("[[1], [2]]");
             List<string> separatingCharacters = new List<string>() { "," };
             List<List<Token>> entries = ParserUtilities.ParseUntilMatchingSeparator(tokens, separatingCharacters);
 

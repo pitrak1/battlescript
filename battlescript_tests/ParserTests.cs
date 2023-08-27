@@ -17,7 +17,8 @@ public class ParserTests
     public void Variables()
     {
         string contents = LoadFile("variables.btl");
-        var tokens = Lexer.Run(contents);
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run(contents);
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
@@ -49,7 +50,8 @@ public class ParserTests
     public void Operators()
     {
         string contents = LoadFile("operators.btl");
-        var tokens = Lexer.Run(contents);
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run(contents);
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
@@ -102,7 +104,8 @@ public class ParserTests
     public void Arrays()
     {
         string contents = LoadFile("arrays.btl");
-        var tokens = Lexer.Run(contents);
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run(contents);
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
@@ -195,7 +198,8 @@ public class ParserTests
     public void Dictionaries()
     {
         string contents = LoadFile("dictionaries.btl");
-        var tokens = Lexer.Run(contents);
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run(contents);
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
@@ -291,7 +295,8 @@ public class ParserTests
     public void If()
     {
         string contents = LoadFile("if.btl");
-        var tokens = Lexer.Run(contents);
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run(contents);
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
@@ -338,7 +343,8 @@ public class ParserTests
     public void IfElse()
     {
         string contents = LoadFile("ifelse.btl");
-        var tokens = Lexer.Run(contents);
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run(contents);
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
@@ -424,7 +430,8 @@ public class ParserTests
     public void While()
     {
         string contents = LoadFile("while.btl");
-        var tokens = Lexer.Run(contents);
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run(contents);
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
@@ -470,7 +477,8 @@ public class ParserTests
     public void Functions()
     {
         string contents = LoadFile("functions.btl");
-        var tokens = Lexer.Run(contents);
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run(contents);
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
@@ -529,7 +537,8 @@ public class ParserTests
     public void Classes()
     {
         string contents = LoadFile("classes.btl");
-        var tokens = Lexer.Run(contents);
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run(contents);
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
@@ -594,7 +603,8 @@ public class ParserTests
     public void Methods()
     {
         string contents = LoadFile("methods.btl");
-        var tokens = Lexer.Run(contents);
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run(contents);
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
@@ -672,7 +682,8 @@ public class ParserTests
     public void Inheritance()
     {
         string contents = LoadFile("inheritance.btl");
-        var tokens = Lexer.Run(contents);
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run(contents);
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
@@ -785,7 +796,8 @@ public class ParserTests
     public void Self()
     {
         string contents = LoadFile("self.btl");
-        var tokens = Lexer.Run(contents);
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run(contents);
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
@@ -850,7 +862,8 @@ public class ParserTests
     public void Super()
     {
         string contents = LoadFile("super.btl");
-        var tokens = Lexer.Run(contents);
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run(contents);
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
@@ -938,7 +951,8 @@ public class ParserTests
     public void SuperSuper()
     {
         string contents = LoadFile("super_super.btl");
-        var tokens = Lexer.Run(contents);
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run(contents);
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
@@ -1110,7 +1124,8 @@ public class ParserTests
     public void SelfSuper()
     {
         string contents = LoadFile("self_super.btl");
-        var tokens = Lexer.Run(contents);
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run(contents);
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
@@ -1208,7 +1223,8 @@ public class ParserTests
     public void Constructors()
     {
         string contents = LoadFile("constructors.btl");
-        var tokens = Lexer.Run(contents);
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run(contents);
         var instructions = Parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {

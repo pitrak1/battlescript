@@ -8,7 +8,8 @@ public class LexerTests
     [Test]
     public void Integers()
     {
-        var tokens = Lexer.Run("123456");
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run("123456");
         var expectedTokens = new List<Token>() {
             new NumberToken("123456")
         };
@@ -18,7 +19,8 @@ public class LexerTests
     [Test]
     public void FloatingPointNumbers()
     {
-        var tokens = Lexer.Run("123.456");
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run("123.456");
         var expectedTokens = new List<Token>() {
             new NumberToken("123.456")
         };
@@ -28,7 +30,8 @@ public class LexerTests
     [Test]
     public void SingleQuoteStrings()
     {
-        var tokens = Lexer.Run("'testString'");
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run("'testString'");
         var expectedTokens = new List<Token>() {
             new StringToken("'testString'")
         };
@@ -38,7 +41,8 @@ public class LexerTests
     [Test]
     public void DoubleQuoteStrings()
     {
-        var tokens = Lexer.Run("\"testString\"");
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run("\"testString\"");
         var expectedTokens = new List<Token>() {
             new StringToken("\"testString\"")
         };
@@ -48,7 +52,8 @@ public class LexerTests
     [Test]
     public void MixedQuoteStrings()
     {
-        var tokens = Lexer.Run("\"'testString'\"");
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run("\"'testString'\"");
         var expectedTokens = new List<Token>() {
             new StringToken("\"'testString'\"")
         };
@@ -58,7 +63,8 @@ public class LexerTests
     [Test]
     public void Separators()
     {
-        var tokens = Lexer.Run("(");
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run("(");
         var expectedTokens = new List<Token>() {
             new SeparatorToken("(")
         };
@@ -68,7 +74,8 @@ public class LexerTests
     [Test]
     public void Keywords()
     {
-        var tokens = Lexer.Run("constructor");
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run("constructor");
         var expectedTokens = new List<Token>() {
             new KeywordToken("constructor")
         };
@@ -78,7 +85,8 @@ public class LexerTests
     [Test]
     public void Booleans()
     {
-        var tokens = Lexer.Run("true");
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run("true");
         var expectedTokens = new List<Token>() {
             new BooleanToken("true")
         };
@@ -88,7 +96,8 @@ public class LexerTests
     [Test]
     public void Identifiers()
     {
-        var tokens = Lexer.Run("my_identifier1");
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run("my_identifier1");
         var expectedTokens = new List<Token>() {
             new IdentifierToken("my_identifier1")
         };
@@ -98,7 +107,8 @@ public class LexerTests
     [Test]
     public void SingleCharacterOperators()
     {
-        var tokens = Lexer.Run("+");
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run("+");
         var expectedTokens = new List<Token>() {
             new OperatorToken("+")
         };
@@ -108,7 +118,8 @@ public class LexerTests
     [Test]
     public void MultipleCharacterOperators()
     {
-        var tokens = Lexer.Run("==");
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run("==");
         var expectedTokens = new List<Token>() {
             new OperatorToken("==")
         };
@@ -118,7 +129,8 @@ public class LexerTests
     [Test]
     public void Assignments()
     {
-        var tokens = Lexer.Run("=");
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run("=");
         var expectedTokens = new List<Token>() {
             new AssignmentToken()
         };
@@ -128,7 +140,8 @@ public class LexerTests
     [Test]
     public void Comments()
     {
-        var tokens = Lexer.Run("//");
+        Lexer lexer = new Lexer();
+        var tokens = lexer.Run("//");
         var expectedTokens = new List<Token>() { };
         Assertions.AssertTokens(tokens, expectedTokens);
     }
