@@ -1,7 +1,7 @@
-namespace BattleScript.Tests;
-
-using BattleScript.Core;
+using BattleScript.LexerNS;
 using BattleScript.Tokens;
+
+namespace BattleScript.Tests;
 
 public class LexerTests
 {

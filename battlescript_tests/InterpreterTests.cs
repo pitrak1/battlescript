@@ -1,6 +1,7 @@
-namespace BattleScript.Tests;
-
 using BattleScript.Core;
+using BattleScript.InterpreterNS;
+
+namespace BattleScript.Tests;
 
 public class InterpreterTests
 {

@@ -1,4 +1,4 @@
-namespace BattleScript.Core;
+namespace BattleScript.InterpreterNS;
 
 public class ContextStack
 {

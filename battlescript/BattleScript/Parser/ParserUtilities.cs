@@ -1,7 +1,8 @@
 using System.Diagnostics;
 using BattleScript.Tokens;
+using BattleScript.Core;
 
-namespace BattleScript.Core;
+namespace BattleScript.ParserNS;
 
 public class ParserUtilities
 {

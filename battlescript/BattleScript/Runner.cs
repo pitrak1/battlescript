@@ -1,3 +1,7 @@
+using BattleScript.LexerNS;
+using BattleScript.ParserNS;
+using BattleScript.InterpreterNS;
+
 namespace BattleScript.Core;
 
 public class Runner

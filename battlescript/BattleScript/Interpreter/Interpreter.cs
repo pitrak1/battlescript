@@ -2,8 +2,9 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using BattleScript.Exceptions;
 using BattleScript.Instructions;
+using BattleScript.Core;
 
-namespace BattleScript.Core;
+namespace BattleScript.InterpreterNS;
 
 public class Interpreter
 {
