@@ -2,12 +2,12 @@ namespace BattleScript.LexerNS;
 
 public class LexerUtilities
 {
-    public static string GetLineUntilCharacterInCollection(string line, int lineIndex, char[] collection)
+    public static string GetLineUntilCharacterInCollection(string contents, int contentIndex, char[] collection)
     {
         string resultString = "";
-        while (lineIndex < line.Length)
+        while (contentIndex < contents.Length)
         {
-            char currentCharacter = line[lineIndex];
+            char currentCharacter = contents[contentIndex];
             if (collection.Contains(currentCharacter))
             {
                 break;
@@ -15,23 +15,23 @@ public class LexerUtilities
             else
             {
                 resultString += currentCharacter.ToString();
-                lineIndex++;
+                contentIndex++;
             }
         }
 
         return resultString;
     }
 
-    public static string GetLineWhileCharactersInCollection(string line, int lineIndex, char[] collection)
+    public static string GetLineWhileCharactersInCollection(string contents, int contentIndex, char[] collection)
     {
         string resultString = "";
-        while (lineIndex < line.Length)
+        while (contentIndex < contents.Length)
         {
-            char currentCharacter = line[lineIndex];
+            char currentCharacter = contents[contentIndex];
             if (collection.Contains(currentCharacter))
             {
                 resultString += currentCharacter.ToString();
-                lineIndex++;
+                contentIndex++;
             }
             else
             {
