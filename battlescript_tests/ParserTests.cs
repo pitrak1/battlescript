@@ -8,6 +8,7 @@ using BattleScript.Instructions;
 using BattleScript.LexerNS;
 using BattleScript.ParserNS;
 using BattleScript.InterpreterNS;
+using System.Diagnostics;
 
 namespace BattleScript.Tests;
 
@@ -17,9 +18,12 @@ public class ParserTests
     public void Variables()
     {
         string contents = LoadFile("variables.btl");
+
         Lexer lexer = new Lexer();
         var tokens = lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
+
+        Parser parser = new Parser();
+        var instructions = parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -50,9 +54,12 @@ public class ParserTests
     public void Operators()
     {
         string contents = LoadFile("operators.btl");
+
         Lexer lexer = new Lexer();
         var tokens = lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
+
+        Parser parser = new Parser();
+        var instructions = parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -104,9 +111,12 @@ public class ParserTests
     public void Arrays()
     {
         string contents = LoadFile("arrays.btl");
+
         Lexer lexer = new Lexer();
         var tokens = lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
+
+        Parser parser = new Parser();
+        var instructions = parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -198,9 +208,12 @@ public class ParserTests
     public void Dictionaries()
     {
         string contents = LoadFile("dictionaries.btl");
+
         Lexer lexer = new Lexer();
         var tokens = lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
+
+        Parser parser = new Parser();
+        var instructions = parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -295,9 +308,12 @@ public class ParserTests
     public void If()
     {
         string contents = LoadFile("if.btl");
+
         Lexer lexer = new Lexer();
         var tokens = lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
+
+        Parser parser = new Parser();
+        var instructions = parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -343,9 +359,12 @@ public class ParserTests
     public void IfElse()
     {
         string contents = LoadFile("ifelse.btl");
+
         Lexer lexer = new Lexer();
         var tokens = lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
+
+        Parser parser = new Parser();
+        var instructions = parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -430,9 +449,12 @@ public class ParserTests
     public void While()
     {
         string contents = LoadFile("while.btl");
+
         Lexer lexer = new Lexer();
         var tokens = lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
+
+        Parser parser = new Parser();
+        var instructions = parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -477,9 +499,12 @@ public class ParserTests
     public void Functions()
     {
         string contents = LoadFile("functions.btl");
+
         Lexer lexer = new Lexer();
         var tokens = lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
+
+        Parser parser = new Parser();
+        var instructions = parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -537,9 +562,12 @@ public class ParserTests
     public void Classes()
     {
         string contents = LoadFile("classes.btl");
+
         Lexer lexer = new Lexer();
         var tokens = lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
+
+        Parser parser = new Parser();
+        var instructions = parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -603,9 +631,12 @@ public class ParserTests
     public void Methods()
     {
         string contents = LoadFile("methods.btl");
+
         Lexer lexer = new Lexer();
         var tokens = lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
+
+        Parser parser = new Parser();
+        var instructions = parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -682,9 +713,12 @@ public class ParserTests
     public void Inheritance()
     {
         string contents = LoadFile("inheritance.btl");
+
         Lexer lexer = new Lexer();
         var tokens = lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
+
+        Parser parser = new Parser();
+        var instructions = parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -796,9 +830,12 @@ public class ParserTests
     public void Self()
     {
         string contents = LoadFile("self.btl");
+
         Lexer lexer = new Lexer();
         var tokens = lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
+
+        Parser parser = new Parser();
+        var instructions = parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -862,9 +899,12 @@ public class ParserTests
     public void Super()
     {
         string contents = LoadFile("super.btl");
+
         Lexer lexer = new Lexer();
         var tokens = lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
+
+        Parser parser = new Parser();
+        var instructions = parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -951,9 +991,12 @@ public class ParserTests
     public void SuperSuper()
     {
         string contents = LoadFile("super_super.btl");
+
         Lexer lexer = new Lexer();
         var tokens = lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
+
+        Parser parser = new Parser();
+        var instructions = parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -1124,9 +1167,12 @@ public class ParserTests
     public void SelfSuper()
     {
         string contents = LoadFile("self_super.btl");
+
         Lexer lexer = new Lexer();
         var tokens = lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
+
+        Parser parser = new Parser();
+        var instructions = parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -1223,9 +1269,12 @@ public class ParserTests
     public void Constructors()
     {
         string contents = LoadFile("constructors.btl");
+
         Lexer lexer = new Lexer();
         var tokens = lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
+
+        Parser parser = new Parser();
+        var instructions = parser.Run(tokens);
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(

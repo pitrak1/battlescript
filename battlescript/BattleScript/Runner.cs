@@ -16,9 +16,13 @@ public class Runner
     public ScopeStack Run(string path)
     {
         string contents = ReadFile(path);
+
         Lexer lexer = new Lexer();
         var tokens = lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
+
+        Parser parser = new Parser();
+        var instructions = parser.Run(tokens);
+
         var interpreter = new Interpreter();
         return interpreter.Run(instructions);
     }
@@ -27,7 +31,10 @@ public class Runner
     {
         Lexer lexer = new Lexer();
         var tokens = lexer.Run(contents);
-        var instructions = Parser.Run(tokens);
+
+        Parser parser = new Parser();
+        var instructions = parser.Run(tokens);
+
         var interpreter = new Interpreter();
         return interpreter.Run(instructions);
     }
