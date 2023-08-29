@@ -13,8 +13,6 @@ public partial class InstructionParser
         {
             case "var":
                 return HandleVar(tokens);
-            case "const":
-                return HandleConst(tokens);
             case "if":
                 return HandleIf(tokens);
             case "else":
@@ -48,25 +46,6 @@ public partial class InstructionParser
         Debug.Assert(tokens[1].Type == Consts.TokenTypes.Identifier);
 
         return new DeclarationInstruction(tokens[1].Value, tokens[0].Line, tokens[0].Column);
-    }
-
-    private Instruction HandleConst(List<Token> tokens)
-    {
-        Debug.Assert(tokens.Count == 2);
-        Debug.Assert(tokens[0].Type == Consts.TokenTypes.Keyword);
-        Debug.Assert(tokens[0].Value == "const");
-        Debug.Assert(tokens[1].Type == Consts.TokenTypes.Identifier);
-
-        return new Instruction(
-            Consts.InstructionTypes.ConstDeclaration,
-            tokens[1].Value,
-            null,
-            null,
-            null,
-            null,
-            tokens[0].Line,
-            tokens[0].Column
-        );
     }
 
     private Instruction HandleIf(List<Token> tokens)
