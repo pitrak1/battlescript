@@ -35,18 +35,17 @@ public class Parser
 
                 if (instruction.Type == Consts.InstructionTypes.Else)
                 {
-                    Instruction mostRecentInstruction = scopes[^1][^1];
-                    while (mostRecentInstruction.Next is not null)
-                    {
-                        mostRecentInstruction = mostRecentInstruction.Next;
-                    }
-                    mostRecentInstruction.Next = instruction;
+                    attachToEndOfNextChainOfMostRecentInstruction(instruction);
                 }
                 else
                 {
                     addToCurrentScope(instruction);
                 }
 
+                // This is so that when we start parsing instructions in the block, they will
+                // be added to the appropriate scope. In most cases, it's just the list of
+                // Instructions, but for assignment, we specifically want it to be the Right
+                // property.
                 if (instruction.Type == Consts.InstructionTypes.Assignment)
                 {
                     addToScopes(instruction.Right.Instructions);
@@ -69,6 +68,21 @@ public class Parser
         }
 
         return instructions;
+    }
+
+    // It's kind of unfortunate that this has to be done this way, but the problem is that an
+    // else or elseif instruction after an if instruction looks exactly the same as a whole new
+    // instruction. This isn't really built to be able to determine whether an instruction with a code
+    // block after an instruction with a code block is a new instruction entirely or an attachment
+    // to the previous instruction.  I bet when I do try/catch, this same thing will come up.
+    private void attachToEndOfNextChainOfMostRecentInstruction(Instruction instruction)
+    {
+        Instruction mostRecentInstruction = scopes[^1][^1];
+        while (mostRecentInstruction.Next is not null)
+        {
+            mostRecentInstruction = mostRecentInstruction.Next;
+        }
+        mostRecentInstruction.Next = instruction;
     }
 
     private void clearTokensForCurrentInstruction()
