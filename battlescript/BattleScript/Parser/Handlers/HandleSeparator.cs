@@ -32,7 +32,7 @@ public partial class InstructionParser
         {
             values.Add(Run(entry));
         }
-        return new SquareBracesInstruction(values).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new SquareBracesInstruction(values, null, tokens[0].Line, tokens[0].Column);
     }
 
     private Instruction HandleCurlyBraces(List<Token> tokens)
@@ -53,7 +53,7 @@ public partial class InstructionParser
             next = Run(tokens.GetRange(entriesLength, tokens.Count - entriesLength));
         }
 
-        return new DictionaryInstruction(values, next).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new DictionaryInstruction(values, next, tokens[0].Line, tokens[0].Column);
     }
 
     private Instruction HandleParens(List<Token> tokens)
@@ -75,12 +75,12 @@ public partial class InstructionParser
             next = Run(tokens.GetRange(entriesLength, tokens.Count - entriesLength));
         }
 
-        return new ParensInstruction(values, next).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new ParensInstruction(values, next, tokens[0].Line, tokens[0].Column);
     }
 
     private Instruction HandleMember(List<Token> tokens)
     {
-        Instruction property = new StringInstruction(tokens[1].Value).SetDebugInfo(tokens[1].Line, tokens[1].Column);
+        Instruction property = new StringInstruction(tokens[1].Value, tokens[0].Line, tokens[0].Column);
 
         Instruction next = null;
         if (tokens.Count > 2)
@@ -88,6 +88,6 @@ public partial class InstructionParser
             next = Run(tokens.GetRange(2, tokens.Count - 2));
         }
 
-        return new SquareBracesInstruction(new List<Instruction>() { property }, next).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new SquareBracesInstruction(new List<Instruction>() { property }, next, tokens[0].Line, tokens[0].Column);
     }
 }

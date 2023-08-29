@@ -388,7 +388,7 @@ public class ParserTests
                     )
                 },
                 new ElseInstruction(
-                    Consts.InstructionTypes.Else,
+                    null,
                     new List<Instruction>() {
                         new AssignmentInstruction(
                             new VariableInstruction("x"),
@@ -573,7 +573,7 @@ public class ParserTests
             new AssignmentInstruction(
                 new DeclarationInstruction("Class1"),
                 new ClassInstruction(
-                    Consts.InstructionTypes.Class,
+                    null,
                     new List<Instruction>() {
                         new AssignmentInstruction(
                             new DeclarationInstruction("a"),
@@ -651,7 +651,7 @@ public class ParserTests
                         new AssignmentInstruction(
                             new DeclarationInstruction("my_function"),
                             new FunctionInstruction(
-                                new List<ScopeVariable>(),
+                                new List<Instruction>(),
                                 new List<Instruction>() {
                                     new ReturnInstruction(
                                         new VariableInstruction("a")
@@ -737,7 +737,7 @@ public class ParserTests
                         new AssignmentInstruction(
                             new DeclarationInstruction("my_function"),
                             new FunctionInstruction(
-                                new List<ScopeVariable>(),
+                                null,
                                 new List<Instruction>() {
                                     new ReturnInstruction(
                                         new VariableInstruction("b")
@@ -764,7 +764,7 @@ public class ParserTests
                         new AssignmentInstruction(
                             new DeclarationInstruction("my_other_function"),
                             new FunctionInstruction(
-                                new List<ScopeVariable>(),
+                                new List<Instruction>(),
                                 new List<Instruction>() {
                                     new ReturnInstruction(
                                         new OperationInstruction(
@@ -850,7 +850,7 @@ public class ParserTests
                         new AssignmentInstruction(
                             new DeclarationInstruction("my_function"),
                             new FunctionInstruction(
-                                new List<ScopeVariable>(),
+                                new List<Instruction>(),
                                 new List<Instruction>() {
                                     new AssignmentInstruction(
                                         new DeclarationInstruction("b"),
@@ -915,7 +915,7 @@ public class ParserTests
                         new AssignmentInstruction(
                             new DeclarationInstruction("my_function"),
                             new FunctionInstruction(
-                                new List<ScopeVariable>(),
+                                new List<Instruction>(),
                                 new List<Instruction>() {
                                     new ReturnInstruction(
                                         new NumberInstruction(9)
@@ -934,7 +934,7 @@ public class ParserTests
                         new AssignmentInstruction(
                             new DeclarationInstruction("my_function"),
                             new FunctionInstruction(
-                                new List<ScopeVariable>(),
+                                new List<Instruction>(),
                                 new List<Instruction>() {
                                     new ReturnInstruction(
                                         new NumberInstruction(4)
@@ -945,7 +945,7 @@ public class ParserTests
                         new AssignmentInstruction(
                             new DeclarationInstruction("my_other_function"),
                             new FunctionInstruction(
-                                new List<ScopeVariable>(),
+                                new List<Instruction>(),
                                 new List<Instruction>() {
                                     new ReturnInstruction(
                                         new SuperInstruction(
@@ -1007,7 +1007,7 @@ public class ParserTests
                         new AssignmentInstruction(
                             new DeclarationInstruction("my_function"),
                             new FunctionInstruction(
-                                new List<ScopeVariable>(),
+                                new List<Instruction>(),
                                 new List<Instruction>() {
                                     new (
                                         Consts.InstructionTypes.Return,
@@ -1019,7 +1019,7 @@ public class ParserTests
                         new AssignmentInstruction(
                             new DeclarationInstruction("my_other_function"),
                             new FunctionInstruction(
-                                new List<ScopeVariable>(),
+                                new List<Instruction>(),
                                 new List<Instruction>() {
                                     new ReturnInstruction(
                                         new NumberInstruction(3)
@@ -1038,7 +1038,7 @@ public class ParserTests
                         new AssignmentInstruction(
                             new DeclarationInstruction("my_function"),
                             new FunctionInstruction(
-                                new List<ScopeVariable>(),
+                                new List<Instruction>(),
                                 new List<Instruction>() {
                                     new ReturnInstruction(
                                         new NumberInstruction(4)
@@ -1049,7 +1049,7 @@ public class ParserTests
                         new AssignmentInstruction(
                             new DeclarationInstruction("my_other_function"),
                             new FunctionInstruction(
-                                new List<ScopeVariable>(),
+                                new List<Instruction>(),
                                 new List<Instruction>() {
                                     new ReturnInstruction(
                                         new SuperInstruction(
@@ -1075,7 +1075,7 @@ public class ParserTests
                         new AssignmentInstruction(
                             new DeclarationInstruction("my_function"),
                             new FunctionInstruction(
-                                new List<ScopeVariable>(),
+                                new List<Instruction>(),
                                 new List<Instruction>() {
                                     new ReturnInstruction(
                                         new NumberInstruction(2)
@@ -1086,7 +1086,7 @@ public class ParserTests
                         new AssignmentInstruction(
                             new DeclarationInstruction("my_other_function"),
                             new FunctionInstruction(
-                                new List<ScopeVariable>(),
+                                new List<Instruction>(),
                                 new List<Instruction>() {
                                     new ReturnInstruction(
                                         new SuperInstruction(
@@ -1104,7 +1104,7 @@ public class ParserTests
                         new AssignmentInstruction(
                             new DeclarationInstruction("my_other_other_function"),
                             new FunctionInstruction(
-                                new List<ScopeVariable>(),
+                                new List<Instruction>(),
                                 new List<Instruction>() {
                                     new ReturnInstruction(
                                         new SuperInstruction(
@@ -1187,7 +1187,7 @@ public class ParserTests
                         new AssignmentInstruction(
                             new DeclarationInstruction("my_function"),
                             new FunctionInstruction(
-                                new List<ScopeVariable>(),
+                                new List<Instruction>(),
                                 new List<Instruction>() {
                                     new ReturnInstruction(
                                         new SelfInstruction(
@@ -1212,7 +1212,7 @@ public class ParserTests
                         new AssignmentInstruction(
                             new DeclarationInstruction("my_other_function"),
                             new FunctionInstruction(
-                                new List<ScopeVariable>(),
+                                new List<Instruction>(),
                                 new List<Instruction>() {
                                     new ReturnInstruction(
                                         new SuperInstruction (
@@ -1308,7 +1308,7 @@ public class ParserTests
                         new AssignmentInstruction(
                             new DeclarationInstruction("my_function"),
                             new FunctionInstruction(
-                                new List<ScopeVariable>(),
+                                new List<Instruction>(),
                                 new List<Instruction>() {
                                     new ReturnInstruction(
                                         new VariableInstruction("a")
@@ -1345,7 +1345,7 @@ public class ParserTests
                         new AssignmentInstruction(
                             new DeclarationInstruction("my_function"),
                             new FunctionInstruction(
-                                new List<ScopeVariable>(),
+                                new List<Instruction>(),
                                 new List<Instruction>() {
                                     new ReturnInstruction(
                                         new Instruction (Consts.InstructionTypes.Variable, "b")
@@ -1356,7 +1356,7 @@ public class ParserTests
                         new AssignmentInstruction(
                             new DeclarationInstruction("my_other_function"),
                             new FunctionInstruction(
-                                new List<ScopeVariable>(),
+                                new List<Instruction>(),
                                 new List<Instruction>() {
                                     new ReturnInstruction(
                                         new SuperInstruction (

@@ -47,7 +47,7 @@ public partial class InstructionParser
         Debug.Assert(tokens[0].Value == "var");
         Debug.Assert(tokens[1].Type == Consts.TokenTypes.Identifier);
 
-        return new DeclarationInstruction(tokens[1].Value).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new DeclarationInstruction(tokens[1].Value, tokens[0].Line, tokens[0].Column);
     }
 
     private Instruction HandleConst(List<Token> tokens)
@@ -59,8 +59,14 @@ public partial class InstructionParser
 
         return new Instruction(
             Consts.InstructionTypes.ConstDeclaration,
-            tokens[1].Value
-        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+            tokens[1].Value,
+            null,
+            null,
+            null,
+            null,
+            tokens[0].Line,
+            tokens[0].Column
+        );
     }
 
     private Instruction HandleIf(List<Token> tokens)
@@ -68,7 +74,7 @@ public partial class InstructionParser
         // exclude the if itself and the start and ending parens
         Instruction condition = Run(tokens.GetRange(2, tokens.Count - 3));
 
-        return new IfInstruction(condition).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new IfInstruction(condition, null, null, tokens[0].Line, tokens[0].Column);
     }
 
     private Instruction HandleElse(List<Token> tokens)
@@ -85,7 +91,7 @@ public partial class InstructionParser
             instruction.Value = condition;
         }
 
-        return new ElseInstruction(condition).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new ElseInstruction(condition, null, null, tokens[0].Line, tokens[0].Column);
     }
 
     private Instruction HandleWhile(List<Token> tokens)
@@ -93,7 +99,7 @@ public partial class InstructionParser
         // exclude the while itself and the start and ending parens
         Instruction condition = Run(tokens.GetRange(2, tokens.Count - 3));
 
-        return new WhileInstruction(condition).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new WhileInstruction(condition, null, tokens[0].Line, tokens[0].Column);
     }
 
     private Instruction HandleFunction(List<Token> tokens)
@@ -114,14 +120,14 @@ public partial class InstructionParser
             }
         }
 
-        return new FunctionInstruction(instructionArgs).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new FunctionInstruction(instructionArgs, null, tokens[0].Line, tokens[0].Column);
     }
 
     private Instruction HandleReturn(List<Token> tokens)
     {
         Instruction returnValue = Run(tokens.GetRange(1, tokens.Count - 1));
 
-        return new ReturnInstruction(returnValue).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new ReturnInstruction(returnValue, tokens[0].Line, tokens[0].Column);
     }
 
     private Instruction HandleClass(List<Token> tokens)
@@ -134,7 +140,7 @@ public partial class InstructionParser
             value = new VariableInstruction(tokens[2].Value);
         }
 
-        return new ClassInstruction(value).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new ClassInstruction(value, null, tokens[0].Line, tokens[0].Column);
     }
 
     private Instruction HandleSelf(List<Token> tokens)
@@ -145,7 +151,7 @@ public partial class InstructionParser
             next = Run(tokens.GetRange(1, tokens.Count - 1));
         }
 
-        return new SelfInstruction(next);
+        return new SelfInstruction(next, tokens[0].Line, tokens[0].Column);
     }
 
     private Instruction HandleSuper(List<Token> tokens)
@@ -156,7 +162,7 @@ public partial class InstructionParser
             next = Run(tokens.GetRange(1, tokens.Count - 1));
         }
 
-        return new SuperInstruction(next);
+        return new SuperInstruction(next, tokens[0].Line, tokens[0].Column);
     }
 
     private Instruction HandleConstructor(List<Token> tokens)
@@ -177,7 +183,7 @@ public partial class InstructionParser
             }
         }
 
-        return new ConstructorInstruction(instructionArgs).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new ConstructorInstruction(instructionArgs, null, tokens[0].Line, tokens[0].Column);
     }
 
     private Instruction HandleBtl(List<Token> tokens)
@@ -188,6 +194,6 @@ public partial class InstructionParser
             next = Run(tokens.GetRange(1, tokens.Count - 1));
         }
 
-        return new BtlInstruction(next);
+        return new BtlInstruction(next, tokens[0].Line, tokens[0].Column);
     }
 }

@@ -9,9 +9,19 @@ public partial class InstructionParser
 {
     private Instruction HandleAssignment(List<Token> tokens, int assignmentOperatorIndex)
     {
-        Instruction left = Run(tokens.GetRange(0, assignmentOperatorIndex));
-        Instruction right = Run(tokens.GetRange(assignmentOperatorIndex + 1, tokens.Count - assignmentOperatorIndex - 1));
+        Instruction left = Run(GetTokensBeforeIndex(tokens, assignmentOperatorIndex));
+        Instruction right = Run(GetTokensAfterIndex(tokens, assignmentOperatorIndex));
 
-        return new AssignmentInstruction(left, right).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new AssignmentInstruction(left, right, tokens[0].Line, tokens[0].Column);
+    }
+
+    private List<Token> GetTokensBeforeIndex(List<Token> tokens, int index)
+    {
+        return tokens.GetRange(0, index);
+    }
+
+    private List<Token> GetTokensAfterIndex(List<Token> tokens, int index)
+    {
+        return tokens.GetRange(index + 1, tokens.Count - index - 1);
     }
 }

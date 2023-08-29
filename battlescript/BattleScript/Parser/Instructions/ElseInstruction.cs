@@ -5,22 +5,25 @@ namespace BattleScript.Instructions;
 public class ElseInstruction : Instruction
 {
     public ElseInstruction(
-        dynamic? value = null,
+        Instruction? value = null,
         List<Instruction>? instructions = null,
-        Instruction? next = null
+        Instruction? next = null,
+        int? line = null,
+        int? column = null
     ) : base(
-        Consts.InstructionTypes.Else
+        Consts.InstructionTypes.Else,
+        value,
+        null,
+        null,
+        next,
+        instructions,
+        line,
+        column
     )
     {
-        Value = value;
-        if (instructions is not null)
-        {
-            Instructions = instructions;
-        }
-        else
+        if (Instructions is null)
         {
             Instructions = new List<Instruction>();
         }
-        Next = next;
     }
 }

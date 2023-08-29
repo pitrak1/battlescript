@@ -5,18 +5,25 @@ namespace BattleScript.Instructions;
 public class IfInstruction : Instruction
 {
     public IfInstruction(
-        dynamic? value = null,
+        Instruction? value = null,
         List<Instruction>? instructions = null,
-        Instruction? next = null
+        Instruction? next = null,
+        int? line = null,
+        int? column = null
     ) : base(
         Consts.InstructionTypes.If,
-        null,
+        value,
         null,
         null,
         next,
-        instructions
+        instructions,
+        line,
+        column
     )
     {
-        Value = value;
+        if (Instructions is null)
+        {
+            Instructions = new List<Instruction>();
+        }
     }
 }

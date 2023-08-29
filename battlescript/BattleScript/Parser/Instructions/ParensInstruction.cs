@@ -5,16 +5,24 @@ namespace BattleScript.Instructions;
 public class ParensInstruction : Instruction
 {
     public ParensInstruction(
-        dynamic? value = null,
-        Instruction? next = null
+        List<Instruction>? value = null,
+        Instruction? next = null,
+        int? line = null,
+        int? column = null
     ) : base(
         Consts.InstructionTypes.Parens,
+        value,
         null,
         null,
+        next,
         null,
-        next
+        line,
+        column
     )
     {
-        Value = value;
+        if (Value is null)
+        {
+            Value = new List<Instruction>();
+        }
     }
 }

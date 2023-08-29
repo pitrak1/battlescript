@@ -5,16 +5,20 @@ namespace BattleScript.Instructions;
 public class OperationInstruction : Instruction
 {
     public OperationInstruction(
-        dynamic? value = null,
+        string? value = null,
         Instruction? left = null,
-        Instruction? right = null
+        Instruction? right = null,
+        int? line = null,
+        int? column = null
     ) : base(
         Consts.InstructionTypes.Operation,
-        null,
+        value,
         left,
-        right
+        right,
+        null,
+        null,
+        line,
+        column
     )
-    {
-        Value = value;
-    }
+    { }
 }

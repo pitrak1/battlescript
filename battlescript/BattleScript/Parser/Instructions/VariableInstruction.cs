@@ -5,16 +5,19 @@ namespace BattleScript.Instructions;
 public class VariableInstruction : Instruction
 {
     public VariableInstruction(
-        dynamic? value = null,
-        Instruction? next = null
+        string? value = null,
+        Instruction? next = null,
+        int? line = null,
+        int? column = null
     ) : base(
         Consts.InstructionTypes.Variable,
+        value,
         null,
         null,
+        next,
         null,
-        next
+        line,
+        column
     )
-    {
-        Value = value;
-    }
+    { }
 }

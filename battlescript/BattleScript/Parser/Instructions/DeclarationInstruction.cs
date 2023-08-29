@@ -5,11 +5,18 @@ namespace BattleScript.Instructions;
 public class DeclarationInstruction : Instruction
 {
     public DeclarationInstruction(
-        dynamic? value
+        string? value,
+        int? line = null,
+        int? column = null
     ) : base(
-        Consts.InstructionTypes.Declaration
+        Consts.InstructionTypes.Declaration,
+        value,
+        null,
+        null,
+        null,
+        null,
+        line,
+        column
     )
-    {
-        Value = value;
-    }
+    { }
 }

@@ -15,7 +15,9 @@ public partial class InstructionParser
         return new OperationInstruction(
             tokens[mathematicalOperatorIndex].Value,
             left,
-            right
-        ).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+            right,
+            tokens[0].Line,
+            tokens[0].Column
+        );
     }
 }

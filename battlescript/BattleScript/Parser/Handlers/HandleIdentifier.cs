@@ -15,6 +15,6 @@ public partial class InstructionParser
             next = Run(tokens.GetRange(1, tokens.Count - 1));
         }
 
-        return new VariableInstruction(tokens[0].Value, next).SetDebugInfo(tokens[0].Line, tokens[0].Column);
+        return new VariableInstruction(tokens[0].Value, next, tokens[0].Line, tokens[0].Column);
     }
 }

@@ -5,11 +5,18 @@ namespace BattleScript.Instructions;
 public class BooleanInstruction : Instruction
 {
     public BooleanInstruction(
-        dynamic? value = null
+        bool? value = null,
+        int? line = null,
+        int? column = null
     ) : base(
-        Consts.InstructionTypes.Boolean
+        Consts.InstructionTypes.Boolean,
+        value,
+        null,
+        null,
+        null,
+        null,
+        line,
+        column
     )
-    {
-        Value = value;
-    }
+    { }
 }

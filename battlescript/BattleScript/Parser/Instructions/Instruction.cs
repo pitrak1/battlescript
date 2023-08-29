@@ -19,7 +19,9 @@ public class Instruction
         Instruction? left = null,
         Instruction? right = null,
         Instruction? next = null,
-        List<Instruction>? instructions = null
+        List<Instruction>? instructions = null,
+        int? line = null,
+        int? column = null
     )
     {
         Type = type;
@@ -27,6 +29,7 @@ public class Instruction
         Left = left;
         Right = right;
         Next = next;
+
         if (instructions is not null)
         {
             Instructions = instructions;
@@ -35,13 +38,9 @@ public class Instruction
         {
             Instructions = new List<Instruction>();
         }
-    }
 
-    public Instruction SetDebugInfo(int? line, int? column)
-    {
         Line = line;
         Column = column;
-        return this;
     }
 }
 
