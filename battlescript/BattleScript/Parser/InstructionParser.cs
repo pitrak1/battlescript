@@ -22,7 +22,33 @@ public partial class InstructionParser
         }
         else if (currentTokenSet[0].Type == Consts.TokenTypes.Keyword)
         {
-            return HandleKeyword(currentTokenSet);
+            switch (currentTokenSet[0].Value)
+            {
+                case "var":
+                    return HandleVar(currentTokenSet);
+                case "if":
+                    return HandleIf(currentTokenSet);
+                case "else":
+                    return HandleElse(currentTokenSet);
+                case "while":
+                    return HandleWhile(currentTokenSet);
+                case "function":
+                    return HandleFunction(currentTokenSet);
+                case "return":
+                    return HandleReturn(currentTokenSet);
+                case "class":
+                    return HandleClass(currentTokenSet);
+                case "self":
+                    return HandleSelf(currentTokenSet);
+                case "super":
+                    return HandleSuper(currentTokenSet);
+                case "constructor":
+                    return HandleConstructor(currentTokenSet);
+                case "Btl":
+                    return HandleBtl(currentTokenSet);
+                default:
+                    return new Instruction();
+            }
         }
         else if (mathematicalOperatorIndex != -1)
         {
@@ -32,9 +58,17 @@ public partial class InstructionParser
         {
             return HandleIdentifier(currentTokenSet);
         }
+        else if (currentTokenSet[0].Type == Consts.TokenTypes.Number)
+        {
+            return HandleNumber(currentTokenSet);
+        }
+        else if (currentTokenSet[0].Type == Consts.TokenTypes.String)
+        {
+            return HandleString(currentTokenSet);
+        }
         else
         {
-            return HandleLiteral(currentTokenSet);
+            return HandleBoolean(currentTokenSet);
         }
     }
 }
