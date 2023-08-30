@@ -85,7 +85,7 @@ public partial class InstructionParser
         Instruction next = null;
         if (tokens.Count > 2)
         {
-            next = Run(tokens.GetRange(2, tokens.Count - 2));
+            next = Run(GetAllTokensButFirstTwo(tokens));
         }
 
         return new SquareBracesInstruction(new List<Instruction>() { property }, next, tokens[0].Line, tokens[0].Column);

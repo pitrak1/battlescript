@@ -51,7 +51,7 @@ public partial class InstructionParser
     private Instruction HandleIf(List<Token> tokens)
     {
         // exclude the if itself and the start and ending parens
-        Instruction condition = Run(tokens.GetRange(2, tokens.Count - 3));
+        Instruction condition = Run(GetTokensAfterKeywordWithoutParens(tokens));
 
         return new IfInstruction(condition, null, null, tokens[0].Line, tokens[0].Column);
     }
@@ -66,7 +66,7 @@ public partial class InstructionParser
         {
             Debug.Assert(tokens[1].Value == "if");
             // exclude the else if and the start and ending parens
-            condition = Run(tokens.GetRange(3, tokens.Count - 4));
+            condition = Run(GetTokensAfterTwoKeywordsWithoutParens(tokens));
             instruction.Value = condition;
         }
 
@@ -76,15 +76,14 @@ public partial class InstructionParser
     private Instruction HandleWhile(List<Token> tokens)
     {
         // exclude the while itself and the start and ending parens
-        Instruction condition = Run(tokens.GetRange(2, tokens.Count - 3));
+        Instruction condition = Run(GetTokensAfterKeywordWithoutParens(tokens));
 
         return new WhileInstruction(condition, null, tokens[0].Line, tokens[0].Column);
     }
 
     private Instruction HandleFunction(List<Token> tokens)
     {
-        // exclude the function itself and the start and ending parens
-        List<Token> argTokens = tokens.GetRange(1, tokens.Count - 1);
+        List<Token> argTokens = GetAllTokensButFirst(tokens);
         List<List<Token>> tokenizedArgs =
             ParserUtilities.ParseUntilMatchingSeparator(argTokens, new List<string>() { "," });
 
@@ -104,7 +103,7 @@ public partial class InstructionParser
 
     private Instruction HandleReturn(List<Token> tokens)
     {
-        Instruction returnValue = Run(tokens.GetRange(1, tokens.Count - 1));
+        Instruction returnValue = Run(GetAllTokensButFirst(tokens));
 
         return new ReturnInstruction(returnValue, tokens[0].Line, tokens[0].Column);
     }
@@ -127,7 +126,7 @@ public partial class InstructionParser
         Instruction? next = null;
         if (tokens.Count > 1)
         {
-            next = Run(tokens.GetRange(1, tokens.Count - 1));
+            next = Run(GetAllTokensButFirst(tokens));
         }
 
         return new SelfInstruction(next, tokens[0].Line, tokens[0].Column);
@@ -138,7 +137,7 @@ public partial class InstructionParser
         Instruction? next = null;
         if (tokens.Count > 1)
         {
-            next = Run(tokens.GetRange(1, tokens.Count - 1));
+            next = Run(GetAllTokensButFirst(tokens));
         }
 
         return new SuperInstruction(next, tokens[0].Line, tokens[0].Column);
@@ -146,8 +145,7 @@ public partial class InstructionParser
 
     private Instruction HandleConstructor(List<Token> tokens)
     {
-        // exclude the function itself and the start and ending parens
-        List<Token> argTokens = tokens.GetRange(1, tokens.Count - 1);
+        List<Token> argTokens = GetAllTokensButFirst(tokens);
         List<List<Token>> tokenizedArgs =
             ParserUtilities.ParseUntilMatchingSeparator(argTokens, new List<string>() { "," });
 
@@ -170,7 +168,7 @@ public partial class InstructionParser
         Instruction? next = null;
         if (tokens.Count > 1)
         {
-            next = Run(tokens.GetRange(1, tokens.Count - 1));
+            next = Run(GetAllTokensButFirst(tokens));
         }
 
         return new BtlInstruction(next, tokens[0].Line, tokens[0].Column);

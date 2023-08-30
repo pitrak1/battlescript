@@ -12,7 +12,7 @@ public partial class InstructionParser
         Instruction next = null;
         if (tokens.Count > 1)
         {
-            next = Run(tokens.GetRange(1, tokens.Count - 1));
+            next = Run(GetAllTokensButFirst(tokens));
         }
 
         return new VariableInstruction(tokens[0].Value, next, tokens[0].Line, tokens[0].Column);

@@ -14,14 +14,4 @@ public partial class InstructionParser
 
         return new AssignmentInstruction(left, right, tokens[0].Line, tokens[0].Column);
     }
-
-    private List<Token> GetTokensBeforeIndex(List<Token> tokens, int index)
-    {
-        return tokens.GetRange(0, index);
-    }
-
-    private List<Token> GetTokensAfterIndex(List<Token> tokens, int index)
-    {
-        return tokens.GetRange(index + 1, tokens.Count - index - 1);
-    }
 }

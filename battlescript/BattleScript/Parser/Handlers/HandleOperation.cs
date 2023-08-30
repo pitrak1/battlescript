@@ -9,8 +9,8 @@ public partial class InstructionParser
 {
     private Instruction HandleOperation(List<Token> tokens, int mathematicalOperatorIndex)
     {
-        Instruction left = Run(tokens.GetRange(0, mathematicalOperatorIndex));
-        Instruction right = Run(tokens.GetRange(mathematicalOperatorIndex + 1, tokens.Count - mathematicalOperatorIndex - 1));
+        Instruction left = Run(GetTokensBeforeIndex(tokens, mathematicalOperatorIndex));
+        Instruction right = Run(GetTokensAfterIndex(tokens, mathematicalOperatorIndex));
 
         return new OperationInstruction(
             tokens[mathematicalOperatorIndex].Value,
