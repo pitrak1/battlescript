@@ -80,34 +80,34 @@ public partial class Interpreter
                 return HandleDeclaration(instruction);
             case Consts.InstructionTypes.Variable:
                 return HandleVariable(instruction);
-            case Consts.InstructionTypes.Operation:
-                return HandleOperation(instruction);
-            case Consts.InstructionTypes.SquareBraces:
-                return HandleSquareBraces(instruction);
-            case Consts.InstructionTypes.Dictionary:
-                return HandleDictionary(instruction);
-            case Consts.InstructionTypes.If:
-                return HandleIf(instruction);
-            case Consts.InstructionTypes.Else:
-                return HandleElse(instruction);
-            case Consts.InstructionTypes.While:
-                return HandleWhile(instruction);
-            case Consts.InstructionTypes.Function:
-                return HandleFunction(instruction);
-            case Consts.InstructionTypes.Parens:
-                return HandleParens(instruction);
-            case Consts.InstructionTypes.Return:
-                return HandleReturn(instruction);
-            case Consts.InstructionTypes.Class:
-                return HandleClass(instruction);
-            case Consts.InstructionTypes.Self:
-                return HandleSelf(instruction);
-            case Consts.InstructionTypes.Super:
-                return HandleSuper(instruction);
-            case Consts.InstructionTypes.Constructor:
-                return HandleConstructor(instruction);
-            case Consts.InstructionTypes.Btl:
-                return HandleBtl(instruction);
+                // case Consts.InstructionTypes.Operation:
+                //     return HandleOperation(instruction);
+                // case Consts.InstructionTypes.SquareBraces:
+                //     return HandleSquareBraces(instruction);
+                // case Consts.InstructionTypes.Dictionary:
+                //     return HandleDictionary(instruction);
+                // case Consts.InstructionTypes.If:
+                //     return HandleIf(instruction);
+                // case Consts.InstructionTypes.Else:
+                //     return HandleElse(instruction);
+                // case Consts.InstructionTypes.While:
+                //     return HandleWhile(instruction);
+                // case Consts.InstructionTypes.Function:
+                //     return HandleFunction(instruction);
+                // case Consts.InstructionTypes.Parens:
+                //     return HandleParens(instruction);
+                // case Consts.InstructionTypes.Return:
+                //     return HandleReturn(instruction);
+                // case Consts.InstructionTypes.Class:
+                //     return HandleClass(instruction);
+                // case Consts.InstructionTypes.Self:
+                //     return HandleSelf(instruction);
+                // case Consts.InstructionTypes.Super:
+                //     return HandleSuper(instruction);
+                // case Consts.InstructionTypes.Constructor:
+                //     return HandleConstructor(instruction);
+                // case Consts.InstructionTypes.Btl:
+                //     return HandleBtl(instruction);
         }
 
         return new ScopeVariable(Consts.VariableTypes.Value);
