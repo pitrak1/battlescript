@@ -13,28 +13,7 @@ public partial class Interpreter
         ScopeVariable left = getOperand(instruction.Left!);
         ScopeVariable right = getOperand(instruction.Right!);
 
-        dynamic? result;
-        switch (instruction.Value)
-        {
-            case "==":
-                result = left.Value == right.Value;
-                break;
-            case "<":
-                result = left.Value < right.Value;
-                break;
-            case ">":
-                result = left.Value > right.Value;
-                break;
-            case "+":
-                result = left.Value + right.Value;
-                break;
-            case "*":
-                result = left.Value * right.Value;
-                break;
-            default:
-                throw new SystemException("Invalid operator");
-        }
-
+        dynamic? result = getOperationResult(instruction.Value, left, right);
         return new ScopeVariable(Consts.VariableTypes.Literal, result);
     }
 
@@ -43,5 +22,24 @@ public partial class Interpreter
         ScopeVariable operand = InterpretInstruction(instruction);
         Debug.Assert(operand.Value is int, "Operands must be integers");
         return operand;
+    }
+
+    private dynamic? getOperationResult(string operatorString, ScopeVariable left, ScopeVariable right)
+    {
+        switch (operatorString)
+        {
+            case "==":
+                return left.Value == right.Value;
+            case "<":
+                return left.Value < right.Value;
+            case ">":
+                return left.Value > right.Value;
+            case "+":
+                return left.Value + right.Value;
+            case "*":
+                return left.Value * right.Value;
+            default:
+                throw new SystemException("Invalid operator");
+        }
     }
 }
