@@ -10,11 +10,8 @@ public partial class Interpreter
 {
     private ScopeVariable HandleOperation(Instruction instruction)
     {
-        ScopeVariable left = InterpretInstruction(instruction.Left);
-        ScopeVariable right = InterpretInstruction(instruction.Right);
-
-        Debug.Assert(left.Value is int);
-        Debug.Assert(right.Value is int);
+        ScopeVariable left = getOperand(instruction.Left!);
+        ScopeVariable right = getOperand(instruction.Right!);
 
         dynamic? result;
         switch (instruction.Value)
@@ -39,5 +36,12 @@ public partial class Interpreter
         }
 
         return new ScopeVariable(Consts.VariableTypes.Literal, result);
+    }
+
+    private ScopeVariable getOperand(Instruction instruction)
+    {
+        ScopeVariable operand = InterpretInstruction(instruction);
+        Debug.Assert(operand.Value is int, "Operands must be integers");
+        return operand;
     }
 }

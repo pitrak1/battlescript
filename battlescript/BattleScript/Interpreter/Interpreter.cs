@@ -80,8 +80,8 @@ public partial class Interpreter
                 return HandleDeclaration(instruction);
             case Consts.InstructionTypes.Variable:
                 return HandleVariable(instruction);
-                // case Consts.InstructionTypes.Operation:
-                //     return HandleOperation(instruction);
+            case Consts.InstructionTypes.Operation:
+                return HandleOperation(instruction);
                 // case Consts.InstructionTypes.SquareBraces:
                 //     return HandleSquareBraces(instruction);
                 // case Consts.InstructionTypes.Dictionary:
