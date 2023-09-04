@@ -12,37 +12,44 @@ public partial class Interpreter
     {
         if (OngoingContexts.IsEmpty())
         {
-            // Handle array
-            List<ScopeVariable> entries = new List<ScopeVariable>();
-            foreach (Instruction entryInstruction in instruction.Value)
-            {
-                ScopeVariable entryResult = InterpretInstruction(entryInstruction);
-                entries.Add(entryResult);
-            }
-            return new ScopeVariable(Consts.VariableTypes.Array, entries);
+            return handleArray(instruction);
         }
         else
         {
-            // Handle index
-            ScopeVariable index = InterpretInstruction(instruction.Value[0]);
-            ScopeVariable indexed = OngoingContexts.GetCurrentContext();
-            ScopeVariable var = indexed.GetIndex(index.Value);
-
-            if (index.Value is string && index.Value == "super")
-            {
-                ClassContexts.Add(OngoingContexts.GetCurrentContext());
-                ScopeVariable result = HandleSuper(instruction);
-                ClassContexts.Pop();
-                return result;
-            }
-
-            if (instruction.Next is not null)
-            {
-                OngoingContexts.SetCurrentContext(var);
-                var = InterpretInstruction(instruction.Next);
-            }
-
-            return var;
+            return handleIndex(instruction);
         }
+    }
+
+    private ScopeVariable handleArray(Instruction instruction)
+    {
+        List<ScopeVariable> initializationEntries = InterpretListOfInstructions(instruction.Value);
+        return new ScopeVariable(Consts.VariableTypes.Array, initializationEntries);
+    }
+
+    private ScopeVariable handleIndex(Instruction instruction)
+    {
+        Debug.Assert(instruction.Value is List<Instruction>, $"Expected the index value to be an array of instructions");
+        ScopeVariable index = InterpretInstruction(instruction.Value![0]);
+
+        Debug.Assert(!OngoingContexts.IsEmpty(), "Expected to have a non-null indexed value");
+        ScopeVariable indexed = OngoingContexts.GetCurrentContext();
+
+        ScopeVariable result = indexed.GetIndex(index.Value);
+
+        // if (index.Value is string && index.Value == "super")
+        // {
+        //     ClassContexts.Add(OngoingContexts.GetCurrentContext());
+        //     ScopeVariable result = HandleSuper(instruction);
+        //     ClassContexts.Pop();
+        //     return result;
+        // }
+
+        // if (instruction.Next is not null)
+        // {
+        //     OngoingContexts.SetCurrentContext(var);
+        //     var = InterpretInstruction(instruction.Next);
+        // }
+
+        return result;
     }
 }

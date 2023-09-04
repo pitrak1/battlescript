@@ -29,7 +29,7 @@ public class ScopeStack : ContextStack
 
     public ScopeVariable GetVariable(string key)
     {
-        for (int i = (contexts.Count - 1); i >= 0; i--)
+        for (int i = contexts.Count - 1; i >= 0; i--)
         {
             if (contexts[i].HasVariable(key))
             {

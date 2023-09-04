@@ -48,7 +48,7 @@ public partial class Interpreter
 
         for (int i = 0; i < args.Count; i++)
         {
-            string argName = functionValue[i].Value;
+            string argName = functionValue[i].Value!;
             ScopeVariable argValue = InterpretInstruction(args[i]);
             LexicalContexts.AddVariableToCurrentScope(new List<string>() { argName }, argValue);
         }
@@ -64,5 +64,18 @@ public partial class Interpreter
         }
 
         return LexicalContexts.Pop();
+    }
+
+    private List<ScopeVariable> InterpretListOfInstructions(List<Instruction> instructions)
+    {
+        List<ScopeVariable> resultVariables = new List<ScopeVariable>();
+
+        foreach (Instruction instruction in instructions)
+        {
+            ScopeVariable result = InterpretInstruction(instruction);
+            resultVariables.Add(result);
+        }
+
+        return resultVariables;
     }
 }

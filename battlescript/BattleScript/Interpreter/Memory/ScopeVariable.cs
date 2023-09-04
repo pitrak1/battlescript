@@ -55,23 +55,14 @@ public class ScopeVariable
 
     public bool HasVariable(string key)
     {
-        Debug.Assert(Value is Dictionary<string, ScopeVariable>);
-        return Value.ContainsKey(key);
+        return Value!.ContainsKey(key);
     }
 
     public ScopeVariable GetVariable(string key)
     {
-        if (Value.ContainsKey(key))
+        if (Value!.ContainsKey(key))
         {
             return Value[key];
-        }
-        else if (Value.ContainsKey("class") && Type == Consts.VariableTypes.Object)
-        {
-            return Value["class"].GetVariable(key);
-        }
-        else if (Value.ContainsKey("super") && Type == Consts.VariableTypes.Class)
-        {
-            return Value["super"].GetVariable(key);
         }
         else
         {
@@ -79,42 +70,80 @@ public class ScopeVariable
         }
     }
 
+    // public ScopeVariable GetVariable(string key)
+    // {
+    //     if (Value.ContainsKey(key))
+    //     {
+    //         return Value[key];
+    //     }
+    //     else if (Value.ContainsKey("class") && Type == Consts.VariableTypes.Object)
+    //     {
+    //         return Value["class"].GetVariable(key);
+    //     }
+    //     else if (Value.ContainsKey("super") && Type == Consts.VariableTypes.Class)
+    //     {
+    //         return Value["super"].GetVariable(key);
+    //     }
+    //     else
+    //     {
+    //         throw new VariableNotFoundException(key);
+    //     }
+    // }
+
     public ScopeVariable GetIndex(dynamic key)
     {
-        if (Value is List<ScopeVariable>)
+        return handleArrayIndex(key);
+    }
+
+    private ScopeVariable handleArrayIndex(dynamic key)
+    {
+        Debug.Assert(key is int, "Indexes into an array must be an integer");
+        if (key < Value!.Count)
         {
-            Debug.Assert(key is int);
-            if (key < Value.Count)
-            {
-                return Value[key];
-            }
-            else
-            {
-                throw new ArrayOutOfBoundsException(key);
-            }
+            return Value[key];
         }
         else
         {
-            if (Value.ContainsKey(key))
-            {
-                return Value[key];
-            }
-            else if (Value.ContainsKey("class") && Type == Consts.VariableTypes.Object)
-            {
-                return Value["class"].GetIndex(key);
-            }
-            else if (Value.ContainsKey("super") && Type == Consts.VariableTypes.Class)
-            {
-                return Value["super"].GetIndex(key);
-            }
-            else
-            {
-                var variable = new ScopeVariable(Consts.VariableTypes.Literal);
-                Value[key] = variable;
-                return variable;
-            }
+            throw new ArrayOutOfBoundsException(key);
         }
     }
+
+    // public ScopeVariable GetIndex(dynamic key)
+    // {
+    //     if (Value is List<ScopeVariable>)
+    //     {
+    //         Debug.Assert(key is int);
+    //         if (key < Value.Count)
+    //         {
+    //             return Value[key];
+    //         }
+    //         else
+    //         {
+    //             throw new ArrayOutOfBoundsException(key);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         if (Value.ContainsKey(key))
+    //         {
+    //             return Value[key];
+    //         }
+    //         else if (Value.ContainsKey("class") && Type == Consts.VariableTypes.Object)
+    //         {
+    //             return Value["class"].GetIndex(key);
+    //         }
+    //         else if (Value.ContainsKey("super") && Type == Consts.VariableTypes.Class)
+    //         {
+    //             return Value["super"].GetIndex(key);
+    //         }
+    //         else
+    //         {
+    //             var variable = new ScopeVariable(Consts.VariableTypes.Literal);
+    //             Value[key] = variable;
+    //             return variable;
+    //         }
+    //     }
+    // }
 
     public ScopeVariable CreateObject(ScopeVariable var)
     {

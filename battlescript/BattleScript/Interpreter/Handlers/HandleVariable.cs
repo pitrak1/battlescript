@@ -11,18 +11,23 @@ public partial class Interpreter
     private ScopeVariable HandleVariable(Instruction instruction)
     {
         ScopeVariable var = LexicalContexts.GetVariable(instruction.Value);
-        // if (instruction.Next is not null)
-        // {
-        //     OngoingContexts.Add(var);
-        //     if (var.Type == Consts.VariableTypes.Object) { SelfContexts.Add(var); }
-
-        //     ScopeVariable result = InterpretInstruction(instruction.Next);
-
-        //     if (var.Type == Consts.VariableTypes.Object) { SelfContexts.Pop(); }
-        //     OngoingContexts.Pop();
-
-        //     var = result;
-        // }
+        if (instruction.Next is not null)
+        {
+            return handleNext(var, instruction.Next);
+        }
         return var;
+    }
+
+    private ScopeVariable handleNext(ScopeVariable var, Instruction next)
+    {
+        OngoingContexts.Add(var);
+        // if (var.Type == Consts.VariableTypes.Object) { SelfContexts.Add(var); }
+
+        ScopeVariable result = InterpretInstruction(next);
+
+        // if (var.Type == Consts.VariableTypes.Object) { SelfContexts.Pop(); }
+        OngoingContexts.Pop();
+
+        return result;
     }
 }
