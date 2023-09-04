@@ -17,7 +17,7 @@ public partial class Interpreter
         }
 
         ScopeVariable? classObject = null;
-        if (!ClassContexts.Empty())
+        if (!ClassContexts.IsEmpty())
         {
             classObject = ClassContexts.GetCurrentContext();
         }

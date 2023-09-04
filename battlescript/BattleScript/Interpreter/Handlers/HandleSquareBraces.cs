@@ -10,7 +10,7 @@ public partial class Interpreter
 {
     private ScopeVariable HandleSquareBraces(Instruction instruction)
     {
-        if (OngoingContexts.Empty())
+        if (OngoingContexts.IsEmpty())
         {
             // Handle array
             List<ScopeVariable> entries = new List<ScopeVariable>();

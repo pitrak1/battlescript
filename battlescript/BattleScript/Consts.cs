@@ -94,7 +94,8 @@ public class Consts
         Dictionary,
         Function,
         Class,
-        Object
+        Object,
+        Scope
     };
 }
 

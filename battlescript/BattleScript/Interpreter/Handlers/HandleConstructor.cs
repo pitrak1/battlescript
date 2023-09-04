@@ -17,13 +17,13 @@ public partial class Interpreter
         }
 
         ScopeVariable? classObject = null;
-        if (!ClassContexts.Empty())
+        if (!ClassContexts.IsEmpty())
         {
             classObject = ClassContexts.GetCurrentContext();
         }
 
         List<string> path = new List<string>() { "constructor" };
-        ScopeVariable left = LexicalContexts.AddVariable(path);
+        ScopeVariable left = LexicalContexts.AddVariableToCurrentScope(path);
         return left.CopyProperties(new ScopeVariable(Consts.VariableTypes.Function, args, instruction.Instructions, classObject));
     }
 }

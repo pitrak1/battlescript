@@ -10,14 +10,14 @@ public partial class Interpreter
 {
     private ScopeVariable HandleParens(Instruction instruction)
     {
-        Debug.Assert(!OngoingContexts.Empty());
+        Debug.Assert(!OngoingContexts.IsEmpty());
 
         ScopeVariable called = OngoingContexts.GetCurrentContext();
 
         switch (called.Type)
         {
             case Consts.VariableTypes.Function:
-                if (!SelfContexts.Empty())
+                if (!SelfContexts.IsEmpty())
                 {
                     LexicalContexts.Add(SelfContexts.GetCurrentContext());
                 }
@@ -30,7 +30,7 @@ public partial class Interpreter
                     returnValue = functionScope.GetVariable("return");
                 }
 
-                if (!SelfContexts.Empty())
+                if (!SelfContexts.IsEmpty())
                 {
                     LexicalContexts.Pop();
                 }
@@ -38,7 +38,7 @@ public partial class Interpreter
             case Consts.VariableTypes.Class:
                 ScopeVariable createdObject = null;
                 ScopeVariable constructor = null;
-                if (SelfContexts.Empty())
+                if (SelfContexts.IsEmpty())
                 {
                     createdObject = new ScopeVariable().CreateObject(called);
                     constructor = createdObject.ClassObject.GetConstructorForClass();

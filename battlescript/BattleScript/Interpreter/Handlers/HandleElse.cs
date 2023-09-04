@@ -18,7 +18,7 @@ public partial class Interpreter
 
         if (instruction.Value is null || isTruthy(condition))
         {
-            LexicalContexts.Add();
+            LexicalContexts.AddNewScope();
             foreach (Instruction elseInstruction in instruction.Instructions)
             {
                 InterpretInstruction(elseInstruction);

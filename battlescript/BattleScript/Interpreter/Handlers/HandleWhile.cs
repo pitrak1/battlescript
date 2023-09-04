@@ -13,7 +13,7 @@ public partial class Interpreter
         ScopeVariable condition = InterpretInstruction(instruction.Value);
         while (isTruthy(condition))
         {
-            LexicalContexts.Add();
+            LexicalContexts.AddNewScope();
             foreach (Instruction ifInstruction in instruction.Instructions)
             {
                 InterpretInstruction(ifInstruction);

@@ -10,8 +10,8 @@ public partial class Interpreter
 {
     private ScopeVariable HandleDeclaration(Instruction instruction)
     {
-        Debug.Assert(instruction.Value is string);
+        Debug.Assert(instruction.Value is string, "Variables must be declared as strings");
         List<string> path = new List<string>() { instruction.Value };
-        return LexicalContexts.AddVariable(path);
+        return LexicalContexts.AddVariableToCurrentScope(path);
     }
 }

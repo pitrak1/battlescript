@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using BattleScript.Core;
 using BattleScript.Exceptions;
 
 namespace BattleScript.InterpreterNS;
@@ -7,23 +8,21 @@ public class ScopeStack : ContextStack
 {
     public ScopeStack()
     {
+        contexts.Add(new ScopeVariable(Consts.VariableTypes.Scope, new Dictionary<string, ScopeVariable>()));
+    }
+
+    public void AddNewScope()
+    {
         contexts.Add(new ScopeVariable(null, new Dictionary<string, ScopeVariable>()));
     }
 
-    public override void Add(ScopeVariable? context = null)
+    public void AddExistingScope(ScopeVariable context)
     {
-        if (context is not null)
-        {
-            Debug.Assert(context.Value is Dictionary<string, ScopeVariable>);
-            contexts.Add(new ScopeVariable(null, context.Value));
-        }
-        else
-        {
-            contexts.Add(new ScopeVariable(null, new Dictionary<string, ScopeVariable>()));
-        }
+        Debug.Assert(context.Value is Dictionary<string, ScopeVariable>, "Adding a new scope requires it to be a Dictionary<string, ScopeVariable>");
+        contexts.Add(new ScopeVariable(null, context.Value));
     }
 
-    public ScopeVariable AddVariable(List<string> path, ScopeVariable? var = null)
+    public ScopeVariable AddVariableToCurrentScope(List<string> path, ScopeVariable? var = null)
     {
         return GetCurrentContext().AddVariable(path, var);
     }

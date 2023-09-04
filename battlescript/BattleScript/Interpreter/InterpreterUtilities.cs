@@ -34,7 +34,7 @@ public partial class Interpreter
 
     private ScopeVariable RunFunction(List<ScopeVariable> functionValue, List<Instruction> instructions, List<Instruction> args, ScopeVariable? classObject = null)
     {
-        LexicalContexts.Add();
+        LexicalContexts.AddNewScope();
 
         if (args.Count != functionValue.Count)
         {
@@ -50,7 +50,7 @@ public partial class Interpreter
         {
             string argName = functionValue[i].Value;
             ScopeVariable argValue = InterpretInstruction(args[i]);
-            LexicalContexts.AddVariable(new List<string>() { argName }, argValue);
+            LexicalContexts.AddVariableToCurrentScope(new List<string>() { argName }, argValue);
         }
 
         foreach (Instruction funcInstruction in instructions)

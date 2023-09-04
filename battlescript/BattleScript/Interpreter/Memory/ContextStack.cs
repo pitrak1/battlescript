@@ -19,7 +19,7 @@ public class ContextStack
         contexts[^1] = context;
     }
 
-    public virtual void Add(ScopeVariable context)
+    public void Add(ScopeVariable context)
     {
         contexts.Add(context);
     }
@@ -31,7 +31,7 @@ public class ContextStack
         return removed;
     }
 
-    public bool Empty()
+    public bool IsEmpty()
     {
         return contexts.Count == 0;
     }

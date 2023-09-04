@@ -9,6 +9,14 @@ namespace BattleScript.InterpreterNS;
 public partial class Interpreter
 {
     /*
+     * This is to keep track of the hierarchy of code blocks available to the current function.
+     * This is altered when:
+     * - when a new block is created for an if/else/while or a function/class definition
+     * - when a class method is called (so that variables in the class will be in scope even without using the self keyword)
+     */
+    public ScopeStack LexicalContexts { get; set; }
+
+    /*
      * This is to keep track of instructions that are analyzed in parts, keeping the value from the previous part
      * This has to be a stack, not a single value, because of expressions like these: function_1(function_2());
      * If this were just a value, the context of function_2 would overwrite the context of function_1.
@@ -16,14 +24,6 @@ public partial class Interpreter
      * - Instructions are executed that contain multiple parts using separators (parens, dots, indexes, curly braces)
      */
     public ContextStack OngoingContexts { get; set; }
-
-    /*
-     * This is to keep track of the hierarchy of code blocks available to the current function.
-     * This is altered when:
-     * - when a new block is created for an if/else/while or a function/class definition
-     * - when a class method is called (so that variables in the class will be in scope even without using the self keyword)
-     */
-    public ScopeStack LexicalContexts { get; set; }
 
     /*
      * This is to keep track of the current value of self.
