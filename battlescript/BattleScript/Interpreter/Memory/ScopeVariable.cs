@@ -100,7 +100,7 @@ public class ScopeVariable
             }
             else
             {
-                var variable = new ScopeVariable(Consts.VariableTypes.Value);
+                var variable = new ScopeVariable(Consts.VariableTypes.Literal);
                 Value[key] = variable;
                 return variable;
             }
@@ -173,7 +173,7 @@ public class ScopeVariable
                 Consts.VariableTypes.Array or
                 Consts.VariableTypes.Dictionary or
                 Consts.VariableTypes.Object or
-                Consts.VariableTypes.Value
+                Consts.VariableTypes.Literal
             )
             {
                 if (HasVariable(pair.Key))

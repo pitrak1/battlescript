@@ -24,7 +24,7 @@ public partial class Interpreter
 
                 ScopeVariable functionScope = RunFunction(called.Value, called.Instructions, instruction.Value, called.ClassObject);
 
-                ScopeVariable? returnValue = new ScopeVariable(Consts.VariableTypes.Value);
+                ScopeVariable? returnValue = new ScopeVariable(Consts.VariableTypes.Literal);
                 if (functionScope.HasVariable("return"))
                 {
                     returnValue = functionScope.GetVariable("return");

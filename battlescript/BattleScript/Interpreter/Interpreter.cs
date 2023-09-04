@@ -75,7 +75,7 @@ public partial class Interpreter
             case Consts.InstructionTypes.Number:
             case Consts.InstructionTypes.String:
             case Consts.InstructionTypes.Boolean:
-                return HandleValueType(instruction);
+                return HandleLiteral(instruction);
             case Consts.InstructionTypes.Declaration:
                 return HandleDeclaration(instruction);
             case Consts.InstructionTypes.Variable:
@@ -110,6 +110,6 @@ public partial class Interpreter
                 //     return HandleBtl(instruction);
         }
 
-        return new ScopeVariable(Consts.VariableTypes.Value);
+        return new ScopeVariable(Consts.VariableTypes.Literal);
     }
 }

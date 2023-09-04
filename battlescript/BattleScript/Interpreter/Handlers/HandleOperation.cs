@@ -38,6 +38,6 @@ public partial class Interpreter
                 throw new SystemException("Invalid operator");
         }
 
-        return new ScopeVariable(Consts.VariableTypes.Value, result);
+        return new ScopeVariable(Consts.VariableTypes.Literal, result);
     }
 }

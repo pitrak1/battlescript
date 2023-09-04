@@ -25,6 +25,6 @@ public partial class Interpreter
             InterpretInstruction(instruction.Next);
         }
 
-        return new ScopeVariable(Consts.VariableTypes.Value);
+        return new ScopeVariable(Consts.VariableTypes.Literal);
     }
 }

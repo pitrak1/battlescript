@@ -13,7 +13,7 @@ public partial class Interpreter
         List<ScopeVariable> args = new List<ScopeVariable>();
         foreach (Instruction inst in instruction.Value)
         {
-            args.Add(new ScopeVariable(Consts.VariableTypes.Value, inst.Value));
+            args.Add(new ScopeVariable(Consts.VariableTypes.Literal, inst.Value));
         }
 
         ScopeVariable? classObject = null;

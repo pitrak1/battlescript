@@ -89,7 +89,7 @@ public class Consts
 
     public enum VariableTypes
     {
-        Value,
+        Literal,
         Array,
         Dictionary,
         Function,

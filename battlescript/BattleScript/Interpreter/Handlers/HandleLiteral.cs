@@ -8,8 +8,8 @@ namespace BattleScript.InterpreterNS;
 
 public partial class Interpreter
 {
-    private ScopeVariable HandleValueType(Instruction instruction)
+    private ScopeVariable HandleLiteral(Instruction instruction)
     {
-        return new ScopeVariable(Consts.VariableTypes.Value, instruction.Value);
+        return new ScopeVariable(Consts.VariableTypes.Literal, instruction.Value);
     }
 }

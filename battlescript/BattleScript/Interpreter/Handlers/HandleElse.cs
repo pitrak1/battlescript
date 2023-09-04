@@ -10,7 +10,7 @@ public partial class Interpreter
 {
     private ScopeVariable HandleElse(Instruction instruction)
     {
-        ScopeVariable condition = new ScopeVariable(Consts.VariableTypes.Value);
+        ScopeVariable condition = new ScopeVariable(Consts.VariableTypes.Literal);
         if (instruction.Value is not null)
         {
             condition = InterpretInstruction(instruction.Value);
@@ -29,6 +29,6 @@ public partial class Interpreter
         {
             InterpretInstruction(instruction.Next);
         }
-        return new ScopeVariable(Consts.VariableTypes.Value);
+        return new ScopeVariable(Consts.VariableTypes.Literal);
     }
 }

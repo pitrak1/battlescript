@@ -37,7 +37,7 @@ public partial class Interpreter
                 }
             }
             dynamic returnValue = Callbacks.Run(indexValue, args);
-            var = new ScopeVariable(Consts.VariableTypes.Value, returnValue);
+            var = new ScopeVariable(Consts.VariableTypes.Literal, returnValue);
 
             if (instruction.Next.Next.Next is not null)
             {
