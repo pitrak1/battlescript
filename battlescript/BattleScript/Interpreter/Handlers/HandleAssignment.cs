@@ -10,8 +10,8 @@ public partial class Interpreter
 {
     private ScopeVariable HandleAssignment(Instruction instruction)
     {
-        ScopeVariable left = InterpretInstruction(instruction.Left);
-        ScopeVariable right = InterpretInstruction(instruction.Right);
-        return left.Copy(right);
+        ScopeVariable left = InterpretInstruction(instruction.Left!);
+        ScopeVariable right = InterpretInstruction(instruction.Right!);
+        return left.CopyProperties(right);
     }
 }

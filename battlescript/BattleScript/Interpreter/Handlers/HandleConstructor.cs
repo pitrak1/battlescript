@@ -24,6 +24,6 @@ public partial class Interpreter
 
         List<string> path = new List<string>() { "constructor" };
         ScopeVariable left = LexicalContexts.AddVariable(path);
-        return left.Copy(new ScopeVariable(Consts.VariableTypes.Function, args, instruction.Instructions, classObject));
+        return left.CopyProperties(new ScopeVariable(Consts.VariableTypes.Function, args, instruction.Instructions, classObject));
     }
 }

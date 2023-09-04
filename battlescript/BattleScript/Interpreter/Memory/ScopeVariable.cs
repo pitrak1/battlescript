@@ -30,6 +30,15 @@ public class ScopeVariable
         ClassObject = classObject;
     }
 
+    public ScopeVariable CopyProperties(ScopeVariable var)
+    {
+        Type = var.Type;
+        Value = var.Value;
+        Instructions = var.Instructions;
+        ClassObject = var.ClassObject;
+        return this;
+    }
+
     public ScopeVariable AddVariable(List<string> path, ScopeVariable? var = null)
     {
         Debug.Assert(Value is Dictionary<string, ScopeVariable>);
@@ -107,15 +116,6 @@ public class ScopeVariable
         }
     }
 
-    public ScopeVariable Copy(ScopeVariable var)
-    {
-        Type = var.Type;
-        Value = var.Value;
-        Instructions = var.Instructions;
-        ClassObject = var.ClassObject;
-        return this;
-    }
-
     public ScopeVariable CreateObject(ScopeVariable var)
     {
         Type = Consts.VariableTypes.Object;
@@ -178,11 +178,11 @@ public class ScopeVariable
             {
                 if (HasVariable(pair.Key))
                 {
-                    Value[pair.Key] = new ScopeVariable().Copy(pair.Value);
+                    Value[pair.Key] = new ScopeVariable().CopyProperties(pair.Value);
                 }
                 else
                 {
-                    Value.Add(pair.Key, new ScopeVariable().Copy(pair.Value));
+                    Value.Add(pair.Key, new ScopeVariable().CopyProperties(pair.Value));
                 }
             }
         }

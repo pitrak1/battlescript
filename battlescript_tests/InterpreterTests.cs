@@ -16,7 +16,7 @@ public class InterpreterTests
     [Test]
     public void Variables()
     {
-        var scopeStack = _runner.Run("variables.btl");
+        var scopeStack = _runner!.Run("variables.btl");
 
         Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
         expected.Add("x", new ScopeVariable(Consts.VariableTypes.Literal, 15));
