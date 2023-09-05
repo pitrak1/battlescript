@@ -78,4 +78,18 @@ public partial class Interpreter
 
         return resultVariables;
     }
+
+    private Dictionary<dynamic, ScopeVariable> InterpretListOfKeyValuePairInstructions(List<Instruction> instructions)
+    {
+        Dictionary<dynamic, ScopeVariable> entries = new Dictionary<dynamic, ScopeVariable>();
+
+        for (int i = 0; i < instructions.Count; i = i + 2)
+        {
+            ScopeVariable key = InterpretInstruction(instructions[i]);
+            ScopeVariable value = InterpretInstruction(instructions[i + 1]);
+            entries.Add(key.Value, value);
+        }
+
+        return entries;
+    }
 }

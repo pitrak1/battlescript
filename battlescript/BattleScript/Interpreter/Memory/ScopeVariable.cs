@@ -92,7 +92,14 @@ public class ScopeVariable
 
     public ScopeVariable GetIndex(dynamic key)
     {
-        return handleArrayIndex(key);
+        if (Value is List<ScopeVariable>)
+        {
+            return handleArrayIndex(key);
+        }
+        else
+        {
+            return handleObjectIndex(key);
+        }
     }
 
     private ScopeVariable handleArrayIndex(dynamic key)
@@ -106,6 +113,25 @@ public class ScopeVariable
         {
             throw new ArrayOutOfBoundsException(key);
         }
+    }
+
+    private ScopeVariable handleObjectIndex(dynamic key)
+    {
+        if (Value!.ContainsKey(key))
+        {
+            return Value[key];
+        }
+        else
+        {
+            return createNewVariableWithKey(key);
+        }
+    }
+
+    private ScopeVariable createNewVariableWithKey(dynamic key)
+    {
+        var variable = new ScopeVariable(Consts.VariableTypes.Literal);
+        Value![key] = variable;
+        return variable;
     }
 
     // public ScopeVariable GetIndex(dynamic key)

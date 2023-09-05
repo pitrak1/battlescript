@@ -28,7 +28,6 @@ public partial class Interpreter
 
     private ScopeVariable handleIndex(Instruction instruction)
     {
-        Debug.Assert(instruction.Value is List<Instruction>, $"Expected the index value to be an array of instructions");
         ScopeVariable index = InterpretInstruction(instruction.Value![0]);
 
         Debug.Assert(!OngoingContexts.IsEmpty(), "Expected to have a non-null indexed value");
