@@ -92,12 +92,12 @@ public partial class Interpreter
                 return HandleElse(instruction);
             case Consts.InstructionTypes.While:
                 return HandleWhile(instruction);
-                // case Consts.InstructionTypes.Function:
-                //     return HandleFunction(instruction);
-                // case Consts.InstructionTypes.Parens:
-                //     return HandleParens(instruction);
-                // case Consts.InstructionTypes.Return:
-                //     return HandleReturn(instruction);
+            case Consts.InstructionTypes.Function:
+                return HandleFunction(instruction);
+            case Consts.InstructionTypes.Parens:
+                return HandleParens(instruction);
+            case Consts.InstructionTypes.Return:
+                return HandleReturn(instruction);
                 // case Consts.InstructionTypes.Class:
                 //     return HandleClass(instruction);
                 // case Consts.InstructionTypes.Self:

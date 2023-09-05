@@ -194,27 +194,28 @@ public class InterpreterTests
         Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
     }
 
-    // [Test]
-    // public void Functions()
-    // {
-    //     var scopeStack = _runner.Run("functions.btl");
+    [Test]
+    public void Functions()
+    {
+        var scopeStack = _runner!.Run("functions.btl");
 
-    //     Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
-    //     { "my_function", new ScopeVariable(
-    //         Consts.VariableTypes.Function,
-    //         new List<ScopeVariable>()
-    //     ) },
-    //     { "x", new ScopeVariable(Consts.VariableTypes.Literal, 5) },
-    //     { "my_other_function", new ScopeVariable(
-    //         Consts.VariableTypes.Function,
-    //         new List<ScopeVariable>() {
-    //             new ScopeVariable(Consts.VariableTypes.Literal, "my_variable")
-    //         }
-    //     ) },
-    //     { "y", new ScopeVariable(Consts.VariableTypes.Literal, 8) },
+        Dictionary<string, ScopeVariable> expected = new() {
+            { "my_function", new(
+                Consts.VariableTypes.Function,
+                new List<ScopeVariable>()
+            ) },
+            { "x", new(Consts.VariableTypes.Literal, 5) },
+            { "my_other_function", new(
+                Consts.VariableTypes.Function,
+                new List<ScopeVariable>() {
+                    new(Consts.VariableTypes.Literal, "my_variable")
+                }
+            ) },
+            { "y", new(Consts.VariableTypes.Literal, 8) },
+        };
 
-    //     Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
-    // }
+        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    }
 
     // [Test]
     // public void Classes()

@@ -42,40 +42,6 @@ public partial class Interpreter
         LexicalContexts.Pop();
     }
 
-    private ScopeVariable RunFunction(List<ScopeVariable> functionValue, List<Instruction> instructions, List<Instruction> args, ScopeVariable? classObject = null)
-    {
-        LexicalContexts.AddNewScope();
-
-        if (args.Count != functionValue.Count)
-        {
-            throw new WrongNumberOfArgumentsException(args.Count, functionValue.Count);
-        }
-
-        if (classObject != null)
-        {
-            ClassContexts.Add(classObject);
-        }
-
-        for (int i = 0; i < args.Count; i++)
-        {
-            string argName = functionValue[i].Value!;
-            ScopeVariable argValue = InterpretInstruction(args[i]);
-            LexicalContexts.AddVariableToCurrentScope(new List<string>() { argName }, argValue);
-        }
-
-        foreach (Instruction funcInstruction in instructions)
-        {
-            InterpretInstruction(funcInstruction);
-        }
-
-        if (classObject != null)
-        {
-            ClassContexts.Pop();
-        }
-
-        return LexicalContexts.Pop();
-    }
-
     private List<ScopeVariable> InterpretListOfInstructions(List<Instruction> instructions)
     {
         List<ScopeVariable> resultVariables = new List<ScopeVariable>();
@@ -102,4 +68,64 @@ public partial class Interpreter
 
         return entries;
     }
+
+    private ScopeVariable RunFunction(List<ScopeVariable> functionValue, List<Instruction> instructions, List<Instruction> args)
+    {
+        if (args.Count != functionValue.Count)
+        {
+            throw new WrongNumberOfArgumentsException(args.Count, functionValue.Count);
+        }
+
+        LexicalContexts.AddNewScope();
+        addArgumentsToContext(functionValue, args);
+        foreach (Instruction insideBlockInstruction in instructions)
+        {
+            InterpretInstruction(insideBlockInstruction);
+        }
+        return LexicalContexts.Pop();
+    }
+
+    private void addArgumentsToContext(List<ScopeVariable> functionValue, List<Instruction> args)
+    {
+        for (int i = 0; i < args.Count; i++)
+        {
+            string argName = functionValue[i].Value!;
+            ScopeVariable argValue = InterpretInstruction(args[i]);
+            LexicalContexts.AddVariableToCurrentScope(new List<string>() { argName }, argValue);
+        }
+    }
+
+    // private ScopeVariable RunFunction(List<ScopeVariable> functionValue, List<Instruction> instructions, List<Instruction> args, ScopeVariable? classObject = null)
+    // {
+    //     LexicalContexts.AddNewScope();
+
+    //     if (args.Count != functionValue.Count)
+    //     {
+    //         throw new WrongNumberOfArgumentsException(args.Count, functionValue.Count);
+    //     }
+
+    //     if (classObject != null)
+    //     {
+    //         ClassContexts.Add(classObject);
+    //     }
+
+    //     for (int i = 0; i < args.Count; i++)
+    //     {
+    //         string argName = functionValue[i].Value!;
+    //         ScopeVariable argValue = InterpretInstruction(args[i]);
+    //         LexicalContexts.AddVariableToCurrentScope(new List<string>() { argName }, argValue);
+    //     }
+
+    //     foreach (Instruction funcInstruction in instructions)
+    //     {
+    //         InterpretInstruction(funcInstruction);
+    //     }
+
+    //     if (classObject != null)
+    //     {
+    //         ClassContexts.Pop();
+    //     }
+
+    //     return LexicalContexts.Pop();
+    // }
 }
