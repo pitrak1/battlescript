@@ -119,6 +119,40 @@ public class InterpreterTests
         Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
     }
 
+    [Test]
+    public void DictionaryAssignment()
+    {
+        var scopeStack = _runner!.Run("dictionary_assignment.btl");
+
+        Dictionary<string, ScopeVariable> expected = new() {
+            { "x", new(
+                Consts.VariableTypes.Dictionary,
+                new Dictionary<dynamic, ScopeVariable> {
+                    {
+                        "x",
+                        new(Consts.VariableTypes.Literal, 1)
+                    },
+                    {
+                        "y",
+                        new(Consts.VariableTypes.Literal, 2)
+                    },
+                    {
+                        "z",
+                        new(Consts.VariableTypes.Literal, 5)
+                    },
+                    {
+                        "a",
+                        new(Consts.VariableTypes.Literal, 6)
+                    }
+                }
+            ) },
+            { "y", new(Consts.VariableTypes.Literal, 5) },
+            { "z", new(Consts.VariableTypes.Literal, 6) },
+        };
+
+        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    }
+
     // [Test]
     // public void If()
     // {
@@ -397,39 +431,6 @@ public class InterpreterTests
     //     { "c", new ScopeVariable(Consts.VariableTypes.Literal, 11) },
     //     { "d", new ScopeVariable(Consts.VariableTypes.Literal, 11) },
     //     { "e", new ScopeVariable(Consts.VariableTypes.Literal, 8) },
-
-    //     Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
-    // }
-
-    // [Test]
-    // public void DictionaryAssignment()
-    // {
-    //     var scopeStack = _runner.Run("dictionary_assignment.btl");
-
-    //     Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
-    //     { "x", new ScopeVariable(
-    //         Consts.VariableTypes.Dictionary,
-    //         new Dictionary<dynamic, ScopeVariable> {
-    //             {
-    //                 "x",
-    //                 new ScopeVariable(Consts.VariableTypes.Literal, 1)
-    //             },
-    //             {
-    //                 "y",
-    //                 new ScopeVariable(Consts.VariableTypes.Literal, 2)
-    //             },
-    //             {
-    //                 "z",
-    //                 new ScopeVariable(Consts.VariableTypes.Literal, 5)
-    //             },
-    //             {
-    //                 "a",
-    //                 new ScopeVariable(Consts.VariableTypes.Literal, 6)
-    //             }
-    //         }
-    //     ) },
-    //     { "y", new ScopeVariable(Consts.VariableTypes.Literal, 5) },
-    //     { "z", new ScopeVariable(Consts.VariableTypes.Literal, 6) },
 
     //     Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
     // }
