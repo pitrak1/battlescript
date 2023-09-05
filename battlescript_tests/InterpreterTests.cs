@@ -153,17 +153,18 @@ public class InterpreterTests
         Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
     }
 
-    // [Test]
-    // public void If()
-    // {
-    //     var scopeStack = _runner.Run("if.btl");
+    [Test]
+    public void If()
+    {
+        var scopeStack = _runner!.Run("if.btl");
 
-    //     Dictionary<string, ScopeVariable> expected = new Dictionary<string, ScopeVariable>();
-    //     { "x", new ScopeVariable(Consts.VariableTypes.Literal, 5) },
-    //     { "y", new ScopeVariable(Consts.VariableTypes.Literal, 6) },
+        Dictionary<string, ScopeVariable> expected = new() {
+            { "x", new(Consts.VariableTypes.Literal, 5) },
+            { "y", new(Consts.VariableTypes.Literal, 6) },
+        };
 
-    //     Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
-    // }
+        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    }
 
     // [Test]
     // public void IfElse()

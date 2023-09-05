@@ -13,17 +13,12 @@ public partial class Interpreter
         ScopeVariable condition = InterpretInstruction(instruction.Value);
         if (isTruthy(condition))
         {
-            LexicalContexts.AddNewScope();
-            foreach (Instruction ifInstruction in instruction.Instructions)
-            {
-                InterpretInstruction(ifInstruction);
-            }
-            LexicalContexts.Pop();
+            RunCodeBlock(instruction.Instructions);
         }
-        else if (instruction.Next is not null)
-        {
-            InterpretInstruction(instruction.Next);
-        }
+        // else if (instruction.Next is not null)
+        // {
+        //     InterpretInstruction(instruction.Next);
+        // }
 
         return new ScopeVariable(Consts.VariableTypes.Literal);
     }

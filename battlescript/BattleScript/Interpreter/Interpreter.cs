@@ -86,8 +86,8 @@ public partial class Interpreter
                 return HandleSquareBraces(instruction);
             case Consts.InstructionTypes.Dictionary:
                 return HandleDictionary(instruction);
-                // case Consts.InstructionTypes.If:
-                //     return HandleIf(instruction);
+            case Consts.InstructionTypes.If:
+                return HandleIf(instruction);
                 // case Consts.InstructionTypes.Else:
                 //     return HandleElse(instruction);
                 // case Consts.InstructionTypes.While:

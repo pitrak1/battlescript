@@ -32,6 +32,16 @@ public partial class Interpreter
         }
     }
 
+    public void RunCodeBlock(List<Instruction> instructions)
+    {
+        LexicalContexts.AddNewScope();
+        foreach (Instruction insideBlockInstruction in instructions)
+        {
+            InterpretInstruction(insideBlockInstruction);
+        }
+        LexicalContexts.Pop();
+    }
+
     private ScopeVariable RunFunction(List<ScopeVariable> functionValue, List<Instruction> instructions, List<Instruction> args, ScopeVariable? classObject = null)
     {
         LexicalContexts.AddNewScope();
