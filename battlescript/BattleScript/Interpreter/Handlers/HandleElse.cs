@@ -10,25 +10,33 @@ public partial class Interpreter
 {
     private ScopeVariable HandleElse(Instruction instruction)
     {
-        ScopeVariable condition = new ScopeVariable(Consts.VariableTypes.Literal);
-        if (instruction.Value is not null)
-        {
-            condition = InterpretInstruction(instruction.Value);
-        }
+        ScopeVariable condition = interpretCondition(instruction);
 
-        if (instruction.Value is null || isTruthy(condition))
+        if (ShouldRun(instruction, condition))
         {
-            LexicalContexts.AddNewScope();
-            foreach (Instruction elseInstruction in instruction.Instructions)
-            {
-                InterpretInstruction(elseInstruction);
-            }
-            LexicalContexts.Pop();
+            RunCodeBlock(instruction.Instructions);
         }
         else if (instruction.Next is not null)
         {
             InterpretInstruction(instruction.Next);
         }
         return new ScopeVariable(Consts.VariableTypes.Literal);
+    }
+
+    private ScopeVariable interpretCondition(Instruction instruction)
+    {
+        if (instruction.Value is not null)
+        {
+            return InterpretInstruction(instruction.Value);
+        }
+        else
+        {
+            return new ScopeVariable(Consts.VariableTypes.Literal);
+        }
+    }
+
+    private bool ShouldRun(Instruction instruction, ScopeVariable condition)
+    {
+        return instruction.Value is null || isTruthy(condition);
     }
 }

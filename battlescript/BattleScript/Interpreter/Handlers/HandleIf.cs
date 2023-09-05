@@ -15,10 +15,10 @@ public partial class Interpreter
         {
             RunCodeBlock(instruction.Instructions);
         }
-        // else if (instruction.Next is not null)
-        // {
-        //     InterpretInstruction(instruction.Next);
-        // }
+        else if (instruction.Next is not null)
+        {
+            InterpretInstruction(instruction.Next);
+        }
 
         return new ScopeVariable(Consts.VariableTypes.Literal);
     }

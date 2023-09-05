@@ -88,8 +88,8 @@ public partial class Interpreter
                 return HandleDictionary(instruction);
             case Consts.InstructionTypes.If:
                 return HandleIf(instruction);
-                // case Consts.InstructionTypes.Else:
-                //     return HandleElse(instruction);
+            case Consts.InstructionTypes.Else:
+                return HandleElse(instruction);
                 // case Consts.InstructionTypes.While:
                 //     return HandleWhile(instruction);
                 // case Consts.InstructionTypes.Function:
