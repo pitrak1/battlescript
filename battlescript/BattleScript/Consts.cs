@@ -19,8 +19,7 @@ public class Consts
     public static char[] WordCharacters = StartingWordCharacters.Concat(Digits).ToArray();
 
     public static string[] Keywords = new string[] {
-        "var", "if", "else", "while", "function", "return", "import", "export", "class", "extends",
-        "Btl", "constructor", "self", "const", "super"
+        "var", "if", "else", "while", "function", "return", "import", "export", "Btl"
     };
     public static char[] Separators = new char[] { '(', ')', '{', '}', ',', '[', ']', ':', '.' };
     public static string[] Operators = new string[] { "==", "<", ">", "+", "*" };
@@ -28,7 +27,6 @@ public class Consts
 
     public static string[] OpeningSeparators = new string[] { "(", "{", "[" };
     public static string[] ClosingSeparators = new string[] { ")", "}", "]" };
-    public static string[] MatchedSeparators = new string[] { "(", ")", "{", "}", "[", "]" };
     public static Dictionary<string, string> MatchingSeparatorsMap = new Dictionary<string, string>() {
         {"(", ")"},
         {"{", "}"},
@@ -78,13 +76,8 @@ public class Consts
         Function,
         Parens,
         Return,
-        Class,
         Else,
-        Constructor,
-        Self,
-        Super,
         Btl,
-        ConstDeclaration // Does not yet have an instruction class
     };
 
     public enum VariableTypes
@@ -93,8 +86,6 @@ public class Consts
         Array,
         Dictionary,
         Function,
-        Class,
-        Object,
         Scope
     };
 }

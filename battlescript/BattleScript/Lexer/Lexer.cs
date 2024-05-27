@@ -5,33 +5,39 @@ namespace BattleScript.LexerNS;
 
 public class Lexer
 {
-    string contents = "";
-    int contentIndex = 0;
-    int lineIndex = 0;
-    int lineNumber = 0;
+    string contents;
+    int contentIndex;
+    int lineIndex;
+    int lineNumber;
 
-    List<Token> tokens = new List<Token>();
+    List<Token> tokens;
 
-    public List<Token> Run(string _contents)
+    public Lexer(string _contents)
     {
         contents = _contents;
         contentIndex = 0;
         lineIndex = 0;
         lineNumber = 0;
         tokens = new List<Token>();
+    }
 
+    public List<Token> Run()
+    {
         while (contentIndex < contents.Length)
         {
-            string nextCharacters = getNextCharacters(contents, contentIndex);
+            string nextCharacters = LexerUtilities.GetNextCharacters(contents, contentIndex);
             char nextCharacter = nextCharacters[0];
 
             if (nextCharacter == '\n')
             {
-                moveToNextLine();
+                contentIndex++;
+                lineIndex++;
+                lineIndex = 0;
             }
             else if (Consts.Whitespace.Contains(nextCharacter))
             {
-                moveForwardOnce();
+                contentIndex++;
+                lineIndex++;
             }
             else if (Consts.Digits.Contains(nextCharacter))
             {
@@ -78,51 +84,60 @@ public class Lexer
         return tokens;
     }
 
-    private static string getNextCharacters(string contents, int contentIndex)
-    {
-        try
-        {
-            return contents.Substring(contentIndex, 2);
-        }
-        catch (ArgumentOutOfRangeException e)
-        {
-            return contents.Substring(contentIndex);
-        }
-    }
-
     private void handleNumber()
     {
-        string result = LexerUtilities.GetLineWhileCharactersInCollection(contents, contentIndex, Consts.NumberCharacters);
+        // Get all following characters that are digits and periods
+        string result = LexerUtilities.GetCharactersUsingCollection(
+            contents,
+            contentIndex,
+            Consts.NumberCharacters,
+            CollectionType.Inclusive
+        );
 
         Token token = new NumberToken(result, lineNumber, lineIndex);
         tokens.Add(token);
 
-        moveForward(token.Value.Length);
+        contentIndex += token.Value.Length;
+        lineIndex += token.Value.Length;
     }
 
     private void handleString()
     {
         char startingQuote = contents[contentIndex];
-        string result = LexerUtilities.GetLineUntilCharacterInCollection(contents, contentIndex + 1, new char[] { startingQuote });
+
+        // Get all following characters until matching quote
+        string result = LexerUtilities.GetCharactersUsingCollection(
+            contents,
+            contentIndex + 1,
+            new char[] { startingQuote },
+            CollectionType.Exclusive
+        );
+
         string finalString = startingQuote + result + startingQuote;
 
         Token token = new StringToken(finalString, lineNumber, lineIndex);
         tokens.Add(token);
-
-        moveForward(token.Value.Length);
+        contentIndex += token.Value.Length;
+        lineIndex += token.Value.Length;
     }
 
     private void handleSeparator(string nextCharacter)
     {
         Token token = new SeparatorToken(nextCharacter, lineNumber, lineIndex);
         tokens.Add(token);
-
-        moveForwardOnce();
+        contentIndex++;
+        lineIndex++;
     }
 
     private void handleWord()
     {
-        string result = LexerUtilities.GetLineWhileCharactersInCollection(contents, contentIndex, Consts.WordCharacters);
+        // Get all following characters that are letters, numbers, or _
+        string result = LexerUtilities.GetCharactersUsingCollection(
+            contents,
+            contentIndex,
+            Consts.WordCharacters,
+            CollectionType.Inclusive
+        );
 
         Consts.TokenTypes type = Consts.TokenTypes.Identifier;
         if (Consts.Keywords.Contains(result))
@@ -136,56 +151,44 @@ public class Lexer
 
         Token token = new Token(type, result, lineNumber, lineIndex);
         tokens.Add(token);
-
-        moveForward(token.Value.Length);
+        contentIndex += token.Value.Length;
+        lineIndex += token.Value.Length;
     }
 
     private void handleOperator(string operatorString)
     {
         Token token = new OperatorToken(operatorString, lineNumber, lineIndex);
         tokens.Add(token);
-
-        moveForward(token.Value.Length);
+        contentIndex += token.Value.Length;
+        lineIndex += token.Value.Length;
     }
 
     private void handleAssignment()
     {
         Token token = new AssignmentToken(lineNumber, lineIndex);
         tokens.Add(token);
-
-        moveForwardOnce();
+        contentIndex++;
+        lineIndex++;
     }
 
     private void handleSemicolon()
     {
         Token token = new SemicolonToken(lineNumber, lineIndex);
         tokens.Add(token);
-
-        moveForwardOnce();
+        contentIndex++;
+        lineIndex++;
     }
 
     private void handleComment()
     {
-        string charactersUntilNextLine = LexerUtilities.GetLineUntilCharacterInCollection(contents, contentIndex, new char[] { '\n' });
-
-        moveForward(charactersUntilNextLine.Length);
-    }
-
-    private void moveToNextLine()
-    {
-        lineNumber++;
-        lineIndex = 0;
-        contentIndex++;
-    }
-
-    private void moveForward(int value)
-    {
-        lineIndex += value;
-        contentIndex += value;
-    }
-
-    private void moveForwardOnce()
-    {
-        moveForward(1);
+        // Get all following characters until newline
+        string charactersUntilNextLine = LexerUtilities.GetCharactersUsingCollection(
+            contents,
+            contentIndex,
+            new char[] { '\n' },
+            CollectionType.Exclusive
+        );
+        contentIndex += charactersUntilNextLine.Length;
+        lineIndex += charactersUntilNextLine.Length;
     }
 }

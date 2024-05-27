@@ -171,20 +171,20 @@ public class ScopeVariable
     //     }
     // }
 
-    public ScopeVariable CreateObject(ScopeVariable var)
-    {
-        Type = Consts.VariableTypes.Object;
-        Value = new Dictionary<string, ScopeVariable>();
-        List<ScopeVariable> chain = GatherClassChain(var);
-        chain.Reverse();
-        foreach (ScopeVariable scope in chain)
-        {
-            MergeScope(scope);
-        }
-        Value.Add("class", var);
-        ClassObject = var;
-        return this;
-    }
+    // public ScopeVariable CreateObject(ScopeVariable var)
+    // {
+    //     Type = Consts.VariableTypes.Object;
+    //     Value = new Dictionary<string, ScopeVariable>();
+    //     List<ScopeVariable> chain = GatherClassChain(var);
+    //     chain.Reverse();
+    //     foreach (ScopeVariable scope in chain)
+    //     {
+    //         MergeScope(scope);
+    //     }
+    //     Value.Add("class", var);
+    //     ClassObject = var;
+    //     return this;
+    // }
 
     public ScopeVariable? GetConstructorForClass()
     {
@@ -219,27 +219,27 @@ public class ScopeVariable
         return chain;
     }
 
-    private void MergeScope(ScopeVariable var)
-    {
-        foreach (KeyValuePair<string, ScopeVariable> pair in var.Value)
-        {
-            if (
-                pair.Value.Type is
-                Consts.VariableTypes.Array or
-                Consts.VariableTypes.Dictionary or
-                Consts.VariableTypes.Object or
-                Consts.VariableTypes.Literal
-            )
-            {
-                if (HasVariable(pair.Key))
-                {
-                    Value[pair.Key] = new ScopeVariable().CopyProperties(pair.Value);
-                }
-                else
-                {
-                    Value.Add(pair.Key, new ScopeVariable().CopyProperties(pair.Value));
-                }
-            }
-        }
-    }
+    // private void MergeScope(ScopeVariable var)
+    // {
+    //     foreach (KeyValuePair<string, ScopeVariable> pair in var.Value)
+    //     {
+    //         if (
+    //             pair.Value.Type is
+    //             Consts.VariableTypes.Array or
+    //             Consts.VariableTypes.Dictionary or
+    //             Consts.VariableTypes.Object or
+    //             Consts.VariableTypes.Literal
+    //         )
+    //         {
+    //             if (HasVariable(pair.Key))
+    //             {
+    //                 Value[pair.Key] = new ScopeVariable().CopyProperties(pair.Value);
+    //             }
+    //             else
+    //             {
+    //                 Value.Add(pair.Key, new ScopeVariable().CopyProperties(pair.Value));
+    //             }
+    //         }
+    //     }
+    // }
 }

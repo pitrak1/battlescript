@@ -1,14 +1,27 @@
+using BattleScript.Core;
+
 namespace BattleScript.LexerNS;
+
+public enum CollectionType
+{
+    Inclusive,
+    Exclusive
+}
 
 public class LexerUtilities
 {
-    public static string GetLineUntilCharacterInCollection(string contents, int contentIndex, char[] collection)
+    public static string GetCharactersUsingCollection(
+        string contents,
+        int contentIndex,
+        char[] collection,
+        CollectionType type
+    )
     {
         string resultString = "";
         while (contentIndex < contents.Length)
         {
             char currentCharacter = contents[contentIndex];
-            if (collection.Contains(currentCharacter))
+            if (collection.Contains(currentCharacter) == (type == CollectionType.Exclusive))
             {
                 break;
             }
@@ -22,23 +35,15 @@ public class LexerUtilities
         return resultString;
     }
 
-    public static string GetLineWhileCharactersInCollection(string contents, int contentIndex, char[] collection)
+    public static string GetNextCharacters(string contents, int contentIndex)
     {
-        string resultString = "";
-        while (contentIndex < contents.Length)
+        try
         {
-            char currentCharacter = contents[contentIndex];
-            if (collection.Contains(currentCharacter))
-            {
-                resultString += currentCharacter.ToString();
-                contentIndex++;
-            }
-            else
-            {
-                break;
-            }
+            return contents.Substring(contentIndex, 2);
         }
-
-        return resultString;
+        catch (ArgumentOutOfRangeException)
+        {
+            return contents.Substring(contentIndex);
+        }
     }
 }

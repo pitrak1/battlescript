@@ -19,11 +19,11 @@ public class ParserTests
     {
         string contents = LoadFile("variables.btl");
 
-        Lexer lexer = new Lexer();
-        var tokens = lexer.Run(contents);
+        Lexer lexer = new Lexer(contents);
+        var tokens = lexer.Run();
 
-        Parser parser = new Parser();
-        var instructions = parser.Run(tokens);
+        Parser parser = new Parser(tokens);
+        var instructions = parser.Run();
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -55,11 +55,11 @@ public class ParserTests
     {
         string contents = LoadFile("operators.btl");
 
-        Lexer lexer = new Lexer();
-        var tokens = lexer.Run(contents);
+        Lexer lexer = new Lexer(contents);
+        var tokens = lexer.Run();
 
-        Parser parser = new Parser();
-        var instructions = parser.Run(tokens);
+        Parser parser = new Parser(tokens);
+        var instructions = parser.Run();
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -112,11 +112,11 @@ public class ParserTests
     {
         string contents = LoadFile("arrays.btl");
 
-        Lexer lexer = new Lexer();
-        var tokens = lexer.Run(contents);
+        Lexer lexer = new Lexer(contents);
+        var tokens = lexer.Run();
 
-        Parser parser = new Parser();
-        var instructions = parser.Run(tokens);
+        Parser parser = new Parser(tokens);
+        var instructions = parser.Run();
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -209,11 +209,11 @@ public class ParserTests
     {
         string contents = LoadFile("dictionaries.btl");
 
-        Lexer lexer = new Lexer();
-        var tokens = lexer.Run(contents);
+        Lexer lexer = new Lexer(contents);
+        var tokens = lexer.Run();
 
-        Parser parser = new Parser();
-        var instructions = parser.Run(tokens);
+        Parser parser = new Parser(tokens);
+        var instructions = parser.Run();
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -309,11 +309,11 @@ public class ParserTests
     {
         string contents = LoadFile("if.btl");
 
-        Lexer lexer = new Lexer();
-        var tokens = lexer.Run(contents);
+        Lexer lexer = new Lexer(contents);
+        var tokens = lexer.Run();
 
-        Parser parser = new Parser();
-        var instructions = parser.Run(tokens);
+        Parser parser = new Parser(tokens);
+        var instructions = parser.Run();
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -360,11 +360,11 @@ public class ParserTests
     {
         string contents = LoadFile("ifelse.btl");
 
-        Lexer lexer = new Lexer();
-        var tokens = lexer.Run(contents);
+        Lexer lexer = new Lexer(contents);
+        var tokens = lexer.Run();
 
-        Parser parser = new Parser();
-        var instructions = parser.Run(tokens);
+        Parser parser = new Parser(tokens);
+        var instructions = parser.Run();
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -450,11 +450,11 @@ public class ParserTests
     {
         string contents = LoadFile("while.btl");
 
-        Lexer lexer = new Lexer();
-        var tokens = lexer.Run(contents);
+        Lexer lexer = new Lexer(contents);
+        var tokens = lexer.Run();
 
-        Parser parser = new Parser();
-        var instructions = parser.Run(tokens);
+        Parser parser = new Parser(tokens);
+        var instructions = parser.Run();
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -500,11 +500,11 @@ public class ParserTests
     {
         string contents = LoadFile("functions.btl");
 
-        Lexer lexer = new Lexer();
-        var tokens = lexer.Run(contents);
+        Lexer lexer = new Lexer(contents);
+        var tokens = lexer.Run();
 
-        Parser parser = new Parser();
-        var instructions = parser.Run(tokens);
+        Parser parser = new Parser(tokens);
+        var instructions = parser.Run();
 
         List<Instruction> expected = new List<Instruction>() {
             new AssignmentInstruction(
@@ -550,884 +550,6 @@ public class ParserTests
                         new List<Instruction>() {
                             new NumberInstruction(3)
                         }
-                    )
-                )
-            )
-        };
-
-        Assertions.AssertInstructions(instructions, expected);
-    }
-
-    [Test]
-    public void Classes()
-    {
-        string contents = LoadFile("classes.btl");
-
-        Lexer lexer = new Lexer();
-        var tokens = lexer.Run(contents);
-
-        Parser parser = new Parser();
-        var instructions = parser.Run(tokens);
-
-        List<Instruction> expected = new List<Instruction>() {
-            new AssignmentInstruction(
-                new DeclarationInstruction("Class1"),
-                new ClassInstruction(
-                    null,
-                    new List<Instruction>() {
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("a"),
-                            new NumberInstruction(5)
-                        )
-                    }
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("x"),
-                new VariableInstruction(
-                    "Class1",
-                    new ParensInstruction(new List<Instruction>())
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("y"),
-                new VariableInstruction(
-                    "x",
-                    new SquareBracesInstruction(
-                        new List<Instruction>() {
-                            new StringInstruction("a")
-                        }
-                    )
-                )
-            ),
-            new AssignmentInstruction(
-                new VariableInstruction(
-                    "x",
-                    new SquareBracesInstruction(
-                        new List<Instruction>() {
-                            new StringInstruction("a")
-                        }
-                    )
-                ),
-                new NumberInstruction(10)
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("z"),
-                new VariableInstruction(
-                    "x",
-                    new SquareBracesInstruction(
-                        new List<Instruction>() {
-                            new StringInstruction("a")
-                        }
-                    )
-                )
-            )
-        };
-
-        Assertions.AssertInstructions(instructions, expected);
-    }
-
-    [Test]
-    public void Methods()
-    {
-        string contents = LoadFile("methods.btl");
-
-        Lexer lexer = new Lexer();
-        var tokens = lexer.Run(contents);
-
-        Parser parser = new Parser();
-        var instructions = parser.Run(tokens);
-
-        List<Instruction> expected = new List<Instruction>() {
-            new AssignmentInstruction(
-                new DeclarationInstruction("Class1"),
-                new ClassInstruction(
-                    null,
-                    new List<Instruction>() {
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("a"),
-                            new NumberInstruction(5)
-                        ),
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("my_function"),
-                            new FunctionInstruction(
-                                new List<Instruction>(),
-                                new List<Instruction>() {
-                                    new ReturnInstruction(
-                                        new VariableInstruction("a")
-                                    )
-                                }
-                            )
-                        )
-                    }
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("x"),
-                new VariableInstruction(
-                    "Class1",
-                    new ParensInstruction(new List<Instruction>())
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("y"),
-                new VariableInstruction(
-                    "x",
-                    new SquareBracesInstruction(
-                        new List<Instruction>() {
-                            new StringInstruction("my_function")
-                        },
-                        new ParensInstruction(new List<Instruction>())
-                    )
-                )
-            ),
-            new AssignmentInstruction(
-                new VariableInstruction(
-                    "x",
-                    new SquareBracesInstruction(
-                        new List<Instruction>() {
-                            new StringInstruction("a")
-                        }
-                    )
-                ),
-                new NumberInstruction(10)
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("z"),
-                new VariableInstruction(
-                    "x",
-                    new SquareBracesInstruction(
-                        new List<Instruction>() {
-                            new StringInstruction("my_function")
-                        },
-                        new ParensInstruction(new List<Instruction>())
-                    )
-                )
-            )
-        };
-
-        Assertions.AssertInstructions(instructions, expected);
-    }
-
-    [Test]
-    public void Inheritance()
-    {
-        string contents = LoadFile("inheritance.btl");
-
-        Lexer lexer = new Lexer();
-        var tokens = lexer.Run(contents);
-
-        Parser parser = new Parser();
-        var instructions = parser.Run(tokens);
-
-        List<Instruction> expected = new List<Instruction>() {
-            new AssignmentInstruction(
-                new DeclarationInstruction("Class1"),
-                new ClassInstruction(
-                    null,
-                    new List<Instruction>() {
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("b"),
-                            new NumberInstruction(6)
-                        ),
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("d"),
-                            new NumberInstruction(3)
-                        ),
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("my_function"),
-                            new FunctionInstruction(
-                                null,
-                                new List<Instruction>() {
-                                    new ReturnInstruction(
-                                        new VariableInstruction("b")
-                                    )
-                                }
-                            )
-                        )
-                    }
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("Class2"),
-                new ClassInstruction(
-                    new VariableInstruction("Class1"),
-                    new List<Instruction>() {
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("c"),
-                            new NumberInstruction(9)
-                        ),
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("d"),
-                            new NumberInstruction(12)
-                        ),
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("my_other_function"),
-                            new FunctionInstruction(
-                                new List<Instruction>(),
-                                new List<Instruction>() {
-                                    new ReturnInstruction(
-                                        new OperationInstruction(
-                                            "+",
-                                            new VariableInstruction("b"),
-                                            new VariableInstruction("c")
-                                        )
-                                    )
-                                }
-                            )
-                        )
-                    }
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("b"),
-                new VariableInstruction(
-                    "Class2",
-                    new ParensInstruction(new List<Instruction>())
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("c"),
-                new VariableInstruction(
-                    "b",
-                    new SquareBracesInstruction(
-                        new List<Instruction>() {
-                            new StringInstruction("my_other_function")
-                        },
-                        new ParensInstruction(new List<Instruction>())
-                    )
-                )
-            ),
-            new AssignmentInstruction(
-                new VariableInstruction(
-                    "b",
-                    new SquareBracesInstruction(
-                        new List<Instruction>() {
-                            new StringInstruction("b")
-                        }
-                    )
-                ),
-                new NumberInstruction(9)
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("d"),
-                new VariableInstruction(
-                    "b",
-                    new SquareBracesInstruction(
-                        new List<Instruction>() {
-                            new StringInstruction("my_function")
-                        },
-                        new ParensInstruction(new List<Instruction>())
-                    )
-                )
-            )
-        };
-
-        Assertions.AssertInstructions(instructions, expected);
-    }
-
-    [Test]
-    public void Self()
-    {
-        string contents = LoadFile("self.btl");
-
-        Lexer lexer = new Lexer();
-        var tokens = lexer.Run(contents);
-
-        Parser parser = new Parser();
-        var instructions = parser.Run(tokens);
-
-        List<Instruction> expected = new List<Instruction>() {
-            new AssignmentInstruction(
-                new DeclarationInstruction("Class1"),
-                new ClassInstruction(
-                    null,
-                    new List<Instruction>() {
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("b"),
-                            new NumberInstruction(8)
-                        ),
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("my_function"),
-                            new FunctionInstruction(
-                                new List<Instruction>(),
-                                new List<Instruction>() {
-                                    new AssignmentInstruction(
-                                        new DeclarationInstruction("b"),
-                                        new NumberInstruction(3)
-                                    ),
-                                    new ReturnInstruction(
-                                        new SelfInstruction(
-                                            new SquareBracesInstruction(
-                                                new List<Instruction>() {
-                                                    new StringInstruction("b")
-                                                }
-                                            )
-                                        )
-                                    )
-                                }
-                            )
-                        )
-                    }
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("x"),
-                new VariableInstruction(
-                    "Class1",
-                    new ParensInstruction(new List<Instruction>())
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("y"),
-                new VariableInstruction(
-                    "x",
-                    new SquareBracesInstruction(
-                        new List<Instruction>() {
-                            new StringInstruction("my_function")
-                        },
-                        new ParensInstruction(new List<Instruction>())
-                    )
-                )
-            )
-        };
-
-        Assertions.AssertInstructions(instructions, expected);
-    }
-
-    [Test]
-    public void Super()
-    {
-        string contents = LoadFile("super.btl");
-
-        Lexer lexer = new Lexer();
-        var tokens = lexer.Run(contents);
-
-        Parser parser = new Parser();
-        var instructions = parser.Run(tokens);
-
-        List<Instruction> expected = new List<Instruction>() {
-            new AssignmentInstruction(
-                new DeclarationInstruction("Class1"),
-                new ClassInstruction(
-                    null,
-                    new List<Instruction>() {
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("my_function"),
-                            new FunctionInstruction(
-                                new List<Instruction>(),
-                                new List<Instruction>() {
-                                    new ReturnInstruction(
-                                        new NumberInstruction(9)
-                                    )
-                                }
-                            )
-                        )
-                    }
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("Class2"),
-                new ClassInstruction(
-                    new VariableInstruction("Class1"),
-                    new List<Instruction>() {
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("my_function"),
-                            new FunctionInstruction(
-                                new List<Instruction>(),
-                                new List<Instruction>() {
-                                    new ReturnInstruction(
-                                        new NumberInstruction(4)
-                                    )
-                                }
-                            )
-                        ),
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("my_other_function"),
-                            new FunctionInstruction(
-                                new List<Instruction>(),
-                                new List<Instruction>() {
-                                    new ReturnInstruction(
-                                        new SuperInstruction(
-                                            new SquareBracesInstruction(
-                                                new List<Instruction>() {
-                                                    new StringInstruction("my_function")
-                                                },
-                                                new ParensInstruction(new List<Instruction>())
-                                            )
-                                        )
-                                    )
-                                }
-                            )
-                        )
-                    }
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("a"),
-                new VariableInstruction(
-                    "Class2",
-                    new ParensInstruction(new List<Instruction>())
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("b"),
-                new VariableInstruction(
-                    "a",
-                    new SquareBracesInstruction(
-                        new List<Instruction>() {
-                            new StringInstruction("my_other_function")
-                        },
-                        new ParensInstruction(new List<Instruction>())
-                    )
-                )
-            )
-        };
-
-        Assertions.AssertInstructions(instructions, expected);
-    }
-
-    [Test]
-    public void SuperSuper()
-    {
-        string contents = LoadFile("super_super.btl");
-
-        Lexer lexer = new Lexer();
-        var tokens = lexer.Run(contents);
-
-        Parser parser = new Parser();
-        var instructions = parser.Run(tokens);
-
-        List<Instruction> expected = new List<Instruction>() {
-            new AssignmentInstruction(
-                new DeclarationInstruction("Class1"),
-                new ClassInstruction(
-                    null,
-                    new List<Instruction>() {
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("my_function"),
-                            new FunctionInstruction(
-                                new List<Instruction>(),
-                                new List<Instruction>() {
-                                    new (
-                                        Consts.InstructionTypes.Return,
-                                        new NumberInstruction(9)
-                                    )
-                                }
-                            )
-                        ),
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("my_other_function"),
-                            new FunctionInstruction(
-                                new List<Instruction>(),
-                                new List<Instruction>() {
-                                    new ReturnInstruction(
-                                        new NumberInstruction(3)
-                                    )
-                                }
-                            )
-                        )
-                    }
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("Class2"),
-                new ClassInstruction(
-                    new VariableInstruction("Class1"),
-                    new List<Instruction>() {
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("my_function"),
-                            new FunctionInstruction(
-                                new List<Instruction>(),
-                                new List<Instruction>() {
-                                    new ReturnInstruction(
-                                        new NumberInstruction(4)
-                                    )
-                                }
-                            )
-                        ),
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("my_other_function"),
-                            new FunctionInstruction(
-                                new List<Instruction>(),
-                                new List<Instruction>() {
-                                    new ReturnInstruction(
-                                        new SuperInstruction(
-                                            new SquareBracesInstruction(
-                                                new List<Instruction>() {
-                                                    new StringInstruction("my_other_function")
-                                                },
-                                                new ParensInstruction(new List<Instruction>())
-                                            )
-                                        )
-                                    )
-                                }
-                            )
-                        )
-                    }
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("Class3"),
-                new ClassInstruction(
-                    new VariableInstruction("Class2"),
-                    new List<Instruction>() {
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("my_function"),
-                            new FunctionInstruction(
-                                new List<Instruction>(),
-                                new List<Instruction>() {
-                                    new ReturnInstruction(
-                                        new NumberInstruction(2)
-                                    )
-                                }
-                            )
-                        ),
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("my_other_function"),
-                            new FunctionInstruction(
-                                new List<Instruction>(),
-                                new List<Instruction>() {
-                                    new ReturnInstruction(
-                                        new SuperInstruction(
-                                            new SquareBracesInstruction(
-                                                new List<Instruction>() {
-                                                    new StringInstruction("my_other_function")
-                                                },
-                                                new ParensInstruction(new List<Instruction>())
-                                            )
-                                        )
-                                    )
-                                }
-                            )
-                        ),
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("my_other_other_function"),
-                            new FunctionInstruction(
-                                new List<Instruction>(),
-                                new List<Instruction>() {
-                                    new ReturnInstruction(
-                                        new SuperInstruction(
-                                            new SquareBracesInstruction(
-                                                new List<Instruction>() {
-                                                    new StringInstruction("super")
-                                                },
-                                                new SquareBracesInstruction(
-                                                    new List<Instruction>() {
-                                                        new StringInstruction("my_function")
-                                                    },
-                                                    new ParensInstruction(new List<Instruction>())
-                                                )
-                                            )
-                                        )
-                                    )
-                                }
-                            )
-                        )
-                    }
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("a"),
-                new VariableInstruction(
-                    "Class3",
-                    new ParensInstruction(new List<Instruction>())
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("b"),
-                new VariableInstruction(
-                    "a",
-                    new SquareBracesInstruction(
-                        new List<Instruction>() {
-                            new StringInstruction("my_other_function")
-                        },
-                        new ParensInstruction(new List<Instruction>())
-                    )
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("c"),
-                new VariableInstruction(
-                    "a",
-                    new SquareBracesInstruction(
-                        new List<Instruction>() {
-                            new StringInstruction("my_other_other_function")
-                        },
-                        new ParensInstruction(new List<Instruction>())
-                    )
-                )
-            )
-        };
-
-        Assertions.AssertInstructions(instructions, expected);
-    }
-
-    [Test]
-    public void SelfSuper()
-    {
-        string contents = LoadFile("self_super.btl");
-
-        Lexer lexer = new Lexer();
-        var tokens = lexer.Run(contents);
-
-        Parser parser = new Parser();
-        var instructions = parser.Run(tokens);
-
-        List<Instruction> expected = new List<Instruction>() {
-            new AssignmentInstruction(
-                new DeclarationInstruction("Class1"),
-                new ClassInstruction(
-                    null,
-                    new List<Instruction>() {
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("x"),
-                            new NumberInstruction(5)
-                        ),
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("my_function"),
-                            new FunctionInstruction(
-                                new List<Instruction>(),
-                                new List<Instruction>() {
-                                    new ReturnInstruction(
-                                        new SelfInstruction(
-                                            new SquareBracesInstruction(
-                                                new List<Instruction>() {
-                                                    new StringInstruction("x")
-                                                }
-                                            )
-                                        )
-                                    )
-                                }
-                            )
-                        )
-                    }
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("Class2"),
-                new ClassInstruction(
-                    new VariableInstruction("Class1"),
-                    new List<Instruction>() {
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("my_other_function"),
-                            new FunctionInstruction(
-                                new List<Instruction>(),
-                                new List<Instruction>() {
-                                    new ReturnInstruction(
-                                        new SuperInstruction (
-                                            new SquareBracesInstruction(
-                                                new List<Instruction>() {
-                                                    new StringInstruction("my_function")
-                                                },
-                                                new ParensInstruction(new List<Instruction>())
-                                            )
-                                        )
-                                    )
-                                }
-                            )
-                        )
-                    }
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("a"),
-                new VariableInstruction(
-                    "Class2",
-                    new ParensInstruction(new List<Instruction>())
-                )
-            ),
-            new AssignmentInstruction(
-                new VariableInstruction(
-                    "a",
-                    new SquareBracesInstruction(
-                        new List<Instruction>() {
-                            new StringInstruction("x")
-                        }
-                    )
-                ),
-                new NumberInstruction(10)
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("b"),
-                new VariableInstruction(
-                    "a",
-                    new SquareBracesInstruction(
-                        new List<Instruction>() {
-                            new StringInstruction("my_other_function")
-                        },
-                        new ParensInstruction(new List<Instruction>())
-                    )
-                )
-            )
-        };
-
-        Assertions.AssertInstructions(instructions, expected);
-    }
-
-    [Test]
-    public void Constructors()
-    {
-        string contents = LoadFile("constructors.btl");
-
-        Lexer lexer = new Lexer();
-        var tokens = lexer.Run(contents);
-
-        Parser parser = new Parser();
-        var instructions = parser.Run(tokens);
-
-        List<Instruction> expected = new List<Instruction>() {
-            new AssignmentInstruction(
-                new DeclarationInstruction("Class1"),
-                new ClassInstruction(
-                    null,
-                    new List<Instruction>() {
-                        new ConstructorInstruction(
-                            new List<Instruction>() {
-                                new VariableInstruction("value")
-                            },
-                            new List<Instruction>() {
-                                new AssignmentInstruction(
-                                    new VariableInstruction("b"),
-                                    new OperationInstruction(
-                                        "+",
-                                        new VariableInstruction("value"),
-                                        new NumberInstruction(3)
-                                    )
-                                )
-                            }
-                        ),
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("a"),
-                            new NumberInstruction(4)
-                        ),
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("b"),
-                            new NumberInstruction(7)
-                        ),
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("my_function"),
-                            new FunctionInstruction(
-                                new List<Instruction>(),
-                                new List<Instruction>() {
-                                    new ReturnInstruction(
-                                        new VariableInstruction("a")
-                                    )
-                                }
-                            )
-                        )
-                    }
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("Class2"),
-                new ClassInstruction(
-                    new VariableInstruction("Class1"),
-                    new List<Instruction>() {
-                        new ConstructorInstruction(
-                            new List<Instruction>() {
-                                new VariableInstruction("value")
-                            },
-                            new List<Instruction>() {
-                                new SuperInstruction(
-                                    new ParensInstruction(
-                                        new List<Instruction>() {
-                                            new VariableInstruction("value")
-                                        }
-                                    )
-                                ),
-                                new AssignmentInstruction(
-                                    new VariableInstruction("a"),
-                                    new VariableInstruction("value")
-                                )
-                            }
-                        ),
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("my_function"),
-                            new FunctionInstruction(
-                                new List<Instruction>(),
-                                new List<Instruction>() {
-                                    new ReturnInstruction(
-                                        new Instruction (Consts.InstructionTypes.Variable, "b")
-                                    )
-                                }
-                            )
-                        ),
-                        new AssignmentInstruction(
-                            new DeclarationInstruction("my_other_function"),
-                            new FunctionInstruction(
-                                new List<Instruction>(),
-                                new List<Instruction>() {
-                                    new ReturnInstruction(
-                                        new SuperInstruction (
-                                            new SquareBracesInstruction(
-                                                new List<Instruction>() {
-                                                    new StringInstruction("my_function")
-                                                },
-                                                new ParensInstruction(new List<Instruction>())
-                                            )
-                                        )
-                                    )
-                                }
-                            )
-                        )
-                    }
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("a"),
-                new VariableInstruction(
-                    "Class2",
-                    new ParensInstruction(
-                        new List<Instruction>() {
-                            new NumberInstruction(8)
-                        }
-                    )
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("b"),
-                new VariableInstruction(
-                    "a",
-                    new SquareBracesInstruction(
-                        new List<Instruction>() {
-                            new StringInstruction("a")
-                        }
-                    )
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("c"),
-                new VariableInstruction(
-                    "a",
-                    new SquareBracesInstruction(
-                        new List<Instruction>() {
-                            new StringInstruction("b")
-                        }
-                    )
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("d"),
-                new VariableInstruction(
-                    "a",
-                    new SquareBracesInstruction(
-                        new List<Instruction>() {
-                            new StringInstruction("my_function")
-                        },
-                        new ParensInstruction(new List<Instruction>())
-                    )
-                )
-            ),
-            new AssignmentInstruction(
-                new DeclarationInstruction("e"),
-                new VariableInstruction(
-                    "a",
-                    new SquareBracesInstruction(
-                        new List<Instruction>() {
-                            new StringInstruction("my_other_function")
-                        },
-                        new ParensInstruction(new List<Instruction>())
                     )
                 )
             )

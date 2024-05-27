@@ -17,11 +17,11 @@ public class Runner
     {
         string contents = ReadFile(path);
 
-        Lexer lexer = new Lexer();
-        var tokens = lexer.Run(contents);
+        Lexer lexer = new Lexer(contents);
+        var tokens = lexer.Run();
 
-        Parser parser = new Parser();
-        var instructions = parser.Run(tokens);
+        Parser parser = new Parser(tokens);
+        var instructions = parser.Run();
 
         var interpreter = new Interpreter();
         return interpreter.Run(instructions);
@@ -29,11 +29,11 @@ public class Runner
 
     public ScopeStack RunString(string contents)
     {
-        Lexer lexer = new Lexer();
-        var tokens = lexer.Run(contents);
+        Lexer lexer = new Lexer(contents);
+        var tokens = lexer.Run();
 
-        Parser parser = new Parser();
-        var instructions = parser.Run(tokens);
+        Parser parser = new Parser(tokens);
+        var instructions = parser.Run();
 
         var interpreter = new Interpreter();
         return interpreter.Run(instructions);

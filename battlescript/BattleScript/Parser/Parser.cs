@@ -1,25 +1,29 @@
-using System.Diagnostics;
 using BattleScript.Tokens;
 using BattleScript.Instructions;
 using BattleScript.Core;
-using Newtonsoft.Json;
 
 namespace BattleScript.ParserNS;
 
 public class Parser
 {
-    List<Token> tokensForCurrentInstruction = new List<Token>();
-    List<Instruction> instructions = new List<Instruction>();
-    List<List<Instruction>> scopes = new List<List<Instruction>>();
-    InstructionParser instructionParser = new InstructionParser();
+    List<Token> tokens;
+    List<Token> tokensForCurrentInstruction;
+    List<Instruction> instructions;
+    List<List<Instruction>> scopes;
 
-    public List<Instruction> Run(List<Token> tokens)
+    InstructionParser instructionParser;
+
+    public Parser(List<Token> _tokens)
     {
+        tokens = _tokens;
         tokensForCurrentInstruction = new List<Token>();
         instructions = new List<Instruction>();
         scopes = new List<List<Instruction>>() { instructions };
         instructionParser = new InstructionParser();
+    }
 
+    public List<Instruction> Run()
+    {
         for (int tokenIndex = 0; tokenIndex < tokens.Count; tokenIndex++)
         {
             Token token = tokens[tokenIndex];

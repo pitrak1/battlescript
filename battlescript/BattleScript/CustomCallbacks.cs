@@ -5,7 +5,7 @@ namespace BattleScript.Core;
 public class CustomCallbacks
 {
     /*
-     * This is where you need to add custom callbacks for your Unity project.  These functions will be called by using
+     * This is where you need to add custom callbacks for your Godot/Unity project.  These functions will be called by using
      * the Btl object (ex: Btl.print).
      */
 
