@@ -30,8 +30,8 @@ public class Parser
             if (token.Type == Consts.TokenTypes.Semicolon)
             {
                 Instruction parsedInstruction = instructionParser.Run(tokensForCurrentInstruction);
-                addToCurrentScope(parsedInstruction);
-                clearTokensForCurrentInstruction();
+                scopes[^1].Add(parsedInstruction);
+                tokensForCurrentInstruction = new List<Token>();
             }
             else if (isStartOfCodeBlock(tokens, tokenIndex))
             {
@@ -43,7 +43,7 @@ public class Parser
                 }
                 else
                 {
-                    addToCurrentScope(instruction);
+                    scopes[^1].Add(instruction);
                 }
 
                 // This is so that when we start parsing instructions in the block, they will
@@ -52,18 +52,18 @@ public class Parser
                 // property.
                 if (instruction.Type == Consts.InstructionTypes.Assignment)
                 {
-                    addToScopes(instruction.Right.Instructions);
+                    scopes.Add(instruction.Right.Instructions);
                 }
                 else
                 {
-                    addToScopes(instruction.Instructions);
+                    scopes.Add(instruction.Instructions);
                 }
-                clearTokensForCurrentInstruction();
+                tokensForCurrentInstruction = new List<Token>();
             }
             else if (isEndOfCodeBlock(tokens, tokenIndex))
             {
-                clearTokensForCurrentInstruction();
-                popScopes();
+                tokensForCurrentInstruction = new List<Token>();
+                scopes.RemoveAt(scopes.Count - 1);
             }
             else
             {
@@ -87,26 +87,6 @@ public class Parser
             mostRecentInstruction = mostRecentInstruction.Next;
         }
         mostRecentInstruction.Next = instruction;
-    }
-
-    private void clearTokensForCurrentInstruction()
-    {
-        tokensForCurrentInstruction = new List<Token>();
-    }
-
-    private void addToScopes(List<Instruction> value)
-    {
-        scopes.Add(value);
-    }
-
-    private void addToCurrentScope(Instruction value)
-    {
-        scopes[^1].Add(value);
-    }
-
-    private void popScopes()
-    {
-        scopes.RemoveAt(scopes.Count - 1);
     }
 
     private bool isStartOfCodeBlock(List<Token> tokens, int tokenIndex)

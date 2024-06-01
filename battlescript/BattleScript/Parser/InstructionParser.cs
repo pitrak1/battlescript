@@ -9,8 +9,10 @@ public class InstructionParser
 {
     public Instruction Run(List<Token> tokens)
     {
-        int assignmentOperatorIndex = ParserUtilities.GetAssignmentOperatorIndex(tokens);
-        int mathematicalOperatorIndex = ParserUtilities.GetMathematicalOperatorIndex(tokens);
+        int assignmentOperatorIndex =
+            InstructionParserUtilities.GetAssignmentOperatorIndex(tokens);
+        int mathematicalOperatorIndex =
+            InstructionParserUtilities.GetMathematicalOperatorIndex(tokens);
 
         if (assignmentOperatorIndex != -1)
         {
@@ -81,7 +83,16 @@ public class InstructionParser
         Instruction left = Run(GetTokensBeforeIndex(tokens, assignmentOperatorIndex));
         Instruction right = Run(GetTokensAfterIndex(tokens, assignmentOperatorIndex));
 
-        return new AssignmentInstruction(left, right, tokens[0].Line, tokens[0].Column);
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.Assignment,
+            null,
+            null,
+            null,
+            left,
+            right
+        );
     }
 
     private Instruction handleBoolean(List<Token> tokens)
@@ -91,7 +102,12 @@ public class InstructionParser
 
         bool value = tokens[0].Value == "true";
 
-        return new BooleanInstruction(value, tokens[0].Line, tokens[0].Column);
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.Boolean,
+            value
+        );
     }
 
     private Instruction handleBtl(List<Token> tokens)
@@ -102,7 +118,13 @@ public class InstructionParser
             next = Run(GetAllTokensButFirst(tokens));
         }
 
-        return new BtlInstruction(next, tokens[0].Line, tokens[0].Column);
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.Btl,
+            null,
+            next
+        );
     }
 
     private Instruction handleElse(List<Token> tokens)
@@ -119,14 +141,19 @@ public class InstructionParser
             instruction.Value = condition;
         }
 
-        return new ElseInstruction(condition, null, null, tokens[0].Line, tokens[0].Column);
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.Else,
+            condition
+        );
     }
 
     private Instruction handleFunction(List<Token> tokens)
     {
         List<Token> argTokens = GetAllTokensButFirst(tokens);
         List<List<Token>> tokenizedArgs =
-            ParserUtilities.ParseUntilMatchingSeparator(argTokens, new List<string>() { "," });
+            InstructionParserUtilities.ParseUntilMatchingSeparator(argTokens, new List<string>() { "," });
 
         List<Instruction> instructionArgs = new List<Instruction>();
         foreach (List<Token> arg in tokenizedArgs)
@@ -139,7 +166,12 @@ public class InstructionParser
             }
         }
 
-        return new FunctionInstruction(instructionArgs, null, tokens[0].Line, tokens[0].Column);
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.Function,
+            instructionArgs
+        );
     }
 
     private Instruction handleIdentifier(List<Token> tokens)
@@ -150,7 +182,13 @@ public class InstructionParser
             next = Run(GetAllTokensButFirst(tokens));
         }
 
-        return new VariableInstruction(tokens[0].Value, next, tokens[0].Line, tokens[0].Column);
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.Variable,
+            tokens[0].Value,
+            next
+        );
     }
 
     private Instruction handleIf(List<Token> tokens)
@@ -158,7 +196,12 @@ public class InstructionParser
         // exclude the if itself and the start and ending parens
         Instruction condition = Run(GetTokensAfterKeywordWithoutParens(tokens));
 
-        return new IfInstruction(condition, null, null, tokens[0].Line, tokens[0].Column);
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.If,
+            condition
+        );
     }
 
     private Instruction handleNumber(List<Token> tokens)
@@ -166,7 +209,12 @@ public class InstructionParser
         Debug.Assert(tokens.Count == 1);
         Debug.Assert(tokens[0].Type == Consts.TokenTypes.Number);
 
-        return new NumberInstruction(int.Parse(tokens[0].Value), tokens[0].Line, tokens[0].Column);
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.Number,
+            int.Parse(tokens[0].Value)
+        );
     }
 
     private Instruction handleOperation(List<Token> tokens, int mathematicalOperatorIndex)
@@ -174,12 +222,15 @@ public class InstructionParser
         Instruction left = Run(GetTokensBeforeIndex(tokens, mathematicalOperatorIndex));
         Instruction right = Run(GetTokensAfterIndex(tokens, mathematicalOperatorIndex));
 
-        return new OperationInstruction(
-            tokens[mathematicalOperatorIndex].Value,
-            left,
-            right,
+        return new Instruction(
             tokens[0].Line,
-            tokens[0].Column
+            tokens[0].Column,
+            Consts.InstructionTypes.Operation,
+            tokens[mathematicalOperatorIndex].Value,
+            null,
+            null,
+            left,
+            right
         );
     }
 
@@ -187,23 +238,34 @@ public class InstructionParser
     {
         Instruction returnValue = Run(GetAllTokensButFirst(tokens));
 
-        return new ReturnInstruction(returnValue, tokens[0].Line, tokens[0].Column);
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.Return,
+            returnValue
+        );
     }
 
     private Instruction handleSquareBraces(List<Token> tokens)
     {
-        List<List<Token>> entries = ParserUtilities.ParseUntilMatchingSeparator(tokens, new List<string>() { "," });
+        List<List<Token>> entries = InstructionParserUtilities.ParseUntilMatchingSeparator(tokens, new List<string>() { "," });
         List<Instruction> values = new List<Instruction>();
         foreach (List<Token> entry in entries)
         {
             values.Add(Run(entry));
         }
-        return new SquareBracesInstruction(values, null, tokens[0].Line, tokens[0].Column);
+
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.SquareBraces,
+            values
+        );
     }
 
     private Instruction handleCurlyBraces(List<Token> tokens)
     {
-        List<List<Token>> entries = ParserUtilities.ParseUntilMatchingSeparator(tokens, new List<string>() { ",", ":" });
+        List<List<Token>> entries = InstructionParserUtilities.ParseUntilMatchingSeparator(tokens, new List<string>() { ",", ":" });
         Debug.Assert(entries.Count % 2 == 0);
 
         List<Instruction> values = new List<Instruction>();
@@ -213,18 +275,24 @@ public class InstructionParser
         }
 
         Instruction next = null;
-        int entriesLength = ParserUtilities.GetTokenLengthOfEntries(entries);
+        int entriesLength = InstructionParserUtilities.GetTokenLengthOfEntries(entries);
         if (tokens.Count > entriesLength)
         {
             next = Run(tokens.GetRange(entriesLength, tokens.Count - entriesLength));
         }
 
-        return new DictionaryInstruction(values, next, tokens[0].Line, tokens[0].Column);
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.Dictionary,
+            values,
+            next
+        );
     }
 
     private Instruction handleParens(List<Token> tokens)
     {
-        List<List<Token>> entries = ParserUtilities.ParseUntilMatchingSeparator(tokens, new List<string>() { "," });
+        List<List<Token>> entries = InstructionParserUtilities.ParseUntilMatchingSeparator(tokens, new List<string>() { "," });
         List<Instruction> values = new List<Instruction>();
         foreach (List<Token> entry in entries)
         {
@@ -234,27 +302,44 @@ public class InstructionParser
             }
         }
 
-        Instruction next = null;
-        int entriesLength = ParserUtilities.GetTokenLengthOfEntries(entries);
+        Instruction? next = null;
+        int entriesLength = InstructionParserUtilities.GetTokenLengthOfEntries(entries);
         if (tokens.Count > entriesLength)
         {
             next = Run(tokens.GetRange(entriesLength, tokens.Count - entriesLength));
         }
 
-        return new ParensInstruction(values, next, tokens[0].Line, tokens[0].Column);
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.Parens,
+            values,
+            next
+        );
     }
 
     private Instruction handleMember(List<Token> tokens)
     {
-        Instruction property = new StringInstruction(tokens[1].Value, tokens[0].Line, tokens[0].Column);
+        Instruction property = new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.String,
+            tokens[1].Value
+        );
 
-        Instruction next = null;
+        Instruction? next = null;
         if (tokens.Count > 2)
         {
             next = Run(GetAllTokensButFirstTwo(tokens));
         }
 
-        return new SquareBracesInstruction(new List<Instruction>() { property }, next, tokens[0].Line, tokens[0].Column);
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.SquareBraces,
+            new List<Instruction>() { property },
+            next
+        );
     }
 
     private Instruction handleString(List<Token> tokens)
@@ -264,7 +349,12 @@ public class InstructionParser
 
         string trimmedValue = tokens[0].Value.Substring(1, tokens[0].Value.Length - 2);
 
-        return new StringInstruction(trimmedValue, tokens[0].Line, tokens[0].Column);
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.String,
+            trimmedValue
+        );
     }
 
     private Instruction handleVar(List<Token> tokens)
@@ -274,7 +364,12 @@ public class InstructionParser
         Debug.Assert(tokens[0].Value == "var");
         Debug.Assert(tokens[1].Type == Consts.TokenTypes.Identifier);
 
-        return new DeclarationInstruction(tokens[1].Value, tokens[0].Line, tokens[0].Column);
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.Declaration,
+            tokens[1].Value
+        );
     }
 
     private Instruction handleWhile(List<Token> tokens)
@@ -282,7 +377,12 @@ public class InstructionParser
         // exclude the while itself and the start and ending parens
         Instruction condition = Run(GetTokensAfterKeywordWithoutParens(tokens));
 
-        return new WhileInstruction(condition, null, tokens[0].Line, tokens[0].Column);
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.While,
+            condition
+        );
     }
 
     private List<Token> GetTokensBeforeIndex(List<Token> tokens, int index)
