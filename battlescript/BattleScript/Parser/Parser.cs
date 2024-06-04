@@ -1,8 +1,7 @@
 using BattleScript.Tokens;
 using BattleScript.Instructions;
-using BattleScript.Core;
 
-namespace BattleScript.ParserNS;
+namespace BattleScript.Core;
 
 public class Parser
 {
@@ -91,11 +90,13 @@ public class Parser
 
     private bool isStartOfCodeBlock(List<Token> tokens, int tokenIndex)
     {
-        return tokens[tokenIndex].Value == "{" && ParserUtilities.BlockContainsSemicolon(tokens, tokenIndex);
+        return tokens[tokenIndex].Value == "{" &&
+            Utilities.BlockContainsSemicolon(tokens, tokenIndex);
     }
 
     private bool isEndOfCodeBlock(List<Token> tokens, int tokenIndex)
     {
-        return tokens[tokenIndex].Value == "}" && ParserUtilities.BlockContainsSemicolonReverse(tokens, tokenIndex);
+        return tokens[tokenIndex].Value == "}" &&
+            Utilities.BlockContainsSemicolonReverse(tokens, tokenIndex);
     }
 }

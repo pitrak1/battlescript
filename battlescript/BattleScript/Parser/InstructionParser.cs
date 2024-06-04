@@ -1,18 +1,15 @@
 using System.Diagnostics;
 using BattleScript.Tokens;
 using BattleScript.Instructions;
-using BattleScript.Core;
 
-namespace BattleScript.ParserNS;
+namespace BattleScript.Core;
 
 public class InstructionParser
 {
     public Instruction Run(List<Token> tokens)
     {
-        int assignmentOperatorIndex =
-            InstructionParserUtilities.GetAssignmentOperatorIndex(tokens);
-        int mathematicalOperatorIndex =
-            InstructionParserUtilities.GetMathematicalOperatorIndex(tokens);
+        int assignmentOperatorIndex = Utilities.GetAssignmentOperatorIndex(tokens);
+        int mathematicalOperatorIndex = Utilities.GetMathematicalOperatorIndex(tokens);
 
         if (assignmentOperatorIndex != -1)
         {
@@ -80,8 +77,10 @@ public class InstructionParser
 
     private Instruction handleAssignment(List<Token> tokens, int assignmentOperatorIndex)
     {
-        Instruction left = Run(GetTokensBeforeIndex(tokens, assignmentOperatorIndex));
-        Instruction right = Run(GetTokensAfterIndex(tokens, assignmentOperatorIndex));
+        List<Token> tokensBeforeAssignment = tokens.GetRange(0, assignmentOperatorIndex);
+        List<Token> tokensAfterAssignment = tokens.GetRange(0, assignmentOperatorIndex);
+        Instruction left = Run(tokensBeforeAssignment);
+        Instruction right = Run(tokensAfterAssignment);
 
         return new Instruction(
             tokens[0].Line,
@@ -115,7 +114,8 @@ public class InstructionParser
         Instruction? next = null;
         if (tokens.Count > 1)
         {
-            next = Run(GetAllTokensButFirst(tokens));
+            List<Token> allTokensButFirst = tokens.GetRange(1, tokens.Count - 1);
+            next = Run(allTokensButFirst);
         }
 
         return new Instruction(
@@ -137,7 +137,8 @@ public class InstructionParser
         {
             Debug.Assert(tokens[1].Value == "if");
             // exclude the else if and the start and ending parens
-            condition = Run(GetTokensAfterTwoKeywordsWithoutParens(tokens));
+            List<Token> tokensAfterTwoKeywordsWithoutParens = tokens.GetRange(3, tokens.Count - 4);
+            condition = Run(tokensAfterTwoKeywordsWithoutParens);
             instruction.Value = condition;
         }
 
@@ -151,9 +152,9 @@ public class InstructionParser
 
     private Instruction handleFunction(List<Token> tokens)
     {
-        List<Token> argTokens = GetAllTokensButFirst(tokens);
+        List<Token> argTokens = tokens.GetRange(1, tokens.Count - 1);
         List<List<Token>> tokenizedArgs =
-            InstructionParserUtilities.ParseUntilMatchingSeparator(argTokens, new List<string>() { "," });
+            Utilities.ParseUntilMatchingSeparator(argTokens, new List<string>() { "," });
 
         List<Instruction> instructionArgs = new List<Instruction>();
         foreach (List<Token> arg in tokenizedArgs)
@@ -179,7 +180,7 @@ public class InstructionParser
         Instruction next = null;
         if (tokens.Count > 1)
         {
-            next = Run(GetAllTokensButFirst(tokens));
+            next = Run(tokens.GetRange(1, tokens.Count - 1));
         }
 
         return new Instruction(
@@ -194,7 +195,7 @@ public class InstructionParser
     private Instruction handleIf(List<Token> tokens)
     {
         // exclude the if itself and the start and ending parens
-        Instruction condition = Run(GetTokensAfterKeywordWithoutParens(tokens));
+        Instruction condition = Run(tokens.GetRange(2, tokens.Count - 3));
 
         return new Instruction(
             tokens[0].Line,
@@ -219,8 +220,13 @@ public class InstructionParser
 
     private Instruction handleOperation(List<Token> tokens, int mathematicalOperatorIndex)
     {
-        Instruction left = Run(GetTokensBeforeIndex(tokens, mathematicalOperatorIndex));
-        Instruction right = Run(GetTokensAfterIndex(tokens, mathematicalOperatorIndex));
+        List<Token> tokensBeforeOperator = tokens.GetRange(0, mathematicalOperatorIndex);
+        List<Token> tokensAfterOperator = tokens.GetRange(
+            mathematicalOperatorIndex + 1,
+            tokens.Count - mathematicalOperatorIndex - 1
+        );
+        Instruction left = Run(tokensBeforeOperator);
+        Instruction right = Run(tokensAfterOperator);
 
         return new Instruction(
             tokens[0].Line,
@@ -236,7 +242,7 @@ public class InstructionParser
 
     private Instruction handleReturn(List<Token> tokens)
     {
-        Instruction returnValue = Run(GetAllTokensButFirst(tokens));
+        Instruction returnValue = Run(tokens.GetRange(1, tokens.Count - 1));
 
         return new Instruction(
             tokens[0].Line,
@@ -248,7 +254,8 @@ public class InstructionParser
 
     private Instruction handleSquareBraces(List<Token> tokens)
     {
-        List<List<Token>> entries = InstructionParserUtilities.ParseUntilMatchingSeparator(tokens, new List<string>() { "," });
+        List<List<Token>> entries =
+            Utilities.ParseUntilMatchingSeparator(tokens, new List<string>() { "," });
         List<Instruction> values = new List<Instruction>();
         foreach (List<Token> entry in entries)
         {
@@ -265,7 +272,8 @@ public class InstructionParser
 
     private Instruction handleCurlyBraces(List<Token> tokens)
     {
-        List<List<Token>> entries = InstructionParserUtilities.ParseUntilMatchingSeparator(tokens, new List<string>() { ",", ":" });
+        List<List<Token>> entries =
+            Utilities.ParseUntilMatchingSeparator(tokens, new List<string>() { ",", ":" });
         Debug.Assert(entries.Count % 2 == 0);
 
         List<Instruction> values = new List<Instruction>();
@@ -275,7 +283,7 @@ public class InstructionParser
         }
 
         Instruction next = null;
-        int entriesLength = InstructionParserUtilities.GetTokenLengthOfEntries(entries);
+        int entriesLength = Utilities.GetTokenLengthOfEntries(entries);
         if (tokens.Count > entriesLength)
         {
             next = Run(tokens.GetRange(entriesLength, tokens.Count - entriesLength));
@@ -292,7 +300,8 @@ public class InstructionParser
 
     private Instruction handleParens(List<Token> tokens)
     {
-        List<List<Token>> entries = InstructionParserUtilities.ParseUntilMatchingSeparator(tokens, new List<string>() { "," });
+        List<List<Token>> entries =
+            Utilities.ParseUntilMatchingSeparator(tokens, new List<string>() { "," });
         List<Instruction> values = new List<Instruction>();
         foreach (List<Token> entry in entries)
         {
@@ -303,7 +312,7 @@ public class InstructionParser
         }
 
         Instruction? next = null;
-        int entriesLength = InstructionParserUtilities.GetTokenLengthOfEntries(entries);
+        int entriesLength = Utilities.GetTokenLengthOfEntries(entries);
         if (tokens.Count > entriesLength)
         {
             next = Run(tokens.GetRange(entriesLength, tokens.Count - entriesLength));
@@ -330,7 +339,7 @@ public class InstructionParser
         Instruction? next = null;
         if (tokens.Count > 2)
         {
-            next = Run(GetAllTokensButFirstTwo(tokens));
+            next = Run(tokens.GetRange(2, tokens.Count - 2));
         }
 
         return new Instruction(
@@ -375,7 +384,7 @@ public class InstructionParser
     private Instruction handleWhile(List<Token> tokens)
     {
         // exclude the while itself and the start and ending parens
-        Instruction condition = Run(GetTokensAfterKeywordWithoutParens(tokens));
+        Instruction condition = Run(tokens.GetRange(2, tokens.Count - 3));
 
         return new Instruction(
             tokens[0].Line,
@@ -383,35 +392,5 @@ public class InstructionParser
             Consts.InstructionTypes.While,
             condition
         );
-    }
-
-    private List<Token> GetTokensBeforeIndex(List<Token> tokens, int index)
-    {
-        return tokens.GetRange(0, index);
-    }
-
-    private List<Token> GetTokensAfterIndex(List<Token> tokens, int index)
-    {
-        return tokens.GetRange(index + 1, tokens.Count - index - 1);
-    }
-
-    private List<Token> GetAllTokensButFirst(List<Token> tokens)
-    {
-        return tokens.GetRange(1, tokens.Count - 1);
-    }
-
-    private List<Token> GetAllTokensButFirstTwo(List<Token> tokens)
-    {
-        return tokens.GetRange(2, tokens.Count - 2);
-    }
-
-    private List<Token> GetTokensAfterKeywordWithoutParens(List<Token> tokens)
-    {
-        return tokens.GetRange(2, tokens.Count - 3);
-    }
-
-    private List<Token> GetTokensAfterTwoKeywordsWithoutParens(List<Token> tokens)
-    {
-        return tokens.GetRange(3, tokens.Count - 4);
     }
 }
