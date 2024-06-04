@@ -1,7 +1,6 @@
 using BattleScript.Tokens;
-using BattleScript.Core;
 
-namespace BattleScript.LexerNS;
+namespace BattleScript.Core;
 
 public class Lexer
 {
@@ -25,7 +24,7 @@ public class Lexer
     {
         while (contentIndex < contents.Length)
         {
-            string nextCharacters = LexerUtilities.GetNextCharacters(contents, contentIndex);
+            string nextCharacters = getNextCharacters();
             char nextCharacter = nextCharacters[0];
 
             if (nextCharacter == '\n')
@@ -87,14 +86,14 @@ public class Lexer
     private void handleNumber()
     {
         // Get all following characters that are digits and periods
-        string result = LexerUtilities.GetCharactersUsingCollection(
+        string result = Utilities.GetCharactersUsingCollection(
             contents,
             contentIndex,
             Consts.NumberCharacters,
             CollectionType.Inclusive
         );
 
-        Token token = new NumberToken(result, lineNumber, lineIndex);
+        Token token = new Token(Consts.TokenTypes.Number, result, lineNumber, lineIndex);
         tokens.Add(token);
 
         contentIndex += token.Value.Length;
@@ -106,7 +105,7 @@ public class Lexer
         char startingQuote = contents[contentIndex];
 
         // Get all following characters until matching quote
-        string result = LexerUtilities.GetCharactersUsingCollection(
+        string result = Utilities.GetCharactersUsingCollection(
             contents,
             contentIndex + 1,
             new char[] { startingQuote },
@@ -115,7 +114,7 @@ public class Lexer
 
         string finalString = startingQuote + result + startingQuote;
 
-        Token token = new StringToken(finalString, lineNumber, lineIndex);
+        Token token = new Token(Consts.TokenTypes.String, finalString, lineNumber, lineIndex);
         tokens.Add(token);
         contentIndex += token.Value.Length;
         lineIndex += token.Value.Length;
@@ -123,7 +122,7 @@ public class Lexer
 
     private void handleSeparator(string nextCharacter)
     {
-        Token token = new SeparatorToken(nextCharacter, lineNumber, lineIndex);
+        Token token = new Token(Consts.TokenTypes.Separator, nextCharacter, lineNumber, lineIndex);
         tokens.Add(token);
         contentIndex++;
         lineIndex++;
@@ -132,7 +131,7 @@ public class Lexer
     private void handleWord()
     {
         // Get all following characters that are letters, numbers, or _
-        string result = LexerUtilities.GetCharactersUsingCollection(
+        string result = Utilities.GetCharactersUsingCollection(
             contents,
             contentIndex,
             Consts.WordCharacters,
@@ -157,7 +156,7 @@ public class Lexer
 
     private void handleOperator(string operatorString)
     {
-        Token token = new OperatorToken(operatorString, lineNumber, lineIndex);
+        Token token = new Token(Consts.TokenTypes.Operator, operatorString, lineNumber, lineIndex);
         tokens.Add(token);
         contentIndex += token.Value.Length;
         lineIndex += token.Value.Length;
@@ -165,7 +164,7 @@ public class Lexer
 
     private void handleAssignment()
     {
-        Token token = new AssignmentToken(lineNumber, lineIndex);
+        Token token = new Token(Consts.TokenTypes.Assignment, "=", lineNumber, lineIndex);
         tokens.Add(token);
         contentIndex++;
         lineIndex++;
@@ -173,7 +172,7 @@ public class Lexer
 
     private void handleSemicolon()
     {
-        Token token = new SemicolonToken(lineNumber, lineIndex);
+        Token token = new Token(Consts.TokenTypes.Semicolon, ";", lineNumber, lineIndex);
         tokens.Add(token);
         contentIndex++;
         lineIndex++;
@@ -182,7 +181,7 @@ public class Lexer
     private void handleComment()
     {
         // Get all following characters until newline
-        string charactersUntilNextLine = LexerUtilities.GetCharactersUsingCollection(
+        string charactersUntilNextLine = Utilities.GetCharactersUsingCollection(
             contents,
             contentIndex,
             new char[] { '\n' },
@@ -190,5 +189,17 @@ public class Lexer
         );
         contentIndex += charactersUntilNextLine.Length;
         lineIndex += charactersUntilNextLine.Length;
+    }
+
+    private string getNextCharacters()
+    {
+        try
+        {
+            return contents.Substring(contentIndex, 2);
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            return contents.Substring(contentIndex);
+        }
     }
 }

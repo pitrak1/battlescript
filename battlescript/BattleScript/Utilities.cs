@@ -1,6 +1,4 @@
-using BattleScript.Core;
-
-namespace BattleScript.LexerNS;
+namespace BattleScript.Core;
 
 public enum CollectionType
 {
@@ -8,7 +6,7 @@ public enum CollectionType
     Exclusive
 }
 
-public class LexerUtilities
+public class Utilities
 {
     public static string GetCharactersUsingCollection(
         string contents,
@@ -33,17 +31,5 @@ public class LexerUtilities
         }
 
         return resultString;
-    }
-
-    public static string GetNextCharacters(string contents, int contentIndex)
-    {
-        try
-        {
-            return contents.Substring(contentIndex, 2);
-        }
-        catch (ArgumentOutOfRangeException)
-        {
-            return contents.Substring(contentIndex);
-        }
     }
 }
