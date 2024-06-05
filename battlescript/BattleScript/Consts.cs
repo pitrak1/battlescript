@@ -22,7 +22,7 @@ public class Consts
         "var", "if", "else", "while", "function", "return", "import", "export", "Btl"
     };
     public static char[] Separators = new char[] { '(', ')', '{', '}', ',', '[', ']', ':', '.' };
-    public static string[] Operators = new string[] { "==", "<", ">", "+", "*" };
+    public static string[] Operators = new string[] { "*", "+", ">", "<", "==" };
     public static string[] Booleans = new string[] { "true", "false" };
 
     public static string[] OpeningSeparators = new string[] { "(", "{", "[" };

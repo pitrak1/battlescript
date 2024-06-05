@@ -266,11 +266,18 @@ public class InstructionParser
             values.Add(Run(entry));
         }
 
+        Instruction next = null;
+        if (tokens.Count > entries.Count)
+        {
+            next = Run(tokens.GetRange(entries.Count, tokens.Count - entries.Count));
+        }
+
         return new Instruction(
             tokens[0].Line,
             tokens[0].Column,
             Consts.InstructionTypes.SquareBraces,
-            values
+            values,
+            next
         );
     }
 
@@ -286,18 +293,18 @@ public class InstructionParser
             values.Add(Run(entry));
         }
 
-        // Instruction next = null;
-        // int entriesLength = Utilities.GetTokenLengthOfEntries(entries);
-        // if (tokens.Count > entriesLength)
-        // {
-        //     next = Run(tokens.GetRange(entriesLength, tokens.Count - entriesLength));
-        // }
+        Instruction next = null;
+        if (tokens.Count > entries.Count)
+        {
+            next = Run(tokens.GetRange(entries.Count, tokens.Count - entries.Count));
+        }
 
         return new Instruction(
             tokens[0].Line,
             tokens[0].Column,
             Consts.InstructionTypes.Dictionary,
-            values
+            values,
+            next
         );
     }
 
@@ -314,18 +321,18 @@ public class InstructionParser
             }
         }
 
-        // Instruction? next = null;
-        // int entriesLength = Utilities.GetTokenLengthOfEntries(entries);
-        // if (tokens.Count > entriesLength)
-        // {
-        //     next = Run(tokens.GetRange(entriesLength, tokens.Count - entriesLength));
-        // }
+        Instruction next = null;
+        if (tokens.Count > entries.Count)
+        {
+            next = Run(tokens.GetRange(entries.Count, tokens.Count - entries.Count));
+        }
 
         return new Instruction(
             tokens[0].Line,
             tokens[0].Column,
             Consts.InstructionTypes.Parens,
-            values
+            values,
+            next
         );
     }
 
@@ -338,17 +345,18 @@ public class InstructionParser
             tokens[1].Value
         );
 
-        // Instruction? next = null;
-        // if (tokens.Count > 2)
-        // {
-        //     next = Run(tokens.GetRange(2, tokens.Count - 2));
-        // }
+        Instruction? next = null;
+        if (tokens.Count > 2)
+        {
+            next = Run(tokens.GetRange(2, tokens.Count - 2));
+        }
 
         return new Instruction(
             tokens[0].Line,
             tokens[0].Column,
             Consts.InstructionTypes.SquareBraces,
-            new List<Instruction>() { property }
+            new List<Instruction>() { property },
+            next
         );
     }
 

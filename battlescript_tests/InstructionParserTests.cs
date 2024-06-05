@@ -704,5 +704,114 @@ public class InstructionParserTests
 
             Assert.That(instruction, Is.EqualTo(expectedInstruction));
         }
+
+        [TestFixture]
+        public class CompoundSeparators
+        {
+            [Test]
+            public void SeparatorAfterSquareBraces()
+            {
+                Lexer lexer = new Lexer("x[1](5)");
+                var tokens = lexer.Run();
+
+                InstructionParser instructionParser = new InstructionParser();
+                Instruction instruction = instructionParser.Run(tokens);
+
+                Instruction expectedInstruction = new Instruction(
+                    null,
+                    null,
+                    Consts.InstructionTypes.Variable,
+                    "x",
+                    new Instruction(
+                        null,
+                        null,
+                        Consts.InstructionTypes.SquareBraces,
+                        new List<Instruction>() {
+                            new Instruction(null, null, Consts.InstructionTypes.Number, 1)
+                        },
+                        new Instruction(
+                            null,
+                            null,
+                            Consts.InstructionTypes.Parens,
+                            new List<Instruction>() {
+                                new Instruction(null, null, Consts.InstructionTypes.Number, 5)
+                            }
+                        )
+                    )
+                );
+
+                Assert.That(instruction, Is.EqualTo(expectedInstruction));
+            }
+
+            [Test]
+            public void SeparatorAfterParens()
+            {
+                Lexer lexer = new Lexer("x(1).asdf");
+                var tokens = lexer.Run();
+
+                InstructionParser instructionParser = new InstructionParser();
+                Instruction instruction = instructionParser.Run(tokens);
+
+                Instruction expectedInstruction = new Instruction(
+                    null,
+                    null,
+                    Consts.InstructionTypes.Variable,
+                    "x",
+                    new Instruction(
+                        null,
+                        null,
+                        Consts.InstructionTypes.Parens,
+                        new List<Instruction>() {
+                            new Instruction(null, null, Consts.InstructionTypes.Number, 1)
+                        },
+                        new Instruction(
+                            null,
+                            null,
+                            Consts.InstructionTypes.SquareBraces,
+                            new List<Instruction>() {
+                                new Instruction(null, null, Consts.InstructionTypes.String, "asdf")
+                            }
+                        )
+                    )
+                );
+
+                Assert.That(instruction, Is.EqualTo(expectedInstruction));
+            }
+
+            [Test]
+            public void SeparatorAfterMember()
+            {
+                Lexer lexer = new Lexer("x.asdf[5]");
+                var tokens = lexer.Run();
+
+                InstructionParser instructionParser = new InstructionParser();
+                Instruction instruction = instructionParser.Run(tokens);
+
+                Instruction expectedInstruction = new Instruction(
+                    null,
+                    null,
+                    Consts.InstructionTypes.Variable,
+                    "x",
+                    new Instruction(
+                        null,
+                        null,
+                        Consts.InstructionTypes.SquareBraces,
+                        new List<Instruction>() {
+                            new Instruction(null, null, Consts.InstructionTypes.String, "asdf")
+                        },
+                        new Instruction(
+                            null,
+                            null,
+                            Consts.InstructionTypes.SquareBraces,
+                            new List<Instruction>() {
+                                new Instruction(null, null, Consts.InstructionTypes.Number, 5)
+                            }
+                        )
+                    )
+                );
+
+                Assert.That(instruction, Is.EqualTo(expectedInstruction));
+            }
+        }
     }
 }

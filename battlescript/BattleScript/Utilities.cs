@@ -51,8 +51,8 @@ public class Utilities
 
     public static int GetMathematicalOperatorIndex(List<Token> tokens)
     {
-        int lowestOperatorPriority = Consts.Operators.Length;
-        int lowestOperatorLocation = tokens.Count;
+        int lowestOperatorPriority = -1;
+        int lowestOperatorLocation = -1;
 
         List<string> separatorStack = new List<string>();
 
@@ -80,12 +80,14 @@ public class Utilities
             // Token is a mathematical operator not within matching separators
             else if (tokens[i].Type == Consts.TokenTypes.Operator && separatorStack.Count == 0)
             {
-                // Operators in the Consts file are listed in priority order
+                // Because we want to find lower priority operators, the Operators const is in
+                // mathematical priority descending order, making it priority order ascending
+                // with regard to this function
                 int currentOperatorPriority =
                     Array.FindIndex(Consts.Operators, element => element == tokens[i].Value);
                 if (
                     currentOperatorPriority != -1 &&
-                    currentOperatorPriority < lowestOperatorPriority
+                    currentOperatorPriority > lowestOperatorPriority
                 )
                 {
                     lowestOperatorPriority = currentOperatorPriority;
@@ -94,7 +96,7 @@ public class Utilities
             }
         }
 
-        return lowestOperatorPriority != Consts.Operators.Length ? lowestOperatorLocation : -1;
+        return lowestOperatorLocation;
     }
 
     public static (int Count, List<List<Token>> Result) ParseUntilMatchingSeparator(List<Token> tokens, List<string> separatingCharacters)
