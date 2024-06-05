@@ -155,11 +155,11 @@ public class InstructionParser
     private Instruction handleFunction(List<Token> tokens)
     {
         List<Token> argTokens = tokens.GetRange(1, tokens.Count - 1);
-        List<List<Token>> tokenizedArgs =
+        (int Count, List<List<Token>> Result) tokenizedArgs =
             Utilities.ParseUntilMatchingSeparator(argTokens, new List<string>() { "," });
 
         List<Instruction> instructionArgs = new List<Instruction>();
-        foreach (List<Token> arg in tokenizedArgs)
+        foreach (List<Token> arg in tokenizedArgs.Result)
         {
             if (arg.Count > 0)
             {
@@ -258,10 +258,10 @@ public class InstructionParser
 
     private Instruction handleSquareBraces(List<Token> tokens)
     {
-        List<List<Token>> entries =
+        (int Count, List<List<Token>> Result) entries =
             Utilities.ParseUntilMatchingSeparator(tokens, new List<string>() { "," });
         List<Instruction> values = new List<Instruction>();
-        foreach (List<Token> entry in entries)
+        foreach (List<Token> entry in entries.Result)
         {
             values.Add(Run(entry));
         }
@@ -276,12 +276,12 @@ public class InstructionParser
 
     private Instruction handleCurlyBraces(List<Token> tokens)
     {
-        List<List<Token>> entries =
+        (int Count, List<List<Token>> Result) entries =
             Utilities.ParseUntilMatchingSeparator(tokens, new List<string>() { ",", ":" });
-        Debug.Assert(entries.Count % 2 == 0);
+        Debug.Assert(entries.Result.Count % 2 == 0);
 
         List<Instruction> values = new List<Instruction>();
-        foreach (List<Token> entry in entries)
+        foreach (List<Token> entry in entries.Result)
         {
             values.Add(Run(entry));
         }
@@ -303,10 +303,10 @@ public class InstructionParser
 
     private Instruction handleParens(List<Token> tokens)
     {
-        List<List<Token>> entries =
+        (int Count, List<List<Token>> Result) entries =
             Utilities.ParseUntilMatchingSeparator(tokens, new List<string>() { "," });
         List<Instruction> values = new List<Instruction>();
-        foreach (List<Token> entry in entries)
+        foreach (List<Token> entry in entries.Result)
         {
             if (entry.Count > 0)
             {

@@ -56,23 +56,37 @@ public class Utilities
 
         List<string> separatorStack = new List<string>();
 
+        // Loop backwards so we evaluate from front to back
         for (int i = tokens.Count - 1; i >= 0; i--)
         {
-            var currentValue = tokens[i].Value;
-            string matchingSeparator;
-            Consts.MatchingSeparatorsMap.TryGetValue(currentValue, out matchingSeparator);
-            if (Consts.ClosingSeparators.Contains(currentValue))
+            string matchingSeparatorForCurrentToken =
+                Consts.MatchingSeparatorsMap.ContainsKey(tokens[i].Value) ?
+                Consts.MatchingSeparatorsMap[tokens[i].Value] :
+                "";
+
+            // Token is a new separator we need to add to the stack 
+            if (Consts.ClosingSeparators.Contains(tokens[i].Value))
             {
-                separatorStack.Add(currentValue);
+                separatorStack.Add(tokens[i].Value);
             }
-            else if (separatorStack.Count > 0 && separatorStack[^1] == matchingSeparator)
+            // Token is the matching separator for the separator on top of the stack
+            else if (
+                separatorStack.Count > 0 &&
+                separatorStack[^1] == matchingSeparatorForCurrentToken
+            )
             {
                 separatorStack.RemoveAt(separatorStack.Count - 1);
             }
+            // Token is a mathematical operator not within matching separators
             else if (tokens[i].Type == Consts.TokenTypes.Operator && separatorStack.Count == 0)
             {
-                int currentOperatorPriority = Array.FindIndex(Consts.Operators, element => element == currentValue);
-                if (currentOperatorPriority != -1 && currentOperatorPriority < lowestOperatorPriority)
+                // Operators in the Consts file are listed in priority order
+                int currentOperatorPriority =
+                    Array.FindIndex(Consts.Operators, element => element == tokens[i].Value);
+                if (
+                    currentOperatorPriority != -1 &&
+                    currentOperatorPriority < lowestOperatorPriority
+                )
                 {
                     lowestOperatorPriority = currentOperatorPriority;
                     lowestOperatorLocation = i;
@@ -80,31 +94,26 @@ public class Utilities
             }
         }
 
-        if (lowestOperatorPriority != Consts.Operators.Length)
-        {
-            return lowestOperatorLocation;
-        }
-        else
-        {
-            return -1;
-        }
+        return lowestOperatorPriority != Consts.Operators.Length ? lowestOperatorLocation : -1;
     }
 
-    public static List<List<Token>> ParseUntilMatchingSeparator(List<Token> tokens, List<string> separatingCharacters)
+    public static (int Count, List<List<Token>> Result) ParseUntilMatchingSeparator(List<Token> tokens, List<string> separatingCharacters)
     {
-        Debug.Assert(Consts.OpeningSeparators.Contains(tokens[0].Value));
-
         if (tokens.Count == 0)
         {
-            return new List<List<Token>>();
+            return (Count: 0, Result: new List<List<Token>>());
         }
+
+        Debug.Assert(Consts.OpeningSeparators.Contains(tokens[0].Value));
 
         List<string> separatorStack = new List<string>();
         List<List<Token>> entries = new List<List<Token>>();
         List<Token> currentTokenSet = new List<Token>();
+        int count = 0;
 
         foreach (Token token in tokens)
         {
+            count++;
             if (Consts.OpeningSeparators.Contains(token.Value))
             {
                 separatorStack.Add(token.Value);
@@ -145,22 +154,10 @@ public class Utilities
 
         if (entries.Count == 1 && entries[0].Count == 0)
         {
-            return new List<List<Token>>();
+            return (Count: 0, Result: new List<List<Token>>());
         }
 
-        return entries;
-    }
-
-    public static int GetTokenLengthOfEntries(List<List<Token>> entries)
-    {
-        int total = 0;
-        foreach (List<Token> entry in entries)
-        {
-            total += entry.Count;
-        }
-        // Add breaking characters and starting and ending seaprators
-        total += entries.Count + 1;
-        return total;
+        return (Count: count, Result: entries);
     }
 
     public static bool BlockContainsSemicolon(List<Token> tokens, int tokenIndex)
