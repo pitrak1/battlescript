@@ -1,4 +1,4 @@
-// NOT TESTED IN INTERPRETER YET
+// NOT CURRENTLY USED
 
 const x = 5;
 var y = 3;

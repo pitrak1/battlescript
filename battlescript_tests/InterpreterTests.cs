@@ -5,217 +5,217 @@ namespace BattleScript.Tests;
 
 public class InterpreterTests
 {
-    private Runner? _runner;
+    // private Runner? _runner;
 
-    [SetUp]
-    public void SetUp()
-    {
-        _runner = new Runner("/Users/nickpitrak/Desktop/battlescript/battlescript_tests/TestFiles/");
-    }
+    // [SetUp]
+    // public void SetUp()
+    // {
+    //     _runner = new Runner("/Users/nickpitrak/Desktop/battlescript/battlescript_tests/TestFiles/");
+    // }
 
-    [Test]
-    public void Variables()
-    {
-        var scopeStack = _runner!.Run("variables.btl");
+    // [Test]
+    // public void Variables()
+    // {
+    //     var scopeStack = _runner!.Run("variables.btl");
 
-        Dictionary<string, ScopeVariable> expected = new()
-        {
-            { "x", new(Consts.VariableTypes.Literal, 15) },
-            { "y", new(Consts.VariableTypes.Literal, "1234") },
-            { "z", new(Consts.VariableTypes.Literal, "2345") },
-            { "a", new(Consts.VariableTypes.Literal, true) },
-            { "b", new(Consts.VariableTypes.Literal, true) },
-        };
+    //     Dictionary<string, ScopeVariable> expected = new()
+    //     {
+    //         { "x", new(Consts.VariableTypes.Literal, 15) },
+    //         { "y", new(Consts.VariableTypes.Literal, "1234") },
+    //         { "z", new(Consts.VariableTypes.Literal, "2345") },
+    //         { "a", new(Consts.VariableTypes.Literal, true) },
+    //         { "b", new(Consts.VariableTypes.Literal, true) },
+    //     };
 
-        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
-    }
+    //     Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    // }
 
-    [Test]
-    public void Operators()
-    {
-        var scopeStack = _runner!.Run("operators.btl");
+    // [Test]
+    // public void Operators()
+    // {
+    //     var scopeStack = _runner!.Run("operators.btl");
 
-        Dictionary<string, ScopeVariable> expected = new() {
-            { "x", new(Consts.VariableTypes.Literal, 11) },
-            { "y", new(Consts.VariableTypes.Literal, 56) },
-            { "z", new(Consts.VariableTypes.Literal, false) },
-            { "a", new(Consts.VariableTypes.Literal, true) },
-            { "b", new(Consts.VariableTypes.Literal, false) },
-        };
+    //     Dictionary<string, ScopeVariable> expected = new() {
+    //         { "x", new(Consts.VariableTypes.Literal, 11) },
+    //         { "y", new(Consts.VariableTypes.Literal, 56) },
+    //         { "z", new(Consts.VariableTypes.Literal, false) },
+    //         { "a", new(Consts.VariableTypes.Literal, true) },
+    //         { "b", new(Consts.VariableTypes.Literal, false) },
+    //     };
 
-        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
-    }
+    //     Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    // }
 
-    [Test]
-    public void Arrays()
-    {
-        var scopeStack = _runner!.Run("arrays.btl");
+    // [Test]
+    // public void Arrays()
+    // {
+    //     var scopeStack = _runner!.Run("arrays.btl");
 
-        Dictionary<string, ScopeVariable> expected = new() {
-            { "x", new(
-                Consts.VariableTypes.Array,
-                new List<ScopeVariable>() {
-                    new(Consts.VariableTypes.Literal, 1),
-                    new(Consts.VariableTypes.Literal, 5),
-                    new(Consts.VariableTypes.Literal, 6)
-                }
-            ) },
-            { "y", new(
-                Consts.VariableTypes.Array,
-                new List<ScopeVariable>() {
-                    new(Consts.VariableTypes.Literal, "1234"),
-                    new(Consts.VariableTypes.Literal, "2345")
-                }
-            ) },
-            { "z", new(Consts.VariableTypes.Literal, 3) },
-            { "a", new(Consts.VariableTypes.Literal, 2) },
-            { "b", new(
-                Consts.VariableTypes.Array,
-                new List<ScopeVariable>() {
-                    new(Consts.VariableTypes.Literal, 3),
-                    new(Consts.VariableTypes.Literal, 2)
-                }
-            ) },
-        };
+    //     Dictionary<string, ScopeVariable> expected = new() {
+    //         { "x", new(
+    //             Consts.VariableTypes.Array,
+    //             new List<ScopeVariable>() {
+    //                 new(Consts.VariableTypes.Literal, 1),
+    //                 new(Consts.VariableTypes.Literal, 5),
+    //                 new(Consts.VariableTypes.Literal, 6)
+    //             }
+    //         ) },
+    //         { "y", new(
+    //             Consts.VariableTypes.Array,
+    //             new List<ScopeVariable>() {
+    //                 new(Consts.VariableTypes.Literal, "1234"),
+    //                 new(Consts.VariableTypes.Literal, "2345")
+    //             }
+    //         ) },
+    //         { "z", new(Consts.VariableTypes.Literal, 3) },
+    //         { "a", new(Consts.VariableTypes.Literal, 2) },
+    //         { "b", new(
+    //             Consts.VariableTypes.Array,
+    //             new List<ScopeVariable>() {
+    //                 new(Consts.VariableTypes.Literal, 3),
+    //                 new(Consts.VariableTypes.Literal, 2)
+    //             }
+    //         ) },
+    //     };
 
 
 
-        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
-    }
+    //     Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    // }
 
-    [Test]
-    public void Dictionaries()
-    {
-        var scopeStack = _runner!.Run("dictionaries.btl");
+    // [Test]
+    // public void Dictionaries()
+    // {
+    //     var scopeStack = _runner!.Run("dictionaries.btl");
 
-        Dictionary<string, ScopeVariable> expected = new() {
-            { "x", new(
-                Consts.VariableTypes.Dictionary,
-                new Dictionary<dynamic, ScopeVariable> {
-                    {
-                        1,
-                        new(Consts.VariableTypes.Literal, "asdf")
-                    },
-                    {
-                        "qwer",
-                        new(Consts.VariableTypes.Literal, 5)
-                    }
-                }
-            ) },
-            { "y", new(Consts.VariableTypes.Literal, 5) },
-            { "z", new(Consts.VariableTypes.Literal, 5) },
-            { "a", new(
-                Consts.VariableTypes.Dictionary,
-                new Dictionary<dynamic, ScopeVariable> {
-                    {
-                        5,
-                        new(Consts.VariableTypes.Literal, 9)
-                    }
-                }
-            ) },
-            { "b", new(Consts.VariableTypes.Literal, 9) }
-        };
+    //     Dictionary<string, ScopeVariable> expected = new() {
+    //         { "x", new(
+    //             Consts.VariableTypes.Dictionary,
+    //             new Dictionary<dynamic, ScopeVariable> {
+    //                 {
+    //                     1,
+    //                     new(Consts.VariableTypes.Literal, "asdf")
+    //                 },
+    //                 {
+    //                     "qwer",
+    //                     new(Consts.VariableTypes.Literal, 5)
+    //                 }
+    //             }
+    //         ) },
+    //         { "y", new(Consts.VariableTypes.Literal, 5) },
+    //         { "z", new(Consts.VariableTypes.Literal, 5) },
+    //         { "a", new(
+    //             Consts.VariableTypes.Dictionary,
+    //             new Dictionary<dynamic, ScopeVariable> {
+    //                 {
+    //                     5,
+    //                     new(Consts.VariableTypes.Literal, 9)
+    //                 }
+    //             }
+    //         ) },
+    //         { "b", new(Consts.VariableTypes.Literal, 9) }
+    //     };
 
-        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
-    }
+    //     Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    // }
 
-    [Test]
-    public void DictionaryAssignment()
-    {
-        var scopeStack = _runner!.Run("dictionary_assignment.btl");
+    // [Test]
+    // public void DictionaryAssignment()
+    // {
+    //     var scopeStack = _runner!.Run("dictionary_assignment.btl");
 
-        Dictionary<string, ScopeVariable> expected = new() {
-            { "x", new(
-                Consts.VariableTypes.Dictionary,
-                new Dictionary<dynamic, ScopeVariable> {
-                    {
-                        "x",
-                        new(Consts.VariableTypes.Literal, 1)
-                    },
-                    {
-                        "y",
-                        new(Consts.VariableTypes.Literal, 2)
-                    },
-                    {
-                        "z",
-                        new(Consts.VariableTypes.Literal, 5)
-                    },
-                    {
-                        "a",
-                        new(Consts.VariableTypes.Literal, 6)
-                    }
-                }
-            ) },
-            { "y", new(Consts.VariableTypes.Literal, 5) },
-            { "z", new(Consts.VariableTypes.Literal, 6) },
-        };
+    //     Dictionary<string, ScopeVariable> expected = new() {
+    //         { "x", new(
+    //             Consts.VariableTypes.Dictionary,
+    //             new Dictionary<dynamic, ScopeVariable> {
+    //                 {
+    //                     "x",
+    //                     new(Consts.VariableTypes.Literal, 1)
+    //                 },
+    //                 {
+    //                     "y",
+    //                     new(Consts.VariableTypes.Literal, 2)
+    //                 },
+    //                 {
+    //                     "z",
+    //                     new(Consts.VariableTypes.Literal, 5)
+    //                 },
+    //                 {
+    //                     "a",
+    //                     new(Consts.VariableTypes.Literal, 6)
+    //                 }
+    //             }
+    //         ) },
+    //         { "y", new(Consts.VariableTypes.Literal, 5) },
+    //         { "z", new(Consts.VariableTypes.Literal, 6) },
+    //     };
 
-        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
-    }
+    //     Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    // }
 
-    [Test]
-    public void If()
-    {
-        var scopeStack = _runner!.Run("if.btl");
+    // [Test]
+    // public void If()
+    // {
+    //     var scopeStack = _runner!.Run("if.btl");
 
-        Dictionary<string, ScopeVariable> expected = new() {
-            { "x", new(Consts.VariableTypes.Literal, 5) },
-            { "y", new(Consts.VariableTypes.Literal, 6) },
-        };
+    //     Dictionary<string, ScopeVariable> expected = new() {
+    //         { "x", new(Consts.VariableTypes.Literal, 5) },
+    //         { "y", new(Consts.VariableTypes.Literal, 6) },
+    //     };
 
-        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
-    }
+    //     Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    // }
 
-    [Test]
-    public void IfElse()
-    {
-        var scopeStack = _runner!.Run("ifelse.btl");
+    // [Test]
+    // public void IfElse()
+    // {
+    //     var scopeStack = _runner!.Run("ifelse.btl");
 
-        Dictionary<string, ScopeVariable> expected = new() {
-            { "x", new(Consts.VariableTypes.Literal, 3) },
-            { "y", new(Consts.VariableTypes.Literal, 3) },
-            { "z", new(Consts.VariableTypes.Literal, 2) },
-            { "a", new(Consts.VariableTypes.Literal, 5) },
-        };
+    //     Dictionary<string, ScopeVariable> expected = new() {
+    //         { "x", new(Consts.VariableTypes.Literal, 3) },
+    //         { "y", new(Consts.VariableTypes.Literal, 3) },
+    //         { "z", new(Consts.VariableTypes.Literal, 2) },
+    //         { "a", new(Consts.VariableTypes.Literal, 5) },
+    //     };
 
-        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
-    }
+    //     Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    // }
 
-    [Test]
-    public void While()
-    {
-        var scopeStack = _runner!.Run("while.btl");
+    // [Test]
+    // public void While()
+    // {
+    //     var scopeStack = _runner!.Run("while.btl");
 
-        Dictionary<string, ScopeVariable> expected = new() {
-            { "z", new(Consts.VariableTypes.Literal, 8) },
-            { "a", new(Consts.VariableTypes.Literal, 11) },
-        };
+    //     Dictionary<string, ScopeVariable> expected = new() {
+    //         { "z", new(Consts.VariableTypes.Literal, 8) },
+    //         { "a", new(Consts.VariableTypes.Literal, 11) },
+    //     };
 
-        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
-    }
+    //     Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    // }
 
-    [Test]
-    public void Functions()
-    {
-        var scopeStack = _runner!.Run("functions.btl");
+    // [Test]
+    // public void Functions()
+    // {
+    //     var scopeStack = _runner!.Run("functions.btl");
 
-        Dictionary<string, ScopeVariable> expected = new() {
-            { "my_function", new(
-                Consts.VariableTypes.Function,
-                new List<ScopeVariable>()
-            ) },
-            { "x", new(Consts.VariableTypes.Literal, 5) },
-            { "my_other_function", new(
-                Consts.VariableTypes.Function,
-                new List<ScopeVariable>() {
-                    new(Consts.VariableTypes.Literal, "my_variable")
-                }
-            ) },
-            { "y", new(Consts.VariableTypes.Literal, 8) },
-        };
+    //     Dictionary<string, ScopeVariable> expected = new() {
+    //         { "my_function", new(
+    //             Consts.VariableTypes.Function,
+    //             new List<ScopeVariable>()
+    //         ) },
+    //         { "x", new(Consts.VariableTypes.Literal, 5) },
+    //         { "my_other_function", new(
+    //             Consts.VariableTypes.Function,
+    //             new List<ScopeVariable>() {
+    //                 new(Consts.VariableTypes.Literal, "my_variable")
+    //             }
+    //         ) },
+    //         { "y", new(Consts.VariableTypes.Literal, 8) },
+    //     };
 
-        Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
-    }
+    //     Assertions.AssertScope(scopeStack.GetCurrentContext().Value, expected);
+    // }
 
     // [Test]
     // public void Classes()

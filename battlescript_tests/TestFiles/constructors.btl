@@ -1,3 +1,5 @@
+// NOT CURRENTLY USED
+
 var Class1 = class {
 	constructor(value) {
 		b = value + 3;

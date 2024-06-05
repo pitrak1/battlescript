@@ -1,5 +1,4 @@
-using BattleScript.LexerNS;
-using BattleScript.ParserNS;
+using BattleScript.Core;
 using BattleScript.InterpreterNS;
 
 namespace BattleScript.Core;

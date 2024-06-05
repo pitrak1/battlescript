@@ -36,7 +36,7 @@ public class InstructionParser
             switch (tokens[0].Value)
             {
                 case "var":
-                    return handleVar(tokens);
+                    return handleDeclaration(tokens);
                 case "if":
                     return handleIf(tokens);
                 case "else":
@@ -50,7 +50,7 @@ public class InstructionParser
                 case "Btl":
                     return handleBtl(tokens);
                 default:
-                    return new Instruction();
+                    throw new SystemException("Invalid keyword found");
             }
         }
         else if (mathematicalOperatorIndex != -1)
@@ -77,10 +77,13 @@ public class InstructionParser
 
     private Instruction handleAssignment(List<Token> tokens, int assignmentOperatorIndex)
     {
-        List<Token> tokensBeforeAssignment = tokens.GetRange(0, assignmentOperatorIndex);
-        List<Token> tokensAfterAssignment = tokens.GetRange(0, assignmentOperatorIndex);
-        Instruction left = Run(tokensBeforeAssignment);
-        Instruction right = Run(tokensAfterAssignment);
+        Instruction left = Run(tokens.GetRange(0, assignmentOperatorIndex));
+        Instruction right = Run(
+            tokens.GetRange(
+                assignmentOperatorIndex + 1,
+                tokens.Count - assignmentOperatorIndex - 1
+            )
+        );
 
         return new Instruction(
             tokens[0].Line,
@@ -137,8 +140,7 @@ public class InstructionParser
         {
             Debug.Assert(tokens[1].Value == "if");
             // exclude the else if and the start and ending parens
-            List<Token> tokensAfterTwoKeywordsWithoutParens = tokens.GetRange(3, tokens.Count - 4);
-            condition = Run(tokensAfterTwoKeywordsWithoutParens);
+            condition = Run(tokens.GetRange(3, tokens.Count - 4));
             instruction.Value = condition;
         }
 
@@ -214,19 +216,17 @@ public class InstructionParser
             tokens[0].Line,
             tokens[0].Column,
             Consts.InstructionTypes.Number,
-            int.Parse(tokens[0].Value)
+            Convert.ToDouble(tokens[0].Value)
         );
     }
 
     private Instruction handleOperation(List<Token> tokens, int mathematicalOperatorIndex)
     {
-        List<Token> tokensBeforeOperator = tokens.GetRange(0, mathematicalOperatorIndex);
-        List<Token> tokensAfterOperator = tokens.GetRange(
+        Instruction left = Run(tokens.GetRange(0, mathematicalOperatorIndex));
+        Instruction right = Run(tokens.GetRange(
             mathematicalOperatorIndex + 1,
             tokens.Count - mathematicalOperatorIndex - 1
-        );
-        Instruction left = Run(tokensBeforeOperator);
-        Instruction right = Run(tokensAfterOperator);
+        ));
 
         return new Instruction(
             tokens[0].Line,
@@ -242,7 +242,11 @@ public class InstructionParser
 
     private Instruction handleReturn(List<Token> tokens)
     {
-        Instruction returnValue = Run(tokens.GetRange(1, tokens.Count - 1));
+        Instruction? returnValue = null;
+        if (tokens.Count > 1)
+        {
+            returnValue = Run(tokens.GetRange(1, tokens.Count - 1));
+        }
 
         return new Instruction(
             tokens[0].Line,
@@ -282,19 +286,18 @@ public class InstructionParser
             values.Add(Run(entry));
         }
 
-        Instruction next = null;
-        int entriesLength = Utilities.GetTokenLengthOfEntries(entries);
-        if (tokens.Count > entriesLength)
-        {
-            next = Run(tokens.GetRange(entriesLength, tokens.Count - entriesLength));
-        }
+        // Instruction next = null;
+        // int entriesLength = Utilities.GetTokenLengthOfEntries(entries);
+        // if (tokens.Count > entriesLength)
+        // {
+        //     next = Run(tokens.GetRange(entriesLength, tokens.Count - entriesLength));
+        // }
 
         return new Instruction(
             tokens[0].Line,
             tokens[0].Column,
             Consts.InstructionTypes.Dictionary,
-            values,
-            next
+            values
         );
     }
 
@@ -311,19 +314,18 @@ public class InstructionParser
             }
         }
 
-        Instruction? next = null;
-        int entriesLength = Utilities.GetTokenLengthOfEntries(entries);
-        if (tokens.Count > entriesLength)
-        {
-            next = Run(tokens.GetRange(entriesLength, tokens.Count - entriesLength));
-        }
+        // Instruction? next = null;
+        // int entriesLength = Utilities.GetTokenLengthOfEntries(entries);
+        // if (tokens.Count > entriesLength)
+        // {
+        //     next = Run(tokens.GetRange(entriesLength, tokens.Count - entriesLength));
+        // }
 
         return new Instruction(
             tokens[0].Line,
             tokens[0].Column,
             Consts.InstructionTypes.Parens,
-            values,
-            next
+            values
         );
     }
 
@@ -336,18 +338,17 @@ public class InstructionParser
             tokens[1].Value
         );
 
-        Instruction? next = null;
-        if (tokens.Count > 2)
-        {
-            next = Run(tokens.GetRange(2, tokens.Count - 2));
-        }
+        // Instruction? next = null;
+        // if (tokens.Count > 2)
+        // {
+        //     next = Run(tokens.GetRange(2, tokens.Count - 2));
+        // }
 
         return new Instruction(
             tokens[0].Line,
             tokens[0].Column,
             Consts.InstructionTypes.SquareBraces,
-            new List<Instruction>() { property },
-            next
+            new List<Instruction>() { property }
         );
     }
 
@@ -366,7 +367,7 @@ public class InstructionParser
         );
     }
 
-    private Instruction handleVar(List<Token> tokens)
+    private Instruction handleDeclaration(List<Token> tokens)
     {
         Debug.Assert(tokens.Count == 2);
         Debug.Assert(tokens[0].Type == Consts.TokenTypes.Keyword);

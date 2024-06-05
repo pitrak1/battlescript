@@ -5,7 +5,7 @@ namespace BattleScript.Tests;
 
 public class E2ETests
 {
-    private Runner? _runner;
+    // private Runner? _runner;
 
     // [SetUp]
     // public void SetUp()

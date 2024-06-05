@@ -1,7 +1,8 @@
-using BattleScript.LexerNS;
+using BattleScript.Core;
 using BattleScript.Tokens;
+using BattleScript.Tests;
 
-namespace BattleScript.Tests;
+namespace BattleScript.LexerTests;
 
 public class LexerTests
 {
@@ -11,7 +12,7 @@ public class LexerTests
         Lexer lexer = new Lexer("123456");
         var tokens = lexer.Run();
         var expectedTokens = new List<Token>() {
-            new NumberToken("123456")
+            new Token(Consts.TokenTypes.Number, "123456")
         };
         Assertions.AssertTokens(tokens, expectedTokens);
     }
@@ -22,7 +23,7 @@ public class LexerTests
         Lexer lexer = new Lexer("123.456");
         var tokens = lexer.Run();
         var expectedTokens = new List<Token>() {
-            new NumberToken("123.456")
+            new Token(Consts.TokenTypes.Number, "123.456")
         };
         Assertions.AssertTokens(tokens, expectedTokens);
     }
@@ -33,7 +34,7 @@ public class LexerTests
         Lexer lexer = new Lexer("'testString'");
         var tokens = lexer.Run();
         var expectedTokens = new List<Token>() {
-            new StringToken("'testString'")
+            new Token(Consts.TokenTypes.String, "'testString'")
         };
         Assertions.AssertTokens(tokens, expectedTokens);
     }
@@ -44,7 +45,7 @@ public class LexerTests
         Lexer lexer = new Lexer("\"testString\"");
         var tokens = lexer.Run();
         var expectedTokens = new List<Token>() {
-            new StringToken("\"testString\"")
+            new Token(Consts.TokenTypes.String, "\"testString\"")
         };
         Assertions.AssertTokens(tokens, expectedTokens);
     }
@@ -55,7 +56,7 @@ public class LexerTests
         Lexer lexer = new Lexer("\"'testString'\"");
         var tokens = lexer.Run();
         var expectedTokens = new List<Token>() {
-            new StringToken("\"'testString'\"")
+            new Token(Consts.TokenTypes.String, "\"'testString'\"")
         };
         Assertions.AssertTokens(tokens, expectedTokens);
     }
@@ -66,7 +67,7 @@ public class LexerTests
         Lexer lexer = new Lexer("(");
         var tokens = lexer.Run();
         var expectedTokens = new List<Token>() {
-            new SeparatorToken("(")
+            new Token(Consts.TokenTypes.Separator, "(")
         };
         Assertions.AssertTokens(tokens, expectedTokens);
     }
@@ -77,7 +78,7 @@ public class LexerTests
         Lexer lexer = new Lexer("function");
         var tokens = lexer.Run();
         var expectedTokens = new List<Token>() {
-            new KeywordToken("function")
+            new Token(Consts.TokenTypes.Keyword, "function")
         };
         Assertions.AssertTokens(tokens, expectedTokens);
     }
@@ -88,7 +89,7 @@ public class LexerTests
         Lexer lexer = new Lexer("true");
         var tokens = lexer.Run();
         var expectedTokens = new List<Token>() {
-            new BooleanToken("true")
+            new Token(Consts.TokenTypes.Boolean, "true")
         };
         Assertions.AssertTokens(tokens, expectedTokens);
     }
@@ -99,7 +100,7 @@ public class LexerTests
         Lexer lexer = new Lexer("my_identifier1");
         var tokens = lexer.Run();
         var expectedTokens = new List<Token>() {
-            new IdentifierToken("my_identifier1")
+            new Token(Consts.TokenTypes.Identifier, "my_identifier1")
         };
         Assertions.AssertTokens(tokens, expectedTokens);
     }
@@ -110,7 +111,7 @@ public class LexerTests
         Lexer lexer = new Lexer("+");
         var tokens = lexer.Run();
         var expectedTokens = new List<Token>() {
-            new OperatorToken("+")
+            new Token(Consts.TokenTypes.Operator, "+")
         };
         Assertions.AssertTokens(tokens, expectedTokens);
     }
@@ -121,7 +122,7 @@ public class LexerTests
         Lexer lexer = new Lexer("==");
         var tokens = lexer.Run();
         var expectedTokens = new List<Token>() {
-            new OperatorToken("==")
+            new Token(Consts.TokenTypes.Operator, "==")
         };
         Assertions.AssertTokens(tokens, expectedTokens);
     }
@@ -132,7 +133,7 @@ public class LexerTests
         Lexer lexer = new Lexer("=");
         var tokens = lexer.Run();
         var expectedTokens = new List<Token>() {
-            new AssignmentToken()
+            new Token(Consts.TokenTypes.Assignment, "=")
         };
         Assertions.AssertTokens(tokens, expectedTokens);
     }

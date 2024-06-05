@@ -63,9 +63,19 @@ public class Instruction
             return false;
         }
 
-        if (Value != instruction.Value)
+        if (Value is IEnumerable<Instruction>)
         {
-            return false;
+            if (!Enumerable.SequenceEqual(Value, instruction.Value))
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if (Value != instruction.Value)
+            {
+                return false;
+            }
         }
 
         if (Next != instruction.Next)

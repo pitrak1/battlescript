@@ -143,6 +143,11 @@ public class Utilities
             }
         }
 
+        if (entries.Count == 1 && entries[0].Count == 0)
+        {
+            return new List<List<Token>>();
+        }
+
         return entries;
     }
 

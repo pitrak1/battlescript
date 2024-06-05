@@ -1,3 +1,5 @@
+// NOT CURRENTLY USED
+
 var Class1 = class {
 	var b = 8;
 
