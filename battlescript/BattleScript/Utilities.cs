@@ -9,6 +9,12 @@ public enum CollectionType
     Exclusive
 }
 
+public enum SearchDirection
+{
+    Forward,
+    Reverse
+}
+
 public class Utilities
 {
     public static string GetCharactersUsingCollection(
@@ -162,37 +168,77 @@ public class Utilities
         return (Count: count, Result: entries);
     }
 
-    public static bool BlockContainsSemicolon(List<Token> tokens, int tokenIndex)
+    public static bool AtStartOfCodeBlock(List<Token> tokens, int tokenIndex)
     {
+        if (tokens[tokenIndex].Value != "{")
+        {
+            return false;
+        }
+
+        int nestCount = 0;
+
         while (tokenIndex < tokens.Count)
         {
+            tokenIndex++;
             switch (tokens[tokenIndex].Value)
             {
+                case "{":
+                    if (AtStartOfCodeBlock(tokens, tokenIndex))
+                    {
+                        return true;
+                    }
+                    nestCount++;
+                    break;
                 case "}":
-                    return false;
+                    if (nestCount > 0)
+                    {
+                        nestCount--;
+                        break;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 case ";":
                     return true;
-                default:
-                    tokenIndex++;
-                    break;
             }
         }
         return false;
     }
 
-    public static bool BlockContainsSemicolonReverse(List<Token> tokens, int tokenIndex)
+    public static bool AtEndOfCodeBlock(List<Token> tokens, int tokenIndex)
     {
+        if (tokens[tokenIndex].Value != "}")
+        {
+            return false;
+        }
+
+        int nestCount = 0;
+
         while (tokenIndex >= 0)
         {
+            tokenIndex--;
             switch (tokens[tokenIndex].Value)
             {
+                case "}":
+                    if (AtEndOfCodeBlock(tokens, tokenIndex))
+                    {
+                        return true;
+                    }
+                    nestCount++;
+                    break;
                 case "{":
-                    return false;
+                    if (nestCount > 0)
+                    {
+                        nestCount--;
+                        break;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 case ";":
                     return true;
-                default:
-                    tokenIndex--;
-                    break;
             }
         }
         return false;

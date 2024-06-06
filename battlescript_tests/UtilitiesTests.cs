@@ -209,4 +209,144 @@ public class UtilitiesTests
             Assert.That(parsed.Result[1][2].Value, Is.EqualTo("]"));
         }
     }
+
+    [TestFixture]
+    public class AtStartOfCodeBlock
+    {
+        [Test]
+        public void ReturnsFalseIfFirstTokenIsNotOpenBracket()
+        {
+            Lexer lexer = new Lexer("x{y}z");
+            var tokens = lexer.Run();
+
+            bool result = Utilities.AtStartOfCodeBlock(tokens, 0);
+
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void ReturnsFalseIfThereIsNoSemicolon()
+        {
+            Lexer lexer = new Lexer("x{y}z");
+            var tokens = lexer.Run();
+
+            bool result = Utilities.AtStartOfCodeBlock(tokens, 1);
+
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void IgnoresSemicolonsOutsideBlock()
+        {
+            Lexer lexer = new Lexer("x{y}z;");
+            var tokens = lexer.Run();
+
+            bool result = Utilities.AtStartOfCodeBlock(tokens, 1);
+
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void ReturnsTrueIfThereIsASemicolon()
+        {
+            Lexer lexer = new Lexer("x{y;}z");
+            var tokens = lexer.Run();
+
+            bool result = Utilities.AtStartOfCodeBlock(tokens, 1);
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void DetectsSemicolonsOutsideInnerBraces()
+        {
+            Lexer lexer = new Lexer("x{{a}y;}z");
+            var tokens = lexer.Run();
+
+            bool result = Utilities.AtStartOfCodeBlock(tokens, 1);
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void DetectsSemicolonsInsideInnerBraces()
+        {
+            Lexer lexer = new Lexer("x{{a;}y}z");
+            var tokens = lexer.Run();
+
+            bool result = Utilities.AtStartOfCodeBlock(tokens, 1);
+
+            Assert.That(result, Is.True);
+        }
+    }
+
+    [TestFixture]
+    public class AtEndOfCodeBlock
+    {
+        [Test]
+        public void ReturnsFalseIfFirstTokenIsNotOpenBracket()
+        {
+            Lexer lexer = new Lexer("x{y}z");
+            var tokens = lexer.Run();
+
+            bool result = Utilities.AtEndOfCodeBlock(tokens, 4);
+
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void ReturnsFalseIfThereIsNoSemicolon()
+        {
+            Lexer lexer = new Lexer("x{y}z");
+            var tokens = lexer.Run();
+
+            bool result = Utilities.AtEndOfCodeBlock(tokens, 3);
+
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void IgnoresSemicolonsOutsideBlock()
+        {
+            Lexer lexer = new Lexer("x;{y}z");
+            var tokens = lexer.Run();
+
+            bool result = Utilities.AtEndOfCodeBlock(tokens, 4);
+
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void ReturnsTrueIfThereIsASemicolon()
+        {
+            Lexer lexer = new Lexer("x{y;}z");
+            var tokens = lexer.Run();
+
+            bool result = Utilities.AtEndOfCodeBlock(tokens, 4);
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void DetectsSemicolonsOutsideInnerBraces()
+        {
+            Lexer lexer = new Lexer("x{y;{a}}z");
+            var tokens = lexer.Run();
+
+            bool result = Utilities.AtEndOfCodeBlock(tokens, 7);
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void DetectsSemicolonsInsideInnerBraces()
+        {
+            Lexer lexer = new Lexer("x{y{a;}}z");
+            var tokens = lexer.Run();
+
+            bool result = Utilities.AtEndOfCodeBlock(tokens, 7);
+
+            Assert.That(result, Is.True);
+        }
+    }
 }

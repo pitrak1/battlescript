@@ -7,8 +7,8 @@ public class Parser
 {
     List<Token> tokens;
     List<Token> tokensForCurrentInstruction;
-    List<Instruction> instructions;
-    List<List<Instruction>> scopes;
+    List<Instruction> instructions; // This is the base set of instructions we'll be returning
+    List<List<Instruction>> scopes; // This is the stack of scopes to know where to add instructions
 
     InstructionParser instructionParser;
 
@@ -17,6 +17,8 @@ public class Parser
         tokens = _tokens;
         tokensForCurrentInstruction = new List<Token>();
         instructions = new List<Instruction>();
+        // The scope stack starts with a reference to the base instruction object because that's
+        // where we want to start adding instructions
         scopes = new List<List<Instruction>>() { instructions };
         instructionParser = new InstructionParser();
     }
@@ -28,41 +30,15 @@ public class Parser
             Token token = tokens[tokenIndex];
             if (token.Type == Consts.TokenTypes.Semicolon)
             {
-                Instruction parsedInstruction = instructionParser.Run(tokensForCurrentInstruction);
-                scopes[^1].Add(parsedInstruction);
-                tokensForCurrentInstruction = new List<Token>();
+                handleEndOfSemicolonInstruction(tokens, tokenIndex);
             }
-            else if (isStartOfCodeBlock(tokens, tokenIndex))
+            else if (Utilities.AtStartOfCodeBlock(tokens, tokenIndex))
             {
-                Instruction instruction = instructionParser.Run(tokensForCurrentInstruction);
-
-                if (instruction.Type == Consts.InstructionTypes.Else)
-                {
-                    attachToEndOfNextChainOfMostRecentInstruction(instruction);
-                }
-                else
-                {
-                    scopes[^1].Add(instruction);
-                }
-
-                // This is so that when we start parsing instructions in the block, they will
-                // be added to the appropriate scope. In most cases, it's just the list of
-                // Instructions, but for assignment, we specifically want it to be the Right
-                // property.
-                if (instruction.Type == Consts.InstructionTypes.Assignment)
-                {
-                    scopes.Add(instruction.Right.Instructions);
-                }
-                else
-                {
-                    scopes.Add(instruction.Instructions);
-                }
-                tokensForCurrentInstruction = new List<Token>();
+                handleStartOfCodeBlock(tokens, tokenIndex);
             }
-            else if (isEndOfCodeBlock(tokens, tokenIndex))
+            else if (Utilities.AtEndOfCodeBlock(tokens, tokenIndex))
             {
-                tokensForCurrentInstruction = new List<Token>();
-                scopes.RemoveAt(scopes.Count - 1);
+                handleEndOfCodeBlock(tokens, tokenIndex);
             }
             else
             {
@@ -71,6 +47,50 @@ public class Parser
         }
 
         return instructions;
+    }
+
+    private void handleEndOfSemicolonInstruction(List<Token> tokens, int tokenIndex)
+    {
+        // Add instruction to the most recent scope and clear the tokens for the current instruction
+        Instruction parsedInstruction = instructionParser.Run(tokensForCurrentInstruction);
+        scopes[^1].Add(parsedInstruction);
+        tokensForCurrentInstruction = new List<Token>();
+    }
+
+    private void handleStartOfCodeBlock(List<Token> tokens, int tokenIndex)
+    {
+        // Parse the instruction using the code block (function, if, while, etc.)
+        Instruction instruction = instructionParser.Run(tokensForCurrentInstruction);
+
+        if (instruction.Type == Consts.InstructionTypes.Else)
+        {
+            attachToEndOfNextChainOfMostRecentInstruction(instruction);
+        }
+        else
+        {
+            scopes[^1].Add(instruction);
+        }
+
+        // This is so that when we start parsing instructions in the block, they will
+        // be added to the appropriate scope. In most cases, it's just the list of
+        // Instructions, but for assignment, we specifically want it to be the Right
+        // property. The most common case for this is function definitions.
+        if (instruction.Type == Consts.InstructionTypes.Assignment)
+        {
+            scopes.Add(instruction.Right.Instructions);
+        }
+        else
+        {
+            scopes.Add(instruction.Instructions);
+        }
+        tokensForCurrentInstruction = new List<Token>();
+    }
+
+    private void handleEndOfCodeBlock(List<Token> tokens, int tokenIndex)
+    {
+        // Clear tokens for current instruction and pop most renet scope
+        tokensForCurrentInstruction = new List<Token>();
+        scopes.RemoveAt(scopes.Count - 1);
     }
 
     // It's kind of unfortunate that this has to be done this way, but the problem is that an
@@ -86,17 +106,5 @@ public class Parser
             mostRecentInstruction = mostRecentInstruction.Next;
         }
         mostRecentInstruction.Next = instruction;
-    }
-
-    private bool isStartOfCodeBlock(List<Token> tokens, int tokenIndex)
-    {
-        return tokens[tokenIndex].Value == "{" &&
-            Utilities.BlockContainsSemicolon(tokens, tokenIndex);
-    }
-
-    private bool isEndOfCodeBlock(List<Token> tokens, int tokenIndex)
-    {
-        return tokens[tokenIndex].Value == "}" &&
-            Utilities.BlockContainsSemicolonReverse(tokens, tokenIndex);
     }
 }
