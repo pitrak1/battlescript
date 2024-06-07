@@ -30,15 +30,15 @@ public class Parser
             Token token = tokens[tokenIndex];
             if (token.Type == Consts.TokenTypes.Semicolon)
             {
-                handleEndOfSemicolonInstruction(tokens, tokenIndex);
+                handleEndOfSemicolonInstruction();
             }
             else if (Utilities.AtStartOfCodeBlock(tokens, tokenIndex))
             {
-                handleStartOfCodeBlock(tokens, tokenIndex);
+                handleStartOfCodeBlock();
             }
             else if (Utilities.AtEndOfCodeBlock(tokens, tokenIndex))
             {
-                handleEndOfCodeBlock(tokens, tokenIndex);
+                handleEndOfCodeBlock();
             }
             else
             {
@@ -49,7 +49,7 @@ public class Parser
         return instructions;
     }
 
-    private void handleEndOfSemicolonInstruction(List<Token> tokens, int tokenIndex)
+    private void handleEndOfSemicolonInstruction()
     {
         // Add instruction to the most recent scope and clear the tokens for the current instruction
         Instruction parsedInstruction = instructionParser.Run(tokensForCurrentInstruction);
@@ -57,7 +57,7 @@ public class Parser
         tokensForCurrentInstruction = new List<Token>();
     }
 
-    private void handleStartOfCodeBlock(List<Token> tokens, int tokenIndex)
+    private void handleStartOfCodeBlock()
     {
         // Parse the instruction using the code block (function, if, while, etc.)
         Instruction instruction = instructionParser.Run(tokensForCurrentInstruction);
@@ -86,7 +86,7 @@ public class Parser
         tokensForCurrentInstruction = new List<Token>();
     }
 
-    private void handleEndOfCodeBlock(List<Token> tokens, int tokenIndex)
+    private void handleEndOfCodeBlock()
     {
         // Clear tokens for current instruction and pop most renet scope
         tokensForCurrentInstruction = new List<Token>();
