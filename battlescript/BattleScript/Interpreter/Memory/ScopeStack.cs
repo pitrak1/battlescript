@@ -2,7 +2,7 @@ using System.Diagnostics;
 using BattleScript.Core;
 using BattleScript.Exceptions;
 
-namespace BattleScript.InterpreterNS;
+namespace BattleScript.Core;
 
 public class ScopeStack : ContextStack
 {

@@ -243,4 +243,28 @@ public class Utilities
         }
         return false;
     }
+
+    public static bool variableIsTruthy(ScopeVariable var)
+    {
+        if (var.Value is null)
+        {
+            return false;
+        }
+        else if ((var.Value is int) && (var.Value == 0))
+        {
+            return false;
+        }
+        else if ((var.Value is string) && (var.Value == ""))
+        {
+            return false;
+        }
+        else if (var.Value is bool)
+        {
+            return var.Value;
+        }
+        else
+        {
+            return true;
+        }
+    }
 }

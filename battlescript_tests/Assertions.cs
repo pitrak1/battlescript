@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using BattleScript.Core;
 using BattleScript.Tokens;
 using BattleScript.Instructions;
-using BattleScript.InterpreterNS;
 
 namespace BattleScript.Tests;
 

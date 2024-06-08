@@ -4,7 +4,7 @@ using BattleScript.Exceptions;
 using BattleScript.Instructions;
 using BattleScript.Core;
 
-namespace BattleScript.InterpreterNS;
+namespace BattleScript.Core;
 
 public class ScopeVariable
 {
