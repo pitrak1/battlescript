@@ -5,7 +5,6 @@ using NUnit.Framework;
 using BattleScript.Core;
 using BattleScript.Tokens;
 using BattleScript.Instructions;
-using BattleScript.InterpreterNS;
 using System.Diagnostics;
 
 namespace BattleScript.ParserTests;

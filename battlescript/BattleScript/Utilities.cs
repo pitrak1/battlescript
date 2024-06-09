@@ -244,7 +244,7 @@ public class Utilities
         return false;
     }
 
-    public static bool variableIsTruthy(ScopeVariable var)
+    public static bool variableIsTruthy(Variable var)
     {
         if (var.Value is null)
         {

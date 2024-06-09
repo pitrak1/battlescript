@@ -4,36 +4,21 @@ using BattleScript.Exceptions;
 
 namespace BattleScript.Core;
 
-public class ScopeStack : ContextStack
+public class ScopeStack : Stack<Dictionary<string, Variable>>
 {
     public ScopeStack()
     {
-        contexts.Add(new ScopeVariable(Consts.VariableTypes.Scope, new Dictionary<string, ScopeVariable>()));
+        Push(new Dictionary<string, Variable>());
     }
 
-    public void AddNewScope()
+    public Variable GetVariable(string key)
     {
-        contexts.Add(new ScopeVariable(null, new Dictionary<string, ScopeVariable>()));
-    }
-
-    public void AddExistingScope(ScopeVariable context)
-    {
-        Debug.Assert(context.Value is Dictionary<string, ScopeVariable>, "Adding a new scope requires it to be a Dictionary<string, ScopeVariable>");
-        contexts.Add(new ScopeVariable(null, context.Value));
-    }
-
-    public ScopeVariable AddVariableToCurrentScope(List<string> path, ScopeVariable? var = null)
-    {
-        return GetCurrentContext().AddVariable(path, var);
-    }
-
-    public ScopeVariable GetVariable(string key)
-    {
-        for (int i = contexts.Count - 1; i >= 0; i--)
+        var scopes = ToArray();
+        for (int i = scopes.Length - 1; i >= 0; i--)
         {
-            if (contexts[i].HasVariable(key))
+            if (scopes[i].ContainsKey(key))
             {
-                return contexts[i].GetVariable(key);
+                return scopes[i][key];
             }
         }
         throw new VariableNotFoundException(key);

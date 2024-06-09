@@ -1,6 +1,3 @@
-using BattleScript.Core;
-using BattleScript.InterpreterNS;
-
 namespace BattleScript.Core;
 
 public class Runner
@@ -12,7 +9,7 @@ public class Runner
         _basePath = basePath;
     }
 
-    public ScopeStack Run(string path)
+    public Dictionary<string, Variable> Run(string path)
     {
         string contents = ReadFile(path);
 
@@ -22,11 +19,11 @@ public class Runner
         Parser parser = new Parser(tokens);
         var instructions = parser.Run();
 
-        var interpreter = new Interpreter();
-        return interpreter.Run(instructions);
+        var interpreter = new Interpreter(instructions);
+        return interpreter.Run();
     }
 
-    public ScopeStack RunString(string contents)
+    public Dictionary<string, Variable> RunString(string contents)
     {
         Lexer lexer = new Lexer(contents);
         var tokens = lexer.Run();
@@ -34,8 +31,8 @@ public class Runner
         Parser parser = new Parser(tokens);
         var instructions = parser.Run();
 
-        var interpreter = new Interpreter();
-        return interpreter.Run(instructions);
+        var interpreter = new Interpreter(instructions);
+        return interpreter.Run();
     }
 
     private string ReadFile(string path)

@@ -22,46 +22,48 @@ public partial class Interpreter
      * This is altered when:
      * - Instructions are executed that contain multiple parts using separators (parens, dots, indexes, curly braces)
      */
-    ContextStack ongoingContexts;
+    Stack<Variable> ongoingContexts;
 
     CustomCallbacks callbacks;
 
-    ScopeVariable btlContext;
+    Variable btlContext;
 
     List<Instruction> instructions;
 
     public Interpreter(List<Instruction> _instructions)
     {
         instructions = _instructions;
-        ongoingContexts = new ContextStack();
+        ongoingContexts = new Stack<Variable>();
         lexicalContexts = new ScopeStack();
         callbacks = new CustomCallbacks();
-        btlContext = new ScopeVariable(
+        btlContext = new Variable(
             Consts.VariableTypes.Dictionary,
-            new Dictionary<dynamic, ScopeVariable>()
+            new Dictionary<dynamic, Variable>()
         );
     }
 
-    public ScopeStack Run(List<Instruction> instructions)
+    public Dictionary<string, Variable> Run()
     {
         foreach (Instruction instruction in instructions)
         {
             interpretInstruction(instruction);
         }
 
-        return lexicalContexts;
+        return lexicalContexts.Peek();
     }
 
-    private ScopeVariable interpretInstruction(Instruction instruction)
+    private Variable interpretInstruction(Instruction instruction)
     {
         switch (instruction.Type)
         {
             case Consts.InstructionTypes.Assignment:
                 return handleAssignment(instruction);
             case Consts.InstructionTypes.Number:
+                return new Variable(Consts.VariableTypes.Number, instruction.Value);
             case Consts.InstructionTypes.String:
+                return new Variable(Consts.VariableTypes.String, instruction.Value);
             case Consts.InstructionTypes.Boolean:
-                return handleLiteral(instruction);
+                return new Variable(Consts.VariableTypes.Boolean, instruction.Value);
             case Consts.InstructionTypes.Declaration:
                 return handleDeclaration(instruction);
             case Consts.InstructionTypes.Variable:
@@ -88,45 +90,39 @@ public partial class Interpreter
                 return handleBtl(instruction);
         }
 
-        return new ScopeVariable(Consts.VariableTypes.Literal);
+        return new Variable();
     }
 
-    private ScopeVariable handleAssignment(Instruction instruction)
+    private Variable handleAssignment(Instruction instruction)
     {
-        ScopeVariable left = interpretInstruction(instruction.Left!);
-        ScopeVariable right = interpretInstruction(instruction.Right!);
+        Variable left = interpretInstruction(instruction.Left!);
+        Variable right = interpretInstruction(instruction.Right!);
         return left.CopyProperties(right);
     }
 
-    private ScopeVariable handleLiteral(Instruction instruction)
-    {
-        return new ScopeVariable(Consts.VariableTypes.Literal, instruction.Value);
-    }
-
-    private ScopeVariable handleDeclaration(Instruction instruction)
+    private Variable handleDeclaration(Instruction instruction)
     {
         Debug.Assert(instruction.Value is string, "Variables must be declared as strings");
-        List<string> path = new List<string>() { instruction.Value };
-        return lexicalContexts.AddVariableToCurrentScope(path);
+        return lexicalContexts.Peek().Add(instruction.Value, new Variable());
     }
 
-    private ScopeVariable handleVariable(Instruction instruction)
+    private Variable handleVariable(Instruction instruction)
     {
-        ScopeVariable var = lexicalContexts.GetVariable(instruction.Value);
+        Variable var = lexicalContexts.GetVariable(instruction.Value);
         if (instruction.Next is not null)
         {
-            ongoingContexts.Add(var);
-            ScopeVariable result = interpretInstruction(instruction.Next);
+            ongoingContexts.Push(var);
+            Variable result = interpretInstruction(instruction.Next);
             ongoingContexts.Pop();
             return result;
         }
         return var;
     }
 
-    private ScopeVariable handleOperation(Instruction instruction)
+    private Variable handleOperation(Instruction instruction)
     {
-        ScopeVariable left = interpretInstruction(instruction.Left!);
-        ScopeVariable right = interpretInstruction(instruction.Right!);
+        Variable left = interpretInstruction(instruction.Left!);
+        Variable right = interpretInstruction(instruction.Right!);
 
         dynamic? result;
         switch (instruction.Value)
@@ -150,53 +146,54 @@ public partial class Interpreter
                 throw new SystemException("Invalid operator");
         }
 
-        return new ScopeVariable(Consts.VariableTypes.Literal, result);
+        return new Variable(left.Type, result);
     }
 
-    private ScopeVariable handleSquareBraces(Instruction instruction)
+    private Variable handleSquareBraces(Instruction instruction)
     {
-        if (ongoingContexts.IsEmpty())
+        if (ongoingContexts.Count == 0)
         {
-            List<ScopeVariable> initializationEntries = new List<ScopeVariable>();
+            List<Variable> initializationEntries = new List<Variable>();
 
             foreach (Instruction inst in instruction.Value)
             {
-                ScopeVariable result = interpretInstruction(inst);
+                Variable result = interpretInstruction(inst);
                 initializationEntries.Add(result);
             }
 
-            return new ScopeVariable(Consts.VariableTypes.Array, initializationEntries);
+            return new Variable(Consts.VariableTypes.Array, initializationEntries);
         }
         else
         {
-            ScopeVariable index = interpretInstruction(instruction.Value![0]);
+            Variable index = interpretInstruction(instruction.Value![0]);
 
-            Debug.Assert(!ongoingContexts.IsEmpty(), "Expected to have a non-null indexed value");
-            ScopeVariable indexed = ongoingContexts.GetCurrentContext();
+            Debug.Assert(ongoingContexts.Count != 0, "Expected to have a non-null indexed value");
+            Variable indexed = ongoingContexts.Peek();
 
-            ScopeVariable result = indexed.GetIndex(index.Value);
+            // Variable result = indexed.GetIndex(index.Value);
+            Variable result = new Variable();
 
             return result;
         }
     }
 
-    private ScopeVariable handleDictionary(Instruction instruction)
+    private Variable handleDictionary(Instruction instruction)
     {
-        Dictionary<dynamic, ScopeVariable> entries = new Dictionary<dynamic, ScopeVariable>();
+        Dictionary<dynamic, Variable> entries = new Dictionary<dynamic, Variable>();
 
         for (int i = 0; i < instruction.Value.Count; i = i + 2)
         {
-            ScopeVariable key = interpretInstruction(instruction.Value[i]);
-            ScopeVariable value = interpretInstruction(instruction.Value[i + 1]);
+            Variable key = interpretInstruction(instruction.Value[i]);
+            Variable value = interpretInstruction(instruction.Value[i + 1]);
             entries.Add(key.Value, value);
         }
 
-        return new ScopeVariable(Consts.VariableTypes.Dictionary, entries);
+        return new Variable(Consts.VariableTypes.Dictionary, entries);
     }
 
-    private ScopeVariable handleIf(Instruction instruction)
+    private Variable handleIf(Instruction instruction)
     {
-        ScopeVariable condition = interpretInstruction(instruction.Value);
+        Variable condition = interpretInstruction(instruction.Value);
         if (Utilities.variableIsTruthy(condition))
         {
             runCodeBlock(instruction.Instructions);
@@ -206,14 +203,14 @@ public partial class Interpreter
             interpretInstruction(instruction.Next);
         }
 
-        return new ScopeVariable(Consts.VariableTypes.Literal);
+        return new Variable();
     }
 
-    private ScopeVariable handleElse(Instruction instruction)
+    private Variable handleElse(Instruction instruction)
     {
-        ScopeVariable condition = instruction.Value is not null ?
+        Variable condition = instruction.Value is not null ?
             interpretInstruction(instruction.Value) :
-            new ScopeVariable(Consts.VariableTypes.Literal);
+            new Variable();
 
 
         if (instruction.Value is null || Utilities.variableIsTruthy(condition))
@@ -224,38 +221,38 @@ public partial class Interpreter
         {
             interpretInstruction(instruction.Next);
         }
-        return new ScopeVariable(Consts.VariableTypes.Literal);
+        return new Variable();
     }
 
-    private ScopeVariable handleWhile(Instruction instruction)
+    private Variable handleWhile(Instruction instruction)
     {
-        ScopeVariable condition = interpretInstruction(instruction.Value);
+        Variable condition = interpretInstruction(instruction.Value);
         while (Utilities.variableIsTruthy(condition))
         {
             runCodeBlock(instruction.Instructions);
             condition = interpretInstruction(instruction.Value);
         }
 
-        return new ScopeVariable(Consts.VariableTypes.Literal);
+        return new Variable();
     }
 
-    private ScopeVariable handleFunction(Instruction instruction)
+    private Variable handleFunction(Instruction instruction)
     {
-        List<ScopeVariable> args = new List<ScopeVariable>();
+        List<Variable> args = new List<Variable>();
 
         foreach (Instruction inst in instructions)
         {
-            args.Add(new ScopeVariable(Consts.VariableTypes.Literal, inst.Value));
+            args.Add(new Variable(Consts.VariableTypes.Number, inst.Value));
         }
 
-        return new ScopeVariable(Consts.VariableTypes.Function, args, instruction.Instructions);
+        return new Variable(Consts.VariableTypes.Function, args, instruction.Instructions);
     }
 
-    private ScopeVariable handleParens(Instruction instruction)
+    private Variable handleParens(Instruction instruction)
     {
-        Debug.Assert(!ongoingContexts.IsEmpty());
+        Debug.Assert(ongoingContexts.Count != 0);
 
-        ScopeVariable called = ongoingContexts.GetCurrentContext();
+        Variable called = ongoingContexts.Peek();
 
         switch (called.Type)
         {
@@ -268,13 +265,13 @@ public partial class Interpreter
                     );
                 }
 
-                lexicalContexts.AddNewScope();
+                lexicalContexts.Push(new Dictionary<string, Variable>());
 
                 for (int i = 0; i < instruction.Value.Count; i++)
                 {
                     string argName = called.Value[i].Value!;
-                    ScopeVariable argValue = interpretInstruction(instruction.Value[i]);
-                    lexicalContexts.AddVariableToCurrentScope(new List<string>() { argName }, argValue);
+                    Variable argValue = interpretInstruction(instruction.Value[i]);
+                    lexicalContexts.Peek().Add(argName, argValue);
                 }
 
                 foreach (Instruction insideBlockInstruction in instructions)
@@ -282,12 +279,12 @@ public partial class Interpreter
                     interpretInstruction(insideBlockInstruction);
                 }
 
-                ScopeVariable functionScope = lexicalContexts.Pop();
-                ScopeVariable returnValue = new ScopeVariable(Consts.VariableTypes.Literal);
+                Dictionary<string, Variable> functionScope = lexicalContexts.Pop();
+                Variable returnValue = new Variable();
 
-                if (functionScope.HasVariable("return"))
+                if (functionScope.ContainsKey("return"))
                 {
-                    returnValue = functionScope.GetVariable("return");
+                    returnValue = functionScope["return"];
                 }
 
                 return returnValue;
@@ -296,19 +293,19 @@ public partial class Interpreter
         }
     }
 
-    private ScopeVariable handleReturn(Instruction instruction)
+    private Variable handleReturn(Instruction instruction)
     {
-        ScopeVariable result = interpretInstruction(instruction.Value);
-        lexicalContexts.AddVariableToCurrentScope(new List<string>() { "return" }, result);
+        Variable result = interpretInstruction(instruction.Value);
+        lexicalContexts.Peek().Add("return", result);
         return result;
     }
 
-    private ScopeVariable handleBtl(Instruction instruction)
+    private Variable handleBtl(Instruction instruction)
     {
         Debug.Assert(instruction.Next is not null);
         Debug.Assert(instruction.Next.Type == Consts.InstructionTypes.SquareBraces);
 
-        ScopeVariable var;
+        Variable var;
         string indexValue = instruction.Next.Value[0].Value;
         if (indexValue == "context")
         {
@@ -316,7 +313,7 @@ public partial class Interpreter
 
             if (instruction.Next is not null)
             {
-                ongoingContexts.Add(var);
+                ongoingContexts.Push(var);
                 var = interpretInstruction(instruction.Next.Next);
                 ongoingContexts.Pop();
             }
@@ -332,11 +329,11 @@ public partial class Interpreter
                 }
             }
             dynamic returnValue = callbacks.Run(indexValue, args);
-            var = new ScopeVariable(Consts.VariableTypes.Literal, returnValue);
+            var = new Variable(Consts.VariableTypes.Number, returnValue);
 
             if (instruction.Next.Next.Next is not null)
             {
-                ongoingContexts.Add(var);
+                ongoingContexts.Push(var);
                 var = interpretInstruction(instruction.Next.Next.Next);
                 ongoingContexts.Pop();
             }
@@ -347,7 +344,7 @@ public partial class Interpreter
 
     public void runCodeBlock(List<Instruction> instructions)
     {
-        lexicalContexts.AddNewScope();
+        lexicalContexts.Push(new Dictionary<string, Variable>());
         foreach (Instruction insideBlockInstruction in instructions)
         {
             interpretInstruction(insideBlockInstruction);
