@@ -137,9 +137,9 @@ public class UtilitiesTests
             Lexer lexer = new Lexer("[]");
             var tokens = lexer.Run();
             (int Count, List<List<Token>> Result) parsed =
-                Utilities.ParseUntilMatchingSeparator(new List<Token>(), new List<string>());
+                Utilities.ParseUntilMatchingSeparator(tokens, new List<string>());
 
-            Assert.That(parsed.Count, Is.EqualTo(0));
+            Assert.That(parsed.Count, Is.EqualTo(2));
             Assert.That(parsed.Result.Count, Is.EqualTo(0));
         }
 

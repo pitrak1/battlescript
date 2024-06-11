@@ -162,7 +162,7 @@ public class Utilities
 
         if (entries.Count == 1 && entries[0].Count == 0)
         {
-            return (Count: 0, Result: new List<List<Token>>());
+            return (Count: count, Result: new List<List<Token>>());
         }
 
         return (Count: count, Result: entries);

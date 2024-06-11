@@ -14,7 +14,7 @@ public class ScopeStack : Stack<Dictionary<string, Variable>>
     public Variable GetVariable(string key)
     {
         var scopes = ToArray();
-        for (int i = scopes.Length - 1; i >= 0; i--)
+        for (int i = 0; i < scopes.Length; i++)
         {
             if (scopes[i].ContainsKey(key))
             {

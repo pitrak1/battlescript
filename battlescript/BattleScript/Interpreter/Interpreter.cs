@@ -103,7 +103,9 @@ public partial class Interpreter
     private Variable handleDeclaration(Instruction instruction)
     {
         Debug.Assert(instruction.Value is string, "Variables must be declared as strings");
-        return lexicalContexts.Peek().Add(instruction.Value, new Variable());
+        Variable var = new Variable();
+        lexicalContexts.Peek().Add(instruction.Value, var);
+        return var;
     }
 
     private Variable handleVariable(Instruction instruction)
@@ -125,28 +127,34 @@ public partial class Interpreter
         Variable right = interpretInstruction(instruction.Right!);
 
         dynamic? result;
+        Consts.VariableTypes type;
         switch (instruction.Value)
         {
             case "==":
                 result = left.Value == right.Value;
+                type = Consts.VariableTypes.Boolean;
                 break;
             case "<":
                 result = left.Value < right.Value;
+                type = Consts.VariableTypes.Boolean;
                 break;
             case ">":
                 result = left.Value > right.Value;
+                type = Consts.VariableTypes.Boolean;
                 break;
             case "+":
                 result = left.Value + right.Value;
+                type = Consts.VariableTypes.Number;
                 break;
             case "*":
                 result = left.Value * right.Value;
+                type = Consts.VariableTypes.Number;
                 break;
             default:
                 throw new SystemException("Invalid operator");
         }
 
-        return new Variable(left.Type, result);
+        return new Variable(type, result);
     }
 
     private Variable handleSquareBraces(Instruction instruction)
@@ -170,8 +178,7 @@ public partial class Interpreter
             Debug.Assert(ongoingContexts.Count != 0, "Expected to have a non-null indexed value");
             Variable indexed = ongoingContexts.Peek();
 
-            // Variable result = indexed.GetIndex(index.Value);
-            Variable result = new Variable();
+            Variable result = indexed.GetIndex(index.Value);
 
             return result;
         }
@@ -240,9 +247,9 @@ public partial class Interpreter
     {
         List<Variable> args = new List<Variable>();
 
-        foreach (Instruction inst in instructions)
+        foreach (Instruction arg in instruction.Value)
         {
-            args.Add(new Variable(Consts.VariableTypes.Number, inst.Value));
+            args.Add(new Variable(null, arg.Value));
         }
 
         return new Variable(Consts.VariableTypes.Function, args, instruction.Instructions);
@@ -271,10 +278,10 @@ public partial class Interpreter
                 {
                     string argName = called.Value[i].Value!;
                     Variable argValue = interpretInstruction(instruction.Value[i]);
-                    lexicalContexts.Peek().Add(argName, argValue);
+                    lexicalContexts.Peek().Add(argName, new Variable().CopyProperties(argValue));
                 }
 
-                foreach (Instruction insideBlockInstruction in instructions)
+                foreach (Instruction insideBlockInstruction in called.Instructions)
                 {
                     interpretInstruction(insideBlockInstruction);
                 }

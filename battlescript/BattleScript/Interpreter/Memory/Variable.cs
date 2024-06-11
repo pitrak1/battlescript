@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using BattleScript.Exceptions;
 using BattleScript.Instructions;
 using BattleScript.Core;
+using System.Linq;
 
 namespace BattleScript.Core;
 
@@ -10,7 +11,7 @@ public class Variable
 {
     public Consts.VariableTypes? Type { get; set; }
     public dynamic? Value { get; set; }
-    // public List<Instruction>? Instructions { get; set; } = new();
+    public List<Instruction>? Instructions { get; set; }
 
     public Variable(
         Consts.VariableTypes? type = null,
@@ -20,17 +21,14 @@ public class Variable
     {
         Type = type;
         Value = value;
-        // if (instructions is not null)
-        // {
-        //     Instructions = instructions;
-        // }
+        Instructions = instructions;
     }
 
     public Variable CopyProperties(Variable var)
     {
         Type = var.Type;
         Value = var.Value;
-        // Instructions = var.Instructions;
+        Instructions = var.Instructions;
         return this;
     }
 
@@ -62,6 +60,35 @@ public class Variable
         else
         {
             throw new VariableNotFoundException(key);
+        }
+    }
+
+    public Variable GetIndex(dynamic key)
+    {
+        if (Value is List<Variable>)
+        {
+            int integerKey = (int)key;
+            if (integerKey < Value.Count)
+            {
+                return Value[integerKey];
+            }
+            else
+            {
+                throw new ArrayOutOfBoundsException(key);
+            }
+        }
+        else
+        {
+            if (Value.ContainsKey(key))
+            {
+                return Value[key];
+            }
+            else
+            {
+                var variable = new Variable();
+                Value[key] = variable;
+                return variable;
+            }
         }
     }
 
@@ -127,43 +154,6 @@ public class Variable
     //     var variable = new Variable(Consts.VariableTypes.Literal);
     //     Value![key] = variable;
     //     return variable;
-    // }
-
-    // public Variable GetIndex(dynamic key)
-    // {
-    //     if (Value is List<Variable>)
-    //     {
-    //         Debug.Assert(key is int);
-    //         if (key < Value.Count)
-    //         {
-    //             return Value[key];
-    //         }
-    //         else
-    //         {
-    //             throw new ArrayOutOfBoundsException(key);
-    //         }
-    //     }
-    //     else
-    //     {
-    //         if (Value.ContainsKey(key))
-    //         {
-    //             return Value[key];
-    //         }
-    //         else if (Value.ContainsKey("class") && Type == Consts.VariableTypes.Object)
-    //         {
-    //             return Value["class"].GetIndex(key);
-    //         }
-    //         else if (Value.ContainsKey("super") && Type == Consts.VariableTypes.Class)
-    //         {
-    //             return Value["super"].GetIndex(key);
-    //         }
-    //         else
-    //         {
-    //             var variable = new Variable(Consts.VariableTypes.Literal);
-    //             Value[key] = variable;
-    //             return variable;
-    //         }
-    //     }
     // }
 
     // public Variable CreateObject(Variable var)
@@ -244,38 +234,67 @@ public class Variable
         return this.Equals(obj as Variable);
     }
 
-    public bool Equals(Variable Variable)
+    public bool Equals(Variable variable)
     {
-        if (Variable is null)
+        if (variable is null)
         {
             return false;
         }
 
-        if (ReferenceEquals(this, Variable))
+        if (ReferenceEquals(this, variable))
         {
             return true;
         }
 
-        if (GetType() != Variable.GetType())
+        if (GetType() != variable.GetType())
         {
             return false;
         }
 
-        if (Type != Variable.Type)
+        if (Type != variable.Type)
         {
             return false;
         }
 
-        if (Value is IEnumerable<KeyValuePair<string, Variable>>)
+        if (Value is Dictionary<dynamic, Variable>)
         {
-            if (!Enumerable.SequenceEqual(Value, Variable.Value))
+            if (variable.Value is not Dictionary<dynamic, Variable>)
+            {
+                return false;
+            }
+
+            var dictionaryValue = variable.Value as Dictionary<dynamic, Variable>;
+            var varDictionaryValue = variable.Value as Dictionary<dynamic, Variable>;
+
+            foreach (var pair in dictionaryValue)
+            {
+                if (varDictionaryValue.ContainsKey(pair.Key))
+                {
+                    if (pair.Value != varDictionaryValue[pair.Key])
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        else if (
+            Value is List<Variable> ||
+            Value is IEnumerable<KeyValuePair<string, Variable>> ||
+            Value is Dictionary<dynamic, Variable>
+        )
+        {
+            if (!Enumerable.SequenceEqual(Value, variable.Value))
             {
                 return false;
             }
         }
         else
         {
-            if (Value != Variable.Value)
+            if (Value != variable.Value)
             {
                 return false;
             }
