@@ -19,7 +19,7 @@ public class Consts
     public static char[] WordCharacters = StartingWordCharacters.Concat(Digits).ToArray();
 
     public static string[] Keywords = new string[] {
-        "var", "if", "else", "while", "function", "return", "import", "export", "Btl"
+        "var", "if", "else", "while", "function", "return", "import", "export", "Btl", "breakpoint"
     };
     public static char[] Separators = new char[] { '(', ')', '{', '}', ',', '[', ']', ':', '.' };
     public static string[] Operators = new string[] { "*", "+", ">", "<", "==" };
@@ -57,7 +57,8 @@ public class Consts
         Operator,
         Semicolon,
         Whitespace,
-        Comment
+        Comment,
+        Breakpoint
     };
 
     public enum InstructionTypes
@@ -78,6 +79,7 @@ public class Consts
         Return,
         Else,
         Btl,
+        Breakpoint
     };
 
     public enum VariableTypes

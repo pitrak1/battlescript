@@ -28,22 +28,66 @@ public partial class Interpreter
 
     List<Instruction> instructions;
 
+    public int InstructionIndex = 0;
+
     public Interpreter(List<Instruction> _instructions)
     {
+        reset();
         instructions = _instructions;
-        ongoingContexts = new Stack<Variable>();
-        lexicalContexts = new ScopeStack();
         callbacks = new CustomCallbacks();
     }
 
-    public Dictionary<string, Variable> Run()
+    public Dictionary<string, Variable>[] Run()
     {
-        foreach (Instruction instruction in instructions)
+        reset();
+        return run();
+    }
+
+    public Dictionary<string, Variable>[] RunDebug()
+    {
+        reset();
+        return run(true);
+    }
+
+    public Dictionary<string, Variable>[] Continue()
+    {
+        return run(true);
+    }
+
+    private Dictionary<string, Variable>[] run(bool respectBreakpoints = false)
+    {
+        while (InstructionIndex < instructions.Count)
         {
-            interpretInstruction(instruction);
+            try
+            {
+                interpretInstruction(instructions[InstructionIndex]);
+            }
+            catch (Exception e)
+            {
+                if (e is BreakpointException)
+                {
+                    if (respectBreakpoints)
+                    {
+                        InstructionIndex++;
+                        return lexicalContexts.ToArray();
+                    }
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            InstructionIndex++;
         }
 
-        return lexicalContexts.Peek();
+        return lexicalContexts.ToArray();
+    }
+
+    private void reset()
+    {
+        InstructionIndex = 0;
+        ongoingContexts = new Stack<Variable>();
+        lexicalContexts = new ScopeStack();
     }
 
     private Variable interpretInstruction(Instruction instruction)
@@ -82,6 +126,8 @@ public partial class Interpreter
                 return handleReturn(instruction);
             case Consts.InstructionTypes.Btl:
                 return handleBtl(instruction);
+            case Consts.InstructionTypes.Breakpoint:
+                return handleBreakpoint(instruction);
         }
 
         return new Variable();
@@ -327,6 +373,11 @@ public partial class Interpreter
         }
 
         return var;
+    }
+
+    private Variable handleBreakpoint(Instruction instruction)
+    {
+        throw new BreakpointException();
     }
 
     public void runCodeBlock(List<Instruction> instructions)

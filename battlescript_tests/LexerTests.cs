@@ -146,4 +146,15 @@ public class LexerTests
         var expectedTokens = new List<Token>() { };
         Assertions.AssertTokens(tokens, expectedTokens);
     }
+
+    [Test]
+    public void Breakpoint()
+    {
+        Lexer lexer = new Lexer("breakpoint");
+        var tokens = lexer.Run();
+        var expectedTokens = new List<Token>() {
+            new Token(Consts.TokenTypes.Keyword, "breakpoint")
+        };
+        Assertions.AssertTokens(tokens, expectedTokens);
+    }
 }

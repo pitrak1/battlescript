@@ -814,4 +814,22 @@ public class InstructionParserTests
             }
         }
     }
+
+    [Test]
+    public void Breakpoint()
+    {
+        Lexer lexer = new Lexer("breakpoint");
+        var tokens = lexer.Run();
+
+        InstructionParser instructionParser = new InstructionParser();
+        Instruction instruction = instructionParser.Run(tokens);
+
+        Instruction expectedInstruction = new Instruction(
+            null,
+            null,
+            Consts.InstructionTypes.Breakpoint
+        );
+
+        Assert.That(instruction, Is.EqualTo(expectedInstruction));
+    }
 }

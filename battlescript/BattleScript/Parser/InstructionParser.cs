@@ -49,6 +49,8 @@ public class InstructionParser
                     return handleReturn(tokens);
                 case "Btl":
                     return handleBtl(tokens);
+                case "breakpoint":
+                    return handleBreakpoint(tokens);
                 default:
                     throw new SystemException("Invalid keyword found");
             }
@@ -127,6 +129,15 @@ public class InstructionParser
             Consts.InstructionTypes.Btl,
             null,
             next
+        );
+    }
+
+    private Instruction handleBreakpoint(List<Token> tokens)
+    {
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.Breakpoint
         );
     }
 

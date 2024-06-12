@@ -25,7 +25,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Number, 5)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -43,7 +43,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.String, "asdf")}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -61,7 +61,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Boolean, true)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
     }
 
@@ -81,7 +81,7 @@ public class InterpreterTests
             {"x", new Variable(Consts.VariableTypes.Number, 5)},
             {"y", new Variable(Consts.VariableTypes.Number, 5)}
         };
-        Assert.That(result, Is.EqualTo(expectedResult));
+        Assert.That(result[0], Is.EqualTo(expectedResult));
     }
 
     [TestFixture]
@@ -102,7 +102,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Boolean, true)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         public void EqualityFalse()
@@ -119,7 +119,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Boolean, false)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -137,7 +137,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Boolean, true)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -155,7 +155,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Boolean, false)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -173,7 +173,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Boolean, true)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -191,7 +191,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Boolean, false)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -209,7 +209,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Number, 14)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -227,7 +227,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Number, 45)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
     }
 
@@ -252,7 +252,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Number, 10)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -273,7 +273,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Number, 5)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -294,7 +294,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Number, 10)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -316,7 +316,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Number, 10)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -338,7 +338,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Number, 6)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -361,7 +361,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Number, 10)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -384,7 +384,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Number, 15)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -407,7 +407,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Number, 6)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
     }
 
@@ -432,7 +432,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Number, 10)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -453,7 +453,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Number, 5)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
     }
 
@@ -485,7 +485,7 @@ public class InterpreterTests
                     )
                 }
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -514,7 +514,7 @@ public class InterpreterTests
                 },
                 {"y", new Variable(Consts.VariableTypes.Number, 2)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -542,7 +542,7 @@ public class InterpreterTests
                     )
                 }
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
     }
 
@@ -570,7 +570,7 @@ public class InterpreterTests
                     )
                 }
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -596,7 +596,7 @@ public class InterpreterTests
                     )
                 }
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -623,7 +623,7 @@ public class InterpreterTests
                 },
                 {"y", new Variable(Consts.VariableTypes.Number, 6)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -649,7 +649,7 @@ public class InterpreterTests
                     )
                 },
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -675,7 +675,7 @@ public class InterpreterTests
                     )
                 }
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -702,7 +702,7 @@ public class InterpreterTests
                 },
                 {"y", new Variable(Consts.VariableTypes.Boolean, true)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -728,7 +728,7 @@ public class InterpreterTests
                     )
                 }
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -755,7 +755,7 @@ public class InterpreterTests
                     )
                 }
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -784,7 +784,7 @@ public class InterpreterTests
                 {"z", new Variable(Consts.VariableTypes.Boolean, true)},
                 {"a", new Variable(Consts.VariableTypes.Boolean, true)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -811,7 +811,7 @@ public class InterpreterTests
                     )
                 }
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -837,7 +837,7 @@ public class InterpreterTests
                     )
                 }
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -864,7 +864,7 @@ public class InterpreterTests
                 },
                 {"y", new Variable(Consts.VariableTypes.Number, 9)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -890,7 +890,7 @@ public class InterpreterTests
                     )
                 }
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
     }
 
@@ -918,7 +918,7 @@ public class InterpreterTests
                     )
                 }
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -942,7 +942,7 @@ public class InterpreterTests
                     )
                 }
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -967,7 +967,7 @@ public class InterpreterTests
                 },
                 {"y", new Variable(Consts.VariableTypes.Number, 4)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -994,7 +994,7 @@ public class InterpreterTests
                     )
                 }
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -1022,7 +1022,7 @@ public class InterpreterTests
                 },
                 {"a", new Variable(Consts.VariableTypes.Number, 3)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -1051,7 +1051,7 @@ public class InterpreterTests
                     )
                 }
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -1088,7 +1088,7 @@ public class InterpreterTests
                     )
                 }
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
     }
 
@@ -1125,7 +1125,7 @@ public class InterpreterTests
                 },
                 {"z", new Variable(Consts.VariableTypes.Number, 8)},
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
     }
 
@@ -1149,7 +1149,7 @@ public class InterpreterTests
             var expectedResult = new Dictionary<string, Variable>() {
                 {"x", new Variable(Consts.VariableTypes.Number, 8)}
             };
-            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(result[0], Is.EqualTo(expectedResult));
         }
     }
 }
