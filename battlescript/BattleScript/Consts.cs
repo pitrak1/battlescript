@@ -89,8 +89,7 @@ public class Consts
         Boolean,
         Array,
         Dictionary,
-        Function,
-        Scope
+        Function
     };
 }
 
