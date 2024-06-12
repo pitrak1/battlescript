@@ -26,8 +26,6 @@ public partial class Interpreter
 
     CustomCallbacks callbacks;
 
-    Variable btlContext;
-
     List<Instruction> instructions;
 
     public Interpreter(List<Instruction> _instructions)
@@ -36,10 +34,6 @@ public partial class Interpreter
         ongoingContexts = new Stack<Variable>();
         lexicalContexts = new ScopeStack();
         callbacks = new CustomCallbacks();
-        btlContext = new Variable(
-            Consts.VariableTypes.Dictionary,
-            new Dictionary<dynamic, Variable>()
-        );
     }
 
     public Dictionary<string, Variable> Run()
@@ -314,36 +308,22 @@ public partial class Interpreter
 
         Variable var;
         string indexValue = instruction.Next.Value[0].Value;
-        if (indexValue == "context")
-        {
-            var = btlContext;
 
-            if (instruction.Next is not null)
+        List<dynamic> args = new List<dynamic>();
+        if (instruction.Next.Next.Type == Consts.InstructionTypes.Parens)
+        {
+            foreach (Instruction inst in instruction.Next.Next.Value)
             {
-                ongoingContexts.Push(var);
-                var = interpretInstruction(instruction.Next.Next);
-                ongoingContexts.Pop();
+                args.Add(interpretInstruction(inst).Value);
             }
         }
-        else
-        {
-            List<dynamic> args = new List<dynamic>();
-            if (instruction.Next.Next.Type == Consts.InstructionTypes.Parens)
-            {
-                foreach (Instruction inst in instruction.Next.Next.Value)
-                {
-                    args.Add(interpretInstruction(inst).Value);
-                }
-            }
-            dynamic returnValue = callbacks.Run(indexValue, args);
-            var = new Variable(Consts.VariableTypes.Number, returnValue);
+        var = callbacks.Run(indexValue, args);
 
-            if (instruction.Next.Next.Next is not null)
-            {
-                ongoingContexts.Push(var);
-                var = interpretInstruction(instruction.Next.Next.Next);
-                ongoingContexts.Pop();
-            }
+        if (instruction.Next.Next.Next is not null)
+        {
+            ongoingContexts.Push(var);
+            var = interpretInstruction(instruction.Next.Next.Next);
+            ongoingContexts.Pop();
         }
 
         return var;

@@ -13,28 +13,16 @@ public class CustomCallbacks
 
     public CustomCallbacks()
     {
-        Callbacks["test"] = new Func<int>(TestFunction);
-        Callbacks["test2"] = new Func<string, string>(TestFunction2);
-        Callbacks["test3"] = new Action(TestFunction3);
+        Callbacks["test"] = new Func<double, Variable>(TestFunction);
     }
 
-    public object? Run(string key, List<dynamic> args)
+    public Variable? Run(string key, List<dynamic> args)
     {
-        return Callbacks[key].DynamicInvoke(args.ToArray());
+        return Callbacks[key].DynamicInvoke(args.ToArray()) as Variable;
     }
 
-    public int TestFunction()
+    public Variable TestFunction(double x)
     {
-        return 5;
-    }
-
-    public string TestFunction2(string stringToReturn)
-    {
-        return $"{stringToReturn}asdf";
-    }
-
-    public void TestFunction3()
-    {
-        Debug.Print("some message");
+        return new Variable(Consts.VariableTypes.Number, x + 5);
     }
 }

@@ -1132,6 +1132,24 @@ public class InterpreterTests
     [TestFixture]
     public class Btl
     {
+        [Test]
+        public void ArgumentsAndReturnValues()
+        {
+            Lexer lexer = new Lexer(@"
+                var x = Btl.test(3);
+            ");
+            var tokens = lexer.Run();
 
+            Parser parser = new Parser(tokens);
+            var instructions = parser.Run();
+
+            Interpreter interpreter = new Interpreter(instructions);
+            var result = interpreter.Run();
+
+            var expectedResult = new Dictionary<string, Variable>() {
+                {"x", new Variable(Consts.VariableTypes.Number, 8)}
+            };
+            Assert.That(result, Is.EqualTo(expectedResult));
+        }
     }
 }
