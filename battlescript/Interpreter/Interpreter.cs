@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Security.Cryptography;
 using BattleScript.Exceptions;
 using BattleScript.Instructions;
 

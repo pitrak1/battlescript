@@ -1,7 +1,4 @@
 using BattleScript.Core;
-using BattleScript.Tokens;
-using BattleScript.Tests;
-using BattleScript.Instructions;
 
 namespace BattleScript.InterpreterTests;
 

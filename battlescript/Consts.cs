@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace BattleScript.Core;
 
 public class Consts

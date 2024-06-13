@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace BattleScript.Core;
 
 public class CustomCallbacks

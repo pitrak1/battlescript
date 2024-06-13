@@ -1,5 +1,3 @@
-using System.Diagnostics;
-using BattleScript.Core;
 using BattleScript.Exceptions;
 
 namespace BattleScript.Core;
