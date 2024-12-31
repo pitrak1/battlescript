@@ -1,6 +1,6 @@
-﻿namespace Battlescript;
+namespace Battlescript;
 
-public class Class1
+public class LexerUtilities
 {
     public static void Print()
     {
