@@ -67,12 +67,6 @@ public class Lexer
                 _index++;
                 _column++;
             }
-            else if (nextCharacter == '=')
-            {
-                _tokens.Add(new Token(Consts.TokenTypes.Assignment, nextCharacter.ToString(), _line, _column));
-                _index++;
-                _column++;
-            }
             else if (nextCharacter == '#')
             {
                 HandleComment();
@@ -124,7 +118,7 @@ public class Lexer
         var numberCharacters = LexerUtilities.GetNextCharactersInCollection(
             _input, 
             _index, 
-            Consts.Digits, 
+            Consts.NumberCharacters, 
             CollectionType.Inclusive
         );
         _tokens.Add(new Token(Consts.TokenTypes.Number, numberCharacters, _line, _column));
