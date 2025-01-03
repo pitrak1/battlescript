@@ -1,26 +1,19 @@
 namespace Battlescript;
 
-public class Lexer
+public class Lexer(string input)
 {
-    private string _input;
     private int _index;
     private int _line;
     private int _column;
 
-    private List<Token> _tokens;
-
-    public Lexer(string input)
-    {
-        _input = input;
-        _tokens = [];
-    }
+    private List<Token> _tokens = [];
 
     public List<Token> Run()
     {
-        while (_index < _input.Length)
+        while (_index < input.Length)
         {
             var (nextThreeCharacters, nextTwoCharacters, nextCharacter) = 
-                LexerUtilities.GetNextThreeCharacters(_input, _index);
+                LexerUtilities.GetNextThreeCharacters(input, _index);
 
             if (nextCharacter == '\n')
             {
@@ -84,7 +77,7 @@ public class Lexer
     {
         // We are assuming indent sizes of 4 spaces or 1 tab
         var indent = LexerUtilities.GetNextCharactersInCollection(
-            _input, 
+            input, 
             _index,
             Consts.Indentations,
             CollectionType.Inclusive
@@ -116,7 +109,7 @@ public class Lexer
     private void HandleNumber()
     {
         var numberCharacters = LexerUtilities.GetNextCharactersInCollection(
-            _input, 
+            input, 
             _index, 
             Consts.NumberCharacters, 
             CollectionType.Inclusive
@@ -128,10 +121,10 @@ public class Lexer
 
     private void HandleString()
     {
-        var startingQuoteCollection = new [] { _input[_index] };
+        var startingQuoteCollection = new [] { input[_index] };
         // Get all characters after the starting quote and until we find a matching quote
         var stringContents = LexerUtilities.GetNextCharactersInCollection(
-            _input, 
+            input, 
             _index + 1, 
             startingQuoteCollection, 
             CollectionType.Exclusive
@@ -145,7 +138,7 @@ public class Lexer
     private void HandleWord()
     {
         var word = LexerUtilities.GetNextCharactersInCollection(
-            _input, 
+            input, 
             _index, 
             Consts.WordCharacters, 
             CollectionType.Inclusive
@@ -174,7 +167,7 @@ public class Lexer
     {
         // Get all next characters up until the newline
         var comment = LexerUtilities.GetNextCharactersInCollection(
-            _input, 
+            input, 
             _index, 
             new [] { '\n' }, 
             CollectionType.Exclusive
