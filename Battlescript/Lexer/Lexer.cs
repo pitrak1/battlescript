@@ -84,7 +84,9 @@ public class Lexer(string input)
             }
             else
             {
-                throw new Exception("Invalid character found");
+                throw new Exception(
+                    "Invalid character found at line " + _line + ", column " + _column + ": " + nextThreeCharacters
+                );
             }
         }
         

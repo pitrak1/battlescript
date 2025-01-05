@@ -28,6 +28,16 @@ public static class Consts
     public static readonly char[] Indentations = [' ', '\t'];
     public static readonly char[] Quotes = ['\'', '"'];
     public static readonly char[] Separators = ['(', ')', '{', '}', ',', '[', ']', ':', '.'];
+    public static string[] OpeningSeparators = ["(", "{", "["];
+    public static string[] ClosingSeparators = [")", "}", "]"];
+    public static Dictionary<string, string> MatchingSeparatorsMap = new() {
+        {"(", ")"},
+        {"{", "}"},
+        {"[", "]"},
+        {")", "("},
+        {"}", "{"},
+        {"]", "["}
+    };
     public static readonly string[] Keywords = [
         "None",
         "as",
