@@ -48,15 +48,33 @@ public class Lexer(string input)
                 _index += 3;
                 _column += 3;
             }
+            else if (Consts.Assignments.Contains(nextThreeCharacters))
+            {
+                _tokens.Add(new Token(Consts.TokenTypes.Assignment, nextThreeCharacters, _line, _column));
+                _index += 3;
+                _column += 3;
+            }
             else if (Consts.Operators.Contains(nextTwoCharacters))
             {
                 _tokens.Add(new Token(Consts.TokenTypes.Operator, nextTwoCharacters, _line, _column));
                 _index += 2;
                 _column += 2;
             }
+            else if (Consts.Assignments.Contains(nextTwoCharacters))
+            {
+                _tokens.Add(new Token(Consts.TokenTypes.Assignment, nextTwoCharacters, _line, _column));
+                _index += 2;
+                _column += 2;
+            }
             else if (Consts.Operators.Contains(nextCharacter.ToString()))
             {
                 _tokens.Add(new Token(Consts.TokenTypes.Operator, nextCharacter.ToString(), _line, _column));
+                _index++;
+                _column++;
+            }
+            else if (Consts.Assignments.Contains(nextCharacter.ToString()))
+            {
+                _tokens.Add(new Token(Consts.TokenTypes.Assignment, nextCharacter.ToString(), _line, _column));
                 _index++;
                 _column++;
             }

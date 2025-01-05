@@ -136,11 +136,48 @@ public static class LexerTests
         [Test]
         public void HandlesDoubleCharacterOperators()
         {
-            var lexer = new Lexer("+=");
+            var lexer = new Lexer("**");
             var result = lexer.Run();
             Assertions.AssertTokenListEqual(result, new List<Token>()
             {
-                new(Consts.TokenTypes.Operator, "+=")
+                new(Consts.TokenTypes.Operator, "**")
+            });
+        }
+        
+        [Test]
+        public void HandlesTripleCharacterOperators()
+        {
+            var lexer = new Lexer("not");
+            var result = lexer.Run();
+            Assertions.AssertTokenListEqual(result, new List<Token>()
+            {
+                new(Consts.TokenTypes.Operator, "not")
+            });
+        }
+    }
+    
+    [TestFixture]
+    public class LexerAssignmentOperators
+    {
+        [Test]
+        public void HandlesSingleCharacterOperators()
+        {
+            var lexer = new Lexer("=");
+            var result = lexer.Run();
+            Assertions.AssertTokenListEqual(result, new List<Token>()
+            {
+                new(Consts.TokenTypes.Assignment, "=")
+            });
+        }
+        
+        [Test]
+        public void HandlesDoubleCharacterOperators()
+        {
+            var lexer = new Lexer("*=");
+            var result = lexer.Run();
+            Assertions.AssertTokenListEqual(result, new List<Token>()
+            {
+                new(Consts.TokenTypes.Assignment, "*=")
             });
         }
         
@@ -151,7 +188,7 @@ public static class LexerTests
             var result = lexer.Run();
             Assertions.AssertTokenListEqual(result, new List<Token>()
             {
-                new(Consts.TokenTypes.Operator, "**=")
+                new(Consts.TokenTypes.Assignment, "**=")
             });
         }
     }
@@ -166,7 +203,7 @@ public static class LexerTests
             var result = lexer.Run();
             Assertions.AssertTokenListEqual(result, new List<Token>()
             {
-                new(Consts.TokenTypes.Operator, "=")
+                new(Consts.TokenTypes.Assignment, "=")
             });
         }
     }

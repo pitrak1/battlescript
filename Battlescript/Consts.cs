@@ -59,14 +59,35 @@ public static class Consts
         "yield"
     ];
     public static readonly string[] Booleans = ["True", "False"];
+
     public static readonly string[] Operators = [
-        "+",
-        "-",
+        "**",
+        "~",
         "*",
         "/",
-        "%",
-        "**",
         "//",
+        "%",
+        "+",
+        "-",
+        "<<",
+        ">>",
+        "&",
+        "^",
+        "|",
+        "==",
+        "!=",
+        ">",
+        ">=",
+        "<",
+        "<=",
+        "is",
+        "in",
+        "not",
+        "and",
+        "or"
+    ];
+
+    public static readonly string[] Assignments = [
         "=",
         "+=",
         "-=",
@@ -80,24 +101,7 @@ public static class Consts
         "^=",
         ">>=",
         "<<=",
-        ":=",
-        "==",
-        "!=",
-        ">",
-        "<",
-        ">=",
-        "<=",
-        "not",
-        "and",
-        "or",
-        "is",
-        "in",
-        "&",
-        "|",
-        "~",
-        "^",
-        "<<",
-        ">>"
+        ":="
     ];
 
     public enum TokenTypes
@@ -110,6 +114,27 @@ public static class Consts
         Identifier,
         Separator,
         Operator,
+        Assignment,
         Breakpoint
     }
+    
+    public enum InstructionTypes
+    {
+        Assignment,
+        Operation,
+        Variable,
+        Number,
+        String,
+        Boolean,
+        If,
+        While,
+        SquareBraces,
+        Dictionary,
+        Function,
+        Parens,
+        Return,
+        Else,
+        Btl,
+        Breakpoint
+    };
 }

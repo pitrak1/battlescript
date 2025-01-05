@@ -33,7 +33,7 @@ public class Parser
                 if (newIndentValue > currentIndentValue) {
                     // Add the last instruction of the current scope to the stack of scopes so that new instructions
                     // within the block are added there
-                    _scopes.Add(_scopes[^1][^1].Scope);
+                    _scopes.Add(_scopes[^1][^1].Instructions);
                 }
                 // If we are at the end of a code block
                 else if (newIndentValue < currentIndentValue)
