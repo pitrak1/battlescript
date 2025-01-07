@@ -102,7 +102,7 @@ public static class InstructionParserTests
     }
     
     [TestFixture]
-    public class InstructionParserSquareBrackets
+    public class InstructionParserStandardSeparators
     {
         [Test]
         public void HandlesSquareBrackets()
@@ -118,6 +118,29 @@ public static class InstructionParserTests
                     0, 
                     0, 
                     Consts.InstructionTypes.SquareBrackets, 
+                    new List<Instruction> 
+                    {
+                        new (0, 0, Consts.InstructionTypes.Number, 4),
+                        new (0, 0, Consts.InstructionTypes.String, "asdf")
+                    }
+                )
+            );
+        }
+        
+        [Test]
+        public void HandlesParens()
+        {
+            var lexer = new Lexer("(4, 'asdf')");
+            var lexerResult = lexer.Run();
+            var instructionParser = new InstructionParser();
+            var instructionParserResult = instructionParser.Run(lexerResult);
+            
+            Assertions.AssertInstructionEqual(
+                instructionParserResult,
+                new Instruction(
+                    0, 
+                    0, 
+                    Consts.InstructionTypes.Parens, 
                     new List<Instruction> 
                     {
                         new (0, 0, Consts.InstructionTypes.Number, 4),

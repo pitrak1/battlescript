@@ -19,12 +19,10 @@ public class InstructionParser
         {
             switch (tokens[0].Value)
             {
-                case "[":
-                    return HandleSquareBrackets(tokens);
+                case "[": case "(":
+                    return HandleStandardSeparator(tokens);
                 case "{":
                     return HandleCurlyBraces(tokens);
-                // case "(":
-                //     return HandleParenthesis(tokens);
                 // case ".":
                 //     return HandleMember(tokens);
                 default:
@@ -63,15 +61,18 @@ public class InstructionParser
         );
     }
 
-    private Instruction HandleSquareBrackets(List<Token> tokens)
+    private Instruction HandleStandardSeparator(List<Token> tokens)
     {
         var results = ParseAndRunEntriesWithinSeparator(tokens, [","]);
         var next = CheckAndRunFollowingTokens(tokens, results.Count);
+        var type = tokens[0].Value == "(" ? 
+            Consts.InstructionTypes.Parens : 
+            Consts.InstructionTypes.SquareBrackets;
         
         return new Instruction(
             tokens[0].Line,
             tokens[0].Column,
-            Consts.InstructionTypes.SquareBrackets,
+            type,
             results.Values,
             next
         );
