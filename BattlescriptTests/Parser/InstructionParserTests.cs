@@ -100,4 +100,87 @@ public static class InstructionParserTests
             );
         }
     }
+    
+    [TestFixture]
+    public class InstructionParserSquareBrackets
+    {
+        [Test]
+        public void HandlesSquareBrackets()
+        {
+            var lexer = new Lexer("[4, 'asdf']");
+            var lexerResult = lexer.Run();
+            var instructionParser = new InstructionParser();
+            var instructionParserResult = instructionParser.Run(lexerResult);
+            
+            Assertions.AssertInstructionEqual(
+                instructionParserResult,
+                new Instruction(
+                    0, 
+                    0, 
+                    Consts.InstructionTypes.SquareBrackets, 
+                    new List<Instruction> 
+                    {
+                        new (0, 0, Consts.InstructionTypes.Number, 4),
+                        new (0, 0, Consts.InstructionTypes.String, "asdf")
+                    }
+                )
+            );
+        }
+    }
+    
+    [TestFixture]
+    public class InstructionParserCurlyBraces
+    {
+        [Test]
+        public void HandlesSetDefinition()
+        {
+            var lexer = new Lexer("{4, 'asdf'}");
+            var lexerResult = lexer.Run();
+            var instructionParser = new InstructionParser();
+            var instructionParserResult = instructionParser.Run(lexerResult);
+            
+            Assertions.AssertInstructionEqual(
+                instructionParserResult,
+                new Instruction(
+                    0, 
+                    0, 
+                    Consts.InstructionTypes.SetDefinition, 
+                    new List<Instruction> 
+                    {
+                        new (0, 0, Consts.InstructionTypes.Number, 4),
+                        new (0, 0, Consts.InstructionTypes.String, "asdf")
+                    }
+                )
+            );
+        }
+        
+        [Test]
+        public void HandlesDictionaryDefinition()
+        {
+            var lexer = new Lexer("{4: 5, 6: 'asdf'}");
+            var lexerResult = lexer.Run();
+            var instructionParser = new InstructionParser();
+            var instructionParserResult = instructionParser.Run(lexerResult);
+            
+            Assertions.AssertInstructionEqual(
+                instructionParserResult,
+                new Instruction(
+                    0, 
+                    0, 
+                    Consts.InstructionTypes.DictionaryDefinition, 
+                    new List<(Instruction Key, Instruction Value)> 
+                    {
+                        (
+                            new (0, 0, Consts.InstructionTypes.Number, 4), 
+                            new (0, 0, Consts.InstructionTypes.Number, 5)
+                        ),
+                        (
+                            new (0, 0, Consts.InstructionTypes.Number, 6),
+                            new (0, 0, Consts.InstructionTypes.String, "asdf")
+                        )
+                    }
+                )
+            );
+        }
+    }
 }

@@ -2,11 +2,20 @@ namespace Battlescript;
 
 public static class InstructionParserUtilities
 {
-    public static int GetAssignmentIndex(List<Token> tokens)
+    public static int GetTokenIndex(
+        List<Token> tokens, 
+        List<string>? values = null, 
+        List<Consts.TokenTypes>? types = null
+    )
     {
         for (var i = 0; i < tokens.Count; i++)
         {
-            if (tokens[i].Type == Consts.TokenTypes.Assignment)
+            if (values is not null && values.Contains(tokens[i].Value))
+            {
+                return i;
+            }
+            
+            if (types is not null && types.Contains(tokens[i].Type))
             {
                 return i;
             }

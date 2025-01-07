@@ -5,23 +5,41 @@ namespace BattlescriptTests;
 public static class InstructionParserUtilitiesTests
 {
     [TestFixture]
-    public class GetAssignmentIndex
+    public class GetTokenIndex
     {
         [Test]
-        public void Exists()
+        public void FindsByType()
         {
             var lexer = new Lexer("x = 1 + 2");
             var tokens = lexer.Run();
-            var index = InstructionParserUtilities.GetAssignmentIndex(tokens);
+            var index = InstructionParserUtilities.GetTokenIndex(tokens, null, [Consts.TokenTypes.Assignment]);
             Assert.That(index, Is.EqualTo(1));
         }
 
         [Test]
-        public void DoesNotExist()
+        public void TypeDoesNotExist()
         {
-            Lexer lexer = new Lexer("x 1 + 2");
+            var lexer = new Lexer("x 1 + 2");
             var tokens = lexer.Run();
-            int index = InstructionParserUtilities.GetAssignmentIndex(tokens);
+            var index = InstructionParserUtilities.GetTokenIndex(tokens, null, [Consts.TokenTypes.Assignment]);
+            Assert.That(index, Is.EqualTo(-1));
+        }
+        
+        [Test]
+        public void FindsByValue()
+        {
+            var lexer = new Lexer("x = 1 + 2");
+            var tokens = lexer.Run();
+            var index = InstructionParserUtilities.GetTokenIndex(tokens, ["+"]);
+            Assert.That(index, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void ValueDoesNotExist()
+        {
+            var lexer = new Lexer("x = 1 2");
+            var tokens = lexer.Run();
+            var index = InstructionParserUtilities.GetTokenIndex(tokens, ["+"]);
             Assert.That(index, Is.EqualTo(-1));
         }
     }

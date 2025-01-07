@@ -4,7 +4,11 @@ public class InstructionParser
 {
     public Instruction Run(List<Token> tokens)
     {
-        var assignmentIndex = InstructionParserUtilities.GetAssignmentIndex(tokens);
+        var assignmentIndex = InstructionParserUtilities.GetTokenIndex(
+            tokens, 
+            null, 
+            [Consts.TokenTypes.Assignment]
+        );
         var operatorIndex = InstructionParserUtilities.GetOperatorIndex(tokens);
         
         if (assignmentIndex != -1)
@@ -16,15 +20,15 @@ public class InstructionParser
             switch (tokens[0].Value)
             {
                 case "[":
-                    return HandleSquareBraces(tokens);
-                // case "{":
-                //     return HandleCurlyBraces(tokens);
+                    return HandleSquareBrackets(tokens);
+                case "{":
+                    return HandleCurlyBraces(tokens);
                 // case "(":
                 //     return HandleParenthesis(tokens);
                 // case ".":
                 //     return HandleMember(tokens);
                 default:
-                    throw new Exception("Unexpected token");
+                    return ThrowErrorForToken("Unexpected character", tokens[0]);
             }
         }
         else if (operatorIndex != -1)
@@ -41,7 +45,7 @@ public class InstructionParser
         }
         else
         {
-            throw new Exception("Syntax error");
+            return ThrowErrorForToken("Unexpected character", tokens[0]);
         }
     }
 
@@ -59,7 +63,7 @@ public class InstructionParser
         );
     }
 
-    private Instruction HandleSquareBraces(List<Token> tokens)
+    private Instruction HandleSquareBrackets(List<Token> tokens)
     {
         var results = ParseAndRunEntriesWithinSeparator(tokens, [","]);
         var next = CheckAndRunFollowingTokens(tokens, results.Count);
@@ -67,9 +71,66 @@ public class InstructionParser
         return new Instruction(
             tokens[0].Line,
             tokens[0].Column,
-            Consts.InstructionTypes.SquareBraces,
+            Consts.InstructionTypes.SquareBrackets,
             results.Values,
             next
+        );
+    }
+
+    private Instruction HandleCurlyBraces(List<Token> tokens)
+    {
+        // A colon will indicate key value pairs within a dictionary definition
+        if (InstructionParserUtilities.GetTokenIndex(tokens, [":"]) != -1)
+        {
+            return HandleDictionaryDefinition(tokens);
+        }
+        else
+        {
+            return HandleSetDefinition(tokens);
+        }
+    }
+
+    private Instruction HandleDictionaryDefinition(List<Token> tokens)
+    {
+        var results = 
+            InstructionParserUtilities.ParseTokensUntilMatchingSeparator(tokens, [","]);
+            
+        // There should be no characters following a dictionary definition
+        CheckForNoFollowingTokens(tokens, results.Count);
+
+        List<(Instruction? Key, Instruction? Value)> pairs = [];
+        foreach (var entry in results.Entries)
+        {
+            var colonIndex = InstructionParserUtilities.GetTokenIndex(entry, [":"]);
+            if (colonIndex == -1)
+            {
+                ThrowErrorForToken("Dictionary entry should have key value pair", entry[0]);
+            }
+                
+            var result = RunLeftAndRightAroundIndex(entry, colonIndex);
+            pairs.Add(result);
+        }
+            
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.DictionaryDefinition,
+            pairs
+        );
+    }
+
+    private Instruction HandleSetDefinition(List<Token> tokens)
+    {
+        var results = ParseAndRunEntriesWithinSeparator(tokens, [","]);
+            
+        // There should be no characters following a set definition
+        CheckForNoFollowingTokens(tokens, results.Count);
+            
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.SetDefinition,
+            results.Values
         );
     }
 
@@ -102,10 +163,7 @@ public class InstructionParser
 
     private Instruction HandleLiteral(List<Token> tokens, Consts.TokenTypes type)
     {
-        if (tokens.Count != 1)
-        {
-            throw new Exception("Unexpected token");
-        }
+        CheckForNoFollowingTokens(tokens, 1);
 
         dynamic? value;
         Consts.InstructionTypes instructionType;
@@ -157,5 +215,24 @@ public class InstructionParser
         return tokens.Count > expectedCount ? 
             Run(tokens.GetRange(expectedCount, tokens.Count - expectedCount)) : 
             null;
+    }
+
+    private void CheckForNoFollowingTokens(List<Token> tokens, int expectedCount)
+    {
+        if (tokens.Count > expectedCount)
+        {
+            ThrowErrorForToken("Unexpected character", tokens[expectedCount]);
+        }
+    }
+
+    // I put a return type of Instruction here because the interpreter doesn't seem to recognize that this
+    // function always throws
+    private Instruction ThrowErrorForToken(string message, Token token)
+    {
+        throw new Exception(
+            message + "\n" +
+            "Line " + token.Line + ", Column " + token.Column + "\n" +
+            "Value: " + token.Value
+        );
     }
 }
