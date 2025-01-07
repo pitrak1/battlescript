@@ -47,66 +47,49 @@ public class InstructionParser
 
     private Instruction HandleAssignment(List<Token> tokens, int assignmentIndex)
     {
-        Instruction left = Run(tokens.GetRange(0, assignmentIndex));
-        Instruction right = Run(tokens.GetRange(assignmentIndex + 1, tokens.Count - assignmentIndex - 1));
-        
+        var assignmentToken = tokens[assignmentIndex];
+        var result = RunLeftAndRightAroundIndex(tokens, assignmentIndex);
         return new Instruction(
-            tokens[assignmentIndex].Line, 
-            tokens[assignmentIndex].Column, 
+            assignmentToken.Line, 
+            assignmentToken.Column, 
             Consts.InstructionTypes.Assignment,
-            tokens[assignmentIndex].Value,
-            left,
-            right
+            assignmentToken.Value,
+            result.Left,
+            result.Right
         );
     }
 
     private Instruction HandleSquareBraces(List<Token> tokens)
     {
-        var results = InstructionParserUtilities.ParseTokensUntilMatchingSeparator(tokens, [","]);
-        
-        List<Instruction> values = [];
-        foreach (var entry in results.Entries)
-        {
-              values.Add(Run(entry));
-        }
-        
-        Instruction? next = null;
-        if (tokens.Count > results.Count) 
-        {
-            next = Run(tokens.GetRange(results.Count, tokens.Count - results.Count));
-        }
+        var results = ParseAndRunEntriesWithinSeparator(tokens, [","]);
+        var next = CheckAndRunFollowingTokens(tokens, results.Count);
         
         return new Instruction(
             tokens[0].Line,
             tokens[0].Column,
             Consts.InstructionTypes.SquareBraces,
-            values,
+            results.Values,
             next
         );
     }
 
     private Instruction HandleOperation(List<Token> tokens, int operatorIndex)
     {
-        Instruction left = Run(tokens.GetRange(0, operatorIndex));
-        Instruction right = Run(tokens.GetRange(operatorIndex + 1, tokens.Count - operatorIndex - 1));
-        
+        var operatorToken = tokens[operatorIndex];
+        var result = RunLeftAndRightAroundIndex(tokens, operatorIndex);
         return new Instruction(
-            tokens[operatorIndex].Line, 
-            tokens[operatorIndex].Column, 
+            operatorToken.Line, 
+            operatorToken.Column, 
             Consts.InstructionTypes.Operation,
-            tokens[operatorIndex].Value,
-            left,
-            right
+            operatorToken.Value,
+            result.Left,
+            result.Right
         );
     }
 
     private Instruction HandleIdentifier(List<Token> tokens)
     {
-        Instruction? next = null;
-        if (tokens.Count > 1) 
-        {
-            next = Run(tokens.GetRange(1, tokens.Count - 1));
-        }
+        var next = CheckAndRunFollowingTokens(tokens, 1);
         
         return new Instruction(
             tokens[0].Line, 
@@ -126,22 +109,53 @@ public class InstructionParser
 
         dynamic? value;
         Consts.InstructionTypes instructionType;
-        if (type == Consts.TokenTypes.Number)
+        switch (type)
         {
-            value = Convert.ToDouble(tokens[0].Value);
-            instructionType = Consts.InstructionTypes.Number;
-        }
-        else if (type == Consts.TokenTypes.String)
-        {
-            value = tokens[0].Value;
-            instructionType = Consts.InstructionTypes.String;
-        }
-        else
-        {
-            value = tokens[0].Value == "True";
-            instructionType = Consts.InstructionTypes.Boolean;
+            case Consts.TokenTypes.Number:
+                value = Convert.ToDouble(tokens[0].Value);
+                instructionType = Consts.InstructionTypes.Number;
+                break;
+            case Consts.TokenTypes.String:
+                value = tokens[0].Value;
+                instructionType = Consts.InstructionTypes.String;
+                break;
+            default:
+                value = tokens[0].Value == "True";
+                instructionType = Consts.InstructionTypes.Boolean;
+                break;
         }
         
         return new Instruction(tokens[0].Line, tokens[0].Column, instructionType, value);
+    }
+
+    private (int Count, List<Instruction> Values) ParseAndRunEntriesWithinSeparator(
+        List<Token> tokens, 
+        List<string> separators
+    )
+    {
+        var results = InstructionParserUtilities.ParseTokensUntilMatchingSeparator(tokens, separators);
+        
+        List<Instruction> values = [];
+        foreach (var entry in results.Entries)
+        {
+            values.Add(Run(entry));
+        }
+
+        return (results.Count, values);
+    }
+
+    private (Instruction? Left, Instruction? Right) RunLeftAndRightAroundIndex(List<Token> tokens, int index)
+    {
+        var left = Run(tokens.GetRange(0, index));
+        var right = Run(tokens.GetRange(index + 1, tokens.Count - index - 1));
+
+        return (left, right);
+    }
+
+    private Instruction? CheckAndRunFollowingTokens(List<Token> tokens, int expectedCount)
+    {
+        return tokens.Count > expectedCount ? 
+            Run(tokens.GetRange(expectedCount, tokens.Count - expectedCount)) : 
+            null;
     }
 }
