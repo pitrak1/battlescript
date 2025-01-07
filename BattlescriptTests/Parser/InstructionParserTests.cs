@@ -152,6 +152,33 @@ public static class InstructionParserTests
     }
     
     [TestFixture]
+    public class InstructionParserMembers
+    {
+        [Test]
+        public void HandlesMembers()
+        {
+            // Nonsensical expression but works for tests *shrug*
+            var lexer = new Lexer(".asdf");
+            var lexerResult = lexer.Run();
+            var instructionParser = new InstructionParser();
+            var instructionParserResult = instructionParser.Run(lexerResult);
+            
+            Assertions.AssertInstructionEqual(
+                instructionParserResult,
+                new Instruction(
+                    0, 
+                    0, 
+                    Consts.InstructionTypes.SquareBrackets, 
+                    new List<Instruction> 
+                    {
+                        new (0, 0, Consts.InstructionTypes.String, "asdf")
+                    }
+                )
+            );
+        }
+    }
+    
+    [TestFixture]
     public class InstructionParserCurlyBraces
     {
         [Test]

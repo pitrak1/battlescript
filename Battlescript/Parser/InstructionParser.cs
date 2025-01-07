@@ -21,12 +21,12 @@ public class InstructionParser
             {
                 case "[": case "(":
                     return HandleStandardSeparator(tokens);
+                case ".":
+                    return HandleMember(tokens);
                 case "{":
                     return HandleCurlyBraces(tokens);
-                // case ".":
-                //     return HandleMember(tokens);
                 default:
-                    return ThrowErrorForToken("Unexpected character", tokens[0]);
+                    return ThrowErrorForToken("Unexpected token", tokens[0]);
             }
         }
         else if (operatorIndex != -1)
@@ -43,7 +43,7 @@ public class InstructionParser
         }
         else
         {
-            return ThrowErrorForToken("Unexpected character", tokens[0]);
+            return ThrowErrorForToken("Unexpected token", tokens[0]);
         }
     }
 
@@ -74,6 +74,27 @@ public class InstructionParser
             tokens[0].Column,
             type,
             results.Values,
+            next
+        );
+    }
+    
+    private Instruction HandleMember(List<Token> tokens)
+    {
+        var indexValue = new Instruction(
+            tokens[1].Line,
+            tokens[1].Column,
+            Consts.InstructionTypes.String,
+            tokens[1].Value
+        );
+        var next = CheckAndRunFollowingTokens(tokens, 2);
+        
+        // It seems like the easiest way to handle using the period for accessing members is to treat it exactly
+        // like a square bracket (i.e. x.asdf = x["asdf"]).  This may change later once I know python better :P
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.SquareBrackets,
+            new List<Instruction> { indexValue },
             next
         );
     }
@@ -222,7 +243,7 @@ public class InstructionParser
     {
         if (tokens.Count > expectedCount)
         {
-            ThrowErrorForToken("Unexpected character", tokens[expectedCount]);
+            ThrowErrorForToken("Unexpected token", tokens[expectedCount]);
         }
     }
 
