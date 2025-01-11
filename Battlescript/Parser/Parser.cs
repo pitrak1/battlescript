@@ -50,6 +50,11 @@ public class Parser
                 _currentTokens.Add(token);
             }
         }
+
+        if (_currentTokens.Count != 0)
+        {
+            ParseInstructionAndAddToCurrentScope();
+        }
         
         return _instructions;
     }

@@ -137,6 +137,7 @@ public static class Consts
         String,
         Boolean,
         If,
+        For,
         While,
         SquareBrackets,
         SetDefinition,
@@ -147,5 +148,17 @@ public static class Consts
         Else,
         Btl,
         Breakpoint
+    };
+    
+    public enum VariableTypes
+    {
+        Null,
+        Number,
+        String,
+        Boolean,
+        Array,
+        Dictionary,
+        Set,
+        Function
     };
 }

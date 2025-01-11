@@ -56,6 +56,7 @@ public class InstructionParser
             assignmentToken.Column, 
             Consts.InstructionTypes.Assignment,
             assignmentToken.Value,
+            null,
             result.Left,
             result.Right
         );
@@ -165,6 +166,7 @@ public class InstructionParser
             operatorToken.Column, 
             Consts.InstructionTypes.Operation,
             operatorToken.Value,
+            null,
             result.Left,
             result.Right
         );

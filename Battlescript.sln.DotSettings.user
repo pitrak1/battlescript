@@ -5,5 +5,7 @@
     &lt;ProjectFile&gt;D828B451-A5D4-460B-94ED-048730099A1D/d:Lexer/f:LexerTests.cs&lt;/ProjectFile&gt;
     &lt;ProjectFile&gt;D828B451-A5D4-460B-94ED-048730099A1D/d:Parser/f:InstructionParserTests.cs&lt;/ProjectFile&gt;
     &lt;ProjectFile&gt;D828B451-A5D4-460B-94ED-048730099A1D/d:Parser/f:InstructionParserUtilitiesTests.cs&lt;/ProjectFile&gt;
+    &lt;ProjectFile&gt;D828B451-A5D4-460B-94ED-048730099A1D/d:Interpreter/f:InterpreterTests.cs&lt;/ProjectFile&gt;
+    &lt;ProjectFile&gt;D828B451-A5D4-460B-94ED-048730099A1D/d:Parser/f:ParserTests.cs&lt;/ProjectFile&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

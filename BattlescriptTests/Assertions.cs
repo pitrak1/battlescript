@@ -48,7 +48,7 @@ public static class Assertions
         }
     }
 
-    private static void AssertInstructionListEqual(List<Instruction>? input, List<Instruction>? expected)
+    public static void AssertInstructionListEqual(List<Instruction>? input, List<Instruction>? expected)
     {
         Assert.That(input, Is.Not.Null);
         Assert.That(expected, Is.Not.Null);
@@ -73,6 +73,46 @@ public static class Assertions
         {
             AssertInstructionEqual(input[i].Key, expected[i].Key);
             AssertInstructionEqual(input[i].Value, expected[i].Value);
+        }
+    }
+
+    public static void AssertScopeListEqual(
+        List<Dictionary<string, Variable>>? input,
+        List<Dictionary<string, Variable>>? expected)
+    {
+        if (input is null)
+        {
+            Assert.That(expected, Is.Null);
+        }
+        else
+        {
+            Assert.That(expected, Is.Not.Null);
+            Assert.That(input.Count, Is.EqualTo(expected.Count));
+
+            for (var i = 0; i < input.Count; i++)
+            {
+                AssertScopesEqual(input[i], expected[i]);
+            }
+        }
+    }
+
+    private static void AssertScopesEqual(Dictionary<string, Variable>? input, Dictionary<string, Variable>? expected)
+    {
+        Assert.That(input, Is.Not.Null);
+        Assert.That(expected, Is.Not.Null);
+
+        foreach (var kvp in input)
+        {
+            Assert.That(expected, Contains.Key(kvp.Key));
+            Assert.That(expected[kvp.Key], Is.EqualTo(kvp.Value));
+        }
+        
+        // This isn't efficient, but it's probably the simplest way to do this.  we'll have to revisit
+        // this once the values of variables get more complicated anyway
+        foreach (var kvp in expected)
+        {
+            Assert.That(input, Contains.Key(kvp.Key));
+            Assert.That(input[kvp.Key], Is.EqualTo(kvp.Value));
         }
     }
 }
