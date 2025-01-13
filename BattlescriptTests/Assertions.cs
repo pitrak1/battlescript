@@ -100,19 +100,32 @@ public static class Assertions
     {
         Assert.That(input, Is.Not.Null);
         Assert.That(expected, Is.Not.Null);
-
-        foreach (var kvp in input)
-        {
-            Assert.That(expected, Contains.Key(kvp.Key));
-            Assert.That(expected[kvp.Key], Is.EqualTo(kvp.Value));
-        }
         
-        // This isn't efficient, but it's probably the simplest way to do this.  we'll have to revisit
-        // this once the values of variables get more complicated anyway
         foreach (var kvp in expected)
         {
             Assert.That(input, Contains.Key(kvp.Key));
-            Assert.That(input[kvp.Key], Is.EqualTo(kvp.Value));
+            if (input[kvp.Key] is Variable)
+            {
+                AssertVariableEqual(input[kvp.Key], expected[kvp.Key]);
+            }
+            else
+            {
+                Assert.That(input[kvp.Key], Is.EqualTo(kvp.Value));
+            }
+        }
+    }
+
+    private static void AssertVariableEqual(Variable? input, Variable? expected)
+    {
+        if (input is null)
+        {
+            Assert.That(expected, Is.Null);
+        }
+        else
+        {
+            Assert.That(expected, Is.Not.Null);
+            Assert.That(input.Value, Is.EqualTo(expected.Value));
+            Assert.That(input.Type, Is.EqualTo(expected.Type));
         }
     }
 }

@@ -68,6 +68,7 @@ public static class InstructionParserTests
                     0, 
                     Consts.InstructionTypes.Operation, 
                     "+", 
+                    null,
                     new Instruction(0, 0, Consts.InstructionTypes.Number, 5.0),
                     new Instruction(0, 0, Consts.InstructionTypes.Number, 6.0)
                 )
@@ -94,6 +95,7 @@ public static class InstructionParserTests
                     0, 
                     Consts.InstructionTypes.Assignment, 
                     "=", 
+                    null,
                     new Instruction(0, 0, Consts.InstructionTypes.Number, 5.0),
                     new Instruction(0, 0, Consts.InstructionTypes.Number, 6.0)
                 )
