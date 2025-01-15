@@ -33,6 +33,17 @@ public class InstructionParser
         {
             return HandleOperation(tokens, operatorIndex);
         }
+        // This is just something that's going to take some thought and I'm eating tacos right now
+        // else if (tokens[0].Type == Consts.TokenTypes.Keyword)
+        // {
+        //     switch (tokens[0].Value)
+        //     {
+        //         case "if":
+        //             return HandleIf(tokens);
+        //         default:
+        //             return ThrowErrorForToken("Unexpected token", tokens[0]);
+        //     }
+        // }
         else if (tokens[0].Type == Consts.TokenTypes.Identifier)
         {
             return HandleIdentifier(tokens);
@@ -171,6 +182,17 @@ public class InstructionParser
             result.Right
         );
     }
+
+    // private Instruction HandleIf(List<Token> tokens)
+    // {
+    //     if (tokens[^1].Value != ":")
+    //     {
+    //         ThrowErrorForToken("If statement should end with colon", tokens[0]);
+    //     }
+    //
+    //     var condition = Run(tokens.GetRange(1, tokens.Count - 1));
+    //     
+    // }
 
     private Instruction HandleIdentifier(List<Token> tokens)
     {

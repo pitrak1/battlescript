@@ -104,7 +104,7 @@ public static class InstructionParserTests
     }
     
     [TestFixture]
-    public class InstructionParserStandardSeparators
+    public class InstructionParserSeparators
     {
         [Test]
         public void HandlesSquareBrackets()
@@ -128,7 +128,7 @@ public static class InstructionParserTests
                 )
             );
         }
-        
+
         [Test]
         public void HandlesParens()
         {
@@ -136,26 +136,22 @@ public static class InstructionParserTests
             var lexerResult = lexer.Run();
             var instructionParser = new InstructionParser();
             var instructionParserResult = instructionParser.Run(lexerResult);
-            
+
             Assertions.AssertInstructionEqual(
                 instructionParserResult,
                 new Instruction(
-                    0, 
-                    0, 
-                    Consts.InstructionTypes.Parens, 
-                    new List<Instruction> 
+                    0,
+                    0,
+                    Consts.InstructionTypes.Parens,
+                    new List<Instruction>
                     {
-                        new (0, 0, Consts.InstructionTypes.Number, 4),
-                        new (0, 0, Consts.InstructionTypes.String, "asdf")
+                        new(0, 0, Consts.InstructionTypes.Number, 4),
+                        new(0, 0, Consts.InstructionTypes.String, "asdf")
                     }
                 )
             );
         }
-    }
-    
-    [TestFixture]
-    public class InstructionParserMembers
-    {
+
         [Test]
         public void HandlesMembers()
         {
@@ -164,7 +160,7 @@ public static class InstructionParserTests
             var lexerResult = lexer.Run();
             var instructionParser = new InstructionParser();
             var instructionParserResult = instructionParser.Run(lexerResult);
-            
+        
             Assertions.AssertInstructionEqual(
                 instructionParserResult,
                 new Instruction(
@@ -178,11 +174,7 @@ public static class InstructionParserTests
                 )
             );
         }
-    }
-    
-    [TestFixture]
-    public class InstructionParserCurlyBraces
-    {
+        
         [Test]
         public void HandlesSetDefinition()
         {

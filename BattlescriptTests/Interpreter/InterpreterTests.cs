@@ -161,4 +161,132 @@ public static class InterpreterTests
             Assertions.AssertScopeListEqual(interpreterResult, expected);
         }
     }
+    
+    [TestFixture]
+    public class InterpreterSeparators
+    {
+        [Test]
+        public void HandlesArrayDefinition()
+        {
+            var lexer = new Lexer("x = [5, '5']");
+            var lexerResult = lexer.Run();
+            var parser = new Parser(lexerResult);
+            var parserResult = parser.Run();
+            var interpreter = new Interpreter(parserResult);
+            var interpreterResult = interpreter.Run();
+    
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    {
+                        "x", 
+                        new Variable(
+                            Consts.VariableTypes.List, 
+                            new List<Variable>
+                            {
+                                new (Consts.VariableTypes.Number, 5),
+                                new (Consts.VariableTypes.String, "5"),
+                            }
+                        )
+                    },
+                }
+            };
+            
+            Assertions.AssertScopeListEqual(interpreterResult, expected);
+        }
+        
+        [Test]
+        public void HandlesTupleDefinition()
+        {
+            var lexer = new Lexer("x = (5, '5')");
+            var lexerResult = lexer.Run();
+            var parser = new Parser(lexerResult);
+            var parserResult = parser.Run();
+            var interpreter = new Interpreter(parserResult);
+            var interpreterResult = interpreter.Run();
+    
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    {
+                        "x", 
+                        new Variable(
+                            Consts.VariableTypes.Tuple, 
+                            new List<Variable>
+                            {
+                                new (Consts.VariableTypes.Number, 5),
+                                new (Consts.VariableTypes.String, "5"),
+                            }
+                        )
+                    },
+                }
+            };
+            
+            Assertions.AssertScopeListEqual(interpreterResult, expected);
+        }
+        
+        [Test]
+        public void HandlesSetDefinition()
+        {
+            var lexer = new Lexer("x = {5, '5'}");
+            var lexerResult = lexer.Run();
+            var parser = new Parser(lexerResult);
+            var parserResult = parser.Run();
+            var interpreter = new Interpreter(parserResult);
+            var interpreterResult = interpreter.Run();
+    
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    {
+                        "x", 
+                        new Variable(
+                            Consts.VariableTypes.Set, 
+                            new List<Variable>
+                            {
+                                new (Consts.VariableTypes.Number, 5),
+                                new (Consts.VariableTypes.String, "5"),
+                            }
+                        )
+                    },
+                }
+            };
+            
+            Assertions.AssertScopeListEqual(interpreterResult, expected);
+        }
+        
+        [Test]
+        public void HandlesDictionaryDefinition()
+        {
+            var lexer = new Lexer("x = {'asdf': 5, 'qwer': '5'}");
+            var lexerResult = lexer.Run();
+            var parser = new Parser(lexerResult);
+            var parserResult = parser.Run();
+            var interpreter = new Interpreter(parserResult);
+            var interpreterResult = interpreter.Run();
+    
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    {
+                        "x", 
+                        new Variable(
+                            Consts.VariableTypes.Dictionary, 
+                            new Dictionary<string, Variable>
+                            {
+                                {"asdf", new (Consts.VariableTypes.Number, 5)},
+                                {"qwer", new (Consts.VariableTypes.String, "5")}
+                            }
+                        )
+                    },
+                }
+            };
+            
+            Assertions.AssertScopeListEqual(interpreterResult, expected);
+        }
+    }
 }

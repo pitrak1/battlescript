@@ -36,6 +36,14 @@ public class Interpreter(List<Instruction> instructions)
                 return HandleVariable(instruction);
             case Consts.InstructionTypes.Operation:
                 return HandleOperation(instruction);
+            case Consts.InstructionTypes.SquareBrackets:
+                return HandleSquareBrackets(instruction);
+            case Consts.InstructionTypes.Parens:
+                return HandleParens(instruction);
+            case Consts.InstructionTypes.SetDefinition:
+                return HandleSetDefinition(instruction);
+            case Consts.InstructionTypes.DictionaryDefinition:
+                return HandleDictionaryDefinition(instruction);
             default:
                 throw new Exception($"Unknown instruction type: {instruction.Type}");
         }
@@ -90,6 +98,50 @@ public class Interpreter(List<Instruction> instructions)
         return new Variable(type, result);
     }
 
+    private Variable HandleSquareBrackets(Instruction instruction)
+    {
+        if (_ongoingContextsStack.Count > 0)
+        {
+            // This means that it's trying to get a member of a list/dict/etc, not create a list.
+            // On the TODO list
+            return new Variable(0, 0);
+        }
+        else
+        {
+            var values = new List<Variable>();
+            // If we got here, that means that the value of the instruction should be a list of instructions
+            foreach (var instValue in instruction.Value)
+            {
+                values.Add(InterpretInstruction(instValue));
+            }
+            return new Variable(Consts.VariableTypes.List, values);
+        }
+    }
+    
+    private Variable HandleParens(Instruction instruction)
+    {
+        if (_ongoingContextsStack.Count > 0)
+        {
+            // This means that it's trying to call a function, not create a tuple
+            // The parser doesn't currently support that correctly
+            return new Variable(0, 0);
+        }
+        else
+        {
+            return new Variable(Consts.VariableTypes.Tuple, InterpretList(instruction.Value));
+        }
+    }
+
+    private Variable HandleSetDefinition(Instruction instruction)
+    {
+        return new Variable(Consts.VariableTypes.Set, InterpretList(instruction.Value));
+    }
+    
+    private Variable HandleDictionaryDefinition(Instruction instruction)
+    {
+        return new Variable(Consts.VariableTypes.Dictionary, InterpretKvpList(instruction.Value));
+    }
+
     private Variable ReturnVariableOrInterpretNext(Variable variable, Instruction? next)
     {
         if (next is not null)
@@ -100,5 +152,27 @@ public class Interpreter(List<Instruction> instructions)
             return result;
         }
         return variable;
+    }
+
+    private List<Variable> InterpretList(List<Instruction> instructions)
+    {
+        var values = new List<Variable>();
+        foreach (var instValue in instructions)
+        {
+            values.Add(InterpretInstruction(instValue));
+        }
+        return values;
+    }
+    
+    private Dictionary<string, Variable> InterpretKvpList(List<(Instruction Key, Instruction Value)> instructions)
+    {
+        var values = new Dictionary<string, Variable>();
+        foreach (var instValue in instructions)
+        {
+            var key = InterpretInstruction(instValue.Key);
+            var value = InterpretInstruction(instValue.Value);
+            values[key.Value] = value;
+        }
+        return values;
     }
 }

@@ -156,9 +156,10 @@ public static class Consts
         Number,
         String,
         Boolean,
-        Array,
+        List,
         Dictionary,
         Set,
+        Tuple,
         Function
     };
 }
