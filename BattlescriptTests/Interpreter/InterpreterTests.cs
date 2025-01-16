@@ -2,6 +2,7 @@ using Battlescript;
 
 namespace BattlescriptTests;
 
+[TestFixture]
 public static class InterpreterTests
 {
     [TestFixture]
