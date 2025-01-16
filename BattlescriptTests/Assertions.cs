@@ -39,12 +39,21 @@ public static class Assertions
             {
                 AssertKeyValuePairListEqual(input.Value, expected.Value);
             }
+            else if (input.Value is Instruction)
+            {
+                AssertInstructionEqual(input.Value, expected.Value);
+            }
             else
             {
                 Assert.That(input.Value, Is.EqualTo(expected.Value));
             }
             AssertInstructionEqual(input.Left, expected.Left);
             AssertInstructionEqual(input.Right, expected.Right);
+
+            if (input.Instructions.Count > 0)
+            {
+                AssertInstructionListEqual(input.Instructions, expected.Instructions);
+            }
         }
     }
 

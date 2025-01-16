@@ -28,6 +28,8 @@ public class Parser
             var token = _tokens[tokenIndex];
             if (token.Type == Consts.TokenTypes.Newline)
             {
+                ParseInstructionAndAddToCurrentScope();
+                
                 var newIndentValue = int.Parse(token.Value);
                 // If we are at the start of a code block
                 if (newIndentValue > currentIndentValue) {
@@ -42,8 +44,6 @@ public class Parser
                     // largest containing scope
                     _scopes.RemoveAt(_scopes.Count - 1);
                 }
-
-                ParseInstructionAndAddToCurrentScope();
             }
             else
             {
@@ -61,9 +61,12 @@ public class Parser
 
     private void ParseInstructionAndAddToCurrentScope()
     {
-        // Parse the current tokens, add to the current scope, and reset list of current tokens for next instruction
-        var instruction = _instructionParser.Run(_currentTokens);
-        _scopes[^1].Add(instruction);
-        _currentTokens = [];
+        if (_currentTokens.Count != 0)
+        {
+            // Parse the current tokens, add to the current scope, and reset list of current tokens for next instruction
+            var instruction = _instructionParser.Run(_currentTokens);
+            _scopes[^1].Add(instruction);
+            _currentTokens = [];
+        }
     }
 }

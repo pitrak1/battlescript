@@ -3,7 +3,7 @@ namespace Battlescript;
 public class Lexer(string input)
 {
     private int _index;
-    private int _line;
+    private int _line = 1;
     private int _column;
 
     private List<Token> _tokens = [];
@@ -18,7 +18,7 @@ public class Lexer(string input)
             if (nextCharacter == '\n')
             {
                 HandleNewline();
-            } 
+            }
             else if (nextCharacter == ' ')
             {
                 _index++;
@@ -98,11 +98,11 @@ public class Lexer(string input)
         // We are assuming indent sizes of 4 spaces or 1 tab
         var indent = LexerUtilities.GetNextCharactersInCollection(
             input, 
-            _index,
+            _index + 1,
             Consts.Indentations,
             CollectionType.Inclusive
         );
-
+        
         var totalSpaces = 0;
         foreach (var indentChar in indent)
         {
@@ -115,7 +115,7 @@ public class Lexer(string input)
                 totalSpaces += 4;
             }
         }
-        var totalIndent = (int)MathF.Floor(totalSpaces);
+        var totalIndent = (int)MathF.Floor(totalSpaces / 4);
                 
         // This is the number of characters in the indent plus the newline
         _index += indent.Length + 1;
@@ -125,7 +125,7 @@ public class Lexer(string input)
         _column = 0;
         _tokens.Add(new Token(Consts.TokenTypes.Newline, totalIndent.ToString(), _line, _column));
     }
-
+    
     private void HandleNumber()
     {
         var numberCharacters = LexerUtilities.GetNextCharactersInCollection(

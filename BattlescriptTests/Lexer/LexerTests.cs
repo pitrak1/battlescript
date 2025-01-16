@@ -208,4 +208,50 @@ public static class LexerTests
             });
         }
     }
+    
+    [TestFixture]
+    public class NewLine
+    {
+        [Test]
+        public void DetectsNewLineAndIndents()
+        {
+            // This has 4 spaces
+            var lexer = new Lexer("asdf\n\t\t    asdf");
+            var result = lexer.Run();
+            Assertions.AssertTokenListEqual(result, new List<Token>()
+            {
+                new(Consts.TokenTypes.Identifier, "asdf"),
+                new(Consts.TokenTypes.Newline, "3"),
+                new(Consts.TokenTypes.Identifier, "asdf")
+            });
+        }
+
+        [Test]
+        public void IgnoresTrailingSpaces()
+        {
+            // This has 3 spaces
+            var lexer = new Lexer("asdf\n\t\t   asdf");
+            var result = lexer.Run();
+            Assertions.AssertTokenListEqual(result, new List<Token>()
+            {
+                new(Consts.TokenTypes.Identifier, "asdf"),
+                new(Consts.TokenTypes.Newline, "2"),
+                new(Consts.TokenTypes.Identifier, "asdf")
+            });
+        }
+        
+        [Test]
+        public void HandlesNoIndent()
+        {
+            // This has 3 spaces
+            var lexer = new Lexer("asdf\nasdf");
+            var result = lexer.Run();
+            Assertions.AssertTokenListEqual(result, new List<Token>()
+            {
+                new(Consts.TokenTypes.Identifier, "asdf"),
+                new(Consts.TokenTypes.Newline, "0"),
+                new(Consts.TokenTypes.Identifier, "asdf")
+            });
+        }
+    }
 }

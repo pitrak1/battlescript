@@ -24,7 +24,25 @@ public class InstructionParser
                 case ".":
                     return HandleMember(tokens);
                 case "{":
-                    return HandleCurlyBraces(tokens);
+                    // A colon will indicate key value pairs within a dictionary definition
+                    if (InstructionParserUtilities.GetTokenIndex(tokens, [":"]) != -1)
+                    {
+                        return HandleDictionaryDefinition(tokens);
+                    }
+                    else
+                    {
+                        return HandleSetDefinition(tokens);
+                    }
+                default:
+                    return ThrowErrorForToken("Unexpected token", tokens[0]);
+            }
+        }
+        else if (tokens[0].Type == Consts.TokenTypes.Keyword)
+        {
+            switch (tokens[0].Value)
+            {
+                case "if":
+                    return HandleIf(tokens);
                 default:
                     return ThrowErrorForToken("Unexpected token", tokens[0]);
             }
@@ -33,17 +51,6 @@ public class InstructionParser
         {
             return HandleOperation(tokens, operatorIndex);
         }
-        // This is just something that's going to take some thought and I'm eating tacos right now
-        // else if (tokens[0].Type == Consts.TokenTypes.Keyword)
-        // {
-        //     switch (tokens[0].Value)
-        //     {
-        //         case "if":
-        //             return HandleIf(tokens);
-        //         default:
-        //             return ThrowErrorForToken("Unexpected token", tokens[0]);
-        //     }
-        // }
         else if (tokens[0].Type == Consts.TokenTypes.Identifier)
         {
             return HandleIdentifier(tokens);
@@ -111,19 +118,6 @@ public class InstructionParser
         );
     }
 
-    private Instruction HandleCurlyBraces(List<Token> tokens)
-    {
-        // A colon will indicate key value pairs within a dictionary definition
-        if (InstructionParserUtilities.GetTokenIndex(tokens, [":"]) != -1)
-        {
-            return HandleDictionaryDefinition(tokens);
-        }
-        else
-        {
-            return HandleSetDefinition(tokens);
-        }
-    }
-
     private Instruction HandleDictionaryDefinition(List<Token> tokens)
     {
         var results = 
@@ -183,16 +177,21 @@ public class InstructionParser
         );
     }
 
-    // private Instruction HandleIf(List<Token> tokens)
-    // {
-    //     if (tokens[^1].Value != ":")
-    //     {
-    //         ThrowErrorForToken("If statement should end with colon", tokens[0]);
-    //     }
-    //
-    //     var condition = Run(tokens.GetRange(1, tokens.Count - 1));
-    //     
-    // }
+    private Instruction HandleIf(List<Token> tokens)
+    {
+        if (tokens[^1].Value != ":")
+        {
+            ThrowErrorForToken("If statement should end with colon", tokens[0]);
+        }
+    
+        var condition = Run(tokens.GetRange(1, tokens.Count - 2));
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.If,
+            condition
+        );
+    }
 
     private Instruction HandleIdentifier(List<Token> tokens)
     {
