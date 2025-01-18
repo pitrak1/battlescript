@@ -111,7 +111,7 @@ public static class Consts
         "^=",
         ">>=",
         "<<=",
-        ":="
+        ":=" // walrus operator is not supported yet because it's complicated. Sorry :(
     ];
 
     public enum TokenTypes

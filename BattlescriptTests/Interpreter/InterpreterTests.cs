@@ -11,13 +11,7 @@ public static class InterpreterTests
         [Test]
         public void HandlesBasicAssignmentsFromLiteralToVariable()
         {
-            var lexer = new Lexer("x = 5");
-            var lexerResult = lexer.Run();
-            var parser = new Parser(lexerResult);
-            var parserResult = parser.Run();
-            var interpreter = new Interpreter(parserResult);
-            var interpreterResult = interpreter.Run();
-    
+            var input = "x = 5";
             var expected = new List<Dictionary<string, Variable>>
             {
                 new ()
@@ -25,20 +19,13 @@ public static class InterpreterTests
                     { "x", new Variable(Consts.VariableTypes.Number, 5) }
                 }
             };
-            
-            Assertions.AssertScopeListEqual(interpreterResult, expected);
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
         }
         
         [Test]
         public void HandlesBasicAssignmentsFromVariableToVariable()
         {
-            var lexer = new Lexer("x = 5\ny = x");
-            var lexerResult = lexer.Run();
-            var parser = new Parser(lexerResult);
-            var parserResult = parser.Run();
-            var interpreter = new Interpreter(parserResult);
-            var interpreterResult = interpreter.Run();
-    
+            var input = "x = 5\ny = x";
             var expected = new List<Dictionary<string, Variable>>
             {
                 new ()
@@ -46,8 +33,180 @@ public static class InterpreterTests
                     { "y", new Variable(Consts.VariableTypes.Number, 5) }
                 }
             };
-            
-            Assertions.AssertScopeListEqual(interpreterResult, expected);
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+
+        [Test]
+        public void HandlesAdditionAssignment()
+        {
+            var input = "x = 5\nx += 2";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 7) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesSubtractionAssignment()
+        {
+            var input = "x = 5\nx -= 2";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 3) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesMultiplicationAssignment()
+        {
+            var input = "x = 5\nx *= 2";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 10) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesDivisionAssignment()
+        {
+            var input = "x = 5\nx /= 2";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 2.5) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesModuloAssignment()
+        {
+            var input = "x = 5\nx %= 2";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 1) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesFloorDivisionAssignment()
+        {
+            var input = "x = 5\nx //= 2";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 2) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesPowerAssignment()
+        {
+            var input = "x = 5\nx **= 2";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 25) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesBitwiseAndAssignment()
+        {
+            // 00000111 & 00010101 = 00000101
+            var input = "x = 7\nx &= 21";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 5) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesBitwiseOrAssignment()
+        {
+            // 0101 | 0011 = 0111
+            var input = "x = 5\nx |= 3";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 7) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesBitwiseXorAssignment()
+        {
+            // 0101 | 0011 = 0110
+            var input = "x = 5\nx ^= 3";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 6) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesBitwiseRightShiftAssignment()
+        {
+            // 0101 >> 2 = 0001
+            var input = "x = 5\nx >>= 2";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 1) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesBitwiseLeftShiftAssignment()
+        {
+            // 0101 << 2 = 10100
+            var input = "x = 5\nx <<= 2";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 20) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
         }
     }
     
@@ -57,13 +216,7 @@ public static class InterpreterTests
         [Test]
         public void HandlesEquality()
         {
-            var lexer = new Lexer("x = 5 == 5\ny = 5 == 6");
-            var lexerResult = lexer.Run();
-            var parser = new Parser(lexerResult);
-            var parserResult = parser.Run();
-            var interpreter = new Interpreter(parserResult);
-            var interpreterResult = interpreter.Run();
-    
+            var input = "x = 5 == 5\ny = 5 == 6";
             var expected = new List<Dictionary<string, Variable>>
             {
                 new ()
@@ -72,20 +225,13 @@ public static class InterpreterTests
                     { "y", new Variable(Consts.VariableTypes.Boolean, false) }
                 }
             };
-            
-            Assertions.AssertScopeListEqual(interpreterResult, expected);
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
         }
         
         [Test]
         public void HandlesLessThan()
         {
-            var lexer = new Lexer("x = 5 < 5\ny = 5 < 6");
-            var lexerResult = lexer.Run();
-            var parser = new Parser(lexerResult);
-            var parserResult = parser.Run();
-            var interpreter = new Interpreter(parserResult);
-            var interpreterResult = interpreter.Run();
-    
+            var input = "x = 5 < 5\ny = 5 < 6";
             var expected = new List<Dictionary<string, Variable>>
             {
                 new ()
@@ -94,20 +240,13 @@ public static class InterpreterTests
                     { "y", new Variable(Consts.VariableTypes.Boolean, true) }
                 }
             };
-            
-            Assertions.AssertScopeListEqual(interpreterResult, expected);
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
         }
         
         [Test]
         public void HandlesGreaterThan()
         {
-            var lexer = new Lexer("x = 5 > 5\ny = 7 > 6");
-            var lexerResult = lexer.Run();
-            var parser = new Parser(lexerResult);
-            var parserResult = parser.Run();
-            var interpreter = new Interpreter(parserResult);
-            var interpreterResult = interpreter.Run();
-    
+            var input = "x = 5 > 5\ny = 7 > 6";
             var expected = new List<Dictionary<string, Variable>>
             {
                 new ()
@@ -116,20 +255,13 @@ public static class InterpreterTests
                     { "y", new Variable(Consts.VariableTypes.Boolean, true) }
                 }
             };
-            
-            Assertions.AssertScopeListEqual(interpreterResult, expected);
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
         }
         
         [Test]
         public void HandlesAddition()
         {
-            var lexer = new Lexer("x = 5 + 6");
-            var lexerResult = lexer.Run();
-            var parser = new Parser(lexerResult);
-            var parserResult = parser.Run();
-            var interpreter = new Interpreter(parserResult);
-            var interpreterResult = interpreter.Run();
-    
+            var input = "x = 5 + 6";
             var expected = new List<Dictionary<string, Variable>>
             {
                 new ()
@@ -137,20 +269,13 @@ public static class InterpreterTests
                     { "x", new Variable(Consts.VariableTypes.Number, 11) }
                 }
             };
-            
-            Assertions.AssertScopeListEqual(interpreterResult, expected);
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
         }
         
         [Test]
         public void HandlesMultiplication()
         {
-            var lexer = new Lexer("x = 5 * 6");
-            var lexerResult = lexer.Run();
-            var parser = new Parser(lexerResult);
-            var parserResult = parser.Run();
-            var interpreter = new Interpreter(parserResult);
-            var interpreterResult = interpreter.Run();
-    
+            var input = "x = 5 * 6";
             var expected = new List<Dictionary<string, Variable>>
             {
                 new ()
@@ -158,8 +283,7 @@ public static class InterpreterTests
                     { "x", new Variable(Consts.VariableTypes.Number, 30) }
                 }
             };
-            
-            Assertions.AssertScopeListEqual(interpreterResult, expected);
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
         }
     }
     
@@ -169,13 +293,7 @@ public static class InterpreterTests
         [Test]
         public void HandlesArrayDefinition()
         {
-            var lexer = new Lexer("x = [5, '5']");
-            var lexerResult = lexer.Run();
-            var parser = new Parser(lexerResult);
-            var parserResult = parser.Run();
-            var interpreter = new Interpreter(parserResult);
-            var interpreterResult = interpreter.Run();
-    
+            var input = "x = [5, '5']";
             var expected = new List<Dictionary<string, Variable>>
             {
                 new ()
@@ -193,20 +311,13 @@ public static class InterpreterTests
                     },
                 }
             };
-            
-            Assertions.AssertScopeListEqual(interpreterResult, expected);
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
         }
         
         [Test]
         public void HandlesTupleDefinition()
         {
-            var lexer = new Lexer("x = (5, '5')");
-            var lexerResult = lexer.Run();
-            var parser = new Parser(lexerResult);
-            var parserResult = parser.Run();
-            var interpreter = new Interpreter(parserResult);
-            var interpreterResult = interpreter.Run();
-    
+            var input = "x = (5, '5')";
             var expected = new List<Dictionary<string, Variable>>
             {
                 new ()
@@ -224,20 +335,13 @@ public static class InterpreterTests
                     },
                 }
             };
-            
-            Assertions.AssertScopeListEqual(interpreterResult, expected);
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
         }
         
         [Test]
         public void HandlesSetDefinition()
         {
-            var lexer = new Lexer("x = {5, '5'}");
-            var lexerResult = lexer.Run();
-            var parser = new Parser(lexerResult);
-            var parserResult = parser.Run();
-            var interpreter = new Interpreter(parserResult);
-            var interpreterResult = interpreter.Run();
-    
+            var input = "x = {5, '5'}";
             var expected = new List<Dictionary<string, Variable>>
             {
                 new ()
@@ -255,20 +359,13 @@ public static class InterpreterTests
                     },
                 }
             };
-            
-            Assertions.AssertScopeListEqual(interpreterResult, expected);
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
         }
         
         [Test]
         public void HandlesDictionaryDefinition()
         {
-            var lexer = new Lexer("x = {'asdf': 5, 'qwer': '5'}");
-            var lexerResult = lexer.Run();
-            var parser = new Parser(lexerResult);
-            var parserResult = parser.Run();
-            var interpreter = new Interpreter(parserResult);
-            var interpreterResult = interpreter.Run();
-    
+            var input = "x = {'asdf': 5, 'qwer': '5'}";
             var expected = new List<Dictionary<string, Variable>>
             {
                 new ()
@@ -286,8 +383,7 @@ public static class InterpreterTests
                     },
                 }
             };
-            
-            Assertions.AssertScopeListEqual(interpreterResult, expected);
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
         }
     }
 
@@ -297,13 +393,7 @@ public static class InterpreterTests
         [Test]
         public void HandlesTrueIfStatement()
         {
-            var lexer = new Lexer("x = 5\nif x == 5:\n\tx = 6");
-            var lexerResult = lexer.Run();
-            var parser = new Parser(lexerResult);
-            var parserResult = parser.Run();
-            var interpreter = new Interpreter(parserResult);
-            var interpreterResult = interpreter.Run();
-    
+            var input = "x = 5\nif x == 5:\n\tx = 6";
             var expected = new List<Dictionary<string, Variable>>
             {
                 new ()
@@ -314,20 +404,13 @@ public static class InterpreterTests
                     },
                 }
             };
-            
-            Assertions.AssertScopeListEqual(interpreterResult, expected);
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
         }
         
         [Test]
         public void HandlesFalseIfStatement()
         {
-            var lexer = new Lexer("x = 5\nif x == 6:\n\tx = 6");
-            var lexerResult = lexer.Run();
-            var parser = new Parser(lexerResult);
-            var parserResult = parser.Run();
-            var interpreter = new Interpreter(parserResult);
-            var interpreterResult = interpreter.Run();
-    
+            var input = "x = 5\nif x == 6:\n\tx = 6";
             var expected = new List<Dictionary<string, Variable>>
             {
                 new ()
@@ -338,8 +421,7 @@ public static class InterpreterTests
                     },
                 }
             };
-            
-            Assertions.AssertScopeListEqual(interpreterResult, expected);
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
         }
     }
 }

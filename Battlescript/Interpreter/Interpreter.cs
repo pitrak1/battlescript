@@ -57,7 +57,48 @@ public class Interpreter(List<Instruction> instructions)
     {
         var left = InterpretInstruction(instruction.Left!);
         var right = InterpretInstruction(instruction.Right!);
-        return left.Copy(right);
+
+        var result = right;
+        switch (instruction.Value)
+        {
+            case "+=":
+                result.Value = left.Value + right.Value;
+                break;
+            case "-=":
+                result.Value = left.Value - right.Value;
+                break;
+            case "*=":
+                result.Value = left.Value * right.Value;
+                break;
+            case "/=":
+                result.Value = left.Value / right.Value;
+                break;
+            case "%=":
+                result.Value = left.Value % right.Value;
+                break;
+            case "//=":
+                result.Value = Math.Floor(left.Value / right.Value);
+                break;
+            case "**=":
+                result.Value = Math.Pow(left.Value, right.Value);
+                break;
+            case "&=":
+                result.Value = (int)left.Value & (int)right.Value;
+                break;
+            case "|=":
+                result.Value = (int)left.Value | (int)right.Value;
+                break;
+            case "^=":
+                result.Value = (int)left.Value ^ (int)right.Value;
+                break;
+            case ">>=":
+                result.Value = (int)left.Value >> (int)right.Value;
+                break;
+            case "<<=":
+                result.Value = (int)left.Value << (int)right.Value;
+                break;
+        }
+        return left.Copy(result);
     }
 
     private Variable HandleIf(Instruction instruction)
