@@ -19,23 +19,11 @@ public static class ParserTests
             var expected = new List<Instruction>
             {
                 new Instruction(
-                    0, 
-                    0, 
                     Consts.InstructionTypes.Assignment, 
                     "=", 
                     null,
-                    new Instruction(
-                        0,
-                        0,
-                        Consts.InstructionTypes.Variable,
-                        "x"
-                    ),
-                    new Instruction(
-                        0,
-                        0,
-                        Consts.InstructionTypes.Number,
-                        5
-                    )
+                    new (Consts.InstructionTypes.Variable, "x"),
+                    new (Consts.InstructionTypes.Number, 5)
                 )
             };
             
@@ -53,27 +41,13 @@ public static class ParserTests
             var expected = new List<Instruction>
             {
                 new Instruction(
-                    0, 
-                    0, 
                     Consts.InstructionTypes.If, 
                     new Instruction(
-                       0,
-                       0,
                        Consts.InstructionTypes.Operation,
                        "<",
                        null,
-                       new Instruction(
-                           0,
-                           0,
-                           Consts.InstructionTypes.Number,
-                           5
-                        ),
-                       new Instruction(
-                            0,
-                            0,
-                            Consts.InstructionTypes.Number,
-                            6
-                        )
+                       new (Consts.InstructionTypes.Number, 5), 
+                       new (Consts.InstructionTypes.Number, 6)
                     ), 
                     null,
                     null,
@@ -81,23 +55,11 @@ public static class ParserTests
                     new List<Instruction>
                     {
                         new(
-                            0,
-                            0,
                             Consts.InstructionTypes.Assignment,
                             "=",
                             null,
-                            new (
-                                0,
-                                0,
-                                Consts.InstructionTypes.Variable,
-                                "x"
-                            ),
-                            new (
-                                0,
-                                0,
-                                Consts.InstructionTypes.Number,
-                                5
-                            )
+                            new (Consts.InstructionTypes.Variable, "x"),
+                            new (Consts.InstructionTypes.Number, 5)
                         )
                     }
                 )

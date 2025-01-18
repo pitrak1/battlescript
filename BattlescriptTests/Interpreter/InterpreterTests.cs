@@ -244,7 +244,7 @@ public static class InterpreterTests
                 {
                     {
                         "x", 
-                        new Variable(
+                        new (
                             Consts.VariableTypes.Set, 
                             new List<Variable>
                             {
@@ -275,7 +275,7 @@ public static class InterpreterTests
                 {
                     {
                         "x", 
-                        new Variable(
+                        new (
                             Consts.VariableTypes.Dictionary, 
                             new Dictionary<string, Variable>
                             {
@@ -310,10 +310,7 @@ public static class InterpreterTests
                 {
                     {
                         "x", 
-                        new Variable(
-                            Consts.VariableTypes.Number, 
-                            6
-                        )
+                        new (Consts.VariableTypes.Number, 6)
                     },
                 }
             };
@@ -337,10 +334,7 @@ public static class InterpreterTests
                 {
                     {
                         "x", 
-                        new Variable(
-                            Consts.VariableTypes.Number, 
-                            5
-                        )
+                        new (Consts.VariableTypes.Number, 5)
                     },
                 }
             };

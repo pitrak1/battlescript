@@ -18,7 +18,7 @@ public static class InstructionParserTests
 
             Assertions.AssertInstructionEqual(
                 instructionParserResult,
-                new Instruction(0, 0, Consts.InstructionTypes.Number, 5.0)
+                new Instruction(Consts.InstructionTypes.Number, 5.0)
             );
         }
         
@@ -32,7 +32,7 @@ public static class InstructionParserTests
 
             Assertions.AssertInstructionEqual(
                 instructionParserResult,
-                new Instruction(0, 0, Consts.InstructionTypes.String, "asdf")
+                new Instruction(Consts.InstructionTypes.String, "asdf")
             );
         }
         
@@ -46,7 +46,7 @@ public static class InstructionParserTests
 
             Assertions.AssertInstructionEqual(
                 instructionParserResult,
-                new Instruction(0, 0, Consts.InstructionTypes.Boolean, false)
+                new Instruction(Consts.InstructionTypes.Boolean, false)
             );
         }
     }
@@ -70,8 +70,8 @@ public static class InstructionParserTests
                     Consts.InstructionTypes.Operation, 
                     "+", 
                     null,
-                    new Instruction(0, 0, Consts.InstructionTypes.Number, 5.0),
-                    new Instruction(0, 0, Consts.InstructionTypes.Number, 6.0)
+                    new Instruction(Consts.InstructionTypes.Number, 5.0),
+                    new Instruction(Consts.InstructionTypes.Number, 6.0)
                 )
             );
         }
@@ -97,8 +97,8 @@ public static class InstructionParserTests
                     Consts.InstructionTypes.Assignment, 
                     "=", 
                     null,
-                    new Instruction(0, 0, Consts.InstructionTypes.Number, 5.0),
-                    new Instruction(0, 0, Consts.InstructionTypes.Number, 6.0)
+                    new Instruction(Consts.InstructionTypes.Number, 5.0),
+                    new Instruction(Consts.InstructionTypes.Number, 6.0)
                 )
             );
         }
@@ -123,8 +123,8 @@ public static class InstructionParserTests
                     Consts.InstructionTypes.SquareBrackets, 
                     new List<Instruction> 
                     {
-                        new (0, 0, Consts.InstructionTypes.Number, 4),
-                        new (0, 0, Consts.InstructionTypes.String, "asdf")
+                        new (Consts.InstructionTypes.Number, 4),
+                        new (Consts.InstructionTypes.String, "asdf")
                     }
                 )
             );
@@ -146,8 +146,8 @@ public static class InstructionParserTests
                     Consts.InstructionTypes.Parens,
                     new List<Instruction>
                     {
-                        new(0, 0, Consts.InstructionTypes.Number, 4),
-                        new(0, 0, Consts.InstructionTypes.String, "asdf")
+                        new(Consts.InstructionTypes.Number, 4),
+                        new(Consts.InstructionTypes.String, "asdf")
                     }
                 )
             );
@@ -170,7 +170,7 @@ public static class InstructionParserTests
                     Consts.InstructionTypes.SquareBrackets, 
                     new List<Instruction> 
                     {
-                        new (0, 0, Consts.InstructionTypes.String, "asdf")
+                        new (Consts.InstructionTypes.String, "asdf")
                     }
                 )
             );
@@ -192,8 +192,8 @@ public static class InstructionParserTests
                     Consts.InstructionTypes.SetDefinition, 
                     new List<Instruction> 
                     {
-                        new (0, 0, Consts.InstructionTypes.Number, 4),
-                        new (0, 0, Consts.InstructionTypes.String, "asdf")
+                        new (Consts.InstructionTypes.Number, 4),
+                        new (Consts.InstructionTypes.String, "asdf")
                     }
                 )
             );
@@ -216,12 +216,12 @@ public static class InstructionParserTests
                     new List<(Instruction Key, Instruction Value)> 
                     {
                         (
-                            new (0, 0, Consts.InstructionTypes.Number, 4), 
-                            new (0, 0, Consts.InstructionTypes.Number, 5)
+                            new (Consts.InstructionTypes.Number, 4), 
+                            new (Consts.InstructionTypes.Number, 5)
                         ),
                         (
-                            new (0, 0, Consts.InstructionTypes.Number, 6),
-                            new (0, 0, Consts.InstructionTypes.String, "asdf")
+                            new (Consts.InstructionTypes.Number, 6),
+                            new (Consts.InstructionTypes.String, "asdf")
                         )
                     }
                 )
