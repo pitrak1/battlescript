@@ -43,6 +43,8 @@ public class InstructionParser
             {
                 case "if":
                     return HandleIf(tokens);
+                case "while":
+                    return HandleWhile(tokens);
                 default:
                     return ThrowErrorForToken("Unexpected token", tokens[0]);
             }
@@ -189,6 +191,22 @@ public class InstructionParser
             tokens[0].Line,
             tokens[0].Column,
             Consts.InstructionTypes.If,
+            condition
+        );
+    }
+    
+    private Instruction HandleWhile(List<Token> tokens)
+    {
+        if (tokens[^1].Value != ":")
+        {
+            ThrowErrorForToken("While statement should end with colon", tokens[0]);
+        }
+    
+        var condition = Run(tokens.GetRange(1, tokens.Count - 2));
+        return new Instruction(
+            tokens[0].Line,
+            tokens[0].Column,
+            Consts.InstructionTypes.While,
             condition
         );
     }

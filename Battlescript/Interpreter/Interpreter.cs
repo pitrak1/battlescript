@@ -34,6 +34,8 @@ public class Interpreter(List<Instruction> instructions)
                 return new Variable(Consts.VariableTypes.Boolean, instruction.Value);
             case Consts.InstructionTypes.If:
                 return HandleIf(instruction);
+            case Consts.InstructionTypes.While:
+                return HandleWhile(instruction);
             case Consts.InstructionTypes.Variable:
                 return HandleVariable(instruction);
             case Consts.InstructionTypes.Operation:
@@ -68,6 +70,22 @@ public class Interpreter(List<Instruction> instructions)
             _memory.AddScope();
             InterpretList(instruction.Instructions);
             _memory.RemoveScope();
+        }
+
+        return new Variable(Consts.VariableTypes.Null, null);
+    }
+
+    private Variable HandleWhile(Instruction instruction)
+    {
+        var condition = InterpretInstruction(instruction.Value);
+        // This will likely eventually be a function to determine if something is "truthy"
+        while (condition.Type == Consts.VariableTypes.Boolean &&
+            condition.Value is true)
+        {
+            _memory.AddScope();
+            InterpretList(instruction.Instructions);
+            _memory.RemoveScope();
+            condition = InterpretInstruction(instruction.Value);
         }
 
         return new Variable(Consts.VariableTypes.Null, null);
