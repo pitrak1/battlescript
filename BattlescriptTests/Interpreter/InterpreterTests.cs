@@ -214,6 +214,193 @@ public static class InterpreterTests
     public class Operations
     {
         [Test]
+        public void HandlesPower()
+        {
+            var input = "x = 5 ** 2";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 25) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesBitwiseNotPower()
+        {
+            var input = "x = ~5";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, -6) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesMultiplication()
+        {
+            var input = "x = 5 * 6";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 30) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesDivision()
+        {
+            var input = "x = 5 / 2";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 2.5) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesFloorDivision()
+        {
+            var input = "x = 5 // 2";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 2) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesModulo()
+        {
+            var input = "x = 5 % 2";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 1) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesAddition()
+        {
+            var input = "x = 5 + 6";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 11) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesSubtraction()
+        {
+            var input = "x = 6 - 5";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 1) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesLeftShift()
+        {
+            // 0011 << 2 = 1100
+            var input = "x = 3 << 2";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 12) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesRightShift()
+        {
+            // 0110 >> 2 = 0001
+            var input = "x = 6 >> 2";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 1) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesBitwiseAnd()
+        {
+            // 0110 & 0011 = 0010
+            var input = "x = 6 & 3";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 2) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesBitwiseXor()
+        {
+            // 0110 ^ 0011 = 0101
+            var input = "x = 6 ^ 3";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 5) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesBitwiseOr()
+        {
+            // 0110 | 0011 = 0111
+            var input = "x = 6 | 3";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Number, 7) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
         public void HandlesEquality()
         {
             var input = "x = 5 == 5\ny = 5 == 6";
@@ -229,9 +416,9 @@ public static class InterpreterTests
         }
         
         [Test]
-        public void HandlesLessThan()
+        public void HandlesNotEquality()
         {
-            var input = "x = 5 < 5\ny = 5 < 6";
+            var input = "x = 5 != 5\ny = 5 != 6";
             var expected = new List<Dictionary<string, Variable>>
             {
                 new ()
@@ -259,28 +446,90 @@ public static class InterpreterTests
         }
         
         [Test]
-        public void HandlesAddition()
+        public void HandlesGreaterThanOrEqualTo()
         {
-            var input = "x = 5 + 6";
+            var input = "x = 5 >= 5\ny = 7 >= 6";
             var expected = new List<Dictionary<string, Variable>>
             {
                 new ()
                 {
-                    { "x", new Variable(Consts.VariableTypes.Number, 11) }
+                    { "x", new Variable(Consts.VariableTypes.Boolean, true) },
+                    { "y", new Variable(Consts.VariableTypes.Boolean, true) }
                 }
             };
             InterpreterAssertions.AssertInputProducesOutput(input, expected);
         }
         
         [Test]
-        public void HandlesMultiplication()
+        public void HandlesLessThan()
         {
-            var input = "x = 5 * 6";
+            var input = "x = 5 < 5\ny = 5 < 6";
             var expected = new List<Dictionary<string, Variable>>
             {
                 new ()
                 {
-                    { "x", new Variable(Consts.VariableTypes.Number, 30) }
+                    { "x", new Variable(Consts.VariableTypes.Boolean, false) },
+                    { "y", new Variable(Consts.VariableTypes.Boolean, true) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesLessThanOrEqualTo()
+        {
+            var input = "x = 5 <= 5\ny = 5 <= 6";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Boolean, true) },
+                    { "y", new Variable(Consts.VariableTypes.Boolean, true) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesBooleanNot()
+        {
+            var input = "x = not True\ny = not False";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Boolean, false) },
+                    { "y", new Variable(Consts.VariableTypes.Boolean, true) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesBooleanAnd()
+        {
+            var input = "x = True and False\ny = True and True";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Boolean, false) },
+                    { "y", new Variable(Consts.VariableTypes.Boolean, true) }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesBooleanOr()
+        {
+            var input = "x = True or False\ny = False or False";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    { "x", new Variable(Consts.VariableTypes.Boolean, true) },
+                    { "y", new Variable(Consts.VariableTypes.Boolean, false) }
                 }
             };
             InterpreterAssertions.AssertInputProducesOutput(input, expected);

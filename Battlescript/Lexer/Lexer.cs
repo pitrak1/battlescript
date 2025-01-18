@@ -89,6 +89,8 @@ public class Lexer(string input)
                 );
             }
         }
+
+        HandleOperatorCombinations();
         
         return _tokens;
     }
@@ -194,5 +196,32 @@ public class Lexer(string input)
         );
         _index += comment.Length;
         _column += comment.Length;
+    }
+
+    private void HandleOperatorCombinations()
+    {
+        var i = 0;
+        while (i < _tokens.Count)
+        {
+            if (_tokens[i].Type == Consts.TokenTypes.Operator && _tokens[i].Value == "not")
+            {
+                if (i > 0 && 
+                    _tokens[i - 1].Type == Consts.TokenTypes.Operator && 
+                    _tokens[i - 1].Value == "is")
+                {
+                    _tokens[i - 1].Value = "is not";
+                    _tokens.RemoveAt(i);
+                    continue;
+                } else if (i < _tokens.Count - 1 &&
+                           _tokens[i + 1].Type == Consts.TokenTypes.Operator &&
+                           _tokens[i + 1].Value == "in")
+                {
+                    _tokens[i + 1].Value = "not in";
+                    _tokens.RemoveAt(i);
+                    continue;
+                }
+            }
+            i++;
+        }
     }
 }

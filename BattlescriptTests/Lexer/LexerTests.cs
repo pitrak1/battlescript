@@ -155,6 +155,32 @@ public static class LexerTests
                 new(Consts.TokenTypes.Operator, "not")
             });
         }
+        
+        [Test]
+        public void HandlesIsNotOperator()
+        {
+            var lexer = new Lexer("x is not y");
+            var result = lexer.Run();
+            Assertions.AssertTokenListEqual(result, new List<Token>()
+            {
+                new(Consts.TokenTypes.Identifier, "x"),
+                new(Consts.TokenTypes.Operator, "is not"),
+                new(Consts.TokenTypes.Identifier, "y"),
+            });
+        }
+        
+        [Test]
+        public void HandlesNotInOperator()
+        {
+            var lexer = new Lexer("x not in y");
+            var result = lexer.Run();
+            Assertions.AssertTokenListEqual(result, new List<Token>()
+            {
+                new(Consts.TokenTypes.Identifier, "x"),
+                new(Consts.TokenTypes.Operator, "not in"),
+                new(Consts.TokenTypes.Identifier, "y"),
+            });
+        }
     }
     
     [TestFixture]

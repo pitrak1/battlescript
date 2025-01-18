@@ -75,6 +75,28 @@ public static class InstructionParserTests
                 )
             );
         }
+
+        [Test]
+        public void HandlesUnaryOperators()
+        {
+            var lexer = new Lexer("~6");
+            var lexerResult = lexer.Run();
+            var instructionParser = new InstructionParser();
+            var instructionParserResult = instructionParser.Run(lexerResult);
+
+            Assertions.AssertInstructionEqual(
+                instructionParserResult,
+                new Instruction(
+                    0, 
+                    0, 
+                    Consts.InstructionTypes.Operation, 
+                    "~", 
+                    null,
+                    null,
+                    new Instruction(Consts.InstructionTypes.Number, 6.0)
+                )
+            );
+        }
     }
     
     [TestFixture]

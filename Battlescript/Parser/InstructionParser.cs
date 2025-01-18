@@ -267,8 +267,10 @@ public class InstructionParser
 
     private (Instruction? Left, Instruction? Right) RunLeftAndRightAroundIndex(List<Token> tokens, int index)
     {
-        var left = Run(tokens.GetRange(0, index));
-        var right = Run(tokens.GetRange(index + 1, tokens.Count - index - 1));
+        var left = index > 0 ? Run(tokens.GetRange(0, index)) : null;
+        var right = index < tokens.Count - 1 ? 
+            Run(tokens.GetRange(index + 1, tokens.Count - index - 1)) : 
+            null;
 
         return (left, right);
     }

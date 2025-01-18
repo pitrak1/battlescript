@@ -90,8 +90,10 @@ public static class Consts
         ">=",
         "<",
         "<=",
-        "is",
-        "in",
+        "is", //NOT SUPPORTED YET
+        "is not", //NOT SUPPORTED YET
+        "in", //NOT SUPPORTED YET
+        "not in", //NOT SUPPORTED YET
         "not",
         "and",
         "or"
