@@ -290,4 +290,62 @@ public static class InterpreterTests
             Assertions.AssertScopeListEqual(interpreterResult, expected);
         }
     }
+
+    [TestFixture]
+    public class If
+    {
+        [Test]
+        public void HandlesTrueIfStatement()
+        {
+            var lexer = new Lexer("x = 5\nif x == 5:\n\tx = 6");
+            var lexerResult = lexer.Run();
+            var parser = new Parser(lexerResult);
+            var parserResult = parser.Run();
+            var interpreter = new Interpreter(parserResult);
+            var interpreterResult = interpreter.Run();
+    
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    {
+                        "x", 
+                        new Variable(
+                            Consts.VariableTypes.Number, 
+                            6
+                        )
+                    },
+                }
+            };
+            
+            Assertions.AssertScopeListEqual(interpreterResult, expected);
+        }
+        
+        [Test]
+        public void HandlesFalseIfStatement()
+        {
+            var lexer = new Lexer("x = 5\nif x == 6:\n\tx = 6");
+            var lexerResult = lexer.Run();
+            var parser = new Parser(lexerResult);
+            var parserResult = parser.Run();
+            var interpreter = new Interpreter(parserResult);
+            var interpreterResult = interpreter.Run();
+    
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    {
+                        "x", 
+                        new Variable(
+                            Consts.VariableTypes.Number, 
+                            5
+                        )
+                    },
+                }
+            };
+            
+            Assertions.AssertScopeListEqual(interpreterResult, expected);
+        }
+    }
 }

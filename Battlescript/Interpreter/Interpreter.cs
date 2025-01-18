@@ -32,6 +32,8 @@ public class Interpreter(List<Instruction> instructions)
                 return new Variable(Consts.VariableTypes.String, instruction.Value);
             case Consts.InstructionTypes.Boolean:
                 return new Variable(Consts.VariableTypes.Boolean, instruction.Value);
+            case Consts.InstructionTypes.If:
+                return HandleIf(instruction);
             case Consts.InstructionTypes.Variable:
                 return HandleVariable(instruction);
             case Consts.InstructionTypes.Operation:
@@ -54,6 +56,21 @@ public class Interpreter(List<Instruction> instructions)
         var left = InterpretInstruction(instruction.Left!);
         var right = InterpretInstruction(instruction.Right!);
         return left.Copy(right);
+    }
+
+    private Variable HandleIf(Instruction instruction)
+    {
+        var condition = InterpretInstruction(instruction.Value);
+        // This will likely eventually be a function to determine if something is "truthy"
+        if (condition.Type == Consts.VariableTypes.Boolean &&
+            condition.Value is true)
+        {
+            _memory.AddScope();
+            InterpretList(instruction.Instructions);
+            _memory.RemoveScope();
+        }
+
+        return new Variable(Consts.VariableTypes.Null, null);
     }
 
     private Variable HandleVariable(Instruction instruction)
