@@ -673,4 +673,42 @@ public static class InterpreterTests
             InterpreterAssertions.AssertInputProducesOutput(input, expected);
         }
     }
+    
+    [TestFixture]
+    public class While
+    {
+        [Test]
+        public void HandlesWhileStatement()
+        {
+            var input = "x = 5\nwhile x < 10:\n\tx += 1";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    {
+                        "x", 
+                        new (Consts.VariableTypes.Number, 10)
+                    },
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesFalseWhileStatement()
+        {
+            var input = "x = 5\nwhile x == 6:\n\tx = 10";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    {
+                        "x", 
+                        new (Consts.VariableTypes.Number, 5)
+                    },
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+    }
 }
