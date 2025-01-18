@@ -6,7 +6,7 @@ namespace BattlescriptTests;
 public static class InterpreterTests
 {
     [TestFixture]
-    public class InterpreterAssignments
+    public class Assignments
     {
         [Test]
         public void HandlesBasicAssignmentsFromLiteralToVariable()
@@ -52,7 +52,7 @@ public static class InterpreterTests
     }
     
     [TestFixture]
-    public class InterpreterOperations
+    public class Operations
     {
         [Test]
         public void HandlesEquality()
@@ -164,7 +164,7 @@ public static class InterpreterTests
     }
     
     [TestFixture]
-    public class InterpreterSeparators
+    public class Separators
     {
         [Test]
         public void HandlesArrayDefinition()

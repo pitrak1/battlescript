@@ -6,7 +6,7 @@ namespace BattlescriptTests;
 public static class ParserTests
 {
     [TestFixture]
-    public class ParserBasics
+    public class Basics
     {
         [Test]
         public void HandlesSingleInstruction()

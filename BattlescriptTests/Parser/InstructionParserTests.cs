@@ -6,7 +6,7 @@ namespace BattlescriptTests;
 public static class InstructionParserTests
 {
     [TestFixture]
-    public class InstructionParserLiterals
+    public class Literals
     {
         [Test]
         public void HandlesNumbers()
@@ -52,7 +52,7 @@ public static class InstructionParserTests
     }
 
     [TestFixture]
-    public class InstructionParserOperations
+    public class Operations
     {
         [Test]
         public void HandlesOperations()
@@ -78,7 +78,7 @@ public static class InstructionParserTests
     }
     
     [TestFixture]
-    public class InstructionParserAssignments
+    public class Assignments
     {
         [Test]
         public void HandlesAssignments()
@@ -105,7 +105,7 @@ public static class InstructionParserTests
     }
     
     [TestFixture]
-    public class InstructionParserSeparators
+    public class Separators
     {
         [Test]
         public void HandlesSquareBrackets()

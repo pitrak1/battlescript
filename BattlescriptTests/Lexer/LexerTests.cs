@@ -6,7 +6,7 @@ namespace BattlescriptTests;
 public static class LexerTests
 {
     [TestFixture]
-    public class LexerNumbers
+    public class Numbers
     {
         [Test]
         public void HandlesIntegers()
@@ -32,7 +32,7 @@ public static class LexerTests
     }
 
     [TestFixture]
-    public class LexerStrings
+    public class Strings
     {
         [Test]
         public void HandlesDoubleQuotes()
@@ -58,7 +58,7 @@ public static class LexerTests
     }
 
     [TestFixture]
-    public class LexerSeparators
+    public class Separators
     {
         [Test]
         public void HandlesSeparators()
@@ -73,7 +73,7 @@ public static class LexerTests
     }
 
     [TestFixture]
-    public class LexerWords
+    public class Words
     {
         [Test]
         public void HandlesKeywords()
@@ -121,7 +121,7 @@ public static class LexerTests
     }
 
     [TestFixture]
-    public class LexerOperators
+    public class Operators
     {
         [Test]
         public void HandlesSingleCharacterOperators()
@@ -158,7 +158,7 @@ public static class LexerTests
     }
     
     [TestFixture]
-    public class LexerAssignmentOperators
+    public class AssignmentOperators
     {
         [Test]
         public void HandlesSingleCharacterOperators()
@@ -195,7 +195,7 @@ public static class LexerTests
     }
 
     [TestFixture]
-    public class LexerComments
+    public class Comments
     {
         [Test]
         public void IgnoresComments()
