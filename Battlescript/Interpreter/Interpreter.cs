@@ -63,55 +63,14 @@ public class Interpreter(List<Instruction> instructions)
         var left = InterpretInstruction(instruction.Left!);
         var right = InterpretInstruction(instruction.Right!);
 
-        var result = right;
-        switch (instruction.Value)
-        {
-            case "+=":
-                result.Value = left.Value + right.Value;
-                break;
-            case "-=":
-                result.Value = left.Value - right.Value;
-                break;
-            case "*=":
-                result.Value = left.Value * right.Value;
-                break;
-            case "/=":
-                result.Value = left.Value / right.Value;
-                break;
-            case "%=":
-                result.Value = left.Value % right.Value;
-                break;
-            case "//=":
-                result.Value = Math.Floor(left.Value / right.Value);
-                break;
-            case "**=":
-                result.Value = Math.Pow(left.Value, right.Value);
-                break;
-            case "&=":
-                result.Value = (int)left.Value & (int)right.Value;
-                break;
-            case "|=":
-                result.Value = (int)left.Value | (int)right.Value;
-                break;
-            case "^=":
-                result.Value = (int)left.Value ^ (int)right.Value;
-                break;
-            case ">>=":
-                result.Value = (int)left.Value >> (int)right.Value;
-                break;
-            case "<<=":
-                result.Value = (int)left.Value << (int)right.Value;
-                break;
-        }
+        var result = InterpreterUtilities.ConductAssignment(instruction, left, right);
         return left.Copy(result);
     }
 
     private Variable HandleIf(Instruction instruction)
     {
         var condition = InterpretInstruction(instruction.Value);
-        // This will likely eventually be a function to determine if something is "truthy"
-        if (condition.Type == Consts.VariableTypes.Boolean &&
-            condition.Value is true)
+        if (InterpreterUtilities.IsVariableTruthy(condition))
         {
             _memory.AddScope();
             InterpretList(instruction.Instructions);
@@ -125,8 +84,7 @@ public class Interpreter(List<Instruction> instructions)
     {
         var condition = InterpretInstruction(instruction.Value);
         // This will likely eventually be a function to determine if something is "truthy"
-        while (condition.Type == Consts.VariableTypes.Boolean &&
-            condition.Value is true)
+        while (InterpreterUtilities.IsVariableTruthy(condition))
         {
             _memory.AddScope();
             InterpretList(instruction.Instructions);
@@ -147,104 +105,7 @@ public class Interpreter(List<Instruction> instructions)
     {
         var left = InterpretInstruction(instruction.Left!);
         var right = InterpretInstruction(instruction.Right!);
-
-        dynamic? result;
-        Consts.VariableTypes type;
-        switch (instruction.Value)
-        {
-            case "**":
-                result = Math.Pow(left.Value, right.Value);
-                type = Consts.VariableTypes.Number;
-                break;
-            case "~":
-                result = ~(int)right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "*":
-                result = left.Value * right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "/":
-                result = left.Value / right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "//":
-                result = (int)Math.Floor(left.Value / right.Value);
-                type = Consts.VariableTypes.Number;
-                break;
-            case "%":
-                result = left.Value % right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "+":
-                result = left.Value + right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "-":
-                result = left.Value - right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "<<":
-                result = (int)left.Value << (int)right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case ">>":
-                result = (int)left.Value >> (int)right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "&":
-                result = (int)left.Value & (int)right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "^":
-                result = (int)left.Value ^ (int)right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "|":
-                result = (int)left.Value | (int)right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "==":
-                result = left.Value == right.Value;
-                type = Consts.VariableTypes.Boolean;
-                break;
-            case "!=":
-                result = left.Value != right.Value;
-                type = Consts.VariableTypes.Boolean;
-                break;
-            case ">":
-                result = left.Value > right.Value;
-                type = Consts.VariableTypes.Boolean;
-                break;
-            case ">=":
-                result = left.Value >= right.Value;
-                type = Consts.VariableTypes.Boolean;
-                break;
-            case "<":
-                result = left.Value < right.Value;
-                type = Consts.VariableTypes.Boolean;
-                break;
-            case "<=":
-                result = left.Value <= right.Value;
-                type = Consts.VariableTypes.Boolean;
-                break;
-            case "not":
-                result = !right.Value;
-                type = Consts.VariableTypes.Boolean;
-                break;
-            case "and":
-                result = left.Value && right.Value;
-                type = Consts.VariableTypes.Boolean;
-                break;
-            case "or":
-                result = left.Value || right.Value;
-                type = Consts.VariableTypes.Boolean;
-                break;
-            default:
-                throw new SystemException("Invalid operator");
-        }
-        
-        return new Variable(type, result);
+        return InterpreterUtilities.ConductOperation(instruction, left, right);
     }
 
     private Variable HandleSquareBrackets(Instruction instruction)
