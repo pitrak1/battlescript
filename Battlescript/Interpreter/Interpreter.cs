@@ -112,9 +112,10 @@ public class Interpreter(List<Instruction> instructions)
     {
         if (_ongoingContextsStack.Count > 0)
         {
-            // This means that it's trying to get a member of a list/dict/etc, not create a list.
-            // On the TODO list
-            return new Variable(0, 0);
+            // This only handles a single index, no range nonsense.... yet :P
+            var index = InterpretInstruction(instruction.Value[0]);
+            var result =  _ongoingContextsStack.Peek().GetIndex(index.Value);
+            return ReturnVariableOrInterpretNext(result, instruction.Next);
         }
         else
         {

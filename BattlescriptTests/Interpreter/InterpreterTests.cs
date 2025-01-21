@@ -535,9 +535,9 @@ public static class InterpreterTests
             InterpreterAssertions.AssertInputProducesOutput(input, expected);
         }
     }
-    
+
     [TestFixture]
-    public class Separators
+    public class Arrays
     {
         [Test]
         public void HandlesArrayDefinition()
@@ -564,6 +564,38 @@ public static class InterpreterTests
         }
         
         [Test]
+        public void HandlesArrayIndex()
+        {
+            var input = "x = [5, '5']\ny = x[1]";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    {
+                        "x", 
+                        new Variable(
+                            Consts.VariableTypes.List, 
+                            new List<Variable>
+                            {
+                                new (Consts.VariableTypes.Number, 5),
+                                new (Consts.VariableTypes.String, "5"),
+                            }
+                        )
+                    },
+                    {
+                        "y",
+                        new Variable(Consts.VariableTypes.String, "5")
+                    }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+    }
+
+    [TestFixture]
+    public class Tuples
+    {
+        [Test]
         public void HandlesTupleDefinition()
         {
             var input = "x = (5, '5')";
@@ -587,6 +619,38 @@ public static class InterpreterTests
             InterpreterAssertions.AssertInputProducesOutput(input, expected);
         }
         
+        [Test]
+        public void HandlesTupleIndex()
+        {
+            var input = "x = (5, '5')\ny = x[1]";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    {
+                        "x", 
+                        new Variable(
+                            Consts.VariableTypes.Tuple, 
+                            new List<Variable>
+                            {
+                                new (Consts.VariableTypes.Number, 5),
+                                new (Consts.VariableTypes.String, "5"),
+                            }
+                        )
+                    },
+                    {
+                        "y",
+                        new Variable(Consts.VariableTypes.String, "5")
+                    }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+    }
+
+    [TestFixture]
+    public class Sets
+    {
         [Test]
         public void HandlesSetDefinition()
         {
@@ -612,6 +676,38 @@ public static class InterpreterTests
         }
         
         [Test]
+        public void HandlesSetIndex()
+        {
+            var input = "x = {5, '5'}\ny = x[1]";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    {
+                        "x", 
+                        new Variable(
+                            Consts.VariableTypes.Set, 
+                            new List<Variable>
+                            {
+                                new (Consts.VariableTypes.Number, 5),
+                                new (Consts.VariableTypes.String, "5"),
+                            }
+                        )
+                    },
+                    {
+                        "y",
+                        new Variable(Consts.VariableTypes.String, "5")
+                    }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+    }
+    
+    [TestFixture]
+    public class Dictionaries
+    {
+        [Test]
         public void HandlesDictionaryDefinition()
         {
             var input = "x = {'asdf': 5, 'qwer': '5'}";
@@ -630,6 +726,34 @@ public static class InterpreterTests
                             }
                         )
                     },
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesDictionaryIndex()
+        {
+            var input = "x = {'asdf': 5, 'qwer': '5'}\ny = x['qwer']";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    {
+                        "x", 
+                        new (
+                            Consts.VariableTypes.Dictionary, 
+                            new Dictionary<string, Variable>
+                            {
+                                {"asdf", new (Consts.VariableTypes.Number, 5)},
+                                {"qwer", new (Consts.VariableTypes.String, "5")}
+                            }
+                        )
+                    },
+                    {
+                        "y", 
+                        new Variable(Consts.VariableTypes.String, "5")
+                    }
                 }
             };
             InterpreterAssertions.AssertInputProducesOutput(input, expected);

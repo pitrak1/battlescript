@@ -130,7 +130,7 @@ public static class InstructionParserTests
     public class Separators
     {
         [Test]
-        public void HandlesSquareBrackets()
+        public void HandlesArrayDefinition()
         {
             var lexer = new Lexer("[4, 'asdf']");
             var lexerResult = lexer.Run();
@@ -148,6 +148,71 @@ public static class InstructionParserTests
                         new (Consts.InstructionTypes.Number, 4),
                         new (Consts.InstructionTypes.String, "asdf")
                     }
+                )
+            );
+        }
+        
+        [Test]
+        public void HandlesIndex()
+        {
+            var lexer = new Lexer("x[4]");
+            var lexerResult = lexer.Run();
+            var instructionParser = new InstructionParser();
+            var instructionParserResult = instructionParser.Run(lexerResult);
+            
+            Assertions.AssertInstructionEqual(
+                instructionParserResult,
+                new (
+                    0, 
+                    0, 
+                    Consts.InstructionTypes.Variable,
+                    "x",
+                    new (
+                        0, 
+                        0, 
+                        Consts.InstructionTypes.SquareBrackets, 
+                        new List<Instruction> 
+                        {
+                            new (Consts.InstructionTypes.Number, 4)
+                        }
+                    )
+                )
+            );
+        }
+        
+        [Test]
+        public void HandlesStackedIndexes()
+        {
+            var lexer = new Lexer("x[4][5]");
+            var lexerResult = lexer.Run();
+            var instructionParser = new InstructionParser();
+            var instructionParserResult = instructionParser.Run(lexerResult);
+            
+            Assertions.AssertInstructionEqual(
+                instructionParserResult,
+                new (
+                    0, 
+                    0, 
+                    Consts.InstructionTypes.Variable,
+                    "x",
+                    new (
+                        0, 
+                        0, 
+                        Consts.InstructionTypes.SquareBrackets, 
+                        new List<Instruction> 
+                        {
+                            new (Consts.InstructionTypes.Number, 4)
+                        },
+                        new (
+                            0, 
+                            0, 
+                            Consts.InstructionTypes.SquareBrackets, 
+                            new List<Instruction> 
+                            {
+                                new (Consts.InstructionTypes.Number, 5)
+                            }
+                        )
+                    )
                 )
             );
         }
