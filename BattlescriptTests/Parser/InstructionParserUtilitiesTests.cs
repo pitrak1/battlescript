@@ -43,6 +43,33 @@ public static class InstructionParserUtilitiesTests
             var index = InstructionParserUtilities.GetTokenIndex(tokens, ["+"]);
             Assert.That(index, Is.EqualTo(-1));
         }
+
+        [Test]
+        public void IgnoresTokensWithinSeparators()
+        {
+            var lexer = new Lexer("x = [4 + 5]");
+            var tokens = lexer.Run();
+            var index = InstructionParserUtilities.GetTokenIndex(tokens, ["+"]);
+            Assert.That(index, Is.EqualTo(-1));
+        }
+        
+        [Test]
+        public void AllowsFindingUnnestedOpeningSeparators()
+        {
+            var lexer = new Lexer("x = [4 + 5]");
+            var tokens = lexer.Run();
+            var index = InstructionParserUtilities.GetTokenIndex(tokens, ["["]);
+            Assert.That(index, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void AllowsFindingUnnestedClosingSeparators()
+        {
+            var lexer = new Lexer("x = [4 + 5]");
+            var tokens = lexer.Run();
+            var index = InstructionParserUtilities.GetTokenIndex(tokens, ["]"]);
+            Assert.That(index, Is.EqualTo(6));
+        }
     }
 
     [TestFixture]

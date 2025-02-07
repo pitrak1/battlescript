@@ -8,16 +8,44 @@ public static class InstructionParserUtilities
         List<Consts.TokenTypes>? types = null
     )
     {
+        List<string> separatorStack = [];
+        
         for (var i = 0; i < tokens.Count; i++)
         {
-            if (values is not null && values.Contains(tokens[i].Value))
+            var currentToken = tokens[i];
+            if (values is not null && values.Contains(currentToken.Value) && separatorStack.Count == 0)
             {
                 return i;
             }
-            
-            if (types is not null && types.Contains(tokens[i].Type))
+            else if (types is not null && types.Contains(currentToken.Type) && separatorStack.Count == 0)
             {
                 return i;
+            }
+            else if (Consts.OpeningSeparators.Contains(currentToken.Value))
+            {
+                separatorStack.Add(currentToken.Value);
+            } else if (Consts.ClosingSeparators.Contains(currentToken.Value))
+            {
+                var matchingCurrentTokenSeparator = Consts.MatchingSeparatorsMap[currentToken.Value];
+                if (matchingCurrentTokenSeparator == separatorStack[^1])
+                {
+                    // If the separator matches the top of the stack, pop it off. If the stack is now empty, that means
+                    // we just hit the closing separator of the entire expression, so we add the last entry and exit
+                    separatorStack.RemoveAt(separatorStack.Count - 1);
+                    
+                    if (values is not null && values.Contains(currentToken.Value) && separatorStack.Count == 0)
+                    {
+                        return i;
+                    }
+                    else if (types is not null && types.Contains(currentToken.Type) && separatorStack.Count == 0)
+                    {
+                        return i;
+                    }
+                }
+                else
+                {
+                    throw new Exception("Unexpected closing separator");
+                }
             }
         }
 
@@ -121,5 +149,15 @@ public static class InstructionParserUtilities
         // With the above code, an empty set of separators will result in a single empty entry in our list.  We'd
         // prefer to just have an empty set of entries
         return entries is [{ Count: 0 }] ? (totalTokenCount, []) : (totalTokenCount, entries);
+    }
+
+    public static void PrintTokens(List<Token> tokens)
+    {
+        var result = "";
+        foreach (var token in tokens)
+        {
+            result += token.Value;
+        }
+        Console.WriteLine(result);
     }
 }

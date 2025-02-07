@@ -216,6 +216,42 @@ public static class InstructionParserTests
                 )
             );
         }
+        
+        [Test]
+        public void HandlesRangeIndexes()
+        {
+            var lexer = new Lexer("x[4:5]");
+            var lexerResult = lexer.Run();
+            var instructionParser = new InstructionParser();
+            var instructionParserResult = instructionParser.Run(lexerResult);
+            
+            Assertions.AssertInstructionEqual(
+                instructionParserResult,
+                new (
+                    0, 
+                    0, 
+                    Consts.InstructionTypes.Variable,
+                    "x",
+                    new (
+                        0, 
+                        0, 
+                        Consts.InstructionTypes.SquareBrackets, 
+                        new List<Instruction> 
+                        {
+                            new (
+                                Consts.InstructionTypes.KeyValuePair,
+                                new List<Instruction>
+                                {
+                                    new (Consts.InstructionTypes.Number, 4),
+                                    new (Consts.InstructionTypes.Number, 5)
+                                }
+                            )
+                            
+                        }
+                    )
+                )
+            );
+        }
 
         [Test]
         public void HandlesParens()
@@ -300,14 +336,20 @@ public static class InstructionParserTests
                     0, 
                     0, 
                     Consts.InstructionTypes.DictionaryDefinition, 
-                    new List<(Instruction Key, Instruction Value)> 
+                    new List<Instruction> 
                     {
-                        (
+                        new (
+                            Consts.InstructionTypes.KeyValuePair, 
+                            ":", 
+                            null, 
                             new (Consts.InstructionTypes.Number, 4), 
                             new (Consts.InstructionTypes.Number, 5)
                         ),
-                        (
-                            new (Consts.InstructionTypes.Number, 6),
+                        new (
+                            Consts.InstructionTypes.KeyValuePair, 
+                            ":", 
+                            null, 
+                            new (Consts.InstructionTypes.Number, 6), 
                             new (Consts.InstructionTypes.String, "asdf")
                         )
                     }

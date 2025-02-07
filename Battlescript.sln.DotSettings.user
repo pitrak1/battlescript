@@ -7,5 +7,10 @@
     &lt;ProjectFile&gt;D828B451-A5D4-460B-94ED-048730099A1D/d:Parser/f:InstructionParserUtilitiesTests.cs&lt;/ProjectFile&gt;
     &lt;ProjectFile&gt;D828B451-A5D4-460B-94ED-048730099A1D/d:Interpreter/f:InterpreterTests.cs&lt;/ProjectFile&gt;
     &lt;ProjectFile&gt;D828B451-A5D4-460B-94ED-048730099A1D/d:Parser/f:ParserTests.cs&lt;/ProjectFile&gt;
+    &lt;TestAncestor&gt;
+      &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.AssignmentTests.HandlesDivisionAssignment&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.AssignmentTests+Assignments&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.InterpreterTests+Assignments&lt;/TestId&gt;
+    &lt;/TestAncestor&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

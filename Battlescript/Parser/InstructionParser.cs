@@ -9,11 +9,12 @@ public class InstructionParser
             null, 
             [Consts.TokenTypes.Assignment]
         );
+        var colonIndex = InstructionParserUtilities.GetTokenIndex(tokens, [":"]);
         var operatorIndex = InstructionParserUtilities.GetOperatorIndex(tokens);
         
         if (assignmentIndex != -1)
         {
-            return HandleAssignment(tokens, assignmentIndex);
+            return HandlePair(tokens, assignmentIndex);
         }
         else if (tokens[0].Type == Consts.TokenTypes.Separator)
         {
@@ -24,15 +25,7 @@ public class InstructionParser
                 case ".":
                     return HandleMember(tokens);
                 case "{":
-                    // A colon will indicate key value pairs within a dictionary definition
-                    if (InstructionParserUtilities.GetTokenIndex(tokens, [":"]) != -1)
-                    {
-                        return HandleDictionaryDefinition(tokens);
-                    }
-                    else
-                    {
-                        return HandleSetDefinition(tokens);
-                    }
+                    return HandleDictionaryOrSetDefinition(tokens);
                 default:
                     return ThrowErrorForToken("Unexpected token", tokens[0]);
             }
@@ -48,6 +41,10 @@ public class InstructionParser
                 default:
                     return ThrowErrorForToken("Unexpected token", tokens[0]);
             }
+        }
+        else if (colonIndex != -1)
+        {
+            return HandlePair(tokens, colonIndex);
         }
         else if (operatorIndex != -1)
         {
@@ -67,15 +64,18 @@ public class InstructionParser
         }
     }
 
-    private Instruction HandleAssignment(List<Token> tokens, int assignmentIndex)
+    private Instruction HandlePair(List<Token> tokens, int separatorIndex)
     {
-        var assignmentToken = tokens[assignmentIndex];
-        var result = RunLeftAndRightAroundIndex(tokens, assignmentIndex);
+        var separatorToken = tokens[separatorIndex];
+        var result = RunLeftAndRightAroundIndex(tokens, separatorIndex);
+        var type = separatorToken.Value == ":" ? 
+            Consts.InstructionTypes.KeyValuePair : 
+            Consts.InstructionTypes.Assignment;
         return new Instruction(
-            assignmentToken.Line, 
-            assignmentToken.Column, 
-            Consts.InstructionTypes.Assignment,
-            assignmentToken.Value,
+            separatorToken.Line, 
+            separatorToken.Column, 
+            type,
+            separatorToken.Value,
             null,
             result.Left,
             result.Right
@@ -120,50 +120,24 @@ public class InstructionParser
         );
     }
 
-    private Instruction HandleDictionaryDefinition(List<Token> tokens)
-    {
-        var results = 
-            InstructionParserUtilities.ParseTokensUntilMatchingSeparator(tokens, [","]);
-            
-        // There should be no characters following a dictionary definition
-        CheckForNoFollowingTokens(tokens, results.Count);
-
-        List<(Instruction? Key, Instruction? Value)> pairs = [];
-        foreach (var entry in results.Entries)
-        {
-            var colonIndex = InstructionParserUtilities.GetTokenIndex(entry, [":"]);
-            if (colonIndex == -1)
-            {
-                ThrowErrorForToken("Dictionary entry should have key value pair", entry[0]);
-            }
-                
-            var result = RunLeftAndRightAroundIndex(entry, colonIndex);
-            pairs.Add(result);
-        }
-            
-        return new Instruction(
-            tokens[0].Line,
-            tokens[0].Column,
-            Consts.InstructionTypes.DictionaryDefinition,
-            pairs
-        );
-    }
-
-    private Instruction HandleSetDefinition(List<Token> tokens)
+    private Instruction HandleDictionaryOrSetDefinition(List<Token> tokens)
     {
         var results = ParseAndRunEntriesWithinSeparator(tokens, [","]);
-            
-        // There should be no characters following a set definition
+        var type = results.Values[0].Type == Consts.InstructionTypes.KeyValuePair ?
+            Consts.InstructionTypes.DictionaryDefinition :
+            Consts.InstructionTypes.SetDefinition;
+        
+        // There should be no characters following a dictionary or set definition
         CheckForNoFollowingTokens(tokens, results.Count);
-            
+        
         return new Instruction(
             tokens[0].Line,
             tokens[0].Column,
-            Consts.InstructionTypes.SetDefinition,
+            type,
             results.Values
         );
     }
-
+    
     private Instruction HandleOperation(List<Token> tokens, int operatorIndex)
     {
         var operatorToken = tokens[operatorIndex];

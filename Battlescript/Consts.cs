@@ -217,6 +217,7 @@ public static class Consts
         For,
         While,
         SquareBrackets,
+        KeyValuePair,
         SetDefinition,
         DictionaryDefinition,
         Function,
