@@ -112,10 +112,24 @@ public class Interpreter(List<Instruction> instructions)
     {
         if (_ongoingContextsStack.Count > 0)
         {
-            // This only handles a single index, no range nonsense.... yet :P
-            var index = InterpretInstruction(instruction.Value[0]);
-            var result =  _ongoingContextsStack.Peek().GetIndex(index.Value);
-            return ReturnVariableOrInterpretNext(result, instruction.Next);
+            if (instruction.Value.Count > 1)
+            {
+                throw new Exception("Too many index values");
+            }
+
+            if (instruction.Value[0].Type == Consts.InstructionTypes.KeyValuePair)
+            {
+                var leftIndex = InterpretInstruction(instruction.Value[0].Left);
+                var rightIndex = InterpretInstruction(instruction.Value[0].Right);
+                var result = _ongoingContextsStack.Peek().GetRangeIndex((int?)leftIndex.Value, (int?)rightIndex.Value);
+                return ReturnVariableOrInterpretNext(result, instruction.Next);
+            }
+            else
+            {
+                var index = InterpretInstruction(instruction.Value[0]);
+                var result =  _ongoingContextsStack.Peek().GetIndex(index.Value);
+                return ReturnVariableOrInterpretNext(result, instruction.Next);
+            }
         }
         else
         {
@@ -175,13 +189,13 @@ public class Interpreter(List<Instruction> instructions)
         return values;
     }
     
-    private Dictionary<string, Variable> InterpretKvpList(List<(Instruction Key, Instruction Value)> instructions)
+    private Dictionary<string, Variable> InterpretKvpList(List<Instruction> instructions)
     {
         var values = new Dictionary<string, Variable>();
-        foreach (var instValue in instructions)
+        foreach (var kvp in instructions)
         {
-            var key = InterpretInstruction(instValue.Key);
-            var value = InterpretInstruction(instValue.Value);
+            var key = InterpretInstruction(kvp.Left);
+            var value = InterpretInstruction(kvp.Right);
             values[key.Value] = value;
         }
         return values;

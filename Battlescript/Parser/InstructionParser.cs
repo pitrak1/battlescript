@@ -1,3 +1,5 @@
+using System.Data;
+
 namespace Battlescript;
 
 public class InstructionParser
@@ -233,7 +235,18 @@ public class InstructionParser
         List<Instruction> values = [];
         foreach (var entry in results.Entries)
         {
-            values.Add(Run(entry));
+            var colonIndex = entry.FindIndex(0, x => x.Value == ":");
+            if (colonIndex != -1)
+            {
+                var kvp = RunLeftAndRightAroundIndex(entry, colonIndex);
+                values.Add(
+                    new Instruction(Consts.InstructionTypes.KeyValuePair, null, null, kvp.Left, kvp.Right));
+            }
+            else
+            {
+                values.Add(Run(entry));
+            }
+            
         }
 
         return (results.Count, values);

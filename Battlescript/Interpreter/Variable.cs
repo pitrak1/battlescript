@@ -45,4 +45,19 @@ public class Variable(Consts.VariableTypes type, dynamic? value)
             return Value[key];
         }
     }
+    
+    public Variable GetRangeIndex(int? left, int? right)
+    {
+        if (Type != Consts.VariableTypes.List && Type != Consts.VariableTypes.Tuple)
+        {
+            throw new Exception("wrong variable type bro");
+        }
+        
+        var index = left ?? 0;
+        var count = right == null ? Value.Count - 1 : right - index;
+
+        Console.WriteLine(index + ", " + count);
+        
+        return new Variable(Consts.VariableTypes.List, Value.GetRange(index, count));
+    }
 }

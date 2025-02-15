@@ -385,6 +385,119 @@ public static partial class InterpreterTests
             };
             InterpreterAssertions.AssertInputProducesOutput(input, expected);
         }
+        
+        [Test]
+        public void HandlesArrayRangeIndex()
+        {
+            var input = "x = [5, 3, 2, '5']\ny = x[1:3]";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    {
+                        "x", 
+                        new Variable(
+                            Consts.VariableTypes.List, 
+                            new List<Variable>
+                            {
+                                new (Consts.VariableTypes.Number, 5),
+                                new (Consts.VariableTypes.Number, 3),
+                                new (Consts.VariableTypes.Number, 2),
+                                new (Consts.VariableTypes.String, "5"),
+                            }
+                        )
+                    },
+                    {
+                        "y",
+                        new Variable(
+                            Consts.VariableTypes.List, 
+                            new List<Variable>
+                            {
+                                new (Consts.VariableTypes.Number, 3),
+                                new (Consts.VariableTypes.Number, 2),
+                            }
+                        )
+                    }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesArrayRangeIndexWithBlankStart()
+        {
+            var input = "x = [5, 3, 2, '5']\ny = x[:3]";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    {
+                        "x", 
+                        new Variable(
+                            Consts.VariableTypes.List, 
+                            new List<Variable>
+                            {
+                                new (Consts.VariableTypes.Number, 5),
+                                new (Consts.VariableTypes.Number, 3),
+                                new (Consts.VariableTypes.Number, 2),
+                                new (Consts.VariableTypes.String, "5"),
+                            }
+                        )
+                    },
+                    {
+                        "y",
+                        new Variable(
+                            Consts.VariableTypes.List, 
+                            new List<Variable>
+                            {
+                                new (Consts.VariableTypes.Number, 5),
+                                new (Consts.VariableTypes.Number, 3),
+                                new (Consts.VariableTypes.Number, 2),
+                            }
+                        )
+                    }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesArrayRangeIndexWithBlankEnd()
+        {
+            var input = "x = [5, 3, 2, '5']\ny = x[1:]";
+            var expected = new List<Dictionary<string, Variable>>
+            {
+                new ()
+                {
+                    {
+                        "x", 
+                        new Variable(
+                            Consts.VariableTypes.List, 
+                            new List<Variable>
+                            {
+                                new (Consts.VariableTypes.Number, 5),
+                                new (Consts.VariableTypes.Number, 3),
+                                new (Consts.VariableTypes.Number, 2),
+                                new (Consts.VariableTypes.String, "5"),
+                            }
+                        )
+                    },
+                    {
+                        "y",
+                        new Variable(
+                            Consts.VariableTypes.List, 
+                            new List<Variable>
+                            {
+                                new (Consts.VariableTypes.Number, 3),
+                                new (Consts.VariableTypes.Number, 2),
+                                new (Consts.VariableTypes.String, "5"),
+                            }
+                        )
+                    }
+                }
+            };
+            InterpreterAssertions.AssertInputProducesOutput(input, expected);
+        }
     }
 
     [TestFixture]
