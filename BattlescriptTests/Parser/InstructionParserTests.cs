@@ -340,14 +340,14 @@ public static class InstructionParserTests
                     {
                         new (
                             Consts.InstructionTypes.KeyValuePair, 
-                            ":", 
+                            null, 
                             null, 
                             new (Consts.InstructionTypes.Number, 4), 
                             new (Consts.InstructionTypes.Number, 5)
                         ),
                         new (
                             Consts.InstructionTypes.KeyValuePair, 
-                            ":", 
+                            null, 
                             null, 
                             new (Consts.InstructionTypes.Number, 6), 
                             new (Consts.InstructionTypes.String, "asdf")

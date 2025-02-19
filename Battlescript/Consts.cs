@@ -59,6 +59,7 @@ public static class Consts
         "if",
         "import",
         "lambda",
+        "match",
         "nonlocal",
         "pass",
         "raise",
