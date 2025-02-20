@@ -12,80 +12,85 @@ public class Lexer(string input)
     {
         while (_index < input.Length)
         {
-            var (nextThreeCharacters, nextTwoCharacters, nextCharacter) = 
+            var (nextNextNextCharacter, nextNextCharacter, nextCharacter) = 
                 LexerUtilities.GetNextThreeCharacters(input, _index);
-
-            if (nextCharacter == '\n')
+            
+            if (nextCharacter[0] == '\n')
             {
                 HandleNewline();
             }
-            else if (nextCharacter == ' ')
+            else if (nextCharacter[0] == ' ')
             {
                 _index++;
                 _column++;
             } 
-            else if (Consts.Digits.Contains(nextCharacter))
+            else if (
+                Consts.InseparableNumberCharacters.Contains(nextCharacter[0]) && Consts.NumberCharacters.Contains(nextNextCharacter[0]))
             {
                 HandleNumber();
             }
-            else if (Consts.Quotes.Contains(nextCharacter))
+            else if (Consts.Digits.Contains(nextCharacter[0]))
+            {
+                HandleNumber();
+            }
+            else if (Consts.Quotes.Contains(nextCharacter[0]))
             {
                 HandleString();
             }
-            else if (Consts.Separators.Contains(nextCharacter))
+            else if (Consts.Separators.Contains(nextCharacter[0]))
             {
-                _tokens.Add(new Token(Consts.TokenTypes.Separator, nextCharacter.ToString(), _line, _column));
+                _tokens.Add(new Token(Consts.TokenTypes.Separator, nextCharacter, _line, _column));
                 _index++;
                 _column++;
             }
-            else if (Consts.StartingWordCharacters.Contains(nextCharacter))
+            else if (Consts.StartingWordCharacters.Contains(nextCharacter[0]))
             {
                 HandleWord();
             }
-            else if (Consts.Operators.Contains(nextThreeCharacters))
+            else if (Consts.Operators.Contains(nextCharacter + nextNextCharacter + nextNextNextCharacter))
             {
-                _tokens.Add(new Token(Consts.TokenTypes.Operator, nextThreeCharacters, _line, _column));
+                _tokens.Add(new Token(Consts.TokenTypes.Operator, nextCharacter + nextNextCharacter + nextNextNextCharacter, _line, _column));
                 _index += 3;
                 _column += 3;
             }
-            else if (Consts.Assignments.Contains(nextThreeCharacters))
+            else if (Consts.Assignments.Contains(nextCharacter + nextNextCharacter + nextNextNextCharacter))
             {
-                _tokens.Add(new Token(Consts.TokenTypes.Assignment, nextThreeCharacters, _line, _column));
+                _tokens.Add(new Token(Consts.TokenTypes.Assignment, nextCharacter + nextNextCharacter + nextNextNextCharacter, _line, _column));
                 _index += 3;
                 _column += 3;
             }
-            else if (Consts.Operators.Contains(nextTwoCharacters))
+            else if (Consts.Operators.Contains(nextCharacter + nextNextCharacter))
             {
-                _tokens.Add(new Token(Consts.TokenTypes.Operator, nextTwoCharacters, _line, _column));
+                _tokens.Add(new Token(Consts.TokenTypes.Operator, nextCharacter + nextNextCharacter, _line, _column));
                 _index += 2;
                 _column += 2;
             }
-            else if (Consts.Assignments.Contains(nextTwoCharacters))
+            else if (Consts.Assignments.Contains(nextCharacter + nextNextCharacter))
             {
-                _tokens.Add(new Token(Consts.TokenTypes.Assignment, nextTwoCharacters, _line, _column));
+                _tokens.Add(new Token(Consts.TokenTypes.Assignment, nextCharacter + nextNextCharacter, _line, _column));
                 _index += 2;
                 _column += 2;
             }
-            else if (Consts.Operators.Contains(nextCharacter.ToString()))
+            else if (Consts.Operators.Contains(nextCharacter))
             {
-                _tokens.Add(new Token(Consts.TokenTypes.Operator, nextCharacter.ToString(), _line, _column));
+                _tokens.Add(new Token(Consts.TokenTypes.Operator, nextCharacter, _line, _column));
                 _index++;
                 _column++;
             }
-            else if (Consts.Assignments.Contains(nextCharacter.ToString()))
+            else if (Consts.Assignments.Contains(nextCharacter))
             {
-                _tokens.Add(new Token(Consts.TokenTypes.Assignment, nextCharacter.ToString(), _line, _column));
+                _tokens.Add(new Token(Consts.TokenTypes.Assignment, nextCharacter, _line, _column));
                 _index++;
                 _column++;
             }
-            else if (nextCharacter == '#')
+            else if (nextCharacter[0] == '#')
             {
                 HandleComment();
             }
             else
             {
                 throw new Exception(
-                    "Invalid character found at line " + _line + ", column " + _column + ": " + nextThreeCharacters
+                    "Invalid character found at line " + _line + ", column " + _column + ": " + nextCharacter + nextNextCharacter + nextNextNextCharacter
                 );
             }
         }
@@ -130,13 +135,23 @@ public class Lexer(string input)
     
     private void HandleNumber()
     {
+        // This is so we can skip the negative sign and search for numbers
+        var negativeSign = "";
+        if (input[_index] == '-')
+        {
+            negativeSign = "-";
+            _index++;
+            _column++;
+        }
+        
         var numberCharacters = LexerUtilities.GetNextCharactersInCollection(
             input, 
             _index, 
             Consts.NumberCharacters, 
             CollectionType.Inclusive
         );
-        _tokens.Add(new Token(Consts.TokenTypes.Number, numberCharacters, _line, _column));
+
+        _tokens.Add(new Token(Consts.TokenTypes.Number, negativeSign + numberCharacters, _line, _column));
         _index += numberCharacters.Length;
         _column += numberCharacters.Length;
     }

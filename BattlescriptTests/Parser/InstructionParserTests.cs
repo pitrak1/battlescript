@@ -11,43 +11,22 @@ public static class InstructionParserTests
         [Test]
         public void HandlesNumbers()
         {
-            var lexer = new Lexer("5");
-            var lexerResult = lexer.Run();
-            var instructionParser = new InstructionParser();
-            var instructionParserResult = instructionParser.Run(lexerResult);
-
-            Assertions.AssertInstructionEqual(
-                instructionParserResult,
-                new Instruction(Consts.InstructionTypes.Number, 5.0)
-            );
+            var expected = new Instruction(Consts.InstructionTypes.Number, 5.0);
+            ParserAssertions.AssertInputProducesInstruction("5", expected);
         }
         
         [Test]
         public void HandlesStrings()
         {
-            var lexer = new Lexer("'asdf'");
-            var lexerResult = lexer.Run();
-            var instructionParser = new InstructionParser();
-            var instructionParserResult = instructionParser.Run(lexerResult);
-
-            Assertions.AssertInstructionEqual(
-                instructionParserResult,
-                new Instruction(Consts.InstructionTypes.String, "asdf")
-            );
+            var expected = new Instruction(Consts.InstructionTypes.String, "asdf");
+            ParserAssertions.AssertInputProducesInstruction("'asdf'", expected);
         }
         
         [Test]
         public void HandlesBooleans()
         {
-            var lexer = new Lexer("False");
-            var lexerResult = lexer.Run();
-            var instructionParser = new InstructionParser();
-            var instructionParserResult = instructionParser.Run(lexerResult);
-
-            Assertions.AssertInstructionEqual(
-                instructionParserResult,
-                new Instruction(Consts.InstructionTypes.Boolean, false)
-            );
+            var expected = new Instruction(Consts.InstructionTypes.Boolean, false);
+            ParserAssertions.AssertInputProducesInstruction("False", expected);
         }
     }
 
@@ -57,45 +36,25 @@ public static class InstructionParserTests
         [Test]
         public void HandlesOperations()
         {
-            var lexer = new Lexer("5 + 6");
-            var lexerResult = lexer.Run();
-            var instructionParser = new InstructionParser();
-            var instructionParserResult = instructionParser.Run(lexerResult);
-
-            Assertions.AssertInstructionEqual(
-                instructionParserResult,
-                new Instruction(
-                    0, 
-                    0, 
-                    Consts.InstructionTypes.Operation, 
-                    "+", 
-                    null,
-                    new Instruction(Consts.InstructionTypes.Number, 5.0),
-                    new Instruction(Consts.InstructionTypes.Number, 6.0)
-                )
-            );
+            var expected = new Instruction(
+                Consts.InstructionTypes.Operation,
+                "+",
+                null,
+                new Instruction(Consts.InstructionTypes.Number, 5.0),
+                new Instruction(Consts.InstructionTypes.Number, 6.0));
+            ParserAssertions.AssertInputProducesInstruction("5 + 6", expected);
         }
 
         [Test]
         public void HandlesUnaryOperators()
         {
-            var lexer = new Lexer("~6");
-            var lexerResult = lexer.Run();
-            var instructionParser = new InstructionParser();
-            var instructionParserResult = instructionParser.Run(lexerResult);
-
-            Assertions.AssertInstructionEqual(
-                instructionParserResult,
-                new Instruction(
-                    0, 
-                    0, 
-                    Consts.InstructionTypes.Operation, 
-                    "~", 
-                    null,
-                    null,
-                    new Instruction(Consts.InstructionTypes.Number, 6.0)
-                )
-            );
+            var expected = new Instruction(
+                Consts.InstructionTypes.Operation,
+                "~",
+                null,
+                null,
+                new Instruction(Consts.InstructionTypes.Number, 6.0));
+            ParserAssertions.AssertInputProducesInstruction("~6", expected);
         }
     }
     
@@ -106,23 +65,13 @@ public static class InstructionParserTests
         public void HandlesAssignments()
         {
             // This is nonsensical, but is an easy example for this test *shrug*
-            var lexer = new Lexer("5 = 6");
-            var lexerResult = lexer.Run();
-            var instructionParser = new InstructionParser();
-            var instructionParserResult = instructionParser.Run(lexerResult);
-
-            Assertions.AssertInstructionEqual(
-                instructionParserResult,
-                new Instruction(
-                    0, 
-                    0, 
-                    Consts.InstructionTypes.Assignment, 
-                    "=", 
-                    null,
-                    new Instruction(Consts.InstructionTypes.Number, 5.0),
-                    new Instruction(Consts.InstructionTypes.Number, 6.0)
-                )
-            );
+            var expected = new Instruction(
+                Consts.InstructionTypes.Assignment,
+                "=",
+                null,
+                new Instruction(Consts.InstructionTypes.Number, 5.0),
+                new Instruction(Consts.InstructionTypes.Number, 6.0));
+            ParserAssertions.AssertInputProducesInstruction("5 = 6", expected);
         }
     }
     
@@ -132,229 +81,137 @@ public static class InstructionParserTests
         [Test]
         public void HandlesArrayDefinition()
         {
-            var lexer = new Lexer("[4, 'asdf']");
-            var lexerResult = lexer.Run();
-            var instructionParser = new InstructionParser();
-            var instructionParserResult = instructionParser.Run(lexerResult);
-            
-            Assertions.AssertInstructionEqual(
-                instructionParserResult,
-                new Instruction(
-                    0, 
-                    0, 
-                    Consts.InstructionTypes.SquareBrackets, 
-                    new List<Instruction> 
-                    {
-                        new (Consts.InstructionTypes.Number, 4),
-                        new (Consts.InstructionTypes.String, "asdf")
-                    }
-                )
-            );
+            var expected = new Instruction(
+                Consts.InstructionTypes.SquareBrackets,
+                new List<Instruction>
+                {
+                    new(Consts.InstructionTypes.Number, 4),
+                    new(Consts.InstructionTypes.String, "asdf")
+                });
+            ParserAssertions.AssertInputProducesInstruction("[4, 'asdf']", expected);
         }
         
         [Test]
         public void HandlesIndex()
         {
-            var lexer = new Lexer("x[4]");
-            var lexerResult = lexer.Run();
-            var instructionParser = new InstructionParser();
-            var instructionParserResult = instructionParser.Run(lexerResult);
-            
-            Assertions.AssertInstructionEqual(
-                instructionParserResult,
-                new (
-                    0, 
-                    0, 
-                    Consts.InstructionTypes.Variable,
-                    "x",
-                    new (
-                        0, 
-                        0, 
-                        Consts.InstructionTypes.SquareBrackets, 
-                        new List<Instruction> 
-                        {
-                            new (Consts.InstructionTypes.Number, 4)
-                        }
-                    )
-                )
-            );
+            var expected = new Instruction(
+                Consts.InstructionTypes.Variable,
+                "x",
+                new(
+                    Consts.InstructionTypes.SquareBrackets,
+                    new List<Instruction>
+                    {
+                        new(Consts.InstructionTypes.Number, 4)
+                    }));
+            ParserAssertions.AssertInputProducesInstruction("x[4]", expected);
         }
         
         [Test]
         public void HandlesStackedIndexes()
         {
-            var lexer = new Lexer("x[4][5]");
-            var lexerResult = lexer.Run();
-            var instructionParser = new InstructionParser();
-            var instructionParserResult = instructionParser.Run(lexerResult);
-            
-            Assertions.AssertInstructionEqual(
-                instructionParserResult,
-                new (
-                    0, 
-                    0, 
-                    Consts.InstructionTypes.Variable,
-                    "x",
-                    new (
-                        0, 
-                        0, 
-                        Consts.InstructionTypes.SquareBrackets, 
-                        new List<Instruction> 
+            var expected = new Instruction(
+                Consts.InstructionTypes.Variable,
+                "x",
+                new(
+                    Consts.InstructionTypes.SquareBrackets,
+                    new List<Instruction>
+                    {
+                        new(Consts.InstructionTypes.Number, 4)
+                    },
+                    new(
+                        Consts.InstructionTypes.SquareBrackets,
+                        new List<Instruction>
                         {
-                            new (Consts.InstructionTypes.Number, 4)
-                        },
-                        new (
-                            0, 
-                            0, 
-                            Consts.InstructionTypes.SquareBrackets, 
-                            new List<Instruction> 
-                            {
-                                new (Consts.InstructionTypes.Number, 5)
-                            }
-                        )
-                    )
-                )
-            );
+                            new(Consts.InstructionTypes.Number, 5)
+                        })));
+            ParserAssertions.AssertInputProducesInstruction("x[4][5]", expected);
         }
         
         [Test]
         public void HandlesRangeIndexes()
         {
-            var lexer = new Lexer("x[4:5]");
-            var lexerResult = lexer.Run();
-            var instructionParser = new InstructionParser();
-            var instructionParserResult = instructionParser.Run(lexerResult);
-            
-            Assertions.AssertInstructionEqual(
-                instructionParserResult,
-                new (
-                    0, 
-                    0, 
-                    Consts.InstructionTypes.Variable,
-                    "x",
-                    new (
-                        0, 
-                        0, 
-                        Consts.InstructionTypes.SquareBrackets, 
-                        new List<Instruction> 
-                        {
-                            new (
-                                Consts.InstructionTypes.KeyValuePair,
-                                new List<Instruction>
-                                {
-                                    new (Consts.InstructionTypes.Number, 4),
-                                    new (Consts.InstructionTypes.Number, 5)
-                                }
-                            )
-                            
-                        }
-                    )
-                )
-            );
+            var expected = new Instruction(
+                Consts.InstructionTypes.Variable,
+                "x",
+                new(
+                    Consts.InstructionTypes.SquareBrackets,
+                    new List<Instruction>
+                    {
+                        new(
+                            Consts.InstructionTypes.KeyValuePair,
+                            new List<Instruction>
+                            {
+                                new (Consts.InstructionTypes.Number, 4),
+                                new (Consts.InstructionTypes.Number, 5)
+                            })
+                    }));
+            ParserAssertions.AssertInputProducesInstruction("x[4:5]", expected);
         }
 
         [Test]
         public void HandlesParens()
         {
-            var lexer = new Lexer("(4, 'asdf')");
-            var lexerResult = lexer.Run();
-            var instructionParser = new InstructionParser();
-            var instructionParserResult = instructionParser.Run(lexerResult);
-
-            Assertions.AssertInstructionEqual(
-                instructionParserResult,
-                new Instruction(
-                    0,
-                    0,
-                    Consts.InstructionTypes.Parens,
-                    new List<Instruction>
-                    {
-                        new(Consts.InstructionTypes.Number, 4),
-                        new(Consts.InstructionTypes.String, "asdf")
-                    }
-                )
-            );
+            var expected = new Instruction(
+                Consts.InstructionTypes.Parens,
+                new List<Instruction>
+                {
+                    new(Consts.InstructionTypes.Number, 4),
+                    new(Consts.InstructionTypes.String, "asdf")
+                });
+            ParserAssertions.AssertInputProducesInstruction("(4, 'asdf')", expected);
         }
 
         [Test]
         public void HandlesMembers()
-        {
-            // Nonsensical expression but works for tests *shrug*
-            var lexer = new Lexer(".asdf");
-            var lexerResult = lexer.Run();
-            var instructionParser = new InstructionParser();
-            var instructionParserResult = instructionParser.Run(lexerResult);
-        
-            Assertions.AssertInstructionEqual(
-                instructionParserResult,
-                new Instruction(
-                    0, 
-                    0, 
-                    Consts.InstructionTypes.SquareBrackets, 
-                    new List<Instruction> 
+        { 
+            var expected = new Instruction(
+                Consts.InstructionTypes.Variable,
+                "asdf",
+                new(
+                    Consts.InstructionTypes.SquareBrackets,
+                    new List<Instruction>
                     {
-                        new (Consts.InstructionTypes.String, "asdf")
-                    }
-                )
-            );
+                        new(Consts.InstructionTypes.String, "asdf")
+                    }));
+            ParserAssertions.AssertInputProducesInstruction("asdf.asdf", expected);
         }
         
         [Test]
         public void HandlesSetDefinition()
         {
-            var lexer = new Lexer("{4, 'asdf'}");
-            var lexerResult = lexer.Run();
-            var instructionParser = new InstructionParser();
-            var instructionParserResult = instructionParser.Run(lexerResult);
-            
-            Assertions.AssertInstructionEqual(
-                instructionParserResult,
-                new Instruction(
-                    0, 
-                    0, 
-                    Consts.InstructionTypes.SetDefinition, 
-                    new List<Instruction> 
-                    {
-                        new (Consts.InstructionTypes.Number, 4),
-                        new (Consts.InstructionTypes.String, "asdf")
-                    }
-                )
-            );
+            var expected = new Instruction(
+                Consts.InstructionTypes.SetDefinition,
+                new List<Instruction>
+                {
+                    new (Consts.InstructionTypes.Number, 4),
+                    new(Consts.InstructionTypes.String, "asdf")
+                });
+            ParserAssertions.AssertInputProducesInstruction("{4, 'asdf'}", expected);
         }
         
         [Test]
         public void HandlesDictionaryDefinition()
         {
-            var lexer = new Lexer("{4: 5, 6: 'asdf'}");
-            var lexerResult = lexer.Run();
-            var instructionParser = new InstructionParser();
-            var instructionParserResult = instructionParser.Run(lexerResult);
-            
-            Assertions.AssertInstructionEqual(
-                instructionParserResult,
-                new Instruction(
-                    0, 
-                    0, 
-                    Consts.InstructionTypes.DictionaryDefinition, 
-                    new List<Instruction> 
-                    {
-                        new (
-                            Consts.InstructionTypes.KeyValuePair, 
-                            null, 
-                            null, 
-                            new (Consts.InstructionTypes.Number, 4), 
-                            new (Consts.InstructionTypes.Number, 5)
-                        ),
-                        new (
-                            Consts.InstructionTypes.KeyValuePair, 
-                            null, 
-                            null, 
-                            new (Consts.InstructionTypes.Number, 6), 
-                            new (Consts.InstructionTypes.String, "asdf")
-                        )
-                    }
-                )
-            );
+            var expected = new Instruction(
+                Consts.InstructionTypes.DictionaryDefinition,
+                new List<Instruction>
+                {
+                    new (
+                        Consts.InstructionTypes.KeyValuePair, 
+                        null, 
+                        null, 
+                        new (Consts.InstructionTypes.Number, 4), 
+                        new (Consts.InstructionTypes.Number, 5)
+                    ),
+                    new (
+                        Consts.InstructionTypes.KeyValuePair, 
+                        null, 
+                        null, 
+                        new (Consts.InstructionTypes.Number, 6), 
+                        new (Consts.InstructionTypes.String, "asdf")
+                    )
+                });
+            ParserAssertions.AssertInputProducesInstruction("{4: 5, 6: 'asdf'}", expected);
         }
     }
 }

@@ -32,19 +32,13 @@ public static class LexerUtilities
         return result;
     }
     
-    public static (string, string, char) GetNextThreeCharacters(string input, int index)
+    public static (string, string, string) GetNextThreeCharacters(string input, int index)
     {
         var remainingCharacters = input.Length - index;
+        var nextCharacter = remainingCharacters >= 1 ? input[index].ToString() : "";
+        var nextNextCharacter = remainingCharacters >= 2 ? input[index + 1].ToString() : "";
+        var nextNextNextCharacter = remainingCharacters >= 3 ? input[index + 2].ToString() : "";
 
-        if (remainingCharacters <= 0)
-        {
-            return ("", "", ' ');
-        }
-
-        var threeCharacters = input.Substring(index, (int)MathF.Min(remainingCharacters, 3));
-        var twoCharacters = input.Substring(index, (int)MathF.Min(remainingCharacters, 2));
-        var character = input[index];
-        
-        return (threeCharacters, twoCharacters, character);
+        return (nextNextNextCharacter, nextNextCharacter, nextCharacter);
     }
 }

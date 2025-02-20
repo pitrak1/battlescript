@@ -2,6 +2,8 @@ namespace Battlescript;
 
 public static class Consts
 {
+    public static readonly char[] InseparableNumberCharacters = ['-', '.'];
+    public static readonly char[] NumberCharacters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
     public static readonly char[] Digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     public static readonly char[] Letters = [
         'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
@@ -24,7 +26,6 @@ public static class Consts
         '_',
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
     ];
-    public static readonly char[] NumberCharacters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
     public static readonly char[] Indentations = [' ', '\t'];
     public static readonly char[] Quotes = ['\'', '"'];
     public static readonly char[] Separators = ['(', ')', '{', '}', ',', '[', ']', ':', '.'];
