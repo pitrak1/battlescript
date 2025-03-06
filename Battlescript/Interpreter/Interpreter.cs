@@ -2,7 +2,6 @@ namespace Battlescript;
 
 public class Interpreter(List<Instruction> instructions)
 {
-    private Stack<Variable> _ongoingContextsStack = [];
     private List<Instruction> _instructions = instructions;
     private int _instructionIndex = 0;
     private Memory _memory = new ();
@@ -20,7 +19,7 @@ public class Interpreter(List<Instruction> instructions)
         return _memory.GetScopes();
     }
 
-    private Variable InterpretInstruction(Instruction? instruction)
+    private Variable InterpretInstruction(Instruction? instruction, Variable? context = null)
     {
         if (instruction is null)
         {
@@ -46,9 +45,9 @@ public class Interpreter(List<Instruction> instructions)
             case Consts.InstructionTypes.Operation:
                 return HandleOperation(instruction);
             case Consts.InstructionTypes.SquareBrackets:
-                return HandleSquareBrackets(instruction);
+                return HandleSquareBrackets(instruction, context);
             case Consts.InstructionTypes.Parens:
-                return HandleParens(instruction);
+                return HandleParens(instruction, context);
             case Consts.InstructionTypes.SetDefinition:
                 return HandleSetDefinition(instruction);
             case Consts.InstructionTypes.DictionaryDefinition:
@@ -98,7 +97,7 @@ public class Interpreter(List<Instruction> instructions)
     private Variable HandleVariable(Instruction instruction)
     {
         var variable = _memory.GetAndCreateIfNotExists(instruction.Value);
-        return ReturnVariableOrInterpretNext(variable, instruction.Next);
+        return instruction.Next is not null ? InterpretInstruction(instruction.Next, variable) : variable;
     }
 
     private Variable HandleOperation(Instruction instruction)
@@ -108,9 +107,9 @@ public class Interpreter(List<Instruction> instructions)
         return InterpreterUtilities.ConductOperation(instruction, left, right);
     }
 
-    private Variable HandleSquareBrackets(Instruction instruction)
+    private Variable HandleSquareBrackets(Instruction instruction, Variable? context)
     {
-        if (_ongoingContextsStack.Count > 0)
+        if (context is not null)
         {
             if (instruction.Value.Count > 1)
             {
@@ -121,14 +120,14 @@ public class Interpreter(List<Instruction> instructions)
             {
                 var leftIndex = InterpretInstruction(instruction.Value[0].Left);
                 var rightIndex = InterpretInstruction(instruction.Value[0].Right);
-                var result = _ongoingContextsStack.Peek().GetRangeIndex((int?)leftIndex.Value, (int?)rightIndex.Value);
-                return ReturnVariableOrInterpretNext(result, instruction.Next);
+                var result = context.GetRangeIndex((int?)leftIndex.Value, (int?)rightIndex.Value);
+                return instruction.Next is not null ? InterpretInstruction(instruction.Next, result) : result;
             }
             else
             {
                 var index = InterpretInstruction(instruction.Value[0]);
-                var result =  _ongoingContextsStack.Peek().GetIndex(index.Value);
-                return ReturnVariableOrInterpretNext(result, instruction.Next);
+                var result =  context.GetIndex(index.Value);
+                return instruction.Next is not null ? InterpretInstruction(instruction.Next, result) : result;
             }
         }
         else
@@ -143,9 +142,9 @@ public class Interpreter(List<Instruction> instructions)
         }
     }
     
-    private Variable HandleParens(Instruction instruction)
+    private Variable HandleParens(Instruction instruction, Variable? context)
     {
-        if (_ongoingContextsStack.Count > 0)
+        if (context is not null)
         {
             // This means that it's trying to call a function, not create a tuple
             // The parser doesn't currently support that correctly
@@ -166,19 +165,7 @@ public class Interpreter(List<Instruction> instructions)
     {
         return new Variable(Consts.VariableTypes.Dictionary, InterpretKvpList(instruction.Value));
     }
-
-    private Variable ReturnVariableOrInterpretNext(Variable variable, Instruction? next)
-    {
-        if (next is not null)
-        {
-            _ongoingContextsStack.Push(variable);
-            var result = InterpretInstruction(next);
-            _ongoingContextsStack.Pop();
-            return result;
-        }
-        return variable;
-    }
-
+    
     private List<Variable> InterpretList(List<Instruction> instructions)
     {
         var values = new List<Variable>();
