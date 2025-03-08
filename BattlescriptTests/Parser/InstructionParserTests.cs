@@ -214,4 +214,55 @@ public static class InstructionParserTests
             ParserAssertions.AssertInputProducesInstruction("{4: 5, 6: 'asdf'}", expected);
         }
     }
+
+    [TestFixture]
+    public class Functions
+    {
+        [Test]
+        public void HandlesBasicFunctionDefinition()
+        {
+            var expected = new Instruction(
+                Consts.InstructionTypes.Function,
+                "func"
+            );
+            ParserAssertions.AssertInputProducesInstruction("def func():", expected);
+        }
+        
+        [Test]
+        public void HandlesFunctionDefinitionWithPositionalArgument()
+        {
+            var expected = new Instruction(
+                Consts.InstructionTypes.Function,
+                "func",
+                null,
+                null,
+                null,
+                null,
+                new List<Instruction>()
+                {
+                    new (Consts.InstructionTypes.Variable, "asdf"),
+                }
+            );
+            ParserAssertions.AssertInputProducesInstruction("def func(asdf):", expected);
+        }
+        
+        [Test]
+        public void HandlesFunctionDefinitionWithMultiplePositionalArguments()
+        {
+            var expected = new Instruction(
+                Consts.InstructionTypes.Function,
+                "func",
+                null,
+                null,
+                null,
+                null,
+                new List<Instruction>()
+                {
+                    new (Consts.InstructionTypes.Variable, "asdf"),
+                    new (Consts.InstructionTypes.Variable, "qwer")
+                }
+            );
+            ParserAssertions.AssertInputProducesInstruction("def func(asdf, qwer):", expected);
+        }
+    }
 }

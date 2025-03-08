@@ -1,9 +1,11 @@
 namespace Battlescript;
 
-public class Variable(Consts.VariableTypes type, dynamic? value)
+public class Variable(Consts.VariableTypes type, dynamic? value, List<Instruction>? instructions = null)
 {
     public Consts.VariableTypes Type { get; set; } = type;
     public dynamic? Value { get; set; } = value;
+
+    public List<Instruction> Instructions { get; set; } = instructions ?? [];
 
     // This method is useful for assignments because it will allow us to copy a value we've interpreted
     // from the instructions to a variable while also keeping that variable's place in memory.  If we
@@ -12,6 +14,7 @@ public class Variable(Consts.VariableTypes type, dynamic? value)
     {
         Type = copy.Type;
         Value = copy.Value;
+        Instructions = copy.Instructions;
         return this;
     }
 
@@ -55,8 +58,6 @@ public class Variable(Consts.VariableTypes type, dynamic? value)
         
         var index = left ?? 0;
         var count = right == null ? Value.Count - 1 : right - index;
-
-        Console.WriteLine(index + ", " + count);
         
         return new Variable(Consts.VariableTypes.List, Value.GetRange(index, count));
     }

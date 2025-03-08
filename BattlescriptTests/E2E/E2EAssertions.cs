@@ -39,6 +39,10 @@ public class E2EAssertions
                 Assert.That(input.Value, Is.EqualTo(expected.Value));
             }
             Assert.That(input.Type, Is.EqualTo(expected.Type));
+            if (input.Instructions.Count > 0)
+            {
+                Assertions.AssertInstructionListEqual(input.Instructions, expected.Instructions);
+            }
         }
     }
     

@@ -44,6 +44,8 @@ public class Parser
                     // largest containing scope
                     _scopes.RemoveAt(_scopes.Count - 1);
                 }
+                
+                currentIndentValue = newIndentValue;
             }
             else
             {

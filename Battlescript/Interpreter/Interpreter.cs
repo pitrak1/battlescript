@@ -40,6 +40,8 @@ public class Interpreter(List<Instruction> instructions)
                 return HandleIf(instruction);
             case Consts.InstructionTypes.While:
                 return HandleWhile(instruction);
+            case Consts.InstructionTypes.Function:
+                return HandleFunction(instruction);
             case Consts.InstructionTypes.Variable:
                 return HandleVariable(instruction);
             case Consts.InstructionTypes.Operation:
@@ -92,6 +94,16 @@ public class Interpreter(List<Instruction> instructions)
         }
 
         return new Variable(Consts.VariableTypes.Null, null);
+    }
+    
+    private Variable HandleFunction(Instruction instruction)
+    {
+        var result = new Variable(
+            Consts.VariableTypes.Function, 
+            ParseFunctionDefinitionParameters(instruction.Values), 
+            instruction.Instructions);
+        var variable = _memory.GetAndCreateIfNotExists(instruction.Value);
+        return variable.Copy(result);
     }
 
     private Variable HandleVariable(Instruction instruction)
@@ -146,9 +158,10 @@ public class Interpreter(List<Instruction> instructions)
     {
         if (context is not null)
         {
-            // This means that it's trying to call a function, not create a tuple
-            // The parser doesn't currently support that correctly
-            return new Variable(0, 0);
+            _memory.AddScope();
+            InterpretList(context.Instructions);
+            _memory.RemoveScope();
+            return new Variable(Consts.VariableTypes.Null, null);
         }
         else
         {
@@ -186,5 +199,21 @@ public class Interpreter(List<Instruction> instructions)
             values[key.Value] = value;
         }
         return values;
+    }
+
+    private List<string> ParseFunctionDefinitionParameters(List<Instruction> parameters)
+    {
+        var results = new List<string>();
+        foreach (var p in parameters)
+        {
+            if (p.Type != Consts.InstructionTypes.Variable)
+            {
+                // ERROR HERE
+            }
+            
+            results.Add(p.Value);
+        }
+
+        return results;
     }
 }

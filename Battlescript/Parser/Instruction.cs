@@ -10,6 +10,7 @@ public class Instruction
     public Instruction? Left { get; set; }
     public Instruction? Right { get; set; }
     public List<Instruction> Instructions { get; set; }
+    public List<Instruction> Values { get; set; }
 
     public Instruction(
         int? line,
@@ -19,7 +20,8 @@ public class Instruction
         Instruction? next = null,
         Instruction? left = null,
         Instruction? right = null,
-        List<Instruction>? instructions = null
+        List<Instruction>? instructions = null,
+        List<Instruction>? values = null
     )
     {
         Line = line;
@@ -30,6 +32,7 @@ public class Instruction
         Left = left;
         Right = right;
         Instructions = instructions ?? [];
+        Values = values ?? [];
     }
     
     // Used for testing so that column and line default to 0
@@ -40,6 +43,7 @@ public class Instruction
         Instruction? left = null,
         Instruction? right = null,
         List<Instruction>? instructions = null,
+        List<Instruction>? values = null,
         int? line = 0,
         int? column = 0
     )
@@ -52,5 +56,6 @@ public class Instruction
         Left = left;
         Right = right;
         Instructions = instructions ?? [];
+        Values = values ?? [];
     }
 }

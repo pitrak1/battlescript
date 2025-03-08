@@ -67,5 +67,95 @@ public static class ParserTests
             
             Assertions.AssertInstructionListEqual(parserResult, expected);
         }
+        
+        [Test]
+        public void HandlesInstructionsBeforeConditionalInstructionBlock()
+        {
+            var lexer = new Lexer("y = 7\nif 5 < 6:\n\tx = 5");
+            var lexerResult = lexer.Run();
+            var parser = new Parser(lexerResult);
+            var parserResult = parser.Run();
+
+            var expected = new List<Instruction>
+            {
+                new(
+                    Consts.InstructionTypes.Assignment,
+                    "=",
+                    null,
+                    new (Consts.InstructionTypes.Variable, "y"),
+                    new (Consts.InstructionTypes.Number, 7)
+                ),
+                new Instruction(
+                    Consts.InstructionTypes.If, 
+                    new Instruction(
+                        Consts.InstructionTypes.Operation,
+                        "<",
+                        null,
+                        new (Consts.InstructionTypes.Number, 5), 
+                        new (Consts.InstructionTypes.Number, 6)
+                    ), 
+                    null,
+                    null,
+                    null,
+                    new List<Instruction>
+                    {
+                        new(
+                            Consts.InstructionTypes.Assignment,
+                            "=",
+                            null,
+                            new (Consts.InstructionTypes.Variable, "x"),
+                            new (Consts.InstructionTypes.Number, 5)
+                        )
+                    }
+                )
+            };
+            
+            Assertions.AssertInstructionListEqual(parserResult, expected);
+        }
+        
+        [Test]
+        public void HandlesInstructionsAfterConditionalInstructionBlock()
+        {
+            var lexer = new Lexer("if 5 < 6:\n\tx = 5\ny = 7");
+            var lexerResult = lexer.Run();
+            var parser = new Parser(lexerResult);
+            var parserResult = parser.Run();
+
+            var expected = new List<Instruction>
+            {
+                new Instruction(
+                    Consts.InstructionTypes.If, 
+                    new Instruction(
+                        Consts.InstructionTypes.Operation,
+                        "<",
+                        null,
+                        new (Consts.InstructionTypes.Number, 5), 
+                        new (Consts.InstructionTypes.Number, 6)
+                    ), 
+                    null,
+                    null,
+                    null,
+                    new List<Instruction>
+                    {
+                        new(
+                            Consts.InstructionTypes.Assignment,
+                            "=",
+                            null,
+                            new (Consts.InstructionTypes.Variable, "x"),
+                            new (Consts.InstructionTypes.Number, 5)
+                        )
+                    }
+                ),
+                new(
+                    Consts.InstructionTypes.Assignment,
+                    "=",
+                    null,
+                    new (Consts.InstructionTypes.Variable, "y"),
+                    new (Consts.InstructionTypes.Number, 7)
+                )
+            };
+            
+            Assertions.AssertInstructionListEqual(parserResult, expected);
+        }
     }
 }

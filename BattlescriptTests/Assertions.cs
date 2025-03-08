@@ -54,6 +54,11 @@ public static class Assertions
             {
                 AssertInstructionListEqual(input.Instructions, expected.Instructions);
             }
+            
+            if (input.Values.Count > 0)
+            {
+                AssertInstructionListEqual(input.Values, expected.Values);
+            }
         }
     }
 
