@@ -30,6 +30,10 @@ public class E2EAssertions
             {
                 AssertVariableListEqual(input.Value, expected.Value);
             }
+            else if (input.Value is List<Instruction>)
+            {
+                Assertions.AssertInstructionListEqual(input.Value, expected.Value);
+            }
             else if (input.Value is Dictionary<string, Variable>)
             {
                 AssertVariableDictionaryEqual(input.Value, expected.Value);

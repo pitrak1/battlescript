@@ -13,7 +13,7 @@ public static partial class E2ETests {
             var input = "def func():\n\tx = 5";
             var expected = new Variable(
                 Consts.VariableTypes.Function, 
-                new List<Variable>(),
+                new List<Instruction>(),
                 new List<Instruction>()
                 {
                     new (
@@ -32,9 +32,9 @@ public static partial class E2ETests {
             var input = "def func(asdf):\n\tx = asdf";
             var expected = new Variable(
                 Consts.VariableTypes.Function, 
-                new List<string>()
+                new List<Instruction>()
                 {
-                    "asdf"
+                    new (Consts.InstructionTypes.Variable, "asdf")
                 },
                 new List<Instruction>()
                 {
@@ -54,10 +54,10 @@ public static partial class E2ETests {
             var input = "def func(asdf, qwer):\n\tx = asdf";
             var expected = new Variable(
                 Consts.VariableTypes.Function, 
-                new List<string>()
+                new List<Instruction>()
                 {
-                    "asdf",
-                    "qwer"
+                    new (Consts.InstructionTypes.Variable, "asdf"),
+                    new (Consts.InstructionTypes.Variable, "qwer")
                 },
                 new List<Instruction>()
                 {
@@ -88,6 +88,14 @@ public static partial class E2ETests {
         {
             var input = "def func():\n\treturn 6\nx = func()";
             var expected = new Variable(Consts.VariableTypes.Number, 6);
+            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+        }
+
+        [Test]
+        public void HandlesFunctionCallWithArguments()
+        {
+            var input = "def func(x, y):\n\treturn x + y\nx = func(2, 3)";
+            var expected = new Variable(Consts.VariableTypes.Number, 5);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
         }
     }

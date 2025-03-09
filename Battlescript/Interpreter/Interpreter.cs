@@ -168,6 +168,7 @@ public class Interpreter(List<Instruction> instructions)
         if (context is not null)
         {
             _memory.AddScope();
+            TransferFunctionArguments(instruction, context);
             InterpretList(context.Instructions);
             var returnValue = _memory.Get("return");
             _memory.RemoveScope();
@@ -211,9 +212,9 @@ public class Interpreter(List<Instruction> instructions)
         return values;
     }
 
-    private List<string> ParseFunctionDefinitionParameters(List<Instruction> parameters)
+    private List<Instruction> ParseFunctionDefinitionParameters(List<Instruction> parameters)
     {
-        var results = new List<string>();
+        var results = new List<Instruction>();
         foreach (var p in parameters)
         {
             if (p.Type != Consts.InstructionTypes.Variable)
@@ -221,9 +222,20 @@ public class Interpreter(List<Instruction> instructions)
                 // ERROR HERE
             }
             
-            results.Add(p.Value);
+            results.Add(p);
         }
 
         return results;
+    }
+
+    private void TransferFunctionArguments(Instruction instruction, Variable context)
+    {
+        var arguments = InterpretList(instruction.Value);
+        for (int i = 0; i < context.Value.Count; i++)
+        {
+            var variable = _memory.GetAndCreateIfNotExists(context.Value[i].Value);
+            var value = arguments[i];
+            variable.Copy(value);
+        }
     }
 }
