@@ -42,6 +42,8 @@ public class InstructionParser
                     return HandleWhile(tokens);
                 case "def":
                     return HandleDef(tokens);
+                case "return":
+                    return HandleReturn(tokens);
                 default:
                     return ThrowErrorForToken("Unexpected token", tokens[0]);
             }
@@ -230,6 +232,12 @@ public class InstructionParser
             null,
             results.Values
         );
+    }
+
+    private Instruction HandleReturn(List<Token> tokens)
+    {
+        var value = Run(tokens.GetRange(1, tokens.Count - 1));
+        return new Instruction(tokens[0].Line, tokens[0].Column, Consts.InstructionTypes.Return, value);
     }
 
     private Instruction HandleIdentifier(List<Token> tokens)

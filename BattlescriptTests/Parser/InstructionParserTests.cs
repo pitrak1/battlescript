@@ -264,5 +264,14 @@ public static class InstructionParserTests
             );
             ParserAssertions.AssertInputProducesInstruction("def func(asdf, qwer):", expected);
         }
+
+        [Test]
+        public void HandlesReturn()
+        {
+            var expected = new Instruction(
+                Consts.InstructionTypes.Return, 
+                new Instruction(Consts.InstructionTypes.Number, 4));
+            ParserAssertions.AssertInputProducesInstruction("return 4", expected);
+        }
     }
 }

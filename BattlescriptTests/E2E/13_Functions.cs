@@ -82,5 +82,13 @@ public static partial class E2ETests {
             var expected = new Variable(Consts.VariableTypes.Number, 5);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
         }
+        
+        [Test]
+        public void HandlesFunctionCallWithReturnValue()
+        {
+            var input = "def func():\n\treturn 6\nx = func()";
+            var expected = new Variable(Consts.VariableTypes.Number, 6);
+            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+        }
     }
 }

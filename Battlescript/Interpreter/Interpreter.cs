@@ -42,6 +42,8 @@ public class Interpreter(List<Instruction> instructions)
                 return HandleWhile(instruction);
             case Consts.InstructionTypes.Function:
                 return HandleFunction(instruction);
+            case Consts.InstructionTypes.Return:
+                return HandleReturn(instruction);
             case Consts.InstructionTypes.Variable:
                 return HandleVariable(instruction);
             case Consts.InstructionTypes.Operation:
@@ -106,6 +108,13 @@ public class Interpreter(List<Instruction> instructions)
         return variable.Copy(result);
     }
 
+    private Variable HandleReturn(Instruction instruction)
+    {
+        var returnVariable = _memory.GetAndCreateIfNotExists("return");
+        var returnValue = InterpretInstruction(instruction.Value);
+        return returnVariable.Copy(returnValue);
+    }
+
     private Variable HandleVariable(Instruction instruction)
     {
         var variable = _memory.GetAndCreateIfNotExists(instruction.Value);
@@ -160,8 +169,9 @@ public class Interpreter(List<Instruction> instructions)
         {
             _memory.AddScope();
             InterpretList(context.Instructions);
+            var returnValue = _memory.Get("return");
             _memory.RemoveScope();
-            return new Variable(Consts.VariableTypes.Null, null);
+            return returnValue ?? new Variable(Consts.VariableTypes.Null, null);
         }
         else
         {
