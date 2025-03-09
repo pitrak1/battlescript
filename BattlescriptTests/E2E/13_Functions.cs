@@ -17,11 +17,10 @@ public static partial class E2ETests {
                 new List<Instruction>()
                 {
                     new (
-                        Consts.InstructionTypes.Assignment, 
-                        "=", 
-                        null,
-                        new Instruction(Consts.InstructionTypes.Variable, "x"),
-                        new Instruction(Consts.InstructionTypes.Number, 5))
+                        type: Consts.InstructionTypes.Assignment, 
+                        operation: "=", 
+                        left: new Instruction(type: Consts.InstructionTypes.Variable, name: "x"),
+                        right: new Instruction(Consts.InstructionTypes.Number, 5))
                 });
             E2EAssertions.AssertVariableValueFromInput(input, "func", expected);
         }
@@ -34,16 +33,15 @@ public static partial class E2ETests {
                 Consts.VariableTypes.Function, 
                 new List<Instruction>()
                 {
-                    new (Consts.InstructionTypes.Variable, "asdf")
+                    new (type: Consts.InstructionTypes.Variable, name: "asdf")
                 },
                 new List<Instruction>()
                 {
                     new (
-                        Consts.InstructionTypes.Assignment, 
-                        "=", 
-                        null,
-                        new Instruction(Consts.InstructionTypes.Variable, "x"),
-                        new Instruction(Consts.InstructionTypes.Variable, "asdf"))
+                        type: Consts.InstructionTypes.Assignment, 
+                        operation: "=", 
+                        left: new Instruction(type: Consts.InstructionTypes.Variable, name: "x"),
+                        right: new Instruction(type: Consts.InstructionTypes.Variable, name: "asdf"))
                 });
             E2EAssertions.AssertVariableValueFromInput(input, "func", expected);
         }
@@ -56,17 +54,16 @@ public static partial class E2ETests {
                 Consts.VariableTypes.Function, 
                 new List<Instruction>()
                 {
-                    new (Consts.InstructionTypes.Variable, "asdf"),
-                    new (Consts.InstructionTypes.Variable, "qwer")
+                    new (type: Consts.InstructionTypes.Variable, name: "asdf"),
+                    new (type: Consts.InstructionTypes.Variable, name: "qwer")
                 },
                 new List<Instruction>()
                 {
                     new (
-                        Consts.InstructionTypes.Assignment, 
-                        "=", 
-                        null,
-                        new Instruction(Consts.InstructionTypes.Variable, "x"),
-                        new Instruction(Consts.InstructionTypes.Variable, "asdf"))
+                        type: Consts.InstructionTypes.Assignment, 
+                        operation: "=", 
+                        left: new Instruction(type: Consts.InstructionTypes.Variable, name: "x"),
+                        right: new Instruction(type: Consts.InstructionTypes.Variable, name: "asdf"))
                 });
             E2EAssertions.AssertVariableValueFromInput(input, "func", expected);
         }

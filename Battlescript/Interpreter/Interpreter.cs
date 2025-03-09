@@ -31,11 +31,11 @@ public class Interpreter(List<Instruction> instructions)
             case Consts.InstructionTypes.Assignment:
                 return HandleAssignment(instruction);
             case Consts.InstructionTypes.Number:
-                return new Variable(Consts.VariableTypes.Number, instruction.Value);
+                return new Variable(Consts.VariableTypes.Number, instruction.LiteralValue);
             case Consts.InstructionTypes.String:
-                return new Variable(Consts.VariableTypes.String, instruction.Value);
+                return new Variable(Consts.VariableTypes.String, instruction.LiteralValue);
             case Consts.InstructionTypes.Boolean:
-                return new Variable(Consts.VariableTypes.Boolean, instruction.Value);
+                return new Variable(Consts.VariableTypes.Boolean, instruction.LiteralValue);
             case Consts.InstructionTypes.If:
                 return HandleIf(instruction);
             case Consts.InstructionTypes.While:
@@ -102,9 +102,9 @@ public class Interpreter(List<Instruction> instructions)
     {
         var result = new Variable(
             Consts.VariableTypes.Function, 
-            ParseFunctionDefinitionParameters(instruction.Values), 
+            ParseFunctionDefinitionParameters(instruction.ValueList), 
             instruction.Instructions);
-        var variable = _memory.GetAndCreateIfNotExists(instruction.Value);
+        var variable = _memory.GetAndCreateIfNotExists(instruction.Name);
         return variable.Copy(result);
     }
 
@@ -117,7 +117,7 @@ public class Interpreter(List<Instruction> instructions)
 
     private Variable HandleVariable(Instruction instruction)
     {
-        var variable = _memory.GetAndCreateIfNotExists(instruction.Value);
+        var variable = _memory.GetAndCreateIfNotExists(instruction.Name);
         return instruction.Next is not null ? InterpretInstruction(instruction.Next, variable) : variable;
     }
 
@@ -132,21 +132,21 @@ public class Interpreter(List<Instruction> instructions)
     {
         if (context is not null)
         {
-            if (instruction.Value.Count > 1)
+            if (instruction.ValueList.Count > 1)
             {
                 throw new Exception("Too many index values");
             }
 
-            if (instruction.Value[0].Type == Consts.InstructionTypes.KeyValuePair)
+            if (instruction.ValueList[0].Type == Consts.InstructionTypes.KeyValuePair)
             {
-                var leftIndex = InterpretInstruction(instruction.Value[0].Left);
-                var rightIndex = InterpretInstruction(instruction.Value[0].Right);
+                var leftIndex = InterpretInstruction(instruction.ValueList[0].Left);
+                var rightIndex = InterpretInstruction(instruction.ValueList[0].Right);
                 var result = context.GetRangeIndex((int?)leftIndex.Value, (int?)rightIndex.Value);
                 return instruction.Next is not null ? InterpretInstruction(instruction.Next, result) : result;
             }
             else
             {
-                var index = InterpretInstruction(instruction.Value[0]);
+                var index = InterpretInstruction(instruction.ValueList[0]);
                 var result =  context.GetIndex(index.Value);
                 return instruction.Next is not null ? InterpretInstruction(instruction.Next, result) : result;
             }
@@ -155,7 +155,7 @@ public class Interpreter(List<Instruction> instructions)
         {
             var values = new List<Variable>();
             // If we got here, that means that the value of the instruction should be a list of instructions
-            foreach (var instValue in instruction.Value)
+            foreach (var instValue in instruction.ValueList)
             {
                 values.Add(InterpretInstruction(instValue));
             }
@@ -176,18 +176,18 @@ public class Interpreter(List<Instruction> instructions)
         }
         else
         {
-            return new Variable(Consts.VariableTypes.Tuple, InterpretList(instruction.Value));
+            return new Variable(Consts.VariableTypes.Tuple, InterpretList(instruction.ValueList));
         }
     }
 
     private Variable HandleSetDefinition(Instruction instruction)
     {
-        return new Variable(Consts.VariableTypes.Set, InterpretList(instruction.Value));
+        return new Variable(Consts.VariableTypes.Set, InterpretList(instruction.ValueList));
     }
     
     private Variable HandleDictionaryDefinition(Instruction instruction)
     {
-        return new Variable(Consts.VariableTypes.Dictionary, InterpretKvpList(instruction.Value));
+        return new Variable(Consts.VariableTypes.Dictionary, InterpretKvpList(instruction.ValueList));
     }
     
     private List<Variable> InterpretList(List<Instruction> instructions)
@@ -230,10 +230,10 @@ public class Interpreter(List<Instruction> instructions)
 
     private void TransferFunctionArguments(Instruction instruction, Variable context)
     {
-        var arguments = InterpretList(instruction.Value);
+        var arguments = InterpretList(instruction.ValueList);
         for (int i = 0; i < context.Value.Count; i++)
         {
-            var variable = _memory.GetAndCreateIfNotExists(context.Value[i].Value);
+            var variable = _memory.GetAndCreateIfNotExists(context.Value[i].Name);
             var value = arguments[i];
             variable.Copy(value);
         }

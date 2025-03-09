@@ -7,7 +7,7 @@ public static class InterpreterUtilities
         dynamic? result;
         Consts.VariableTypes type;
         
-        switch (inst.Value)
+        switch (inst.Operation)
         {
             case "**":
                 result = Math.Pow(left.Value, right.Value);
@@ -108,7 +108,7 @@ public static class InterpreterUtilities
     {
         var result = right;
         
-        switch (inst.Value)
+        switch (inst.Operation)
         {
             case "+=":
             result.Value = left.Value + right.Value;

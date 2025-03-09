@@ -30,34 +30,18 @@ public static class Assertions
             Assert.That(expected, Is.Not.Null);
             
             Assert.That(input.Type, Is.EqualTo(expected.Type));
-
-            if (input.Value is List<Instruction>)
-            {
-                AssertInstructionListEqual(input.Value, expected.Value);
-            }
-            else if (input.Value is List<(Instruction, Instruction)>)
-            {
-                AssertKeyValuePairListEqual(input.Value, expected.Value);
-            }
-            else if (input.Value is Instruction)
-            {
-                AssertInstructionEqual(input.Value, expected.Value);
-            }
-            else
-            {
-                Assert.That(input.Value, Is.EqualTo(expected.Value));
-            }
+            Assert.That(input.LiteralValue, Is.EqualTo(expected.LiteralValue));
+            Assert.That(input.Name, Is.EqualTo(expected.Name));
+            Assert.That(input.Operation, Is.EqualTo(expected.Operation));
+            AssertInstructionEqual(input.Value, expected.Value);
+            AssertInstructionListEqual(input.ValueList, expected.ValueList);
+            AssertInstructionEqual(input.Next, expected.Next);
             AssertInstructionEqual(input.Left, expected.Left);
             AssertInstructionEqual(input.Right, expected.Right);
 
             if (input.Instructions.Count > 0)
             {
                 AssertInstructionListEqual(input.Instructions, expected.Instructions);
-            }
-            
-            if (input.Values.Count > 0)
-            {
-                AssertInstructionListEqual(input.Values, expected.Values);
             }
         }
     }

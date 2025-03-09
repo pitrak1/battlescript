@@ -37,11 +37,10 @@ public static class InstructionParserTests
         public void HandlesOperations()
         {
             var expected = new Instruction(
-                Consts.InstructionTypes.Operation,
-                "+",
-                null,
-                new Instruction(Consts.InstructionTypes.Number, 5.0),
-                new Instruction(Consts.InstructionTypes.Number, 6.0));
+                type: Consts.InstructionTypes.Operation,
+                operation: "+",
+                left: new Instruction(Consts.InstructionTypes.Number, 5.0),
+                right: new Instruction(Consts.InstructionTypes.Number, 6.0));
             ParserAssertions.AssertInputProducesInstruction("5 + 6", expected);
         }
 
@@ -49,11 +48,9 @@ public static class InstructionParserTests
         public void HandlesUnaryOperators()
         {
             var expected = new Instruction(
-                Consts.InstructionTypes.Operation,
-                "~",
-                null,
-                null,
-                new Instruction(Consts.InstructionTypes.Number, 6.0));
+                type: Consts.InstructionTypes.Operation,
+                operation: "~",
+                right: new Instruction(Consts.InstructionTypes.Number, 6.0));
             ParserAssertions.AssertInputProducesInstruction("~6", expected);
         }
     }
@@ -66,11 +63,10 @@ public static class InstructionParserTests
         {
             // This is nonsensical, but is an easy example for this test *shrug*
             var expected = new Instruction(
-                Consts.InstructionTypes.Assignment,
-                "=",
-                null,
-                new Instruction(Consts.InstructionTypes.Number, 5.0),
-                new Instruction(Consts.InstructionTypes.Number, 6.0));
+                type: Consts.InstructionTypes.Assignment,
+                operation: "=",
+                left: new Instruction(Consts.InstructionTypes.Number, 5.0),
+                right: new Instruction(Consts.InstructionTypes.Number, 6.0));
             ParserAssertions.AssertInputProducesInstruction("5 = 6", expected);
         }
     }
@@ -82,8 +78,8 @@ public static class InstructionParserTests
         public void HandlesArrayDefinition()
         {
             var expected = new Instruction(
-                Consts.InstructionTypes.SquareBrackets,
-                new List<Instruction>
+                type: Consts.InstructionTypes.SquareBrackets,
+                valueList: new List<Instruction>
                 {
                     new(Consts.InstructionTypes.Number, 4),
                     new(Consts.InstructionTypes.String, "asdf")
@@ -95,11 +91,11 @@ public static class InstructionParserTests
         public void HandlesIndex()
         {
             var expected = new Instruction(
-                Consts.InstructionTypes.Variable,
-                "x",
-                new(
-                    Consts.InstructionTypes.SquareBrackets,
-                    new List<Instruction>
+                type: Consts.InstructionTypes.Variable,
+                name: "x",
+                next: new(
+                    type: Consts.InstructionTypes.SquareBrackets,
+                    valueList: new List<Instruction>
                     {
                         new(Consts.InstructionTypes.Number, 4)
                     }));
@@ -110,17 +106,17 @@ public static class InstructionParserTests
         public void HandlesStackedIndexes()
         {
             var expected = new Instruction(
-                Consts.InstructionTypes.Variable,
-                "x",
-                new(
-                    Consts.InstructionTypes.SquareBrackets,
-                    new List<Instruction>
+                type: Consts.InstructionTypes.Variable,
+                name: "x",
+                next: new(
+                    type: Consts.InstructionTypes.SquareBrackets,
+                    valueList: new List<Instruction>
                     {
                         new(Consts.InstructionTypes.Number, 4)
                     },
-                    new(
-                        Consts.InstructionTypes.SquareBrackets,
-                        new List<Instruction>
+                    next: new(
+                        type: Consts.InstructionTypes.SquareBrackets,
+                        valueList: new List<Instruction>
                         {
                             new(Consts.InstructionTypes.Number, 5)
                         })));
@@ -131,19 +127,16 @@ public static class InstructionParserTests
         public void HandlesRangeIndexes()
         {
             var expected = new Instruction(
-                Consts.InstructionTypes.Variable,
-                "x",
-                new(
-                    Consts.InstructionTypes.SquareBrackets,
-                    new List<Instruction>
+                type: Consts.InstructionTypes.Variable,
+                name: "x",
+                next: new(
+                    type: Consts.InstructionTypes.SquareBrackets,
+                    valueList: new List<Instruction>
                     {
                         new(
-                            Consts.InstructionTypes.KeyValuePair,
-                            new List<Instruction>
-                            {
-                                new (Consts.InstructionTypes.Number, 4),
-                                new (Consts.InstructionTypes.Number, 5)
-                            })
+                            type: Consts.InstructionTypes.KeyValuePair,
+                            left: new (Consts.InstructionTypes.Number, 4),
+                            right: new (Consts.InstructionTypes.Number, 5))
                     }));
             ParserAssertions.AssertInputProducesInstruction("x[4:5]", expected);
         }
@@ -152,8 +145,8 @@ public static class InstructionParserTests
         public void HandlesParens()
         {
             var expected = new Instruction(
-                Consts.InstructionTypes.Parens,
-                new List<Instruction>
+                type: Consts.InstructionTypes.Parens,
+                valueList: new List<Instruction>
                 {
                     new(Consts.InstructionTypes.Number, 4),
                     new(Consts.InstructionTypes.String, "asdf")
@@ -165,11 +158,11 @@ public static class InstructionParserTests
         public void HandlesMembers()
         { 
             var expected = new Instruction(
-                Consts.InstructionTypes.Variable,
-                "asdf",
-                new(
-                    Consts.InstructionTypes.SquareBrackets,
-                    new List<Instruction>
+                type: Consts.InstructionTypes.Variable,
+                name: "asdf",
+                next: new(
+                    type: Consts.InstructionTypes.SquareBrackets,
+                    valueList: new List<Instruction>
                     {
                         new(Consts.InstructionTypes.String, "asdf")
                     }));
@@ -180,8 +173,8 @@ public static class InstructionParserTests
         public void HandlesSetDefinition()
         {
             var expected = new Instruction(
-                Consts.InstructionTypes.SetDefinition,
-                new List<Instruction>
+                type: Consts.InstructionTypes.SetDefinition,
+                valueList: new List<Instruction>
                 {
                     new (Consts.InstructionTypes.Number, 4),
                     new(Consts.InstructionTypes.String, "asdf")
@@ -193,22 +186,18 @@ public static class InstructionParserTests
         public void HandlesDictionaryDefinition()
         {
             var expected = new Instruction(
-                Consts.InstructionTypes.DictionaryDefinition,
-                new List<Instruction>
+                type: Consts.InstructionTypes.DictionaryDefinition,
+                valueList: new List<Instruction>
                 {
                     new (
-                        Consts.InstructionTypes.KeyValuePair, 
-                        null, 
-                        null, 
-                        new (Consts.InstructionTypes.Number, 4), 
-                        new (Consts.InstructionTypes.Number, 5)
+                        type: Consts.InstructionTypes.KeyValuePair,
+                        left: new (Consts.InstructionTypes.Number, 4), 
+                        right: new (Consts.InstructionTypes.Number, 5)
                     ),
                     new (
                         Consts.InstructionTypes.KeyValuePair, 
-                        null, 
-                        null, 
-                        new (Consts.InstructionTypes.Number, 6), 
-                        new (Consts.InstructionTypes.String, "asdf")
+                        left: new (Consts.InstructionTypes.Number, 6), 
+                        right: new (Consts.InstructionTypes.String, "asdf")
                     )
                 });
             ParserAssertions.AssertInputProducesInstruction("{4: 5, 6: 'asdf'}", expected);
@@ -222,8 +211,8 @@ public static class InstructionParserTests
         public void HandlesBasicFunctionDefinition()
         {
             var expected = new Instruction(
-                Consts.InstructionTypes.Function,
-                "func"
+                type: Consts.InstructionTypes.Function,
+                name: "func"
             );
             ParserAssertions.AssertInputProducesInstruction("def func():", expected);
         }
@@ -232,15 +221,11 @@ public static class InstructionParserTests
         public void HandlesFunctionDefinitionWithPositionalArgument()
         {
             var expected = new Instruction(
-                Consts.InstructionTypes.Function,
-                "func",
-                null,
-                null,
-                null,
-                null,
-                new List<Instruction>()
+                type: Consts.InstructionTypes.Function,
+                name: "func",
+                valueList: new List<Instruction>()
                 {
-                    new (Consts.InstructionTypes.Variable, "asdf"),
+                    new (type: Consts.InstructionTypes.Variable, name: "asdf"),
                 }
             );
             ParserAssertions.AssertInputProducesInstruction("def func(asdf):", expected);
@@ -250,16 +235,12 @@ public static class InstructionParserTests
         public void HandlesFunctionDefinitionWithMultiplePositionalArguments()
         {
             var expected = new Instruction(
-                Consts.InstructionTypes.Function,
-                "func",
-                null,
-                null,
-                null,
-                null,
-                new List<Instruction>()
+                type: Consts.InstructionTypes.Function,
+                name: "func",
+                valueList: new List<Instruction>()
                 {
-                    new (Consts.InstructionTypes.Variable, "asdf"),
-                    new (Consts.InstructionTypes.Variable, "qwer")
+                    new (type: Consts.InstructionTypes.Variable, name: "asdf"),
+                    new (type: Consts.InstructionTypes.Variable, name: "qwer")
                 }
             );
             ParserAssertions.AssertInputProducesInstruction("def func(asdf, qwer):", expected);
@@ -269,8 +250,8 @@ public static class InstructionParserTests
         public void HandlesReturn()
         {
             var expected = new Instruction(
-                Consts.InstructionTypes.Return, 
-                new Instruction(Consts.InstructionTypes.Number, 4));
+                type: Consts.InstructionTypes.Return, 
+                value: new Instruction(Consts.InstructionTypes.Number, 4));
             ParserAssertions.AssertInputProducesInstruction("return 4", expected);
         }
     }

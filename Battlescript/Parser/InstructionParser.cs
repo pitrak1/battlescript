@@ -78,13 +78,12 @@ public class InstructionParser
             Consts.InstructionTypes.KeyValuePair : 
             Consts.InstructionTypes.Assignment;
         return new Instruction(
-            separatorToken.Line, 
-            separatorToken.Column, 
-            type,
-            separatorToken.Value,
-            null,
-            result.Left,
-            result.Right
+            line: separatorToken.Line, 
+            column: separatorToken.Column, 
+            type: type,
+            operation: separatorToken.Value,
+            left: result.Left,
+            right: result.Right
         );
     }
 
@@ -97,32 +96,32 @@ public class InstructionParser
             Consts.InstructionTypes.SquareBrackets;
         
         return new Instruction(
-            tokens[0].Line,
-            tokens[0].Column,
-            type,
-            results.Values,
-            next
+            line: tokens[0].Line,
+            column: tokens[0].Column,
+            type: type,
+            valueList: results.Values,
+            next: next
         );
     }
     
     private Instruction HandleMember(List<Token> tokens)
     {
         var indexValue = new Instruction(
-            tokens[1].Line,
-            tokens[1].Column,
-            Consts.InstructionTypes.String,
-            tokens[1].Value
+            line: tokens[1].Line,
+            column: tokens[1].Column,
+            type: Consts.InstructionTypes.String,
+            literalValue: tokens[1].Value
         );
         var next = CheckAndRunFollowingTokens(tokens, 2);
         
         // It seems like the easiest way to handle using the period for accessing members is to treat it exactly
         // like a square bracket (i.e. x.asdf = x["asdf"]).  This may change later once I know python better :P
         return new Instruction(
-            tokens[0].Line,
-            tokens[0].Column,
-            Consts.InstructionTypes.SquareBrackets,
-            new List<Instruction> { indexValue },
-            next
+            line: tokens[0].Line,
+            column: tokens[0].Column,
+            type: Consts.InstructionTypes.SquareBrackets,
+            valueList: new List<Instruction> { indexValue },
+            next: next
         );
     }
 
@@ -137,10 +136,10 @@ public class InstructionParser
         CheckForNoFollowingTokens(tokens, results.Count);
         
         return new Instruction(
-            tokens[0].Line,
-            tokens[0].Column,
-            type,
-            results.Values
+            line: tokens[0].Line,
+            column: tokens[0].Column,
+            type: type,
+            valueList: results.Values
         );
     }
     
@@ -149,13 +148,12 @@ public class InstructionParser
         var operatorToken = tokens[operatorIndex];
         var result = RunLeftAndRightAroundIndex(tokens, operatorIndex);
         return new Instruction(
-            operatorToken.Line, 
-            operatorToken.Column, 
-            Consts.InstructionTypes.Operation,
-            operatorToken.Value,
-            null,
-            result.Left,
-            result.Right
+            line: operatorToken.Line, 
+            column: operatorToken.Column, 
+            type: Consts.InstructionTypes.Operation,
+            operation: operatorToken.Value,
+            left: result.Left,
+            right: result.Right
         );
     }
 
@@ -168,10 +166,10 @@ public class InstructionParser
     
         var condition = Run(tokens.GetRange(1, tokens.Count - 2));
         return new Instruction(
-            tokens[0].Line,
-            tokens[0].Column,
-            Consts.InstructionTypes.If,
-            condition
+            line: tokens[0].Line,
+            column: tokens[0].Column,
+            type: Consts.InstructionTypes.If,
+            value: condition
         );
     }
     
@@ -184,10 +182,10 @@ public class InstructionParser
     
         var condition = Run(tokens.GetRange(1, tokens.Count - 2));
         return new Instruction(
-            tokens[0].Line,
-            tokens[0].Column,
-            Consts.InstructionTypes.While,
-            condition
+            line: tokens[0].Line,
+            column: tokens[0].Column,
+            type: Consts.InstructionTypes.While,
+            value: condition
         );
     }
 
@@ -222,22 +220,22 @@ public class InstructionParser
         var tokensInParens = tokens.GetRange(2, tokens.Count - 2);
         var results = ParseAndRunEntriesWithinSeparator(tokensInParens, [","]);
         return new Instruction(
-            tokens[0].Line,
-            tokens[0].Column,
-            Consts.InstructionTypes.Function,
-            tokens[1].Value,
-            null,
-            null,
-            null,
-            null,
-            results.Values
+            line: tokens[0].Line,
+            column: tokens[0].Column,
+            type: Consts.InstructionTypes.Function,
+            name: tokens[1].Value,
+            valueList: results.Values
         );
     }
 
     private Instruction HandleReturn(List<Token> tokens)
     {
         var value = Run(tokens.GetRange(1, tokens.Count - 1));
-        return new Instruction(tokens[0].Line, tokens[0].Column, Consts.InstructionTypes.Return, value);
+        return new Instruction(
+            line: tokens[0].Line, 
+            column: tokens[0].Column, 
+            type: Consts.InstructionTypes.Return, 
+            value: value);
     }
 
     private Instruction HandleIdentifier(List<Token> tokens)
@@ -245,11 +243,11 @@ public class InstructionParser
         var next = CheckAndRunFollowingTokens(tokens, 1);
         
         return new Instruction(
-            tokens[0].Line, 
-            tokens[0].Column, 
-            Consts.InstructionTypes.Variable, 
-            tokens[0].Value, 
-            next
+            line: tokens[0].Line, 
+            column: tokens[0].Column, 
+            type: Consts.InstructionTypes.Variable, 
+            name: tokens[0].Value, 
+            next: next
         );
     }
 
@@ -275,7 +273,7 @@ public class InstructionParser
                 break;
         }
         
-        return new Instruction(tokens[0].Line, tokens[0].Column, instructionType, value);
+        return new Instruction(line: tokens[0].Line, column: tokens[0].Column, type: instructionType, literalValue: value);
     }
 
     private (int Count, List<Instruction> Values) ParseAndRunEntriesWithinSeparator(
@@ -293,7 +291,7 @@ public class InstructionParser
             {
                 var kvp = RunLeftAndRightAroundIndex(entry, colonIndex);
                 values.Add(
-                    new Instruction(Consts.InstructionTypes.KeyValuePair, null, null, kvp.Left, kvp.Right));
+                    new Instruction(type: Consts.InstructionTypes.KeyValuePair, operation: ":", left: kvp.Left, right: kvp.Right));
             }
             else
             {
