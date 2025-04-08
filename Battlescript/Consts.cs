@@ -225,6 +225,7 @@ public static class Consts
         Function,
         Parens,
         Return,
+        Class,
         Else,
         Btl,
         Breakpoint
@@ -240,6 +241,7 @@ public static class Consts
         Dictionary,
         Set,
         Tuple,
-        Function
+        Function,
+        Class
     };
 }

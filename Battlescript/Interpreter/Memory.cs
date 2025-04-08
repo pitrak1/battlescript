@@ -45,9 +45,11 @@ public class Memory
         scopes.Add(new Dictionary<string, Variable>());
     }
 
-    public void RemoveScope()
+    public Dictionary<string, Variable> RemoveScope()
     {
+        var removedScope = scopes[^1];
         scopes.RemoveAt(scopes.Count - 1);
+        return removedScope;
     }
 
     public List<Dictionary<string, Variable>> GetScopes()

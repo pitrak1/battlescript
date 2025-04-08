@@ -56,6 +56,8 @@ public class Interpreter(List<Instruction> instructions)
                 return HandleSetDefinition(instruction);
             case Consts.InstructionTypes.DictionaryDefinition:
                 return HandleDictionaryDefinition(instruction);
+            case Consts.InstructionTypes.Class:
+                return HandleClassDefinition(instruction);
             default:
                 throw new Exception($"Unknown instruction type: {instruction.Type}");
         }
@@ -188,6 +190,16 @@ public class Interpreter(List<Instruction> instructions)
     private Variable HandleDictionaryDefinition(Instruction instruction)
     {
         return new Variable(Consts.VariableTypes.Dictionary, InterpretKvpList(instruction.ValueList));
+    }
+
+    private Variable HandleClassDefinition(Instruction instruction)
+    {
+        _memory.AddScope();
+        InterpretList(instruction.Instructions);
+        var classScope = _memory.RemoveScope();
+        var classVariable = new Variable(Consts.VariableTypes.Class, classScope);
+        _memory.Set(instruction.Name, classVariable);
+        return classVariable;
     }
     
     private List<Variable> InterpretList(List<Instruction> instructions)

@@ -135,6 +135,7 @@ public static class InstructionParserTests
                     {
                         new(
                             type: Consts.InstructionTypes.KeyValuePair,
+                            operation: ":",
                             left: new (Consts.InstructionTypes.Number, 4),
                             right: new (Consts.InstructionTypes.Number, 5))
                     }));
@@ -191,11 +192,13 @@ public static class InstructionParserTests
                 {
                     new (
                         type: Consts.InstructionTypes.KeyValuePair,
+                        operation: ":",
                         left: new (Consts.InstructionTypes.Number, 4), 
                         right: new (Consts.InstructionTypes.Number, 5)
                     ),
                     new (
-                        Consts.InstructionTypes.KeyValuePair, 
+                        type: Consts.InstructionTypes.KeyValuePair, 
+                        operation: ":",
                         left: new (Consts.InstructionTypes.Number, 6), 
                         right: new (Consts.InstructionTypes.String, "asdf")
                     )
@@ -253,6 +256,31 @@ public static class InstructionParserTests
                 type: Consts.InstructionTypes.Return, 
                 value: new Instruction(Consts.InstructionTypes.Number, 4));
             ParserAssertions.AssertInputProducesInstruction("return 4", expected);
+        }
+    }
+    
+    [TestFixture]
+    public class Classes
+    {
+        [Test]
+        public void HandlesBasicClassDefinition()
+        {
+            var expected = new Instruction(
+                type: Consts.InstructionTypes.Class,
+                name: "MyClass"
+            );
+            ParserAssertions.AssertInputProducesInstruction("class MyClass:", expected);
+        }
+        
+        [Test]
+        public void HandlesClassDefinitionWithInheritance()
+        {
+            var expected = new Instruction(
+                type: Consts.InstructionTypes.Class,
+                name: "MyClass",
+                value: new Instruction(type: Consts.InstructionTypes.Variable, name: "asdf")
+            );
+            ParserAssertions.AssertInputProducesInstruction("class MyClass(asdf):", expected);
         }
     }
 }

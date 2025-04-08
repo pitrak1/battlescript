@@ -44,6 +44,8 @@ public class InstructionParser
                     return HandleDef(tokens);
                 case "return":
                     return HandleReturn(tokens);
+                case "class":
+                    return HandleClass(tokens);
                 default:
                     return ThrowErrorForToken("Unexpected token", tokens[0]);
             }
@@ -235,6 +237,20 @@ public class InstructionParser
             line: tokens[0].Line, 
             column: tokens[0].Column, 
             type: Consts.InstructionTypes.Return, 
+            value: value);
+    }
+    
+    private Instruction HandleClass(List<Token> tokens)
+    {
+        // If we have more than three tokens, we need to get the superclass name
+        var value = tokens.Count > 3 ? 
+            new Instruction(type: Consts.InstructionTypes.Variable, name: tokens[3].Value) : 
+            null;
+        return new Instruction(
+            line: tokens[0].Line, 
+            column: tokens[0].Column, 
+            type: Consts.InstructionTypes.Class, 
+            name: tokens[1].Value,
             value: value);
     }
 
