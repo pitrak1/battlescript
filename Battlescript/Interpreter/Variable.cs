@@ -23,7 +23,9 @@ public class Variable(Consts.VariableTypes type, dynamic? value, List<Instructio
         if (Type != Consts.VariableTypes.List &&
             Type != Consts.VariableTypes.Dictionary &&
             Type != Consts.VariableTypes.Set &&
-            Type != Consts.VariableTypes.Tuple)
+            Type != Consts.VariableTypes.Tuple &&
+            Type != Consts.VariableTypes.Class &&
+            Type != Consts.VariableTypes.Object)
         {
             throw new Exception("wrong variable type bro");
         }

@@ -169,12 +169,20 @@ public class Interpreter(List<Instruction> instructions)
     {
         if (context is not null)
         {
-            _memory.AddScope();
-            TransferFunctionArguments(instruction, context);
-            InterpretList(context.Instructions);
-            var returnValue = _memory.Get("return");
-            _memory.RemoveScope();
-            return returnValue ?? new Variable(Consts.VariableTypes.Null, null);
+            if (context.Type == Consts.VariableTypes.Function)
+            {
+                _memory.AddScope();
+                TransferFunctionArguments(instruction, context);
+                InterpretList(context.Instructions);
+                var returnValue = _memory.Get("return");
+                _memory.RemoveScope();
+                return returnValue ?? new Variable(Consts.VariableTypes.Null, null);
+            }
+            else
+            {
+                return new Variable(Consts.VariableTypes.Object, context.Value);
+            }
+            
         }
         else
         {

@@ -242,6 +242,7 @@ public static class Consts
         Set,
         Tuple,
         Function,
-        Class
+        Class,
+        Object
     };
 }
