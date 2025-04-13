@@ -26,7 +26,7 @@ public class Memory
     {
         scopes[^1].Add(name, value);
     }
-
+    
     public Variable GetAndCreateIfNotExists(string name)
     {
         var result = Get(name);

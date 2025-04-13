@@ -202,10 +202,15 @@ public class Interpreter(List<Instruction> instructions)
 
     private Variable HandleClassDefinition(Instruction instruction)
     {
+        List<Variable>? superclasses = null;
+        if (instruction.ValueList.Count > 0)
+        {
+            superclasses = InterpretList(instruction.ValueList);
+        }
         _memory.AddScope();
         InterpretList(instruction.Instructions);
         var classScope = _memory.RemoveScope();
-        var classVariable = new Variable(Consts.VariableTypes.Class, classScope);
+        var classVariable = new Variable(Consts.VariableTypes.Class, classScope, null, superclasses);
         _memory.Set(instruction.Name, classVariable);
         return classVariable;
     }

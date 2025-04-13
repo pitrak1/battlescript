@@ -35,6 +35,30 @@ public static partial class E2ETests
         }
         
         [Test]
+        public void AllowsSuperclasses()
+        {
+            var input = "class asdf:\n\ti = 1234\nclass qwer(asdf):\n\tj = 2345";
+            var expected = new Variable(
+                Consts.VariableTypes.Class,
+                new Dictionary<string, Variable>()
+                {
+                    { "j", new Variable(Consts.VariableTypes.Number, 2345) }
+                },
+                null,
+                new List<Variable>()
+                {
+                    new Variable(
+                        Consts.VariableTypes.Class,
+                        new Dictionary<string, Variable>()
+                        {
+                            { "i", new Variable(Consts.VariableTypes.Number, 1234) }
+                        }
+                    )
+                });
+            E2EAssertions.AssertVariableValueFromInput(input, "qwer", expected);
+        }
+        
+        [Test]
         public void AllowsAccessingValueMembers()
         {
             var input = "class asdf:\n\ti = 1234\nx = asdf()\ny = x.i";

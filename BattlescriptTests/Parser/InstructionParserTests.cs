@@ -278,7 +278,7 @@ public static class InstructionParserTests
             var expected = new Instruction(
                 type: Consts.InstructionTypes.Class,
                 name: "MyClass",
-                value: new Instruction(type: Consts.InstructionTypes.Variable, name: "asdf")
+                valueList: new List<Instruction>() { new Instruction(type: Consts.InstructionTypes.Variable, name: "asdf") }
             );
             ParserAssertions.AssertInputProducesInstruction("class MyClass(asdf):", expected);
         }

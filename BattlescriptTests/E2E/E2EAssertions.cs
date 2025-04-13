@@ -47,6 +47,14 @@ public class E2EAssertions
             {
                 Assertions.AssertInstructionListEqual(input.Instructions, expected.Instructions);
             }
+
+            if (input.ClassVariable is not null)
+            {
+                for (int i = 0; i < input.ClassVariable.Count; i++)
+                {
+                    AssertVariableEqual(input.ClassVariable[i], expected.ClassVariable[i]);
+                }
+            }
         }
     }
     

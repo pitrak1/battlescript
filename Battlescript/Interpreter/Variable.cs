@@ -1,11 +1,21 @@
 namespace Battlescript;
 
-public class Variable(Consts.VariableTypes type, dynamic? value, List<Instruction>? instructions = null)
+// I would love to split this up into different classes for each type, but there's the following problem:]
+// In our variable assignments, we ideally would like to have the left hand side return the memory address
+// of where the right side should be stored.  I think this should be possible through polymorphism, but
+// C# has all other sorts of concerns because of the garbage collector and heap management.  It uses the
+// class GCHandle, which I believe makes you create the reference when allocating, specifically setting
+// the memory space as fixed/pinned.  It's possible I'll look into this again later *shrug*
+public class Variable(
+    Consts.VariableTypes type, 
+    dynamic? value, 
+    List<Instruction>? instructions = null, 
+    List<Variable>? classVariable = null)
 {
     public Consts.VariableTypes Type { get; set; } = type;
     public dynamic? Value { get; set; } = value;
-
     public List<Instruction> Instructions { get; set; } = instructions ?? [];
+    public List<Variable>? ClassVariable { get; set; } = classVariable;
 
     // This method is useful for assignments because it will allow us to copy a value we've interpreted
     // from the instructions to a variable while also keeping that variable's place in memory.  If we
@@ -15,6 +25,7 @@ public class Variable(Consts.VariableTypes type, dynamic? value, List<Instructio
         Type = copy.Type;
         Value = copy.Value;
         Instructions = copy.Instructions;
+        ClassVariable = copy.ClassVariable;
         return this;
     }
 
