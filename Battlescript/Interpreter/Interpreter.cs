@@ -69,7 +69,7 @@ public class Interpreter(List<Instruction> instructions)
         var right = InterpretInstruction(instruction.Right!);
 
         var result = InterpreterUtilities.ConductAssignment(instruction, left, right);
-        return left.Copy(result);
+        return left.Set(result);
     }
 
     private Variable HandleIf(Instruction instruction)
@@ -107,14 +107,14 @@ public class Interpreter(List<Instruction> instructions)
             ParseFunctionDefinitionParameters(instruction.ValueList), 
             instruction.Instructions);
         var variable = _memory.GetAndCreateIfNotExists(instruction.Name);
-        return variable.Copy(result);
+        return variable.Set(result);
     }
 
     private Variable HandleReturn(Instruction instruction)
     {
         var returnVariable = _memory.GetAndCreateIfNotExists("return");
         var returnValue = InterpretInstruction(instruction.Value);
-        return returnVariable.Copy(returnValue);
+        return returnVariable.Set(returnValue);
     }
 
     private Variable HandleVariable(Instruction instruction)
@@ -180,7 +180,7 @@ public class Interpreter(List<Instruction> instructions)
             }
             else
             {
-                return new Variable(Consts.VariableTypes.Object, context.Value);
+                return context.CreateObject();
             }
             
         }
@@ -260,7 +260,7 @@ public class Interpreter(List<Instruction> instructions)
         {
             var variable = _memory.GetAndCreateIfNotExists(context.Value[i].Name);
             var value = arguments[i];
-            variable.Copy(value);
+            variable.Set(value);
         }
     }
 }

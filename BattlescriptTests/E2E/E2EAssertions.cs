@@ -50,6 +50,7 @@ public class E2EAssertions
 
             if (input.ClassVariable is not null)
             {
+                Assert.That(input.ClassVariable.Count, Is.EqualTo(expected.ClassVariable.Count));
                 for (int i = 0; i < input.ClassVariable.Count; i++)
                 {
                     AssertVariableEqual(input.ClassVariable[i], expected.ClassVariable[i]);

@@ -15,18 +15,89 @@ public class Variable(
     public Consts.VariableTypes Type { get; set; } = type;
     public dynamic? Value { get; set; } = value;
     public List<Instruction> Instructions { get; set; } = instructions ?? [];
-    public List<Variable>? ClassVariable { get; set; } = classVariable;
+    public List<Variable> ClassVariable { get; set; } = classVariable ?? [];
 
     // This method is useful for assignments because it will allow us to copy a value we've interpreted
     // from the instructions to a variable while also keeping that variable's place in memory.  If we
     // were just to set the variable to the other, we would lose the reference
-    public Variable Copy(Variable copy)
+    public Variable Set(Variable copy)
     {
         Type = copy.Type;
         Value = copy.Value;
         Instructions = copy.Instructions;
         ClassVariable = copy.ClassVariable;
         return this;
+    }
+
+    public Variable Copy()
+    {
+        switch (Type)
+        {
+            case Consts.VariableTypes.Null:
+            case Consts.VariableTypes.Number:
+            case Consts.VariableTypes.String: 
+            case Consts.VariableTypes.Boolean:
+            case Consts.VariableTypes.Function:
+                return new Variable(Type, Value, Instructions, ClassVariable);
+            case Consts.VariableTypes.List:
+                var listValues = new List<Variable>();
+                
+                for (int i = 0; i < Value.Count; i++)
+                {
+                    listValues.Add(Value[i].Copy());
+                }
+
+                return new Variable(Type, listValues);
+            case Consts.VariableTypes.Dictionary:
+            case Consts.VariableTypes.Class:
+                var dictionaryValues = new Dictionary<string, Variable>();
+                foreach (KeyValuePair<string, Variable> entry in Value)
+                {
+                    dictionaryValues.Add(entry.Key, entry.Value.Copy());
+                }
+                return new Variable(Type, dictionaryValues);
+            case Consts.VariableTypes.Object:
+                var classValues = new Dictionary<string, Variable>();
+                foreach (KeyValuePair<string, Variable> entry in Value)
+                {
+                    if (entry.Value.Type != Consts.VariableTypes.Function)
+                    {
+                        classValues.Add(entry.Key, entry.Value.Copy());
+                    }
+                }
+                return new Variable(Type, classValues);
+        }
+
+        return new Variable(Consts.VariableTypes.Null, null);
+    }
+
+    public Variable CreateObject()
+    {
+        if (Type != Consts.VariableTypes.Class)
+        {
+            throw new Exception("wrong variable type bro");
+        }
+
+        var objectValue = new Dictionary<string, Variable>();
+        AddClassToObjectValue(objectValue, this);
+        return new Variable(Consts.VariableTypes.Object, objectValue, null, new List<Variable>() {this});
+    }
+
+    private void AddClassToObjectValue(Dictionary<string, Variable> objectValue, Variable classVariable)
+    {
+        var classCopy = classVariable.Copy();
+        foreach (KeyValuePair<string, Variable> entry in classCopy.Value)
+        {
+            if (!objectValue.ContainsKey(entry.Key))
+            {
+                objectValue.Add(entry.Key, entry.Value.Copy());
+            }
+        }
+
+        for (var i = 0; i < classVariable.ClassVariable.Count; i++)
+        {
+            AddClassToObjectValue(objectValue, classVariable.ClassVariable[i]);
+        }
     }
 
     public Variable GetIndex(dynamic key)

@@ -30,6 +30,14 @@ public static partial class E2ETests
                 new Dictionary<string, Variable>()
                 {
                     {"i", new Variable(Consts.VariableTypes.Number, 1234)}
+                },
+                null,
+                new List<Variable>()
+                {
+                    new Variable(Consts.VariableTypes.Class, new Dictionary<string, Variable>()
+                    {
+                        {"i", new Variable(Consts.VariableTypes.Number, 1234)}
+                    })
                 });
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
         }
@@ -66,6 +74,20 @@ public static partial class E2ETests
                 Consts.VariableTypes.Number,
                 1234);
             E2EAssertions.AssertVariableValueFromInput(input, "y", expected);
+        }
+        
+        [Test]
+        public void ChangingValueMembersDoesNotAlterClass()
+        {
+            var input = "class asdf:\n\ti = 1234\nx = asdf()\nx.i = 6";
+            var expected = new Variable(
+                Consts.VariableTypes.Class,
+                new Dictionary<string, Variable>()
+                {
+                    { "i", new Variable(Consts.VariableTypes.Number, 1234) }
+                }
+            );
+            E2EAssertions.AssertVariableValueFromInput(input, "asdf", expected);
         }
     }
 }
