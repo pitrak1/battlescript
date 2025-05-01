@@ -9,7 +9,6 @@ public class Parser
     // This is to track where the currently parsed instruction goes.  The base scope should always be entry 0, but
     // this will keep references to the set of different code blocks we are in (fors, ifs, functions, whatever)
     private List<List<Instruction>> _scopes;
-    private InstructionParser _instructionParser;
 
     public Parser(List<Token> tokens)
     {
@@ -17,7 +16,6 @@ public class Parser
         _currentTokens = [];
         _instructions = [];
         _scopes = [_instructions];
-        _instructionParser = new InstructionParser();
     }
 
     public List<Instruction> Run()
@@ -66,7 +64,7 @@ public class Parser
         if (_currentTokens.Count != 0)
         {
             // Parse the current tokens, add to the current scope, and reset list of current tokens for next instruction
-            var instruction = _instructionParser.Run(_currentTokens);
+            var instruction = Instruction.Parse(_currentTokens);
             _scopes[^1].Add(instruction);
             _currentTokens = [];
         }

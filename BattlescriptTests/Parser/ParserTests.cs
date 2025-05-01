@@ -18,11 +18,10 @@ public static class ParserTests
 
             var expected = new List<Instruction>
             {
-                new (
-                    type: Consts.InstructionTypes.Assignment, 
+                new AssignmentInstruction(
                     operation: "=", 
-                    left: new (type: Consts.InstructionTypes.Variable, name: "x"),
-                    right: new (Consts.InstructionTypes.Number, 5)
+                    left: new VariableInstruction("x"),
+                    right: new NumberInstruction(5)
                 )
             };
             
@@ -39,23 +38,19 @@ public static class ParserTests
 
             var expected = new List<Instruction>
             {
-                new (
-                    type: Consts.InstructionTypes.If, 
-                    value: new Instruction(
-                       type: Consts.InstructionTypes.Operation,
+                new IfInstruction(
+                    condition: new OperationInstruction(
                        operation: "<",
-                       left: new (Consts.InstructionTypes.Number, 5), 
-                       right: new (Consts.InstructionTypes.Number, 6)
+                       left: new NumberInstruction(5), 
+                       right: new NumberInstruction(6)
                     ), 
-                    instructions: new List<Instruction>
-                    {
-                        new(
-                            type: Consts.InstructionTypes.Assignment,
+                    instructions: [
+                        new AssignmentInstruction(
                             operation: "=",
-                            left: new (type: Consts.InstructionTypes.Variable, name: "x"),
-                            right: new (Consts.InstructionTypes.Number, 5)
+                            left: new VariableInstruction("x"),
+                            right: new NumberInstruction(5)
                         )
-                    }
+                    ]
                 )
             };
             
@@ -72,29 +67,24 @@ public static class ParserTests
 
             var expected = new List<Instruction>
             {
-                new(
-                    type: Consts.InstructionTypes.Assignment,
+                new AssignmentInstruction(
                     operation: "=",
-                    left: new (type: Consts.InstructionTypes.Variable, name: "y"),
-                    right: new (Consts.InstructionTypes.Number, 7)
+                    left: new VariableInstruction("y"),
+                    right: new NumberInstruction(7)
                 ),
-                new (
-                    type: Consts.InstructionTypes.If, 
-                    value: new (
-                        type: Consts.InstructionTypes.Operation,
+                new IfInstruction(
+                    condition: new OperationInstruction(
                         operation: "<",
-                        left: new (Consts.InstructionTypes.Number, 5), 
-                        right: new (Consts.InstructionTypes.Number, 6)
+                        left: new NumberInstruction(5), 
+                        right: new NumberInstruction(6)
                     ), 
-                    instructions: new List<Instruction>
-                    {
-                        new(
-                            type: Consts.InstructionTypes.Assignment,
+                    instructions: [
+                        new AssignmentInstruction(
                             operation: "=",
-                            left: new (type: Consts.InstructionTypes.Variable, name: "x"),
-                            right: new (Consts.InstructionTypes.Number, 5)
+                            left: new VariableInstruction("x"),
+                            right: new NumberInstruction(5)
                         )
-                    }
+                    ]
                 )
             };
             
@@ -111,29 +101,24 @@ public static class ParserTests
 
             var expected = new List<Instruction>
             {
-                new (
-                    type: Consts.InstructionTypes.If, 
-                    value: new (
-                        type: Consts.InstructionTypes.Operation,
+                new IfInstruction(
+                    condition: new OperationInstruction(
                         operation: "<",
-                        left: new (Consts.InstructionTypes.Number, 5), 
-                        right: new (Consts.InstructionTypes.Number, 6)
+                        left: new NumberInstruction(5), 
+                        right: new NumberInstruction(6)
                     ),
-                    instructions: new List<Instruction>
-                    {
-                        new(
-                            type: Consts.InstructionTypes.Assignment,
+                    instructions: [
+                        new AssignmentInstruction(
                             operation: "=",
-                            left: new (type: Consts.InstructionTypes.Variable, name: "x"),
-                            right: new (Consts.InstructionTypes.Number, 5)
+                            left: new VariableInstruction("x"),
+                            right: new NumberInstruction(5)
                         )
-                    }
+                    ]
                 ),
-                new(
-                    type: Consts.InstructionTypes.Assignment,
+                new AssignmentInstruction(
                     operation: "=",
-                    left: new (type: Consts.InstructionTypes.Variable, name: "y"),
-                    right: new (Consts.InstructionTypes.Number, 7)
+                    left: new VariableInstruction("y"),
+                    right: new NumberInstruction(7)
                 )
             };
             

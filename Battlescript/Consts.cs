@@ -207,30 +207,6 @@ public static class Consts
         Breakpoint
     }
     
-    public enum InstructionTypes
-    {
-        Assignment,
-        Operation,
-        Variable,
-        Number,
-        String,
-        Boolean,
-        If,
-        For,
-        While,
-        SquareBrackets,
-        KeyValuePair,
-        SetDefinition,
-        DictionaryDefinition,
-        Function,
-        Parens,
-        Return,
-        Class,
-        Else,
-        Btl,
-        Breakpoint
-    };
-    
     public enum VariableTypes
     {
         Null,

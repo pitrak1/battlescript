@@ -2,12 +2,12 @@ namespace Battlescript;
 
 public static class InterpreterUtilities
 {
-    public static Variable ConductOperation(Instruction inst, Variable left, Variable right)
+    public static Variable ConductOperation(string operation, Variable left, Variable right)
     {
         dynamic? result;
         Consts.VariableTypes type;
         
-        switch (inst.Operation)
+        switch (operation)
         {
             case "**":
                 result = Math.Pow(left.Value, right.Value);
@@ -104,11 +104,11 @@ public static class InterpreterUtilities
         return new Variable(type, result);
     }
 
-    public static Variable ConductAssignment(Instruction inst, Variable left, Variable right)
+    public static Variable ConductAssignment(string operation, Variable left, Variable right)
     {
         var result = right;
         
-        switch (inst.Operation)
+        switch (operation)
         {
             case "+=":
             result.Value = left.Value + right.Value;
