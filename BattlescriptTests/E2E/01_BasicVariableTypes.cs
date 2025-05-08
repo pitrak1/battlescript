@@ -11,7 +11,7 @@ public static partial class E2ETests {
         public void SupportsStringVariablesUsingSingleQuotes()
         {
             var input = "x = 'asdf'";
-            var expected = new Variable(Consts.VariableTypes.String, "asdf");
+            var expected = new StringVariable("asdf");
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
         }
         
@@ -19,7 +19,7 @@ public static partial class E2ETests {
         public void SupportsStringVariablesUsingDoubleQuotes()
         {
             var input = "x = \"asdf\"";
-            var expected = new Variable(Consts.VariableTypes.String, "asdf");
+            var expected = new StringVariable("asdf");
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
         }
         
@@ -28,7 +28,7 @@ public static partial class E2ETests {
         public void SupportsNumbers()
         {
             var input = "x = 5.5";
-            var expected = new Variable(Consts.VariableTypes.Number, 5.5);
+            var expected = new NumberVariable(5.5);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
         }
 
@@ -36,7 +36,7 @@ public static partial class E2ETests {
         public void SupportsBooleans()
         {
             var input = "x = True";
-            var expected = new Variable(Consts.VariableTypes.Boolean, true);
+            var expected = new BooleanVariable(true);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
         }
     }

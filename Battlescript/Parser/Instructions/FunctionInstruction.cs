@@ -50,8 +50,8 @@ public class FunctionInstruction : Instruction
 
     public override Variable Interpret(Memory memory, Variable? context = null)
     {
-        var functionValue = new Variable(Consts.VariableTypes.Function, Parameters, Instructions);
-        var functionVariable = memory.GetAndCreateIfNotExists(Name);
-        return functionVariable.Set(functionValue);
+        var functionValue = new FunctionVariable(Parameters, Instructions);
+        memory.AssignToVariable(new VariableInstruction(Name), functionValue);
+        return functionValue;
     }
 }

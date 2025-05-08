@@ -12,10 +12,10 @@ public static partial class E2ETests {
         {
             var input = "x = True and False\ny = True and True";
             
-            var expected1 = new Variable(Consts.VariableTypes.Boolean, false);
+            var expected1 = new BooleanVariable(false);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected1);
             
-            var expected2 = new Variable(Consts.VariableTypes.Boolean, true);
+            var expected2 = new BooleanVariable(true);
             E2EAssertions.AssertVariableValueFromInput(input, "y", expected2);
         }
         
@@ -24,10 +24,10 @@ public static partial class E2ETests {
         {
             var input = "x = True or False\ny = False or False";
             
-            var expected1 = new Variable(Consts.VariableTypes.Boolean, true);
+            var expected1 = new BooleanVariable(true);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected1);
             
-            var expected2 = new Variable(Consts.VariableTypes.Boolean, false);
+            var expected2 = new BooleanVariable(false);
             E2EAssertions.AssertVariableValueFromInput(input, "y", expected2);
         }
         
@@ -36,10 +36,10 @@ public static partial class E2ETests {
         {
             var input = "x = not True\ny = not False";
             
-            var expected1 = new Variable(Consts.VariableTypes.Boolean, false);
+            var expected1 = new BooleanVariable(false);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected1);
             
-            var expected2 = new Variable(Consts.VariableTypes.Boolean, true);
+            var expected2 = new BooleanVariable(true);
             E2EAssertions.AssertVariableValueFromInput(input, "y", expected2);
         }
     }

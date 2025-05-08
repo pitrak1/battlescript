@@ -12,10 +12,10 @@ public static partial class E2ETests {
         {
             var input = "x = 5 == 6\ny = 5 == 5";
             
-            var expected1 = new Variable(Consts.VariableTypes.Boolean, false);
+            var expected1 = new BooleanVariable(false);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected1);
             
-            var expected2 = new Variable(Consts.VariableTypes.Boolean, true);
+            var expected2 = new BooleanVariable(true);
             E2EAssertions.AssertVariableValueFromInput(input, "y", expected2);
         }
         
@@ -24,10 +24,10 @@ public static partial class E2ETests {
         {
             var input = "x = 5 != 6\ny = 5 != 5";
             
-            var expected1 = new Variable(Consts.VariableTypes.Boolean, true);
+            var expected1 = new BooleanVariable(true);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected1);
             
-            var expected2 = new Variable(Consts.VariableTypes.Boolean, false);
+            var expected2 = new BooleanVariable(false);
             E2EAssertions.AssertVariableValueFromInput(input, "y", expected2);
         }
         
@@ -36,13 +36,13 @@ public static partial class E2ETests {
         {
             var input = "x = 5 > 6\ny = 6 > 6\nz = 7 > 6";
             
-            var expected1 = new Variable(Consts.VariableTypes.Boolean, false);
+            var expected1 = new BooleanVariable(false);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected1);
             
-            var expected2 = new Variable(Consts.VariableTypes.Boolean, false);
+            var expected2 = new BooleanVariable(false);
             E2EAssertions.AssertVariableValueFromInput(input, "y", expected2);
             
-            var expected3 = new Variable(Consts.VariableTypes.Boolean, true);
+            var expected3 = new BooleanVariable(true);
             E2EAssertions.AssertVariableValueFromInput(input, "z", expected3);
         }
         
@@ -51,13 +51,13 @@ public static partial class E2ETests {
         {
             var input = "x = 5 < 6\ny = 6 < 6\nz = 7 < 6";
             
-            var expected1 = new Variable(Consts.VariableTypes.Boolean, true);
+            var expected1 = new BooleanVariable(true);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected1);
             
-            var expected2 = new Variable(Consts.VariableTypes.Boolean, false);
+            var expected2 = new BooleanVariable(false);
             E2EAssertions.AssertVariableValueFromInput(input, "y", expected2);
             
-            var expected3 = new Variable(Consts.VariableTypes.Boolean, false);
+            var expected3 = new BooleanVariable(false);
             E2EAssertions.AssertVariableValueFromInput(input, "z", expected3);
         }
         
@@ -66,13 +66,13 @@ public static partial class E2ETests {
         {
             var input = "x = 5 >= 6\ny = 6 >= 6\nz = 7 >= 6";
             
-            var expected1 = new Variable(Consts.VariableTypes.Boolean, false);
+            var expected1 = new BooleanVariable(false);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected1);
             
-            var expected2 = new Variable(Consts.VariableTypes.Boolean, true);
+            var expected2 = new BooleanVariable(true);
             E2EAssertions.AssertVariableValueFromInput(input, "y", expected2);
             
-            var expected3 = new Variable(Consts.VariableTypes.Boolean, true);
+            var expected3 = new BooleanVariable(true);
             E2EAssertions.AssertVariableValueFromInput(input, "z", expected3);
         }
         
@@ -81,13 +81,13 @@ public static partial class E2ETests {
         {
             var input = "x = 5 <= 6\ny = 6 <= 6\nz = 7 <= 6";
             
-            var expected1 = new Variable(Consts.VariableTypes.Boolean, true);
+            var expected1 = new BooleanVariable(true);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected1);
             
-            var expected2 = new Variable(Consts.VariableTypes.Boolean, true);
+            var expected2 = new BooleanVariable(true);
             E2EAssertions.AssertVariableValueFromInput(input, "y", expected2);
             
-            var expected3 = new Variable(Consts.VariableTypes.Boolean, false);
+            var expected3 = new BooleanVariable(false);
             E2EAssertions.AssertVariableValueFromInput(input, "z", expected3);
         }
     }

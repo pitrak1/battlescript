@@ -4,7 +4,7 @@ namespace Battlescript;
 
 public class DictionaryInstruction : Instruction
 {
-    public List<Instruction> Values { get; set; }
+    public List<KeyValuePairInstruction> Values { get; set; }
 
     public DictionaryInstruction(List<Token> tokens)
     {
@@ -12,28 +12,31 @@ public class DictionaryInstruction : Instruction
         
         // There should be no characters following a dictionary definition
         CheckForNoFollowingTokens(tokens, results.Count);
+        
+        Debug.Assert(results.Values.All(result => result is KeyValuePairInstruction));
+        
+        var kvpResults = results.Values.Cast<KeyValuePairInstruction>().ToList();
 
-        Values = results.Values;
+        Values = kvpResults;
         Line = tokens[0].Line;
         Column = tokens[0].Column;
     }
 
-    public DictionaryInstruction(List<Instruction> values)
+    public DictionaryInstruction(List<KeyValuePairInstruction> values)
     {
         Values = values;
     }
 
     public override Variable Interpret(Memory memory, Variable? context = null)
     {
-        var variableValue = new Dictionary<string, Variable>();
+        var variableValue = new List<KeyValuePairVariable>();
         foreach (var kvp in Values)
         {
-            Debug.Assert(kvp is KeyValuePairInstruction);
-            var kvpInstruction = (KeyValuePairInstruction)kvp;
-            var key = kvpInstruction.Left.Interpret(memory);
-            var value = kvpInstruction.Right.Interpret(memory);
-            variableValue[key.Value] = value;
+            var key = kvp.Left.Interpret(memory);
+            var value = kvp.Right.Interpret(memory);
+            
+            variableValue.Add(new KeyValuePairVariable(key, value));
         }
-        return new Variable(Consts.VariableTypes.Dictionary, variableValue);
+        return new DictionaryVariable(variableValue);
     }
 }

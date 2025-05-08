@@ -18,8 +18,8 @@ public class ReturnInstruction : Instruction
 
     public override Variable Interpret(Memory memory, Variable? context = null)
     {
-        var returnVariable = memory.GetAndCreateIfNotExists("return");
         var returnValue = Value.Interpret(memory);
-        return returnVariable.Set(returnValue);
+        memory.AssignToVariable(new VariableInstruction("return"), returnValue);
+        return returnValue;
     }
 }

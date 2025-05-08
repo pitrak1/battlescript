@@ -35,6 +35,6 @@ public class WhileInstruction : Instruction
             condition = Condition.Interpret(memory);
         }
 
-        return new Variable(Consts.VariableTypes.Null, null);
+        return new NullVariable();
     }
 }

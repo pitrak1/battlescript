@@ -21,7 +21,6 @@ public class VariableInstruction : Instruction
 
     public override Variable Interpret(Memory memory, Variable? context = null)
     {
-        var variable = memory.GetAndCreateIfNotExists(Name);
-        return Next is not null ? Next.Interpret(memory, variable) : variable;
+        return memory.GetVariable(this);
     }
 }

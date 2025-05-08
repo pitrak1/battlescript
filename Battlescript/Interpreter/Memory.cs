@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Battlescript;
 
 public class Memory
@@ -9,35 +11,69 @@ public class Memory
         scopes.Add(new Dictionary<string, Variable>());
     }
 
-    public Variable? Get(string name)
+    public Variable? GetVariable(VariableInstruction variableInstruction)
+    {
+        // We need to pass in the full instruction here so we can handle indexing
+        for (var i = scopes.Count - 1; i >= 0; i--)
+        {
+            if (scopes[i].ContainsKey(variableInstruction.Name))
+            {
+                if (variableInstruction.Next is null)
+                {
+                    return scopes[i][variableInstruction.Name];
+                }
+                else
+                {
+                    Debug.Assert(scopes[i][variableInstruction.Name] is ListVariable || 
+                                 scopes[i][variableInstruction.Name] is DictionaryVariable);
+                    Debug.Assert(variableInstruction.Next is SquareBracketsInstruction);
+                    var nextInstruction = variableInstruction.Next as SquareBracketsInstruction;
+                    return scopes[i][variableInstruction.Name].GetIndex(this, nextInstruction!);
+                }
+            }
+        }
+    
+        return null;
+    }
+
+    public void AssignToVariable(VariableInstruction variableInstruction, Variable valueVariable)
+    {
+        if (VariableExists(variableInstruction.Name))
+        {
+            for (var i = scopes.Count - 1; i >= 0; i--)
+            {
+                if (scopes[i].ContainsKey(variableInstruction.Name))
+                {
+                    if (variableInstruction.Next is null)
+                    {
+                        scopes[i][variableInstruction.Name] = valueVariable;
+                    }
+                    else
+                    {
+                        Debug.Assert(variableInstruction.Next is SquareBracketsInstruction);
+                        var nextInstruction = variableInstruction.Next as SquareBracketsInstruction;
+                        scopes[i][variableInstruction.Name].AssignToIndexOrKey(this, valueVariable, nextInstruction!);
+                    }
+                }
+            }
+        }
+        else
+        {
+            scopes[^1].Add(variableInstruction.Name, valueVariable);
+        }
+    }
+
+    private bool VariableExists(string name)
     {
         for (var i = scopes.Count - 1; i >= 0; i--)
         {
             if (scopes[i].ContainsKey(name))
             {
-                return scopes[i][name];
+                return true;
             }
         }
-
-        return null;
-    }
-
-    public void Set(string name, Variable value)
-    {
-        scopes[^1].Add(name, value);
-    }
-    
-    public Variable GetAndCreateIfNotExists(string name)
-    {
-        var result = Get(name);
-        if (result is not null)
-        {
-            return result;
-        }
-
-        var newVariable = new Variable(Consts.VariableTypes.Null, null);
-        Set(name, newVariable);
-        return newVariable;
+        
+        return false;        
     }
 
     public void AddScope()

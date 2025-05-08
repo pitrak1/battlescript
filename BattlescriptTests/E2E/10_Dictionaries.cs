@@ -11,12 +11,11 @@ public static partial class E2ETests {
         public void SupportsDictionaryDefinition()
         {
             var input = "x = {'asdf': 5, 'qwer': '5'}";
-            var expected = new Variable(
-                Consts.VariableTypes.Dictionary, 
-                new Dictionary<string, Variable>
+            var expected = new DictionaryVariable(
+                new List<KeyValuePairVariable>()
                 {
-                    {"asdf", new (Consts.VariableTypes.Number, 5)},
-                    {"qwer", new (Consts.VariableTypes.String, "5")}
+                    new (new StringVariable("asdf"), new NumberVariable(5)),
+                    new (new StringVariable("qwer"), new StringVariable("5"))
                 }
             );
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
@@ -26,7 +25,7 @@ public static partial class E2ETests {
         public void SupportsDictionaryIndexing()
         {
             var input = "x = {'asdf': 5, 'qwer': '5'}\ny = x['qwer']";
-            var expected = new Variable(Consts.VariableTypes.String, "5");
+            var expected = new StringVariable("5");
             E2EAssertions.AssertVariableValueFromInput(input, "y", expected);
         }
     }

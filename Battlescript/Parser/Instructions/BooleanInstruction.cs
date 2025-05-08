@@ -18,6 +18,6 @@ public class BooleanInstruction : Instruction
 
     public override Variable Interpret(Memory memory, Variable? context = null)
     {
-        return new Variable(Consts.VariableTypes.Boolean, Value);
+        return new BooleanVariable(Value);
     }
 }

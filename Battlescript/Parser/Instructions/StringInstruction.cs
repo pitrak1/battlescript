@@ -18,6 +18,6 @@ public class StringInstruction : Instruction
     
     public override Variable Interpret(Memory memory, Variable? context = null)
     {
-        return new Variable(Consts.VariableTypes.String, Value);
+        return new StringVariable(Value);
     }
 }

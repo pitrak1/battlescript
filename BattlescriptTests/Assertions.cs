@@ -1,4 +1,5 @@
 using Battlescript;
+using Microsoft.VisualBasic;
 
 namespace BattlescriptTests;
 
@@ -55,7 +56,10 @@ public static class Assertions
             Assert.That(expected, Is.TypeOf<DictionaryInstruction>());
             var expectedInst = (DictionaryInstruction)expected!;
             
-            AssertInstructionListEqual(dictInst.Values, expectedInst.Values);
+            var dictValues = dictInst.Values.ConvertAll(x => x as Instruction);
+            var expectedValues = expectedInst.Values.ConvertAll(x => x as Instruction);
+            
+            AssertInstructionListEqual(dictValues, expectedValues);
         }
         else if (input is FunctionInstruction functionInst)
         {

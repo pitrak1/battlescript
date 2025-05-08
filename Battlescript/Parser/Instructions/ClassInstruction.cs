@@ -45,8 +45,8 @@ public class ClassInstruction : Instruction
         }
 
         var classScope = memory.RemoveScope();
-        var classVariable = new Variable(Consts.VariableTypes.Class, classScope, null, superclasses);
-        memory.Set(Name, classVariable);
+        var classVariable = new ClassVariable(classScope);
+        memory.AssignToVariable(new VariableInstruction(Name), classVariable);
         return classVariable;
     }
 }

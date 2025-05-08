@@ -206,19 +206,4 @@ public static class Consts
         Assignment,
         Breakpoint
     }
-    
-    public enum VariableTypes
-    {
-        Null,
-        Number,
-        String,
-        Boolean,
-        List,
-        Dictionary,
-        Set,
-        Tuple,
-        Function,
-        Class,
-        Object
-    };
 }

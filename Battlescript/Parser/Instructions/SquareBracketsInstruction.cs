@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Battlescript;
 
 public class SquareBracketsInstruction : Instruction
@@ -42,22 +44,9 @@ public class SquareBracketsInstruction : Instruction
         if (context is not null)
         {
             if (Values.Count > 1) throw new Exception("Too many index values");
-
-            // Range index
-            if (Values[0] is KeyValuePairInstruction inst)
-            {
-                var leftIndex = inst.Left?.Interpret(memory);
-                var rightIndex = inst.Right?.Interpret(memory);
-                var result = context.GetRangeIndex((int?)leftIndex?.Value, (int?)rightIndex?.Value);
-                return Next is not null ? Next.Interpret(memory, result) : result;
-            }
-            // Single index
-            else
-            {
-                var index = Values[0].Interpret(memory);
-                var result = context.GetIndex(index.Value);
-                return Next is not null ? Next.Interpret(memory, result) : result;
-            }
+            
+            var result = context.GetIndex(memory, this);
+            return Next is not null ? Next.Interpret(memory, result) : result;
         }
         // Dealing with list creation
         else
@@ -67,7 +56,7 @@ public class SquareBracketsInstruction : Instruction
             {
                 values.Add(instructionValue.Interpret(memory));
             }
-            return new Variable(Consts.VariableTypes.List, values);
+            return new ListVariable(values);
         }
     }
 }

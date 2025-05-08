@@ -35,6 +35,6 @@ public class IfInstruction : Instruction
             memory.RemoveScope();
         }
 
-        return new Variable(Consts.VariableTypes.Null, null);
+        return new NullVariable();
     }
 }

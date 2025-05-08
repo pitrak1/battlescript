@@ -55,28 +55,85 @@ public class InterpreterAssertions
         }
     }
 
-    private static void AssertVariableEqual(Variable? input, Variable? expected)
+    public static void AssertVariableEqual(Variable? input, Variable? expected)
     {
         if (input is null)
         {
             Assert.That(expected, Is.Null);
         }
-        else
+        else if (input is BooleanVariable booleanVariable)
         {
-            Assert.That(expected, Is.Not.Null);
-            if (input.Value is List<Variable>)
+            Assert.That(expected, Is.TypeOf<BooleanVariable>());
+            var expectedVariable = (BooleanVariable)expected;
+            
+            Assert.That(booleanVariable.Value, Is.EqualTo(expectedVariable.Value));
+        } else if (input is ClassVariable classVariable)
+        {
+            Assert.That(expected, Is.TypeOf<ClassVariable>());
+            var expectedVariable = (ClassVariable)expected;
+
+            foreach (var entry in classVariable.Values)
             {
-                AssertVariableListEqual(input.Value, expected.Value);
+                Assert.That(expectedVariable.Values.ContainsKey(entry.Key));
+                AssertVariableEqual(expectedVariable.Values[entry.Key], entry.Value);
             }
-            else if (input.Value is Dictionary<string, Variable>)
+        }
+        else if (input is DictionaryVariable dictionaryVariable)
+        {
+            Assert.That(expected, Is.TypeOf<DictionaryVariable>());
+            var expectedVariable = (DictionaryVariable)expected;
+            
+            var dictionaryValues = dictionaryVariable.Values.ConvertAll(v => (Variable)v);
+            var expectedValues = expectedVariable.Values.ConvertAll(v => (Variable)v);
+            AssertVariableListEqual(dictionaryValues, expectedValues);
+        }
+        else if (input is FunctionVariable functionVariable)
+        {
+            Assert.That(expected, Is.TypeOf<FunctionVariable>());
+            var expectedVariable = (FunctionVariable)expected;
+            
+            Assertions.AssertInstructionListEqual(functionVariable.Parameters, expectedVariable.Parameters);
+            Assertions.AssertInstructionListEqual(functionVariable.Instructions, expectedVariable.Instructions);
+        }
+        else if (input is KeyValuePairVariable kvpVariable)
+        {
+            Assert.That(expected, Is.TypeOf<KeyValuePairVariable>());
+            var expectedVariable = (KeyValuePairVariable)expected;
+            
+            AssertVariableEqual(kvpVariable.Left, expectedVariable.Left);
+            AssertVariableEqual(kvpVariable.Right, expectedVariable.Right);
+        }
+        else if (input is ListVariable listVariable)
+        {
+            Assert.That(expected, Is.TypeOf<ListVariable>());
+            var expectedVariable = (ListVariable)expected;
+            
+            AssertVariableListEqual(listVariable.Values, expectedVariable.Values);
+        } else if (input is NullVariable nullVariable)
+        {
+            Assert.That(expected, Is.TypeOf<NullVariable>());
+        } else if (input is NumberVariable numberVariable)
+        {
+            Assert.That(expected, Is.TypeOf<NumberVariable>());
+            var expectedVariable = (NumberVariable)expected;
+            
+            Assert.That(numberVariable.Value, Is.EqualTo(expectedVariable.Value));
+        } else if (input is ObjectVariable objectVariable)
+        {
+            Assert.That(expected, Is.TypeOf<ObjectVariable>());
+            var expectedVariable = (ObjectVariable)expected;
+            
+            foreach (var entry in objectVariable.Values)
             {
-                AssertVariableDictionaryEqual(input.Value, expected.Value);
+                Assert.That(expectedVariable.Values.ContainsKey(entry.Key));
+                AssertVariableEqual(expectedVariable.Values[entry.Key], entry.Value);
             }
-            else
-            {
-                Assert.That(input.Value, Is.EqualTo(expected.Value));
-            }
-            Assert.That(input.Type, Is.EqualTo(expected.Type));
+        } else if (input is StringVariable stringVariable)
+        {
+            Assert.That(expected, Is.TypeOf<StringVariable>());
+            var expectedVariable = (StringVariable)expected;
+            
+            Assert.That(stringVariable.Value, Is.EqualTo(expectedVariable.Value));
         }
     }
 

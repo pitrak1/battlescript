@@ -33,8 +33,17 @@ public class AssignmentInstruction : Instruction
     {
         var left = Left!.Interpret(memory);
         var right = Right.Interpret(memory);
-
+        
         var result = InterpreterUtilities.ConductAssignment(Operation, left, right);
-        return left.Set(result);
+
+        if (Left is VariableInstruction variableInst)
+        {
+            memory.AssignToVariable(variableInst, result);
+            return result;
+        }
+        else
+        {
+            throw new Exception("Cannot assign to anything but variable");
+        }
     }
 }

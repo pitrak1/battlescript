@@ -26,35 +26,38 @@ public class ParensInstruction : Instruction
     public override Variable Interpret(Memory memory, Variable? context = null)
     {
         Debug.Assert(context is not null);
-        
-        if (context.Type == Consts.VariableTypes.Function)
+
+        if (context is FunctionVariable functionVariable)
         {
             memory.AddScope();
             
             // Transferring arguments to local parameter variables
             for (var i = 0; i < Instructions.Count; i++)
             {
-                var variable = memory.GetAndCreateIfNotExists(context.Value[i].Name);
+                Debug.Assert(functionVariable.Parameters[i] is VariableInstruction);
+                var paramInstruction = (VariableInstruction)functionVariable.Parameters[i];
                 var value = Instructions[i].Interpret(memory);
-                variable.Set(value);
+                memory.AssignToVariable(new VariableInstruction(paramInstruction.Name), value);
             }
             
             // Actually running hte instructions
-            foreach (var inst in context.Instructions)
+            foreach (var inst in functionVariable.Instructions)
             {
                 inst.Interpret(memory);
             }
             
             // Getting return value
-            var returnValue = memory.Get("return");
+            var returnValue = memory.GetVariable(new VariableInstruction("return"));
             
             memory.RemoveScope();
             
-            return returnValue ?? new Variable(Consts.VariableTypes.Null, null);
+            return returnValue ?? new NullVariable();
         }
         else
         {
-            return context.CreateObject();
+            // need to update this for the new format
+            // return context.CreateObject();
+            return new NullVariable();
         }
     }
 }

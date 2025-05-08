@@ -20,6 +20,6 @@ public class NumberInstruction : Instruction
     
     public override Variable Interpret(Memory memory, Variable? context = null)
     {
-        return new Variable(Consts.VariableTypes.Number, Value);
+        return new NumberVariable(Value);
     }
 }

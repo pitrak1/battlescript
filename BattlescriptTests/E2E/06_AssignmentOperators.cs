@@ -11,7 +11,7 @@ public static partial class E2ETests {
         public void SupportsAddition()
         {
             var input = "x = 6\nx += 3";
-            var expected = new Variable(Consts.VariableTypes.Number, 9);
+            var expected = new NumberVariable(9);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
         }
         
@@ -19,7 +19,7 @@ public static partial class E2ETests {
         public void SupportsSubtraction()
         {
             var input = "x = 6\nx -= 3";
-            var expected = new Variable(Consts.VariableTypes.Number, 3);
+            var expected = new NumberVariable(3);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
         }
         
@@ -27,7 +27,7 @@ public static partial class E2ETests {
         public void SupportsMultiplication()
         {
             var input = "x = 6\nx *= 3";
-            var expected = new Variable(Consts.VariableTypes.Number, 18);
+            var expected = new NumberVariable(18);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
         }
         
@@ -35,7 +35,7 @@ public static partial class E2ETests {
         public void SupportsDivision()
         {
             var input = "x = 6\nx /= 3";
-            var expected = new Variable(Consts.VariableTypes.Number, 2);
+            var expected = new NumberVariable(2);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
         }
         
@@ -43,7 +43,7 @@ public static partial class E2ETests {
         public void SupportsModulo()
         {
             var input = "x = 6\nx %= 3";
-            var expected = new Variable(Consts.VariableTypes.Number, 0);
+            var expected = new NumberVariable(0);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
         }
         
@@ -51,7 +51,7 @@ public static partial class E2ETests {
         public void SupportsFloorDivision()
         {
             var input = "x = 7\nx //= 3";
-            var expected = new Variable(Consts.VariableTypes.Number, 2);
+            var expected = new NumberVariable(2);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
         }
         
@@ -59,7 +59,7 @@ public static partial class E2ETests {
         public void SupportsPower()
         {
             var input = "x = 6\nx **= 2";
-            var expected = new Variable(Consts.VariableTypes.Number, 36);
+            var expected = new NumberVariable(36);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
         }
         
@@ -68,7 +68,7 @@ public static partial class E2ETests {
         {
             // 0110 & 0011 = 0010
             var input = "x = 6\nx &= 3";
-            var expected = new Variable(Consts.VariableTypes.Number, 2);
+            var expected = new NumberVariable(2);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
         }
         
@@ -77,7 +77,7 @@ public static partial class E2ETests {
         {
             // 0110 | 0011 = 0111
             var input = "x = 6\nx |= 3";
-            var expected = new Variable(Consts.VariableTypes.Number, 7);
+            var expected = new NumberVariable(7);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
         }
         
@@ -86,7 +86,7 @@ public static partial class E2ETests {
         {
             // 0110 ^ 0011 = 0101
             var input = "x = 6\nx ^= 3";
-            var expected = new Variable(Consts.VariableTypes.Number, 5);
+            var expected = new NumberVariable(5);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
         }
         
@@ -95,7 +95,7 @@ public static partial class E2ETests {
         {
             // 0011 << 2 = 1100
             var input = "x = 3\nx <<= 2";
-            var expected = new Variable(Consts.VariableTypes.Number, 12);
+            var expected = new NumberVariable(12);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
         }
         
@@ -104,7 +104,7 @@ public static partial class E2ETests {
         {
             // 0110 >> 2 = 0001
             var input = "x = 6\nx >>= 2";
-            var expected = new Variable(Consts.VariableTypes.Number, 1);
+            var expected = new NumberVariable(1);
             E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
         }
     }

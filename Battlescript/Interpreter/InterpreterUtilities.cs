@@ -4,155 +4,107 @@ public static class InterpreterUtilities
 {
     public static Variable ConductOperation(string operation, Variable left, Variable right)
     {
-        dynamic? result;
-        Consts.VariableTypes type;
-        
-        switch (operation)
+        if (right is NumberVariable rightNumber)
         {
-            case "**":
-                result = Math.Pow(left.Value, right.Value);
-                type = Consts.VariableTypes.Number;
-                break;
-            case "~":
-                result = ~(int)right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "*":
-                result = left.Value * right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "/":
-                result = left.Value / right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "//":
-                result = (int)Math.Floor(left.Value / right.Value);
-                type = Consts.VariableTypes.Number;
-                break;
-            case "%":
-                result = left.Value % right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "+":
-                result = left.Value + right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "-":
-                result = left.Value - right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "<<":
-                result = (int)left.Value << (int)right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case ">>":
-                result = (int)left.Value >> (int)right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "&":
-                result = (int)left.Value & (int)right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "^":
-                result = (int)left.Value ^ (int)right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "|":
-                result = (int)left.Value | (int)right.Value;
-                type = Consts.VariableTypes.Number;
-                break;
-            case "==":
-                result = left.Value == right.Value;
-                type = Consts.VariableTypes.Boolean;
-                break;
-            case "!=":
-                result = left.Value != right.Value;
-                type = Consts.VariableTypes.Boolean;
-                break;
-            case ">":
-                result = left.Value > right.Value;
-                type = Consts.VariableTypes.Boolean;
-                break;
-            case ">=":
-                result = left.Value >= right.Value;
-                type = Consts.VariableTypes.Boolean;
-                break;
-            case "<":
-                result = left.Value < right.Value;
-                type = Consts.VariableTypes.Boolean;
-                break;
-            case "<=":
-                result = left.Value <= right.Value;
-                type = Consts.VariableTypes.Boolean;
-                break;
-            case "not":
-                result = !right.Value;
-                type = Consts.VariableTypes.Boolean;
-                break;
-            case "and":
-                result = left.Value && right.Value;
-                type = Consts.VariableTypes.Boolean;
-                break;
-            case "or":
-                result = left.Value || right.Value;
-                type = Consts.VariableTypes.Boolean;
-                break;
-            default:
-                throw new SystemException("Invalid operator");
+            if (left is NumberVariable leftNumber)
+            {
+                switch (operation)
+                {
+                    case "**":
+                        return new NumberVariable(Math.Pow((int)leftNumber.Value, (int)rightNumber.Value));
+                    case "*":
+                        return new NumberVariable(leftNumber.Value * rightNumber.Value);
+                    case "/":
+                        return new NumberVariable(leftNumber.Value / rightNumber.Value);
+                    case "//":
+                        return new NumberVariable((int)Math.Floor(leftNumber.Value / rightNumber.Value));
+                    case "%":
+                        return new NumberVariable(leftNumber.Value % rightNumber.Value);
+                    case "+":
+                        return new NumberVariable(leftNumber.Value + rightNumber.Value);
+                    case "-":
+                        return new NumberVariable(leftNumber.Value - rightNumber.Value);
+                    case "<<":
+                        return new NumberVariable((int)leftNumber.Value << (int)rightNumber.Value);
+                    case ">>":
+                        return new NumberVariable((int)leftNumber.Value >> (int)rightNumber.Value);
+                    case "&":
+                        return new NumberVariable((int)leftNumber.Value & (int)rightNumber.Value);
+                    case "^":
+                        return new NumberVariable((int)leftNumber.Value ^ (int)rightNumber.Value);
+                    case "|":
+                        return new NumberVariable((int)leftNumber.Value | (int)rightNumber.Value);
+                    case "==":
+                        return new BooleanVariable(leftNumber.Value == rightNumber.Value);
+                    case "!=":
+                        return new BooleanVariable(leftNumber.Value != rightNumber.Value);
+                    case ">":
+                        return new BooleanVariable(leftNumber.Value > rightNumber.Value);
+                    case ">=":
+                        return new BooleanVariable(leftNumber.Value >= rightNumber.Value);
+                    case "<":
+                        return new BooleanVariable(leftNumber.Value < rightNumber.Value);
+                    case "<=":
+                        return new BooleanVariable(leftNumber.Value <= rightNumber.Value);
+                    default:
+                        throw new Exception("Invalid operation: " + operation);
+                }
+            }
+            else
+            {
+                switch (operation)
+                {
+                    case "~":
+                        return new NumberVariable(~(int)rightNumber.Value);
+                    default:
+                        throw new Exception("Invalid operation: " + operation);
+                }
+            }
+        } else if (right is BooleanVariable rightBoolean)
+        {
+            if (left is BooleanVariable leftBoolean)
+            {
+                switch (operation)
+                {
+                    case "and":
+                        return new BooleanVariable(leftBoolean.Value && rightBoolean.Value);
+                    case "or":
+                        return new BooleanVariable(leftBoolean.Value || rightBoolean.Value);
+                    default:
+                        throw new Exception("Invalid operation: " + operation);
+                }
+            }
+            else
+            {
+                switch (operation)
+                {
+                    case "not":
+                        return new BooleanVariable(!rightBoolean.Value);
+                    default:
+                        throw new Exception("Invalid operation: " + operation);
+                }
+            }
         }
-        
-        return new Variable(type, result);
+        else
+        {
+            throw new Exception("Invalid operation: " + operation);
+        }
     }
 
     public static Variable ConductAssignment(string operation, Variable left, Variable right)
     {
-        var result = right;
-        
-        switch (operation)
+        if (operation == "=")
         {
-            case "+=":
-            result.Value = left.Value + right.Value;
-            break;
-            case "-=":
-            result.Value = left.Value - right.Value;
-            break;
-            case "*=":
-            result.Value = left.Value * right.Value;
-            break;
-            case "/=":
-            result.Value = left.Value / right.Value;
-            break;
-            case "%=":
-            result.Value = left.Value % right.Value;
-            break;
-            case "//=":
-            result.Value = Math.Floor(left.Value / right.Value);
-            break;
-            case "**=":
-            result.Value = Math.Pow(left.Value, right.Value);
-            break;
-            case "&=":
-            result.Value = (int)left.Value & (int)right.Value;
-            break;
-            case "|=":
-            result.Value = (int)left.Value | (int)right.Value;
-            break;
-            case "^=":
-            result.Value = (int)left.Value ^ (int)right.Value;
-            break;
-            case ">>=":
-            result.Value = (int)left.Value >> (int)right.Value;
-            break;
-            case "<<=":
-            result.Value = (int)left.Value << (int)right.Value;
-            break;
+            return right;
         }
-
-        return result;
+        else
+        {
+            return ConductOperation(operation.Substring(0, operation.Length - 1), left, right);
+        }
     }
 
     public static bool IsVariableTruthy(Variable variable)
     {
-        return variable is { Type: Consts.VariableTypes.Boolean, Value: true };
+        return variable is BooleanVariable { Value: true };
     }
 }
