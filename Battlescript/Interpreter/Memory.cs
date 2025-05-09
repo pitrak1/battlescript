@@ -18,17 +18,16 @@ public class Memory
         {
             if (scopes[i].ContainsKey(variableInstruction.Name))
             {
-                if (variableInstruction.Next is null)
-                {
-                    return scopes[i][variableInstruction.Name];
-                }
-                else
+                if (variableInstruction.Next is SquareBracketsInstruction squareBracketsInstruction)
                 {
                     Debug.Assert(scopes[i][variableInstruction.Name] is ListVariable || 
                                  scopes[i][variableInstruction.Name] is DictionaryVariable);
-                    Debug.Assert(variableInstruction.Next is SquareBracketsInstruction);
                     var nextInstruction = variableInstruction.Next as SquareBracketsInstruction;
                     return scopes[i][variableInstruction.Name].GetIndex(this, nextInstruction!);
+                }
+                else
+                {
+                    return scopes[i][variableInstruction.Name];
                 }
             }
         }

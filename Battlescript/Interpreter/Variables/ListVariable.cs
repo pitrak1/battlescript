@@ -37,22 +37,11 @@ public class ListVariable(List<Variable>? values = null) : Variable
         Debug.Assert(index.Values.Count == 1);
 
         var indexVariable = index.Values.First().Interpret(memory);
-
-        if (indexVariable is NumberVariable indexNumberVariable)
+        
+        if (index.Values.First() is KeyValuePairInstruction kvpInst)
         {
-            if (index.Next is null)
-            {
-                return Values[(int)indexNumberVariable.Value];
-            }
-            else
-            {
-                Debug.Assert(index.Next is SquareBracketsInstruction);
-                var nextInstruction = index.Next as SquareBracketsInstruction;
-                return Values[(int)indexNumberVariable.Value].GetIndex(memory, nextInstruction!);
-            }
-        }
-        else if (indexVariable is KeyValuePairVariable indexKvpVariable)
-        {
+            var indexKvpVariable = indexVariable as KeyValuePairVariable;
+            
             if (index.Next is null)
             {
                 return GetRangeIndex(indexKvpVariable);
@@ -66,7 +55,18 @@ public class ListVariable(List<Variable>? values = null) : Variable
         }
         else
         {
-            throw new Exception("Can't index a list with anything but a number or a range");
+            var indexNumberVariable = indexVariable as NumberVariable;
+            
+            if (index.Next is null)
+            {
+                return Values[(int)indexNumberVariable.Value];
+            }
+            else
+            {
+                Debug.Assert(index.Next is SquareBracketsInstruction);
+                var nextInstruction = index.Next as SquareBracketsInstruction;
+                return Values[(int)indexNumberVariable.Value].GetIndex(memory, nextInstruction!);
+            }
         }
     }
     
@@ -76,7 +76,7 @@ public class ListVariable(List<Variable>? values = null) : Variable
         if (kvpVariable.Left is NumberVariable leftNumber)
         {
             left = (int)leftNumber.Value;
-        } else if (kvpVariable.Left is not NullVariable)
+        } else if (kvpVariable.Left is not null)
         {
             throw new Exception("Left index must be a number or null");
         }
@@ -85,7 +85,7 @@ public class ListVariable(List<Variable>? values = null) : Variable
         if (kvpVariable.Right is NumberVariable rightNumber)
         {
             right = (int)rightNumber.Value;
-        } else if (kvpVariable.Right is not NullVariable)
+        } else if (kvpVariable.Right is not null)
         {
             throw new Exception("Right index must be a number or null");
         }

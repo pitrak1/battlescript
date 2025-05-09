@@ -21,6 +21,15 @@ public class VariableInstruction : Instruction
 
     public override Variable Interpret(Memory memory, Variable? context = null)
     {
-        return memory.GetVariable(this);
+        var variable = memory.GetVariable(this);
+        // This feels clunky
+        if (Next is ParensInstruction parensInstruction)
+        {
+            return parensInstruction.Interpret(memory, variable);
+        }
+        else
+        {
+            return memory.GetVariable(this);
+        }
     }
 }

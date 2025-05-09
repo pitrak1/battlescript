@@ -25,6 +25,6 @@ public class KeyValuePairInstruction : Instruction
 
     public override Variable Interpret(Memory memory, Variable? context = null)
     {
-        throw new Exception("Should never interpret a KVP instruction directly");
+        return new KeyValuePairVariable(Left?.Interpret(memory, context), Right?.Interpret(memory, context));
     }
 }
