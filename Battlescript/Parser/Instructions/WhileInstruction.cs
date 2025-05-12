@@ -21,7 +21,10 @@ public class WhileInstruction : Instruction
         Condition = condition;
     }
 
-    public override Variable Interpret(Memory memory, Variable? context = null)
+    public override Variable Interpret(
+        Memory memory, 
+        Variable? context = null, 
+        Variable? objectContext = null)
     {
         var condition = Condition.Interpret(memory);
         while (InterpreterUtilities.IsVariableTruthy(condition))

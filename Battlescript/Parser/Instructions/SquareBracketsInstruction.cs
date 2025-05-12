@@ -38,7 +38,10 @@ public class SquareBracketsInstruction : Instruction
         Next = next;
     }
 
-    public override Variable Interpret(Memory memory, Variable? context = null)
+    public override Variable Interpret(
+        Memory memory, 
+        Variable? context = null, 
+        Variable? objectContext = null)
     {
         // Dealing with an index
         if (context is not null)
@@ -46,7 +49,7 @@ public class SquareBracketsInstruction : Instruction
             if (Values.Count > 1) throw new Exception("Too many index values");
             
             var result = context.GetIndex(memory, this);
-            return Next is not null ? Next.Interpret(memory, result) : result;
+            return Next is not null ? Next.Interpret(memory, result, context) : result;
         }
         // Dealing with list creation
         else

@@ -11,24 +11,14 @@ public class Memory
         scopes.Add(new Dictionary<string, Variable>());
     }
 
-    public Variable? GetVariable(VariableInstruction variableInstruction)
+    public Variable? GetVariable(string name)
     {
         // We need to pass in the full instruction here so we can handle indexing
         for (var i = scopes.Count - 1; i >= 0; i--)
         {
-            if (scopes[i].ContainsKey(variableInstruction.Name))
+            if (scopes[i].ContainsKey(name))
             {
-                if (variableInstruction.Next is SquareBracketsInstruction squareBracketsInstruction)
-                {
-                    Debug.Assert(scopes[i][variableInstruction.Name] is ListVariable || 
-                                 scopes[i][variableInstruction.Name] is DictionaryVariable);
-                    var nextInstruction = variableInstruction.Next as SquareBracketsInstruction;
-                    return scopes[i][variableInstruction.Name].GetIndex(this, nextInstruction!);
-                }
-                else
-                {
-                    return scopes[i][variableInstruction.Name];
-                }
+                return scopes[i][name];
             }
         }
     
@@ -37,21 +27,20 @@ public class Memory
 
     public void AssignToVariable(VariableInstruction variableInstruction, Variable valueVariable)
     {
+        // We need to pass in the full instruction here to handle assigning to indexes
         if (VariableExists(variableInstruction.Name))
         {
             for (var i = scopes.Count - 1; i >= 0; i--)
             {
                 if (scopes[i].ContainsKey(variableInstruction.Name))
                 {
-                    if (variableInstruction.Next is null)
+                    if (variableInstruction.Next is SquareBracketsInstruction squareBracketsInstruction)
                     {
-                        scopes[i][variableInstruction.Name] = valueVariable;
+                        scopes[i][variableInstruction.Name].AssignToIndexOrKey(this, valueVariable, squareBracketsInstruction);
                     }
                     else
                     {
-                        Debug.Assert(variableInstruction.Next is SquareBracketsInstruction);
-                        var nextInstruction = variableInstruction.Next as SquareBracketsInstruction;
-                        scopes[i][variableInstruction.Name].AssignToIndexOrKey(this, valueVariable, nextInstruction!);
+                        scopes[i][variableInstruction.Name] = valueVariable;
                     }
                 }
             }
@@ -75,9 +64,9 @@ public class Memory
         return false;        
     }
 
-    public void AddScope()
+    public void AddScope(Dictionary<string, Variable>? scope = null)
     {
-        scopes.Add(new Dictionary<string, Variable>());
+        scopes.Add(scope ?? new Dictionary<string, Variable>());
     }
 
     public Dictionary<string, Variable> RemoveScope()

@@ -27,7 +27,10 @@ public class DictionaryInstruction : Instruction
         Values = values;
     }
 
-    public override Variable Interpret(Memory memory, Variable? context = null)
+    public override Variable Interpret(
+        Memory memory, 
+        Variable? context = null, 
+        Variable? objectContext = null)
     {
         var variableValue = new List<KeyValuePairVariable>();
         foreach (var kvp in Values)

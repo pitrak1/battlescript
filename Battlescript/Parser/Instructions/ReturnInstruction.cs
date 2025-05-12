@@ -16,7 +16,10 @@ public class ReturnInstruction : Instruction
         Value = value;
     }
 
-    public override Variable Interpret(Memory memory, Variable? context = null)
+    public override Variable Interpret(
+        Memory memory, 
+        Variable? context = null, 
+        Variable? objectContext = null)
     {
         var returnValue = Value.Interpret(memory);
         memory.AssignToVariable(new VariableInstruction("return"), returnValue);

@@ -19,17 +19,24 @@ public class VariableInstruction : Instruction
         Next = next;
     }
 
-    public override Variable Interpret(Memory memory, Variable? context = null)
+    public override Variable Interpret(
+        Memory memory, 
+        Variable? context = null, 
+        Variable? objectContext = null)
     {
-        var variable = memory.GetVariable(this);
-        // This feels clunky
-        if (Next is ParensInstruction parensInstruction)
+        var variable = memory.GetVariable(Name);
+
+        var currentObjectContext = variable is ObjectVariable objectVariable ? objectVariable : null; 
+        
+        // This doesn't work because we're currently getting the variable including indexes from memory in GetVariable
+        // but even if we just interpreted Parens here, we would still lose the context of the object we were workign with
+        if (Next is not null)
         {
-            return parensInstruction.Interpret(memory, variable);
+            return Next.Interpret(memory, variable, currentObjectContext);
         }
         else
         {
-            return memory.GetVariable(this);
+            return variable;
         }
     }
 }

@@ -40,7 +40,8 @@ public class Parser
                 {
                     // Pop off the last scope so that new instructions are instead added to the next
                     // largest containing scope
-                    _scopes.RemoveAt(_scopes.Count - 1);
+                    var indentDiff = currentIndentValue - newIndentValue;
+                    _scopes.RemoveRange(_scopes.Count - indentDiff, indentDiff);
                 }
                 
                 currentIndentValue = newIndentValue;

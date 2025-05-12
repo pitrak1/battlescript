@@ -32,7 +32,7 @@ public class ListVariable(List<Variable>? values = null) : Variable
         }
     }
     
-    public override Variable GetIndex(Memory memory, SquareBracketsInstruction index)
+    public override Variable? GetIndex(Memory memory, SquareBracketsInstruction index)
     {
         Debug.Assert(index.Values.Count == 1);
 

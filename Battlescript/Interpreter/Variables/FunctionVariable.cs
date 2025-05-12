@@ -10,7 +10,7 @@ public class FunctionVariable(List<Instruction>? parameters, List<Instruction>? 
         throw new Exception("Cannot index a function variable");
     }
     
-    public override Variable GetIndex(Memory memory, SquareBracketsInstruction index)
+    public override Variable? GetIndex(Memory memory, SquareBracketsInstruction index)
     {
         throw new Exception("Cannot index a function variable");
     }

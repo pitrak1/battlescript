@@ -48,7 +48,10 @@ public class FunctionInstruction : Instruction
         Instructions = instructions ?? [];
     }
 
-    public override Variable Interpret(Memory memory, Variable? context = null)
+    public override Variable Interpret(
+        Memory memory, 
+        Variable? context = null, 
+        Variable? objectContext = null)
     {
         var functionValue = new FunctionVariable(Parameters, Instructions);
         memory.AssignToVariable(new VariableInstruction(Name), functionValue);

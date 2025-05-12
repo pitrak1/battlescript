@@ -26,7 +26,10 @@ public class ClassInstruction : Instruction
         Superclasses = superclasses ?? [];
     }
 
-    public override Variable Interpret(Memory memory, Variable? context = null)
+    public override Variable Interpret(
+        Memory memory, 
+        Variable? context = null, 
+        Variable? objectContext = null)
     {
         List<Variable> superclasses = new List<Variable>();
         if (Superclasses.Count > 0)

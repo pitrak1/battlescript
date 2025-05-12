@@ -10,7 +10,7 @@ public class KeyValuePairVariable(Variable? left = null, Variable? right = null)
         throw new Exception("Cannot index a kvp variable");
     }
     
-    public override Variable GetIndex(Memory memory, SquareBracketsInstruction index)
+    public override Variable? GetIndex(Memory memory, SquareBracketsInstruction index)
     {
         throw new Exception("Cannot index a kvp variable");
     }

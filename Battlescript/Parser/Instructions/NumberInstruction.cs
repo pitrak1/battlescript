@@ -18,7 +18,10 @@ public class NumberInstruction : Instruction
         Value = value;
     }
     
-    public override Variable Interpret(Memory memory, Variable? context = null)
+    public override Variable Interpret(        
+        Memory memory, 
+        Variable? context = null, 
+        Variable? objectContext = null)
     {
         return new NumberVariable(Value);
     }

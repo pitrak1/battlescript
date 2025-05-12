@@ -23,7 +23,7 @@ public class DictionaryVariable(List<KeyValuePairVariable>? values): Variable
         }
     }
 
-    public override Variable GetIndex(Memory memory, SquareBracketsInstruction index)
+    public override Variable? GetIndex(Memory memory, SquareBracketsInstruction index)
     {
         Debug.Assert(index.Values.Count == 1);
 

@@ -29,7 +29,10 @@ public class AssignmentInstruction : Instruction
         Right = right;
     }
 
-    public override Variable Interpret(Memory memory, Variable? context = null)
+    public override Variable Interpret(
+        Memory memory, 
+        Variable? context = null, 
+        Variable? objectContext = null)
     {
         var left = Left!.Interpret(memory);
         var right = Right.Interpret(memory);

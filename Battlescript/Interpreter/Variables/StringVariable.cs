@@ -9,7 +9,7 @@ public class StringVariable(string? value = null) : Variable
         throw new Exception("Cannot index a string variable");
     }
     
-    public override Variable GetIndex(Memory memory, SquareBracketsInstruction index)
+    public override Variable? GetIndex(Memory memory, SquareBracketsInstruction index)
     {
         throw new Exception("Cannot index a string variable");
     }

@@ -23,12 +23,24 @@ public class ParensInstruction : Instruction
         Next = next;
     }
 
-    public override Variable Interpret(Memory memory, Variable? context = null)
+    public override Variable Interpret(
+        Memory memory, 
+        Variable? context = null, 
+        Variable? objectContext = null)
     {
         Debug.Assert(context is not null);
 
         if (context is FunctionVariable functionVariable)
         {
+
+            var classScopesAdded = 0;
+            if (objectContext is ObjectVariable objectVariable)
+            {
+                var classScopes = objectVariable.ClassVariable.AddClassToMemoryScopes(memory);
+                memory.AddScope(objectVariable.Values);
+                classScopesAdded += classScopes + 1;
+            }
+            
             memory.AddScope();
             
             // Transferring arguments to local parameter variables
@@ -47,17 +59,27 @@ public class ParensInstruction : Instruction
             }
             
             // Getting return value
-            var returnValue = memory.GetVariable(new VariableInstruction("return"));
+            var returnValue = memory.GetVariable("return");
             
             memory.RemoveScope();
+
+            for (var i = 0; i < classScopesAdded; i++)
+            {
+                memory.RemoveScope();
+            }
             
             return returnValue ?? new NullVariable();
         }
         else
         {
-            // need to update this for the new format
-            // return context.CreateObject();
-            return new NullVariable();
+            if (context is ClassVariable classVariable)
+            {
+                return classVariable.CreateObject();
+            }
+            else
+            {
+                throw new Exception("Can only create an object of a class");
+            }
         }
     }
 }

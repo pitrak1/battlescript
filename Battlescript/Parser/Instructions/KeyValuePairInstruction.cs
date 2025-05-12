@@ -23,7 +23,10 @@ public class KeyValuePairInstruction : Instruction
         Right = right;
     }
 
-    public override Variable Interpret(Memory memory, Variable? context = null)
+    public override Variable Interpret(
+        Memory memory, 
+        Variable? context = null, 
+        Variable? objectContext = null)
     {
         return new KeyValuePairVariable(Left?.Interpret(memory, context), Right?.Interpret(memory, context));
     }

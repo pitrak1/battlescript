@@ -9,7 +9,7 @@ public class NumberVariable(double value) : Variable
         throw new Exception("Cannot index a number variable");
     }
     
-    public override Variable GetIndex(Memory memory, SquareBracketsInstruction index)
+    public override Variable? GetIndex(Memory memory, SquareBracketsInstruction index)
     {
         throw new Exception("Cannot index a number variable");
     }

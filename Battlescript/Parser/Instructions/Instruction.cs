@@ -144,6 +144,9 @@ public abstract class Instruction(int line = 0, int column = 0)
         );
     }
 
-    public abstract Variable Interpret(Memory memory, Variable? context = null);
-    
+    public abstract Variable Interpret(
+        Memory memory,
+        Variable? context = null,
+        Variable? objectContext = null);
+
 }
