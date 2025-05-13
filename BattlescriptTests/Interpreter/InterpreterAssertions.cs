@@ -6,14 +6,18 @@ public class InterpreterAssertions
 {
     public static void AssertInputProducesOutput(string input, List<Dictionary<string, Variable>> expected)
     {
+        var interpreterResult = RunInput(input);
+        AssertScopeListEqual(interpreterResult, expected);
+    }
+
+    public static List<Dictionary<string, Variable>> RunInput(string input)
+    {
         var lexer = new Lexer(input);
         var lexerResult = lexer.Run();
         var parser = new Parser(lexerResult);
         var parserResult = parser.Run();
         var interpreter = new Interpreter(parserResult);
-        var interpreterResult = interpreter.Run();
-        
-        AssertScopeListEqual(interpreterResult, expected);
+        return interpreter.Run();
     }
     
     private static void AssertScopeListEqual(

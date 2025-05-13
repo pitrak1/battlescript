@@ -3,7 +3,7 @@ namespace Battlescript;
 public class AssignmentInstruction : Instruction
 {
     public string Operation { get; set; } 
-    public Instruction? Left { get; set; }
+    public Instruction Left { get; set; }
     public Instruction Right { get; set; }
 
     public AssignmentInstruction(List<Token> tokens)
@@ -34,7 +34,7 @@ public class AssignmentInstruction : Instruction
         Variable? context = null, 
         Variable? objectContext = null)
     {
-        var left = Left!.Interpret(memory);
+        var left = Left.Interpret(memory);
         var right = Right.Interpret(memory);
         
         var result = InterpreterUtilities.ConductAssignment(Operation, left, right);

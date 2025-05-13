@@ -17,6 +17,15 @@
       &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.InterpreterTests+Assignments&lt;/TestId&gt;
       &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.VariableTypes&lt;/TestId&gt;
       &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.E2ETests&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.AssignmentInstructionTests+Interpret&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.AssignmentInstructionTests+InterpretTests&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.AssignmentInstructionTests&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.AssignmentInstructionParseTests&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.AssignmentInstructionInterpretTests&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.BooleanInstructionTests&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.ClassInstructionTests&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.ClassInstructionTests+Interpret&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.DictionaryInstructionTests&lt;/TestId&gt;
     &lt;/TestAncestor&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
