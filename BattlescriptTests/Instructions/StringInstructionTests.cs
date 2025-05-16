@@ -3,10 +3,10 @@ using Battlescript;
 namespace BattlescriptTests;
 
 [TestFixture]
-public static class StringInstructionTests
+public static partial class InstructionTests
 {
     [TestFixture]
-    public class Parse
+    public class StringInstructionParse
     {
         [Test]
         public void HandlesSingleQuoteStrings()

@@ -3,10 +3,10 @@ using Battlescript;
 namespace BattlescriptTests;
 
 [TestFixture]
-public static class BooleanInstructionTests
+public static partial class InstructionTests
 {
     [TestFixture]
-    public class Parse
+    public class BooleanInstructionParse
     {
         [Test]
         public void HandlesSimpleBooleanParsing()
@@ -17,7 +17,7 @@ public static class BooleanInstructionTests
     }
     
     [TestFixture]
-    public class Interpret
+    public class BooleanInstructionInterpret
     {
         [Test]
         public void ReturnsNewBooleanVariable()
