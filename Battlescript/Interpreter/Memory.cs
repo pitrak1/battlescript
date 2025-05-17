@@ -80,6 +80,14 @@ public class Memory
         return removedScope;
     }
 
+    public void RemoveScopes(int count)
+    {
+        for (var i = 0; i < count; i++)
+        {
+            RemoveScope();
+        }
+    }
+
     public List<Dictionary<string, Variable>> GetScopes()
     {
         return _scopes.ToList();

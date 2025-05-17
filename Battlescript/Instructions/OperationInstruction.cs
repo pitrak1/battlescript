@@ -33,6 +33,6 @@ public class OperationInstruction : Instruction
     {
         var left = Left?.Interpret(memory);
         var right = Right?.Interpret(memory);
-        return InterpreterUtilities.ConductOperation(Operation, left, right);
+        return InterpreterUtilities.ConductOperation(memory, Operation, left, right);
     }
 }

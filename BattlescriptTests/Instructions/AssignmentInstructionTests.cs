@@ -46,14 +46,14 @@ public static partial class InstructionTests
         [Test]
         public void ReturnsAssignedVariable()
         {
-            var scopes = InterpreterAssertions.RunInput("x = 6");
+            var scopes = Runner.Run("x = 6");
             InterpreterAssertions.AssertVariableEqual(scopes.First()["x"], new NumberVariable(6.0));
         }
 
         [Test]
         public void ThrowsErrorIfLeftHandSideIsNotVariable()
         {
-            Assert.Throws<Exception>(() => InterpreterAssertions.RunInput("5 = 6"));
+            Assert.Throws<Exception>(() => Runner.Run("5 = 6"));
         }
     }
 }

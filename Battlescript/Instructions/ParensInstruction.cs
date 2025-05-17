@@ -32,43 +32,8 @@ public class ParensInstruction : Instruction
 
         if (context is FunctionVariable functionVariable)
         {
-
-            var classScopesAdded = 0;
-            if (objectContext is ObjectVariable objectVariable)
-            {
-                var classScopes = objectVariable.ClassVariable.AddClassToMemoryScopes(memory);
-                memory.AddScope(objectVariable.Values);
-                classScopesAdded += classScopes + 1;
-            }
-            
-            memory.AddScope();
-            
-            // Transferring arguments to local parameter variables
-            for (var i = 0; i < Instructions.Count; i++)
-            {
-                Debug.Assert(functionVariable.Parameters[i] is VariableInstruction);
-                var paramInstruction = (VariableInstruction)functionVariable.Parameters[i];
-                var value = Instructions[i].Interpret(memory);
-                memory.AssignToVariable(new VariableInstruction(paramInstruction.Name), value);
-            }
-            
-            // Actually running hte instructions
-            foreach (var inst in functionVariable.Instructions)
-            {
-                inst.Interpret(memory);
-            }
-            
-            // Getting return value
-            var returnValue = memory.GetVariable("return");
-            
-            memory.RemoveScope();
-
-            for (var i = 0; i < classScopesAdded; i++)
-            {
-                memory.RemoveScope();
-            }
-            
-            return returnValue ?? new NullVariable();
+            var objectVariable = objectContext is ObjectVariable ? (ObjectVariable)objectContext : null;
+            return functionVariable.RunFunction(memory, Instructions, objectVariable);
         }
         else
         {

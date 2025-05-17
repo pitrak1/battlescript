@@ -68,7 +68,9 @@ public static class Consts
         "try",
         "while",
         "with",
-        "yield"
+        "yield",
+        "__list__",
+        "__dict__"
     ];
 
     // These are currently not used or implemented in any way, but I like having a list

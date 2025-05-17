@@ -37,7 +37,7 @@ public class AssignmentInstruction : Instruction
         var left = Left.Interpret(memory);
         var right = Right.Interpret(memory);
         
-        var result = InterpreterUtilities.ConductAssignment(Operation, left, right);
+        var result = InterpreterUtilities.ConductAssignment(memory, Operation, left, right);
 
         if (Left is VariableInstruction variableInst)
         {
