@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class ParensInstruction : Instruction
+public class ParensInstruction : Instruction, IEquatable<ParensInstruction>
 {
     public Instruction? Next { get; set; }
 
@@ -47,4 +47,21 @@ public class ParensInstruction : Instruction
             }
         }
     }
+    
+    // All the code below is to override equality
+    public override bool Equals(object obj) => Equals(obj as ParensInstruction);
+    public bool Equals(ParensInstruction? instruction)
+    {
+        if (instruction is null) return false;
+        if (ReferenceEquals(this, instruction)) return true;
+        if (GetType() != instruction.GetType()) return false;
+
+        if (Next != instruction.Next) return false;
+        
+        return base.Equals(instruction);
+    }
+    
+    public override int GetHashCode() => HashCode.Combine(Next, Instructions);
+    public static bool operator ==(ParensInstruction left, ParensInstruction right) => left is null ? right is null : left.Equals(right);
+    public static bool operator !=(ParensInstruction left, ParensInstruction right) => !(left == right);
 }

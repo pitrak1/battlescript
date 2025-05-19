@@ -8,10 +8,6 @@ public static class ParserAssertions
     {
         var lexer = new Lexer(input);
         var lexerResult = lexer.Run();
-
-        Assertions.AssertInstructionEqual(
-            Instruction.Parse(lexerResult),
-            expected
-        );
+        Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
     }
 }

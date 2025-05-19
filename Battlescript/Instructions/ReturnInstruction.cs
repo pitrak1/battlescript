@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class ReturnInstruction : Instruction 
+public class ReturnInstruction : Instruction, IEquatable<ReturnInstruction>
 {
     public Instruction? Value { get; set; }
 
@@ -25,4 +25,21 @@ public class ReturnInstruction : Instruction
         memory.SetVariable(new VariableInstruction("return"), returnValue);
         return returnValue;
     }
+    
+    // All the code below is to override equality
+    public override bool Equals(object obj) => Equals(obj as ReturnInstruction);
+    public bool Equals(ReturnInstruction? instruction)
+    {
+        if (instruction is null) return false;
+        if (ReferenceEquals(this, instruction)) return true;
+        if (GetType() != instruction.GetType()) return false;
+
+        if (Value != instruction.Value) return false;
+        
+        return base.Equals(instruction);
+    }
+    
+    public override int GetHashCode() => HashCode.Combine(Value, Instructions);
+    public static bool operator ==(ReturnInstruction left, ReturnInstruction right) => left is null ? right is null : left.Equals(right);
+    public static bool operator !=(ReturnInstruction left, ReturnInstruction right) => !(left == right);
 }

@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class BooleanInstruction : Instruction
+public class BooleanInstruction : Instruction, IEquatable<BooleanInstruction>
 {
     public bool Value { get; set; }
 
@@ -23,4 +23,21 @@ public class BooleanInstruction : Instruction
     {
         return new BooleanVariable(Value);
     }
+    
+    // All the code below is to override equality
+    public override bool Equals(object obj) => Equals(obj as BooleanInstruction);
+    public bool Equals(BooleanInstruction? instruction)
+    {
+        if (instruction is null) return false;
+        if (ReferenceEquals(this, instruction)) return true;
+        if (GetType() != instruction.GetType()) return false;
+
+        if (Value != instruction.Value) return false;
+        
+        return base.Equals(instruction);
+    }
+    
+    public override int GetHashCode() => HashCode.Combine(Value, Instructions);
+    public static bool operator ==(BooleanInstruction left, BooleanInstruction right) => left is null ? right is null : left.Equals(right);
+    public static bool operator !=(BooleanInstruction left, BooleanInstruction right) => !(left == right);
 }

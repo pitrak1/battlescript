@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public abstract class Instruction(int line = 0, int column = 0)
+public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Instruction>
 {
     public int Line { get; set; } = line;
     public int Column { get; set; } = column;
@@ -149,4 +149,18 @@ public abstract class Instruction(int line = 0, int column = 0)
         Variable? context = null,
         Variable? objectContext = null);
 
+    // All the code below is to override equality
+    public override bool Equals(object obj) => Equals(obj as Instruction);
+    public bool Equals(Instruction? instruction)
+    {
+        if (instruction is null) return false;
+        if (ReferenceEquals(this, instruction)) return true;
+        if (GetType() != instruction.GetType()) return false;
+        
+        return Instructions.SequenceEqual(instruction.Instructions);
+    }
+    
+    public override int GetHashCode() => HashCode.Combine(Instructions);
+    public static bool operator ==(Instruction left, Instruction right) => left is null ? right is null : left.Equals(right);
+    public static bool operator !=(Instruction left, Instruction right) => !(left == right);
 }

@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class Token
+public class Token : IEquatable<Token>
 {
     public Consts.TokenTypes Type { get; set; }
     public string Value { get; set; }

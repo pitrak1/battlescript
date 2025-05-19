@@ -102,14 +102,14 @@ public static class ParserUtilitiesTests
             Assert.That(index, Is.EqualTo(3));
         }
 
-        // [Test]
-        // public void SkipsTokensInSeparatorBlocks()
-        // {
-        //     Lexer lexer = new Lexer("var x = 1 + x[1 + 2];");
-        //     var tokens = lexer.Run();
-        //     int index = ParserUtilities.GetOperatorIndex(tokens);
-        //     Assert.That(index, Is.EqualTo(4));
-        // }
+        [Test]
+        public void SkipsTokensInSeparatorBlocks()
+        {
+            Lexer lexer = new Lexer("var x = 1 + x[1 + 2]");
+            var tokens = lexer.Run();
+            int index = ParserUtilities.GetOperatorIndex(tokens);
+            Assert.That(index, Is.EqualTo(4));
+        }
 
         [Test]
         public void DoesNotExist()

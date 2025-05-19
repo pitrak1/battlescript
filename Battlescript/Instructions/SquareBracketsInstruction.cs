@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class SquareBracketsInstruction : Instruction
+public class SquareBracketsInstruction : Instruction, IEquatable<SquareBracketsInstruction>
 {
     public List<Instruction> Values { get; set; }
     public Instruction? Next { get; set; }
@@ -62,4 +62,21 @@ public class SquareBracketsInstruction : Instruction
             return new ListVariable(values);
         }
     }
+    
+    // All the code below is to override equality
+    public override bool Equals(object obj) => Equals(obj as SquareBracketsInstruction);
+    public bool Equals(SquareBracketsInstruction? instruction)
+    {
+        if (instruction is null) return false;
+        if (ReferenceEquals(this, instruction)) return true;
+        if (GetType() != instruction.GetType()) return false;
+
+        if (!Values.SequenceEqual(instruction.Values) || Next != instruction.Next) return false;
+        
+        return base.Equals(instruction);
+    }
+    
+    public override int GetHashCode() => HashCode.Combine(Values, Next, Instructions);
+    public static bool operator ==(SquareBracketsInstruction left, SquareBracketsInstruction right) => left is null ? right is null : left.Equals(right);
+    public static bool operator !=(SquareBracketsInstruction left, SquareBracketsInstruction right) => !(left == right);
 }

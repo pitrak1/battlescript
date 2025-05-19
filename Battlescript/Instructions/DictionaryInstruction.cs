@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class DictionaryInstruction : Instruction
+public class DictionaryInstruction : Instruction, IEquatable<DictionaryInstruction>
 {
     public List<KeyValuePairInstruction> Values { get; set; }
 
@@ -42,4 +42,21 @@ public class DictionaryInstruction : Instruction
         }
         return new DictionaryVariable(variableValue);
     }
+    
+    // All the code below is to override equality
+    public override bool Equals(object obj) => Equals(obj as DictionaryInstruction);
+    public bool Equals(DictionaryInstruction? instruction)
+    {
+        if (instruction is null) return false;
+        if (ReferenceEquals(this, instruction)) return true;
+        if (GetType() != instruction.GetType()) return false;
+        
+        if (!Values.SequenceEqual(instruction.Values)) return false;
+        
+        return base.Equals(instruction);
+    }
+    
+    public override int GetHashCode() => HashCode.Combine(Values, Instructions);
+    public static bool operator ==(DictionaryInstruction left, DictionaryInstruction right) => left is null ? right is null : left.Equals(right);
+    public static bool operator !=(DictionaryInstruction left, DictionaryInstruction right) => !(left == right);
 }
