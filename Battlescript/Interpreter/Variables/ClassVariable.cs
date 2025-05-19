@@ -7,7 +7,7 @@ public class ClassVariable (Dictionary<string, Variable>? values, List<ClassVari
     public Dictionary<string, Variable> Values { get; set; } = values ?? [];
     public List<ClassVariable> SuperClasses { get; set; } = superclasses ?? [];
     
-    public override void AssignToIndexOrKey(Memory memory, Variable valueVariable, SquareBracketsInstruction index)
+    public override void SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index)
     {
         Debug.Assert(index.Values.Count == 1);
 
@@ -23,7 +23,7 @@ public class ClassVariable (Dictionary<string, Variable>? values, List<ClassVari
             {
                 Debug.Assert(index.Next is SquareBracketsInstruction);
                 var nextInstruction = index.Next as SquareBracketsInstruction;
-                Values[indexStringVariable.Value].AssignToIndexOrKey(memory, valueVariable, nextInstruction!);
+                Values[indexStringVariable.Value].SetItem(memory, valueVariable, nextInstruction!);
             }
         }
         else
@@ -32,47 +32,73 @@ public class ClassVariable (Dictionary<string, Variable>? values, List<ClassVari
         }
     }
     
-    public override Variable? GetIndex(Memory memory, SquareBracketsInstruction index)
+    public override Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
         Debug.Assert(index.Values.Count == 1);
-
         var indexVariable = index.Values.First().Interpret(memory);
 
-        if (indexVariable is StringVariable indexStringVariable)
+        Variable? foundItem;
+        if (indexVariable is StringVariable indexStringVariable && indexStringVariable.Value == "__getitem__")
         {
-            if (Values.ContainsKey(indexStringVariable.Value))
-            {
-                if (index.Next is SquareBracketsInstruction squareBracketsInstruction)
-                {
-                    return Values[indexStringVariable.Value].GetIndex(memory, squareBracketsInstruction!);
-                }
-                else
-                {
-                    return Values[indexStringVariable.Value];
-                }
-            }
-            else
-            {
-                foreach (var superclass in SuperClasses)
-                {
-                    try
-                    {
-                        return superclass.GetIndex(memory, index);
-                    }
-                    catch (KeyNotFoundException)
-                    {
-                        
-                    }
-                }
-            }
-            
+            foundItem = FindItemDirectly(memory, indexStringVariable.Value);
+        } else if (GetItem(memory, "__getitem__") is FunctionVariable functionVariable)
+        {
+            foundItem = functionVariable.RunFunction(memory, [objectContext, indexVariable], objectContext);
+        } else if (indexVariable is StringVariable stringVariable)
+        {
+            foundItem = FindItemDirectly(memory, stringVariable.Value);
         }
         else
         {
             throw new Exception("Can't index a class with anything but a string");
         }
 
+        if (index.Next is SquareBracketsInstruction nextInstruction)
+        {
+            return foundItem.GetItem(memory, nextInstruction, objectContext);
+        }
+        else
+        {
+            return foundItem;
+        }
+    }
+
+    private Variable? FindItemDirectly(Memory memory, string item)
+    {
+        if (Values.ContainsKey(item))
+        {
+            return Values[item];
+        }
+        else
+        {
+            foreach (var superclass in SuperClasses)
+            {
+                Variable? result;
+                superclass.Values.TryGetValue(item, out result);
+                if (result is not null)
+                {
+                    return result;
+                }
+            }
+        }
+
         return null;
+    }
+    
+    private Variable? RunOverride(
+        Memory memory,
+        Variable foundVariable, 
+        FunctionVariable overrideFunction,
+        Variable indexVariable)
+    {
+        if (foundVariable is ObjectVariable objectVariable)
+        {
+            return overrideFunction.RunFunction(memory, [foundVariable, indexVariable], objectVariable);
+        }
+        else
+        {
+            return overrideFunction.RunFunction(memory, [foundVariable, indexVariable]);
+        }
     }
 
     public ObjectVariable CreateObject()

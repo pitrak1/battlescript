@@ -118,7 +118,7 @@ public static class InterpreterUtilities
             switch (operation)
             {
                 case "+":
-                    method = left.GetIndex(memory, "__add__");
+                    method = left.GetItem(memory, "__add__");
                     if (method is FunctionVariable functionVariable)
                     {
                         return functionVariable.RunFunction(memory, [left, right]);
@@ -127,7 +127,6 @@ public static class InterpreterUtilities
                     {
                         throw new Exception("Invalid operation: " + operation);
                     }
-                
                 default:
                     throw new Exception("Invalid operation: " + operation);
             }

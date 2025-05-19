@@ -20,6 +20,20 @@ public static partial class InstructionTests
         }
         
         [Test]
+        public void HandlesBinaryOperationsWithExpressions()
+        {
+            var expected = new OperationInstruction(
+                operation: "+",
+                left: new VariableInstruction(
+                    "x", 
+                    new SquareBracketsInstruction(
+                        [new StringInstruction("i")])),
+                right: new NumberInstruction(6.0)
+            );
+            ParserAssertions.AssertInputProducesInstruction("x.i + 6", expected);
+        }
+        
+        [Test]
         public void HandlesUnaryOperators()
         {
             var expected = new OperationInstruction(

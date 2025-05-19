@@ -6,7 +6,7 @@ public class ListVariable(List<Variable>? values = null) : Variable
 {
     public List<Variable> Values { get; set; } = values ?? [];
     
-    public override void AssignToIndexOrKey(Memory memory, Variable valueVariable, SquareBracketsInstruction index)
+    public override void SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index)
     {
         Debug.Assert(index.Values.Count == 1);
 
@@ -23,7 +23,7 @@ public class ListVariable(List<Variable>? values = null) : Variable
             {
                 Debug.Assert(index.Next is SquareBracketsInstruction);
                 var nextInstruction = index.Next as SquareBracketsInstruction;
-                Values[(int)indexNumberVariable.Value].AssignToIndexOrKey(memory, valueVariable, nextInstruction!);
+                Values[(int)indexNumberVariable.Value].SetItem(memory, valueVariable, nextInstruction!);
             }
         }
         else
@@ -32,7 +32,7 @@ public class ListVariable(List<Variable>? values = null) : Variable
         }
     }
     
-    public override Variable? GetIndex(Memory memory, SquareBracketsInstruction index)
+    public override Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
         Debug.Assert(index.Values.Count == 1);
 
@@ -50,7 +50,7 @@ public class ListVariable(List<Variable>? values = null) : Variable
             {
                 Debug.Assert(index.Next is SquareBracketsInstruction);
                 var nextInstruction = index.Next as SquareBracketsInstruction;
-                return GetRangeIndex(indexKvpVariable).GetIndex(memory, nextInstruction!);
+                return GetRangeIndex(indexKvpVariable).GetItem(memory, nextInstruction!);
             }
         }
         else
@@ -65,7 +65,7 @@ public class ListVariable(List<Variable>? values = null) : Variable
             {
                 Debug.Assert(index.Next is SquareBracketsInstruction);
                 var nextInstruction = index.Next as SquareBracketsInstruction;
-                return Values[(int)indexNumberVariable.Value].GetIndex(memory, nextInstruction!);
+                return Values[(int)indexNumberVariable.Value].GetItem(memory, nextInstruction!);
             }
         }
     }

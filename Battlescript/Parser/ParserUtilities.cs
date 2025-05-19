@@ -63,9 +63,11 @@ public class ParserUtilities
         var lowestOperatorPriority = -1;
         var lowestOperatorIndex = -1;
         
+        List<string> separatorStack = [];
+        
         for (var i = tokens.Count - 1; i >= 0; i--)
         {
-            if (tokens[i].Type == Consts.TokenTypes.Operator)
+            if (tokens[i].Type == Consts.TokenTypes.Operator && separatorStack.Count == 0)
             {
                 // Because we want to find lower priority operators, the Operators const is in mathematical
                 // priority descending order, making the higher priority operators have a lower value and
@@ -76,6 +78,37 @@ public class ParserUtilities
                 {
                     lowestOperatorPriority = priority;
                     lowestOperatorIndex = i;
+                }
+            }
+            else if (Consts.ClosingSeparators.Contains(tokens[i].Value))
+            {
+                separatorStack.Add(tokens[i].Value);
+            } else if (Consts.OpeningSeparators.Contains(tokens[i].Value))
+            {
+                var matchingCurrentTokenSeparator = Consts.MatchingSeparatorsMap[tokens[i].Value];
+                if (matchingCurrentTokenSeparator == separatorStack[^1])
+                {
+                    // If the separator matches the top of the stack, pop it off. If the stack is now empty, that means
+                    // we just hit the closing separator of the entire expression, so we add the last entry and exit
+                    separatorStack.RemoveAt(separatorStack.Count - 1);
+                    
+                    if (tokens[i].Type == Consts.TokenTypes.Operator && separatorStack.Count == 0)
+                    {
+                        // Because we want to find lower priority operators, the Operators const is in mathematical
+                        // priority descending order, making the higher priority operators have a lower value and
+                        // the lower priority operators have a higher value
+                        var priority = Array.FindIndex(Consts.Operators, e => e == tokens[i].Value);
+
+                        if (priority != -1 && priority > lowestOperatorPriority)
+                        {
+                            lowestOperatorPriority = priority;
+                            lowestOperatorIndex = i;
+                        }
+                    }
+                }
+                else
+                {
+                    throw new Exception("Unexpected closing separator");
                 }
             }
         }

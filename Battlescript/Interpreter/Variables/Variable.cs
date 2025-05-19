@@ -2,17 +2,17 @@ namespace Battlescript;
 
 public abstract class Variable
 {
-    public abstract void AssignToIndexOrKey(Memory memory, Variable valueVariable, SquareBracketsInstruction index);
+    public abstract void SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index);
     
-    public abstract Variable? GetIndex(Memory memory, SquareBracketsInstruction index);
+    public abstract Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null);
 
-    public virtual Variable? GetIndex(Memory memory, string index)
+    public Variable? GetItem(Memory memory, string index)
     {
-        return GetIndex(memory, new SquareBracketsInstruction([new StringInstruction(index)]));
+        return GetItem(memory, new SquareBracketsInstruction([new StringInstruction(index)]));
     }
     
-    public virtual Variable? GetIndex(Memory memory, int index)
+    public Variable? GetItem(Memory memory, int index)
     {
-        return GetIndex(memory, new SquareBracketsInstruction([new NumberInstruction(index)]));
+        return GetItem(memory, new SquareBracketsInstruction([new NumberInstruction(index)]));
     }
 }

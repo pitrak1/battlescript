@@ -41,7 +41,7 @@ public class AssignmentInstruction : Instruction
 
         if (Left is VariableInstruction variableInst)
         {
-            memory.AssignToVariable(variableInst, result);
+            memory.SetVariable(variableInst, result);
             return result;
         }
         else

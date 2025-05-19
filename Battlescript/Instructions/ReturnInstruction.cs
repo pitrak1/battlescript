@@ -22,7 +22,7 @@ public class ReturnInstruction : Instruction
         Variable? objectContext = null)
     {
         var returnValue = Value.Interpret(memory);
-        memory.AssignToVariable(new VariableInstruction("return"), returnValue);
+        memory.SetVariable(new VariableInstruction("return"), returnValue);
         return returnValue;
     }
 }

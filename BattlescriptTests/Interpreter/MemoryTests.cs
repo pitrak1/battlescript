@@ -135,7 +135,7 @@ public static class MemoryTests
         {
             var memory = new Memory();
             memory.AddScope();
-            memory.AssignToVariable(new VariableInstruction("x"), new NumberVariable(5.0));
+            memory.SetVariable(new VariableInstruction("x"), new NumberVariable(5.0));
             var scopes = memory.GetScopes();
             
             Assert.That(scopes[1]["x"] is NumberVariable);
@@ -153,7 +153,7 @@ public static class MemoryTests
                 { "x", new NumberVariable(5.0) }
             };
             var memory = new Memory([scope]);
-            memory.AssignToVariable(new VariableInstruction("x"), new NumberVariable(8.0));
+            memory.SetVariable(new VariableInstruction("x"), new NumberVariable(8.0));
             var scopes = memory.GetScopes();
             
             Assert.That(scopes[0]["x"] is NumberVariable);
@@ -175,7 +175,7 @@ public static class MemoryTests
                 { "x", new NumberVariable(6.0) }
             };
             var memory = new Memory([scope1, scope2]);
-            memory.AssignToVariable(new VariableInstruction("x"), new NumberVariable(8.0));
+            memory.SetVariable(new VariableInstruction("x"), new NumberVariable(8.0));
             var scopes = memory.GetScopes();
             
             Assert.That(scopes[0]["x"] is NumberVariable);
@@ -202,7 +202,7 @@ public static class MemoryTests
             var variableInstructionWithIndex = new VariableInstruction(
                 "x",
                 new SquareBracketsInstruction([new NumberInstruction(1.0)]));
-            memory.AssignToVariable(variableInstructionWithIndex, new NumberVariable(10.0));
+            memory.SetVariable(variableInstructionWithIndex, new NumberVariable(10.0));
             var scopes = memory.GetScopes();
             
             Assert.That(scopes[0]["x"] is ListVariable);
@@ -236,7 +236,7 @@ public static class MemoryTests
             var variableInstructionWithIndex = new VariableInstruction(
                 "x",
                 new SquareBracketsInstruction([new NumberInstruction(5.0)]));
-            memory.AssignToVariable(variableInstructionWithIndex, new NumberVariable(10.0));
+            memory.SetVariable(variableInstructionWithIndex, new NumberVariable(10.0));
             var scopes = memory.GetScopes();
             
             Assert.That(scopes[0]["x"] is DictionaryVariable);
@@ -274,7 +274,7 @@ public static class MemoryTests
                 new SquareBracketsInstruction(
                     [new NumberInstruction(1.0)], 
                     new SquareBracketsInstruction([new NumberInstruction(5.0)])));
-            memory.AssignToVariable(variableInstructionWithIndex, new NumberVariable(10.0));
+            memory.SetVariable(variableInstructionWithIndex, new NumberVariable(10.0));
             var scopes = memory.GetScopes();
             
             Assert.That(scopes[0]["x"] is ListVariable);
@@ -323,7 +323,7 @@ public static class MemoryTests
                 "x",
                 new SquareBracketsInstruction(
                     [new StringInstruction("y")]));
-            memory.AssignToVariable(variableInstructionWithIndex, new NumberVariable(10.0));
+            memory.SetVariable(variableInstructionWithIndex, new NumberVariable(10.0));
             var scopes = memory.GetScopes();
             
             Assert.That(scopes[0]["x"] is ClassVariable);
@@ -358,7 +358,7 @@ public static class MemoryTests
                 "y",
                 new SquareBracketsInstruction(
                     [new StringInstruction("y")]));
-            memory.AssignToVariable(variableInstructionWithIndex, new NumberVariable(10.0));
+            memory.SetVariable(variableInstructionWithIndex, new NumberVariable(10.0));
             var scopes = memory.GetScopes();
             
             Assert.That(scopes[0]["y"] is ObjectVariable);

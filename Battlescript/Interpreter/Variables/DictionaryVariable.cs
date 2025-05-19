@@ -6,7 +6,7 @@ public class DictionaryVariable(List<KeyValuePairVariable>? values): Variable
 { 
     public List<KeyValuePairVariable> Values { get; set; } = values ?? [];
     
-    public override void AssignToIndexOrKey(Memory memory, Variable valueVariable, SquareBracketsInstruction index)
+    public override void SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index)
     {
         Debug.Assert(index.Values.Count == 1);
 
@@ -19,11 +19,11 @@ public class DictionaryVariable(List<KeyValuePairVariable>? values): Variable
         }
         else
         {
-            value.Right.AssignToIndexOrKey(memory, valueVariable, (SquareBracketsInstruction)index.Next);
+            value.Right.SetItem(memory, valueVariable, (SquareBracketsInstruction)index.Next);
         }
     }
 
-    public override Variable? GetIndex(Memory memory, SquareBracketsInstruction index)
+    public override Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
         Debug.Assert(index.Values.Count == 1);
 
@@ -36,7 +36,7 @@ public class DictionaryVariable(List<KeyValuePairVariable>? values): Variable
         }
         else
         {
-            return value.Right.GetIndex(memory, (SquareBracketsInstruction)index.Next);
+            return value.Right.GetItem(memory, (SquareBracketsInstruction)index.Next);
         }
     }
 

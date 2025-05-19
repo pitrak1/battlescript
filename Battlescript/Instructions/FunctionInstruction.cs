@@ -54,7 +54,7 @@ public class FunctionInstruction : Instruction
         Variable? objectContext = null)
     {
         var functionValue = new FunctionVariable(Parameters, Instructions);
-        memory.AssignToVariable(new VariableInstruction(Name), functionValue);
+        memory.SetVariable(new VariableInstruction(Name), functionValue);
         return functionValue;
     }
 }

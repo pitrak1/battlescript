@@ -72,5 +72,20 @@ public static partial class InstructionTests
             );
             ParserAssertions.AssertInputProducesInstruction("asdf.asdf", expected);
         }
+
+        [Test]
+        public void HandlesExpressionIndexing()
+        {
+            var expected = new VariableInstruction(
+                name: "asdf",
+                next: new SquareBracketsInstruction(
+                    [new OperationInstruction(
+                        "+",
+                        new NumberInstruction(1),
+                        new NumberInstruction(2))]
+                )
+            );
+            ParserAssertions.AssertInputProducesInstruction("asdf[1 + 2]", expected);
+        }
     }
 }

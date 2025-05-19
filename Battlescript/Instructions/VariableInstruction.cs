@@ -8,7 +8,7 @@ public class VariableInstruction : Instruction
     public VariableInstruction(List<Token> tokens)
     {
         Name = tokens[0].Value;
-        Next = CheckAndRunFollowingTokens(tokens, 1);
+        Next = tokens.Count > 1 ? Parse(tokens.Slice(1, tokens.Count - 1)) : null;
         Line = tokens[0].Line;
         Column = tokens[0].Column;
     }
@@ -30,7 +30,7 @@ public class VariableInstruction : Instruction
         
         // This doesn't work because we're currently getting the variable including indexes from memory in GetVariable
         // but even if we just interpreted Parens here, we would still lose the context of the object we were workign with
-        if (Next is not null)
+        if (Next is not SquareBracketsInstruction && Next is not null)
         {
             return Next.Interpret(memory, variable, currentObjectContext);
         }

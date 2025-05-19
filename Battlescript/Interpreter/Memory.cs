@@ -13,21 +13,34 @@ public class Memory
 
     public Variable? GetVariable(string name)
     {
+        return GetVariable(new VariableInstruction(name));
+    }
+
+    public Variable? GetVariable(VariableInstruction variableInstruction)
+    {
         for (var i = _scopes.Count - 1; i >= 0; i--)
         {
-            if (_scopes[i].ContainsKey(name))
+            if (_scopes[i].ContainsKey(variableInstruction.Name))
             {
-                return _scopes[i][name];
+                var foundVariable = _scopes[i][variableInstruction.Name];
+                if (variableInstruction.Next is SquareBracketsInstruction squareBracketsInstruction)
+                {
+                    return foundVariable.GetItem(this, squareBracketsInstruction);
+                }
+                else
+                {
+                    return foundVariable;
+                }
             }
         }
     
         return null;
     }
-
-    public void AssignToVariable(VariableInstruction variableInstruction, Variable valueVariable)
+    
+    public void SetVariable(VariableInstruction variableInstruction, Variable valueVariable)
     {
         // We need to pass in the full instruction here to handle assigning to indexes
-        if (VariableExists(variableInstruction.Name))
+        if (GetVariable(variableInstruction.Name) is not null)
         {
             for (var i = _scopes.Count - 1; i >= 0; i--)
             {
@@ -35,7 +48,7 @@ public class Memory
                 {
                     if (variableInstruction.Next is SquareBracketsInstruction squareBracketsInstruction)
                     {
-                        _scopes[i][variableInstruction.Name].AssignToIndexOrKey(
+                        _scopes[i][variableInstruction.Name].SetItem(
                             this, 
                             valueVariable, 
                             squareBracketsInstruction);
@@ -54,20 +67,7 @@ public class Memory
             _scopes[^1].Add(variableInstruction.Name, valueVariable);
         }
     }
-
-    private bool VariableExists(string name)
-    {
-        for (var i = _scopes.Count - 1; i >= 0; i--)
-        {
-            if (_scopes[i].ContainsKey(name))
-            {
-                return true;
-            }
-        }
-        
-        return false;        
-    }
-
+    
     public void AddScope(Dictionary<string, Variable>? scope = null)
     {
         _scopes.Add(scope ?? new Dictionary<string, Variable>());

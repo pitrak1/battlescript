@@ -49,7 +49,7 @@ public class ClassInstruction : Instruction
 
         var classScope = memory.RemoveScope();
         var classVariable = new ClassVariable(classScope);
-        memory.AssignToVariable(new VariableInstruction(Name), classVariable);
+        memory.SetVariable(new VariableInstruction(Name), classVariable);
         return classVariable;
     }
 }

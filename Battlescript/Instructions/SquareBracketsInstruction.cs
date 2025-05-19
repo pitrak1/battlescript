@@ -48,7 +48,7 @@ public class SquareBracketsInstruction : Instruction
         {
             if (Values.Count > 1) throw new Exception("Too many index values");
             
-            var result = context.GetIndex(memory, this);
+            var result = context.GetItem(memory, this);
             return Next is not null ? Next.Interpret(memory, result, context) : result;
         }
         // Dealing with list creation

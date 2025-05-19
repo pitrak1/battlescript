@@ -5,12 +5,12 @@ public class FunctionVariable(List<Instruction>? parameters, List<Instruction>? 
     public List<Instruction> Parameters { get; set; } = parameters ?? [];
     public List<Instruction> Instructions { get; set; } = instructions ?? [];
     
-    public override void AssignToIndexOrKey(Memory memory, Variable valueVariable, SquareBracketsInstruction index)
+    public override void SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index)
     {
         throw new Exception("Cannot index a function variable");
     }
     
-    public override Variable? GetIndex(Memory memory, SquareBracketsInstruction index)
+    public override Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
         throw new Exception("Cannot index a function variable");
     }
@@ -26,7 +26,7 @@ public class FunctionVariable(List<Instruction>? parameters, List<Instruction>? 
             if (Parameters[i] is VariableInstruction parameter)
             {
                 var value = arguments[i].Interpret(memory);
-                memory.AssignToVariable(new VariableInstruction(parameter.Name), value);
+                memory.SetVariable(new VariableInstruction(parameter.Name), value);
             }
         }
 
@@ -47,7 +47,7 @@ public class FunctionVariable(List<Instruction>? parameters, List<Instruction>? 
         {
             if (Parameters[i] is VariableInstruction parameter)
             {
-                memory.AssignToVariable(new VariableInstruction(parameter.Name), arguments[i]);
+                memory.SetVariable(new VariableInstruction(parameter.Name), arguments[i]);
             }
         }
 
