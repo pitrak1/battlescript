@@ -14,4 +14,18 @@ public class Token
         Line = line;
         Column = column;
     }
+    
+    // All the code below is to override equality
+    public override bool Equals(object obj) => Equals(obj as Token);
+    public bool Equals(Token token)
+    {
+        if (token is null) return false;
+        if (ReferenceEquals(this, token)) return true;
+        if (GetType() != token.GetType()) return false;
+        return Type == token.Type && Value == token.Value;
+    }
+    
+    public override int GetHashCode() => HashCode.Combine(Type, Value);
+    public static bool operator ==(Token left, Token right) => left is null ? right is null : left.Equals(right);
+    public static bool operator !=(Token left, Token right) => !(left == right);
 }

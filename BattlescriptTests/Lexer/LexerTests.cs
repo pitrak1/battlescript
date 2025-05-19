@@ -11,25 +11,33 @@ public static class LexerTests
         [Test]
         public void HandlesIntegers()
         {
-            LexerAssertions.AssertInputProducesOutput("213", Consts.TokenTypes.Number, "213");
+            LexerAssertions.AssertInputProducesOutput(
+                "213", 
+                [new Token(Consts.TokenTypes.Number, "213")]);
         }
 
         [Test]
         public void HandlesFloats()
         {
-            LexerAssertions.AssertInputProducesOutput("1.23", Consts.TokenTypes.Number, "1.23");
+            LexerAssertions.AssertInputProducesOutput(
+                "1.23", 
+                [new Token(Consts.TokenTypes.Number, "1.23")]);
         }
         
         [Test]
         public void HandlesFloatsWithStartingDecimal()
         {
-            LexerAssertions.AssertInputProducesOutput(".23", Consts.TokenTypes.Number, ".23");
+            LexerAssertions.AssertInputProducesOutput(
+                ".23", 
+                [new Token(Consts.TokenTypes.Number, ".23")]);
         }
         
         [Test]
         public void HandlesNegatives()
         {
-            LexerAssertions.AssertInputProducesOutput("-213", Consts.TokenTypes.Number, "-213");
+            LexerAssertions.AssertInputProducesOutput(
+                "-213",
+                [new Token( Consts.TokenTypes.Number, "-213")]);
         }
     }
 
@@ -39,13 +47,17 @@ public static class LexerTests
         [Test]
         public void HandlesDoubleQuotes()
         {
-            LexerAssertions.AssertInputProducesOutput("\"asdf\"", Consts.TokenTypes.String, "asdf");
+            LexerAssertions.AssertInputProducesOutput(
+                "\"asdf\"", 
+                [new Token(Consts.TokenTypes.String, "asdf")]);
         }
 
         [Test]
         public void HandlesSingleQuotes()
         {
-            LexerAssertions.AssertInputProducesOutput("'asdf'", Consts.TokenTypes.String, "asdf");
+            LexerAssertions.AssertInputProducesOutput(
+                "'asdf'", 
+                [new Token(Consts.TokenTypes.String, "asdf")]);
         }
     }
 
@@ -55,7 +67,9 @@ public static class LexerTests
         [Test]
         public void HandlesSeparators()
         {
-            LexerAssertions.AssertInputProducesOutput(",", Consts.TokenTypes.Separator, ",");
+            LexerAssertions.AssertInputProducesOutput(
+                ",", 
+                [new Token(Consts.TokenTypes.Separator, ",")]);
         }
     }
 
@@ -65,25 +79,33 @@ public static class LexerTests
         [Test]
         public void HandlesKeywords()
         {
-            LexerAssertions.AssertInputProducesOutput("async", Consts.TokenTypes.Keyword, "async");
+            LexerAssertions.AssertInputProducesOutput(
+                "async", 
+                [new Token(Consts.TokenTypes.Keyword, "async")]);
         }
 
         [Test]
         public void HandlesBooleans()
         {
-            LexerAssertions.AssertInputProducesOutput("True", Consts.TokenTypes.Boolean, "True");
+            LexerAssertions.AssertInputProducesOutput(
+                "True", 
+                [new Token(Consts.TokenTypes.Boolean, "True")]);
         }
 
         [Test]
         public void HandlesWordOperators()
         {
-            LexerAssertions.AssertInputProducesOutput("and", Consts.TokenTypes.Operator, "and");
+            LexerAssertions.AssertInputProducesOutput(
+                "and", 
+                [new Token(Consts.TokenTypes.Operator, "and")]);
         }
 
         [Test]
         public void HandlesIdentifiers()
         {
-            LexerAssertions.AssertInputProducesOutput("asdf", Consts.TokenTypes.Identifier, "asdf");
+            LexerAssertions.AssertInputProducesOutput(
+                "asdf", 
+                [new Token(Consts.TokenTypes.Identifier, "asdf")]);
         }
     }
 
@@ -93,19 +115,25 @@ public static class LexerTests
         [Test]
         public void HandlesSingleCharacterOperators()
         {
-            LexerAssertions.AssertInputProducesOutput("+", Consts.TokenTypes.Operator, "+");
+            LexerAssertions.AssertInputProducesOutput(
+                "+", 
+                [new Token(Consts.TokenTypes.Operator, "+")]);
         }
         
         [Test]
         public void HandlesDoubleCharacterOperators()
         {
-            LexerAssertions.AssertInputProducesOutput("**", Consts.TokenTypes.Operator, "**");
+            LexerAssertions.AssertInputProducesOutput(
+                "**", 
+                [new Token(Consts.TokenTypes.Operator, "**")]);
         }
         
         [Test]
         public void HandlesTripleCharacterOperators()
         {
-            LexerAssertions.AssertInputProducesOutput("not", Consts.TokenTypes.Operator, "not");
+            LexerAssertions.AssertInputProducesOutput(
+                "not", 
+                [new Token(Consts.TokenTypes.Operator, "not")]);
         }
         
         [Test]
@@ -117,7 +145,7 @@ public static class LexerTests
                 new(Consts.TokenTypes.Operator, "is not"),
                 new(Consts.TokenTypes.Identifier, "y"),
             };
-            LexerAssertions.AssertInputProducesOutputList("x is not y", expected);
+            LexerAssertions.AssertInputProducesOutput("x is not y", expected);
         }
         
         [Test]
@@ -129,7 +157,7 @@ public static class LexerTests
                 new(Consts.TokenTypes.Operator, "not in"),
                 new(Consts.TokenTypes.Identifier, "y"),
             };
-            LexerAssertions.AssertInputProducesOutputList("x not in y", expected);
+            LexerAssertions.AssertInputProducesOutput("x not in y", expected);
         }
     }
     
@@ -139,19 +167,25 @@ public static class LexerTests
         [Test]
         public void HandlesSingleCharacterOperators()
         {
-            LexerAssertions.AssertInputProducesOutput("=", Consts.TokenTypes.Assignment, "=");
+            LexerAssertions.AssertInputProducesOutput(
+                "=", 
+                [new Token(Consts.TokenTypes.Assignment, "=")]);
         }
         
         [Test]
         public void HandlesDoubleCharacterOperators()
         {
-            LexerAssertions.AssertInputProducesOutput("*=", Consts.TokenTypes.Assignment, "*=");
+            LexerAssertions.AssertInputProducesOutput(
+                "*=", 
+                [new Token(Consts.TokenTypes.Assignment, "*=")]);
         }
         
         [Test]
         public void HandlesTripleCharacterOperators()
         {
-            LexerAssertions.AssertInputProducesOutput("**=", Consts.TokenTypes.Assignment, "**=");
+            LexerAssertions.AssertInputProducesOutput(
+                "**=", 
+                [new Token(Consts.TokenTypes.Assignment, "**=")]);
         }
     }
 
@@ -161,7 +195,9 @@ public static class LexerTests
         [Test]
         public void IgnoresComments()
         {
-            LexerAssertions.AssertInputProducesOutput("= #asdfadsf", Consts.TokenTypes.Assignment, "=");
+            LexerAssertions.AssertInputProducesOutput(
+                "= #asdfadsf", 
+                [new Token(Consts.TokenTypes.Assignment, "=")]);
         }
     }
     
@@ -178,7 +214,7 @@ public static class LexerTests
                 new(Consts.TokenTypes.Newline, "3"),
                 new(Consts.TokenTypes.Identifier, "asdf")
             };
-            LexerAssertions.AssertInputProducesOutputList("asdf\n\t\t    asdf", expected);
+            LexerAssertions.AssertInputProducesOutput("asdf\n\t\t    asdf", expected);
         }
 
         [Test]
@@ -191,7 +227,7 @@ public static class LexerTests
                 new(Consts.TokenTypes.Newline, "2"),
                 new(Consts.TokenTypes.Identifier, "asdf")
             };
-            LexerAssertions.AssertInputProducesOutputList("asdf\n\t\t   asdf", expected);
+            LexerAssertions.AssertInputProducesOutput("asdf\n\t\t   asdf", expected);
         }
         
         [Test]
@@ -203,7 +239,7 @@ public static class LexerTests
                 new(Consts.TokenTypes.Newline, "0"),
                 new(Consts.TokenTypes.Identifier, "asdf")
             };
-            LexerAssertions.AssertInputProducesOutputList("asdf\nasdf", expected);
+            LexerAssertions.AssertInputProducesOutput("asdf\nasdf", expected);
         }
     }
 }
