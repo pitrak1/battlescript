@@ -11,25 +11,36 @@ public static partial class InstructionTests
         [Test]
         public void HandlesSimpleDefinition()
         {
+            var lexer = new Lexer("def func():");
+            var lexerResult = lexer.Run();
+            
             var expected = new FunctionInstruction(
                 name: "func"
             );
-            ParserAssertions.AssertInputProducesInstruction("def func():", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
         public void HandlesDefinitionWithPositionalArgument()
         {
+            var lexer = new Lexer("def func(asdf):");
+            var lexerResult = lexer.Run();
+            
             var expected = new FunctionInstruction(
                 name: "func",
                 parameters: [new VariableInstruction("asdf")]
             );
-            ParserAssertions.AssertInputProducesInstruction("def func(asdf):", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
         public void HandlesDefinitionWithMultiplePositionalArguments()
         {
+            var lexer = new Lexer("def func(asdf, qwer):");
+            var lexerResult = lexer.Run();
+            
             var expected = new FunctionInstruction(
                 name: "func",
                 parameters: 
@@ -38,7 +49,8 @@ public static partial class InstructionTests
                     new VariableInstruction("qwer")
                 ]
             );
-            ParserAssertions.AssertInputProducesInstruction("def func(asdf, qwer):", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
     }
 }

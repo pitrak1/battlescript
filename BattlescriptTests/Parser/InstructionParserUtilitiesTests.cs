@@ -157,10 +157,9 @@ public static class ParserUtilitiesTests
             Assert.That(parsed.Count, Is.EqualTo(3));
 
             Assert.That(parsed.Entries.Count, Is.EqualTo(1));
-            
-            Assertions.AssertTokenListEqual(parsed.Entries[0], [
-                new Token(Consts.TokenTypes.Number, "1")
-            ]);
+
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Number, "1") };
+            Assert.That(parsed.Entries[0], Is.EquivalentTo(expected));
         }
 
         [Test]
@@ -172,15 +171,12 @@ public static class ParserUtilitiesTests
                 ParserUtilities.ParseTokensUntilMatchingSeparator(tokens, [","]);
             Assert.That(parsed.Count, Is.EqualTo(5));
 
-            Assert.That(parsed.Entries.Count, Is.EqualTo(2));
-            
-            Assertions.AssertTokenListEqual(parsed.Entries[0], [
-                new Token(Consts.TokenTypes.Number, "1")
-            ]);
-            
-            Assertions.AssertTokenListEqual(parsed.Entries[1], [
-                new Token(Consts.TokenTypes.Number, "2")
-            ]);
+            var expected = new List<List<Token>>()
+            {
+                new List<Token>() { new Token(Consts.TokenTypes.Number, "1") },
+                new List<Token>() { new Token(Consts.TokenTypes.Number, "2") },
+            };
+            Assert.That(parsed.Entries, Is.EquivalentTo(expected));
         }
 
         [Test]
@@ -193,19 +189,23 @@ public static class ParserUtilitiesTests
 
             Assert.That(parsed.Count, Is.EqualTo(9));
 
-            Assert.That(parsed.Entries.Count, Is.EqualTo(2));
+            var expected = new List<List<Token>>()
+            {
+                new List<Token>()
+                {
+                    new Token(Consts.TokenTypes.Separator, "["),
+                    new Token(Consts.TokenTypes.Number, "1"),
+                    new Token(Consts.TokenTypes.Separator, "]")
+                },
+                new List<Token>()
+                {
+                    new Token(Consts.TokenTypes.Separator, "["),
+                    new Token(Consts.TokenTypes.Number, "2"),
+                    new Token(Consts.TokenTypes.Separator, "]")
+                }
+            };
 
-            Assertions.AssertTokenListEqual(parsed.Entries[0], [
-                new Token(Consts.TokenTypes.Separator, "["),
-                new Token(Consts.TokenTypes.Number, "1"),
-                new Token(Consts.TokenTypes.Separator, "]")
-            ]);
-
-            Assertions.AssertTokenListEqual(parsed.Entries[1], [
-                new Token(Consts.TokenTypes.Separator, "["),
-                new Token(Consts.TokenTypes.Number, "2"),
-                new Token(Consts.TokenTypes.Separator, "]")
-            ]);
+            Assert.That(parsed.Entries, Is.EquivalentTo(expected));
         }
     }
 }

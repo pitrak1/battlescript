@@ -11,8 +11,12 @@ public static partial class InstructionTests
         [Test]
         public void ProperlyParsesCondition()
         {
+            var lexer = new Lexer("while True:");
+            var lexerResult = lexer.Run();
+            
             var expected = new WhileInstruction(new BooleanInstruction(true));
-            ParserAssertions.AssertInputProducesInstruction("while True:", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
     }
 }

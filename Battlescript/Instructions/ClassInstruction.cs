@@ -31,12 +31,12 @@ public class ClassInstruction : Instruction, IEquatable<ClassInstruction>
         Variable? context = null, 
         Variable? objectContext = null)
     {
-        List<Variable> superclasses = new List<Variable>();
+        List<ClassVariable> superclasses = new List<ClassVariable>();
         if (Superclasses.Count > 0)
         {
             foreach (var superclassInstruction in Superclasses)
             {
-                superclasses.Add(superclassInstruction.Interpret(memory));
+                superclasses.Add(superclassInstruction.Interpret(memory) as ClassVariable);
             }
         }
         
@@ -48,7 +48,7 @@ public class ClassInstruction : Instruction, IEquatable<ClassInstruction>
         }
 
         var classScope = memory.RemoveScope();
-        var classVariable = new ClassVariable(classScope);
+        var classVariable = new ClassVariable(classScope, superclasses);
         memory.SetVariable(new VariableInstruction(Name), classVariable);
         return classVariable;
     }

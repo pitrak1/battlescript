@@ -11,33 +11,37 @@ public static class LexerTests
         [Test]
         public void HandlesIntegers()
         {
-            LexerAssertions.AssertInputProducesOutput(
-                "213", 
-                [new Token(Consts.TokenTypes.Number, "213")]);
+            var lexer = new Lexer("213");
+            var result = lexer.Run();
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Number, "213") };
+            Assert.That(result, Is.EquivalentTo(expected));
         }
 
         [Test]
         public void HandlesFloats()
         {
-            LexerAssertions.AssertInputProducesOutput(
-                "1.23", 
-                [new Token(Consts.TokenTypes.Number, "1.23")]);
+            var lexer = new Lexer("1.23");
+            var result = lexer.Run();
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Number, "1.23") };
+            Assert.That(result, Is.EquivalentTo(expected));
         }
         
         [Test]
         public void HandlesFloatsWithStartingDecimal()
         {
-            LexerAssertions.AssertInputProducesOutput(
-                ".23", 
-                [new Token(Consts.TokenTypes.Number, ".23")]);
+            var lexer = new Lexer(".23");
+            var result = lexer.Run();
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Number, ".23") };
+            Assert.That(result, Is.EquivalentTo(expected));
         }
         
         [Test]
         public void HandlesNegatives()
         {
-            LexerAssertions.AssertInputProducesOutput(
-                "-213",
-                [new Token( Consts.TokenTypes.Number, "-213")]);
+            var lexer = new Lexer("-213");
+            var result = lexer.Run();
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Number, "-213") };
+            Assert.That(result, Is.EquivalentTo(expected));
         }
     }
 
@@ -47,17 +51,19 @@ public static class LexerTests
         [Test]
         public void HandlesDoubleQuotes()
         {
-            LexerAssertions.AssertInputProducesOutput(
-                "\"asdf\"", 
-                [new Token(Consts.TokenTypes.String, "asdf")]);
+            var lexer = new Lexer("\"asdf\"");
+            var result = lexer.Run();
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.String, "asdf") };
+            Assert.That(result, Is.EquivalentTo(expected));
         }
 
         [Test]
         public void HandlesSingleQuotes()
         {
-            LexerAssertions.AssertInputProducesOutput(
-                "'asdf'", 
-                [new Token(Consts.TokenTypes.String, "asdf")]);
+            var lexer = new Lexer("'asdf'");
+            var result = lexer.Run();
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.String, "asdf") };
+            Assert.That(result, Is.EquivalentTo(expected));
         }
     }
 
@@ -67,9 +73,10 @@ public static class LexerTests
         [Test]
         public void HandlesSeparators()
         {
-            LexerAssertions.AssertInputProducesOutput(
-                ",", 
-                [new Token(Consts.TokenTypes.Separator, ",")]);
+            var lexer = new Lexer(",");
+            var result = lexer.Run();
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Separator, ",") };
+            Assert.That(result, Is.EquivalentTo(expected));
         }
     }
 
@@ -79,33 +86,37 @@ public static class LexerTests
         [Test]
         public void HandlesKeywords()
         {
-            LexerAssertions.AssertInputProducesOutput(
-                "async", 
-                [new Token(Consts.TokenTypes.Keyword, "async")]);
+            var lexer = new Lexer("async");
+            var result = lexer.Run();
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Keyword, "async") };
+            Assert.That(result, Is.EquivalentTo(expected));
         }
 
         [Test]
         public void HandlesBooleans()
         {
-            LexerAssertions.AssertInputProducesOutput(
-                "True", 
-                [new Token(Consts.TokenTypes.Boolean, "True")]);
+            var lexer = new Lexer("True");
+            var result = lexer.Run();
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Boolean, "True") };
+            Assert.That(result, Is.EquivalentTo(expected));
         }
 
         [Test]
         public void HandlesWordOperators()
         {
-            LexerAssertions.AssertInputProducesOutput(
-                "and", 
-                [new Token(Consts.TokenTypes.Operator, "and")]);
+            var lexer = new Lexer("and");
+            var result = lexer.Run();
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Operator, "and") };
+            Assert.That(result, Is.EquivalentTo(expected));
         }
 
         [Test]
         public void HandlesIdentifiers()
         {
-            LexerAssertions.AssertInputProducesOutput(
-                "asdf", 
-                [new Token(Consts.TokenTypes.Identifier, "asdf")]);
+            var lexer = new Lexer("asdf");
+            var result = lexer.Run();
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Identifier, "asdf") };
+            Assert.That(result, Is.EquivalentTo(expected));
         }
     }
 
@@ -115,49 +126,56 @@ public static class LexerTests
         [Test]
         public void HandlesSingleCharacterOperators()
         {
-            LexerAssertions.AssertInputProducesOutput(
-                "+", 
-                [new Token(Consts.TokenTypes.Operator, "+")]);
+            var lexer = new Lexer("+");
+            var result = lexer.Run();
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Operator, "+") };
+            Assert.That(result, Is.EquivalentTo(expected));
         }
         
         [Test]
         public void HandlesDoubleCharacterOperators()
         {
-            LexerAssertions.AssertInputProducesOutput(
-                "**", 
-                [new Token(Consts.TokenTypes.Operator, "**")]);
+            var lexer = new Lexer("**");
+            var result = lexer.Run();
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Operator, "**") };
+            Assert.That(result, Is.EquivalentTo(expected));
         }
         
         [Test]
         public void HandlesTripleCharacterOperators()
         {
-            LexerAssertions.AssertInputProducesOutput(
-                "not", 
-                [new Token(Consts.TokenTypes.Operator, "not")]);
+            var lexer = new Lexer("not");
+            var result = lexer.Run();
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Operator, "not") };
+            Assert.That(result, Is.EquivalentTo(expected));
         }
         
         [Test]
         public void HandlesIsNotOperator()
         {
+            var lexer = new Lexer("x is not y");
+            var result = lexer.Run();
             var expected = new List<Token>()
             {
                 new(Consts.TokenTypes.Identifier, "x"),
                 new(Consts.TokenTypes.Operator, "is not"),
                 new(Consts.TokenTypes.Identifier, "y"),
             };
-            LexerAssertions.AssertInputProducesOutput("x is not y", expected);
+            Assert.That(result, Is.EquivalentTo(expected));
         }
         
         [Test]
         public void HandlesNotInOperator()
         {
+            var lexer = new Lexer("x not in y");
+            var result = lexer.Run();
             var expected = new List<Token>()
             {
                 new(Consts.TokenTypes.Identifier, "x"),
                 new(Consts.TokenTypes.Operator, "not in"),
                 new(Consts.TokenTypes.Identifier, "y"),
             };
-            LexerAssertions.AssertInputProducesOutput("x not in y", expected);
+            Assert.That(result, Is.EquivalentTo(expected));
         }
     }
     
@@ -167,25 +185,28 @@ public static class LexerTests
         [Test]
         public void HandlesSingleCharacterOperators()
         {
-            LexerAssertions.AssertInputProducesOutput(
-                "=", 
-                [new Token(Consts.TokenTypes.Assignment, "=")]);
+            var lexer = new Lexer("=");
+            var result = lexer.Run();
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Assignment, "=") };
+            Assert.That(result, Is.EquivalentTo(expected));
         }
         
         [Test]
         public void HandlesDoubleCharacterOperators()
         {
-            LexerAssertions.AssertInputProducesOutput(
-                "*=", 
-                [new Token(Consts.TokenTypes.Assignment, "*=")]);
+            var lexer = new Lexer("*=");
+            var result = lexer.Run();
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Assignment, "*=") };
+            Assert.That(result, Is.EquivalentTo(expected));
         }
         
         [Test]
         public void HandlesTripleCharacterOperators()
         {
-            LexerAssertions.AssertInputProducesOutput(
-                "**=", 
-                [new Token(Consts.TokenTypes.Assignment, "**=")]);
+            var lexer = new Lexer("**=");
+            var result = lexer.Run();
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Assignment, "**=") };
+            Assert.That(result, Is.EquivalentTo(expected));
         }
     }
 
@@ -195,9 +216,10 @@ public static class LexerTests
         [Test]
         public void IgnoresComments()
         {
-            LexerAssertions.AssertInputProducesOutput(
-                "= #asdfadsf", 
-                [new Token(Consts.TokenTypes.Assignment, "=")]);
+            var lexer = new Lexer("= #asdfadsf");
+            var result = lexer.Run();
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Assignment, "=") };
+            Assert.That(result, Is.EquivalentTo(expected));
         }
     }
     
@@ -208,38 +230,44 @@ public static class LexerTests
         public void DetectsNewLineAndIndents()
         {
             // This has four spaces in addition to two tabs, meaning it should detect three tabs
+            var lexer = new Lexer("asdf\n\t\t    asdf");
+            var result = lexer.Run();
             var expected = new List<Token>()
             {
                 new(Consts.TokenTypes.Identifier, "asdf"),
                 new(Consts.TokenTypes.Newline, "3"),
                 new(Consts.TokenTypes.Identifier, "asdf")
             };
-            LexerAssertions.AssertInputProducesOutput("asdf\n\t\t    asdf", expected);
+            Assert.That(result, Is.EquivalentTo(expected));
         }
 
         [Test]
         public void IgnoresTrailingSpaces()
         {
             // This has three spaces
+            var lexer = new Lexer("asdf\n\t\t   asdf");
+            var result = lexer.Run();
             var expected = new List<Token>()
             {
                 new(Consts.TokenTypes.Identifier, "asdf"),
                 new(Consts.TokenTypes.Newline, "2"),
                 new(Consts.TokenTypes.Identifier, "asdf")
             };
-            LexerAssertions.AssertInputProducesOutput("asdf\n\t\t   asdf", expected);
+            Assert.That(result, Is.EquivalentTo(expected));
         }
         
         [Test]
         public void HandlesNoIndent()
         {
+            var lexer = new Lexer("asdf\nasdf");
+            var result = lexer.Run();
             var expected = new List<Token>()
             {
                 new(Consts.TokenTypes.Identifier, "asdf"),
                 new(Consts.TokenTypes.Newline, "0"),
                 new(Consts.TokenTypes.Identifier, "asdf")
             };
-            LexerAssertions.AssertInputProducesOutput("asdf\nasdf", expected);
+            Assert.That(result, Is.EquivalentTo(expected));
         }
     }
 }

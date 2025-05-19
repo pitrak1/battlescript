@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class ClassVariable (Dictionary<string, Variable>? values, List<ClassVariable>? superclasses = null) : Variable
+public class ClassVariable (Dictionary<string, Variable>? values, List<ClassVariable>? superclasses = null) : Variable, IEquatable<ClassVariable>
 {
     public Dictionary<string, Variable> Values { get; set; } = values ?? [];
     public List<ClassVariable> SuperClasses { get; set; } = superclasses ?? [];
@@ -139,4 +139,18 @@ public class ClassVariable (Dictionary<string, Variable>? values, List<ClassVari
 
         return addedScopesCount + 1;
     }
+    
+    // All the code below is to override equality
+    public override bool Equals(object obj) => Equals(obj as ClassVariable);
+    public bool Equals(ClassVariable? variable)
+    {
+        if (variable is null) return false;
+        if (ReferenceEquals(this, variable)) return true;
+        if (GetType() != variable.GetType()) return false;
+        
+        var valuesEqual = Values.OrderBy(kvp => kvp.Key).SequenceEqual(variable.Values.OrderBy(kvp => kvp.Key));
+        return SuperClasses.SequenceEqual(variable.SuperClasses) && valuesEqual;
+    }
+    
+    public override int GetHashCode() => HashCode.Combine(Values, SuperClasses);
 }

@@ -11,6 +11,9 @@ public static partial class InstructionTests
         [Test]
         public void AllowsNumbersToBeUsedAsKeys()
         {
+            var lexer = new Lexer("{4: 5, 6: 'asdf'}");
+            var lexerResult = lexer.Run();
+            
             var expected = new DictionaryInstruction(
                 [
                     new KeyValuePairInstruction(
@@ -23,12 +26,16 @@ public static partial class InstructionTests
                     )
                 ]
             );
-            ParserAssertions.AssertInputProducesInstruction("{4: 5, 6: 'asdf'}", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
         public void AllowsStringsToBeUsedAsKeys()
         {
+            var lexer = new Lexer("{'asdf': 5, 'qwer': 'asdf'}");
+            var lexerResult = lexer.Run();
+            
             var expected = new DictionaryInstruction(
                 [
                     new KeyValuePairInstruction(
@@ -41,7 +48,8 @@ public static partial class InstructionTests
                     )
                 ]
             );
-            ParserAssertions.AssertInputProducesInstruction("{'asdf': 5, 'qwer': 'asdf'}", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
     }
 
@@ -51,6 +59,7 @@ public static partial class InstructionTests
         [Test]
         public void HandlesSimpleValues()
         {
+            var result = Runner.Run("x = {'asdf': 5, 'qwer': 'asdf'}");
             var expected = new Dictionary<string, Variable>()
             {
                 {
@@ -60,14 +69,13 @@ public static partial class InstructionTests
                     ])
                 }
             };
-            InterpreterAssertions.AssertInputProducesOutput(
-                "x = {'asdf': 5, 'qwer': 'asdf'}", 
-                [expected]);
+            Assert.That(result[0], Is.EquivalentTo(expected));
         }
         
         [Test]
         public void HandlesExpressionValues()
         {
+            var result = Runner.Run("x = {'asdf': 5 + 6, 'qwer': 3 * 4}");
             var expected = new Dictionary<string, Variable>()
             {
                 {
@@ -77,9 +85,7 @@ public static partial class InstructionTests
                     ])
                 }
             };
-            InterpreterAssertions.AssertInputProducesOutput(
-                "x = {'asdf': 5 + 6, 'qwer': 3 * 4}", 
-                [expected]);
+            Assert.That(result[0], Is.EquivalentTo(expected));
         }
     }
 }

@@ -11,8 +11,12 @@ public static partial class InstructionTests
         [Test]
         public void HandlesSingleQuoteStrings()
         {
+            var lexer = new Lexer("'asdf'");
+            var lexerResult = lexer.Run();
+            
             var expected = new StringInstruction("asdf");
-            ParserAssertions.AssertInputProducesInstruction("'asdf'", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
     }
 }

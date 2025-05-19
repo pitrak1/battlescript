@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class ListVariable(List<Variable>? values = null) : Variable
+public class ListVariable(List<Variable>? values = null) : Variable, IEquatable<ListVariable>
 {
     public List<Variable> Values { get; set; } = values ?? [];
     
@@ -95,4 +95,17 @@ public class ListVariable(List<Variable>? values = null) : Variable
         
         return new ListVariable(Values.GetRange(index, count));
     }
+    
+    // All the code below is to override equality
+    public override bool Equals(object obj) => Equals(obj as ListVariable);
+    public bool Equals(ListVariable? variable)
+    {
+        if (variable is null) return false;
+        if (ReferenceEquals(this, variable)) return true;
+        if (GetType() != variable.GetType()) return false;
+        
+        return Values.SequenceEqual(variable.Values);
+    }
+    
+    public override int GetHashCode() => HashCode.Combine(Values);
 }

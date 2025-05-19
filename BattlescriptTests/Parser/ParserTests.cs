@@ -3,169 +3,164 @@ using Battlescript;
 namespace BattlescriptTests;
 
 [TestFixture]
-public static class ParserTests
+public class ParserTests
 {
-    [TestFixture]
-    public class Basics
+    [Test]
+    public void HandlesSingleInstruction()
     {
-        [Test]
-        public void HandlesSingleInstruction()
+        var lexer = new Lexer("x = 5");
+        var lexerResult = lexer.Run();
+        var parser = new Parser(lexerResult);
+        var parserResult = parser.Run();
+
+        var expected = new List<Instruction>
         {
-            var lexer = new Lexer("x = 5");
-            var lexerResult = lexer.Run();
-            var parser = new Parser(lexerResult);
-            var parserResult = parser.Run();
+            new AssignmentInstruction(
+                operation: "=", 
+                left: new VariableInstruction("x"),
+                right: new NumberInstruction(5)
+            )
+        };
+        Assert.That(parserResult, Is.EqualTo(expected));
+    }
 
-            var expected = new List<Instruction>
-            {
-                new AssignmentInstruction(
-                    operation: "=", 
-                    left: new VariableInstruction("x"),
-                    right: new NumberInstruction(5)
-                )
-            };
-            
-            Assertions.AssertInstructionListEqual(parserResult, expected);
-        }
+    [Test]
+    public void HandlesConditionalInstructionBlocks()
+    {
+        var lexer = new Lexer("if 5 < 6:\n\tx = 5");
+        var lexerResult = lexer.Run();
+        var parser = new Parser(lexerResult);
+        var parserResult = parser.Run();
 
-        [Test]
-        public void HandlesConditionalInstructionBlocks()
+        var expected = new List<Instruction>
         {
-            var lexer = new Lexer("if 5 < 6:\n\tx = 5");
-            var lexerResult = lexer.Run();
-            var parser = new Parser(lexerResult);
-            var parserResult = parser.Run();
-
-            var expected = new List<Instruction>
-            {
-                new IfInstruction(
-                    condition: new OperationInstruction(
-                       operation: "<",
-                       left: new NumberInstruction(5), 
-                       right: new NumberInstruction(6)
-                    ), 
-                    instructions: [
-                        new AssignmentInstruction(
-                            operation: "=",
-                            left: new VariableInstruction("x"),
-                            right: new NumberInstruction(5)
-                        )
-                    ]
-                )
-            };
-            
-            Assertions.AssertInstructionListEqual(parserResult, expected);
-        }
+            new IfInstruction(
+                condition: new OperationInstruction(
+                   operation: "<",
+                   left: new NumberInstruction(5), 
+                   right: new NumberInstruction(6)
+                ), 
+                instructions: [
+                    new AssignmentInstruction(
+                        operation: "=",
+                        left: new VariableInstruction("x"),
+                        right: new NumberInstruction(5)
+                    )
+                ]
+            )
+        };
         
-        [Test]
-        public void HandlesInstructionsBeforeConditionalInstructionBlock()
-        {
-            var lexer = new Lexer("y = 7\nif 5 < 6:\n\tx = 5");
-            var lexerResult = lexer.Run();
-            var parser = new Parser(lexerResult);
-            var parserResult = parser.Run();
+        Assert.That(parserResult, Is.EqualTo(expected));
+    }
+    
+    [Test]
+    public void HandlesInstructionsBeforeConditionalInstructionBlock()
+    {
+        var lexer = new Lexer("y = 7\nif 5 < 6:\n\tx = 5");
+        var lexerResult = lexer.Run();
+        var parser = new Parser(lexerResult);
+        var parserResult = parser.Run();
 
-            var expected = new List<Instruction>
-            {
-                new AssignmentInstruction(
-                    operation: "=",
-                    left: new VariableInstruction("y"),
-                    right: new NumberInstruction(7)
+        var expected = new List<Instruction>
+        {
+            new AssignmentInstruction(
+                operation: "=",
+                left: new VariableInstruction("y"),
+                right: new NumberInstruction(7)
+            ),
+            new IfInstruction(
+                condition: new OperationInstruction(
+                    operation: "<",
+                    left: new NumberInstruction(5), 
+                    right: new NumberInstruction(6)
+                ), 
+                instructions: [
+                    new AssignmentInstruction(
+                        operation: "=",
+                        left: new VariableInstruction("x"),
+                        right: new NumberInstruction(5)
+                    )
+                ]
+            )
+        };
+        
+        Assert.That(parserResult, Is.EquivalentTo(expected));
+    }
+    
+    [Test]
+    public void HandlesInstructionsAfterConditionalInstructionBlock()
+    {
+        var lexer = new Lexer("if 5 < 6:\n\tx = 5\ny = 7");
+        var lexerResult = lexer.Run();
+        var parser = new Parser(lexerResult);
+        var parserResult = parser.Run();
+
+        var expected = new List<Instruction>
+        {
+            new IfInstruction(
+                condition: new OperationInstruction(
+                    operation: "<",
+                    left: new NumberInstruction(5), 
+                    right: new NumberInstruction(6)
                 ),
-                new IfInstruction(
-                    condition: new OperationInstruction(
-                        operation: "<",
-                        left: new NumberInstruction(5), 
-                        right: new NumberInstruction(6)
-                    ), 
-                    instructions: [
-                        new AssignmentInstruction(
-                            operation: "=",
-                            left: new VariableInstruction("x"),
-                            right: new NumberInstruction(5)
-                        )
-                    ]
-                )
-            };
-            
-            Assertions.AssertInstructionListEqual(parserResult, expected);
-        }
+                instructions: [
+                    new AssignmentInstruction(
+                        operation: "=",
+                        left: new VariableInstruction("x"),
+                        right: new NumberInstruction(5)
+                    )
+                ]
+            ),
+            new AssignmentInstruction(
+                operation: "=",
+                left: new VariableInstruction("y"),
+                right: new NumberInstruction(7)
+            )
+        };
         
-        [Test]
-        public void HandlesInstructionsAfterConditionalInstructionBlock()
-        {
-            var lexer = new Lexer("if 5 < 6:\n\tx = 5\ny = 7");
-            var lexerResult = lexer.Run();
-            var parser = new Parser(lexerResult);
-            var parserResult = parser.Run();
+        Assert.That(parserResult, Is.EquivalentTo(expected));
+    }
+    
+    [Test]
+    public void HandlesMultipleLevelReductions()
+    {
+        var lexer = new Lexer("if 5 < 6:\n\tif 5 < 6:\n\t\tx = 6\ny = 7");
+        var lexerResult = lexer.Run();
+        var parser = new Parser(lexerResult);
+        var parserResult = parser.Run();
 
-            var expected = new List<Instruction>
-            {
-                new IfInstruction(
-                    condition: new OperationInstruction(
-                        operation: "<",
-                        left: new NumberInstruction(5), 
-                        right: new NumberInstruction(6)
-                    ),
-                    instructions: [
-                        new AssignmentInstruction(
-                            operation: "=",
-                            left: new VariableInstruction("x"),
-                            right: new NumberInstruction(5)
-                        )
-                    ]
+        var expected = new List<Instruction>
+        {
+            new IfInstruction(
+                condition: new OperationInstruction(
+                    operation: "<",
+                    left: new NumberInstruction(5), 
+                    right: new NumberInstruction(6)
                 ),
-                new AssignmentInstruction(
-                    operation: "=",
-                    left: new VariableInstruction("y"),
-                    right: new NumberInstruction(7)
-                )
-            };
-            
-            Assertions.AssertInstructionListEqual(parserResult, expected);
-        }
-        
-        [Test]
-        public void HandlesMultipleLevelReductions()
-        {
-            var lexer = new Lexer("if 5 < 6:\n\tif 5 < 6:\n\t\tx = 6\ny = 7");
-            var lexerResult = lexer.Run();
-            var parser = new Parser(lexerResult);
-            var parserResult = parser.Run();
-
-            var expected = new List<Instruction>
-            {
-                new IfInstruction(
-                    condition: new OperationInstruction(
-                        operation: "<",
-                        left: new NumberInstruction(5), 
-                        right: new NumberInstruction(6)
-                    ),
-                    instructions: [
-                        new IfInstruction(
-                            condition: new OperationInstruction(
-                                operation: "<",
-                                left: new NumberInstruction(5), 
+                instructions: [
+                    new IfInstruction(
+                        condition: new OperationInstruction(
+                            operation: "<",
+                            left: new NumberInstruction(5), 
+                            right: new NumberInstruction(6)
+                        ),
+                        instructions: [
+                            new AssignmentInstruction(
+                                operation: "=",
+                                left: new VariableInstruction("x"),
                                 right: new NumberInstruction(6)
-                            ),
-                            instructions: [
-                                new AssignmentInstruction(
-                                    operation: "=",
-                                    left: new VariableInstruction("x"),
-                                    right: new NumberInstruction(6)
-                                )
-                            ]
-                        )
-                    ]
-                ),
-                new AssignmentInstruction(
-                    operation: "=",
-                    left: new VariableInstruction("y"),
-                    right: new NumberInstruction(7)
-                )
-            };
-            
-            Assertions.AssertInstructionListEqual(parserResult, expected);
-        }
+                            )
+                        ]
+                    )
+                ]
+            ),
+            new AssignmentInstruction(
+                operation: "=",
+                left: new VariableInstruction("y"),
+                right: new NumberInstruction(7)
+            )
+        };
+        
+        Assert.That(parserResult, Is.EquivalentTo(expected));
     }
 }

@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable classVariable) : Variable
+public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable classVariable) : Variable, IEquatable<ObjectVariable>
 {
     public Dictionary<string, Variable> Values { get; set; } = values ?? [];
     public ClassVariable ClassVariable { get; set; } = classVariable;
@@ -74,4 +74,18 @@ public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable
             return ClassVariable.GetItem(memory, new SquareBracketsInstruction([new StringInstruction(item)]), this);
         }
     }
+    
+    // All the code below is to override equality
+    public override bool Equals(object obj) => Equals(obj as ObjectVariable);
+    public bool Equals(ObjectVariable? variable)
+    {
+        if (variable is null) return false;
+        if (ReferenceEquals(this, variable)) return true;
+        if (GetType() != variable.GetType()) return false;
+        
+        var valuesEqual = Values.OrderBy(kvp => kvp.Key).SequenceEqual(variable.Values.OrderBy(kvp => kvp.Key));
+        return valuesEqual && ClassVariable.Equals(variable.ClassVariable);
+    }
+    
+    public override int GetHashCode() => HashCode.Combine(Values, ClassVariable);
 }

@@ -11,13 +11,17 @@ public static partial class InstructionTests
         [Test]
         public void HandlesSimpleValueLists()
         {
+            var lexer = new Lexer("(4, 'asdf')");
+            var lexerResult = lexer.Run();
+            
             var expected = new ParensInstruction(
                 [
                     new NumberInstruction(4),
                     new StringInstruction("asdf")
                 ]
             );
-            ParserAssertions.AssertInputProducesInstruction("(4, 'asdf')", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
     }
 }

@@ -11,17 +11,24 @@ public static partial class InstructionTests
         [Test]
         public void HandlesBinaryOperations()
         {
+            var lexer = new Lexer("5 + 6");
+            var lexerResult = lexer.Run();
+            
             var expected = new OperationInstruction(
                 operation: "+",
                 left: new NumberInstruction(5.0),
                 right: new NumberInstruction(6.0)
             );
-            ParserAssertions.AssertInputProducesInstruction("5 + 6", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
         public void HandlesBinaryOperationsWithExpressions()
         {
+            var lexer = new Lexer("x.i + 6");
+            var lexerResult = lexer.Run();
+            
             var expected = new OperationInstruction(
                 operation: "+",
                 left: new VariableInstruction(
@@ -30,17 +37,22 @@ public static partial class InstructionTests
                         [new StringInstruction("i")])),
                 right: new NumberInstruction(6.0)
             );
-            ParserAssertions.AssertInputProducesInstruction("x.i + 6", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
         public void HandlesUnaryOperators()
         {
+            var lexer = new Lexer("~6");
+            var lexerResult = lexer.Run();
+            
             var expected = new OperationInstruction(
                 operation: "~",
                 right: new NumberInstruction(6.0)
             );
-            ParserAssertions.AssertInputProducesInstruction("~6", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
     }
 }

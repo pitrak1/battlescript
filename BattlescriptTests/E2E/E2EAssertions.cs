@@ -14,6 +14,6 @@ public class E2EAssertions
         var interpreterResult = interpreter.Run();
 
         Assert.That(interpreterResult[0], Contains.Key(name));
-        InterpreterAssertions.AssertVariableEqual(interpreterResult[0][name], expected);
+        Assert.That(interpreterResult[0][name], Is.EqualTo(expected));
     }
 }

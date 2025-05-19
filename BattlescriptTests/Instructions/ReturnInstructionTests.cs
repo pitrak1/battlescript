@@ -11,8 +11,12 @@ public static partial class InstructionTests
         [Test]
         public void HandlesSimpleValue()
         {
+            var lexer = new Lexer("return 4");
+            var lexerResult = lexer.Run();
+            
             var expected = new ReturnInstruction(new NumberInstruction(4));
-            ParserAssertions.AssertInputProducesInstruction("return 4", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
     }
 }

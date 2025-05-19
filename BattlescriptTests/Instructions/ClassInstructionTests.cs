@@ -11,18 +11,26 @@ public static partial class InstructionTests
         [Test]
         public void HandlesBasicClassDefinition()
         {
+            var lexer = new Lexer("class MyClass:");
+            var lexerResult = lexer.Run();
+            
             var expected = new ClassInstruction("MyClass");
-            ParserAssertions.AssertInputProducesInstruction("class MyClass:", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
         public void HandlesClassDefinitionWithInheritance()
         {
+            var lexer = new Lexer("class MyClass(asdf):");
+            var lexerResult = lexer.Run();
+            
             var expected = new ClassInstruction(
                 "MyClass",
                 [new VariableInstruction("asdf")]
             );
-            ParserAssertions.AssertInputProducesInstruction("class MyClass(asdf):", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
     }
 
@@ -32,6 +40,7 @@ public static partial class InstructionTests
         [Test]
         public void HandlesBasicClassDefinition()
         {
+            var result = Runner.Run("class MyClass:\n\tx = 1");
             var expected = new Dictionary<string, Variable>()
             {
                 {
@@ -41,12 +50,19 @@ public static partial class InstructionTests
                     })
                 }
             };
-            InterpreterAssertions.AssertInputProducesOutput("class MyClass:\n\tx = 1", [expected]);
+            Assert.That(result.First(), Is.EquivalentTo(expected));
         }
         
         [Test]
         public void HandlesClassDefinitionWithInheritance()
         {
+            var result = Runner.Run(@"
+class asdf():
+    x = 1
+
+class qwer(asdf):
+    y = 2
+");
             var asdf = new ClassVariable(new Dictionary<string, Variable>()
             {
                 { "x", new NumberVariable(1.0) }
@@ -62,18 +78,23 @@ public static partial class InstructionTests
                 {"asdf", asdf},
                 {"qwer", qwer}
             };
-            InterpreterAssertions.AssertInputProducesOutput(@"
-class asdf:
-    x = 1
-
-class qwer(asdf):
-    y = 2
-", [expected]);
+            Assert.That(result.First(), Is.EquivalentTo(expected));
         }
         
         [Test]
         public void HandlesClassDefinitionWithMultipleInheritance()
         {
+            var result = Runner.Run(@"
+class asdf:
+    x = 1
+
+class qwer:
+    y = 2
+
+class zxcv(asdf, qwer):
+    z = 3
+");
+            
             var asdf = new ClassVariable(new Dictionary<string, Variable>()
             {
                 { "x", new NumberVariable(1.0) }
@@ -95,16 +116,7 @@ class qwer(asdf):
                 {"qwer", qwer},
                 {"zxcv", zxcv}
             };
-            InterpreterAssertions.AssertInputProducesOutput(@"
-class asdf:
-    x = 1
-
-class qwer:
-    y = 2
-
-class zxcv(asdf, qwer):
-    z = 3
-", [expected]);
+            Assert.That(result.First(), Is.EquivalentTo(expected));
         }
     }
 }

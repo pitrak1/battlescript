@@ -11,8 +11,12 @@ public static partial class InstructionTests
         [Test]
         public void HandlesSimpleBooleanParsing()
         {
+            var lexer = new Lexer("False");
+            var lexerResult = lexer.Run();
+            
             var expected = new BooleanInstruction(false);
-            ParserAssertions.AssertInputProducesInstruction("False", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
     }
     
@@ -22,11 +26,12 @@ public static partial class InstructionTests
         [Test]
         public void ReturnsNewBooleanVariable()
         {
+            var result = Runner.Run("x = False");
             var expected = new Dictionary<string, Variable>
             {
                 { "x", new BooleanVariable(false) }
             };
-            InterpreterAssertions.AssertInputProducesOutput("x = False", [expected]);
+            Assert.That(result.First(), Is.EquivalentTo(expected));
         }
     }
 }

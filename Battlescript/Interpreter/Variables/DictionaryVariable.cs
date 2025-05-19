@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class DictionaryVariable(List<KeyValuePairVariable>? values): Variable
+public class DictionaryVariable(List<KeyValuePairVariable>? values): Variable, IEquatable<DictionaryVariable>
 { 
     public List<KeyValuePairVariable> Values { get; set; } = values ?? [];
     
@@ -62,4 +62,16 @@ public class DictionaryVariable(List<KeyValuePairVariable>? values): Variable
         return null;
     }
     
+    // All the code below is to override equality
+    public override bool Equals(object obj) => Equals(obj as DictionaryVariable);
+    public bool Equals(DictionaryVariable? variable)
+    {
+        if (variable is null) return false;
+        if (ReferenceEquals(this, variable)) return true;
+        if (GetType() != variable.GetType()) return false;
+        
+        return Values.SequenceEqual(variable.Values);
+    }
+    
+    public override int GetHashCode() => HashCode.Combine(Values);
 }

@@ -11,12 +11,16 @@ public static partial class InstructionTests
         [Test]
         public void HandlesSimpleAssignments()
         {
+            var lexer = new Lexer("x = 6");
+            var lexerResult = lexer.Run();
+            
             var expected = new AssignmentInstruction(
                 operation: "=",
                 left: new VariableInstruction("x"),
                 right: new NumberInstruction(6.0)
             );
-            ParserAssertions.AssertInputProducesInstruction("x = 6", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
     }
     
@@ -26,28 +30,30 @@ public static partial class InstructionTests
         [Test]
         public void HandlesSimpleAssignments()
         {
+            var result = Runner.Run("x = 6");
             var expected = new Dictionary<string, Variable>
             {
                 { "x", new NumberVariable(6.0) }
             };
-            InterpreterAssertions.AssertInputProducesOutput("x = 6", [expected]);
+            Assert.That(result.First(), Is.EquivalentTo(expected));
         }
         
         [Test]
         public void HandlesAssignmentOperators()
         {
+            var result = Runner.Run("x = 6\nx += 2");
             var expected = new Dictionary<string, Variable>
             {
                 { "x", new NumberVariable(8.0) }
             };
-            InterpreterAssertions.AssertInputProducesOutput("x = 6\nx += 2", [expected]);
+            Assert.That(result.First(), Is.EquivalentTo(expected));
         }
 
         [Test]
         public void ReturnsAssignedVariable()
         {
             var scopes = Runner.Run("x = 6");
-            InterpreterAssertions.AssertVariableEqual(scopes.First()["x"], new NumberVariable(6.0));
+            Assert.That(scopes.First()["x"], Is.EqualTo(new NumberVariable(6.0)));
         }
 
         [Test]

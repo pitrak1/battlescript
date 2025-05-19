@@ -11,6 +11,9 @@ public static partial class InstructionTests
         [Test]
         public void HandlesArrayDefinition()
         {
+            var lexer = new Lexer("[4, 'asdf']");
+            var lexerResult = lexer.Run();
+            
             var expected = new SquareBracketsInstruction(
                 values:
                 [
@@ -18,22 +21,30 @@ public static partial class InstructionTests
                     new StringInstruction("asdf")
                 ]
             );
-            ParserAssertions.AssertInputProducesInstruction("[4, 'asdf']", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
         public void HandlesIndex()
         {
+            var lexer = new Lexer("x[4]");
+            var lexerResult = lexer.Run();
+            
             var expected = new VariableInstruction(
                 name: "x",
                 next: new SquareBracketsInstruction([new NumberInstruction(4)])
             );
-            ParserAssertions.AssertInputProducesInstruction("x[4]", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
         public void HandlesStackedIndexes()
         {
+            var lexer = new Lexer("x[4][5]");
+            var lexerResult = lexer.Run();
+            
             var expected = new VariableInstruction(
                 name: "x",
                 next: new SquareBracketsInstruction(
@@ -41,12 +52,16 @@ public static partial class InstructionTests
                     next: new SquareBracketsInstruction([new NumberInstruction(5)])
                 )
             );
-            ParserAssertions.AssertInputProducesInstruction("x[4][5]", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
         public void HandlesRangeIndexes()
         {
+            var lexer = new Lexer("x[4:5]");
+            var lexerResult = lexer.Run();
+            
             var expected = new VariableInstruction(
                 name: "x",
                 next: new SquareBracketsInstruction(
@@ -58,24 +73,30 @@ public static partial class InstructionTests
                     ]
                 )
             );
-            ParserAssertions.AssertInputProducesInstruction("x[4:5]", expected);
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
         public void HandlesMembers()
         { 
+            var lexer = new Lexer("asdf.asdf");
+            var lexerResult = lexer.Run();
+            
             var expected = new VariableInstruction(
                 name: "asdf",
                 next: new SquareBracketsInstruction(
                     [new StringInstruction("asdf")]
                 )
             );
-            ParserAssertions.AssertInputProducesInstruction("asdf.asdf", expected);
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
 
         [Test]
         public void HandlesExpressionIndexing()
         {
+            var lexer = new Lexer("asdf[1 + 2]");
+            var lexerResult = lexer.Run();
+            
             var expected = new VariableInstruction(
                 name: "asdf",
                 next: new SquareBracketsInstruction(
@@ -85,7 +106,7 @@ public static partial class InstructionTests
                         new NumberInstruction(2))]
                 )
             );
-            ParserAssertions.AssertInputProducesInstruction("asdf[1 + 2]", expected);
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
     }
 }

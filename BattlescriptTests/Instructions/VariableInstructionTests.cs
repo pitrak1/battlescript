@@ -11,8 +11,12 @@ public static partial class InstructionTests
         [Test]
         public void HandlesSimpleName()
         {
+            var lexer = new Lexer("asdf");
+            var lexerResult = lexer.Run();
+            
             var expected = new VariableInstruction("asdf");
-            ParserAssertions.AssertInputProducesInstruction("asdf", expected);
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
     }
 }

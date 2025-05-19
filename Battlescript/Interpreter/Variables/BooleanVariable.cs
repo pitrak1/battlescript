@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class BooleanVariable(bool? value = null) : Variable
+public class BooleanVariable(bool? value = null) : Variable, IEquatable<BooleanVariable>
 {
     public bool Value { get; set; } = value ?? false;
     
@@ -13,4 +13,17 @@ public class BooleanVariable(bool? value = null) : Variable
     {
         throw new Exception("Cannot index a boolean variable");
     }
+    
+    // All the code below is to override equality
+    public override bool Equals(object obj) => Equals(obj as BooleanVariable);
+    public bool Equals(BooleanVariable? variable)
+    {
+        if (variable is null) return false;
+        if (ReferenceEquals(this, variable)) return true;
+        if (GetType() != variable.GetType()) return false;
+        
+        return Value == variable.Value;
+    }
+    
+    public override int GetHashCode() => HashCode.Combine(Value);
 }
