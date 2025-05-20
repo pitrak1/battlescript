@@ -62,6 +62,4 @@ public class ParensInstruction : Instruction, IEquatable<ParensInstruction>
     }
     
     public override int GetHashCode() => HashCode.Combine(Next, Instructions);
-    public static bool operator ==(ParensInstruction left, ParensInstruction right) => left is null ? right is null : left.Equals(right);
-    public static bool operator !=(ParensInstruction left, ParensInstruction right) => !(left == right);
 }

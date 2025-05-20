@@ -26,6 +26,4 @@ public class Token : IEquatable<Token>
     }
     
     public override int GetHashCode() => HashCode.Combine(Type, Value);
-    public static bool operator ==(Token left, Token right) => left is null ? right is null : left.Equals(right);
-    public static bool operator !=(Token left, Token right) => !(left == right);
 }

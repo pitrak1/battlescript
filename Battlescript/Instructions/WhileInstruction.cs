@@ -55,6 +55,4 @@ public class WhileInstruction : Instruction, IEquatable<WhileInstruction>
     }
     
     public override int GetHashCode() => HashCode.Combine(Condition, Instructions);
-    public static bool operator ==(WhileInstruction left, WhileInstruction right) => left is null ? right is null : left.Equals(right);
-    public static bool operator !=(WhileInstruction left, WhileInstruction right) => !(left == right);
 }

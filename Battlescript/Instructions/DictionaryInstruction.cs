@@ -57,6 +57,4 @@ public class DictionaryInstruction : Instruction, IEquatable<DictionaryInstructi
     }
     
     public override int GetHashCode() => HashCode.Combine(Values, Instructions);
-    public static bool operator ==(DictionaryInstruction left, DictionaryInstruction right) => left is null ? right is null : left.Equals(right);
-    public static bool operator !=(DictionaryInstruction left, DictionaryInstruction right) => !(left == right);
 }

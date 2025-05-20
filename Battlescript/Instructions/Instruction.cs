@@ -161,6 +161,4 @@ public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Ins
     }
     
     public override int GetHashCode() => HashCode.Combine(Instructions);
-    public static bool operator ==(Instruction left, Instruction right) => left is null ? right is null : left.Equals(right);
-    public static bool operator !=(Instruction left, Instruction right) => !(left == right);
 }

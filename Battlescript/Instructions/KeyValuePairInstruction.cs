@@ -45,6 +45,4 @@ public class KeyValuePairInstruction : Instruction, IEquatable<KeyValuePairInstr
     }
     
     public override int GetHashCode() => HashCode.Combine(Left, Right, Instructions);
-    public static bool operator ==(KeyValuePairInstruction left, KeyValuePairInstruction right) => left is null ? right is null : left.Equals(right);
-    public static bool operator !=(KeyValuePairInstruction left, KeyValuePairInstruction right) => !(left == right);
 }

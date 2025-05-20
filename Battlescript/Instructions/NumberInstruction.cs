@@ -40,6 +40,4 @@ public class NumberInstruction : Instruction, IEquatable<NumberInstruction>
     }
     
     public override int GetHashCode() => HashCode.Combine(Value, Instructions);
-    public static bool operator ==(NumberInstruction left, NumberInstruction right) => left is null ? right is null : left.Equals(right);
-    public static bool operator !=(NumberInstruction left, NumberInstruction right) => !(left == right);
 }

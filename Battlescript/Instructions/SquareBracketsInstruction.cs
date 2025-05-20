@@ -77,6 +77,4 @@ public class SquareBracketsInstruction : Instruction, IEquatable<SquareBracketsI
     }
     
     public override int GetHashCode() => HashCode.Combine(Values, Next, Instructions);
-    public static bool operator ==(SquareBracketsInstruction left, SquareBracketsInstruction right) => left is null ? right is null : left.Equals(right);
-    public static bool operator !=(SquareBracketsInstruction left, SquareBracketsInstruction right) => !(left == right);
 }
