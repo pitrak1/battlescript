@@ -41,7 +41,7 @@ public class ClassVariable (Dictionary<string, Variable>? values, List<ClassVari
         if (indexVariable is StringVariable indexStringVariable && indexStringVariable.Value == "__getitem__")
         {
             foundItem = FindItemDirectly(memory, indexStringVariable.Value);
-        } else if (GetItem(memory, "__getitem__") is FunctionVariable functionVariable)
+        } else if (GetItem(memory, "__getitem__") is FunctionVariable functionVariable && objectContext is not null)
         {
             foundItem = functionVariable.RunFunction(memory, [objectContext, indexVariable], objectContext);
         } else if (indexVariable is StringVariable stringVariable)
@@ -73,8 +73,7 @@ public class ClassVariable (Dictionary<string, Variable>? values, List<ClassVari
         {
             foreach (var superclass in SuperClasses)
             {
-                Variable? result;
-                superclass.Values.TryGetValue(item, out result);
+                var result = superclass.GetItem(memory, item);
                 if (result is not null)
                 {
                     return result;

@@ -31,6 +31,8 @@
       &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.MemoryTests&lt;/TestId&gt;
       &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.InstructionTests&lt;/TestId&gt;
       &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.InstructionTests+DictionaryInstructionInterpret.HandlesSimpleValues&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.ClassVariableTests+GetItem.FindsGetItemMethodWhenPresentInClass&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.ClassVariableTests+GetItem&lt;/TestId&gt;
     &lt;/TestAncestor&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
