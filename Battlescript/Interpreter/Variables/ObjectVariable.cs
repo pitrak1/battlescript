@@ -2,33 +2,45 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable classVariable) : Variable, IEquatable<ObjectVariable>
+public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable classVariable) : 
+    Variable, IEquatable<ObjectVariable>
 {
     public Dictionary<string, Variable> Values { get; set; } = values ?? [];
     public ClassVariable ClassVariable { get; set; } = classVariable;
 
-    public override void SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index)
+    public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
         Debug.Assert(index.Values.Count == 1);
-
         var indexVariable = index.Values.First().Interpret(memory);
 
-        if (indexVariable is StringVariable indexStringVariable)
+        Variable? foundItem;
+        if (GetItem(memory, "__setitem__") is FunctionVariable functionVariable)
         {
-            if (index.Next is null)
+            functionVariable.RunFunction(memory, [this, indexVariable, valueVariable], this);
+            return true;
+        } else if (indexVariable is StringVariable stringVariable)
+        {
+            if (Values.ContainsKey(stringVariable.Value))
             {
-                Values[indexStringVariable.Value] = valueVariable;
+                if (index.Next is SquareBracketsInstruction nextInstruction)
+                {
+                    return Values[stringVariable.Value].SetItem(memory, valueVariable, nextInstruction, objectContext);
+                }
+                else
+                {
+                    Values[stringVariable.Value] = valueVariable;
+                    return true;
+                }
             }
             else
             {
-                Debug.Assert(index.Next is SquareBracketsInstruction);
-                var nextInstruction = index.Next as SquareBracketsInstruction;
-                Values[indexStringVariable.Value].SetItem(memory, valueVariable, nextInstruction!);
+                Values.Add(stringVariable.Value, valueVariable);
+                return true;
             }
         }
         else
         {
-            throw new Exception("Can't index an object with anything but a string");
+            throw new Exception("Can't index a class with anything but a string");
         }
     }
     
@@ -37,16 +49,22 @@ public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable
         Debug.Assert(index.Values.Count == 1);
         var indexVariable = index.Values.First().Interpret(memory);
 
+        var getItemOverride = ClassVariable.GetItem(memory, new SquareBracketsInstruction([new StringInstruction("__getitem__")]), this);
         Variable? foundItem;
-        if (indexVariable is StringVariable indexStringVariable && indexStringVariable.Value == "__getitem__")
-        {
-            foundItem = FindItemDirectly(memory, indexStringVariable.Value);
-        } else if (GetItem(memory, "__getitem__") is FunctionVariable functionVariable)
+        if (getItemOverride is FunctionVariable functionVariable)
         {
             foundItem = functionVariable.RunFunction(memory, [this, indexVariable], this);
-        } else if (indexVariable is StringVariable stringVariable)
+        }
+        else if (indexVariable is StringVariable stringVariable)
         {
-            foundItem = FindItemDirectly(memory, stringVariable.Value);
+            if (Values.ContainsKey(stringVariable.Value))
+            { 
+                return Values[stringVariable.Value];
+            }
+            else
+            {
+                return ClassVariable.GetItem(memory, new SquareBracketsInstruction([new StringInstruction(stringVariable.Value)]), this);
+            }
         }
         else
         {
@@ -60,18 +78,6 @@ public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable
         else
         {
             return foundItem;
-        }
-    }
-
-    private Variable? FindItemDirectly(Memory memory, string item)
-    {
-        if (Values.ContainsKey(item))
-        { 
-            return Values[item];
-        }
-        else
-        {
-            return ClassVariable.GetItem(memory, new SquareBracketsInstruction([new StringInstruction(item)]), this);
         }
     }
     

@@ -6,7 +6,7 @@ public class ListVariable(List<Variable>? values = null) : Variable, IEquatable<
 {
     public List<Variable> Values { get; set; } = values ?? [];
     
-    public override void SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index)
+    public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
         Debug.Assert(index.Values.Count == 1);
 
@@ -18,12 +18,13 @@ public class ListVariable(List<Variable>? values = null) : Variable, IEquatable<
             if (index.Next is null)
             {
                 Values[(int)indexNumberVariable.Value] = valueVariable;
+                return true;
             }
             else
             {
                 Debug.Assert(index.Next is SquareBracketsInstruction);
                 var nextInstruction = index.Next as SquareBracketsInstruction;
-                Values[(int)indexNumberVariable.Value].SetItem(memory, valueVariable, nextInstruction!);
+                return Values[(int)indexNumberVariable.Value].SetItem(memory, valueVariable, nextInstruction!);
             }
         }
         else

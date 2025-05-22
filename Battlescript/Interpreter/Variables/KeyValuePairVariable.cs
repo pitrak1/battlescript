@@ -5,7 +5,7 @@ public class KeyValuePairVariable(Variable? left = null, Variable? right = null)
     public Variable? Left { get; set; } = left;
     public Variable? Right { get; set; } = right;
     
-    public override void SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index)
+    public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
         throw new Exception("Cannot index a kvp variable");
     }

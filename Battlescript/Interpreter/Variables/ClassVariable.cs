@@ -7,29 +7,11 @@ public class ClassVariable (Dictionary<string, Variable>? values, List<ClassVari
     public Dictionary<string, Variable> Values { get; set; } = values ?? [];
     public List<ClassVariable> SuperClasses { get; set; } = superclasses ?? [];
     
-    public override void SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index)
+    // I don't think you can use a setitem override on properties of a class.  You shouldn't be able to set any values
+    // in a class directly other than static stuff, which will need to be handled in its own way
+    public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
-        Debug.Assert(index.Values.Count == 1);
-
-        var indexVariable = index.Values.First().Interpret(memory);
-
-        if (indexVariable is StringVariable indexStringVariable)
-        {
-            if (index.Next is null)
-            {
-                Values[indexStringVariable.Value] = valueVariable;
-            }
-            else
-            {
-                Debug.Assert(index.Next is SquareBracketsInstruction);
-                var nextInstruction = index.Next as SquareBracketsInstruction;
-                Values[indexStringVariable.Value].SetItem(memory, valueVariable, nextInstruction!);
-            }
-        }
-        else
-        {
-            throw new Exception("Can't index a class with anything but a string");
-        }
+        throw new Exception("We don't currently support static properties and therefore setting anything at the class level");
     }
     
     public override Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
@@ -40,7 +22,7 @@ public class ClassVariable (Dictionary<string, Variable>? values, List<ClassVari
         Variable? foundItem;
         if (indexVariable is StringVariable indexStringVariable && indexStringVariable.Value == "__getitem__")
         {
-            foundItem = FindItemDirectly(memory, indexStringVariable.Value);
+            foundItem = FindItemDirectly(memory, "__getitem__");
         } else if (GetItem(memory, "__getitem__") is FunctionVariable functionVariable && objectContext is not null)
         {
             foundItem = functionVariable.RunFunction(memory, [objectContext, indexVariable], objectContext);
@@ -84,22 +66,6 @@ public class ClassVariable (Dictionary<string, Variable>? values, List<ClassVari
         return null;
     }
     
-    private Variable? RunOverride(
-        Memory memory,
-        Variable foundVariable, 
-        FunctionVariable overrideFunction,
-        Variable indexVariable)
-    {
-        if (foundVariable is ObjectVariable objectVariable)
-        {
-            return overrideFunction.RunFunction(memory, [foundVariable, indexVariable], objectVariable);
-        }
-        else
-        {
-            return overrideFunction.RunFunction(memory, [foundVariable, indexVariable]);
-        }
-    }
-
     public ObjectVariable CreateObject()
     {
         var objectValues = new Dictionary<string, Variable>();

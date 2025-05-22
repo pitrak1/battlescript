@@ -2,7 +2,17 @@ namespace Battlescript;
 
 public abstract class Variable
 {
-    public abstract void SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index);
+    public abstract bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null);
+    
+    public void SetItem(Memory memory, Variable valueVariable, string index)
+    {
+        SetItem(memory, valueVariable, new SquareBracketsInstruction([new StringInstruction(index)]));
+    }
+    
+    public void SetItem(Memory memory, Variable valueVariable, int index)
+    {
+        SetItem(memory, valueVariable, new SquareBracketsInstruction([new NumberInstruction(index)]));
+    }
     
     public abstract Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null);
 

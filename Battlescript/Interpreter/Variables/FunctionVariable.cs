@@ -5,7 +5,7 @@ public class FunctionVariable(List<Instruction>? parameters, List<Instruction>? 
     public List<Instruction> Parameters { get; set; } = parameters ?? [];
     public List<Instruction> Instructions { get; set; } = instructions ?? [];
     
-    public override void SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index)
+    public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
         throw new Exception("Cannot index a function variable");
     }

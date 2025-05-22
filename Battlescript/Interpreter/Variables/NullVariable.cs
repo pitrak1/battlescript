@@ -2,7 +2,7 @@ namespace Battlescript;
 
 public class NullVariable : Variable
 {
-    public override void SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index)
+    public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
         throw new Exception("Cannot index a null variable");
     }
