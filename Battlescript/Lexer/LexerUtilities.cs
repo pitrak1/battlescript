@@ -31,6 +31,24 @@ public static class LexerUtilities
 
         return result;
     }
+
+    public static int GetIndentValueFromIndentationString(string indentations)
+    {
+        var totalSpaces = 0;
+        foreach (var indentChar in indentations)
+        {
+            switch (indentChar)
+            {
+                case ' ':
+                    totalSpaces++;
+                    break;
+                case '\t':
+                    totalSpaces += 4;
+                    break;
+            }
+        }
+        return  (int)MathF.Floor(totalSpaces / 4f);
+    }
     
     public static (string, string, string) GetNextThreeCharacters(string input, int index)
     {

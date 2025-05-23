@@ -1,3 +1,5 @@
+using Battlescript.Exceptions;
+
 namespace Battlescript;
 
 public class Lexer(string input)
@@ -6,7 +8,7 @@ public class Lexer(string input)
     private int _line = 1;
     private int _column;
 
-    private List<Token> _tokens = [];
+    private readonly List<Token> _tokens = [];
 
     public List<Token> Run()
     {
@@ -89,9 +91,7 @@ public class Lexer(string input)
             }
             else
             {
-                throw new Exception(
-                    "Invalid character found at line " + _line + ", column " + _column + ": " + nextCharacter + nextNextCharacter + nextNextNextCharacter
-                );
+                throw new LexerException(nextCharacter + nextNextCharacter + nextNextNextCharacter, _line, _column);
             }
         }
 
@@ -110,19 +110,7 @@ public class Lexer(string input)
             CollectionType.Inclusive
         );
         
-        var totalSpaces = 0;
-        foreach (var indentChar in indent)
-        {
-            if (indentChar == ' ')
-            {
-                totalSpaces++;
-            }
-            else if (indentChar == '\t')
-            {
-                totalSpaces += 4;
-            }
-        }
-        var totalIndent = (int)MathF.Floor(totalSpaces / 4);
+        var totalIndent = LexerUtilities.GetIndentValueFromIndentationString(indent);
                 
         // This is the number of characters in the indent plus the newline
         _index += indent.Length + 1;
@@ -213,6 +201,8 @@ public class Lexer(string input)
         _column += comment.Length;
     }
 
+    // This is simply a cleanup run at the end of lexing to identify "is not" and "not in" statements and combine them
+    // as tokens, which needs to be done because both "is" and "not" are operators on their own, and "in" is as well
     private void HandleOperatorCombinations()
     {
         var i = 0;

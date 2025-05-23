@@ -16,8 +16,8 @@ public class Token : IEquatable<Token>
     }
     
     // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as Token);
-    public bool Equals(Token token)
+    public override bool Equals(object? obj) => Equals(obj as Token);
+    public bool Equals(Token? token)
     {
         if (token is null) return false;
         if (ReferenceEquals(this, token)) return true;

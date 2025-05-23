@@ -46,6 +46,48 @@ public static class LexerUtilitiesTests
             Assert.That(result, Is.EqualTo("df"));
         }
     }
+    
+    [TestFixture]
+    public class GetIndentValueFromIndentationString
+    {
+        [Test]
+        public void DetectsTabs()
+        {
+            var indent = LexerUtilities.GetIndentValueFromIndentationString("\t\t\t");
+            Assert.That(indent, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void DetectsSpacesInSetsOfFour()
+        {
+            // this is 8 spaces
+            var indent = LexerUtilities.GetIndentValueFromIndentationString("        ");
+            Assert.That(indent, Is.EqualTo(2));
+        }
+        
+        [Test]
+        public void DetectsCombinationsOfTabsAndSpaces()
+        {
+            // this is 8 spaces total
+            var indent = LexerUtilities.GetIndentValueFromIndentationString("  \t \t  \t   ");
+            Assert.That(indent, Is.EqualTo(5));
+        }
+        
+        [Test]
+        public void ExtraSpacesAreRoundedDown()
+        {
+            // this is 6 spaces total
+            var indent = LexerUtilities.GetIndentValueFromIndentationString("      ");
+            Assert.That(indent, Is.EqualTo(1));
+        }
+        
+        [Test]
+        public void HandlesEmptyString()
+        {
+            var indent = LexerUtilities.GetIndentValueFromIndentationString("");
+            Assert.That(indent, Is.EqualTo(0));
+        }
+    }
 
     [TestFixture]
     public class GetNextThreeCharacters
