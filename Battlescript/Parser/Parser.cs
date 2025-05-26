@@ -2,13 +2,12 @@ namespace Battlescript;
 
 public class Parser
 {
-    private List<Token> _tokens;
-    private List<Token> _currentTokens;
-    // This is the base set of instructions we'll be returning
-    private List<Instruction> _instructions; 
+    private readonly List<Token> _tokens;
+    private readonly List<Token> _currentTokens;
+    private readonly List<Instruction> _instructions; 
     // This is to track where the currently parsed instruction goes.  The base scope should always be entry 0, but
     // this will keep references to the set of different code blocks we are in (fors, ifs, functions, whatever)
-    private List<List<Instruction>> _scopes;
+    private readonly List<List<Instruction>> _scopes;
 
     public Parser(List<Token> tokens)
     {
@@ -52,6 +51,7 @@ public class Parser
             }
         }
 
+        // This is to handle the case that the file does not end with a newline
         if (_currentTokens.Count != 0)
         {
             ParseInstructionAndAddToCurrentScope();
@@ -67,7 +67,7 @@ public class Parser
             // Parse the current tokens, add to the current scope, and reset list of current tokens for next instruction
             var instruction = Instruction.Parse(_currentTokens);
             _scopes[^1].Add(instruction);
-            _currentTokens = [];
+            _currentTokens.Clear();
         }
     }
 }

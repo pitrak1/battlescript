@@ -1,6 +1,8 @@
+using System.Diagnostics;
+
 namespace Battlescript;
 
-public class ParserUtilities
+public static class ParserUtilities
 {
     public static int GetTokenIndex(
         List<Token> tokens, 
@@ -13,11 +15,7 @@ public class ParserUtilities
         for (var i = 0; i < tokens.Count; i++)
         {
             var currentToken = tokens[i];
-            if (values is not null && values.Contains(currentToken.Value) && separatorStack.Count == 0)
-            {
-                return i;
-            }
-            else if (types is not null && types.Contains(currentToken.Type) && separatorStack.Count == 0)
+            if (IsTokenInValuesOrTypes(values, types, currentToken) && separatorStack.Count == 0)
             {
                 return i;
             }
@@ -26,25 +24,20 @@ public class ParserUtilities
                 separatorStack.Add(currentToken.Value);
             } else if (Consts.ClosingSeparators.Contains(currentToken.Value))
             {
-                var matchingCurrentTokenSeparator = Consts.MatchingSeparatorsMap[currentToken.Value];
-                if (matchingCurrentTokenSeparator == separatorStack[^1])
+                if (DoesTokenMatchSeparator(currentToken, separatorStack[^1]))
                 {
                     // If the separator matches the top of the stack, pop it off. If the stack is now empty, that means
                     // we just hit the closing separator of the entire expression, so we add the last entry and exit
                     separatorStack.RemoveAt(separatorStack.Count - 1);
                     
-                    if (values is not null && values.Contains(currentToken.Value) && separatorStack.Count == 0)
-                    {
-                        return i;
-                    }
-                    else if (types is not null && types.Contains(currentToken.Type) && separatorStack.Count == 0)
+                    if (IsTokenInValuesOrTypes(values, types, currentToken) && separatorStack.Count == 0)
                     {
                         return i;
                     }
                 }
                 else
                 {
-                    throw new Exception("Unexpected closing separator");
+                    throw new ParserUnexpectedClosingSeparatorException(currentToken);
                 }
             }
         }
@@ -52,145 +45,145 @@ public class ParserUtilities
         return -1;
     }
 
+    private static bool IsTokenInValuesOrTypes(List<string>? values, List<Consts.TokenTypes>? types, Token token)
+    {
+        return IsTokenInCollection(values, token.Value) || IsTokenInCollection(types, token.Type);
+    }
+
+    private static bool IsTokenInCollection<T>(List<T>? collection, T token)
+    {
+        return collection is not null && collection.Contains(token);
+    }
+
+    private static bool DoesTokenMatchSeparator(Token token, string separator)
+    {
+        return Consts.MatchingSeparatorsMap[token.Value] == separator;
+    }
+
     public static int GetOperatorIndex(List<Token> tokens)
     {
-        // Because we want to prioritize operators (and also prioritize earlier operators over later operators
-        // of the same priority), we need to loop backwards and look for lower priority operators first.  The way
-        // that these instructions are evaluated will be that the more deeply nested expressions will be evaluated
-        // first.  Doing it this way means the lowest operator will split the entire expression with the left
-        // and right operators containing variables, numbers, or sub-expressions with higher priority.
-
-        var lowestOperatorPriority = -1;
-        var lowestOperatorIndex = -1;
+        // We want to prioritize:
+        // 1. operators in separators over operators outside of separators
+        // 2. higher priority operators over lower priority operators
+        // 3. operators earlier in the expression over operators later in the expression
+        // 
+        // Because we are building a tree, the lowest priority should be identified first.  When we evaluate, we
+        // evaluate leaves first and then work our way up.
+        //
+        // To do each of these things:
+        // 1. We ignore operators in separators in this function because we will ultimately run the parser again
+        // for the subexpression within the separators
+        // 2. Operators are given a value, the higher the value, the lower the priority of the operator.  So we're
+        // actually looking for the highest value operator when checking.
+        // 3. We evaluate the expression from right to left
+        
+        (int Priority, int Index) lowest = (-1, -1);
         
         List<string> separatorStack = [];
         
         for (var i = tokens.Count - 1; i >= 0; i--)
         {
-            if (tokens[i].Type == Consts.TokenTypes.Operator && separatorStack.Count == 0)
+            var currentToken = tokens[i];
+            if (currentToken.Type == Consts.TokenTypes.Operator && separatorStack.Count == 0)
             {
-                // Because we want to find lower priority operators, the Operators const is in mathematical
-                // priority descending order, making the higher priority operators have a lower value and
-                // the lower priority operators have a higher value
-                var priority = Array.FindIndex(Consts.Operators, e => e == tokens[i].Value);
-
-                if (priority != -1 && priority > lowestOperatorPriority)
-                {
-                    lowestOperatorPriority = priority;
-                    lowestOperatorIndex = i;
-                }
+                lowest = UpdateOperatorPriorityAndIndexForOperator(lowest, currentToken.Value, i);
             }
-            else if (Consts.ClosingSeparators.Contains(tokens[i].Value))
+            else if (Consts.ClosingSeparators.Contains(currentToken.Value))
             {
-                separatorStack.Add(tokens[i].Value);
-            } else if (Consts.OpeningSeparators.Contains(tokens[i].Value))
+                separatorStack.Add(currentToken.Value);
+            } else if (Consts.OpeningSeparators.Contains(currentToken.Value))
             {
-                var matchingCurrentTokenSeparator = Consts.MatchingSeparatorsMap[tokens[i].Value];
-                if (matchingCurrentTokenSeparator == separatorStack[^1])
+                if (DoesTokenMatchSeparator(currentToken, separatorStack[^1]))
                 {
                     // If the separator matches the top of the stack, pop it off. If the stack is now empty, that means
                     // we just hit the closing separator of the entire expression, so we add the last entry and exit
                     separatorStack.RemoveAt(separatorStack.Count - 1);
                     
-                    if (tokens[i].Type == Consts.TokenTypes.Operator && separatorStack.Count == 0)
+                    if (currentToken.Type == Consts.TokenTypes.Operator && separatorStack.Count == 0)
                     {
-                        // Because we want to find lower priority operators, the Operators const is in mathematical
-                        // priority descending order, making the higher priority operators have a lower value and
-                        // the lower priority operators have a higher value
-                        var priority = Array.FindIndex(Consts.Operators, e => e == tokens[i].Value);
-
-                        if (priority != -1 && priority > lowestOperatorPriority)
-                        {
-                            lowestOperatorPriority = priority;
-                            lowestOperatorIndex = i;
-                        }
+                        lowest = UpdateOperatorPriorityAndIndexForOperator(lowest, currentToken.Value, i);
                     }
                 }
                 else
                 {
-                    throw new Exception("Unexpected closing separator");
+                    throw new ParserUnexpectedClosingSeparatorException(currentToken);
                 }
             }
         }
         
-        return lowestOperatorIndex;
+        return lowest.Index;
     }
 
-    public static (int Count, List<List<Token>> Entries) ParseTokensUntilMatchingSeparator(List<Token> tokens, List<string> separatingCharacters)
+    private static (int Priority, int Index) UpdateOperatorPriorityAndIndexForOperator(
+        (int Priority, int Index) current,
+        string operatorString,
+        int index)
     {
-        if (tokens.Count == 0)
-        {
-            return (0, []);
-        }
-        
-        // The separator stacks allows us to ignore nested separators while checking that different types of 
-        // separators match throughout the expression.  The stack will keep a record of the separators we are
-        // currently nested in
-        List<string> separatorStack = [];
+        var priority = Array.FindIndex(Consts.Operators, e => e == operatorString);
+        return (priority != -1 && priority > current.Priority) ? (priority, index) : current;
+    }
+
+    public static (int Count, List<List<Token>> Entries) GroupTokensWithinSeparators(List<Token> tokens, List<string> separatingCharacters)
+    {
+        // Early return for no tokens present
+        if (tokens.Count == 0) return (0, []);
+
+        List<string> separatorStack = [tokens[0].Value];
         List<List<Token>> entries = [];
         List<Token> currentTokenSet = [];
-        var totalTokenCount = 0;
-        
-        foreach (var token in tokens)
-        {
-            totalTokenCount++;
+        var totalTokenCount = 1;
 
-            if (Consts.OpeningSeparators.Contains(token.Value))
+        while (separatorStack.Count > 0 && totalTokenCount < tokens.Count)
+        {
+            var currentToken = tokens[totalTokenCount];
+            
+            if (Consts.OpeningSeparators.Contains(currentToken.Value))
             {
-                separatorStack.Add(token.Value);
-                // We don't want to add the opening separator of the whole expression to the first entry
-                if (totalTokenCount > 1)
-                {
-                    currentTokenSet.Add(token);
-                }
+                separatorStack.Add(currentToken.Value);
+                currentTokenSet.Add(currentToken);
             }
-            else if (Consts.ClosingSeparators.Contains(token.Value))
+            else if (Consts.ClosingSeparators.Contains(currentToken.Value))
             {
-                var matchingCurrentTokenSeparator = Consts.MatchingSeparatorsMap[token.Value];
-                if (matchingCurrentTokenSeparator == separatorStack[^1])
+                if (DoesTokenMatchSeparator(currentToken, separatorStack[^1]))
                 {
-                    // If the separator matches the top of the stack, pop it off. If the stack is now empty, that means
-                    // we just hit the closing separator of the entire expression, so we add the last entry and exit
                     separatorStack.RemoveAt(separatorStack.Count - 1);
-                    if (separatorStack.Count == 0)
-                    {
-                        entries.Add(currentTokenSet);
-                        break;
-                    }
-                    
-                    
-                    currentTokenSet.Add(token);
+
+                    // We don't want to add the final separator in the expression to the entries but
+                    // we do need to add nested separators into the entries
+                    if (separatorStack.Count != 0) currentTokenSet.Add(currentToken);
                 }
                 else
                 {
-                    throw new Exception("Unexpected closing separator");
+                    throw new ParserUnexpectedClosingSeparatorException(currentToken);
                 }
             }
-            // If we find a separating character at the base nesting of the expression, we want to store the entry
-            // and start a new one
-            else if (separatorStack.Count == 1 && separatingCharacters.Contains(token.Value))
+            else if (separatorStack.Count == 1 && separatingCharacters.Contains(currentToken.Value))
             {
                 entries.Add(currentTokenSet);
                 currentTokenSet = [];
             }
             else
             {
-                currentTokenSet.Add(token);
+                currentTokenSet.Add(currentToken);
             }
+            
+            totalTokenCount++;
         }
 
-        // With the above code, an empty set of separators will result in a single empty entry in our list.  We'd
-        // prefer to just have an empty set of entries
-        return entries is [{ Count: 0 }] ? (totalTokenCount, []) : (totalTokenCount, entries);
-    }
-
-    public static void PrintTokens(List<Token> tokens)
-    {
-        var result = "";
-        foreach (var token in tokens)
+        if (separatorStack.Count == 0)
         {
-            result += token.Value;
+            // This makes it so that if we just have an opening and closing separator, we get an empty
+            // array for entries, not an array with one entry that's an empty array
+            if (currentTokenSet.Count > 0 || entries.Count > 0)
+            {
+                entries.Add(currentTokenSet);
+            }
+
+            return (totalTokenCount, entries);
         }
-        Console.WriteLine(result);
+        else
+        {
+            throw new ParserMatchingSeparatorNotFoundException(tokens[0]);
+        }
     }
 }

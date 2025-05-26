@@ -98,7 +98,7 @@ public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Ins
         List<string> separators
     )
     {
-        var results = ParserUtilities.ParseTokensUntilMatchingSeparator(tokens, separators);
+        var results = ParserUtilities.GroupTokensWithinSeparators(tokens, separators);
         
         List<Instruction> values = [];
         foreach (var entry in results.Entries)

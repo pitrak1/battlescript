@@ -122,13 +122,13 @@ public static class ParserUtilitiesTests
     }
 
     [TestFixture]
-    public class ParseUntilMatchingSeparator
+    public class GroupTokensWithinSeparators
     {
         [Test]
         public void NoTokens()
         {
             var parsed = 
-                ParserUtilities.ParseTokensUntilMatchingSeparator([], []);
+                ParserUtilities.GroupTokensWithinSeparators([], []);
 
             Assert.That(parsed.Count, Is.EqualTo(0));
             Assert.That(parsed.Entries.Count, Is.EqualTo(0));
@@ -140,7 +140,7 @@ public static class ParserUtilitiesTests
             var lexer = new Lexer("[]");
             var tokens = lexer.Run();
             var parsed =
-                ParserUtilities.ParseTokensUntilMatchingSeparator(tokens, []);
+                ParserUtilities.GroupTokensWithinSeparators(tokens, []);
             
             Assert.That(parsed.Count, Is.EqualTo(2));
             Assert.That(parsed.Entries.Count, Is.EqualTo(0));
@@ -152,7 +152,7 @@ public static class ParserUtilitiesTests
             var lexer = new Lexer("[1]");
             var tokens = lexer.Run();
             var parsed =
-                ParserUtilities.ParseTokensUntilMatchingSeparator(tokens, []);
+                ParserUtilities.GroupTokensWithinSeparators(tokens, []);
 
             Assert.That(parsed.Count, Is.EqualTo(3));
 
@@ -168,7 +168,7 @@ public static class ParserUtilitiesTests
             var lexer = new Lexer("[1, 2]");
             var tokens = lexer.Run();
             var parsed =
-                ParserUtilities.ParseTokensUntilMatchingSeparator(tokens, [","]);
+                ParserUtilities.GroupTokensWithinSeparators(tokens, [","]);
             Assert.That(parsed.Count, Is.EqualTo(5));
 
             var expected = new List<List<Token>>()
@@ -185,7 +185,7 @@ public static class ParserUtilitiesTests
             var lexer = new Lexer("[[1], [2]]");
             var tokens = lexer.Run();
             var parsed =
-                ParserUtilities.ParseTokensUntilMatchingSeparator(tokens, [","]);
+                ParserUtilities.GroupTokensWithinSeparators(tokens, [","]);
 
             Assert.That(parsed.Count, Is.EqualTo(9));
 

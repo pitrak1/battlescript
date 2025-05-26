@@ -177,7 +177,7 @@ public static class Consts
         "and",
         "or"
     ];
-
+    
     public static readonly string[] Assignments = [
         "=",
         "+=",

@@ -1,5 +1,3 @@
-using Battlescript.Exceptions;
-
 namespace Battlescript;
 
 public class Lexer(string input)
