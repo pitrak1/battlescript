@@ -11,7 +11,7 @@ public class ClassInstruction : Instruction, IEquatable<ClassInstruction>
         if (tokens.Count > 3)
         {
             var tokensInParens = tokens.GetRange(2, tokens.Count - 3);
-            superClasses = ParseAndRunEntriesWithinSeparator(tokensInParens, [","]).Values;
+            superClasses = ParserUtilities.ParseEntriesWithinSeparator(tokensInParens, [","]).Values;
         }
 
         Name = tokens[1].Value;

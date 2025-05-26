@@ -8,10 +8,13 @@ public class DictionaryInstruction : Instruction, IEquatable<DictionaryInstructi
 
     public DictionaryInstruction(List<Token> tokens)
     {
-        var results = ParseAndRunEntriesWithinSeparator(tokens, [","]);
+        var results = ParserUtilities.ParseEntriesWithinSeparator(tokens, [","]);
         
         // There should be no characters following a dictionary definition
-        CheckForNoFollowingTokens(tokens, results.Count);
+        if (tokens.Count > results.Count)
+        {
+            throw new ParserUnexpectedTokenException(tokens[results.Count]);
+        }
         
         Debug.Assert(results.Values.All(result => result is KeyValuePairInstruction));
         

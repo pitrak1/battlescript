@@ -10,7 +10,7 @@ public class OperationInstruction : Instruction, IEquatable<OperationInstruction
     {
         var operatorIndex = ParserUtilities.GetOperatorIndex(tokens);
         var operatorToken = tokens[operatorIndex];
-        var result = RunLeftAndRightAroundIndex(tokens, operatorIndex);
+        var result = ParserUtilities.ParseLeftAndRightAroundIndex(tokens, operatorIndex);
 
         Operation = operatorToken.Value;
         Left = result.Left;

@@ -9,7 +9,7 @@ public class KeyValuePairInstruction : Instruction, IEquatable<KeyValuePairInstr
     {
         var colonIndex = ParserUtilities.GetTokenIndex(tokens, [":"]);
         var colonToken = tokens[colonIndex];
-        var result = RunLeftAndRightAroundIndex(tokens, colonIndex);
+        var result = ParserUtilities.ParseLeftAndRightAroundIndex(tokens, colonIndex);
         
         Left = result.Left;
         Right = result.Right;

@@ -8,7 +8,7 @@ public class IfInstruction : Instruction, IEquatable<IfInstruction>
     {
         if (tokens[^1].Value != ":")
         {
-            ThrowErrorForToken("If statement should end with colon", tokens[0]);
+            throw new ParserMissingExpectedTokenException(tokens[^1], ":");
         }
 
         Condition = Parse(tokens.GetRange(1, tokens.Count - 2));

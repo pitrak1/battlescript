@@ -6,7 +6,10 @@ public class NumberInstruction : Instruction, IEquatable<NumberInstruction>
 
     public NumberInstruction(List<Token> tokens)
     {
-        CheckForNoFollowingTokens(tokens, 1);
+        if (tokens.Count > 1)
+        {
+            throw new ParserUnexpectedTokenException(tokens[1]);
+        }
         
         Value = Convert.ToDouble(tokens[0].Value);
         Line = tokens[0].Line;

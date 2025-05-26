@@ -186,4 +186,30 @@ public static class ParserUtilities
             throw new ParserMatchingSeparatorNotFoundException(tokens[0]);
         }
     }
+    
+    public static (Instruction? Left, Instruction? Right) ParseLeftAndRightAroundIndex(List<Token> tokens, int index)
+    {
+        var left = index > 0 ? Instruction.Parse(tokens.GetRange(0, index)) : null;
+        var right = index < tokens.Count - 1 ? 
+            Instruction.Parse(tokens.GetRange(index + 1, tokens.Count - index - 1)) : 
+            null;
+
+        return (left, right);
+    }
+    
+    public static (int Count, List<Instruction> Values) ParseEntriesWithinSeparator(
+        List<Token> tokens, 
+        List<string> separators
+    )
+    {
+        var results = GroupTokensWithinSeparators(tokens, separators);
+        
+        List<Instruction> values = [];
+        foreach (var entry in results.Entries)
+        {
+            values.Add(Instruction.Parse(entry));
+        }
+
+        return (results.Count, values);
+    }
 }

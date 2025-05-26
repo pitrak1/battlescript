@@ -13,7 +13,7 @@ public class AssignmentInstruction : Instruction, IEquatable<AssignmentInstructi
             types: [Consts.TokenTypes.Assignment]
         );
         var assignmentToken = tokens[assignmentIndex];
-        var operands = RunLeftAndRightAroundIndex(tokens, assignmentIndex);
+        var operands = ParserUtilities.ParseLeftAndRightAroundIndex(tokens, assignmentIndex);
         
         Operation = assignmentToken.Value;
         Left = operands.Left;

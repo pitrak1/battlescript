@@ -8,8 +8,12 @@ public class ParensInstruction : Instruction, IEquatable<ParensInstruction>
 
     public ParensInstruction(List<Token> tokens)
     {
-        var results = ParseAndRunEntriesWithinSeparator(tokens, [","]);
-        var next = CheckAndRunFollowingTokens(tokens, results.Count);
+        var results = ParserUtilities.ParseEntriesWithinSeparator(tokens, [","]);
+        Instruction? next = null;
+        if (tokens.Count > results.Count)
+        {
+            next = Parse(tokens.GetRange(results.Count, tokens.Count - results.Count));
+        }
 
         Instructions = results.Values;
         Next = next;

@@ -12,7 +12,11 @@ public class SquareBracketsInstruction : Instruction, IEquatable<SquareBracketsI
         if (isMember)
         {
             var indexValue = new StringInstruction(new List<Token>() { tokens[1] });
-            var next = CheckAndRunFollowingTokens(tokens, 2);
+            Instruction? next = null;
+            if (tokens.Count > 2)
+            {
+                next = Parse(tokens.GetRange(2, tokens.Count - 2));
+            }
 
             // It seems like the easiest way to handle using the period for accessing members is to treat it exactly
             // like a square bracket (i.e. x.asdf = x["asdf"]).  This may change later once I know python better :P
@@ -21,8 +25,13 @@ public class SquareBracketsInstruction : Instruction, IEquatable<SquareBracketsI
         }
         else
         {
-            var results = ParseAndRunEntriesWithinSeparator(tokens, [","]);
-            var next = CheckAndRunFollowingTokens(tokens, results.Count);
+            var results = ParserUtilities.ParseEntriesWithinSeparator(tokens, [","]);
+
+            Instruction? next = null;
+            if (tokens.Count > results.Count)
+            {
+                next = Parse(tokens.GetRange(results.Count, tokens.Count - results.Count));
+            }
 
             Values = results.Values;
             Next = next;
