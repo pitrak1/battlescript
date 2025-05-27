@@ -2,23 +2,23 @@ namespace Battlescript;
 
 public static class InterpreterUtilities
 {
-    public static Variable ConductOperation(Memory memory, string operation, Variable left, Variable right)
+    public static Variable ConductOperation(Memory memory, string operation, Variable? left, Variable? right)
     {
         if (right is NumberVariable) return ConductNumericalOperation(operation, left, right);
-        else if (right is BooleanVariable) return ConductBinaryOperation(operation, left, right);
+        else if (right is BooleanVariable) return ConductLogicalOperation(operation, left, right);
         else if (right is ObjectVariable) return ConductObjectOperation(memory, operation, left, right);
-        else throw new Exception("Invalid operation: " + operation);
+        else throw new InterpreterInvalidOperationException(operation, left, right);
     }
 
-    public static Variable ConductAssignment(Memory memory, string operation, Variable left, Variable right)
+    public static Variable ConductAssignment(Memory memory, string operation, Variable? left, Variable? right)
     {
-        if (operation == "=") return right;
+        if (operation == "=") return right ?? new NullVariable();
 
         var operationWithEqualsRemoved = operation.Substring(0, operation.Length - 1);
         return ConductOperation(memory, operationWithEqualsRemoved, left, right);
     }
 
-    private static Variable ConductNumericalOperation(string operation, Variable left, Variable right)
+    private static Variable ConductNumericalOperation(string operation, Variable? left, Variable? right)
     {
         if (left is NumberVariable leftNumber && right is NumberVariable rightNumber)
         {
@@ -61,26 +61,23 @@ public static class InterpreterUtilities
                 case "<=":
                     return new BooleanVariable(leftNumber.Value <= rightNumber.Value);
                 default:
-                    throw new Exception("Invalid operation: " + operation);
+                    throw new InterpreterInvalidOperationException(operation, left, right);
             }
         }
-        else if (right is NumberVariable rightNumber2)
+        else
         {
+            var rightNumber2 = right as NumberVariable;
             switch (operation)
             {
                 case "~":
                     return new NumberVariable(~(int)rightNumber2.Value);
                 default:
-                    throw new Exception("Invalid operation: " + operation);
+                    throw new InterpreterInvalidOperationException(operation, left, right);
             }
-        }
-        else
-        {
-            throw new Exception("Invalid operation: " + operation);
         }
     }
 
-    private static Variable ConductBinaryOperation(string operation, Variable left, Variable right)
+    private static Variable ConductLogicalOperation(string operation, Variable? left, Variable? right)
     {
         if (left is BooleanVariable leftBoolean && right is BooleanVariable rightBoolean)
         {
@@ -91,26 +88,23 @@ public static class InterpreterUtilities
                 case "or":
                     return new BooleanVariable(leftBoolean.Value || rightBoolean.Value);
                 default:
-                    throw new Exception("Invalid operation: " + operation);
+                    throw new InterpreterInvalidOperationException(operation, left, right);
             }
         }
-        else if (right is BooleanVariable rightBoolean2)
+        else
         {
+            var rightBoolean2 = right as BooleanVariable;
             switch (operation)
             {
                 case "not":
                     return new BooleanVariable(!rightBoolean2.Value);
                 default:
-                    throw new Exception("Invalid operation: " + operation);
+                    throw new InterpreterInvalidOperationException(operation, left, right);
             }
-        }
-        else
-        {
-            throw new Exception("Invalid operation: " + operation);
         }
     }
 
-    private static Variable ConductObjectOperation(Memory memory, string operation, Variable left, Variable right)
+    private static Variable ConductObjectOperation(Memory memory, string operation, Variable? left, Variable? right)
     {
         if (left is ObjectVariable leftObject && right is ObjectVariable rightObject)
         {
@@ -125,15 +119,15 @@ public static class InterpreterUtilities
                     }
                     else
                     {
-                        throw new Exception("Invalid operation: " + operation);
+                        throw new InterpreterInvalidOperationException(operation, left, right);
                     }
                 default:
-                    throw new Exception("Invalid operation: " + operation);
+                    throw new InterpreterInvalidOperationException(operation, left, right);
             }
         }
         else
         {
-            throw new Exception("Invalid operation: " + operation);
+            throw new InterpreterInvalidOperationException(operation, left, right);
         }
     }
 
