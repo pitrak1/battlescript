@@ -58,7 +58,7 @@ public class AssignmentInstruction : Instruction, IEquatable<AssignmentInstructi
         if (ReferenceEquals(this, instruction)) return true;
         if (GetType() != instruction.GetType()) return false;
 
-        if (Operation != instruction.Operation || Left != instruction.Left || Right != instruction.Right) return false;
+        if (Operation != instruction.Operation || !Left.Equals(instruction.Left) || !Right.Equals(instruction.Right)) return false;
         
         return base.Equals(instruction);
     }

@@ -22,6 +22,21 @@ public static partial class InstructionTests
             
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
+        
+        [Test]
+        public void HandlesExpressionAssignments()
+        {
+            var lexer = new Lexer("x = 6 + 5");
+            var lexerResult = lexer.Run();
+            
+            var expected = new AssignmentInstruction(
+                operation: "=",
+                left: new VariableInstruction("x"),
+                right: new OperationInstruction("+", new NumberInstruction(5.0), new NumberInstruction(6.0))
+            );
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+        }
     }
     
     [TestFixture]

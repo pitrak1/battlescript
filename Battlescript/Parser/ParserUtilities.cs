@@ -123,7 +123,7 @@ public static class ParserUtilities
         return (priority != -1 && priority > current.Priority) ? (priority, index) : current;
     }
 
-    public static (int Count, List<List<Token>> Entries) GroupTokensWithinSeparators(List<Token> tokens, List<string> separatingCharacters)
+    private static (int Count, List<List<Token>> Entries) GroupTokensWithinSeparators(List<Token> tokens, List<string> separatingCharacters)
     {
         // Early return for no tokens present
         if (tokens.Count == 0) return (0, []);
