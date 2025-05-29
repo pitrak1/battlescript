@@ -26,6 +26,7 @@ public static partial class InstructionTests
                     )
                 ]
             );
+            var result = Instruction.Parse(lexerResult);
             
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }

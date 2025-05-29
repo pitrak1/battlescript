@@ -48,7 +48,9 @@ public class VariableInstruction : Instruction, IEquatable<VariableInstruction>
         if (ReferenceEquals(this, instruction)) return true;
         if (GetType() != instruction.GetType()) return false;
 
-        if (Name != instruction.Name || Next != instruction.Next) return false;
+        if (Name != instruction.Name) return false;
+        
+        if (Next is not null && !Next.Equals(instruction.Next)) return false;
         
         return base.Equals(instruction);
     }

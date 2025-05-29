@@ -80,7 +80,9 @@ public class SquareBracketsInstruction : Instruction, IEquatable<SquareBracketsI
         if (ReferenceEquals(this, instruction)) return true;
         if (GetType() != instruction.GetType()) return false;
 
-        if (!Values.SequenceEqual(instruction.Values) || Next != instruction.Next) return false;
+        if (!Values.SequenceEqual(instruction.Values)) return false;
+        
+        if (Next is not null && !Next.Equals(instruction.Next)) return false;
         
         return base.Equals(instruction);
     }

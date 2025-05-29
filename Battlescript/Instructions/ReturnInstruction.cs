@@ -34,7 +34,7 @@ public class ReturnInstruction : Instruction, IEquatable<ReturnInstruction>
         if (ReferenceEquals(this, instruction)) return true;
         if (GetType() != instruction.GetType()) return false;
 
-        if (Value != instruction.Value) return false;
+        if (!Value.Equals(instruction.Value)) return false;
         
         return base.Equals(instruction);
     }

@@ -19,7 +19,7 @@ public static partial class InstructionTests
                 left: new NumberInstruction(5.0),
                 right: new NumberInstruction(6.0)
             );
-            
+            var result = Instruction.Parse(lexerResult);
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
         

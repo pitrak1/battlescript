@@ -36,6 +36,7 @@ public static partial class InstructionTests
                 next: new SquareBracketsInstruction([new NumberInstruction(4)])
             );
             
+            var result = Instruction.Parse(lexerResult);
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
         

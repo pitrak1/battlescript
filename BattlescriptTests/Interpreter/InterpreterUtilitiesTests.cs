@@ -2,7 +2,8 @@ using Battlescript;
 
 namespace BattlescriptTests;
 
-public class InterpreterUtilitiesTests
+[TestFixture]
+public static class InterpreterUtilitiesTests
 {
     [TestFixture]
     public class ConductOperation

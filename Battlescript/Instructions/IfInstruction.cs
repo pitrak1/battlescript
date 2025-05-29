@@ -49,7 +49,7 @@ public class IfInstruction : Instruction, IEquatable<IfInstruction>
         if (ReferenceEquals(this, instruction)) return true;
         if (GetType() != instruction.GetType()) return false;
         
-        if (Condition != instruction.Condition) return false;
+        if (!Condition.Equals(instruction.Condition)) return false;
         
         return base.Equals(instruction);
     }

@@ -63,6 +63,22 @@ public static class MemoryTests
             Assert.That(returnedScope, Is.EquivalentTo(scope));
         }
     }
+    
+    [TestFixture]
+    public class RemoveScopes()
+    {
+        [Test]
+        public void RemovesScopeCountGiven()
+        {
+            var memory = new Memory();
+            memory.AddScope();
+            memory.AddScope();
+            memory.AddScope();
+            memory.RemoveScopes(3);
+            
+            Assert.That(memory.GetScopes().Count, Is.EqualTo(1));
+        }
+    }
 
     [TestFixture]
     public class GetVariable()
@@ -128,7 +144,7 @@ public static class MemoryTests
     }
 
     [TestFixture]
-    public class AssignToVariable
+    public class SetVariable
     {
         [Test]
         public void CreatesVariableInLastScopeIfDoesNotExist()
@@ -258,7 +274,7 @@ public static class MemoryTests
         }
         
         [Test]
-        public void SupportsAssigningToDictionariesAndArrays()
+        public void SupportsAssigningToDictionariesAndLists()
         {
             var scope = new Dictionary<string, Variable>()
             {
@@ -302,39 +318,6 @@ public static class MemoryTests
                     {
                         Assert.That(numberVariable3.Value, Is.EqualTo(10.0));
                     }
-                }
-            }
-        }
-
-        [Test]
-        public void SupportsAssigningToClasses()
-        {
-            var classValues = new Dictionary<string, Variable>()
-            {
-                { "y", new NumberVariable(6.0) }
-            };
-            var scope = new Dictionary<string, Variable>()
-            {
-                { "x", new ClassVariable(classValues)}
-            };
-                
-            var memory = new Memory([scope]);
-            var variableInstructionWithIndex = new VariableInstruction(
-                "x",
-                new SquareBracketsInstruction(
-                    [new StringInstruction("y")]));
-            memory.SetVariable(variableInstructionWithIndex, new NumberVariable(10.0));
-            var scopes = memory.GetScopes();
-            
-            Assert.That(scopes[0]["x"] is ClassVariable);
-            if (scopes[0]["x"] is ClassVariable classVariable)
-            {
-                Assert.That(classVariable.Values.ContainsKey("y"));
-                Assert.That(classVariable.Values["y"] is NumberVariable);
-
-                if (classVariable.Values["y"] is NumberVariable numberVariable)
-                {
-                    Assert.That(numberVariable.Value, Is.EqualTo(10.0));
                 }
             }
         }

@@ -26,7 +26,10 @@ public static partial class E2ETests {
         {
             var input = "x = {'asdf': 5, 'qwer': '5'}\ny = x['qwer']";
             var expected = new StringVariable("5");
-            E2EAssertions.AssertVariableValueFromInput(input, "y", expected);
+            var interpreterResult = Runner.Run(input);
+            
+            Assert.That(interpreterResult[0], Contains.Key("y"));
+            Assert.That(interpreterResult[0]["y"], Is.EqualTo(expected));
         }
     }
 }

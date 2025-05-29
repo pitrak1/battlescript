@@ -44,7 +44,9 @@ public class OperationInstruction : Instruction, IEquatable<OperationInstruction
         if (ReferenceEquals(this, instruction)) return true;
         if (GetType() != instruction.GetType()) return false;
 
-        if (Operation != instruction.Operation || Left != instruction.Left || Right != instruction.Right) return false;
+        if (Operation != instruction.Operation || !Right.Equals(instruction.Right)) return false;
+        
+        if (Left is not null && !Left.Equals(instruction.Left)) return false;
         
         return base.Equals(instruction);
     }
