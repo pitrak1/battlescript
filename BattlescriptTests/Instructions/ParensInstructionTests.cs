@@ -24,4 +24,44 @@ public static partial class InstructionTests
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
     }
+    
+    [TestFixture]
+    public class ParensInstructionInterpret
+    {
+        [Test]
+        public void HandlesFunctionCalls()
+        {
+            var result = Runner.Run("def func(asdf):\n\treturn asdf + 5\nx = func(4)");
+
+            var expected = new Dictionary<string, Variable>()
+            {
+                ["func"] = new FunctionVariable(
+                    [new VariableInstruction("asdf")],
+                    [
+                        new ReturnInstruction(
+                            new OperationInstruction(
+                                "+",
+                                new VariableInstruction("asdf"),
+                                new NumberInstruction(5)))
+                    ]),
+                ["x"] = new NumberVariable(9)
+            };
+            
+            Assert.That(result[0], Is.EquivalentTo(expected));
+        }
+        
+        [Test]
+        public void HandlesObjectInstantiation()
+        {
+            var result = Runner.Run("class asdf():\n\tx = 6\ny = asdf()");
+
+            var classBody = new Dictionary<string, Variable>()
+            {
+                ["x"] = new NumberVariable(6)
+            };
+            var expected = new ObjectVariable(classBody, new ClassVariable(classBody));
+            
+            Assert.That(result[0]["y"], Is.EqualTo(expected));
+        }
+    }
 }

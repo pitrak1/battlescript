@@ -19,4 +19,19 @@ public static partial class InstructionTests
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
     }
+
+    [TestFixture]
+    public class NumberInstructionInterpret
+    {
+        [Test]
+        public void ReturnsNewNumberVariable()
+        {
+            var result = Runner.Run("x = 5");
+            var expected = new Dictionary<string, Variable>
+            {
+                { "x", new NumberVariable(5) }
+            };
+            Assert.That(result.First(), Is.EquivalentTo(expected));
+        }
+    }
 }

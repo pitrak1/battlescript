@@ -74,6 +74,22 @@ public static partial class InstructionTests
         }
         
         [Test]
+        public void AllowsStringsAndNumbersToBeUsedAsKeys()
+        {
+            var result = Runner.Run("x = {'asdf': 5, 4: 'asdf'}");
+            var expected = new Dictionary<string, Variable>()
+            {
+                {
+                    "x", new DictionaryVariable([
+                        new KeyValuePairVariable(new StringVariable("asdf"), new NumberVariable(5)),
+                        new KeyValuePairVariable(new NumberVariable(4), new StringVariable("asdf"))
+                    ])
+                }
+            };
+            Assert.That(result[0], Is.EquivalentTo(expected));
+        }
+        
+        [Test]
         public void HandlesExpressionValues()
         {
             var result = Runner.Run("x = {'asdf': 5 + 6, 'qwer': 3 * 4}");

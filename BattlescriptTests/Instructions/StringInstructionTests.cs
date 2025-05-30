@@ -19,4 +19,15 @@ public static partial class InstructionTests
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
     }
+    
+    [TestFixture]
+    public class StringInstructionInterpret
+    {
+        [Test]
+        public void HandlesSingleQuoteStrings()
+        {
+            var results = Runner.Run("x = 'asdf'");
+            Assert.That(results[0]["x"], Is.EqualTo(new StringVariable("asdf")));
+        }
+    }
 }

@@ -53,4 +53,37 @@ public static partial class InstructionTests
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
     }
+
+    [TestFixture]
+    public class FunctionInstructionInterpret
+    {
+        [Test]
+        public void ReturnsNewFunctionVariable()
+        {
+            var result = Runner.Run("def func(asdf, qwer):\n\treturn asdf + qwer");
+            
+            var functionVariable = new FunctionVariable(
+                parameters: 
+                [
+                    new VariableInstruction("asdf"),
+                    new VariableInstruction("qwer")
+                ],
+                instructions: [
+                    new ReturnInstruction(
+                        new OperationInstruction(
+                            "+", 
+                            new VariableInstruction("asdf"), 
+                            new VariableInstruction("qwer")))
+                ]
+            );
+
+            var expected = new Dictionary<string, Variable>()
+            {
+                ["func"] = functionVariable
+            };
+            
+            Assert.That(result[0], Is.EquivalentTo(expected));
+        }
+        
+    }
 }
