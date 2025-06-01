@@ -2,10 +2,10 @@ namespace Battlescript;
 
 public class KeyValuePairInstruction : Instruction, IEquatable<KeyValuePairInstruction>
 {
-    public Instruction Left { get; set; } 
-    public Instruction Right { get; set; }
+    public Instruction? Left { get; set; } 
+    public Instruction? Right { get; set; }
 
-    public KeyValuePairInstruction(List<Token> tokens)
+    public KeyValuePairInstruction(List<Token?> tokens)
     {
         var colonIndex = ParserUtilities.GetTokenIndex(tokens, [":"]);
         var colonToken = tokens[colonIndex];

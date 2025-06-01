@@ -26,17 +26,18 @@ public class VariableInstruction : Instruction, IEquatable<VariableInstruction>
     {
         var variable = memory.GetVariable(Name);
 
-        var currentObjectContext = variable is ObjectVariable objectVariable ? objectVariable : null; 
-        
-        // This doesn't work because we're currently getting the variable including indexes from memory in GetVariable
-        // but even if we just interpreted Parens here, we would still lose the context of the object we were workign with
-        if (Next is not SquareBracketsInstruction && Next is not null)
+        if (Next is null)
         {
-            return Next.Interpret(memory, variable, currentObjectContext);
+            return variable;
         }
         else
         {
-            return variable;
+            if (variable is ObjectVariable)
+            {
+                return Next.Interpret(memory, variable, variable);
+            }
+            
+            return Next.Interpret(memory, variable, null);
         }
     }
     

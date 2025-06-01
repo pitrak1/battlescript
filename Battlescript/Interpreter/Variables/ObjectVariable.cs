@@ -13,8 +13,7 @@ public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable
         Debug.Assert(index.Values.Count == 1);
         var indexVariable = index.Values.First().Interpret(memory);
 
-        Variable? foundItem;
-        if (GetItem(memory, "__setitem__") is FunctionVariable functionVariable)
+        if (ClassVariable.GetItem(memory, "__setitem__") is FunctionVariable functionVariable)
         {
             functionVariable.RunFunction(memory, [this, indexVariable, valueVariable], this);
             return true;
@@ -59,11 +58,11 @@ public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable
         {
             if (Values.ContainsKey(stringVariable.Value))
             { 
-                return Values[stringVariable.Value];
+                foundItem = Values[stringVariable.Value];
             }
             else
             {
-                return ClassVariable.GetItem(memory, new SquareBracketsInstruction([new StringInstruction(stringVariable.Value)]), this);
+                foundItem = ClassVariable.GetItem(memory, new SquareBracketsInstruction([new StringInstruction(stringVariable.Value)]), this);
             }
         }
         else

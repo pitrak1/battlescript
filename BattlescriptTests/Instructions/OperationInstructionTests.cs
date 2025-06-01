@@ -11,7 +11,7 @@ public static partial class InstructionTests
         [Test]
         public void HandlesBinaryOperations()
         {
-            var lexer = new Lexer("x = 5 + 6");
+            var lexer = new Lexer("5 + 6");
             var lexerResult = lexer.Run();
             
             var expected = new OperationInstruction(
@@ -19,7 +19,6 @@ public static partial class InstructionTests
                 left: new NumberInstruction(5.0),
                 right: new NumberInstruction(6.0)
             );
-            var result = Instruction.Parse(lexerResult);
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
         

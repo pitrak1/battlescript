@@ -73,26 +73,21 @@ public class ListVariable(List<Variable>? values = null) : Variable, IEquatable<
     
     private ListVariable GetRangeIndex(KeyValuePairVariable kvpVariable)
     {
-        int? left = null;
-        if (kvpVariable.Left is NumberVariable leftNumber)
+        if (kvpVariable.Left is not null && kvpVariable.Left is not NumberVariable)
         {
-            left = (int)leftNumber.Value;
-        } else if (kvpVariable.Left is not null)
-        {
-            throw new Exception("Left index must be a number or null");
+            throw new InterpreterInvalidIndexException(kvpVariable.Left);
         }
         
-        int? right = null;
-        if (kvpVariable.Right is NumberVariable rightNumber)
+        if (kvpVariable.Right is not null && kvpVariable.Right is not NumberVariable)
         {
-            right = (int)rightNumber.Value;
-        } else if (kvpVariable.Right is not null)
-        {
-            throw new Exception("Right index must be a number or null");
+            throw new InterpreterInvalidIndexException(kvpVariable.Right);
         }
+        
+        int left = kvpVariable.Left is NumberVariable leftNumber ? (int)leftNumber.Value : 0;
+        int right = kvpVariable.Right is NumberVariable rightNumber ? (int)rightNumber.Value : Values.Count - 1;
 
-        var index = left ?? 0;
-        var count = right - left ?? Values.Count - 1;
+        var index = left;
+        int count = right - left + 1;
         
         return new ListVariable(Values.GetRange(index, count));
     }

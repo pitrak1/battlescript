@@ -40,29 +40,42 @@ public static partial class E2ETests
             var classValues = new Dictionary<string, Variable>()
             {
                 { "i", new NumberVariable(1234) },
-                { "j", new FunctionVariable([], [])}
+                { "j", new FunctionVariable([], [new ReturnInstruction(new NumberInstruction(1234))])}
             };
             var objectValues = new Dictionary<string, Variable>()
             {
                 { "i", new NumberVariable(1234) }
             };
-            var input = "class asdf:\n\ti = 1234\nx = asdf()";
+            var input = @"
+class asdf:
+    i = 1234
+    def j():
+        return 5
+
+x = asdf()";
             var expected = new ObjectVariable(
                 objectValues,
                 new ClassVariable(classValues));
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
         public void AllowsSuperclasses()
         {
             var input = "class asdf:\n\ti = 1234\nclass qwer(asdf):\n\tj = 2345";
+            var superclass = new ClassVariable(
+                new Dictionary<string, Variable>()
+                {
+                    { "i", new NumberVariable(1234) }
+                });
             var expected = new ClassVariable(
                 new Dictionary<string, Variable>()
                 {
                     { "j", new NumberVariable(2345) }
-                });
-            E2EAssertions.AssertVariableValueFromInput(input, "qwer", expected);
+                }, [superclass]);
+            var result = Runner.Run(input);
+            Assert.That(result[0]["qwer"], Is.EqualTo(expected));
         }
         
         [Test]
