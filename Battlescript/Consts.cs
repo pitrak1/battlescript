@@ -147,6 +147,49 @@ public static class Consts
         "vars",
         "zip"
     ];
+
+    public static readonly string[] OverrideMethods =
+    [
+        "__add__",
+        "__sub__",
+        "__mul__",
+        "__truediv__",
+        "__floordiv__",
+        "__mod__",
+        "__pow__",
+        "__matmul__",
+        "__neg__",
+        "__pos__",
+        "__invert__",
+        "__eq__",
+        "__ne__",
+        "__lt__",
+        "__gt__",
+        "__le__",
+        "__ge__",
+        "__and__",
+        "__or__",
+        "__xor__",
+        "__lshift__",
+        "__rshift__",
+        "__iadd__",
+        "__isub__",
+        "__imul__",
+        "__itruediv__",
+        "__ifloordiv__",
+        "__imod__",
+        "__ipow__",
+        "__iand__",
+        "__ior__",
+        "__ixor__",
+        "__ilshift__",
+        "__irshift__",
+        "__str__",
+        "__repr__",
+        "__len__",
+        "__getitem__",
+        "__setitem__"
+    ];
     public static readonly string[] Booleans = ["True", "False"];
 
     public static readonly string[] Operators = [
