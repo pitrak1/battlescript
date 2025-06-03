@@ -17,7 +17,9 @@ public static partial class E2ETests
                 {
                     {"i", new NumberVariable(1234)}
                 });
-            E2EAssertions.AssertVariableValueFromInput(input, "asdf", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("asdf"));
+            Assert.That(result[0]["asdf"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -31,7 +33,9 @@ public static partial class E2ETests
             var expected = new ObjectVariable(
                 values,
                 new ClassVariable(values));
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -83,7 +87,9 @@ x = asdf()";
         {
             var input = "class asdf:\n\ti = 1234\nx = asdf()\ny = x.i";
             var expected = new NumberVariable(1234);
-            E2EAssertions.AssertVariableValueFromInput(input, "y", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("y"));
+            Assert.That(result[0]["y"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -96,7 +102,9 @@ x = asdf()";
                     { "i", new NumberVariable(1234) }
                 }
             );
-            E2EAssertions.AssertVariableValueFromInput(input, "asdf", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("asdf"));
+            Assert.That(result[0]["asdf"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -112,7 +120,9 @@ x.j()
 y = x.i
 ";
             var expected = new NumberVariable(2345);
-            E2EAssertions.AssertVariableValueFromInput(input, "y", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("y"));
+            Assert.That(result[0]["y"], Is.EqualTo(expected));
         }
     }
 }

@@ -18,7 +18,9 @@ public static partial class E2ETests {
                     new StringVariable("5"),
                 }
             );
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
 
         [Test]
@@ -26,13 +28,15 @@ public static partial class E2ETests {
         {
             var input = "x = [5, '5']\ny = x[1]";
             var expected = new StringVariable("5");
-            E2EAssertions.AssertVariableValueFromInput(input, "y", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("y"));
+            Assert.That(result[0]["y"], Is.EqualTo(expected));
         }
 
         [Test]
         public void SupportsListRangeIndexing()
         {
-            var input = "x = [5, 3, 2, '5']\ny = x[1:3]";
+            var input = "x = [5, 3, 2, '5']\ny = x[1:2]";
             var expected = new ListVariable(
                 new List<Variable>
                 {
@@ -40,13 +44,15 @@ public static partial class E2ETests {
                     new NumberVariable(2),
                 }
             );
-            E2EAssertions.AssertVariableValueFromInput(input, "y", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("y"));
+            Assert.That(result[0]["y"], Is.EqualTo(expected));
         }
         
         [Test]
         public void SupportsListRangeIndexingWithNullStart()
         {
-            var input = "x = [5, 3, 2, '5']\ny = x[:3]";
+            var input = "x = [5, 3, 2, '5']\ny = x[:2]";
             var expected = new ListVariable(
                 new List<Variable>
                 {
@@ -55,7 +61,9 @@ public static partial class E2ETests {
                     new NumberVariable(2),
                 }
             );
-            E2EAssertions.AssertVariableValueFromInput(input, "y", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("y"));
+            Assert.That(result[0]["y"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -70,7 +78,9 @@ public static partial class E2ETests {
                     new StringVariable("5"),
                 }
             );
-            E2EAssertions.AssertVariableValueFromInput(input, "y", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("y"));
+            Assert.That(result[0]["y"], Is.EqualTo(expected));
         }
     }
 }

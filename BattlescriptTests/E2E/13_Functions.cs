@@ -20,7 +20,9 @@ public static partial class E2ETests {
                         left: new VariableInstruction("x"),
                         right: new NumberInstruction(5))
                 });
-            E2EAssertions.AssertVariableValueFromInput(input, "func", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("func"));
+            Assert.That(result[0]["func"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -39,7 +41,9 @@ public static partial class E2ETests {
                         left: new VariableInstruction("x"),
                         right: new VariableInstruction("asdf"))
                 });
-            E2EAssertions.AssertVariableValueFromInput(input, "func", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("func"));
+            Assert.That(result[0]["func"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -59,7 +63,9 @@ public static partial class E2ETests {
                         left: new VariableInstruction("x"),
                         right: new VariableInstruction("asdf"))
                 });
-            E2EAssertions.AssertVariableValueFromInput(input, "func", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("func"));
+            Assert.That(result[0]["func"], Is.EqualTo(expected));
         }
     }
     
@@ -71,7 +77,9 @@ public static partial class E2ETests {
         {
             var input = "x = 6\ndef func():\n\tx = 5\nfunc()";
             var expected = new NumberVariable(5);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -79,7 +87,9 @@ public static partial class E2ETests {
         {
             var input = "def func():\n\treturn 6\nx = func()";
             var expected = new NumberVariable(6);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
 
         [Test]
@@ -87,7 +97,9 @@ public static partial class E2ETests {
         {
             var input = "def func(x, y):\n\treturn x + y\nx = func(2, 3)";
             var expected = new NumberVariable(5);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
     }
 }

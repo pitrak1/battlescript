@@ -13,10 +13,13 @@ public static partial class E2ETests {
             var input = "x = 5 == 6\ny = 5 == 5";
             
             var expected1 = new BooleanVariable(false);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected1);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected1));
             
             var expected2 = new BooleanVariable(true);
-            E2EAssertions.AssertVariableValueFromInput(input, "y", expected2);
+            Assert.That(result[0], Contains.Key("y"));
+            Assert.That(result[0]["y"], Is.EqualTo(expected2));
         }
         
         [Test]
@@ -25,10 +28,13 @@ public static partial class E2ETests {
             var input = "x = 5 != 6\ny = 5 != 5";
             
             var expected1 = new BooleanVariable(true);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected1);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected1));
             
             var expected2 = new BooleanVariable(false);
-            E2EAssertions.AssertVariableValueFromInput(input, "y", expected2);
+            Assert.That(result[0], Contains.Key("y"));
+            Assert.That(result[0]["y"], Is.EqualTo(expected2));
         }
         
         [Test]
@@ -37,13 +43,17 @@ public static partial class E2ETests {
             var input = "x = 5 > 6\ny = 6 > 6\nz = 7 > 6";
             
             var expected1 = new BooleanVariable(false);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected1);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected1));
             
             var expected2 = new BooleanVariable(false);
-            E2EAssertions.AssertVariableValueFromInput(input, "y", expected2);
+            Assert.That(result[0], Contains.Key("y"));
+            Assert.That(result[0]["y"], Is.EqualTo(expected2));
             
             var expected3 = new BooleanVariable(true);
-            E2EAssertions.AssertVariableValueFromInput(input, "z", expected3);
+            Assert.That(result[0], Contains.Key("z"));
+            Assert.That(result[0]["z"], Is.EqualTo(expected3));
         }
         
         [Test]
@@ -52,13 +62,17 @@ public static partial class E2ETests {
             var input = "x = 5 < 6\ny = 6 < 6\nz = 7 < 6";
             
             var expected1 = new BooleanVariable(true);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected1);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected1));
             
             var expected2 = new BooleanVariable(false);
-            E2EAssertions.AssertVariableValueFromInput(input, "y", expected2);
+            Assert.That(result[0], Contains.Key("y"));
+            Assert.That(result[0]["y"], Is.EqualTo(expected2));
             
             var expected3 = new BooleanVariable(false);
-            E2EAssertions.AssertVariableValueFromInput(input, "z", expected3);
+            Assert.That(result[0], Contains.Key("z"));
+            Assert.That(result[0]["z"], Is.EqualTo(expected3));
         }
         
         [Test]
@@ -67,13 +81,17 @@ public static partial class E2ETests {
             var input = "x = 5 >= 6\ny = 6 >= 6\nz = 7 >= 6";
             
             var expected1 = new BooleanVariable(false);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected1);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected1));
             
             var expected2 = new BooleanVariable(true);
-            E2EAssertions.AssertVariableValueFromInput(input, "y", expected2);
+            Assert.That(result[0], Contains.Key("y"));
+            Assert.That(result[0]["y"], Is.EqualTo(expected2));
             
             var expected3 = new BooleanVariable(true);
-            E2EAssertions.AssertVariableValueFromInput(input, "z", expected3);
+            Assert.That(result[0], Contains.Key("z"));
+            Assert.That(result[0]["z"], Is.EqualTo(expected3));
         }
         
         [Test]
@@ -82,13 +100,17 @@ public static partial class E2ETests {
             var input = "x = 5 <= 6\ny = 6 <= 6\nz = 7 <= 6";
             
             var expected1 = new BooleanVariable(true);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected1);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected1));
             
             var expected2 = new BooleanVariable(true);
-            E2EAssertions.AssertVariableValueFromInput(input, "y", expected2);
+            Assert.That(result[0], Contains.Key("y"));
+            Assert.That(result[0]["y"], Is.EqualTo(expected2));
             
             var expected3 = new BooleanVariable(false);
-            E2EAssertions.AssertVariableValueFromInput(input, "z", expected3);
+            Assert.That(result[0], Contains.Key("z"));
+            Assert.That(result[0]["z"], Is.EqualTo(expected3));
         }
     }
 }

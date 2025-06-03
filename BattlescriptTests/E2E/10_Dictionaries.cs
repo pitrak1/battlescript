@@ -18,7 +18,9 @@ public static partial class E2ETests {
                     new (new StringVariable("qwer"), new StringVariable("5"))
                 }
             );
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
 
         [Test]

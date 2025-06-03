@@ -12,7 +12,9 @@ public static partial class E2ETests {
         {
             var input = "x = 5 + 6";
             var expected = new NumberVariable(11);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -20,7 +22,9 @@ public static partial class E2ETests {
         {
             var input = "x = 5 - 3";
             var expected = new NumberVariable(2);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -28,7 +32,9 @@ public static partial class E2ETests {
         {
             var input = "x = 5 * 3";
             var expected = new NumberVariable(15);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -36,7 +42,9 @@ public static partial class E2ETests {
         {
             var input = "x = 5 / 2";
             var expected = new NumberVariable(2.5);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -44,7 +52,9 @@ public static partial class E2ETests {
         {
             var input = "x = 5 // 2";
             var expected = new NumberVariable(2);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -52,7 +62,9 @@ public static partial class E2ETests {
         {
             var input = "x = 5 % 2";
             var expected = new NumberVariable(1);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -60,7 +72,9 @@ public static partial class E2ETests {
         {
             var input = "x = 5 ** 2";
             var expected = new NumberVariable(25);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
     }
 }

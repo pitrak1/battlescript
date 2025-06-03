@@ -12,7 +12,9 @@ public static partial class E2ETests {
         {
             var input = "x = 'asdf'";
             var expected = new StringVariable("asdf");
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -20,7 +22,9 @@ public static partial class E2ETests {
         {
             var input = "x = \"asdf\"";
             var expected = new StringVariable("asdf");
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
         
         // We ultimately need to separate this into ints and floats
@@ -29,7 +33,9 @@ public static partial class E2ETests {
         {
             var input = "x = 5.5";
             var expected = new NumberVariable(5.5);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
 
         [Test]
@@ -37,7 +43,9 @@ public static partial class E2ETests {
         {
             var input = "x = True";
             var expected = new BooleanVariable(true);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
     }
 }

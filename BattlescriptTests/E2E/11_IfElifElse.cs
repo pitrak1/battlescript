@@ -12,7 +12,9 @@ public static partial class E2ETests {
         {
             var input = "x = 5\nif x == 5:\n\tx = 6";
             var expected = new NumberVariable(6);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -20,7 +22,9 @@ public static partial class E2ETests {
         {
             var input = "x = 5\nif x == 6:\n\tx = 6";
             var expected = new NumberVariable(5);
-            E2EAssertions.AssertVariableValueFromInput(input, "x", expected);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
     }
 }
