@@ -32,8 +32,9 @@ public class DictionaryInstruction : Instruction, IEquatable<DictionaryInstructi
 
     public override Variable Interpret(
         Memory memory, 
-        Variable? context = null, 
-        Variable? objectContext = null)
+        Variable? instructionContext = null,
+        ObjectVariable? objectContext = null,
+        ClassVariable? lexicalContext = null)
     {
         var variableValue = new List<KeyValuePairVariable>();
         foreach (var kvp in Values)

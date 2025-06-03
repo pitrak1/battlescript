@@ -49,16 +49,17 @@ public class SquareBracketsInstruction : Instruction, IEquatable<SquareBracketsI
 
     public override Variable Interpret(
         Memory memory, 
-        Variable? context = null, 
-        Variable? objectContext = null)
+        Variable? instructionContext = null,
+        ObjectVariable? objectContext = null,
+        ClassVariable? lexicalContext = null)
     {
         // Dealing with an index
-        if (context is not null)
+        if (instructionContext is not null)
         {
             if (Values.Count > 1) throw new Exception("Too many index values");
             
-            var result = context.GetItem(memory, this);
-            return Next is not null ? Next.Interpret(memory, result, context) : result;
+            var result = instructionContext.GetItem(memory, this);
+            return Next is not null ? Next.Interpret(memory, result, instructionContext as ObjectVariable) : result;
         }
         // Dealing with list creation
         else

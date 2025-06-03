@@ -31,8 +31,9 @@ public class AssignmentInstruction : Instruction, IEquatable<AssignmentInstructi
 
     public override Variable Interpret(
         Memory memory, 
-        Variable? context = null, 
-        Variable? objectContext = null)
+        Variable? instructionContext = null,
+        ObjectVariable? objectContext = null,
+        ClassVariable? lexicalContext = null)
     {
         var left = Left.Interpret(memory);
         var right = Right.Interpret(memory);

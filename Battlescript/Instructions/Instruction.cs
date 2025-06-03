@@ -85,10 +85,17 @@ public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Ins
         }
     }
 
+    // These three context are used for three distinct things:
+    // - instructionContext is used for ongoing interpretations of a single instruction, i.e. a parens instruction
+    // needs to know whether it's calling a function or class to be interpreted
+    // - objectContext is used for class methods because the first argument to a method will always be `self`
+    // - lexicalContext is used for keywords like `super` because we need to know in what class a method was actually
+    // defined to find its superclass, the object is not enough
     public abstract Variable Interpret(
         Memory memory,
-        Variable? context = null,
-        Variable? objectContext = null);
+        Variable? instructionContext = null,
+        ObjectVariable? objectContext = null,
+        ClassVariable? lexicalContext = null);
 
     // All the code below is to override equality
     public override bool Equals(object obj) => Equals(obj as Instruction);

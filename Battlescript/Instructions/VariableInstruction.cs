@@ -21,8 +21,9 @@ public class VariableInstruction : Instruction, IEquatable<VariableInstruction>
 
     public override Variable Interpret(
         Memory memory, 
-        Variable? context = null, 
-        Variable? objectContext = null)
+        Variable? instructionContext = null,
+        ObjectVariable? objectContext = null,
+        ClassVariable? lexicalContext = null)
     {
         var variable = memory.GetVariable(Name);
 
@@ -32,12 +33,12 @@ public class VariableInstruction : Instruction, IEquatable<VariableInstruction>
         }
         else
         {
-            if (variable is ObjectVariable)
+            if (variable is ObjectVariable objectVariable)
             {
-                return Next.Interpret(memory, variable, variable);
+                return Next.Interpret(memory, variable, objectVariable);
             }
             
-            return Next.Interpret(memory, variable, null);
+            return Next.Interpret(memory, variable);
         }
     }
     

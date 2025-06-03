@@ -24,8 +24,9 @@ public class IfInstruction : Instruction, IEquatable<IfInstruction>
 
     public override Variable Interpret(
         Memory memory, 
-        Variable? context = null, 
-        Variable? objectContext = null)
+        Variable? instructionContext = null,
+        ObjectVariable? objectContext = null,
+        ClassVariable? lexicalContext = null)
     {
         var condition = Condition.Interpret(memory);
         if (InterpreterUtilities.IsVariableTruthy(condition))

@@ -18,8 +18,9 @@ public class ReturnInstruction : Instruction, IEquatable<ReturnInstruction>
 
     public override Variable Interpret(
         Memory memory, 
-        Variable? context = null, 
-        Variable? objectContext = null)
+        Variable? instructionContext = null,
+        ObjectVariable? objectContext = null,
+        ClassVariable? lexicalContext = null)
     {
         var returnValue = Value.Interpret(memory);
         memory.SetVariable(new VariableInstruction("return"), returnValue);

@@ -25,10 +25,11 @@ public class KeyValuePairInstruction : Instruction, IEquatable<KeyValuePairInstr
 
     public override Variable Interpret(
         Memory memory, 
-        Variable? context = null, 
-        Variable? objectContext = null)
+        Variable? instructionContext = null,
+        ObjectVariable? objectContext = null,
+        ClassVariable? lexicalContext = null)
     {
-        return new KeyValuePairVariable(Left?.Interpret(memory, context), Right?.Interpret(memory, context));
+        return new KeyValuePairVariable(Left?.Interpret(memory, instructionContext), Right?.Interpret(memory, instructionContext));
     }
     
     // All the code below is to override equality

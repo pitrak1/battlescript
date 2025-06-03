@@ -28,8 +28,9 @@ public class ClassInstruction : Instruction, IEquatable<ClassInstruction>
 
     public override Variable Interpret(
         Memory memory, 
-        Variable? context = null, 
-        Variable? objectContext = null)
+        Variable? instructionContext = null,
+        ObjectVariable? objectContext = null,
+        ClassVariable? lexicalContext = null)
     {
         List<ClassVariable> superclasses = new List<ClassVariable>();
         if (Superclasses.Count > 0)

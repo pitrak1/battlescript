@@ -50,8 +50,9 @@ public class FunctionInstruction : Instruction, IEquatable<FunctionInstruction>
 
     public override Variable Interpret(
         Memory memory, 
-        Variable? context = null, 
-        Variable? objectContext = null)
+        Variable? instructionContext = null,
+        ObjectVariable? objectContext = null,
+        ClassVariable? lexicalContext = null)
     {
         var functionValue = new FunctionVariable(Parameters, Instructions);
         memory.SetVariable(new VariableInstruction(Name), functionValue);

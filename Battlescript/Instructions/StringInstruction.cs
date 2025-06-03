@@ -18,8 +18,9 @@ public class StringInstruction : Instruction, IEquatable<StringInstruction>
     
     public override Variable Interpret(
         Memory memory, 
-        Variable? context = null, 
-        Variable? objectContext = null)
+        Variable? instructionContext = null,
+        ObjectVariable? objectContext = null,
+        ClassVariable? lexicalContext = null)
     {
         return new StringVariable(Value);
     }

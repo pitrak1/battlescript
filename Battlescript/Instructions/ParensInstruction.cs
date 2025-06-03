@@ -29,19 +29,20 @@ public class ParensInstruction : Instruction, IEquatable<ParensInstruction>
 
     public override Variable Interpret(
         Memory memory, 
-        Variable? context = null, 
-        Variable? objectContext = null)
+        Variable? instructionContext = null,
+        ObjectVariable? objectContext = null,
+        ClassVariable? lexicalContext = null)
     {
-        Debug.Assert(context is not null);
+        Debug.Assert(instructionContext is not null);
 
-        if (context is FunctionVariable functionVariable)
+        if (instructionContext is FunctionVariable functionVariable)
         {
             var objectVariable = objectContext is ObjectVariable ? (ObjectVariable)objectContext : null;
             return functionVariable.RunFunction(memory, Instructions, objectVariable);
         }
         else
         {
-            if (context is ClassVariable classVariable)
+            if (instructionContext is ClassVariable classVariable)
             {
                 return classVariable.CreateObject();
             }

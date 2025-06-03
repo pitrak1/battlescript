@@ -23,8 +23,9 @@ public class NumberInstruction : Instruction, IEquatable<NumberInstruction>
     
     public override Variable Interpret(        
         Memory memory, 
-        Variable? context = null, 
-        Variable? objectContext = null)
+        Variable? instructionContext = null,
+        ObjectVariable? objectContext = null,
+        ClassVariable? lexicalContext = null)
     {
         return new NumberVariable(Value);
     }
