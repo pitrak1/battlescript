@@ -55,6 +55,10 @@ public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Ins
                     throw new ParserUnexpectedTokenException(tokens[0]);
             }
         }
+        else if (tokens[0].Type == Consts.TokenTypes.BuiltIn)
+        {
+            return new BuiltInInstruction(tokens);
+        }
         else if (colonIndex != -1)
         {
             return new KeyValuePairInstruction(tokens);

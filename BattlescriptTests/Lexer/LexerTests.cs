@@ -118,6 +118,15 @@ public static class LexerTests
             var expected = new List<Token>() { new Token(Consts.TokenTypes.Identifier, "asdf") };
             Assert.That(result, Is.EquivalentTo(expected));
         }
+
+        [Test]
+        public void HandlesBuiltIns()
+        {
+            var lexer = new Lexer("super");
+            var result = lexer.Run();
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.BuiltIn, "super") };
+            Assert.That(result, Is.EquivalentTo(expected));
+        }
     }
 
     [TestFixture]

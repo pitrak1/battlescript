@@ -249,6 +249,7 @@ public static class Consts
         Separator,
         Operator,
         Assignment,
+        BuiltIn,
         Breakpoint
     }
 }
