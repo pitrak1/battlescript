@@ -18,7 +18,7 @@ public static partial class E2ETests {
                     new AssignmentInstruction(
                         operation: "=", 
                         left: new VariableInstruction("x"),
-                        right: new NumberInstruction(5))
+                        right: new IntegerInstruction(5))
                 });
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("func"));
@@ -76,7 +76,7 @@ public static partial class E2ETests {
         public void HandlesFunctionCallWithNoArguments()
         {
             var input = "x = 6\ndef func():\n\tx = 5\nfunc()";
-            var expected = new NumberVariable(5);
+            var expected = new IntegerVariable(5);
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("x"));
             Assert.That(result[0]["x"], Is.EqualTo(expected));
@@ -86,7 +86,7 @@ public static partial class E2ETests {
         public void HandlesFunctionCallWithReturnValue()
         {
             var input = "def func():\n\treturn 6\nx = func()";
-            var expected = new NumberVariable(6);
+            var expected = new IntegerVariable(6);
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("x"));
             Assert.That(result[0]["x"], Is.EqualTo(expected));
@@ -96,7 +96,7 @@ public static partial class E2ETests {
         public void HandlesFunctionCallWithArguments()
         {
             var input = "def func(x, y):\n\treturn x + y\nx = func(2, 3)";
-            var expected = new NumberVariable(5);
+            var expected = new IntegerVariable(5);
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("x"));
             Assert.That(result[0]["x"], Is.EqualTo(expected));

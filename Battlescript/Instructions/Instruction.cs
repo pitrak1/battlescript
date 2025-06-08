@@ -71,9 +71,13 @@ public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Ins
         {
             return new VariableInstruction(tokens);
         }
-        else if (tokens[0].Type == Consts.TokenTypes.Number)
+        else if (tokens[0].Type == Consts.TokenTypes.Float)
         {
-            return new NumberInstruction(tokens);
+            return new FloatInstruction(tokens);
+        }
+        else if (tokens[0].Type == Consts.TokenTypes.Integer)
+        {
+            return new IntegerInstruction(tokens);
         }
         else if (tokens[0].Type == Consts.TokenTypes.String)
         {

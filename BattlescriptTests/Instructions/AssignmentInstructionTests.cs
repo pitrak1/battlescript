@@ -17,7 +17,7 @@ public static partial class InstructionTests
             var expected = new AssignmentInstruction(
                 operation: "=",
                 left: new VariableInstruction("x"),
-                right: new NumberInstruction(6.0)
+                right: new IntegerInstruction(6)
             );
             
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
@@ -32,7 +32,7 @@ public static partial class InstructionTests
             var expected = new AssignmentInstruction(
                 operation: "=",
                 left: new VariableInstruction("x"),
-                right: new OperationInstruction("+", new NumberInstruction(5.0), new NumberInstruction(6.0))
+                right: new OperationInstruction("+", new IntegerInstruction(5), new IntegerInstruction(6))
             );
             
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
@@ -48,7 +48,7 @@ public static partial class InstructionTests
             var result = Runner.Run("x = 6");
             var expected = new Dictionary<string, Variable>
             {
-                { "x", new NumberVariable(6.0) }
+                { "x", new IntegerVariable(6) }
             };
             Assert.That(result.First(), Is.EquivalentTo(expected));
         }
@@ -59,7 +59,7 @@ public static partial class InstructionTests
             var result = Runner.Run("x = 6\nx += 2");
             var expected = new Dictionary<string, Variable>
             {
-                { "x", new NumberVariable(8.0) }
+                { "x", new IntegerVariable(8) }
             };
             Assert.That(result.First(), Is.EquivalentTo(expected));
         }
@@ -68,7 +68,7 @@ public static partial class InstructionTests
         public void ReturnsAssignedVariable()
         {
             var scopes = Runner.Run("x = 6");
-            Assert.That(scopes.First()["x"], Is.EqualTo(new NumberVariable(6.0)));
+            Assert.That(scopes.First()["x"], Is.EqualTo(new IntegerVariable(6)));
         }
 
         [Test]

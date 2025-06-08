@@ -57,10 +57,10 @@ public static class ClassVariableTests
             // and we're showing this by indexing with "x" because it doesn't matter what we index with
             var getItemFunction = new FunctionVariable(
                 [new VariableInstruction("self"), new VariableInstruction("index")], 
-                [new ReturnInstruction(new NumberInstruction(5.0))]);
+                [new ReturnInstruction(new IntegerInstruction(5))]);
             var classVariable = new ClassVariable(new Dictionary<string, Variable>()
             {
-                {"x", new NumberVariable(7.0)},
+                {"x", new IntegerVariable(7)},
                 {"__getitem__", getItemFunction}
             });
             var objectVariable = new ObjectVariable(null, classVariable);
@@ -68,7 +68,7 @@ public static class ClassVariableTests
             
             Assert.That(
                 classVariable.GetItem(new Memory(), index, objectVariable), 
-                Is.EqualTo(new NumberVariable(5.0)));
+                Is.EqualTo(new IntegerVariable(5)));
         }
         
         [Test]
@@ -76,10 +76,10 @@ public static class ClassVariableTests
         {
             var getItemFunction = new FunctionVariable(
                 [new VariableInstruction("self"), new VariableInstruction("index")], 
-                [new ReturnInstruction(new NumberInstruction(5.0))]);
+                [new ReturnInstruction(new IntegerInstruction(5))]);
             var classVariable = new ClassVariable(new Dictionary<string, Variable>()
             {
-                {"x", new NumberVariable(7.0)},
+                {"x", new IntegerVariable(7)},
                 {"__getitem__", getItemFunction}
             });
             var objectVariable = new ObjectVariable(null, classVariable);
@@ -87,7 +87,7 @@ public static class ClassVariableTests
             
             Assert.That(
                 classVariable.GetItem(new Memory(), index), 
-                Is.EqualTo(new NumberVariable(7.0)));
+                Is.EqualTo(new IntegerVariable(7)));
         }
 
         [Test]

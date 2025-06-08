@@ -157,7 +157,7 @@ public static class ParserUtilitiesTests
             var lexerResult = lexer.Run();
             var result = ParserUtilities.ParseLeftAndRightAroundIndex(lexerResult, 1);
             Assert.That(result.Left, Is.TypeOf<VariableInstruction>());
-            Assert.That(result.Right, Is.TypeOf<NumberInstruction>());
+            Assert.That(result.Right, Is.TypeOf<IntegerInstruction>());
         }
     }
     
@@ -198,7 +198,7 @@ public static class ParserUtilitiesTests
 
             Assert.That(parsed.Values.Count, Is.EqualTo(1));
 
-            var expected = new NumberInstruction(1.0);
+            var expected = new IntegerInstruction(1);
             Assert.That(parsed.Values[0], Is.EqualTo(expected));
         }
 
@@ -213,8 +213,8 @@ public static class ParserUtilitiesTests
 
             var expected = new List<Instruction>()
             {
-                new NumberInstruction(1.0),
-                new NumberInstruction(2.0)
+                new IntegerInstruction(1),
+                new IntegerInstruction(2)
             };
             Assert.That(parsed.Values, Is.EquivalentTo(expected));
         }
@@ -231,8 +231,8 @@ public static class ParserUtilitiesTests
 
             var expected = new List<Instruction>()
             {
-                new SquareBracketsInstruction([new NumberInstruction(1.0)]),
-                new SquareBracketsInstruction([new NumberInstruction(2.0)])
+                new SquareBracketsInstruction([new IntegerInstruction(1)]),
+                new SquareBracketsInstruction([new IntegerInstruction(2)])
             };
 
             Assert.That(parsed.Values, Is.EquivalentTo(expected));

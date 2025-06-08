@@ -16,7 +16,7 @@ public static partial class InstructionTests
             
             var expected = new ParensInstruction(
                 [
-                    new NumberInstruction(4),
+                    new IntegerInstruction(4),
                     new StringInstruction("asdf")
                 ]
             );
@@ -42,9 +42,9 @@ public static partial class InstructionTests
                             new OperationInstruction(
                                 "+",
                                 new VariableInstruction("asdf"),
-                                new NumberInstruction(5)))
+                                new IntegerInstruction(5)))
                     ]),
-                ["x"] = new NumberVariable(9)
+                ["x"] = new IntegerVariable(9)
             };
             
             Assert.That(result[0], Is.EquivalentTo(expected));
@@ -57,7 +57,7 @@ public static partial class InstructionTests
 
             var classBody = new Dictionary<string, Variable>()
             {
-                ["x"] = new NumberVariable(6)
+                ["x"] = new IntegerVariable(6)
             };
             var expected = new ObjectVariable(classBody, new ClassVariable(classBody));
             

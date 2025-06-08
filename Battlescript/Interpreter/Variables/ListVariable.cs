@@ -11,20 +11,20 @@ public class ListVariable(List<Variable>? values = null) : Variable, IEquatable<
         Debug.Assert(index.Values.Count == 1);
 
         var indexVariable = index.Values.First().Interpret(memory);
-        Debug.Assert(indexVariable is NumberVariable);
+        Debug.Assert(indexVariable is IntegerVariable);
 
-        if (indexVariable is NumberVariable indexNumberVariable)
+        if (indexVariable is IntegerVariable indexNumberVariable)
         {
             if (index.Next is null)
             {
-                Values[(int)indexNumberVariable.Value] = valueVariable;
+                Values[indexNumberVariable.Value] = valueVariable;
                 return true;
             }
             else
             {
                 Debug.Assert(index.Next is SquareBracketsInstruction);
                 var nextInstruction = index.Next as SquareBracketsInstruction;
-                return Values[(int)indexNumberVariable.Value].SetItem(memory, valueVariable, nextInstruction!);
+                return Values[indexNumberVariable.Value].SetItem(memory, valueVariable, nextInstruction!);
             }
         }
         else
@@ -56,35 +56,35 @@ public class ListVariable(List<Variable>? values = null) : Variable, IEquatable<
         }
         else
         {
-            var indexNumberVariable = indexVariable as NumberVariable;
+            var indexNumberVariable = indexVariable as IntegerVariable;
             
             if (index.Next is null)
             {
-                return Values[(int)indexNumberVariable.Value];
+                return Values[indexNumberVariable.Value];
             }
             else
             {
                 Debug.Assert(index.Next is SquareBracketsInstruction);
                 var nextInstruction = index.Next as SquareBracketsInstruction;
-                return Values[(int)indexNumberVariable.Value].GetItem(memory, nextInstruction!);
+                return Values[indexNumberVariable.Value].GetItem(memory, nextInstruction!);
             }
         }
     }
     
     private ListVariable GetRangeIndex(KeyValuePairVariable kvpVariable)
     {
-        if (kvpVariable.Left is not null && kvpVariable.Left is not NumberVariable)
+        if (kvpVariable.Left is not null && kvpVariable.Left is not IntegerVariable)
         {
             throw new InterpreterInvalidIndexException(kvpVariable.Left);
         }
         
-        if (kvpVariable.Right is not null && kvpVariable.Right is not NumberVariable)
+        if (kvpVariable.Right is not null && kvpVariable.Right is not IntegerVariable)
         {
             throw new InterpreterInvalidIndexException(kvpVariable.Right);
         }
         
-        int left = kvpVariable.Left is NumberVariable leftNumber ? (int)leftNumber.Value : 0;
-        int right = kvpVariable.Right is NumberVariable rightNumber ? (int)rightNumber.Value : Values.Count - 1;
+        int left = kvpVariable.Left is IntegerVariable leftNumber ? leftNumber.Value : 0;
+        int right = kvpVariable.Right is IntegerVariable rightNumber ? rightNumber.Value : Values.Count - 1;
 
         var index = left;
         int count = right - left + 1;

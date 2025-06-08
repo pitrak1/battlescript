@@ -1,10 +1,10 @@
 namespace Battlescript;
 
-public class NumberInstruction : Instruction, IEquatable<NumberInstruction>
+public class FloatInstruction : Instruction, IEquatable<FloatInstruction>
 {
     public double Value { get; set; }
 
-    public NumberInstruction(List<Token> tokens)
+    public FloatInstruction(List<Token> tokens)
     {
         if (tokens.Count > 1)
         {
@@ -16,7 +16,7 @@ public class NumberInstruction : Instruction, IEquatable<NumberInstruction>
         Column = tokens[0].Column;
     }
 
-    public NumberInstruction(double value)
+    public FloatInstruction(double value)
     {
         Value = value;
     }
@@ -27,12 +27,12 @@ public class NumberInstruction : Instruction, IEquatable<NumberInstruction>
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        return new NumberVariable(Value);
+        return new FloatVariable(Value);
     }
     
     // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as NumberInstruction);
-    public bool Equals(NumberInstruction? instruction)
+    public override bool Equals(object obj) => Equals(obj as FloatInstruction);
+    public bool Equals(FloatInstruction? instruction)
     {
         if (instruction is null) return false;
         if (ReferenceEquals(this, instruction)) return true;

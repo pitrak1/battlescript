@@ -17,11 +17,11 @@ public static partial class InstructionTests
             var expected = new DictionaryInstruction(
                 [
                     new KeyValuePairInstruction(
-                        left: new NumberInstruction(4), 
-                        right: new NumberInstruction(5)
+                        left: new IntegerInstruction(4), 
+                        right: new IntegerInstruction(5)
                     ),
                     new KeyValuePairInstruction(
-                        left: new NumberInstruction(6), 
+                        left: new IntegerInstruction(6), 
                         right: new StringInstruction("asdf")
                     )
                 ]
@@ -41,7 +41,7 @@ public static partial class InstructionTests
                 [
                     new KeyValuePairInstruction(
                         left: new StringInstruction("asdf"), 
-                        right: new NumberInstruction(5)
+                        right: new IntegerInstruction(5)
                     ),
                     new KeyValuePairInstruction(
                         left: new StringInstruction("qwer"), 
@@ -65,7 +65,7 @@ public static partial class InstructionTests
             {
                 {
                     "x", new DictionaryVariable([
-                        new KeyValuePairVariable(new StringVariable("asdf"), new NumberVariable(5)),
+                        new KeyValuePairVariable(new StringVariable("asdf"), new IntegerVariable(5)),
                         new KeyValuePairVariable(new StringVariable("qwer"), new StringVariable("asdf"))
                     ])
                 }
@@ -81,8 +81,8 @@ public static partial class InstructionTests
             {
                 {
                     "x", new DictionaryVariable([
-                        new KeyValuePairVariable(new StringVariable("asdf"), new NumberVariable(5)),
-                        new KeyValuePairVariable(new NumberVariable(4), new StringVariable("asdf"))
+                        new KeyValuePairVariable(new StringVariable("asdf"), new IntegerVariable(5)),
+                        new KeyValuePairVariable(new IntegerVariable(4), new StringVariable("asdf"))
                     ])
                 }
             };
@@ -97,8 +97,8 @@ public static partial class InstructionTests
             {
                 {
                     "x", new DictionaryVariable([
-                        new KeyValuePairVariable(new StringVariable("asdf"), new NumberVariable(11)),
-                        new KeyValuePairVariable(new StringVariable("qwer"), new NumberVariable(12))
+                        new KeyValuePairVariable(new StringVariable("asdf"), new IntegerVariable(11)),
+                        new KeyValuePairVariable(new StringVariable("qwer"), new IntegerVariable(12))
                     ])
                 }
             };

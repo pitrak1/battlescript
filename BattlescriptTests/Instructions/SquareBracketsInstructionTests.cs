@@ -17,7 +17,7 @@ public static partial class InstructionTests
             var expected = new SquareBracketsInstruction(
                 values:
                 [
-                    new NumberInstruction(4),
+                    new IntegerInstruction(4),
                     new StringInstruction("asdf")
                 ]
             );
@@ -33,7 +33,7 @@ public static partial class InstructionTests
             
             var expected = new VariableInstruction(
                 name: "x",
-                next: new SquareBracketsInstruction([new NumberInstruction(4)])
+                next: new SquareBracketsInstruction([new IntegerInstruction(4)])
             );
             
             var result = Instruction.Parse(lexerResult);
@@ -49,8 +49,8 @@ public static partial class InstructionTests
             var expected = new VariableInstruction(
                 name: "x",
                 next: new SquareBracketsInstruction(
-                    values: [new NumberInstruction(4)],
-                    next: new SquareBracketsInstruction([new NumberInstruction(5)])
+                    values: [new IntegerInstruction(4)],
+                    next: new SquareBracketsInstruction([new IntegerInstruction(5)])
                 )
             );
             
@@ -68,8 +68,8 @@ public static partial class InstructionTests
                 next: new SquareBracketsInstruction(
                     [
                         new KeyValuePairInstruction(
-                            new NumberInstruction(4),
-                            new NumberInstruction(5)
+                            new IntegerInstruction(4),
+                            new IntegerInstruction(5)
                         )
                     ]
                 )
@@ -103,8 +103,8 @@ public static partial class InstructionTests
                 next: new SquareBracketsInstruction(
                     [new OperationInstruction(
                         "+",
-                        new NumberInstruction(1),
-                        new NumberInstruction(2))]
+                        new IntegerInstruction(1),
+                        new IntegerInstruction(2))]
                 )
             );
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
@@ -121,7 +121,7 @@ public static partial class InstructionTests
 
             var expected = new Dictionary<string, Variable>()
             {
-                ["x"] = new ListVariable([new NumberVariable(4), new StringVariable("asdf")])
+                ["x"] = new ListVariable([new IntegerVariable(4), new StringVariable("asdf")])
             };
             
             Assert.That(results[0], Is.EquivalentTo(expected));
@@ -131,7 +131,7 @@ public static partial class InstructionTests
         public void HandlesIndex()
         {
             var results = Runner.Run("x = [0, 1, 7, 3, 4]\ny = x[2]");
-            Assert.That(results[0]["y"], Is.EqualTo(new NumberVariable(7)));
+            Assert.That(results[0]["y"], Is.EqualTo(new IntegerVariable(7)));
         }
         
         [Test]
@@ -143,8 +143,8 @@ public static partial class InstructionTests
             var expected = new VariableInstruction(
                 name: "x",
                 next: new SquareBracketsInstruction(
-                    values: [new NumberInstruction(4)],
-                    next: new SquareBracketsInstruction([new NumberInstruction(5)])
+                    values: [new IntegerInstruction(4)],
+                    next: new SquareBracketsInstruction([new IntegerInstruction(5)])
                 )
             );
             
@@ -162,8 +162,8 @@ public static partial class InstructionTests
                 next: new SquareBracketsInstruction(
                     [
                         new KeyValuePairInstruction(
-                            new NumberInstruction(4),
-                            new NumberInstruction(5)
+                            new IntegerInstruction(4),
+                            new IntegerInstruction(5)
                         )
                     ]
                 )
@@ -197,8 +197,8 @@ public static partial class InstructionTests
                 next: new SquareBracketsInstruction(
                     [new OperationInstruction(
                         "+",
-                        new NumberInstruction(1),
-                        new NumberInstruction(2))]
+                        new IntegerInstruction(1),
+                        new IntegerInstruction(2))]
                 )
             );
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));

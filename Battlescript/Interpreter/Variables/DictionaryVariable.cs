@@ -45,9 +45,9 @@ public class DictionaryVariable(List<KeyValuePairVariable>? values): Variable, I
     {
         foreach (var pair in Values)
         {
-            if (pair.Left is NumberVariable leftNumberVariable && key is NumberVariable numberVariable)
+            if (pair.Left is IntegerVariable leftNumberVariable && key is IntegerVariable numberVariable)
             {
-                if ((int)leftNumberVariable.Value == (int)numberVariable.Value)
+                if (leftNumberVariable.Value == numberVariable.Value)
                 {
                     return pair;
                 }

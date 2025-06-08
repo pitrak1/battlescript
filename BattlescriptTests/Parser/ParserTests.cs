@@ -18,7 +18,7 @@ public class ParserTests
             new AssignmentInstruction(
                 operation: "=", 
                 left: new VariableInstruction("x"),
-                right: new NumberInstruction(5)
+                right: new IntegerInstruction(5)
             )
         };
         Assert.That(parserResult, Is.EqualTo(expected));
@@ -37,14 +37,14 @@ public class ParserTests
             new IfInstruction(
                 condition: new OperationInstruction(
                    operation: "<",
-                   left: new NumberInstruction(5), 
-                   right: new NumberInstruction(6)
+                   left: new IntegerInstruction(5), 
+                   right: new IntegerInstruction(6)
                 ), 
                 instructions: [
                     new AssignmentInstruction(
                         operation: "=",
                         left: new VariableInstruction("x"),
-                        right: new NumberInstruction(5)
+                        right: new IntegerInstruction(5)
                     )
                 ]
             )
@@ -66,19 +66,19 @@ public class ParserTests
             new AssignmentInstruction(
                 operation: "=",
                 left: new VariableInstruction("y"),
-                right: new NumberInstruction(7)
+                right: new IntegerInstruction(7)
             ),
             new IfInstruction(
                 condition: new OperationInstruction(
                     operation: "<",
-                    left: new NumberInstruction(5), 
-                    right: new NumberInstruction(6)
+                    left: new IntegerInstruction(5), 
+                    right: new IntegerInstruction(6)
                 ), 
                 instructions: [
                     new AssignmentInstruction(
                         operation: "=",
                         left: new VariableInstruction("x"),
-                        right: new NumberInstruction(5)
+                        right: new IntegerInstruction(5)
                     )
                 ]
             )
@@ -100,21 +100,21 @@ public class ParserTests
             new IfInstruction(
                 condition: new OperationInstruction(
                     operation: "<",
-                    left: new NumberInstruction(5), 
-                    right: new NumberInstruction(6)
+                    left: new IntegerInstruction(5), 
+                    right: new IntegerInstruction(6)
                 ),
                 instructions: [
                     new AssignmentInstruction(
                         operation: "=",
                         left: new VariableInstruction("x"),
-                        right: new NumberInstruction(5)
+                        right: new IntegerInstruction(5)
                     )
                 ]
             ),
             new AssignmentInstruction(
                 operation: "=",
                 left: new VariableInstruction("y"),
-                right: new NumberInstruction(7)
+                right: new IntegerInstruction(7)
             )
         };
         
@@ -134,21 +134,21 @@ public class ParserTests
             new IfInstruction(
                 condition: new OperationInstruction(
                     operation: "<",
-                    left: new NumberInstruction(5), 
-                    right: new NumberInstruction(6)
+                    left: new IntegerInstruction(5), 
+                    right: new IntegerInstruction(6)
                 ),
                 instructions: [
                     new IfInstruction(
                         condition: new OperationInstruction(
                             operation: "<",
-                            left: new NumberInstruction(5), 
-                            right: new NumberInstruction(6)
+                            left: new IntegerInstruction(5), 
+                            right: new IntegerInstruction(6)
                         ),
                         instructions: [
                             new AssignmentInstruction(
                                 operation: "=",
                                 left: new VariableInstruction("x"),
-                                right: new NumberInstruction(6)
+                                right: new IntegerInstruction(6)
                             )
                         ]
                     )
@@ -157,7 +157,7 @@ public class ParserTests
             new AssignmentInstruction(
                 operation: "=",
                 left: new VariableInstruction("y"),
-                right: new NumberInstruction(7)
+                right: new IntegerInstruction(7)
             )
         };
         

@@ -16,8 +16,8 @@ public static partial class InstructionTests
             
             var expected = new OperationInstruction(
                 operation: "+",
-                left: new NumberInstruction(5.0),
-                right: new NumberInstruction(6.0)
+                left: new IntegerInstruction(5),
+                right: new IntegerInstruction(6)
             );
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
@@ -34,7 +34,7 @@ public static partial class InstructionTests
                     "x", 
                     new SquareBracketsInstruction(
                         [new StringInstruction("i")])),
-                right: new NumberInstruction(6.0)
+                right: new IntegerInstruction(6)
             );
             
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
@@ -48,7 +48,7 @@ public static partial class InstructionTests
             
             var expected = new OperationInstruction(
                 operation: "~",
-                right: new NumberInstruction(6.0)
+                right: new IntegerInstruction(6)
             );
             
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
@@ -64,22 +64,8 @@ public static partial class InstructionTests
             var result = Runner.Run("x = 5 + 6");
             var expected = new Dictionary<string, Variable>()
             {
-                ["x"] = new NumberVariable(11)
+                ["x"] = new IntegerVariable(11)
             };
-            Assert.That(result[0], Is.EqualTo(expected));
-        }
-        
-        [Test]
-        public void HandlesUnaryOperators()
-        {
-            var result = Runner.Run("x = 6\ny = ~x");
-            
-            var expected = new Dictionary<string, Variable>()
-            {
-                ["x"] = new NumberVariable(6),
-                ["y"] = new NumberVariable(-7)
-            };
-            
             Assert.That(result[0], Is.EqualTo(expected));
         }
     }

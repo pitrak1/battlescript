@@ -29,7 +29,7 @@ public static partial class InstructionTests
             var result = Runner.Run("x = 3\nif True:\n\tx = 5");
             var expected = new Dictionary<string, Variable>()
             {
-                ["x"] = new NumberVariable(5)
+                ["x"] = new IntegerVariable(5)
             };
             
             Assert.That(result[0], Is.EqualTo(expected));
@@ -41,7 +41,7 @@ public static partial class InstructionTests
             var result = Runner.Run("x = 3\nif False:\n\tx = 5");
             var expected = new Dictionary<string, Variable>()
             {
-                ["x"] = new NumberVariable(3)
+                ["x"] = new IntegerVariable(3)
             };
             
             Assert.That(result[0], Is.EqualTo(expected));

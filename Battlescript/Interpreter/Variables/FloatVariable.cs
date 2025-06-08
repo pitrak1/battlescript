@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class NumberVariable(double value) : Variable, IEquatable<NumberVariable>
+public class FloatVariable(double value) : Variable
 {
     public double Value { get; set; } = value;
     
@@ -15,8 +15,8 @@ public class NumberVariable(double value) : Variable, IEquatable<NumberVariable>
     }
     
     // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as NumberVariable);
-    public bool Equals(NumberVariable? variable)
+    public override bool Equals(object obj) => Equals(obj as FloatVariable);
+    public bool Equals(FloatVariable? variable)
     {
         if (variable is null) return false;
         if (ReferenceEquals(this, variable)) return true;

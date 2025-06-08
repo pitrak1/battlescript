@@ -37,7 +37,7 @@ public static class MemoryTests
             var memory = new Memory();
             var scope = new Dictionary<string, Variable>()
             {
-                { "x", new NumberVariable(5.0) }
+                { "x", new IntegerVariable(5) }
             };
             memory.AddScope(scope);
             
@@ -54,7 +54,7 @@ public static class MemoryTests
         {
             var scope = new Dictionary<string, Variable>()
             {
-                { "x", new NumberVariable(5.0) }
+                { "x", new IntegerVariable(5) }
             };
             var memory = new Memory([scope]);
             var returnedScope = memory.RemoveScope();
@@ -88,15 +88,15 @@ public static class MemoryTests
         {
             var scope = new Dictionary<string, Variable>()
             {
-                { "x", new NumberVariable(5.0) }
+                { "x", new IntegerVariable(5) }
             };
             var memory = new Memory([scope]);
             var returnedVariable = memory.GetVariable("x");
             
-            Assert.That(returnedVariable is NumberVariable);
-            if (returnedVariable is NumberVariable numberVariable)
+            Assert.That(returnedVariable is IntegerVariable);
+            if (returnedVariable is IntegerVariable IntegerVariable)
             {
-                Assert.That(numberVariable.Value, Is.EqualTo(5.0));
+                Assert.That(IntegerVariable.Value, Is.EqualTo(5));
             }
         }
         
@@ -105,19 +105,19 @@ public static class MemoryTests
         {
             var scope1 = new Dictionary<string, Variable>()
             {
-                { "x", new NumberVariable(5.0) }
+                { "x", new IntegerVariable(5) }
             };
             var scope2 = new Dictionary<string, Variable>()
             {
-                { "y", new NumberVariable(8.0) }
+                { "y", new IntegerVariable(8) }
             };
             var memory = new Memory([scope1, scope2]);
             var returnedVariable = memory.GetVariable("x");
             
-            Assert.That(returnedVariable is NumberVariable);
-            if (returnedVariable is NumberVariable numberVariable)
+            Assert.That(returnedVariable is IntegerVariable);
+            if (returnedVariable is IntegerVariable IntegerVariable)
             {
-                Assert.That(numberVariable.Value, Is.EqualTo(5.0));
+                Assert.That(IntegerVariable.Value, Is.EqualTo(5));
             }
         }
 
@@ -126,19 +126,19 @@ public static class MemoryTests
         {
             var scope1 = new Dictionary<string, Variable>()
             {
-                { "x", new NumberVariable(5.0) }
+                { "x", new IntegerVariable(5) }
             };
             var scope2 = new Dictionary<string, Variable>()
             {
-                { "x", new NumberVariable(8.0) }
+                { "x", new IntegerVariable(8) }
             };
             var memory = new Memory([scope1, scope2]);
             var returnedVariable = memory.GetVariable("x");
             
-            Assert.That(returnedVariable is NumberVariable);
-            if (returnedVariable is NumberVariable numberVariable)
+            Assert.That(returnedVariable is IntegerVariable);
+            if (returnedVariable is IntegerVariable IntegerVariable)
             {
-                Assert.That(numberVariable.Value, Is.EqualTo(8.0));
+                Assert.That(IntegerVariable.Value, Is.EqualTo(8));
             }
         }
     }
@@ -151,13 +151,13 @@ public static class MemoryTests
         {
             var memory = new Memory();
             memory.AddScope();
-            memory.SetVariable(new VariableInstruction("x"), new NumberVariable(5.0));
+            memory.SetVariable(new VariableInstruction("x"), new IntegerVariable(5));
             var scopes = memory.GetScopes();
             
-            Assert.That(scopes[1]["x"] is NumberVariable);
-            if (scopes[1]["x"] is NumberVariable numberVariable)
+            Assert.That(scopes[1]["x"] is IntegerVariable);
+            if (scopes[1]["x"] is IntegerVariable IntegerVariable)
             {
-                Assert.That(numberVariable.Value, Is.EqualTo(5.0));
+                Assert.That(IntegerVariable.Value, Is.EqualTo(5));
             }
         }
 
@@ -166,16 +166,16 @@ public static class MemoryTests
         {
             var scope = new Dictionary<string, Variable>()
             {
-                { "x", new NumberVariable(5.0) }
+                { "x", new IntegerVariable(5) }
             };
             var memory = new Memory([scope]);
-            memory.SetVariable(new VariableInstruction("x"), new NumberVariable(8.0));
+            memory.SetVariable(new VariableInstruction("x"), new IntegerVariable(8));
             var scopes = memory.GetScopes();
             
-            Assert.That(scopes[0]["x"] is NumberVariable);
-            if (scopes[0]["x"] is NumberVariable numberVariable)
+            Assert.That(scopes[0]["x"] is IntegerVariable);
+            if (scopes[0]["x"] is IntegerVariable IntegerVariable)
             {
-                Assert.That(numberVariable.Value, Is.EqualTo(8.0));
+                Assert.That(IntegerVariable.Value, Is.EqualTo(8));
             }
         }
 
@@ -184,26 +184,26 @@ public static class MemoryTests
         {
             var scope1 = new Dictionary<string, Variable>()
             {
-                { "x", new NumberVariable(5.0) }
+                { "x", new IntegerVariable(5) }
             };
             var scope2 = new Dictionary<string, Variable>()
             {
-                { "x", new NumberVariable(6.0) }
+                { "x", new IntegerVariable(6) }
             };
             var memory = new Memory([scope1, scope2]);
-            memory.SetVariable(new VariableInstruction("x"), new NumberVariable(8.0));
+            memory.SetVariable(new VariableInstruction("x"), new IntegerVariable(8));
             var scopes = memory.GetScopes();
             
-            Assert.That(scopes[0]["x"] is NumberVariable);
-            if (scopes[0]["x"] is NumberVariable numberVariable1)
+            Assert.That(scopes[0]["x"] is IntegerVariable);
+            if (scopes[0]["x"] is IntegerVariable IntegerVariable1)
             {
-                Assert.That(numberVariable1.Value, Is.EqualTo(5.0));
+                Assert.That(IntegerVariable1.Value, Is.EqualTo(5));
             }
             
-            Assert.That(scopes[1]["x"] is NumberVariable);
-            if (scopes[1]["x"] is NumberVariable numberVariable2)
+            Assert.That(scopes[1]["x"] is IntegerVariable);
+            if (scopes[1]["x"] is IntegerVariable IntegerVariable2)
             {
-                Assert.That(numberVariable2.Value, Is.EqualTo(8.0));
+                Assert.That(IntegerVariable2.Value, Is.EqualTo(8));
             }
         }
 
@@ -212,29 +212,29 @@ public static class MemoryTests
         {
             var scope = new Dictionary<string, Variable>()
             {
-                { "x", new ListVariable([new NumberVariable(5.0), new NumberVariable(8.0)]) }
+                { "x", new ListVariable([new IntegerVariable(5), new IntegerVariable(8)]) }
             };
             var memory = new Memory([scope]);
             var variableInstructionWithIndex = new VariableInstruction(
                 "x",
-                new SquareBracketsInstruction([new NumberInstruction(1.0)]));
-            memory.SetVariable(variableInstructionWithIndex, new NumberVariable(10.0));
+                new SquareBracketsInstruction([new IntegerInstruction(1)]));
+            memory.SetVariable(variableInstructionWithIndex, new IntegerVariable(10));
             var scopes = memory.GetScopes();
             
             Assert.That(scopes[0]["x"] is ListVariable);
             if (scopes[0]["x"] is ListVariable listVariable)
             {
                 Assert.That(listVariable.Values.Count, Is.EqualTo(2));
-                Assert.That(listVariable.Values[0] is NumberVariable);
-                if (listVariable.Values[0] is NumberVariable numberVariable1)
+                Assert.That(listVariable.Values[0] is IntegerVariable);
+                if (listVariable.Values[0] is IntegerVariable IntegerVariable1)
                 {
-                    Assert.That(numberVariable1.Value, Is.EqualTo(5.0));
+                    Assert.That(IntegerVariable1.Value, Is.EqualTo(5));
                 }
                 
-                Assert.That(listVariable.Values[1] is NumberVariable);
-                if (listVariable.Values[1] is NumberVariable numberVariable2)
+                Assert.That(listVariable.Values[1] is IntegerVariable);
+                if (listVariable.Values[1] is IntegerVariable IntegerVariable2)
                 {
-                    Assert.That(numberVariable2.Value, Is.EqualTo(10.0));
+                    Assert.That(IntegerVariable2.Value, Is.EqualTo(10));
                 }
             }
         }
@@ -245,30 +245,30 @@ public static class MemoryTests
             var scope = new Dictionary<string, Variable>()
             {
                 { "x", new DictionaryVariable([
-                    new KeyValuePairVariable(new NumberVariable(5.0), new NumberVariable(8.0))
+                    new KeyValuePairVariable(new IntegerVariable(5), new IntegerVariable(8))
                 ])}
             };
             var memory = new Memory([scope]);
             var variableInstructionWithIndex = new VariableInstruction(
                 "x",
-                new SquareBracketsInstruction([new NumberInstruction(5.0)]));
-            memory.SetVariable(variableInstructionWithIndex, new NumberVariable(10.0));
+                new SquareBracketsInstruction([new IntegerInstruction(5)]));
+            memory.SetVariable(variableInstructionWithIndex, new IntegerVariable(10));
             var scopes = memory.GetScopes();
             
             Assert.That(scopes[0]["x"] is DictionaryVariable);
             if (scopes[0]["x"] is DictionaryVariable dictionaryVariable)
             {
                 Assert.That(dictionaryVariable.Values.Count, Is.EqualTo(1));
-                Assert.That(dictionaryVariable.Values[0].Left is NumberVariable);
-                if (dictionaryVariable.Values[0].Left is NumberVariable numberVariable1)
+                Assert.That(dictionaryVariable.Values[0].Left is IntegerVariable);
+                if (dictionaryVariable.Values[0].Left is IntegerVariable IntegerVariable1)
                 {
-                    Assert.That(numberVariable1.Value, Is.EqualTo(5.0));
+                    Assert.That(IntegerVariable1.Value, Is.EqualTo(5));
                 }
                 
-                Assert.That(dictionaryVariable.Values[0].Right is NumberVariable);
-                if (dictionaryVariable.Values[0].Right is NumberVariable numberVariable2)
+                Assert.That(dictionaryVariable.Values[0].Right is IntegerVariable);
+                if (dictionaryVariable.Values[0].Right is IntegerVariable IntegerVariable2)
                 {
-                    Assert.That(numberVariable2.Value, Is.EqualTo(10.0));
+                    Assert.That(IntegerVariable2.Value, Is.EqualTo(10));
                 }
             }
         }
@@ -279,44 +279,44 @@ public static class MemoryTests
             var scope = new Dictionary<string, Variable>()
             {
                 { "x", new ListVariable([
-                    new NumberVariable(5.0), 
+                    new IntegerVariable(5), 
                     new DictionaryVariable([
-                        new KeyValuePairVariable(new NumberVariable(5.0), new NumberVariable(8.0))
+                        new KeyValuePairVariable(new IntegerVariable(5), new IntegerVariable(8))
                     ])])}
             };
             var memory = new Memory([scope]);
             var variableInstructionWithIndex = new VariableInstruction(
                 "x",
                 new SquareBracketsInstruction(
-                    [new NumberInstruction(1.0)], 
-                    new SquareBracketsInstruction([new NumberInstruction(5.0)])));
-            memory.SetVariable(variableInstructionWithIndex, new NumberVariable(10.0));
+                    [new IntegerInstruction(1)], 
+                    new SquareBracketsInstruction([new IntegerInstruction(5)])));
+            memory.SetVariable(variableInstructionWithIndex, new IntegerVariable(10));
             var scopes = memory.GetScopes();
             
             Assert.That(scopes[0]["x"] is ListVariable);
             if (scopes[0]["x"] is ListVariable listVariable)
             {
                 Assert.That(listVariable.Values.Count, Is.EqualTo(2));
-                Assert.That(listVariable.Values[0] is NumberVariable);
-                if (listVariable.Values[0] is NumberVariable numberVariable1)
+                Assert.That(listVariable.Values[0] is IntegerVariable);
+                if (listVariable.Values[0] is IntegerVariable IntegerVariable1)
                 {
-                    Assert.That(numberVariable1.Value, Is.EqualTo(5.0));
+                    Assert.That(IntegerVariable1.Value, Is.EqualTo(5));
                 }
                 
                 Assert.That(listVariable.Values[1] is DictionaryVariable);
                 if (listVariable.Values[1] is DictionaryVariable dictionaryVariable)
                 {
                     Assert.That(dictionaryVariable.Values.Count, Is.EqualTo(1));
-                    Assert.That(dictionaryVariable.Values[0].Left is NumberVariable);
-                    if (dictionaryVariable.Values[0].Left is NumberVariable numberVariable2)
+                    Assert.That(dictionaryVariable.Values[0].Left is IntegerVariable);
+                    if (dictionaryVariable.Values[0].Left is IntegerVariable IntegerVariable2)
                     {
-                        Assert.That(numberVariable2.Value, Is.EqualTo(5.0));
+                        Assert.That(IntegerVariable2.Value, Is.EqualTo(5));
                     }
                     
-                    Assert.That(dictionaryVariable.Values[0].Right is NumberVariable);
-                    if (dictionaryVariable.Values[0].Right is NumberVariable numberVariable3)
+                    Assert.That(dictionaryVariable.Values[0].Right is IntegerVariable);
+                    if (dictionaryVariable.Values[0].Right is IntegerVariable IntegerVariable3)
                     {
-                        Assert.That(numberVariable3.Value, Is.EqualTo(10.0));
+                        Assert.That(IntegerVariable3.Value, Is.EqualTo(10));
                     }
                 }
             }
@@ -327,7 +327,7 @@ public static class MemoryTests
         {
             var classValues = new Dictionary<string, Variable>()
             {
-                { "y", new NumberVariable(6.0) }
+                { "y", new IntegerVariable(6) }
             };
             var classVariable = new ClassVariable(classValues);
             var scope = new Dictionary<string, Variable>()
@@ -341,18 +341,18 @@ public static class MemoryTests
                 "y",
                 new SquareBracketsInstruction(
                     [new StringInstruction("y")]));
-            memory.SetVariable(variableInstructionWithIndex, new NumberVariable(10.0));
+            memory.SetVariable(variableInstructionWithIndex, new IntegerVariable(10));
             var scopes = memory.GetScopes();
             
             Assert.That(scopes[0]["y"] is ObjectVariable);
             if (scopes[0]["y"] is ObjectVariable objectVariable)
             {
                 Assert.That(objectVariable.Values.ContainsKey("y"));
-                Assert.That(objectVariable.Values["y"] is NumberVariable);
+                Assert.That(objectVariable.Values["y"] is IntegerVariable);
 
-                if (objectVariable.Values["y"] is NumberVariable numberVariable)
+                if (objectVariable.Values["y"] is IntegerVariable IntegerVariable)
                 {
-                    Assert.That(numberVariable.Value, Is.EqualTo(10.0));
+                    Assert.That(IntegerVariable.Value, Is.EqualTo(10));
                 }
             }
         }

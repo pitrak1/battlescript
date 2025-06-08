@@ -6,30 +6,30 @@ namespace BattlescriptTests;
 public static partial class InstructionTests
 {
     [TestFixture]
-    public class NumberInstructionParse
+    public class FloatInstructionParse
     {
         [Test]
         public void HandlesSimpleNumbers()
         {
-            var lexer = new Lexer("5");
+            var lexer = new Lexer("5.8");
             var lexerResult = lexer.Run();
             
-            var expected = new NumberInstruction(5.0);
+            var expected = new FloatInstruction(5.8);
             
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
     }
 
     [TestFixture]
-    public class NumberInstructionInterpret
+    public class FloatInstructionInterpret
     {
         [Test]
         public void ReturnsNewNumberVariable()
         {
-            var result = Runner.Run("x = 5");
+            var result = Runner.Run("x = 5.4");
             var expected = new Dictionary<string, Variable>
             {
-                { "x", new NumberVariable(5) }
+                { "x", new FloatVariable(5.4) }
             };
             Assert.That(result.First(), Is.EquivalentTo(expected));
         }

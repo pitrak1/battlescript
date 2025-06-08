@@ -136,8 +136,11 @@ public class Lexer(string input)
             Consts.NumberCharacters, 
             CollectionType.Inclusive
         );
+        
+        var isFloat = numberCharacters.Any(c => c == '.');
+        var type = isFloat ? Consts.TokenTypes.Float : Consts.TokenTypes.Integer;
 
-        _tokens.Add(new Token(Consts.TokenTypes.Number, negativeSign + numberCharacters, _line, _column));
+        _tokens.Add(new Token(type, negativeSign + numberCharacters, _line, _column));
         _index += numberCharacters.Length;
         _column += numberCharacters.Length;
     }

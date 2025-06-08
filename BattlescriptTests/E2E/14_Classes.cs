@@ -15,7 +15,7 @@ public static partial class E2ETests
             var expected = new ClassVariable(
                 new Dictionary<string, Variable>()
                 {
-                    {"i", new NumberVariable(1234)}
+                    {"i", new IntegerVariable(1234)}
                 });
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("asdf"));
@@ -27,7 +27,7 @@ public static partial class E2ETests
         {
             var values = new Dictionary<string, Variable>()
             {
-                { "i", new NumberVariable(1234) }
+                { "i", new IntegerVariable(1234) }
             };
             var input = "class asdf:\n\ti = 1234\nx = asdf()";
             var expected = new ObjectVariable(
@@ -43,12 +43,12 @@ public static partial class E2ETests
         {
             var classValues = new Dictionary<string, Variable>()
             {
-                { "i", new NumberVariable(1234) },
-                { "j", new FunctionVariable([], [new ReturnInstruction(new NumberInstruction(1234))])}
+                { "i", new IntegerVariable(1234) },
+                { "j", new FunctionVariable([], [new ReturnInstruction(new IntegerInstruction(1234))])}
             };
             var objectValues = new Dictionary<string, Variable>()
             {
-                { "i", new NumberVariable(1234) }
+                { "i", new IntegerVariable(1234) }
             };
             var input = @"
 class asdf:
@@ -71,12 +71,12 @@ x = asdf()";
             var superclass = new ClassVariable(
                 new Dictionary<string, Variable>()
                 {
-                    { "i", new NumberVariable(1234) }
+                    { "i", new IntegerVariable(1234) }
                 });
             var expected = new ClassVariable(
                 new Dictionary<string, Variable>()
                 {
-                    { "j", new NumberVariable(2345) }
+                    { "j", new IntegerVariable(2345) }
                 }, [superclass]);
             var result = Runner.Run(input);
             Assert.That(result[0]["qwer"], Is.EqualTo(expected));
@@ -86,7 +86,7 @@ x = asdf()";
         public void AllowsAccessingValueMembers()
         {
             var input = "class asdf:\n\ti = 1234\nx = asdf()\ny = x.i";
-            var expected = new NumberVariable(1234);
+            var expected = new IntegerVariable(1234);
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("y"));
             Assert.That(result[0]["y"], Is.EqualTo(expected));
@@ -99,7 +99,7 @@ x = asdf()";
             var expected = new ClassVariable(
                 new Dictionary<string, Variable>()
                 {
-                    { "i", new NumberVariable(1234) }
+                    { "i", new IntegerVariable(1234) }
                 }
             );
             var result = Runner.Run(input);
@@ -119,7 +119,7 @@ x = asdf()
 x.j()
 y = x.i
 ";
-            var expected = new NumberVariable(2345);
+            var expected = new IntegerVariable(2345);
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("y"));
             Assert.That(result[0]["y"], Is.EqualTo(expected));

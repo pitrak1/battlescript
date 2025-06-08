@@ -11,7 +11,7 @@ public abstract class Variable
     
     public void SetItem(Memory memory, Variable valueVariable, int index)
     {
-        SetItem(memory, valueVariable, new SquareBracketsInstruction([new NumberInstruction(index)]));
+        SetItem(memory, valueVariable, new SquareBracketsInstruction([new IntegerInstruction(index)]));
     }
     
     public abstract Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null);
@@ -23,6 +23,6 @@ public abstract class Variable
     
     public Variable? GetItem(Memory memory, int index)
     {
-        return GetItem(memory, new SquareBracketsInstruction([new NumberInstruction(index)]));
+        return GetItem(memory, new SquareBracketsInstruction([new IntegerInstruction(index)]));
     }
 }

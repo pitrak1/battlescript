@@ -12,11 +12,11 @@ public static class ListVariableTests
         public void HandlesSingleIndex()
         {
             var listVariable = new ListVariable([
-                new NumberVariable(5),
+                new IntegerVariable(5),
                 new StringVariable("a"),
                 new BooleanVariable(false)
             ]);
-            var index = new NumberInstruction(1);
+            var index = new IntegerInstruction(1);
             var result = listVariable.GetItem(new Memory(), new SquareBracketsInstruction([index]));
             
             Assert.That(result, Is.TypeOf<StringVariable>());
@@ -27,12 +27,12 @@ public static class ListVariableTests
         public void HandlesHandlesRangeIndexWithBothEnds()
         {
             var listVariable = new ListVariable([
-                new NumberVariable(5),
+                new IntegerVariable(5),
                 new StringVariable("a"),
                 new BooleanVariable(false),
-                new NumberVariable(8)
+                new IntegerVariable(8)
             ]);
-            var index = new KeyValuePairInstruction(new NumberInstruction(1), new NumberInstruction(2));
+            var index = new KeyValuePairInstruction(new IntegerInstruction(1), new IntegerInstruction(2));
             var result = listVariable.GetItem(new Memory(), new SquareBracketsInstruction([index]));
             var expected = new ListVariable([
                 new StringVariable("a"),
@@ -45,15 +45,15 @@ public static class ListVariableTests
         public void HandlesHandlesRangeIndexWithoutStartIndex()
         {
             var listVariable = new ListVariable([
-                new NumberVariable(5),
+                new IntegerVariable(5),
                 new StringVariable("a"),
                 new BooleanVariable(false),
-                new NumberVariable(8)
+                new IntegerVariable(8)
             ]);
-            var index = new KeyValuePairInstruction(null, new NumberInstruction(2));
+            var index = new KeyValuePairInstruction(null, new IntegerInstruction(2));
             var result = listVariable.GetItem(new Memory(), new SquareBracketsInstruction([index]));
             var expected = new ListVariable([
-                new NumberVariable(5),
+                new IntegerVariable(5),
                 new StringVariable("a"),
                 new BooleanVariable(false)
             ]);
@@ -64,17 +64,17 @@ public static class ListVariableTests
         public void HandlesHandlesRangeIndexWithoutEndIndex()
         {
             var listVariable = new ListVariable([
-                new NumberVariable(5),
+                new IntegerVariable(5),
                 new StringVariable("a"),
                 new BooleanVariable(false),
-                new NumberVariable(8)
+                new IntegerVariable(8)
             ]);
-            var index = new KeyValuePairInstruction(new NumberInstruction(1), null);
+            var index = new KeyValuePairInstruction(new IntegerInstruction(1), null);
             var result = listVariable.GetItem(new Memory(), new SquareBracketsInstruction([index]));
             var expected = new ListVariable([
                 new StringVariable("a"),
                 new BooleanVariable(false),
-                new NumberVariable(8)
+                new IntegerVariable(8)
             ]);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -83,18 +83,18 @@ public static class ListVariableTests
         public void HandlesHandlesRangeIndexWithoutEitherIndex()
         {
             var listVariable = new ListVariable([
-                new NumberVariable(5),
+                new IntegerVariable(5),
                 new StringVariable("a"),
                 new BooleanVariable(false),
-                new NumberVariable(8)
+                new IntegerVariable(8)
             ]);
             var index = new KeyValuePairInstruction(null, null);
             var result = listVariable.GetItem(new Memory(), new SquareBracketsInstruction([index]));
             var expected = new ListVariable([
-                new NumberVariable(5),
+                new IntegerVariable(5),
                 new StringVariable("a"),
                 new BooleanVariable(false),
-                new NumberVariable(8)
+                new IntegerVariable(8)
             ]);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -103,14 +103,14 @@ public static class ListVariableTests
         public void HandlesHandlesStackedSingleIndices()
         {
             var listVariable = new ListVariable([
-                new NumberVariable(5),
+                new IntegerVariable(5),
                 new StringVariable("a"),
-                new ListVariable([new NumberVariable(6), new StringVariable("b")]),
+                new ListVariable([new IntegerVariable(6), new StringVariable("b")]),
                 new BooleanVariable(false),
-                new NumberVariable(8)
+                new IntegerVariable(8)
             ]);
-            var index1 = new NumberInstruction(2);
-            var index2 = new NumberInstruction(1);
+            var index1 = new IntegerInstruction(2);
+            var index2 = new IntegerInstruction(1);
             var indexInstruction = new SquareBracketsInstruction([index1], new SquareBracketsInstruction([index2]));
             var result = listVariable.GetItem(new Memory(), indexInstruction);
             var expected = new StringVariable("b");
@@ -121,13 +121,13 @@ public static class ListVariableTests
         public void HandlesHandlesStackedRangeIndices()
         {
             var listVariable = new ListVariable([
-                new NumberVariable(5),
+                new IntegerVariable(5),
                 new StringVariable("a"),
                 new BooleanVariable(false),
-                new NumberVariable(8)
+                new IntegerVariable(8)
             ]);
-            var index1 = new KeyValuePairInstruction(new NumberInstruction(1), null);
-            var index2 = new KeyValuePairInstruction(null, new NumberInstruction(1));
+            var index1 = new KeyValuePairInstruction(new IntegerInstruction(1), null);
+            var index2 = new KeyValuePairInstruction(null, new IntegerInstruction(1));
             var indexInstruction = new SquareBracketsInstruction([index1], new SquareBracketsInstruction([index2]));
             var result = listVariable.GetItem(new Memory(), indexInstruction);
             var expected = new ListVariable([
@@ -145,11 +145,11 @@ public static class ListVariableTests
         public void HandlesIndex()
         {
             var listVariable = new ListVariable([
-                new NumberVariable(5),
+                new IntegerVariable(5),
                 new StringVariable("a"),
                 new BooleanVariable(false)
             ]);
-            var index = new NumberInstruction(1);
+            var index = new IntegerInstruction(1);
             var value = new StringVariable("b");
             listVariable.SetItem(new Memory(), value, new SquareBracketsInstruction([index]));
             
@@ -161,16 +161,16 @@ public static class ListVariableTests
         public void HandlesStackedIndices()
         {
             var listVariable = new ListVariable([
-                new NumberVariable(5),
+                new IntegerVariable(5),
                 new StringVariable("a"),
                 new ListVariable([
-                    new NumberVariable(6),
+                    new IntegerVariable(6),
                     new StringVariable("b")
                 ]),
                 new BooleanVariable(false)
             ]);
-            var index1 = new NumberInstruction(2);
-            var index2 = new NumberInstruction(1);
+            var index1 = new IntegerInstruction(2);
+            var index2 = new IntegerInstruction(1);
             var value = new StringVariable("c");
             var indexInstruction = new SquareBracketsInstruction([index1], new SquareBracketsInstruction([index2]));
             listVariable.SetItem(new Memory(), value, indexInstruction);

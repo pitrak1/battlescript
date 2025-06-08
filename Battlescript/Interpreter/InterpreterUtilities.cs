@@ -4,10 +4,18 @@ public static class InterpreterUtilities
 {
     public static Variable ConductOperation(Memory memory, string operation, Variable? left, Variable? right)
     {
-        if (right is NumberVariable) return ConductNumericalOperation(operation, left, right);
-        else if (right is BooleanVariable) return ConductLogicalOperation(operation, left, right);
-        else if (right is ObjectVariable) return ConductObjectOperation(memory, operation, left, right);
-        else throw new InterpreterInvalidOperationException(operation, left, right);
+        if (left is ObjectVariable || right is ObjectVariable)
+        {
+            return ConductObjectOperation(memory, operation, left, right);
+        }
+        else if (Consts.NumericalOperators.Contains(operation))
+        {
+            return ConductNumericalOperation(operation, left, right);
+        } 
+        else
+        {
+            return ConductBooleanOperation(operation, left, right);
+        }
     }
 
     public static Variable ConductAssignment(Memory memory, string operation, Variable? left, Variable? right)
@@ -20,87 +28,126 @@ public static class InterpreterUtilities
 
     private static Variable ConductNumericalOperation(string operation, Variable? left, Variable? right)
     {
-        if (left is NumberVariable leftNumber && right is NumberVariable rightNumber)
+        double leftDouble;
+        double rightDouble;
+        try
         {
-            switch (operation)
-            {
-                case "**":
-                    return new NumberVariable(Math.Pow((int)leftNumber.Value, (int)rightNumber.Value));
-                case "*":
-                    return new NumberVariable(leftNumber.Value * rightNumber.Value);
-                case "/":
-                    return new NumberVariable(leftNumber.Value / rightNumber.Value);
-                case "//":
-                    return new NumberVariable((int)Math.Floor(leftNumber.Value / rightNumber.Value));
-                case "%":
-                    return new NumberVariable(leftNumber.Value % rightNumber.Value);
-                case "+":
-                    return new NumberVariable(leftNumber.Value + rightNumber.Value);
-                case "-":
-                    return new NumberVariable(leftNumber.Value - rightNumber.Value);
-                case "<<":
-                    return new NumberVariable((int)leftNumber.Value << (int)rightNumber.Value);
-                case ">>":
-                    return new NumberVariable((int)leftNumber.Value >> (int)rightNumber.Value);
-                case "&":
-                    return new NumberVariable((int)leftNumber.Value & (int)rightNumber.Value);
-                case "^":
-                    return new NumberVariable((int)leftNumber.Value ^ (int)rightNumber.Value);
-                case "|":
-                    return new NumberVariable((int)leftNumber.Value | (int)rightNumber.Value);
-                case "==":
-                    return new BooleanVariable(leftNumber.Value == rightNumber.Value);
-                case "!=":
-                    return new BooleanVariable(leftNumber.Value != rightNumber.Value);
-                case ">":
-                    return new BooleanVariable(leftNumber.Value > rightNumber.Value);
-                case ">=":
-                    return new BooleanVariable(leftNumber.Value >= rightNumber.Value);
-                case "<":
-                    return new BooleanVariable(leftNumber.Value < rightNumber.Value);
-                case "<=":
-                    return new BooleanVariable(leftNumber.Value <= rightNumber.Value);
-                default:
-                    throw new InterpreterInvalidOperationException(operation, left, right);
-            }
+            leftDouble = GetValueAsDouble(left);
+            rightDouble = GetValueAsDouble(right);
         }
-        else
+        catch (InterpreterInvalidOperationException)
         {
-            var rightNumber2 = right as NumberVariable;
-            switch (operation)
-            {
-                case "~":
-                    return new NumberVariable(~(int)rightNumber2.Value);
-                default:
-                    throw new InterpreterInvalidOperationException(operation, left, right);
-            }
+            throw new InterpreterInvalidOperationException(operation, left, right);
+        }
+        
+        switch (operation)
+        {
+            case "**":
+                return CreateResultWithType(Math.Pow(leftDouble, rightDouble), operation, left, right);
+            case "*":
+                return CreateResultWithType(leftDouble * rightDouble, operation, left, right);
+            case "/":
+                return CreateResultWithType(leftDouble / rightDouble, operation, left, right);
+            case "//":
+                return CreateResultWithType(Math.Floor(leftDouble / rightDouble), operation, left, right);
+            case "%":
+                return CreateResultWithType(leftDouble % rightDouble, operation, left, right);
+            case "+":
+                return CreateResultWithType(leftDouble + rightDouble, operation, left, right);
+            case "-":
+                return CreateResultWithType(leftDouble - rightDouble, operation, left, right);
+            case "==":
+                return CreateResultWithType(leftDouble == rightDouble, operation, left, right);
+            case "!=":
+                return CreateResultWithType(leftDouble != rightDouble, operation, left, right);
+            case ">":
+                return CreateResultWithType(leftDouble > rightDouble, operation, left, right);
+            case ">=":
+                return CreateResultWithType(leftDouble >= rightDouble, operation, left, right);
+            case "<":
+                return CreateResultWithType(leftDouble < rightDouble, operation, left, right);
+            case "<=":
+                return CreateResultWithType(leftDouble <= rightDouble, operation, left, right);
+            default:
+                throw new InterpreterInvalidOperationException(operation, left, right);
         }
     }
 
-    private static Variable ConductLogicalOperation(string operation, Variable? left, Variable? right)
+    private static Variable ConductBooleanOperation(string operation, Variable? left, Variable? right)
     {
         if (left is BooleanVariable leftBoolean && right is BooleanVariable rightBoolean)
         {
-            switch (operation)
+            if (operation == "and")
             {
-                case "and":
-                    return new BooleanVariable(leftBoolean.Value && rightBoolean.Value);
-                case "or":
-                    return new BooleanVariable(leftBoolean.Value || rightBoolean.Value);
-                default:
-                    throw new InterpreterInvalidOperationException(operation, left, right);
+                return new BooleanVariable(leftBoolean.Value && rightBoolean.Value);
+            } else if (operation == "or")
+            {
+                return new BooleanVariable(leftBoolean.Value || rightBoolean.Value);
             }
+            else
+            {
+                throw new InterpreterInvalidOperationException(operation, left, right);
+            }
+        } else if (right is BooleanVariable rightBoolean2 && operation == "not")
+        {
+            return new BooleanVariable(!rightBoolean2.Value);
         }
         else
         {
-            var rightBoolean2 = right as BooleanVariable;
-            switch (operation)
+            throw new InterpreterInvalidOperationException(operation, left, right);
+        }
+    }
+
+    private static double GetValueAsDouble(Variable? variable)
+    {
+        if (variable is IntegerVariable integerVariable)
+        {
+            return integerVariable.Value;
+        } else if (variable is FloatVariable floatVariable)
+        {
+            return floatVariable.Value;
+        }
+        else
+        {
+            throw new InterpreterInvalidOperationException("", variable, variable);
+        }
+    }
+    
+    private static Variable CreateResultWithType(dynamic result, string operation, Variable? left, Variable? right)
+    {
+        if (left is IntegerVariable && right is IntegerVariable)
+        {
+            if (result is int or double)
             {
-                case "not":
-                    return new BooleanVariable(!rightBoolean2.Value);
-                default:
-                    throw new InterpreterInvalidOperationException(operation, left, right);
+                return new IntegerVariable((int)result);
             }
+            else if (result is bool)
+            {
+                return new BooleanVariable((bool)result);
+            }
+            else
+            {
+                throw new InterpreterInvalidOperationException(operation, left, right);
+            }
+        } 
+        else if (left is IntegerVariable or FloatVariable && right is IntegerVariable or FloatVariable)
+        {
+            if (result is int or double)
+            {
+                return new FloatVariable(result);
+            }
+            else if (result is bool)
+            {
+                return new BooleanVariable((bool)result);
+            }
+            else
+            {
+                throw new InterpreterInvalidOperationException(operation, left, right);
+            }
+        } 
+        else
+        {
+            throw new InterpreterInvalidOperationException(operation, left, right);
         }
     }
 

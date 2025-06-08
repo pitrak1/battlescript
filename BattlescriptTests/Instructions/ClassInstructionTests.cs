@@ -46,7 +46,7 @@ public static partial class InstructionTests
                 {
                     "MyClass", new ClassVariable(new Dictionary<string, Variable>()
                     {
-                        { "x", new NumberVariable(1.0) }
+                        { "x", new IntegerVariable(1) }
                     })
                 }
             };
@@ -65,12 +65,12 @@ class qwer(asdf):
 ");
             var asdf = new ClassVariable(new Dictionary<string, Variable>()
             {
-                { "x", new NumberVariable(1.0) }
+                { "x", new IntegerVariable(1) }
             });
 
             var qwer = new ClassVariable(new Dictionary<string, Variable>()
             {
-                { "y", new NumberVariable(2.0) }
+                { "y", new IntegerVariable(2) }
             }, [asdf]);
             
             var expected = new Dictionary<string, Variable>()
@@ -97,17 +97,17 @@ class zxcv(asdf, qwer):
             
             var asdf = new ClassVariable(new Dictionary<string, Variable>()
             {
-                { "x", new NumberVariable(1.0) }
+                { "x", new IntegerVariable(1) }
             });
 
             var qwer = new ClassVariable(new Dictionary<string, Variable>()
             {
-                { "y", new NumberVariable(2.0) }
+                { "y", new IntegerVariable(2) }
             });
 
             var zxcv = new ClassVariable(new Dictionary<string, Variable>()
             {
-                { "z", new NumberVariable(3.0) }
+                { "z", new IntegerVariable(3) }
             }, [asdf, qwer]);
             
             var expected = new Dictionary<string, Variable>()

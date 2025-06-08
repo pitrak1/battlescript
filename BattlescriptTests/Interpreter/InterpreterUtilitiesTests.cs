@@ -9,27 +9,27 @@ public static class InterpreterUtilitiesTests
     public class ConductOperation
     {
         [Test]
-        public void HandlesBinaryNumericalOperations()
+        public void ReturnsIntegerIfBothOperandsAreIntegers()
         {
             var memory = new Memory();
             var result = InterpreterUtilities.ConductOperation(
                 memory, 
                 "+", 
-                new NumberVariable(5.0), 
-                new NumberVariable(6.0));
-            Assert.That(result, Is.EqualTo(new NumberVariable(11.0)));
+                new IntegerVariable(5), 
+                new IntegerVariable(6));
+            Assert.That(result, Is.EqualTo(new IntegerVariable(11)));
         }
         
         [Test]
-        public void HandlesUnaryNumericalOperations()
+        public void ReturnsFloatIfEitherOperandIsFloat()
         {
             var memory = new Memory();
             var result = InterpreterUtilities.ConductOperation(
                 memory, 
-                "~", 
-                null, 
-                new NumberVariable(6.0));
-            Assert.That(result, Is.EqualTo(new NumberVariable(-7.0)));
+                "+", 
+                new IntegerVariable(5), 
+                new FloatVariable(6.0));
+            Assert.That(result, Is.EqualTo(new FloatVariable(11.0)));
         }
         
         [Test]
@@ -63,10 +63,10 @@ public static class InterpreterUtilitiesTests
             var memory = new Memory();
             var addFunction = new FunctionVariable(
                 [new VariableInstruction("self"), new VariableInstruction("other")], 
-                [new ReturnInstruction(new NumberInstruction(5.0))]);
+                [new ReturnInstruction(new IntegerInstruction(5))]);
             var classVariable = new ClassVariable(new Dictionary<string, Variable>()
             {
-                {"x", new NumberVariable(7.0)},
+                {"x", new IntegerVariable(7)},
                 {"__add__", addFunction}
             });
             var objectVariable = classVariable.CreateObject();
@@ -77,7 +77,7 @@ public static class InterpreterUtilitiesTests
                 "+", 
                 objectVariable, 
                 objectVariable);
-            Assert.That(result, Is.EqualTo(new NumberVariable(5.0)));
+            Assert.That(result, Is.EqualTo(new IntegerVariable(5)));
         }
     }
 
@@ -88,8 +88,8 @@ public static class InterpreterUtilitiesTests
         public void ReturnsRightIfStandardAssignmentOperator()
         {
             var memory = new Memory();
-            var result = InterpreterUtilities.ConductAssignment(memory, "=", null, new NumberVariable(5.0));
-            Assert.That(result, Is.EqualTo(new NumberVariable(5.0)));
+            var result = InterpreterUtilities.ConductAssignment(memory, "=", null, new IntegerVariable(5));
+            Assert.That(result, Is.EqualTo(new IntegerVariable(5)));
         }
         
         [Test]
@@ -99,9 +99,9 @@ public static class InterpreterUtilitiesTests
             var result = InterpreterUtilities.ConductAssignment(
                 memory, 
                 "+=", 
-                new NumberVariable(8.0), 
-                new NumberVariable(5.0));
-            Assert.That(result, Is.EqualTo(new NumberVariable(13.0)));
+                new IntegerVariable(8), 
+                new IntegerVariable(5));
+            Assert.That(result, Is.EqualTo(new IntegerVariable(13)));
         }
     }
 }

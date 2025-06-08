@@ -14,7 +14,7 @@ public static partial class InstructionTests
             var lexer = new Lexer("return 4");
             var lexerResult = lexer.Run();
             
-            var expected = new ReturnInstruction(new NumberInstruction(4));
+            var expected = new ReturnInstruction(new IntegerInstruction(4));
             
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
@@ -37,9 +37,9 @@ public static partial class InstructionTests
                             new OperationInstruction(
                                 "+",
                                 new VariableInstruction("asdf"),
-                                new NumberInstruction(5)))
+                                new IntegerInstruction(5)))
                     ]),
-                ["x"] = new NumberVariable(9)
+                ["x"] = new IntegerVariable(9)
             };
             
             Assert.That(result[0], Is.EquivalentTo(expected));

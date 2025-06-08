@@ -11,7 +11,7 @@ public static partial class E2ETests {
         public void SupportsAddition()
         {
             var input = "x = 5 + 6";
-            var expected = new NumberVariable(11);
+            var expected = new IntegerVariable(11);
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("x"));
             Assert.That(result[0]["x"], Is.EqualTo(expected));
@@ -21,7 +21,7 @@ public static partial class E2ETests {
         public void SupportsSubtraction()
         {
             var input = "x = 5 - 3";
-            var expected = new NumberVariable(2);
+            var expected = new IntegerVariable(2);
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("x"));
             Assert.That(result[0]["x"], Is.EqualTo(expected));
@@ -31,7 +31,7 @@ public static partial class E2ETests {
         public void SupportsMultiplication()
         {
             var input = "x = 5 * 3";
-            var expected = new NumberVariable(15);
+            var expected = new IntegerVariable(15);
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("x"));
             Assert.That(result[0]["x"], Is.EqualTo(expected));
@@ -40,8 +40,8 @@ public static partial class E2ETests {
         [Test]
         public void SupportsDivision()
         {
-            var input = "x = 5 / 2";
-            var expected = new NumberVariable(2.5);
+            var input = "x = 5.0 / 2.0";
+            var expected = new FloatVariable(2.5);
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("x"));
             Assert.That(result[0]["x"], Is.EqualTo(expected));
@@ -51,7 +51,7 @@ public static partial class E2ETests {
         public void SupportsFloorDivision()
         {
             var input = "x = 5 // 2";
-            var expected = new NumberVariable(2);
+            var expected = new IntegerVariable(2);
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("x"));
             Assert.That(result[0]["x"], Is.EqualTo(expected));
@@ -61,7 +61,7 @@ public static partial class E2ETests {
         public void SupportsModulo()
         {
             var input = "x = 5 % 2";
-            var expected = new NumberVariable(1);
+            var expected = new IntegerVariable(1);
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("x"));
             Assert.That(result[0]["x"], Is.EqualTo(expected));
@@ -71,7 +71,7 @@ public static partial class E2ETests {
         public void SupportsPower()
         {
             var input = "x = 5 ** 2";
-            var expected = new NumberVariable(25);
+            var expected = new IntegerVariable(25);
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("x"));
             Assert.That(result[0]["x"], Is.EqualTo(expected));

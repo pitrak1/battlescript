@@ -14,7 +14,7 @@ public static partial class E2ETests {
             var expected = new ListVariable(
                 new List<Variable>
                 {
-                    new NumberVariable(5),
+                    new IntegerVariable(5),
                     new StringVariable("5"),
                 }
             );
@@ -40,8 +40,8 @@ public static partial class E2ETests {
             var expected = new ListVariable(
                 new List<Variable>
                 {
-                    new NumberVariable(3),
-                    new NumberVariable(2),
+                    new IntegerVariable(3),
+                    new IntegerVariable(2),
                 }
             );
             var result = Runner.Run(input);
@@ -56,9 +56,9 @@ public static partial class E2ETests {
             var expected = new ListVariable(
                 new List<Variable>
                 {
-                    new NumberVariable(5),
-                    new NumberVariable(3),
-                    new NumberVariable(2),
+                    new IntegerVariable(5),
+                    new IntegerVariable(3),
+                    new IntegerVariable(2),
                 }
             );
             var result = Runner.Run(input);
@@ -73,8 +73,8 @@ public static partial class E2ETests {
             var expected = new ListVariable(
                 new List<Variable>
                 {
-                    new NumberVariable(3),
-                    new NumberVariable(2),
+                    new IntegerVariable(3),
+                    new IntegerVariable(2),
                     new StringVariable("5"),
                 }
             );

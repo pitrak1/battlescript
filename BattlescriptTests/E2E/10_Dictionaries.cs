@@ -14,7 +14,7 @@ public static partial class E2ETests {
             var expected = new DictionaryVariable(
                 new List<KeyValuePairVariable>()
                 {
-                    new (new StringVariable("asdf"), new NumberVariable(5)),
+                    new (new StringVariable("asdf"), new IntegerVariable(5)),
                     new (new StringVariable("qwer"), new StringVariable("5"))
                 }
             );

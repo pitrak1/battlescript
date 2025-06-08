@@ -221,6 +221,22 @@ public static class Consts
         "or"
     ];
     
+    public static readonly string[] NumericalOperators = [
+        "**",
+        "*",
+        "/",
+        "//",
+        "%",
+        "+",
+        "-",
+        "==",
+        "!=",
+        ">",
+        ">=",
+        "<",
+        "<=",
+    ];
+    
     public static readonly string[] Assignments = [
         "=",
         "+=",
@@ -240,7 +256,8 @@ public static class Consts
 
     public enum TokenTypes
     {
-        Number,
+        Integer,
+        Float,
         String,
         Boolean,
         Keyword,
