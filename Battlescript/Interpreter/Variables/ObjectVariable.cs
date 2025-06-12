@@ -13,9 +13,10 @@ public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable
         Debug.Assert(index.Values.Count == 1);
         var indexVariable = index.Values.First().Interpret(memory);
 
-        if (ClassVariable.GetItem(memory, "__setitem__") is FunctionVariable functionVariable)
+        var setItemOverride = GetOverride(memory, "__setitem__");
+        if (setItemOverride is not null)
         {
-            functionVariable.RunFunction(memory, [this, indexVariable, valueVariable], this);
+            setItemOverride.RunFunction(memory, [this, indexVariable, valueVariable], this);
             return true;
         } else if (indexVariable is StringVariable stringVariable)
         {
@@ -48,11 +49,11 @@ public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable
         Debug.Assert(index.Values.Count == 1);
         var indexVariable = index.Values.First().Interpret(memory);
 
-        var getItemOverride = ClassVariable.GetItem(memory, new SquareBracketsInstruction([new StringInstruction("__getitem__")]), this);
+        var getItemOverride = GetOverride(memory, "__getitem__");
         Variable? foundItem;
-        if (getItemOverride is FunctionVariable functionVariable)
+        if (getItemOverride is not null)
         {
-            foundItem = functionVariable.RunFunction(memory, [this, indexVariable], this);
+            foundItem = getItemOverride.RunFunction(memory, [this, indexVariable], this);
         }
         else if (indexVariable is StringVariable stringVariable)
         {
@@ -77,6 +78,19 @@ public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable
         else
         {
             return foundItem;
+        }
+    }
+
+    public FunctionVariable? GetOverride(Memory memory, string overrideName)
+    {
+        var result = ClassVariable.GetItem(memory, overrideName, this);
+        if (result is not null && result is not FunctionVariable)
+        {
+            throw new Exception(overrideName + "is reserved and must be a function");
+        }
+        else
+        {
+            return result as FunctionVariable;
         }
     }
     

@@ -33,6 +33,30 @@ public static class InterpreterUtilitiesTests
         }
         
         [Test]
+        public void ReturnsFloatForTrueDivision()
+        {
+            var memory = new Memory();
+            var result = InterpreterUtilities.ConductOperation(
+                memory, 
+                "/", 
+                new IntegerVariable(5), 
+                new IntegerVariable(2));
+            Assert.That(result, Is.EqualTo(new FloatVariable(2.5)));
+        }
+        
+        [Test]
+        public void ReturnsIntegerForFloorDivision()
+        {
+            var memory = new Memory();
+            var result = InterpreterUtilities.ConductOperation(
+                memory, 
+                "//", 
+                new FloatVariable(10.1), 
+                new FloatVariable(2.5));
+            Assert.That(result, Is.EqualTo(new IntegerVariable(4)));
+        }
+        
+        [Test]
         public void HandlesBinaryLogicalOperations()
         {
             var memory = new Memory();

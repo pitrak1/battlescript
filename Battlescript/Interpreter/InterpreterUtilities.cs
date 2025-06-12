@@ -115,7 +115,15 @@ public static class InterpreterUtilities
     
     private static Variable CreateResultWithType(dynamic result, string operation, Variable? left, Variable? right)
     {
-        if (left is IntegerVariable && right is IntegerVariable)
+        if (operation == "/")
+        {
+            return new FloatVariable(result);
+        }
+        else if (operation == "//")
+        {
+            return new IntegerVariable((int)result);
+        }
+        else if (left is IntegerVariable && right is IntegerVariable)
         {
             if (result is int or double)
             {
@@ -153,23 +161,40 @@ public static class InterpreterUtilities
 
     private static Variable ConductObjectOperation(Memory memory, string operation, Variable? left, Variable? right)
     {
-        if (left is ObjectVariable leftObject && right is ObjectVariable rightObject)
+        if (left is ObjectVariable leftObject)
         {
-            Variable? method;
-            switch (operation)
+            var leftOverrideMethod = leftObject.GetOverride(memory, _binaryOperationToOverrideMap[operation]);
+            if (leftOverrideMethod is not null)
             {
-                case "+":
-                    method = left.GetItem(memory, "__add__");
-                    if (method is FunctionVariable functionVariable)
-                    {
-                        return functionVariable.RunFunction(memory, [left, right]);
-                    }
-                    else
-                    {
-                        throw new InterpreterInvalidOperationException(operation, left, right);
-                    }
-                default:
+                return leftOverrideMethod.RunFunction(memory, [left, right]);
+            }
+            else if (right is ObjectVariable rightObject1)
+            {
+                var rightOverrideMethod = rightObject1.GetOverride(memory, _binaryOperationToOverrideMap[operation]);
+                if (rightOverrideMethod is not null)
+                {
+                    return rightOverrideMethod.RunFunction(memory, [right, left]);
+                }
+                else
+                {
                     throw new InterpreterInvalidOperationException(operation, left, right);
+                }
+            }
+            else
+            {
+                throw new InterpreterInvalidOperationException(operation, left, right);
+            }
+        }
+        else if (right is ObjectVariable rightObject2)
+        {
+            var rightOverrideMethod = rightObject2.GetOverride(memory, _binaryOperationToOverrideMap[operation]);
+            if (rightOverrideMethod is not null)
+            {
+                return rightOverrideMethod.RunFunction(memory, [right, left]);
+            }
+            else
+            {
+                throw new InterpreterInvalidOperationException(operation, left, right);
             }
         }
         else
@@ -178,8 +203,51 @@ public static class InterpreterUtilities
         }
     }
 
+    private static Dictionary<string, string> _binaryOperationToOverrideMap = new Dictionary<string, string>()
+    {
+        {"+", "__add__"},
+        {"-", "__sub__"},
+        {"*", "__mul__"},
+        {"/", "__truediv__"},
+        {"//", "__floordiv__"},
+        {"%", "__mod__"},
+        {"**", "__pow__"},
+        {"==", "__eq__"},
+        {"!=", "__ne__"},
+        {"<", "__lt__"},
+        {"<=", "__le__"},
+        {">", "__gt__"},
+        {">=", "__ge__"}
+    };
+
     public static bool IsVariableTruthy(Variable variable)
     {
-        return variable is BooleanVariable { Value: true };
+        switch (variable)
+        {
+            case BooleanVariable booleanVariable:
+                return booleanVariable.Value;
+            case IntegerVariable integerVariable:
+                return integerVariable.Value != 0;
+            case FloatVariable floatVariable:
+                return floatVariable.Value != 0;
+            case StringVariable stringVariable:
+                return stringVariable.Value.Length > 0;
+            case ListVariable listVariable:
+                return listVariable.Values.Count > 0;
+            case NullVariable:
+                return false;
+            case ClassVariable:
+                return true;
+            case ObjectVariable:
+                return true;
+            case DictionaryVariable:
+                return true;
+            case FunctionVariable:
+                return true;
+            case KeyValuePairVariable:
+                return true;
+            default:
+                throw new Exception("Won't get here");
+        }
     }
 }

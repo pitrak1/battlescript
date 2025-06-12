@@ -41,7 +41,7 @@ public static partial class E2ETests {
         public void SupportsDivision()
         {
             var input = "x = 6\nx /= 3";
-            var expected = new IntegerVariable(2);
+            var expected = new FloatVariable(2);
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("x"));
             Assert.That(result[0]["x"], Is.EqualTo(expected));
