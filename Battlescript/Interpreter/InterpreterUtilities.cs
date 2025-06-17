@@ -28,6 +28,33 @@ public static class InterpreterUtilities
 
     private static Variable ConductNumericalOperation(string operation, Variable? left, Variable? right)
     {
+        if (left is null && right is not null)
+        {
+            if (operation == "+")
+            {
+                return right;
+            }
+            else if (operation == "-")
+            {
+                if (right is IntegerVariable rightInt)
+                {
+                    return new IntegerVariable(-rightInt.Value);
+                } 
+                else if (right is FloatVariable rightFloat)
+                {
+                    return new FloatVariable(-rightFloat.Value);
+                }
+                else
+                {
+                    throw new InterpreterInvalidOperationException(operation, left, right);
+                }
+            }
+            else
+            {
+                throw new InterpreterInvalidOperationException(operation, left, right);
+            }
+        }
+        
         double leftDouble;
         double rightDouble;
         try

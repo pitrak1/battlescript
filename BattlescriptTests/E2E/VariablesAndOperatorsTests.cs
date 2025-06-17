@@ -105,11 +105,21 @@ public static class VariablesAndOperatorsTests
         [Test]
         public void SupportsUnaryPlus()
         {
-            var input = "x = +6";
+            var input = "x = 6\ny = +x";
             var expected = new IntegerVariable(6);
             var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            Assert.That(result[0], Contains.Key("y"));
+            Assert.That(result[0]["y"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void SupportsUnaryMinus()
+        {
+            var input = "x = 6\ny = -x";
+            var expected = new IntegerVariable(-6);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("y"));
+            Assert.That(result[0]["y"], Is.EqualTo(expected));
         }
     }
 
