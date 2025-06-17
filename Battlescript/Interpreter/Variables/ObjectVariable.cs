@@ -3,7 +3,7 @@ using System.Diagnostics;
 namespace Battlescript;
 
 public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable classVariable) : 
-    Variable, IEquatable<ObjectVariable>
+    ReferenceVariable, IEquatable<ObjectVariable>
 {
     public Dictionary<string, Variable> Values { get; set; } = values ?? [];
     public ClassVariable ClassVariable { get; set; } = classVariable;

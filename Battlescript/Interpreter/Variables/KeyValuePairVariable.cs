@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class KeyValuePairVariable(Variable? left = null, Variable? right = null) : Variable, IEquatable<KeyValuePairVariable>
+public class KeyValuePairVariable(Variable? left = null, Variable? right = null) : ReferenceVariable, IEquatable<KeyValuePairVariable>
 {
     public Variable? Left { get; set; } = left;
     public Variable? Right { get; set; } = right;

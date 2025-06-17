@@ -4,7 +4,15 @@ public static class InterpreterUtilities
 {
     public static Variable ConductOperation(Memory memory, string operation, Variable? left, Variable? right)
     {
-        if (left is ObjectVariable || right is ObjectVariable)
+        if (operation == "is" || operation == "is not")
+        {
+            return ConductIsOperation(memory, operation, left, right);
+        }
+        else if (operation == "in" || operation == "not in")
+        {
+            return ConductInOperation(memory, operation, left, right);
+        }
+        else if (left is ObjectVariable || right is ObjectVariable)
         {
             return ConductObjectOperation(memory, operation, left, right);
         }
@@ -18,9 +26,83 @@ public static class InterpreterUtilities
         }
     }
 
+    public static Variable ConductIsOperation(Memory memory, string operation, Variable? left, Variable? right)
+    {
+        if (left is not ReferenceVariable || right is not ReferenceVariable)
+        {
+            throw new InterpreterInvalidOperationException(operation, left, right);
+        }
+
+        if (operation == "is")
+        {
+            return new BooleanVariable(left == right);
+        }
+        else
+        {
+            return new BooleanVariable(left != right);
+        }
+    }
+
+    public static Variable ConductInOperation(Memory memory, string operation, Variable? left, Variable? right)
+    {
+        if (left is StringVariable leftString && right is StringVariable rightString)
+        {
+            if (operation == "in")
+            {
+                return new BooleanVariable(rightString.Value.Contains(leftString.Value));
+            }
+            else
+            {
+                return new BooleanVariable(!rightString.Value.Contains(leftString.Value));
+            }
+        } else if (right is ListVariable rightList)
+        {
+            var found = false;
+            foreach (var x in rightList.Values)
+            {
+                if (x.Equals(left))
+                {
+                    found = true;
+                }
+            }
+            
+            if (operation == "in")
+            {
+                return new BooleanVariable(found);
+            }
+            else
+            {
+                return new BooleanVariable(!found);
+            }
+        } else if (right is DictionaryVariable rightDictionary)
+        {
+            var found = false;
+            foreach (var x in rightDictionary.Values)
+            {
+                if (x.Left.Equals(left))
+                {
+                    found = true;
+                }
+            }
+            
+            if (operation == "in")
+            {
+                return new BooleanVariable(found);
+            }
+            else
+            {
+                return new BooleanVariable(!found);
+            }
+        }
+        else
+        {
+            throw new InterpreterInvalidOperationException(operation, left, right);
+        }
+    }
+
     public static Variable ConductAssignment(Memory memory, string operation, Variable? left, Variable? right)
     {
-        if (operation == "=") return right ?? new NullVariable();
+        if (operation == "=") return right ?? new NoneVariable();
 
         var operationWithEqualsRemoved = operation.Substring(0, operation.Length - 1);
         return ConductOperation(memory, operationWithEqualsRemoved, left, right);
@@ -261,7 +343,7 @@ public static class InterpreterUtilities
                 return stringVariable.Value.Length > 0;
             case ListVariable listVariable:
                 return listVariable.Values.Count > 0;
-            case NullVariable:
+            case NoneVariable:
                 return false;
             case ClassVariable:
                 return true;

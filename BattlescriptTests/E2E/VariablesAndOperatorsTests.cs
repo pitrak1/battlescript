@@ -98,9 +98,9 @@ public static class VariablesAndOperatorsTests
             Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
     }
-    
+
     [TestFixture]
-    public class OperatorSupport
+    public class UnaryOperatorSupport
     {
         [Test]
         public void SupportsUnaryPlus()
@@ -111,7 +111,7 @@ public static class VariablesAndOperatorsTests
             Assert.That(result[0], Contains.Key("y"));
             Assert.That(result[0]["y"], Is.EqualTo(expected));
         }
-        
+
         [Test]
         public void SupportsUnaryMinus()
         {
@@ -120,6 +120,115 @@ public static class VariablesAndOperatorsTests
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("y"));
             Assert.That(result[0]["y"], Is.EqualTo(expected));
+        }
+    }
+    
+    [TestFixture]
+    public class IsAndIsNotOperatorSupport
+    {
+        [Test]
+        public void IsReturnsTrueWhenVariableIsTheSame()
+        {
+            var input = "x = []\ny = x\nz = x is y";
+            var expected = new BooleanVariable(true);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("z"));
+            Assert.That(result[0]["z"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void IsReturnsFalseWhenVariableIsNotTheSame()
+        {
+            var input = "x = {}\ny = {}\nz = x is y";
+            var expected = new BooleanVariable(false);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("z"));
+            Assert.That(result[0]["z"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void ThrowsErrorIfEitherValueIsValueType()
+        {
+            var input = "x = {}\nz = x is 5";
+            Assert.Throws<InterpreterInvalidOperationException>(() => Runner.Run(input));
+        }
+    }
+    
+    [TestFixture]
+    public class InAndNotInOperatorSupport
+    {
+        [Test]
+        public void ReturnsTrueWhenSubstringIsFound()
+        {
+            var input = "x = 'asd' in 'asdf'";
+            var expected = new BooleanVariable(true);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void ReturnsFalseWhenSubstringIsNotFound()
+        {
+            var input = "x = 'asdx' in 'asdf'";
+            var expected = new BooleanVariable(false);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void ThrowsErrorWhenRightArgumentIsStringAndLeftArgumentIsNot()
+        {
+            var input = "x = 5 in 'asdf'";
+            Assert.Throws<InterpreterInvalidOperationException>(() => Runner.Run(input));
+        }
+
+        [Test]
+        public void ReturnsTrueWhenValueIsFoundInList()
+        {
+            var input = "x = 5 in [1, 2, 3, 4, 5]";
+            var expected = new BooleanVariable(true);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void ReturnsFalseWhenValueIsNotFoundInList()
+        {
+            var input = "x = 6 in [1, 2, 3, 4, 5]";
+            var expected = new BooleanVariable(false);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void ReturnsTrueWhenValueIsFoundInKeysOfDictionary()
+        {
+            var input = "x = 5 in {5: 4, 3: 2}";
+            var expected = new BooleanVariable(true);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void ReturnsFalseWhenValueIsNotFoundInKeysOfDictionary()
+        {
+            var input = "x = 6 in {5: 4, 3: 2}";
+            var expected = new BooleanVariable(false);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void ThrowsErrorWhenRightArgumentIsAnythingButStringListOrDictionary()
+        {
+            var input = "class x():\n\ty=5\nz = 5 in x";
+            Assert.Throws<InterpreterInvalidOperationException>(() => Runner.Run(input));
         }
     }
 

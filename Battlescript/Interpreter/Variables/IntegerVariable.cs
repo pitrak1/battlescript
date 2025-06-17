@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class IntegerVariable(int value) : Variable
+public class IntegerVariable(int value) : ValueVariable
 {
     public int Value { get; set; } = value;
     

@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class FunctionVariable(List<Instruction>? parameters, List<Instruction>? instructions) : Variable, IEquatable<FunctionVariable>
+public class FunctionVariable(List<Instruction>? parameters, List<Instruction>? instructions) : ReferenceVariable, IEquatable<FunctionVariable>
 {
     public List<Instruction> Parameters { get; set; } = parameters ?? [];
     public List<Instruction> Instructions { get; set; } = instructions ?? [];
@@ -34,7 +34,7 @@ public class FunctionVariable(List<Instruction>? parameters, List<Instruction>? 
             
         memory.RemoveScopes(classScopesAdded + 1);
         
-        return returnValue ?? new NullVariable();
+        return returnValue ?? new NoneVariable();
     }
 
     public Variable RunFunction(Memory memory, List<Variable> arguments, ObjectVariable? objectVariable = null)
@@ -55,7 +55,7 @@ public class FunctionVariable(List<Instruction>? parameters, List<Instruction>? 
             
         memory.RemoveScopes(classScopesAdded + 1);
         
-        return returnValue ?? new NullVariable();
+        return returnValue ?? new NoneVariable();
     }
 
     private int AddClassScopes(Memory memory, ObjectVariable? objectVariable)

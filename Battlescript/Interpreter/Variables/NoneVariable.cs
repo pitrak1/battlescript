@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class NullVariable : Variable
+public class NoneVariable : ReferenceVariable
 {
     public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {

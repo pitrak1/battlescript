@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class ClassVariable (Dictionary<string, Variable>? values, List<ClassVariable>? superclasses = null) : Variable, IEquatable<ClassVariable>
+public class ClassVariable (Dictionary<string, Variable>? values, List<ClassVariable>? superclasses = null) : ReferenceVariable, IEquatable<ClassVariable>
 {
     public Dictionary<string, Variable> Values { get; set; } = values ?? [];
     public List<ClassVariable> SuperClasses { get; set; } = superclasses ?? [];

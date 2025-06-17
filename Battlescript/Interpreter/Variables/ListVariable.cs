@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class ListVariable(List<Variable>? values = null) : Variable, IEquatable<ListVariable>
+public class ListVariable(List<Variable>? values = null) : ReferenceVariable, IEquatable<ListVariable>
 {
     public List<Variable> Values { get; set; } = values ?? [];
     

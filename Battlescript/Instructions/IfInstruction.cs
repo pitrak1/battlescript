@@ -39,7 +39,7 @@ public class IfInstruction : Instruction, IEquatable<IfInstruction>
             memory.RemoveScope();
         }
 
-        return new NullVariable();
+        return new NoneVariable();
     }
     
     // All the code below is to override equality

@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class FloatVariable(double value) : Variable
+public class FloatVariable(double value) : ValueVariable
 {
     public double Value { get; set; } = value;
     

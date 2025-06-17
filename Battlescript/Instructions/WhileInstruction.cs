@@ -39,7 +39,7 @@ public class WhileInstruction : Instruction, IEquatable<WhileInstruction>
             condition = Condition.Interpret(memory);
         }
 
-        return new NullVariable();
+        return new NoneVariable();
     }
     
     // All the code below is to override equality

@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class StringVariable(string? value = null) : Variable, IEquatable<StringVariable>
+public class StringVariable(string? value = null) : ValueVariable, IEquatable<StringVariable>
 {
     public string? Value { get; set; } = value;
     

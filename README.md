@@ -49,12 +49,8 @@ Falsy Values:
 - None
 
 TODOs before v1:
-1. `is` and `is not`
-2. `in` and `not in`
-3. `()` in precedence
-4. Support for unary operators
-5. Testing appropriate return types
-6. Test falsiness
+1. Testing appropriate return types
+2. Test falsiness
 
 ### Control Flow
 

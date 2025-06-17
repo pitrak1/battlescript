@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class BooleanVariable(bool? value = null) : Variable, IEquatable<BooleanVariable>
+public class BooleanVariable(bool? value = null) : ValueVariable, IEquatable<BooleanVariable>
 {
     public bool Value { get; set; } = value ?? false;
     

@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class DictionaryVariable(List<KeyValuePairVariable>? values): Variable, IEquatable<DictionaryVariable>
+public class DictionaryVariable(List<KeyValuePairVariable>? values): ReferenceVariable, IEquatable<DictionaryVariable>
 { 
     public List<KeyValuePairVariable> Values { get; set; } = values ?? [];
     
