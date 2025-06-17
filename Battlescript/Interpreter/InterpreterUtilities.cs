@@ -349,8 +349,8 @@ public static class InterpreterUtilities
                 return true;
             case ObjectVariable:
                 return true;
-            case DictionaryVariable:
-                return true;
+            case DictionaryVariable dictionaryVariable:
+                return dictionaryVariable.Values.Count > 0;
             case FunctionVariable:
                 return true;
             case KeyValuePairVariable:

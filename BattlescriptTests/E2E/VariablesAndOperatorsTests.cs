@@ -278,4 +278,212 @@ public static class VariablesAndOperatorsTests
         // I would have liked to add test cases here to make sure the precedence order is
         // Comparison > not > and > or, but I can't come up with good test cases. Maybe I'll come back to this.
     }
+    
+    [TestFixture]
+    public class ResultType
+    {
+        [Test]
+        public void UnaryOperatorsReturnIntegerIfGivenInteger()
+        {
+            var input = "x = -1";
+            var expected = new IntegerVariable(-1);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void UnaryOperatorsReturnFloatIfGivenFloat()
+        {
+            var input = "x = -1.0";
+            var expected = new FloatVariable(-1);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void TrueDivisionAlwaysReturnsAFloat()
+        {
+            var input = "x = 12/3";
+            var expected = new FloatVariable(4);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void FloorDivisionAlwaysReturnsAnInteger()
+        {
+            var input = "x = 13.5//3.2";
+            var expected = new IntegerVariable(4);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void OtherOperatorsReturnIntegerIfBothOperandsAreIntegers()
+        {
+            var input = "x = 12 * 3";
+            var expected = new IntegerVariable(36);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void OtherOperatorsReturnFloatIfBothOperandsAreFloats()
+        {
+            var input = "x = 2.5 * 4.0";
+            var expected = new FloatVariable(10);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void OtherOperatorsReturnFloatIfEitherOperandIsFloat()
+        {
+            var input = "x = 2.5 * 4";
+            var expected = new FloatVariable(10);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+    }
+    
+    [TestFixture]
+    public class TruthinessAndFalsiness
+    {
+        [Test]
+        public void EmptyListsAreFalsy()
+        {
+            var input = "x = False\nif []:\n\tx = True";
+            var expected = new BooleanVariable(false);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void NonEmptyListsAreTruthy()
+        {
+            var input = "x = False\nif [1]:\n\tx = True";
+            var expected = new BooleanVariable(true);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void EmptyDictionariesAreFalsy()
+        {
+            var input = "x = False\nif {}:\n\tx = True";
+            var expected = new BooleanVariable(false);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void NonEmptyDictionariesAreTruthy()
+        {
+            var input = "x = False\nif {'asdf': 1}:\n\tx = True";
+            var expected = new BooleanVariable(true);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void EmptyStringsAreFalsy()
+        {
+            var input = "x = False\nif '':\n\tx = True";
+            var expected = new BooleanVariable(false);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void NonEmptyStringsAreTruthy()
+        {
+            var input = "x = False\nif 'asdf':\n\tx = True";
+            var expected = new BooleanVariable(true);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void ZeroIntegerIsFalsy()
+        {
+            var input = "x = False\nif 0:\n\tx = True";
+            var expected = new BooleanVariable(false);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void NonZeroIntegerIsTruthy()
+        {
+            var input = "x = False\nif 1:\n\tx = True";
+            var expected = new BooleanVariable(true);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void ZeroFloatIsFalsy()
+        {
+            var input = "x = False\nif 0.0:\n\tx = True";
+            var expected = new BooleanVariable(false);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void NonZeroFloatIsTruthy()
+        {
+            var input = "x = False\nif 1.5:\n\tx = True";
+            var expected = new BooleanVariable(true);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void FalseIsFalsy()
+        {
+            var input = "x = False\nif False:\n\tx = True";
+            var expected = new BooleanVariable(false);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void TrueIsTruthy()
+        {
+            var input = "x = False\nif True:\n\tx = True";
+            var expected = new BooleanVariable(true);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void NoneIsFalsy()
+        {
+            var input = "x = False\nif None:\n\tx = True";
+            var expected = new BooleanVariable(false);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+    }
 }

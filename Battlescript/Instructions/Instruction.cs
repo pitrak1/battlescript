@@ -51,6 +51,8 @@ public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Ins
                     return new ReturnInstruction(tokens);
                 case "class":
                     return new ClassInstruction(tokens);
+                case "None":
+                    return new NoneInstruction();
                 default:
                     throw new ParserUnexpectedTokenException(tokens[0]);
             }

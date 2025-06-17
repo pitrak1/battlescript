@@ -49,8 +49,7 @@ Falsy Values:
 - None
 
 TODOs before v1:
-1. Testing appropriate return types
-2. Test falsiness
+1. Maybe tuples and sets?
 
 ### Control Flow
 

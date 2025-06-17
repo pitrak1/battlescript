@@ -33,8 +33,6 @@ public class ParensInstruction : Instruction, IEquatable<ParensInstruction>
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        Debug.Assert(instructionContext is not null);
-
         if (instructionContext is FunctionVariable functionVariable)
         {
             var objectVariable = objectContext is ObjectVariable ? (ObjectVariable)objectContext : null;
