@@ -98,4 +98,65 @@ public static class VariablesAndOperatorsTests
             Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
     }
+    
+    [TestFixture]
+    public class OperatorSupport
+    {
+        [Test]
+        public void SupportsUnaryPlus()
+        {
+            var input = "x = +6";
+            var expected = new IntegerVariable(6);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+    }
+
+    [TestFixture]
+    public class OperatorPrecedence
+    {
+        [Test]
+        public void ValuesParenthesesOverPower()
+        {
+            var input = "x = 2 ** (1 + 2)";
+            var expected = new IntegerVariable(8);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void ValuesPowerOverDivisionMultiplicationAndModulo()
+        {
+            var input = "x = 4 * 2 ** 3";
+            var expected = new IntegerVariable(32);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ValuesDivisionMultiplicationAndModuloOverAdditionAndSubtraction()
+        {
+            var input = "x = 8 - 16 // 4";
+            var expected = new IntegerVariable(4);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void ValuesAdditionAndSubtractionOverComparison()
+        {
+            var input = "x = 3 <= 8 - 7";
+            var expected = new BooleanVariable(false);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        // I would have liked to add test cases here to make sure the precedence order is
+        // Comparison > not > and > or, but I can't come up with good test cases. Maybe I'll come back to this.
+    }
 }

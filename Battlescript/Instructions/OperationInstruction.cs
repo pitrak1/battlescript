@@ -17,6 +17,16 @@ public class OperationInstruction : Instruction, IEquatable<OperationInstruction
         Right = result.Right;
         Line = operatorToken.Line;
         Column = operatorToken.Column;
+                
+        if (result.Left is ParensInstruction left)
+        {
+            Left = left.Instructions[0];
+        }
+
+        if (result.Right is ParensInstruction right)
+        {
+            Right = right.Instructions[0];
+        }
     }
 
     public OperationInstruction(string operation, Instruction? left = null, Instruction? right = null)

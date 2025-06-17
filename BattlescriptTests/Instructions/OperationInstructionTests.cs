@@ -53,6 +53,21 @@ public static partial class InstructionTests
             
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
+
+        [Test]
+        public void HandlesParenthesis()
+        {
+            var lexer = new Lexer("4 * (5 + 5)");
+            var lexerResult = lexer.Run();
+            
+            var expected = new OperationInstruction(
+                operation: "*",
+                left: new IntegerInstruction(4),
+                right: new OperationInstruction("+", new IntegerInstruction(5), new IntegerInstruction(5))
+            );
+            
+            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+        }
     }
     
     [TestFixture]
