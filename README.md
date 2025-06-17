@@ -50,6 +50,7 @@ Falsy Values:
 
 TODOs before v1:
 1. Maybe tuples and sets?
+2. Thorough combthrough of errors against Python errors
 
 ### Control Flow
 

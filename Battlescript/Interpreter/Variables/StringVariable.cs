@@ -2,7 +2,7 @@ namespace Battlescript;
 
 public class StringVariable(string? value = null) : ValueVariable, IEquatable<StringVariable>
 {
-    public string? Value { get; set; } = value;
+    public string Value { get; set; } = value ?? "";
     
     public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {

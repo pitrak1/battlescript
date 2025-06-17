@@ -6,11 +6,11 @@ public static class InterpreterUtilities
     {
         if (operation == "is" || operation == "is not")
         {
-            return ConductIsOperation(memory, operation, left, right);
+            return ConductIsOperation(operation, left, right);
         }
         else if (operation == "in" || operation == "not in")
         {
-            return ConductInOperation(memory, operation, left, right);
+            return ConductInOperation(operation, left, right);
         }
         else if (left is ObjectVariable || right is ObjectVariable)
         {
@@ -26,73 +26,30 @@ public static class InterpreterUtilities
         }
     }
 
-    public static Variable ConductIsOperation(Memory memory, string operation, Variable? left, Variable? right)
+    private static Variable ConductIsOperation(string operation, Variable? left, Variable? right)
     {
         if (left is not ReferenceVariable || right is not ReferenceVariable)
         {
             throw new InterpreterInvalidOperationException(operation, left, right);
         }
 
-        if (operation == "is")
-        {
-            return new BooleanVariable(left == right);
-        }
-        else
-        {
-            return new BooleanVariable(left != right);
-        }
+        return operation == "is" ? new BooleanVariable(left == right) : new BooleanVariable(left != right);
     }
 
-    public static Variable ConductInOperation(Memory memory, string operation, Variable? left, Variable? right)
+    private static Variable ConductInOperation(string operation, Variable? left, Variable? right)
     {
         if (left is StringVariable leftString && right is StringVariable rightString)
         {
-            if (operation == "in")
-            {
-                return new BooleanVariable(rightString.Value.Contains(leftString.Value));
-            }
-            else
-            {
-                return new BooleanVariable(!rightString.Value.Contains(leftString.Value));
-            }
+            var isContained = rightString.Value.Contains(leftString.Value);
+            return operation == "in" ? new BooleanVariable(isContained) : new BooleanVariable(!isContained);
         } else if (right is ListVariable rightList)
         {
-            var found = false;
-            foreach (var x in rightList.Values)
-            {
-                if (x.Equals(left))
-                {
-                    found = true;
-                }
-            }
-            
-            if (operation == "in")
-            {
-                return new BooleanVariable(found);
-            }
-            else
-            {
-                return new BooleanVariable(!found);
-            }
+            var found = rightList.Values.Any(x => x.Equals(left));
+            return operation == "in" ? new BooleanVariable(found) : new BooleanVariable(!found);
         } else if (right is DictionaryVariable rightDictionary)
         {
-            var found = false;
-            foreach (var x in rightDictionary.Values)
-            {
-                if (x.Left.Equals(left))
-                {
-                    found = true;
-                }
-            }
-            
-            if (operation == "in")
-            {
-                return new BooleanVariable(found);
-            }
-            else
-            {
-                return new BooleanVariable(!found);
-            }
+            var found = rightDictionary.Values.Any(x => x.Left is not null && x.Left.Equals(left));
+            return operation == "in" ? new BooleanVariable(found) : new BooleanVariable(!found);
         }
         else
         {
@@ -103,8 +60,7 @@ public static class InterpreterUtilities
     public static Variable ConductAssignment(Memory memory, string operation, Variable? left, Variable? right)
     {
         if (operation == "=") return right ?? new NoneVariable();
-
-        var operationWithEqualsRemoved = operation.Substring(0, operation.Length - 1);
+        var operationWithEqualsRemoved = AssignmentOperatorToStandardOperatorMap[operation];
         return ConductOperation(memory, operationWithEqualsRemoved, left, right);
     }
 
@@ -112,29 +68,7 @@ public static class InterpreterUtilities
     {
         if (left is null && right is not null)
         {
-            if (operation == "+")
-            {
-                return right;
-            }
-            else if (operation == "-")
-            {
-                if (right is IntegerVariable rightInt)
-                {
-                    return new IntegerVariable(-rightInt.Value);
-                } 
-                else if (right is FloatVariable rightFloat)
-                {
-                    return new FloatVariable(-rightFloat.Value);
-                }
-                else
-                {
-                    throw new InterpreterInvalidOperationException(operation, left, right);
-                }
-            }
-            else
-            {
-                throw new InterpreterInvalidOperationException(operation, left, right);
-            }
+            return ConductUnaryNumericalOperation(operation, right);
         }
         
         double leftDouble;
@@ -166,9 +100,9 @@ public static class InterpreterUtilities
             case "-":
                 return CreateResultWithType(leftDouble - rightDouble, operation, left, right);
             case "==":
-                return CreateResultWithType(leftDouble == rightDouble, operation, left, right);
+                return CreateResultWithType(Math.Abs(leftDouble - rightDouble) < Consts.FloatingPointTolerance, operation, left, right);
             case "!=":
-                return CreateResultWithType(leftDouble != rightDouble, operation, left, right);
+                return CreateResultWithType(Math.Abs(leftDouble - rightDouble) > Consts.FloatingPointTolerance, operation, left, right);
             case ">":
                 return CreateResultWithType(leftDouble > rightDouble, operation, left, right);
             case ">=":
@@ -179,6 +113,30 @@ public static class InterpreterUtilities
                 return CreateResultWithType(leftDouble <= rightDouble, operation, left, right);
             default:
                 throw new InterpreterInvalidOperationException(operation, left, right);
+        }
+    }
+
+    private static Variable ConductUnaryNumericalOperation(string operation, Variable right)
+    {
+        switch (operation)
+        {
+            case "+":
+                return right;
+            case "-":
+                if (right is IntegerVariable rightInt)
+                {
+                    return new IntegerVariable(-rightInt.Value);
+                } 
+                else if (right is FloatVariable rightFloat)
+                {
+                    return new FloatVariable(-rightFloat.Value);
+                }
+                else
+                {
+                    throw new InterpreterInvalidOperationException(operation, null, right);
+                }
+            default:
+                throw new InterpreterInvalidOperationException(operation, null, right);
         }
     }
 
@@ -272,14 +230,14 @@ public static class InterpreterUtilities
     {
         if (left is ObjectVariable leftObject)
         {
-            var leftOverrideMethod = leftObject.GetOverride(memory, _binaryOperationToOverrideMap[operation]);
+            var leftOverrideMethod = leftObject.GetOverride(memory, BinaryOperationToOverrideMap[operation]);
             if (leftOverrideMethod is not null)
             {
-                return leftOverrideMethod.RunFunction(memory, [left, right]);
+                return leftOverrideMethod.RunFunction(memory, [left, right ?? new NoneVariable()]);
             }
             else if (right is ObjectVariable rightObject1)
             {
-                var rightOverrideMethod = rightObject1.GetOverride(memory, _binaryOperationToOverrideMap[operation]);
+                var rightOverrideMethod = rightObject1.GetOverride(memory, BinaryOperationToOverrideMap[operation]);
                 if (rightOverrideMethod is not null)
                 {
                     return rightOverrideMethod.RunFunction(memory, [right, left]);
@@ -296,10 +254,10 @@ public static class InterpreterUtilities
         }
         else if (right is ObjectVariable rightObject2)
         {
-            var rightOverrideMethod = rightObject2.GetOverride(memory, _binaryOperationToOverrideMap[operation]);
+            var rightOverrideMethod = rightObject2.GetOverride(memory, BinaryOperationToOverrideMap[operation]);
             if (rightOverrideMethod is not null)
             {
-                return rightOverrideMethod.RunFunction(memory, [right, left]);
+                return rightOverrideMethod.RunFunction(memory, [right, left ?? new NoneVariable()]);
             }
             else
             {
@@ -312,22 +270,34 @@ public static class InterpreterUtilities
         }
     }
 
-    private static Dictionary<string, string> _binaryOperationToOverrideMap = new Dictionary<string, string>()
-    {
-        {"+", "__add__"},
-        {"-", "__sub__"},
-        {"*", "__mul__"},
-        {"/", "__truediv__"},
-        {"//", "__floordiv__"},
-        {"%", "__mod__"},
-        {"**", "__pow__"},
-        {"==", "__eq__"},
-        {"!=", "__ne__"},
-        {"<", "__lt__"},
-        {"<=", "__le__"},
-        {">", "__gt__"},
-        {">=", "__ge__"}
-    };
+    private static readonly Dictionary<string, string> BinaryOperationToOverrideMap = new Dictionary<string, string>()
+        {
+            {"+", "__add__"},
+            {"-", "__sub__"},
+            {"*", "__mul__"},
+            {"/", "__truediv__"},
+            {"//", "__floordiv__"},
+            {"%", "__mod__"},
+            {"**", "__pow__"},
+            {"==", "__eq__"},
+            {"!=", "__ne__"},
+            {"<", "__lt__"},
+            {"<=", "__le__"},
+            {">", "__gt__"},
+            {">=", "__ge__"}
+        };
+
+    private static readonly Dictionary<string, string> AssignmentOperatorToStandardOperatorMap =
+        new Dictionary<string, string>()
+        {
+            {"+=", "+"},
+            {"-=", "-"},
+            {"*=", "*"},
+            {"/=", "/"},
+            {"//=", "//"},
+            {"%=", "%"},
+            {"**=", "**"},
+        };
 
     public static bool IsVariableTruthy(Variable variable)
     {
