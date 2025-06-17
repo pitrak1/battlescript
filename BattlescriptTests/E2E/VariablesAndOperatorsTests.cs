@@ -100,7 +100,7 @@ public static class VariablesAndOperatorsTests
     }
 
     [TestFixture]
-    public class UnaryOperatorSupport
+    public class UnaryOperators
     {
         [Test]
         public void SupportsUnaryPlus()
@@ -124,7 +124,7 @@ public static class VariablesAndOperatorsTests
     }
     
     [TestFixture]
-    public class IsAndIsNotOperatorSupport
+    public class IsAndIsNotOperators
     {
         [Test]
         public void IsReturnsTrueWhenVariableIsTheSame()
@@ -155,7 +155,7 @@ public static class VariablesAndOperatorsTests
     }
     
     [TestFixture]
-    public class InAndNotInOperatorSupport
+    public class InAndNotInOperators
     {
         [Test]
         public void ReturnsTrueWhenSubstringIsFound()
@@ -229,6 +229,80 @@ public static class VariablesAndOperatorsTests
         {
             var input = "class x():\n\ty=5\nz = 5 in x";
             Assert.Throws<InterpreterInvalidOperationException>(() => Runner.Run(input));
+        }
+    }
+
+    [TestFixture]
+    public class AssignmentOperators
+    {
+        [Test]
+        public void SupportsAddAssignment()
+        {
+            var input = "x = 5\nx += 5";
+            var expected = new IntegerVariable(10);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void SupportsSubtractAssignment()
+        {
+            var input = "x = 5\nx -= 5";
+            var expected = new IntegerVariable(0);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void SupportsMultiplyAssignment()
+        {
+            var input = "x = 5\nx *= 5";
+            var expected = new IntegerVariable(25);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void SupportsTrueDivisionAssignment()
+        {
+            var input = "x = 8\nx /= 5";
+            var expected = new FloatVariable(1.6);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void SupportsFloorDivisionAssignment()
+        {
+            var input = "x = 8\nx //= 5";
+            var expected = new IntegerVariable(1);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void SupportsModuloAssignment()
+        {
+            var input = "x = 9\nx %= 2";
+            var expected = new IntegerVariable(1);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void SupportsPowerAssignment()
+        {
+            var input = "x = 9\nx **= 2";
+            var expected = new IntegerVariable(81);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
     }
 
