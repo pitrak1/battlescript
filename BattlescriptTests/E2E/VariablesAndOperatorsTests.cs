@@ -2,10 +2,10 @@ using Battlescript;
 
 namespace BattlescriptTests;
 
-[TestFixture]
-public static partial class E2ETests {
+public static class VariablesAndOperatorsTests
+{
     [TestFixture]
-    public class BasicVariableTypes
+    public class VariableTypes
     {
         [Test]
         public void SupportsStringVariablesUsingSingleQuotes()
@@ -27,7 +27,6 @@ public static partial class E2ETests {
             Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
         
-        // We ultimately need to separate this into ints and floats
         [Test]
         public void SupportsFloats()
         {
@@ -53,6 +52,47 @@ public static partial class E2ETests {
         {
             var input = "x = True";
             var expected = new BooleanVariable(true);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void SupportsLists()
+        {
+            var input = "x = []";
+            var expected = new ListVariable([]);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void SupportsDictionaries()
+        {
+            var input = "x = {}";
+            var expected = new DictionaryVariable([]);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void SupportsClasses()
+        {
+            var input = "class asdf():\n\ty = 3";
+            var expected = new ClassVariable(new Dictionary<string, Variable> {{"y", new IntegerVariable(3)}});
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("asdf"));
+            Assert.That(result[0]["asdf"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void SupportsObjects()
+        {
+            var input = "class asdf():\n\ty = 3\nx = asdf()";
+            var classValues = new Dictionary<string, Variable> { { "y", new IntegerVariable(3) } };
+            var expected = new ObjectVariable(classValues, new ClassVariable(classValues));
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("x"));
             Assert.That(result[0]["x"], Is.EqualTo(expected));
