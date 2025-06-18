@@ -15,39 +15,36 @@ public class FunctionVariable(List<Instruction>? parameters, List<Instruction>? 
         throw new Exception("Cannot index a function variable");
     }
     
-    public Variable RunFunction(Memory memory, List<Instruction> arguments, ObjectVariable? objectVariable = null)
-    {
-        var classScopesAdded = AddClassScopes(memory, objectVariable);
-            
-        memory.AddScope();
-            
-        for (var i = 0; i < arguments.Count; i++)
-        {
-            if (Parameters[i] is VariableInstruction parameter)
-            {
-                var value = arguments[i].Interpret(memory);
-                memory.SetVariable(new VariableInstruction(parameter.Name), value);
-            }
-        }
-
-        var returnValue = RunInstructions(memory);
-            
-        memory.RemoveScopes(classScopesAdded + 1);
-        
-        return returnValue ?? new NoneVariable();
-    }
-
     public Variable RunFunction(Memory memory, List<Variable> arguments, ObjectVariable? objectVariable = null)
     {
         var classScopesAdded = AddClassScopes(memory, objectVariable);
             
         memory.AddScope();
-            
-        for (var i = 0; i < arguments.Count; i++)
+
+        for (var i = 0; i < Parameters.Count; i++)
         {
-            if (Parameters[i] is VariableInstruction parameter)
+            var parameter = Parameters[i];
+            if (parameter is VariableInstruction variableInstruction)
             {
-                memory.SetVariable(new VariableInstruction(parameter.Name), arguments[i]);
+                if (i >= arguments.Count)
+                {
+                    throw new Exception("Missing a required argument at arg " + (i + 1));
+                }
+                
+                var value = arguments[i];
+                memory.SetVariable(new VariableInstruction(variableInstruction.Name), value);
+            } else if (parameter is AssignmentInstruction assignmentInstruction)
+            {
+                if (i < arguments.Count)
+                {
+                    var value = arguments[i];
+                    memory.SetVariable((VariableInstruction)assignmentInstruction.Left, value);
+                }
+                else
+                {
+                    var value = assignmentInstruction.Right.Interpret(memory);
+                    memory.SetVariable((VariableInstruction)assignmentInstruction.Left, value);
+                }
             }
         }
 
@@ -57,7 +54,18 @@ public class FunctionVariable(List<Instruction>? parameters, List<Instruction>? 
         
         return returnValue ?? new NoneVariable();
     }
-
+    
+    public Variable RunFunction(Memory memory, List<Instruction> arguments, ObjectVariable? objectVariable = null)
+    {
+        var variableArguments = new List<Variable>();
+        foreach (var instruction in arguments)
+        {
+            variableArguments.Add(instruction.Interpret(memory, objectVariable));
+        }
+        
+        return RunFunction(memory, variableArguments);
+    }
+    
     private int AddClassScopes(Memory memory, ObjectVariable? objectVariable)
     {
         if (objectVariable is not null)

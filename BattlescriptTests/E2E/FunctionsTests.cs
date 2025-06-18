@@ -146,4 +146,34 @@ func()";
             Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
     }
+
+    [TestFixture]
+    public class DefaultArguments
+    {
+        [Test]
+        public void AllowsDefiningDefaultArguments()
+        {
+            var input = @"
+def func(y = 5):
+    return y
+x = func(6)";
+            var expected = new IntegerVariable(6);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void UsesDefaultArgumentsWhenArgumentNotProvided()
+        {
+            var input = @"
+def func(y = 5):
+    return y
+x = func()";
+            var expected = new IntegerVariable(5);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+    }
 }
