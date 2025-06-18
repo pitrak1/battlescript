@@ -60,6 +60,8 @@ public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Ins
                     return new ElseInstruction(tokens);
                 case "break":
                     return new BreakInstruction();
+                case "pass":
+                    return new NoneInstruction();
                 case "continue":
                     return new ContinueInstruction();
                 default:

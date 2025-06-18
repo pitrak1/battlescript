@@ -275,4 +275,21 @@ while y < 4:
             Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
     }
+    
+    [TestFixture]
+    public class PassKeyword
+    {
+        [Test]
+        public void IsSupported()
+        {
+            var input = @"
+x = 5
+if x == 5:
+    pass";
+            var expected = new IntegerVariable(5);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+    }
 }

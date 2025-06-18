@@ -61,7 +61,6 @@ Not Yet Supported:
 - `match/case` statements
 
 TODOs before v1:
-1. Maybe pass?
 2. Thorough combthrough of errors against Python errors
 
 ### Functions
