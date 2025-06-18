@@ -92,4 +92,91 @@ public static class ControlFlowTests
             Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
     }
+
+    [TestFixture]
+    public class Range
+    {
+        [Test]
+        public void HandlesSingleArgument()
+        {
+            var input = "x = range(5)";
+            var expected = new ListVariable([
+                new IntegerVariable(0),
+                new IntegerVariable(1),
+                new IntegerVariable(2),
+                new IntegerVariable(3),
+                new IntegerVariable(4),
+            ]);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void HandlesTwoArguments()
+        {
+            var input = "x = range(2, 5)";
+            var expected = new ListVariable([
+                new IntegerVariable(2),
+                new IntegerVariable(3),
+                new IntegerVariable(4),
+            ]);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void HandlesThreeArguments()
+        {
+            var input = "x = range(2, 10, 2)";
+            var expected = new ListVariable([
+                new IntegerVariable(2),
+                new IntegerVariable(4),
+                new IntegerVariable(6),
+                new IntegerVariable(8),
+            ]);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void HandlesCountNotMatchingStep()
+        {
+            var input = "x = range(2, 5, 2)";
+            var expected = new ListVariable([
+                new IntegerVariable(2),
+                new IntegerVariable(4),
+            ]);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void HandlesDecreasingRange()
+        {
+            var input = "x = range(2, -5, -2)";
+            var expected = new ListVariable([
+                new IntegerVariable(2),
+                new IntegerVariable(0),
+                new IntegerVariable(-2),
+                new IntegerVariable(-4),
+            ]);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void ReturnsEmptyListIfGivenInfiniteRange()
+        {
+            var input = "x = range(2, -5, 2)";
+            var expected = new ListVariable([]);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+    }
 }
