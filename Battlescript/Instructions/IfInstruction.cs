@@ -3,6 +3,7 @@ namespace Battlescript;
 public class IfInstruction : Instruction, IEquatable<IfInstruction>
 {
     public Instruction Condition { get; set; }
+    public Instruction? Next { get; set; }
 
     public IfInstruction(List<Token> tokens)
     {
@@ -16,9 +17,10 @@ public class IfInstruction : Instruction, IEquatable<IfInstruction>
         Column = tokens[0].Column;
     }
 
-    public IfInstruction(Instruction condition, List<Instruction>? instructions = null)
+    public IfInstruction(Instruction condition, Instruction? next = null, List<Instruction>? instructions = null)
     {
         Condition = condition;
+        Next = next;
         Instructions = instructions ?? [];
     }
 
@@ -37,6 +39,10 @@ public class IfInstruction : Instruction, IEquatable<IfInstruction>
                 inst.Interpret(memory);
             }
             memory.RemoveScope();
+        }
+        else if (Next is not null)
+        {
+            Next.Interpret(memory, instructionContext, objectContext, lexicalContext);
         }
 
         return new NoneVariable();

@@ -158,21 +158,21 @@ public static class Consts
         "__floordiv__",
         "__mod__",
         "__pow__",
-        "__matmul__", //NOT SUPPORTED YET
+        "__matmul__", //NOT SUPPORTED IN V1
         "__neg__",
         "__pos__",
-        "__invert__", //NOT SUPPORTED YET
+        "__invert__", //NOT SUPPORTED IN V1
         "__eq__",
         "__ne__",
         "__lt__",
         "__gt__",
         "__le__",
         "__ge__",
-        "__and__",  //NOT SUPPORTED YET
-        "__or__", //NOT SUPPORTED YET
-        "__xor__", //NOT SUPPORTED YET
-        "__lshift__", //NOT SUPPORTED YET
-        "__rshift__", //NOT SUPPORTED YET
+        "__and__",  //NOT SUPPORTED IN V1
+        "__or__", //NOT SUPPORTED IN V1
+        "__xor__", //NOT SUPPORTED IN V1
+        "__lshift__", //NOT SUPPORTED IN V1
+        "__rshift__", //NOT SUPPORTED IN V1
         "__iadd__",
         "__isub__",
         "__imul__",
@@ -180,11 +180,11 @@ public static class Consts
         "__ifloordiv__",
         "__imod__",
         "__ipow__",
-        "__iand__", //NOT SUPPORTED YET
-        "__ior__", //NOT SUPPORTED YET
-        "__ixor__", //NOT SUPPORTED YET
-        "__ilshift__", //NOT SUPPORTED YET
-        "__irshift__", //NOT SUPPORTED YET
+        "__iand__", //NOT SUPPORTED IN V1
+        "__ior__", //NOT SUPPORTED IN V1
+        "__ixor__", //NOT SUPPORTED IN V1
+        "__ilshift__", //NOT SUPPORTED IN V1
+        "__irshift__", //NOT SUPPORTED IN V1
         "__str__",
         "__repr__",
         "__len__",
@@ -202,21 +202,21 @@ public static class Consts
         "%",
         "+",
         "-",
-        "<<", //NOT SUPPORTED YET
-        ">>", //NOT SUPPORTED YET
-        "&", //NOT SUPPORTED YET
-        "^", //NOT SUPPORTED YET
-        "|", //NOT SUPPORTED YET
+        "<<", //NOT SUPPORTED IN V1
+        ">>", //NOT SUPPORTED IN V1
+        "&", //NOT SUPPORTED IN V1
+        "^", //NOT SUPPORTED IN V1
+        "|", //NOT SUPPORTED IN V1
         "==",
         "!=",
         ">",
         ">=",
         "<",
         "<=",
-        "is", //NOT SUPPORTED YET
-        "is not", //NOT SUPPORTED YET
-        "in", //NOT SUPPORTED YET
-        "not in", //NOT SUPPORTED YET
+        "is",
+        "is not",
+        "in",
+        "not in",
         "not",
         "and",
         "or"
@@ -247,12 +247,12 @@ public static class Consts
         "%=",
         "//=",
         "**=",
-        "&=",
-        "|=",
-        "^=",
-        ">>=",
-        "<<=",
-        ":=" // walrus operator is not supported yet because it's complicated. Sorry :(
+        "&=",//NOT SUPPORTED IN V1
+        "|=",//NOT SUPPORTED IN V1
+        "^=",//NOT SUPPORTED IN V1
+        ">>=",//NOT SUPPORTED IN V1
+        "<<=",//NOT SUPPORTED IN V1
+        ":=" //NOT SUPPORTED IN V1
     ];
 
     public enum TokenTypes
