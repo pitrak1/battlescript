@@ -31,10 +31,23 @@ public class WhileInstruction : Instruction, IEquatable<WhileInstruction>
         while (InterpreterUtilities.IsVariableTruthy(condition))
         {
             memory.AddScope();
-            foreach (var inst in Instructions)
+
+            try
             {
-                inst.Interpret(memory);
+                foreach (var inst in Instructions)
+                {
+                    inst.Interpret(memory);
+                }
             }
+            catch (InternalContinueException)
+            {
+            }
+            catch (InternalBreakException)
+            {
+                memory.RemoveScope();
+                break;
+            }
+
             memory.RemoveScope();
             condition = Condition.Interpret(memory);
         }

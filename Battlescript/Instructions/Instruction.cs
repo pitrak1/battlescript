@@ -58,6 +58,10 @@ public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Ins
                 case "else":
                 case "elif":
                     return new ElseInstruction(tokens);
+                case "break":
+                    return new BreakInstruction();
+                case "continue":
+                    return new ContinueInstruction();
                 default:
                     throw new ParserUnexpectedTokenException(tokens[0]);
             }

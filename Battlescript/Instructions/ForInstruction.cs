@@ -42,11 +42,25 @@ public class ForInstruction : Instruction, IEquatable<ForInstruction>
             for (var i = 0; i < rangeList.Values.Count; i++)
             {
                 memory.AddScope();
-                memory.SetVariable(BlockVariable, rangeList.Values[i]);
-                foreach (var inst in Instructions)
+                memory.AddVariableToLastScope(BlockVariable, rangeList.Values[i]);
+
+                try
                 {
-                    inst.Interpret(memory);
+                    foreach (var inst in Instructions)
+                    {
+                        inst.Interpret(memory);
+                    }
+
                 }
+                catch (InternalContinueException)
+                {
+                }
+                catch (InternalBreakException)
+                {
+                    memory.RemoveScope();
+                    break;
+                }
+
                 memory.RemoveScope();
             }
             return new NoneVariable();

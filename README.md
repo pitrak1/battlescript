@@ -54,14 +54,15 @@ TODOs before v1:
 
 ### Control Flow
 
-Support for `if/elif/else`, `while`, `for`, `range`, `break`, `continue`, `pass`, and `match/case`
+Support for `if/elif/else`, `while`, `for`, `range`, `break`, and `continue`
+
+Not Yet Supported:
+- `pass` keyword
+- `match/case` statements
 
 TODOs before v1:
-1. Make sure `if/elif/else` works
-2. Add `range` and `for` support
-3. Add `break` and `continue` support
-4. Add `pass` support
-5. Add `match/case` support
+1. Maybe pass?
+2. Thorough combthrough of errors against Python errors
 
 ### Functions
 

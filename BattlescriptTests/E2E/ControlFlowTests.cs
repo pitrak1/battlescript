@@ -203,4 +203,76 @@ public static class ControlFlowTests
             Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
     }
+
+    [TestFixture]
+    public class Continue
+    {
+        [Test]
+        public void ForSupport()
+        {
+            var input = @"
+x = 5
+for y in range(4):
+    if y == 2:
+        continue
+    x = x + y";
+            var expected = new IntegerVariable(9);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void WhileSupport()
+        {
+            var input = @"
+x = 5
+y = 0
+while y < 4:
+    y = y + 1
+    if y == 2:
+        continue
+    x = x + y";
+            var expected = new IntegerVariable(13);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+    }
+    
+    [TestFixture]
+    public class Break
+    {
+        [Test]
+        public void ForSupport()
+        {
+            var input = @"
+x = 5
+for y in range(4):
+    if y == 2:
+        break
+    x = x + y";
+            var expected = new IntegerVariable(6);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void WhileSupport()
+        {
+            var input = @"
+x = 5
+y = 0
+while y < 4:
+    y = y + 1
+    if y == 2:
+        break
+    x = x + y";
+            var expected = new IntegerVariable(6);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+    }
 }

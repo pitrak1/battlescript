@@ -64,8 +64,13 @@ public class Memory
         }
         else
         {
-            _scopes[^1].Add(variableInstruction.Name, valueVariable);
+            AddVariableToLastScope(variableInstruction, valueVariable);
         }
+    }
+
+    public void AddVariableToLastScope(VariableInstruction variableInstruction, Variable valueVariable)
+    {
+        _scopes[^1].Add(variableInstruction.Name, valueVariable);
     }
     
     public void AddScope(Dictionary<string, Variable>? scope = null)
