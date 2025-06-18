@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Battlescript;
 
 public class ReturnInstruction : Instruction, IEquatable<ReturnInstruction>
@@ -6,7 +8,11 @@ public class ReturnInstruction : Instruction, IEquatable<ReturnInstruction>
 
     public ReturnInstruction(List<Token> tokens)
     {
-        Value = Parse(tokens.GetRange(1, tokens.Count - 1));
+        if (tokens.Count > 1)
+        {
+            Value = Parse(tokens.GetRange(1, tokens.Count - 1));
+        }
+        
         Line = tokens[0].Line;
         Column = tokens[0].Column;
     }
@@ -22,9 +28,8 @@ public class ReturnInstruction : Instruction, IEquatable<ReturnInstruction>
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        var returnValue = Value.Interpret(memory);
-        memory.SetVariable(new VariableInstruction("return"), returnValue);
-        return returnValue;
+        var returnValue = Value?.Interpret(memory);
+        throw new InternalReturnException(returnValue);
     }
     
     // All the code below is to override equality

@@ -74,12 +74,19 @@ public class FunctionVariable(List<Instruction>? parameters, List<Instruction>? 
 
     private Variable? RunInstructions(Memory memory)
     {
-        foreach (var inst in Instructions)
+        try
         {
-            inst.Interpret(memory);
+            foreach (var inst in Instructions)
+            {
+                inst.Interpret(memory);
+            }
         }
-            
-        return memory.GetVariable("return");
+        catch (InternalReturnException e)
+        {
+            return e.Value;
+        }
+        
+        return new NoneVariable();
     }
     
     // All the code below is to override equality

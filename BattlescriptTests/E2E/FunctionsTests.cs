@@ -3,44 +3,44 @@ using Battlescript;
 namespace BattlescriptTests;
 
 [TestFixture]
-public static partial class E2ETests {
+public class FunctionsTests
+{
     [TestFixture]
-    public class FunctionDefinitions
+    public class BasicFunctionDefinitions
     {
         [Test]
         public void HandlesFunctionDefinitionWithNoArguments()
         {
-            var input = "def func():\n\tx = 5";
+            var input = @"
+def func():
+    x = 5";
             var expected = new FunctionVariable(
-                new List<Instruction>(),
-                new List<Instruction>()
-                {
+                [],
+                [
                     new AssignmentInstruction(
-                        operation: "=", 
+                        operation: "=",
                         left: new VariableInstruction("x"),
                         right: new IntegerInstruction(5))
-                });
+                ]);
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("func"));
             Assert.That(result[0]["func"], Is.EqualTo(expected));
         }
-        
+
         [Test]
         public void HandlesFunctionDefinitionWithOneArgument()
         {
-            var input = "def func(asdf):\n\tx = asdf";
+            var input = @"
+def func(asdf):
+    x = asdf";
             var expected = new FunctionVariable(
-                new List<Instruction>()
-                {
-                    new VariableInstruction("asdf")
-                },
-                new List<Instruction>()
-                {
+                [new VariableInstruction("asdf")],
+                [
                     new AssignmentInstruction(
-                        operation: "=", 
+                        operation: "=",
                         left: new VariableInstruction("x"),
                         right: new VariableInstruction("asdf"))
-                });
+                ]);
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("func"));
             Assert.That(result[0]["func"], Is.EqualTo(expected));
@@ -49,33 +49,37 @@ public static partial class E2ETests {
         [Test]
         public void HandlesFunctionDefinitionWithMultipleArguments()
         {
-            var input = "def func(asdf, qwer):\n\tx = asdf";
+            var input = @"
+def func(asdf, qwer):
+    x = asdf";
             var expected = new FunctionVariable(
-                new List<Instruction>()
-                {
+                [
                     new VariableInstruction("asdf"),
                     new VariableInstruction("qwer")
-                },
-                new List<Instruction>()
-                {
+                ],
+                [
                     new AssignmentInstruction(
                         operation: "=", 
                         left: new VariableInstruction("x"),
                         right: new VariableInstruction("asdf"))
-                });
+                ]);
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("func"));
             Assert.That(result[0]["func"], Is.EqualTo(expected));
         }
     }
-    
+
     [TestFixture]
-    public class FunctionCalls
+    public class BasicFunctionCalls
     {
         [Test]
         public void HandlesFunctionCallWithNoArguments()
         {
-            var input = "x = 6\ndef func():\n\tx = 5\nfunc()";
+            var input = @"
+x = 6
+def func():
+    x = 5
+func()";
             var expected = new IntegerVariable(5);
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("x"));
@@ -83,19 +87,59 @@ public static partial class E2ETests {
         }
         
         [Test]
-        public void HandlesFunctionCallWithReturnValue()
+        public void HandlesFunctionCallWithArguments()
         {
-            var input = "def func():\n\treturn 6\nx = func()";
-            var expected = new IntegerVariable(6);
+            var input = @"
+x = 6
+def func(y, z):
+    x = y + z
+func(2, 3)";
+            var expected = new IntegerVariable(5);
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("x"));
             Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
+    }
 
+    [TestFixture]
+    public class ReturnValues
+    {
         [Test]
-        public void HandlesFunctionCallWithArguments()
+        public void HandlesBasicValues()
         {
-            var input = "def func(x, y):\n\treturn x + y\nx = func(2, 3)";
+            var input = @"
+def func():
+    return 15
+x = func()";
+            var expected = new IntegerVariable(15);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void HandlesExpressions()
+        {
+            var input = @"
+def func(y, z):
+    return y + z
+x = func(4, 8)";
+            var expected = new IntegerVariable(12);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void StopsExecution()
+        {
+            var input = @"
+x = 4
+def func():
+    x = 5
+    return
+    x = 6
+func()";
             var expected = new IntegerVariable(5);
             var result = Runner.Run(input);
             Assert.That(result[0], Contains.Key("x"));
