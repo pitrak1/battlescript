@@ -53,6 +53,8 @@ public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Ins
                     return new ClassInstruction(tokens);
                 case "None":
                     return new NoneInstruction();
+                case "for":
+                    return new ForInstruction(tokens);
                 case "else":
                 case "elif":
                     return new ElseInstruction(tokens);

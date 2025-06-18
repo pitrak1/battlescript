@@ -179,4 +179,28 @@ public static class ControlFlowTests
             Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
     }
+
+    [TestFixture]
+    public class For
+    {
+        [Test]
+        public void ForLoopUsingRange()
+        {
+            var input = "x = 5\nfor y in range(3):\n\tx = x + y";
+            var expected = new IntegerVariable(8);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void ForLoopUsingList()
+        {
+            var input = "x = 5\nfor y in [-1, 3, 2]:\n\tx = x + y";
+            var expected = new IntegerVariable(9);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+    }
 }
