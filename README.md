@@ -49,8 +49,8 @@ Falsy Values:
 - None
 
 TODOs before v1:
-1. Maybe tuples and sets?
-2. Thorough combthrough of errors against Python errors
+- Maybe tuples and sets?
+- Thorough combthrough of errors against Python errors
 
 ### Control Flow
 
@@ -61,7 +61,7 @@ Not Yet Supported:
 - `match/case` statements
 
 TODOs before v1:
-1. Thorough combthrough of errors against Python errors
+- Thorough combthrough of errors against Python errors
 
 ### Functions
 
@@ -75,8 +75,7 @@ Not Yet Supported:
 - annotations of function headers and `__annotations__`
 
 TODOs before v1:
-- Shore up default and keyword arguments
-- Add support for lambda functions
+- Thorough combthrough of errors against Python errors
 - Possibly add some stuff from the not yet supported list (probably `*args` and `**kwargs` first)
 
 ### Data Structures

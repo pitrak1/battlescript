@@ -122,70 +122,6 @@ public static class ParserUtilities
         var priority = Array.FindIndex(Consts.Operators, e => e == operatorString);
         return (priority != -1 && priority > current.Priority) ? (priority, index) : current;
     }
-
-    private static (int Count, List<List<Token>> Entries) GroupTokensWithinSeparators(List<Token> tokens, List<string> separatingCharacters)
-    {
-        // Early return for no tokens present
-        if (tokens.Count == 0) return (0, []);
-
-        List<string> separatorStack = [tokens[0].Value];
-        List<List<Token>> entries = [];
-        List<Token> currentTokenSet = [];
-        var totalTokenCount = 1;
-
-        while (separatorStack.Count > 0 && totalTokenCount < tokens.Count)
-        {
-            var currentToken = tokens[totalTokenCount];
-            
-            if (Consts.OpeningSeparators.Contains(currentToken.Value))
-            {
-                separatorStack.Add(currentToken.Value);
-                currentTokenSet.Add(currentToken);
-            }
-            else if (Consts.ClosingSeparators.Contains(currentToken.Value))
-            {
-                if (DoesTokenMatchSeparator(currentToken, separatorStack[^1]))
-                {
-                    separatorStack.RemoveAt(separatorStack.Count - 1);
-
-                    // We don't want to add the final separator in the expression to the entries but
-                    // we do need to add nested separators into the entries
-                    if (separatorStack.Count != 0) currentTokenSet.Add(currentToken);
-                }
-                else
-                {
-                    throw new ParserUnexpectedClosingSeparatorException(currentToken);
-                }
-            }
-            else if (separatorStack.Count == 1 && separatingCharacters.Contains(currentToken.Value))
-            {
-                entries.Add(currentTokenSet);
-                currentTokenSet = [];
-            }
-            else
-            {
-                currentTokenSet.Add(currentToken);
-            }
-            
-            totalTokenCount++;
-        }
-
-        if (separatorStack.Count == 0)
-        {
-            // This makes it so that if we just have an opening and closing separator, we get an empty
-            // array for entries, not an array with one entry that's an empty array
-            if (currentTokenSet.Count > 0 || entries.Count > 0)
-            {
-                entries.Add(currentTokenSet);
-            }
-
-            return (totalTokenCount, entries);
-        }
-        else
-        {
-            throw new ParserMatchingSeparatorNotFoundException(tokens[0]);
-        }
-    }
     
     public static (Instruction? Left, Instruction? Right) ParseLeftAndRightAroundIndex(List<Token> tokens, int index)
     {
@@ -202,7 +138,13 @@ public static class ParserUtilities
         List<string> separators
     )
     {
-        var results = GroupTokensWithinSeparators(tokens, separators);
+        // Early return for no tokens present
+        if (tokens.Count == 0) return (0, []);
+        
+        var closingSeparator = Consts.MatchingSeparatorsMap[tokens[0].Value];
+        var closingSeparatorIndex = GetTokenIndex(tokens, [closingSeparator]);
+        var tokensWithinSeparator = tokens.GetRange(1, closingSeparatorIndex - 1);
+        var results = GroupTokensWithSeparators(tokensWithinSeparator, separators);
         
         List<Instruction> values = [];
         foreach (var entry in results.Entries)
@@ -210,7 +152,7 @@ public static class ParserUtilities
             values.Add(Instruction.Parse(entry));
         }
 
-        return (results.Count, values);
+        return (results.Count + 2, values);
     }
     
     public static (int Count, List<Instruction> Values) ParseEntriesBetweenSeparatingCharacters(
@@ -218,7 +160,10 @@ public static class ParserUtilities
         List<string> separators
     )
     {
-        var results = GroupTokensBetweenSeparatingCharacters(tokens, separators);
+        // Early return for no tokens present
+        if (tokens.Count == 0) return (0, []);
+        
+        var results = GroupTokensWithSeparators(tokens, separators);
         
         List<Instruction> values = [];
         foreach (var entry in results.Entries)
@@ -229,11 +174,10 @@ public static class ParserUtilities
         return (results.Count, values);
     }
     
-    private static (int Count, List<List<Token>> Entries) GroupTokensBetweenSeparatingCharacters(List<Token> tokens, List<string> separatingCharacters)
+    private static (int Count, List<List<Token>> Entries) GroupTokensWithSeparators(
+        List<Token> tokens, 
+        List<string> separatingCharacters)
     {
-        // Early return for no tokens present
-        if (tokens.Count == 0) return (0, []);
-
         List<string> separatorStack = [];
         List<List<Token>> entries = [];
         List<Token> currentTokenSet = [];
