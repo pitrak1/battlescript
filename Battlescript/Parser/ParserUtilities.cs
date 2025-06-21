@@ -212,4 +212,76 @@ public static class ParserUtilities
 
         return (results.Count, values);
     }
+    
+    public static (int Count, List<Instruction> Values) ParseEntriesBetweenSeparatingCharacters(
+        List<Token> tokens, 
+        List<string> separators
+    )
+    {
+        var results = GroupTokensBetweenSeparatingCharacters(tokens, separators);
+        
+        List<Instruction> values = [];
+        foreach (var entry in results.Entries)
+        {
+            values.Add(Instruction.Parse(entry));
+        }
+
+        return (results.Count, values);
+    }
+    
+    private static (int Count, List<List<Token>> Entries) GroupTokensBetweenSeparatingCharacters(List<Token> tokens, List<string> separatingCharacters)
+    {
+        // Early return for no tokens present
+        if (tokens.Count == 0) return (0, []);
+
+        List<string> separatorStack = [];
+        List<List<Token>> entries = [];
+        List<Token> currentTokenSet = [];
+        var totalTokenCount = 0;
+
+        while (totalTokenCount < tokens.Count)
+        {
+            var currentToken = tokens[totalTokenCount];
+            
+            if (Consts.OpeningSeparators.Contains(currentToken.Value))
+            {
+                separatorStack.Add(currentToken.Value);
+                currentTokenSet.Add(currentToken);
+            }
+            else if (Consts.ClosingSeparators.Contains(currentToken.Value))
+            {
+                if (DoesTokenMatchSeparator(currentToken, separatorStack[^1]))
+                {
+                    separatorStack.RemoveAt(separatorStack.Count - 1);
+                    currentTokenSet.Add(currentToken);
+                }
+                else
+                {
+                    throw new ParserUnexpectedClosingSeparatorException(currentToken);
+                }
+            }
+            else if (separatorStack.Count == 0 && separatingCharacters.Contains(currentToken.Value))
+            {
+                entries.Add(currentTokenSet);
+                currentTokenSet = [];
+            }
+            else
+            {
+                currentTokenSet.Add(currentToken);
+            }
+            
+            totalTokenCount++;
+        }
+        
+        entries.Add(currentTokenSet);
+
+        if (separatorStack.Count == 0)
+        {
+            return (totalTokenCount, entries);
+        }
+        else
+        {
+            throw new ParserMatchingSeparatorNotFoundException(tokens[0]);
+        }
+    }
 }

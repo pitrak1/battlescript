@@ -255,4 +255,21 @@ x = func(x = 4, y = 5, z = 6)";
             Assert.Throws<Exception>(() => Runner.Run(input));
         }
     }
+
+    [TestFixture]
+    public class LambdaFunctions
+    {
+        [Test]
+        public void AllowsCreationOfLambdaFunctions()
+        {
+            var input = @"
+x = lambda y: y + 5";
+            var expected = new FunctionVariable(
+                [new VariableInstruction("y")],
+                [new ReturnInstruction(new OperationInstruction("+", new VariableInstruction("y"), new IntegerInstruction(5)))]);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+    }
 }
