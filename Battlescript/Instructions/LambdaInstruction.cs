@@ -15,7 +15,7 @@ public class LambdaInstruction : Instruction, IEquatable<LambdaInstruction>
         var instruction = new ReturnInstruction(Parse(expressionTokens));
         
         Parameters = results.Values;
-        Instructions = new List<Instruction> { instruction };
+        Instructions = [instruction];
         Line = tokens[0].Line;
         Column = tokens[0].Column;
     }

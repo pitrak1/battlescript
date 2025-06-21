@@ -86,4 +86,4 @@ TODOs before v1:
 - Add support for all list methods listed [here](https://docs.python.org/3/tutorial/datastructures.html#more-on-lists)
 - Add support for list comprehensions
 
-** Lots to do around lists/data structures, so let's tackle the above things first **
+** Most of the above stuff is tackled, but implementing lists properly may involve fleshing out operator overriding and constructors to make bootstrapped classes for lists/dicts/etc., so taht's probably next **
