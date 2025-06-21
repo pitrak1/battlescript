@@ -35,6 +35,19 @@ public class FunctionInstruction : Instruction, IEquatable<FunctionInstruction>
 
         var tokensInParens = tokens.GetRange(2, tokens.Count - 2);
         var results = ParserUtilities.ParseEntriesWithinSeparator(tokensInParens, [","]);
+
+        var inDefaultArguments = false;
+        foreach (var parameter in results.Values)
+        {
+            if (parameter is AssignmentInstruction)
+            {
+                inDefaultArguments = true;
+            } else if (parameter is VariableInstruction && inDefaultArguments)
+            {
+                throw new Exception("Required arguments have to be before default arguments, fix this later");
+            }
+        }
+        
         Name = tokens[1].Value;
         Parameters = results.Values;
         Line = tokens[0].Line;

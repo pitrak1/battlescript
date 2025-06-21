@@ -175,5 +175,84 @@ x = func()";
             Assert.That(result[0], Contains.Key("x"));
             Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
+
+        [Test]
+        public void DefaultArgumentsMustBeAfterRequiredArguments()
+        {
+            var input = @"
+def func(y = 5, z):
+    return y + z";
+            Assert.Throws<Exception>(() => Runner.Run(input));
+        }
+    }
+
+    [TestFixture]
+    public class KeywordArguments
+    {
+        [Test]
+        public void SupportsBasicKeywordArguments()
+        {
+            var input = @"
+def func(y = 5):
+    return y
+x = func(y = 6)";
+            var expected = new IntegerVariable(6);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void SupportsMixedPositionalAndKeywordArguments()
+        {
+            var input = @"
+def func(x, y = 5):
+    return x + y
+x = func(4, y = 6)";
+            var expected = new IntegerVariable(10);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void ThrowsErrorIfKeywordArgumentBeforePositionalArgument()
+        {
+            var input = @"
+def func(x, y = 5):
+    return x + y
+x = func(x = 6, 4)";
+            Assert.Throws<Exception>(() => Runner.Run(input));
+        }
+        
+        [Test]
+        public void ThrowsErrorIfKeywordAndPositionalArgumentAddressSameParameter()
+        {
+            var input = @"
+def func(x, y = 5):
+    return x + y
+x = func(4, x = 6)";
+            Assert.Throws<Exception>(() => Runner.Run(input));
+        }
+        
+        [Test]
+        public void ThrowsErrorIfExtraPositionalArgument()
+        {
+            var input = @"
+def func(x, y = 5):
+    return x + y
+x = func(4, 5, 6)";
+            Assert.Throws<Exception>(() => Runner.Run(input));
+        }
+        
+        [Test]
+        public void ThrowsErrorIfExtraKeywordArgument()
+        {
+            var input = @"
+def func(x, y = 5):
+    return x + y
+x = func(x = 4, y = 5, z = 6)";
+            Assert.Throws<Exception>(() => Runner.Run(input));
+        }
     }
 }
