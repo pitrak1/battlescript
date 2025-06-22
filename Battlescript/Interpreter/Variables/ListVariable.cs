@@ -91,6 +91,40 @@ public class ListVariable(List<Variable>? values = null) : ReferenceVariable, IE
         
         return new ListVariable(Values.GetRange(index, count));
     }
+
+    public Variable RunMethod(Memory memory, string method, Instruction? arguments)
+    {
+        if (arguments is not ParensInstruction parens)
+        {
+            throw new Exception("must use parens to call list method, fix this later");
+        }
+
+        List<Variable> argumentVariables = [];
+        foreach (var arg in parens.Instructions)
+        {
+            argumentVariables.Add(arg.Interpret(memory));
+        }
+
+        switch (method)
+        {
+            case "append":
+                return Append(memory, argumentVariables);
+            default:
+                throw new Exception("Invalid list method: " + method);
+        }
+    }
+
+    private Variable Append(Memory memory, List<Variable> arguments)
+    {
+        if (arguments.Count != 1)
+        {
+            throw new Exception("Expected 1 argument for list append");
+        }
+
+        Values.Add(arguments[0]);
+
+        return new NoneVariable();
+    }
     
     // All the code below is to override equality
     public override bool Equals(object obj) => Equals(obj as ListVariable);

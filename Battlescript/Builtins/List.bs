@@ -1,3 +1,0 @@
-class list():
-    value = __list__
-    

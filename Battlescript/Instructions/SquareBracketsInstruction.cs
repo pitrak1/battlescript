@@ -57,9 +57,18 @@ public class SquareBracketsInstruction : Instruction, IEquatable<SquareBracketsI
         if (instructionContext is not null)
         {
             if (Values.Count > 1) throw new Exception("Too many index values");
-            
-            var result = instructionContext.GetItem(memory, this);
-            return Next is not null ? Next.Interpret(memory, result, instructionContext as ObjectVariable) : result;
+
+            if (Values[0] is StringInstruction stringInstruction &&
+                Consts.ListMethods.Contains(stringInstruction.Value) &&
+                instructionContext is ListVariable listVariable)
+            {
+                return listVariable.RunMethod(memory, stringInstruction.Value, Next);
+            }
+            else
+            {
+                var result = instructionContext.GetItem(memory, this);
+                return Next is not null ? Next.Interpret(memory, result, instructionContext as ObjectVariable) : result;
+            }
         }
         // Dealing with list creation
         else

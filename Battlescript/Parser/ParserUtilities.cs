@@ -149,7 +149,10 @@ public static class ParserUtilities
         List<Instruction> values = [];
         foreach (var entry in results.Entries)
         {
-            values.Add(Instruction.Parse(entry));
+            if (entry.Count > 0)
+            {
+                values.Add(Instruction.Parse(entry));
+            }
         }
 
         return (results.Count + 2, values);

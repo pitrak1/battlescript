@@ -255,6 +255,21 @@ public static class Consts
         ":=" //NOT SUPPORTED IN V1
     ];
 
+    public static readonly string[] ListMethods =
+    [
+        "append",
+        "extend",
+        "insert",
+        "remove",
+        "pop",
+        "clear",
+        "index",
+        "count",
+        "sort",
+        "reverse",
+        "copy"
+    ];
+
     public enum TokenTypes
     {
         Integer,

@@ -78,7 +78,7 @@ TODOs before v1:
 - Thorough combthrough of errors against Python errors
 - Possibly add some stuff from the not yet supported list (probably `*args` and `**kwargs` first)
 
-### Data Structures
+### Lists
 
 Supports lists and list functionality
 
