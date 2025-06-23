@@ -42,7 +42,20 @@ public class ParensInstruction : Instruction, IEquatable<ParensInstruction>
         {
             if (instructionContext is ClassVariable classVariable)
             {
-                return classVariable.CreateObject();
+                var objectVariable = classVariable.CreateObject();
+                var constructor = objectVariable.GetItem(memory, "__init__");
+                if (constructor is FunctionVariable constructorVariable)
+                {
+                    List<Variable> arguments = [];
+                    foreach (var argument in Instructions)
+                    {
+                        arguments.Add(argument.Interpret(memory, objectVariable, objectContext));
+                    }
+                    
+                    List<Variable> selfArgument = [objectVariable];
+                    constructorVariable.RunFunction(memory, selfArgument.Concat(arguments).ToList(), objectVariable);
+                }
+                return objectVariable;
             }
             else
             {
