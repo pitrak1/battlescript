@@ -203,4 +203,66 @@ x = z.y";
             Assert.That(result[0]["x"], Is.EqualTo(expected));
         }
     }
+
+    [TestFixture]
+    public class OperatorOverloading
+    { 
+        [Test]
+        public void AllowsBinaryOperationOverloading()
+        {
+            var input = @"
+class asdf:
+    i = 5
+
+    def __add__(self, other):
+        return self.i + other.i
+
+z = asdf()
+y = asdf()
+x = z + y";
+            var expected = new IntegerVariable(10);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+//         [Test]
+//         public void AllowsUnaryOperationOverloading()
+//         {
+//             var input = @"
+// class asdf:
+//     i = 5
+//
+//     def __neg__(self):
+//         return -self.i
+//
+// z = asdf()
+// x = -z";
+//             var expected = new IntegerVariable(10);
+//             var result = Runner.Run(input);
+//             Assert.That(result[0], Contains.Key("x"));
+//             Assert.That(result[0]["x"], Is.EqualTo(expected));
+//         }
+
+//         [Test]
+//         public void AllowsAssignmentOperationOverloading()
+//         {
+//             var input = @"
+// class asdf:
+//     i = 5
+//
+//     def __iadd__(self, other):
+//         self.i += other.i
+//         return self
+//
+// z = asdf()
+// y = asdf()
+// z += y
+// x = z.i";
+//             var expected = new IntegerVariable(10);
+//             var result = Runner.Run(input);
+//             Assert.That(result[0], Contains.Key("x"));
+//             Assert.That(result[0]["x"], Is.EqualTo(expected));
+//         }
+    }
 }

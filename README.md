@@ -78,7 +78,7 @@ TODOs before v1:
 - Thorough combthrough of errors against Python errors
 - Possibly add some stuff from the not yet supported list (probably `*args` and `**kwargs` first)
 
-### Lists
+### Lists (LATER)
 
 Supports lists and list functionality
 
@@ -87,3 +87,10 @@ TODOs before v1:
 - Add support for list comprehensions
 
 ** Most of the above stuff is tackled, but implementing lists properly may involve fleshing out operator overriding and constructors to make bootstrapped classes for lists/dicts/etc., so taht's probably next **
+
+### Classes and Objects
+
+Support for constructors
+
+
+** HIGH PRIO: parens and unary operators and overriding assignment operators not working as expected **
