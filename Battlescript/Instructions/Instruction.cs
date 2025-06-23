@@ -19,24 +19,6 @@ public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Ins
         {
             return new AssignmentInstruction(tokens);
         }
-        else if (tokens[0].Type == Consts.TokenTypes.Separator)
-        {
-            switch (tokens[0].Value)
-            {
-                case "[":
-                    return new SquareBracketsInstruction(tokens);
-                case "(":
-                    return new ParensInstruction(tokens);
-                case ".":
-                    return new SquareBracketsInstruction(tokens, isMember: true);
-                case "{":
-                    return new DictionaryInstruction(tokens);
-                case ":":
-                    return new KeyValuePairInstruction(tokens);
-                default:
-                    throw new ParserUnexpectedTokenException(tokens[0]);
-            }
-        }
         else if (tokens[0].Type == Consts.TokenTypes.Keyword)
         {
             switch (tokens[0].Value)
@@ -81,6 +63,24 @@ public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Ins
         else if (operatorIndex != -1)
         {
             return new OperationInstruction(tokens);
+        }
+        else if (tokens[0].Type == Consts.TokenTypes.Separator)
+        {
+            switch (tokens[0].Value)
+            {
+                case "[":
+                    return new SquareBracketsInstruction(tokens);
+                case "(":
+                    return new ParensInstruction(tokens);
+                case ".":
+                    return new SquareBracketsInstruction(tokens, isMember: true);
+                case "{":
+                    return new DictionaryInstruction(tokens);
+                case ":":
+                    return new KeyValuePairInstruction(tokens);
+                default:
+                    throw new ParserUnexpectedTokenException(tokens[0]);
+            }
         }
         else if (tokens[0].Type == Consts.TokenTypes.Identifier)
         {
