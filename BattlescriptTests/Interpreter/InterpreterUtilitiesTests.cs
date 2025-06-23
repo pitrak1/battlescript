@@ -55,6 +55,18 @@ public static class InterpreterUtilitiesTests
                 new FloatVariable(2.5));
             Assert.That(result, Is.EqualTo(new IntegerVariable(4)));
         }
+
+        [Test]
+        public void HandlesUnaryMathematicalOperators()
+        {
+            var memory = new Memory();
+            var result = InterpreterUtilities.ConductOperation(
+                memory, 
+                "-", 
+                null, 
+                new FloatVariable(2.5));
+            Assert.That(result, Is.EqualTo(new FloatVariable(-2.5)));
+        }
         
         [Test]
         public void HandlesBinaryLogicalOperations()

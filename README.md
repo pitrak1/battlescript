@@ -50,6 +50,7 @@ Falsy Values:
 
 TODOs before v1:
 - Maybe tuples and sets?
+- Implied multiplication with parentheses? (ex: 5(4 + 3))
 - Thorough combthrough of errors against Python errors
 
 ### Control Flow

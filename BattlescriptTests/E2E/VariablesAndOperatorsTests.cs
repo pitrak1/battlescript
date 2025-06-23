@@ -308,6 +308,30 @@ public static class VariablesAndOperatorsTests
     }
 
     [TestFixture]
+    public class Parentheses
+    {
+        [Test]
+        public void HandlesParenthesisAsLeftOperand()
+        {
+            var input = "x = (1 + 2) * 2";
+            var expected = new IntegerVariable(6);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void HandlesParenthesisAsRightOperand()
+        {
+            var input = "x = 2 * (1 + 2)";
+            var expected = new IntegerVariable(6);
+            var result = Runner.Run(input);
+            Assert.That(result[0], Contains.Key("x"));
+            Assert.That(result[0]["x"], Is.EqualTo(expected));
+        }
+    }
+
+    [TestFixture]
     public class OperatorPrecedence
     {
         [Test]
