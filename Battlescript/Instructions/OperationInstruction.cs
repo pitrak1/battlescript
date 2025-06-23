@@ -44,7 +44,7 @@ public class OperationInstruction : Instruction, IEquatable<OperationInstruction
     {
         var left = Left?.Interpret(memory);
         var right = Right?.Interpret(memory);
-        return InterpreterUtilities.ConductOperation(memory, Operation, left, right);
+        return Operator.StandardOperation(memory, Operation, left, right);
     }
     
     // All the code below is to override equality

@@ -3,16 +3,16 @@ using Battlescript;
 namespace BattlescriptTests;
 
 [TestFixture]
-public static class InterpreterUtilitiesTests
+public static class OperatorTests
 {
     [TestFixture]
-    public class ConductOperation
+    public class StandardOperation
     {
         [Test]
         public void ReturnsIntegerIfBothOperandsAreIntegers()
         {
             var memory = new Memory();
-            var result = InterpreterUtilities.ConductOperation(
+            var result = Operator.StandardOperation(
                 memory, 
                 "+", 
                 new IntegerVariable(5), 
@@ -24,7 +24,7 @@ public static class InterpreterUtilitiesTests
         public void ReturnsFloatIfEitherOperandIsFloat()
         {
             var memory = new Memory();
-            var result = InterpreterUtilities.ConductOperation(
+            var result = Operator.StandardOperation(
                 memory, 
                 "+", 
                 new IntegerVariable(5), 
@@ -36,7 +36,7 @@ public static class InterpreterUtilitiesTests
         public void ReturnsFloatForTrueDivision()
         {
             var memory = new Memory();
-            var result = InterpreterUtilities.ConductOperation(
+            var result = Operator.StandardOperation(
                 memory, 
                 "/", 
                 new IntegerVariable(5), 
@@ -48,7 +48,7 @@ public static class InterpreterUtilitiesTests
         public void ReturnsIntegerForFloorDivision()
         {
             var memory = new Memory();
-            var result = InterpreterUtilities.ConductOperation(
+            var result = Operator.StandardOperation(
                 memory, 
                 "//", 
                 new FloatVariable(10.1), 
@@ -60,7 +60,7 @@ public static class InterpreterUtilitiesTests
         public void HandlesUnaryMathematicalOperators()
         {
             var memory = new Memory();
-            var result = InterpreterUtilities.ConductOperation(
+            var result = Operator.StandardOperation(
                 memory, 
                 "-", 
                 null, 
@@ -72,7 +72,7 @@ public static class InterpreterUtilitiesTests
         public void HandlesBinaryLogicalOperations()
         {
             var memory = new Memory();
-            var result = InterpreterUtilities.ConductOperation(
+            var result = Operator.StandardOperation(
                 memory, 
                 "and", 
                 new BooleanVariable(true), 
@@ -84,7 +84,7 @@ public static class InterpreterUtilitiesTests
         public void HandlesUnaryLogicalOperations()
         {
             var memory = new Memory();
-            var result = InterpreterUtilities.ConductOperation(
+            var result = Operator.StandardOperation(
                 memory, 
                 "not", 
                 null, 
@@ -108,7 +108,7 @@ public static class InterpreterUtilitiesTests
             var objectVariable = classVariable.CreateObject();
             memory.SetVariable(new VariableInstruction("asdf"), objectVariable);
             
-            var result = InterpreterUtilities.ConductOperation(
+            var result = Operator.StandardOperation(
                 memory, 
                 "+", 
                 objectVariable, 
@@ -118,13 +118,13 @@ public static class InterpreterUtilitiesTests
     }
 
     [TestFixture]
-    public class ConductAssignment
+    public class AssignmentOperation
     {
         [Test]
         public void ReturnsRightIfStandardAssignmentOperator()
         {
             var memory = new Memory();
-            var result = InterpreterUtilities.ConductAssignment(memory, "=", null, new IntegerVariable(5));
+            var result = Operator.AssignmentOperation(memory, "=", null, new IntegerVariable(5));
             Assert.That(result, Is.EqualTo(new IntegerVariable(5)));
         }
         
@@ -132,7 +132,7 @@ public static class InterpreterUtilitiesTests
         public void ConductsOperationOfTruncatedOperatorIfNotStandardAssignmentOperator()
         {
             var memory = new Memory();
-            var result = InterpreterUtilities.ConductAssignment(
+            var result = Operator.AssignmentOperation(
                 memory, 
                 "+=", 
                 new IntegerVariable(8), 

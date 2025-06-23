@@ -31,7 +31,7 @@ public class IfInstruction : Instruction, IEquatable<IfInstruction>
         ClassVariable? lexicalContext = null)
     {
         var condition = Condition.Interpret(memory);
-        if (InterpreterUtilities.IsVariableTruthy(condition))
+        if (Truthiness.IsTruthy(condition))
         {
             memory.AddScope();
             foreach (var inst in Instructions)

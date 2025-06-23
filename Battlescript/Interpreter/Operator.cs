@@ -1,8 +1,34 @@
 namespace Battlescript;
 
-public static class InterpreterUtilities
+public static class Operator
 {
-    public static Variable ConductOperation(Memory memory, string operation, Variable? left, Variable? right)
+    public static Variable StandardOperation(Memory memory, string operation, Variable? left, Variable? right)
+    {
+        return ConductOperationWithOverride(memory, operation, operation, left, right);
+    }
+    
+    public static Variable AssignmentOperation(Memory memory, string operation, Variable? left, Variable? right)
+    {
+        // Assignment operations should return the value to be assigned. The calling function is actually responsible
+        // for assigning the value to the variable
+        if (operation == "=") return right ?? new NoneVariable();
+        
+        var operationWithEqualsRemoved = AssignmentOperatorToStandardOperatorMap[operation];
+        return ConductOperationWithOverride(memory, operationWithEqualsRemoved, operation, left, right);
+    }
+
+    private static readonly Dictionary<string, string> AssignmentOperatorToStandardOperatorMap = new()
+    {
+        {"+=", "+"},
+        {"-=", "-"},
+        {"*=", "*"},
+        {"/=", "/"},
+        {"//=", "//"},
+        {"%=", "%"},
+        {"**=", "**"},
+    };
+    
+    private static Variable ConductOperationWithOverride(Memory memory, string operation, string originalOperation, Variable? left, Variable? right)
     {
         if (operation == "is" || operation == "is not")
         {
@@ -14,7 +40,7 @@ public static class InterpreterUtilities
         }
         else if (left is ObjectVariable || right is ObjectVariable)
         {
-            return ConductObjectOperation(memory, operation, left, right);
+            return ConductObjectOperation(memory, operation, originalOperation, left, right);
         }
         else if (Consts.NumericalOperators.Contains(operation))
         {
@@ -40,14 +66,17 @@ public static class InterpreterUtilities
     {
         if (left is StringVariable leftString && right is StringVariable rightString)
         {
+            // if both operands are strings, we search for a substring
             var isContained = rightString.Value.Contains(leftString.Value);
             return operation == "in" ? new BooleanVariable(isContained) : new BooleanVariable(!isContained);
         } else if (right is ListVariable rightList)
         {
+            // If the right operand is a list, we search for a matching element
             var found = rightList.Values.Any(x => x.Equals(left));
             return operation == "in" ? new BooleanVariable(found) : new BooleanVariable(!found);
         } else if (right is DictionaryVariable rightDictionary)
         {
+            // If the right operand is a dictionary, we search for a matching key
             var found = rightDictionary.Values.Any(x => x.Left is not null && x.Left.Equals(left));
             return operation == "in" ? new BooleanVariable(found) : new BooleanVariable(!found);
         }
@@ -56,16 +85,71 @@ public static class InterpreterUtilities
             throw new InterpreterInvalidOperationException(operation, left, right);
         }
     }
-
-    public static Variable ConductAssignment(Memory memory, string operation, Variable? left, Variable? right)
+    
+    private static Variable ConductObjectOperation(Memory memory, string operation, string originalOperation, Variable? left, Variable? right)
     {
-        if (operation == "=") return right ?? new NoneVariable();
-        var operationWithEqualsRemoved = AssignmentOperatorToStandardOperatorMap[operation];
-        return ConductOperation(memory, operationWithEqualsRemoved, left, right);
-    }
+        OperationToOverrideMap.TryGetValue(operation, out var overrideName);
+        
+        if (overrideName is null)
+        {
+            throw new InterpreterInvalidOperationException(operation, left, right);
+        }
 
+        FunctionVariable? leftOverride = null;
+        if (left is ObjectVariable leftObject)
+        {
+            leftOverride = leftObject.GetOverride(memory, overrideName);
+        }
+        
+        FunctionVariable? rightOverride = null;
+        if (right is ObjectVariable rightObject)
+        {
+            rightOverride = rightObject.GetOverride(memory, overrideName);
+        }
+
+        // If left operand is an object and has an override, use that one.  Otherwise, if right operand is an object
+        // and has an override, use that one.
+        if (leftOverride is not null)
+        {
+            return leftOverride.RunFunction(memory, [left!, right ?? new NoneVariable()]);
+        } else if (rightOverride is not null)
+        {
+            return rightOverride.RunFunction(memory, [right!, left ?? new NoneVariable()]);
+        }
+        else
+        {
+            throw new InterpreterInvalidOperationException(operation, left, right);
+        }
+    }
+    
+    private static readonly Dictionary<string, string> OperationToOverrideMap = new()
+    {
+        {"+", "__add__"},
+        {"-", "__sub__"},
+        {"*", "__mul__"},
+        {"/", "__truediv__"},
+        {"//", "__floordiv__"},
+        {"%", "__mod__"},
+        {"**", "__pow__"},
+        {"==", "__eq__"},
+        {"!=", "__ne__"},
+        {"<", "__lt__"},
+        {"<=", "__le__"},
+        {">", "__gt__"},
+        {">=", "__ge__"},
+        {"+=", "__iadd__"},
+        {"-=", "__isub__"},
+        {"*=", "__imul__"},
+        {"/=", "__itruediv__"},
+        {"//=", "__ifloordiv__"},
+        {"%=", "__imod__"},
+        {"**=", "__ipow__"},
+    };
+    
     private static Variable ConductNumericalOperation(string operation, Variable? left, Variable? right)
     {
+        // This may be made easier by using a generic __numeric__ variable type with a dynamic value instead of this
+        // crazy bs
         if (left is null && right is not null)
         {
             return ConductUnaryNumericalOperation(operation, right);
@@ -223,110 +307,6 @@ public static class InterpreterUtilities
         else
         {
             throw new InterpreterInvalidOperationException(operation, left, right);
-        }
-    }
-
-    private static Variable ConductObjectOperation(Memory memory, string operation, Variable? left, Variable? right)
-    {
-        if (left is ObjectVariable leftObject)
-        {
-            var leftOverrideMethod = leftObject.GetOverride(memory, BinaryOperationToOverrideMap[operation]);
-            if (leftOverrideMethod is not null)
-            {
-                return leftOverrideMethod.RunFunction(memory, [left, right ?? new NoneVariable()]);
-            }
-            else if (right is ObjectVariable rightObject1)
-            {
-                var rightOverrideMethod = rightObject1.GetOverride(memory, BinaryOperationToOverrideMap[operation]);
-                if (rightOverrideMethod is not null)
-                {
-                    return rightOverrideMethod.RunFunction(memory, [right, left]);
-                }
-                else
-                {
-                    throw new InterpreterInvalidOperationException(operation, left, right);
-                }
-            }
-            else
-            {
-                throw new InterpreterInvalidOperationException(operation, left, right);
-            }
-        }
-        else if (right is ObjectVariable rightObject2)
-        {
-            var rightOverrideMethod = rightObject2.GetOverride(memory, BinaryOperationToOverrideMap[operation]);
-            if (rightOverrideMethod is not null)
-            {
-                return rightOverrideMethod.RunFunction(memory, [right, left ?? new NoneVariable()]);
-            }
-            else
-            {
-                throw new InterpreterInvalidOperationException(operation, left, right);
-            }
-        }
-        else
-        {
-            throw new InterpreterInvalidOperationException(operation, left, right);
-        }
-    }
-
-    private static readonly Dictionary<string, string> BinaryOperationToOverrideMap = new Dictionary<string, string>()
-        {
-            {"+", "__add__"},
-            {"-", "__sub__"},
-            {"*", "__mul__"},
-            {"/", "__truediv__"},
-            {"//", "__floordiv__"},
-            {"%", "__mod__"},
-            {"**", "__pow__"},
-            {"==", "__eq__"},
-            {"!=", "__ne__"},
-            {"<", "__lt__"},
-            {"<=", "__le__"},
-            {">", "__gt__"},
-            {">=", "__ge__"}
-        };
-
-    private static readonly Dictionary<string, string> AssignmentOperatorToStandardOperatorMap =
-        new Dictionary<string, string>()
-        {
-            {"+=", "+"},
-            {"-=", "-"},
-            {"*=", "*"},
-            {"/=", "/"},
-            {"//=", "//"},
-            {"%=", "%"},
-            {"**=", "**"},
-        };
-
-    public static bool IsVariableTruthy(Variable variable)
-    {
-        switch (variable)
-        {
-            case BooleanVariable booleanVariable:
-                return booleanVariable.Value;
-            case IntegerVariable integerVariable:
-                return integerVariable.Value != 0;
-            case FloatVariable floatVariable:
-                return floatVariable.Value != 0;
-            case StringVariable stringVariable:
-                return stringVariable.Value.Length > 0;
-            case ListVariable listVariable:
-                return listVariable.Values.Count > 0;
-            case NoneVariable:
-                return false;
-            case ClassVariable:
-                return true;
-            case ObjectVariable:
-                return true;
-            case DictionaryVariable dictionaryVariable:
-                return dictionaryVariable.Values.Count > 0;
-            case FunctionVariable:
-                return true;
-            case KeyValuePairVariable:
-                return true;
-            default:
-                throw new Exception("Won't get here");
         }
     }
 }
