@@ -88,7 +88,12 @@ public static class Operator
     
     private static Variable ConductObjectOperation(Memory memory, string operation, string originalOperation, Variable? left, Variable? right)
     {
-        OperationToOverrideMap.TryGetValue(operation, out var overrideName);
+        if (left is null)
+        {
+            return ConductUnaryObjectOperation(memory, operation, originalOperation, right);
+        }
+        
+        OperationToOverrideMap.TryGetValue(originalOperation, out var overrideName);
         
         if (overrideName is null)
         {
@@ -144,6 +149,38 @@ public static class Operator
         {"//=", "__ifloordiv__"},
         {"%=", "__imod__"},
         {"**=", "__ipow__"},
+    };
+    
+    private static Variable ConductUnaryObjectOperation(Memory memory, string operation, string originalOperation, Variable? right)
+    {
+        UnaryOperationToOverrideMap.TryGetValue(originalOperation, out var overrideName);
+        
+        if (overrideName is null)
+        {
+            throw new InterpreterInvalidOperationException(operation, null, right);
+        }
+        
+        FunctionVariable? rightOverride = null;
+        if (right is ObjectVariable rightObject)
+        {
+            rightOverride = rightObject.GetOverride(memory, overrideName);
+        }
+        
+        var rightObjectVariable = right as ObjectVariable;
+        if (rightOverride is not null)
+        {
+            return rightOverride.RunFunction(memory, new List<Instruction>(), rightObjectVariable);
+        }
+        else
+        {
+            throw new InterpreterInvalidOperationException(operation, null, right);
+        }
+    }
+    
+    private static readonly Dictionary<string, string> UnaryOperationToOverrideMap = new()
+    {
+        {"+", "__pos__"},
+        {"-", "__neg__"},
     };
     
     private static Variable ConductNumericalOperation(string operation, Variable? left, Variable? right)
