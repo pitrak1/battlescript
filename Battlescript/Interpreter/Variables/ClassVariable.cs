@@ -25,7 +25,7 @@ public class ClassVariable (Dictionary<string, Variable>? values, List<ClassVari
             foundItem = FindItemDirectly(memory, "__getitem__");
         } else if (GetItem(memory, "__getitem__") is FunctionVariable functionVariable && objectContext is not null)
         {
-            foundItem = functionVariable.RunFunction(memory, [objectContext, indexVariable], objectContext);
+            foundItem = functionVariable.RunFunction(memory, [indexVariable], objectContext);
         } else if (indexVariable is StringVariable stringVariable)
         {
             foundItem = FindItemDirectly(memory, stringVariable.Value);

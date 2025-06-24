@@ -53,7 +53,7 @@ public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable
         Variable? foundItem;
         if (getItemOverride is not null)
         {
-            foundItem = getItemOverride.RunFunction(memory, [this, indexVariable], this);
+            foundItem = getItemOverride.RunFunction(memory, [indexVariable], this);
         }
         else if (indexVariable is StringVariable stringVariable)
         {

@@ -222,7 +222,7 @@ x = func(4, y = 6)";
 def func(x, y = 5):
     return x + y
 x = func(x = 6, 4)";
-            Assert.Throws<Exception>(() => Runner.Run(input));
+            Assert.Throws<InterpreterKeywordArgBeforePositionalArgException>(() => Runner.Run(input));
         }
         
         [Test]
@@ -232,7 +232,7 @@ x = func(x = 6, 4)";
 def func(x, y = 5):
     return x + y
 x = func(4, x = 6)";
-            Assert.Throws<Exception>(() => Runner.Run(input));
+            Assert.Throws<InterpreterMultipleArgumentsForParameterException>(() => Runner.Run(input));
         }
         
         [Test]

@@ -96,8 +96,9 @@ x = asdf()";
             var input = @"
 class asdf:
     i = 1234
-    def j():
-        i = 2345
+
+    def j(self):
+        self.i = 2345
 x = asdf()
 x.j()
 y = x.i

@@ -52,8 +52,7 @@ public class ParensInstruction : Instruction, IEquatable<ParensInstruction>
                         arguments.Add(argument.Interpret(memory, objectVariable, objectContext));
                     }
                     
-                    List<Variable> selfArgument = [objectVariable];
-                    constructorVariable.RunFunction(memory, selfArgument.Concat(arguments).ToList(), objectVariable);
+                    constructorVariable.RunFunction(memory, arguments, objectVariable);
                 }
                 return objectVariable;
             }
