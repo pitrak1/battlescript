@@ -1,13 +1,13 @@
 namespace Battlescript;
 
-public class Postparser(List<Instruction> instructions)
+public static class Postparser
 {
-    public void Run()
+    public static void Run(List<Instruction> instructions)
     {
-        JoinIfElse();
+        JoinIfElse(instructions);
     }
 
-    private void JoinIfElse()
+    private static void JoinIfElse(List<Instruction> instructions)
     {
         for (var i = 0; i < instructions.Count; i++)
         {

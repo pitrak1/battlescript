@@ -164,6 +164,7 @@ public static class LexerTests
         {
             var lexer = new Lexer("x is not y");
             var result = lexer.Run();
+            Postlexer.Run(result);
             var expected = new List<Token>()
             {
                 new(Consts.TokenTypes.Identifier, "x"),
@@ -178,6 +179,7 @@ public static class LexerTests
         {
             var lexer = new Lexer("x not in y");
             var result = lexer.Run();
+            Postlexer.Run(result);
             var expected = new List<Token>()
             {
                 new(Consts.TokenTypes.Identifier, "x"),

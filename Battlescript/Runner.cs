@@ -6,10 +6,10 @@ public static class Runner
     {
         var lexer = new Lexer(input);
         var lexerResult = lexer.Run();
+        Postlexer.Run(lexerResult);
         var parser = new Parser(lexerResult);
         var parserResult = parser.Run();
-        var postParser = new Postparser(parserResult);
-        postParser.Run();
+        Postparser.Run(parserResult);
         var interpreter = new Interpreter(parserResult);
         return interpreter.Run();
     }
