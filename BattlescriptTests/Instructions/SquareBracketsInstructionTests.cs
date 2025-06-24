@@ -117,21 +117,21 @@ public static partial class InstructionTests
         [Test]
         public void HandlesListDefinition()
         {
-            var results = Runner.Run("x = [4, 'asdf']");
+            var memory = Runner.Run("x = [4, 'asdf']");
 
             var expected = new Dictionary<string, Variable>()
             {
                 ["x"] = new ListVariable([new IntegerVariable(4), new StringVariable("asdf")])
             };
             
-            Assert.That(results[0], Is.EquivalentTo(expected));
+            Assert.That(memory.Scopes[0], Is.EquivalentTo(expected));
         }
         
         [Test]
         public void HandlesIndex()
         {
-            var results = Runner.Run("x = [0, 1, 7, 3, 4]\ny = x[2]");
-            Assert.That(results[0]["y"], Is.EqualTo(new IntegerVariable(7)));
+            var memory = Runner.Run("x = [0, 1, 7, 3, 4]\ny = x[2]");
+            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(new IntegerVariable(7)));
         }
         
         [Test]

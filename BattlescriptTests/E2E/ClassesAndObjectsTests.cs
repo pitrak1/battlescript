@@ -18,9 +18,9 @@ public static class ClassesAndObjectsTests
                 {
                     {"i", new IntegerVariable(1234)}
                 });
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("asdf"));
-            Assert.That(result[0]["asdf"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("asdf"));
+            Assert.That(memory.Scopes[0]["asdf"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -34,9 +34,9 @@ public static class ClassesAndObjectsTests
             var expected = new ObjectVariable(
                 values,
                 new ClassVariable(values));
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -61,8 +61,8 @@ x = asdf()";
             var expected = new ObjectVariable(
                 objectValues,
                 new ClassVariable(classValues));
-            var result = Runner.Run(input);
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -70,9 +70,9 @@ x = asdf()";
         {
             var input = "class asdf:\n\ti = 1234\nx = asdf()\ny = x.i";
             var expected = new IntegerVariable(1234);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("y"));
-            Assert.That(result[0]["y"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("y"));
+            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -85,9 +85,9 @@ x = asdf()";
                     { "i", new IntegerVariable(1234) }
                 }
             );
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("asdf"));
-            Assert.That(result[0]["asdf"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("asdf"));
+            Assert.That(memory.Scopes[0]["asdf"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -103,9 +103,9 @@ x.j()
 y = x.i
 ";
             var expected = new IntegerVariable(2345);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("y"));
-            Assert.That(result[0]["y"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("y"));
+            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
         }
     }
     
@@ -121,9 +121,9 @@ class asdf:
 z = asdf()
 x = z.y";
             var expected = new IntegerVariable(5);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -138,9 +138,9 @@ class asdf:
 z = asdf()
 x = z.y";
             var expected = new IntegerVariable(6);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -155,9 +155,9 @@ class asdf:
 z = asdf(9)
 x = z.y";
             var expected = new IntegerVariable(9);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         
@@ -180,8 +180,8 @@ x = z.y";
                 {
                     { "j", new IntegerVariable(2345) }
                 }, [superclass]);
-            var result = Runner.Run(input);
-            Assert.That(result[0]["qwer"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0]["qwer"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -198,9 +198,9 @@ class qwer(asdf):
 z = qwer(9)
 x = z.y";
             var expected = new IntegerVariable(9);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
     }
 
@@ -221,9 +221,9 @@ z = asdf()
 y = asdf()
 x = z + y";
             var expected = new IntegerVariable(10);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
 //         [Test]
@@ -239,9 +239,9 @@ x = z + y";
 // z = asdf()
 // x = -z";
 //             var expected = new IntegerVariable(10);
-//             var result = Runner.Run(input);
-//             Assert.That(result[0], Contains.Key("x"));
-//             Assert.That(result[0]["x"], Is.EqualTo(expected));
+//             var memory = Runner.Run(input);
+//             Assert.That(memory.Scopes[0], Contains.Key("x"));
+//             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
 //         }
 
 //         [Test]
@@ -260,9 +260,9 @@ x = z + y";
 // z += y
 // x = z.i";
 //             var expected = new IntegerVariable(10);
-//             var result = Runner.Run(input);
-//             Assert.That(result[0], Contains.Key("x"));
-//             Assert.That(result[0]["x"], Is.EqualTo(expected));
+//             var memory = Runner.Run(input);
+//             Assert.That(memory.Scopes[0], Contains.Key("x"));
+//             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
 //         }
     }
 }

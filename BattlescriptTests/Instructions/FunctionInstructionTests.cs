@@ -60,7 +60,7 @@ public static partial class InstructionTests
         [Test]
         public void ReturnsNewFunctionVariable()
         {
-            var result = Runner.Run("def func(asdf, qwer):\n\treturn asdf + qwer");
+            var memory = Runner.Run("def func(asdf, qwer):\n\treturn asdf + qwer");
             
             var functionVariable = new FunctionVariable(
                 parameters: 
@@ -82,7 +82,7 @@ public static partial class InstructionTests
                 ["func"] = functionVariable
             };
             
-            Assert.That(result[0], Is.EquivalentTo(expected));
+            Assert.That(memory.Scopes[0], Is.EquivalentTo(expected));
         }
         
     }

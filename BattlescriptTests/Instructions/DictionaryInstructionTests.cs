@@ -60,7 +60,7 @@ public static partial class InstructionTests
         [Test]
         public void HandlesSimpleValues()
         {
-            var result = Runner.Run("x = {'asdf': 5, 'qwer': 'asdf'}");
+            var memory = Runner.Run("x = {'asdf': 5, 'qwer': 'asdf'}");
             var expected = new Dictionary<string, Variable>()
             {
                 {
@@ -70,13 +70,13 @@ public static partial class InstructionTests
                     ])
                 }
             };
-            Assert.That(result[0], Is.EquivalentTo(expected));
+            Assert.That(memory.Scopes[0], Is.EquivalentTo(expected));
         }
         
         [Test]
         public void AllowsStringsAndNumbersToBeUsedAsKeys()
         {
-            var result = Runner.Run("x = {'asdf': 5, 4: 'asdf'}");
+            var memory = Runner.Run("x = {'asdf': 5, 4: 'asdf'}");
             var expected = new Dictionary<string, Variable>()
             {
                 {
@@ -86,13 +86,13 @@ public static partial class InstructionTests
                     ])
                 }
             };
-            Assert.That(result[0], Is.EquivalentTo(expected));
+            Assert.That(memory.Scopes[0], Is.EquivalentTo(expected));
         }
         
         [Test]
         public void HandlesExpressionValues()
         {
-            var result = Runner.Run("x = {'asdf': 5 + 6, 'qwer': 3 * 4}");
+            var memory = Runner.Run("x = {'asdf': 5 + 6, 'qwer': 3 * 4}");
             var expected = new Dictionary<string, Variable>()
             {
                 {
@@ -102,7 +102,7 @@ public static partial class InstructionTests
                     ])
                 }
             };
-            Assert.That(result[0], Is.EquivalentTo(expected));
+            Assert.That(memory.Scopes[0], Is.EquivalentTo(expected));
         }
     }
 }

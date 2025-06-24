@@ -18,9 +18,9 @@ public static partial class E2ETests {
                     new (new StringVariable("qwer"), new StringVariable("5"))
                 }
             );
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
 
         [Test]
@@ -28,10 +28,10 @@ public static partial class E2ETests {
         {
             var input = "x = {'asdf': 5, 'qwer': '5'}\ny = x['qwer']";
             var expected = new StringVariable("5");
-            var interpreterResult = Runner.Run(input);
+            var memory = Runner.Run(input);
             
-            Assert.That(interpreterResult[0], Contains.Key("y"));
-            Assert.That(interpreterResult[0]["y"], Is.EqualTo(expected));
+            Assert.That(memory.Scopes[0], Contains.Key("y"));
+            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
         }
     }
 }

@@ -31,7 +31,7 @@ public static partial class InstructionTests
         [Test]
         public void HandlesFunctionCalls()
         {
-            var result = Runner.Run("def func(asdf):\n\treturn asdf + 5\nx = func(4)");
+            var memory = Runner.Run("def func(asdf):\n\treturn asdf + 5\nx = func(4)");
 
             var expected = new Dictionary<string, Variable>()
             {
@@ -47,13 +47,13 @@ public static partial class InstructionTests
                 ["x"] = new IntegerVariable(9)
             };
             
-            Assert.That(result[0], Is.EquivalentTo(expected));
+            Assert.That(memory.Scopes[0], Is.EquivalentTo(expected));
         }
         
         [Test]
         public void HandlesObjectInstantiation()
         {
-            var result = Runner.Run("class asdf():\n\tx = 6\ny = asdf()");
+            var memory = Runner.Run("class asdf():\n\tx = 6\ny = asdf()");
 
             var classBody = new Dictionary<string, Variable>()
             {
@@ -61,7 +61,7 @@ public static partial class InstructionTests
             };
             var expected = new ObjectVariable(classBody, new ClassVariable(classBody));
             
-            Assert.That(result[0]["y"], Is.EqualTo(expected));
+            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
         }
     }
 }

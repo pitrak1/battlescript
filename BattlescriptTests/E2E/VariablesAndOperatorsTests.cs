@@ -13,9 +13,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 'asdf'";
             var expected = new StringVariable("asdf");
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -23,9 +23,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = \"asdf\"";
             var expected = new StringVariable("asdf");
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -33,9 +33,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 5.5";
             var expected = new FloatVariable(5.5);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -43,9 +43,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 5";
             var expected = new IntegerVariable(5);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
 
         [Test]
@@ -53,9 +53,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = True";
             var expected = new BooleanVariable(true);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -63,9 +63,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = []";
             var expected = new ListVariable([]);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -73,9 +73,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = {}";
             var expected = new DictionaryVariable([]);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -83,9 +83,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "class asdf():\n\ty = 3";
             var expected = new ClassVariable(new Dictionary<string, Variable> {{"y", new IntegerVariable(3)}});
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("asdf"));
-            Assert.That(result[0]["asdf"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("asdf"));
+            Assert.That(memory.Scopes[0]["asdf"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -94,9 +94,9 @@ public static class VariablesAndOperatorsTests
             var input = "class asdf():\n\ty = 3\nx = asdf()";
             var classValues = new Dictionary<string, Variable> { { "y", new IntegerVariable(3) } };
             var expected = new ObjectVariable(classValues, new ClassVariable(classValues));
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
     }
 
@@ -108,9 +108,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 6\ny = +x";
             var expected = new IntegerVariable(6);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("y"));
-            Assert.That(result[0]["y"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("y"));
+            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
         }
 
         [Test]
@@ -118,9 +118,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 6\ny = -x";
             var expected = new IntegerVariable(-6);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("y"));
-            Assert.That(result[0]["y"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("y"));
+            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
         }
     }
     
@@ -132,9 +132,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = []\ny = x\nz = x is y";
             var expected = new BooleanVariable(true);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("z"));
-            Assert.That(result[0]["z"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("z"));
+            Assert.That(memory.Scopes[0]["z"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -142,9 +142,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = {}\ny = {}\nz = x is y";
             var expected = new BooleanVariable(false);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("z"));
-            Assert.That(result[0]["z"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("z"));
+            Assert.That(memory.Scopes[0]["z"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -163,9 +163,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 'asd' in 'asdf'";
             var expected = new BooleanVariable(true);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -173,9 +173,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 'asdx' in 'asdf'";
             var expected = new BooleanVariable(false);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -190,9 +190,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 5 in [1, 2, 3, 4, 5]";
             var expected = new BooleanVariable(true);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -200,9 +200,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 6 in [1, 2, 3, 4, 5]";
             var expected = new BooleanVariable(false);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -210,9 +210,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 5 in {5: 4, 3: 2}";
             var expected = new BooleanVariable(true);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -220,9 +220,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 6 in {5: 4, 3: 2}";
             var expected = new BooleanVariable(false);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -241,9 +241,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 5\nx += 5";
             var expected = new IntegerVariable(10);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -251,9 +251,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 5\nx -= 5";
             var expected = new IntegerVariable(0);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -261,9 +261,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 5\nx *= 5";
             var expected = new IntegerVariable(25);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -271,9 +271,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 8\nx /= 5";
             var expected = new FloatVariable(1.6);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -281,9 +281,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 8\nx //= 5";
             var expected = new IntegerVariable(1);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -291,9 +291,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 9\nx %= 2";
             var expected = new IntegerVariable(1);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -301,9 +301,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 9\nx **= 2";
             var expected = new IntegerVariable(81);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
     }
 
@@ -315,9 +315,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = (1 + 2) * 2";
             var expected = new IntegerVariable(6);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -325,9 +325,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 2 * (1 + 2)";
             var expected = new IntegerVariable(6);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
     }
 
@@ -339,9 +339,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 2 ** (1 + 2)";
             var expected = new IntegerVariable(8);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -349,9 +349,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 4 * 2 ** 3";
             var expected = new IntegerVariable(32);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
 
         [Test]
@@ -359,9 +359,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 8 - 16 // 4";
             var expected = new IntegerVariable(4);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -369,9 +369,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 3 <= 8 - 7";
             var expected = new BooleanVariable(false);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         // I would have liked to add test cases here to make sure the precedence order is
@@ -386,9 +386,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = -1";
             var expected = new IntegerVariable(-1);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -396,9 +396,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = -1.0";
             var expected = new FloatVariable(-1);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -406,9 +406,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 12/3";
             var expected = new FloatVariable(4);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -416,9 +416,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 13.5//3.2";
             var expected = new IntegerVariable(4);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -426,9 +426,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 12 * 3";
             var expected = new IntegerVariable(36);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -436,9 +436,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 2.5 * 4.0";
             var expected = new FloatVariable(10);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -446,9 +446,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 2.5 * 4";
             var expected = new FloatVariable(10);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
     }
     
@@ -460,9 +460,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif []:\n\tx = True";
             var expected = new BooleanVariable(false);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -470,9 +470,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif [1]:\n\tx = True";
             var expected = new BooleanVariable(true);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -480,9 +480,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif {}:\n\tx = True";
             var expected = new BooleanVariable(false);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -490,9 +490,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif {'asdf': 1}:\n\tx = True";
             var expected = new BooleanVariable(true);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -500,9 +500,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif '':\n\tx = True";
             var expected = new BooleanVariable(false);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -510,9 +510,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif 'asdf':\n\tx = True";
             var expected = new BooleanVariable(true);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -520,9 +520,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif 0:\n\tx = True";
             var expected = new BooleanVariable(false);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -530,9 +530,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif 1:\n\tx = True";
             var expected = new BooleanVariable(true);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -540,9 +540,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif 0.0:\n\tx = True";
             var expected = new BooleanVariable(false);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -550,9 +550,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif 1.5:\n\tx = True";
             var expected = new BooleanVariable(true);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -560,9 +560,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif False:\n\tx = True";
             var expected = new BooleanVariable(false);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -570,9 +570,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif True:\n\tx = True";
             var expected = new BooleanVariable(true);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -580,9 +580,9 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif None:\n\tx = True";
             var expected = new BooleanVariable(false);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
     }
 }

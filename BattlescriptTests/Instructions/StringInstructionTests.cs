@@ -26,8 +26,8 @@ public static partial class InstructionTests
         [Test]
         public void HandlesSingleQuoteStrings()
         {
-            var results = Runner.Run("x = 'asdf'");
-            Assert.That(results[0]["x"], Is.EqualTo(new StringVariable("asdf")));
+            var memory = Runner.Run("x = 'asdf'");
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(new StringVariable("asdf")));
         }
     }
 }

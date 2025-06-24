@@ -26,7 +26,7 @@ public static partial class InstructionTests
         [Test]
         public void HandlesExpressions()
         {
-            var result = Runner.Run("def func(asdf):\n\treturn asdf + 5\nx = func(4)");
+            var memory = Runner.Run("def func(asdf):\n\treturn asdf + 5\nx = func(4)");
 
             var expected = new Dictionary<string, Variable>()
             {
@@ -42,7 +42,7 @@ public static partial class InstructionTests
                 ["x"] = new IntegerVariable(9)
             };
             
-            Assert.That(result[0], Is.EquivalentTo(expected));
+            Assert.That(memory.Scopes[0], Is.EquivalentTo(expected));
         }
     }
 }

@@ -22,9 +22,9 @@ def func():
                         left: new VariableInstruction("x"),
                         right: new IntegerInstruction(5))
                 ]);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("func"));
-            Assert.That(result[0]["func"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("func"));
+            Assert.That(memory.Scopes[0]["func"], Is.EqualTo(expected));
         }
 
         [Test]
@@ -41,9 +41,9 @@ def func(asdf):
                         left: new VariableInstruction("x"),
                         right: new VariableInstruction("asdf"))
                 ]);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("func"));
-            Assert.That(result[0]["func"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("func"));
+            Assert.That(memory.Scopes[0]["func"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -63,9 +63,9 @@ def func(asdf, qwer):
                         left: new VariableInstruction("x"),
                         right: new VariableInstruction("asdf"))
                 ]);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("func"));
-            Assert.That(result[0]["func"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("func"));
+            Assert.That(memory.Scopes[0]["func"], Is.EqualTo(expected));
         }
     }
 
@@ -81,9 +81,9 @@ def func():
     x = 5
 func()";
             var expected = new IntegerVariable(5);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -95,9 +95,9 @@ def func(y, z):
     x = y + z
 func(2, 3)";
             var expected = new IntegerVariable(5);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
     }
 
@@ -112,9 +112,9 @@ def func():
     return 15
 x = func()";
             var expected = new IntegerVariable(15);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -125,9 +125,9 @@ def func(y, z):
     return y + z
 x = func(4, 8)";
             var expected = new IntegerVariable(12);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -141,9 +141,9 @@ def func():
     x = 6
 func()";
             var expected = new IntegerVariable(5);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
     }
 
@@ -158,9 +158,9 @@ def func(y = 5):
     return y
 x = func(6)";
             var expected = new IntegerVariable(6);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -171,9 +171,9 @@ def func(y = 5):
     return y
 x = func()";
             var expected = new IntegerVariable(5);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
 
         [Test]
@@ -197,9 +197,9 @@ def func(y = 5):
     return y
 x = func(y = 6)";
             var expected = new IntegerVariable(6);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -210,9 +210,9 @@ def func(x, y = 5):
     return x + y
 x = func(4, y = 6)";
             var expected = new IntegerVariable(10);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -267,9 +267,9 @@ x = lambda y: y + 5";
             var expected = new FunctionVariable(
                 [new VariableInstruction("y")],
                 [new ReturnInstruction(new OperationInstruction("+", new VariableInstruction("y"), new IntegerInstruction(5)))]);
-            var result = Runner.Run(input);
-            Assert.That(result[0], Contains.Key("x"));
-            Assert.That(result[0]["x"], Is.EqualTo(expected));
+            var memory = Runner.Run(input);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
     }
 }

@@ -76,12 +76,12 @@ public static partial class InstructionTests
         [Test]
         public void HandlesBinaryOperations()
         {
-            var result = Runner.Run("x = 5 + 6");
+            var memory = Runner.Run("x = 5 + 6");
             var expected = new Dictionary<string, Variable>()
             {
                 ["x"] = new IntegerVariable(11)
             };
-            Assert.That(result[0], Is.EqualTo(expected));
+            Assert.That(memory.Scopes[0], Is.EqualTo(expected));
         }
     }
 }

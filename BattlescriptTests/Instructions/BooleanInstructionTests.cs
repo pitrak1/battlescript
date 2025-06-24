@@ -26,12 +26,12 @@ public static partial class InstructionTests
         [Test]
         public void ReturnsNewBooleanVariable()
         {
-            var result = Runner.Run("x = False");
+            var memory = Runner.Run("x = False");
             var expected = new Dictionary<string, Variable>
             {
                 { "x", new BooleanVariable(false) }
             };
-            Assert.That(result.First(), Is.EquivalentTo(expected));
+            Assert.That(memory.Scopes.First(), Is.EquivalentTo(expected));
         }
     }
 }

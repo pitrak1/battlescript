@@ -2,15 +2,10 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class Memory
+public class Memory(List<Dictionary<string, Variable>>? scopes = null)
 {
-    private List<Dictionary<string, Variable>> _scopes;
-
-    public Memory(List<Dictionary<string, Variable>>? scopes = null)
-    {
-        _scopes = scopes ?? [new Dictionary<string, Variable>()];
-    }
-
+    public List<Dictionary<string, Variable>> Scopes { get; } = scopes ?? [new Dictionary<string, Variable>()];
+    
     public Variable? GetVariable(string name)
     {
         return GetVariable(new VariableInstruction(name));
@@ -18,11 +13,11 @@ public class Memory
 
     public Variable? GetVariable(VariableInstruction variableInstruction)
     {
-        for (var i = _scopes.Count - 1; i >= 0; i--)
+        for (var i = Scopes.Count - 1; i >= 0; i--)
         {
-            if (_scopes[i].ContainsKey(variableInstruction.Name))
+            if (Scopes[i].ContainsKey(variableInstruction.Name))
             {
-                var foundVariable = _scopes[i][variableInstruction.Name];
+                var foundVariable = Scopes[i][variableInstruction.Name];
                 if (variableInstruction.Next is SquareBracketsInstruction squareBracketsInstruction)
                 {
                     return foundVariable.GetItem(this, squareBracketsInstruction);
@@ -42,20 +37,20 @@ public class Memory
         // We need to pass in the full instruction here to handle assigning to indexes
         if (GetVariable(variableInstruction.Name) is not null)
         {
-            for (var i = _scopes.Count - 1; i >= 0; i--)
+            for (var i = Scopes.Count - 1; i >= 0; i--)
             {
-                if (_scopes[i].ContainsKey(variableInstruction.Name))
+                if (Scopes[i].ContainsKey(variableInstruction.Name))
                 {
                     if (variableInstruction.Next is SquareBracketsInstruction squareBracketsInstruction)
                     {
-                        _scopes[i][variableInstruction.Name].SetItem(
+                        Scopes[i][variableInstruction.Name].SetItem(
                             this, 
                             valueVariable, 
                             squareBracketsInstruction);
                     }
                     else
                     {
-                        _scopes[i][variableInstruction.Name] = valueVariable;
+                        Scopes[i][variableInstruction.Name] = valueVariable;
                     }
 
                     return;
@@ -70,18 +65,18 @@ public class Memory
 
     public void AddVariableToLastScope(VariableInstruction variableInstruction, Variable valueVariable)
     {
-        _scopes[^1].Add(variableInstruction.Name, valueVariable);
+        Scopes[^1].Add(variableInstruction.Name, valueVariable);
     }
     
     public void AddScope(Dictionary<string, Variable>? scope = null)
     {
-        _scopes.Add(scope ?? new Dictionary<string, Variable>());
+        Scopes.Add(scope ?? new Dictionary<string, Variable>());
     }
 
     public Dictionary<string, Variable> RemoveScope()
     {
-        var removedScope = _scopes[^1];
-        _scopes.RemoveAt(_scopes.Count - 1);
+        var removedScope = Scopes[^1];
+        Scopes.RemoveAt(Scopes.Count - 1);
         return removedScope;
     }
 
@@ -95,6 +90,6 @@ public class Memory
 
     public List<Dictionary<string, Variable>> GetScopes()
     {
-        return _scopes.ToList();
+        return Scopes.ToList();
     }
 }

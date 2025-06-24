@@ -40,7 +40,7 @@ public static partial class InstructionTests
         [Test]
         public void HandlesBasicClassDefinition()
         {
-            var result = Runner.Run("class MyClass:\n\tx = 1");
+            var memory = Runner.Run("class MyClass:\n\tx = 1");
             var expected = new Dictionary<string, Variable>()
             {
                 {
@@ -50,13 +50,13 @@ public static partial class InstructionTests
                     })
                 }
             };
-            Assert.That(result.First(), Is.EquivalentTo(expected));
+            Assert.That(memory.Scopes.First(), Is.EquivalentTo(expected));
         }
         
         [Test]
         public void HandlesClassDefinitionWithInheritance()
         {
-            var result = Runner.Run(@"
+            var memory = Runner.Run(@"
 class asdf():
     x = 1
 
@@ -78,13 +78,13 @@ class qwer(asdf):
                 {"asdf", asdf},
                 {"qwer", qwer}
             };
-            Assert.That(result.First(), Is.EquivalentTo(expected));
+            Assert.That(memory.Scopes.First(), Is.EquivalentTo(expected));
         }
         
         [Test]
         public void HandlesClassDefinitionWithMultipleInheritance()
         {
-            var result = Runner.Run(@"
+            var memory = Runner.Run(@"
 class asdf:
     x = 1
 
@@ -116,7 +116,7 @@ class zxcv(asdf, qwer):
                 {"qwer", qwer},
                 {"zxcv", zxcv}
             };
-            Assert.That(result.First(), Is.EquivalentTo(expected));
+            Assert.That(memory.Scopes.First(), Is.EquivalentTo(expected));
         }
     }
 }

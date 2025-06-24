@@ -26,25 +26,25 @@ public static partial class InstructionTests
         [Test]
         public void RunsCodeIfConditionIsTrue()
         {
-            var result = Runner.Run("x = 3\nif True:\n\tx = 5");
+            var memory = Runner.Run("x = 3\nif True:\n\tx = 5");
             var expected = new Dictionary<string, Variable>()
             {
                 ["x"] = new IntegerVariable(5)
             };
             
-            Assert.That(result[0], Is.EqualTo(expected));
+            Assert.That(memory.Scopes[0], Is.EqualTo(expected));
         }
         
         [Test]
         public void DoesNotRunCodeIfConditionIsFalse()
         {
-            var result = Runner.Run("x = 3\nif False:\n\tx = 5");
+            var memory = Runner.Run("x = 3\nif False:\n\tx = 5");
             var expected = new Dictionary<string, Variable>()
             {
                 ["x"] = new IntegerVariable(3)
             };
             
-            Assert.That(result[0], Is.EqualTo(expected));
+            Assert.That(memory.Scopes[0], Is.EqualTo(expected));
         }
     }
 }

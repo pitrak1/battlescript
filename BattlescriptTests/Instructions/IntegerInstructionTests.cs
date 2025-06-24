@@ -26,12 +26,12 @@ public static partial class InstructionTests
         [Test]
         public void ReturnsNewNumberVariable()
         {
-            var result = Runner.Run("x = 5");
+            var memory = Runner.Run("x = 5");
             var expected = new Dictionary<string, Variable>
             {
                 { "x", new IntegerVariable(5) }
             };
-            Assert.That(result.First(), Is.EquivalentTo(expected));
+            Assert.That(memory.Scopes.First(), Is.EquivalentTo(expected));
         }
     }
 }
