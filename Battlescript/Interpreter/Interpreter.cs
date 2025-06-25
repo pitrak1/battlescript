@@ -3,15 +3,14 @@ namespace Battlescript;
 public class Interpreter(List<Instruction> instructions)
 {
     private List<Instruction> _instructions = instructions;
-    private Memory _memory = new ();
 
-    public Memory Run()
+    public Memory Run(Memory memory)
     {
         foreach (var instruction in _instructions)
         {
-            instruction.Interpret(_memory);
+            instruction.Interpret(memory);
         }
         
-        return _memory;
+        return memory;
     }
 }

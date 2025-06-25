@@ -4,6 +4,20 @@ public static class Runner
 {
     public static Memory Run(string input)
     {
+        var memory = new Memory();
+        RunPartial(memory, input);
+        return memory;
+    }
+
+    private static void LoadBuiltin(Memory memory, string builtinName)
+    {
+        using StreamReader reader = new($"/Users/nickpitrak/Desktop/Battlescript/Battlescript/Builtins/{builtinName}.bs");
+        string text = reader.ReadToEnd();
+        RunPartial(memory, text);
+    }
+
+    private static void RunPartial(Memory memory, string input)
+    {
         var lexer = new Lexer(input);
         var lexerResult = lexer.Run();
         Postlexer.Run(lexerResult);
@@ -11,6 +25,6 @@ public static class Runner
         var parserResult = parser.Run();
         Postparser.Run(parserResult);
         var interpreter = new Interpreter(parserResult);
-        return interpreter.Run();
+        interpreter.Run(memory);
     }
 }
