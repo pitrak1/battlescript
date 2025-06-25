@@ -3,7 +3,6 @@ namespace Battlescript;
 public static class Consts
 {
     public static readonly double FloatingPointTolerance = 0.000001;
-    public static readonly char[] InseparableNumberCharacters = ['-', '.'];
     public static readonly char[] NumberCharacters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
     public static readonly char[] Digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     public static readonly char[] Letters = [
@@ -269,9 +268,18 @@ public static class Consts
         "reverse",
         "copy"
     ];
+    
+    public static readonly string[] PrincipleTypes =
+    [
+        "__numeric__",
+        "__sequence__",
+        "__mapping__",
+        "__exception__"
+    ];
 
     public enum TokenTypes
     {
+        PrincipleType,
         Integer,
         Float,
         String,

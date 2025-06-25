@@ -36,35 +36,36 @@ public class BuiltInInstruction : Instruction
             case "super":
                 break;
             case "range":
-                return RunRangeFunction();
+                return RunRangeFunction(memory);
         }
         // TODO
         return new NoneVariable();
     }
 
-    private Variable RunRangeFunction()
+    private Variable RunRangeFunction(Memory memory)
     {
-        if (!Parameters.All(x => x is IntegerInstruction))
-        {
-            throw new Exception("Bad arguments, clean this up later");
-        }
-
         int startingValue = 0;
         int count = 0;
         int step = 1;
 
         if (Parameters.Count == 1)
         {
-            count = ((IntegerInstruction)Parameters[0]).Value;
+            var countExpression = Parameters[0].Interpret(memory);
+            count = ((IntegerVariable)countExpression).Value;
         } else if (Parameters.Count == 2)
         {
-            startingValue = ((IntegerInstruction)Parameters[0]).Value;
-            count = ((IntegerInstruction)Parameters[1]).Value;
+            var startingValueExpression = Parameters[0].Interpret(memory);
+            var countExpression = Parameters[1].Interpret(memory);
+            startingValue = ((IntegerVariable)startingValueExpression).Value;
+            count = ((IntegerVariable)countExpression).Value;
         } else if (Parameters.Count == 3)
         {
-            startingValue = ((IntegerInstruction)Parameters[0]).Value;
-            count = ((IntegerInstruction)Parameters[1]).Value;
-            step = ((IntegerInstruction)Parameters[2]).Value;
+            var startingValueExpression = Parameters[0].Interpret(memory);
+            var countExpression = Parameters[1].Interpret(memory);
+            var stepExpression = Parameters[2].Interpret(memory);
+            startingValue = ((IntegerVariable)startingValueExpression).Value;
+            count = ((IntegerVariable)countExpression).Value;
+            step = ((IntegerVariable)stepExpression).Value;
         }
         else
         {

@@ -24,8 +24,7 @@ public class Lexer(string input)
                 _index++;
                 _column++;
             } 
-            else if (
-                Consts.InseparableNumberCharacters.Contains(nextCharacter[0]) && Consts.NumberCharacters.Contains(nextNextCharacter[0]))
+            else if (nextCharacter[0] == '.' && Consts.Digits.Contains(nextNextCharacter[0]))
             {
                 HandleNumber();
             }
@@ -184,6 +183,10 @@ public class Lexer(string input)
         else if (Consts.BuiltInFunctions.Contains(word))
         {
             type = Consts.TokenTypes.BuiltIn;
+        }
+        else if (Consts.PrincipleTypes.Contains(word))
+        {
+            type = Consts.TokenTypes.PrincipleType;
         }
         
         _tokens.Add(new Token(type, word, _line, _column));

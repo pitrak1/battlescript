@@ -34,15 +34,6 @@ public static class LexerTests
             var expected = new List<Token>() { new Token(Consts.TokenTypes.Float, ".23") };
             Assert.That(result, Is.EquivalentTo(expected));
         }
-        
-        [Test]
-        public void HandlesNegatives()
-        {
-            var lexer = new Lexer("-213");
-            var result = lexer.Run();
-            var expected = new List<Token>() { new Token(Consts.TokenTypes.Integer, "-213") };
-            Assert.That(result, Is.EquivalentTo(expected));
-        }
     }
 
     [TestFixture]
@@ -277,6 +268,22 @@ public static class LexerTests
                 new(Consts.TokenTypes.Identifier, "asdf"),
                 new(Consts.TokenTypes.Newline, "0"),
                 new(Consts.TokenTypes.Identifier, "asdf")
+            };
+            Assert.That(result, Is.EquivalentTo(expected));
+        }
+    }
+
+    [TestFixture]
+    public class PrincipleTypes
+    {
+        [Test]
+        public void HandlesPrincipleTypes()
+        {
+            var lexer = new Lexer("__mapping__");
+            var result = lexer.Run();
+            var expected = new List<Token>()
+            {
+                new(Consts.TokenTypes.PrincipleType, "__mapping__")
             };
             Assert.That(result, Is.EquivalentTo(expected));
         }
