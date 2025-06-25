@@ -77,7 +77,7 @@ public static class Operator
         } else if (right is DictionaryVariable rightDictionary)
         {
             // If the right operand is a dictionary, we search for a matching key
-            var found = rightDictionary.Values.Any(x => x.Left is not null && x.Left.Equals(left));
+            var found = rightDictionary.Values.Any(x => x.Key.Equals(left));
             return operation == "in" ? new BooleanVariable(found) : new BooleanVariable(!found);
         }
         else

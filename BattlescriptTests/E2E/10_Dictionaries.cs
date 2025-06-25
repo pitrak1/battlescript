@@ -12,10 +12,10 @@ public static partial class E2ETests {
         {
             var input = "x = {'asdf': 5, 'qwer': '5'}";
             var expected = new DictionaryVariable(
-                new List<KeyValuePairVariable>()
+                new Dictionary<Variable, Variable>()
                 {
-                    new (new StringVariable("asdf"), new IntegerVariable(5)),
-                    new (new StringVariable("qwer"), new StringVariable("5"))
+                    {new StringVariable("asdf"), new IntegerVariable(5)},
+                    {new StringVariable("qwer"), new StringVariable("5")}
                 }
             );
             var memory = Runner.Run(input);

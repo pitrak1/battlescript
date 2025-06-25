@@ -2,12 +2,34 @@
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AAssert_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003F46a322d26154b982566e1817203e5452c91223f93b0e392d9c5b4806696fdc1_003FAssert_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AThrowHelper_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003F6780d13016c376c4491c5618b257d84da7eacf747ed2719783e775546b79b_003FThrowHelper_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ATraceListener_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003Fc23551ff8d0344a9b628098f656f49119fd0_003Ff3_003F26c9c48c_003FTraceListener_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=1e5a97c3_002Dc42e_002D4593_002D81af_002D55ea5906fec5/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;BattlescriptTests&amp;gt; #8" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests" Presentation="&amp;lt;BattlescriptTests&amp;gt;" /&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=268daa63_002D8140_002D40b9_002Dac8d_002Ddfecb3c9b42d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;BattlescriptTests&amp;gt; #5" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests" Presentation="&amp;lt;BattlescriptTests&amp;gt;" /&gt;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=29859bf6_002Dcc1a_002D46c2_002D95bb_002D6a1bb54466e0/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;BattlescriptTests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Project Location="/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests" Presentation="&amp;lt;BattlescriptTests&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=441186e9_002De974_002D439a_002D99d0_002D94686a6d1702/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;BattlescriptTests&amp;gt; #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=53d1ba7b_002D5e14_002D43b2_002Da998_002D84aa045d444a/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;BattlescriptTests&amp;gt; #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Project Location="/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests" Presentation="&amp;lt;BattlescriptTests&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9ba71211_002D59e9_002D4353_002Dba59_002D252a83a8ae75/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;BattlescriptTests&amp;gt; #6" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests" Presentation="&amp;lt;BattlescriptTests&amp;gt;" /&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=cd6f7ec9_002Daab2_002D4ca6_002D968a_002D18790e3b1777/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;BattlescriptTests&amp;gt; #7" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests" Presentation="&amp;lt;BattlescriptTests&amp;gt;" /&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d2951a81_002Dcb0f_002D40c8_002Dae07_002D86a6a511458e/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;BattlescriptTests&amp;gt; #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests" Presentation="&amp;lt;BattlescriptTests&amp;gt;" /&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d551d7ef_002Def3f_002D4eb3_002D8d1f_002D7b82defba1fc/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;BattlescriptTests&amp;gt; #9" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests" Presentation="&amp;lt;BattlescriptTests&amp;gt;" /&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e0adbf8e_002Decf2_002D4a92_002Da381_002D0540f68c517e/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;BattlescriptTests&amp;gt; #10" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests" Presentation="&amp;lt;BattlescriptTests&amp;gt;" /&gt;
+&lt;/SessionState&gt;</s:String>
+	
 	
 	
 	

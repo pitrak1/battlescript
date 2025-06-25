@@ -2,25 +2,24 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class DictionaryVariable(List<KeyValuePairVariable>? values): ReferenceVariable, IEquatable<DictionaryVariable>
+public class DictionaryVariable(Dictionary<Variable, Variable>? values): ReferenceVariable, IEquatable<DictionaryVariable>
 { 
-    public List<KeyValuePairVariable> Values { get; set; } = values ?? [];
+    public Dictionary<Variable, Variable> Values { get; set; } = values ?? [];
     
     public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
         Debug.Assert(index.Values.Count == 1);
 
         var indexVariable = index.Values.First().Interpret(memory);
-        var value = GetKvpForVariableKey(indexVariable);
         
         if (index.Next is null)
         {
-            value.Right = valueVariable;
+            Values[indexVariable] = valueVariable;
             return true;
         }
         else
         {
-            return value.Right.SetItem(memory, valueVariable, (SquareBracketsInstruction)index.Next);
+            return Values[indexVariable].SetItem(memory, valueVariable, (SquareBracketsInstruction)index.Next);
         }
     }
 
@@ -29,38 +28,15 @@ public class DictionaryVariable(List<KeyValuePairVariable>? values): ReferenceVa
         Debug.Assert(index.Values.Count == 1);
 
         var indexVariable = index.Values.First().Interpret(memory);
-        var value = GetKvpForVariableKey(indexVariable);
         
         if (index.Next is null)
         {
-            return value.Right;
+            return Values[indexVariable];
         }
         else
         {
-            return value.Right.GetItem(memory, (SquareBracketsInstruction)index.Next);
+            return Values[indexVariable].GetItem(memory, (SquareBracketsInstruction)index.Next);
         }
-    }
-
-    private KeyValuePairVariable? GetKvpForVariableKey(Variable key)
-    {
-        foreach (var pair in Values)
-        {
-            if (pair.Left is IntegerVariable leftNumberVariable && key is IntegerVariable numberVariable)
-            {
-                if (leftNumberVariable.Value == numberVariable.Value)
-                {
-                    return pair;
-                }
-            } else if (pair.Left is StringVariable leftStringVariable && key is StringVariable stringVariable)
-            {
-                if (leftStringVariable.Value == stringVariable.Value)
-                {
-                    return pair;
-                }
-            }
-        }
-
-        return null;
     }
     
     // All the code below is to override equality

@@ -13,19 +13,12 @@ public static partial class InstructionTests
         {
             var lexer = new Lexer("{4: 5, 6: 'asdf'}");
             var lexerResult = lexer.Run();
-            
-            var expected = new DictionaryInstruction(
-                [
-                    new KeyValuePairInstruction(
-                        left: new IntegerInstruction(4), 
-                        right: new IntegerInstruction(5)
-                    ),
-                    new KeyValuePairInstruction(
-                        left: new IntegerInstruction(6), 
-                        right: new StringInstruction("asdf")
-                    )
-                ]
-            );
+
+            var expected = new DictionaryInstruction(new Dictionary<Instruction, Instruction>()
+            {
+                { new IntegerInstruction(4), new IntegerInstruction(5) },
+                { new IntegerInstruction(6), new StringInstruction("asdf") },
+            });
             var result = Instruction.Parse(lexerResult);
             
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
@@ -37,18 +30,11 @@ public static partial class InstructionTests
             var lexer = new Lexer("{'asdf': 5, 'qwer': 'asdf'}");
             var lexerResult = lexer.Run();
             
-            var expected = new DictionaryInstruction(
-                [
-                    new KeyValuePairInstruction(
-                        left: new StringInstruction("asdf"), 
-                        right: new IntegerInstruction(5)
-                    ),
-                    new KeyValuePairInstruction(
-                        left: new StringInstruction("qwer"), 
-                        right: new StringInstruction("asdf")
-                    )
-                ]
-            );
+            var expected = new DictionaryInstruction(new Dictionary<Instruction, Instruction>()
+            {
+                { new StringInstruction("asdf"), new IntegerInstruction(5) },
+                { new StringInstruction("qwer"), new StringInstruction("asdf") },
+            });
             
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }
@@ -64,10 +50,11 @@ public static partial class InstructionTests
             var expected = new Dictionary<string, Variable>()
             {
                 {
-                    "x", new DictionaryVariable([
-                        new KeyValuePairVariable(new StringVariable("asdf"), new IntegerVariable(5)),
-                        new KeyValuePairVariable(new StringVariable("qwer"), new StringVariable("asdf"))
-                    ])
+                    "x", new DictionaryVariable(new Dictionary<Variable, Variable>()
+                    {
+                        {new StringVariable("asdf"), new IntegerVariable(5)},
+                        {new StringVariable("qwer"), new StringVariable("asdf")}
+                    })
                 }
             };
             Assert.That(memory.Scopes[0], Is.EquivalentTo(expected));
@@ -80,10 +67,11 @@ public static partial class InstructionTests
             var expected = new Dictionary<string, Variable>()
             {
                 {
-                    "x", new DictionaryVariable([
-                        new KeyValuePairVariable(new StringVariable("asdf"), new IntegerVariable(5)),
-                        new KeyValuePairVariable(new IntegerVariable(4), new StringVariable("asdf"))
-                    ])
+                    "x", new DictionaryVariable(new Dictionary<Variable, Variable>()
+                    {
+                        {new StringVariable("asdf"), new IntegerVariable(5)},
+                        {new IntegerVariable(4), new StringVariable("asdf")}
+                    })
                 }
             };
             Assert.That(memory.Scopes[0], Is.EquivalentTo(expected));
@@ -96,10 +84,11 @@ public static partial class InstructionTests
             var expected = new Dictionary<string, Variable>()
             {
                 {
-                    "x", new DictionaryVariable([
-                        new KeyValuePairVariable(new StringVariable("asdf"), new IntegerVariable(11)),
-                        new KeyValuePairVariable(new StringVariable("qwer"), new IntegerVariable(12))
-                    ])
+                    "x", new DictionaryVariable(new Dictionary<Variable, Variable>()
+                    {
+                        {new StringVariable("asdf"), new IntegerVariable(11)},
+                        {new StringVariable("qwer"), new IntegerVariable(12)}
+                    })
                 }
             };
             Assert.That(memory.Scopes[0], Is.EquivalentTo(expected));

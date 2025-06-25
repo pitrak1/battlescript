@@ -4,7 +4,7 @@ namespace Battlescript;
 
 public class DictionaryInstruction : Instruction, IEquatable<DictionaryInstruction>
 {
-    public List<KeyValuePairInstruction> Values { get; set; }
+    public Dictionary<Instruction, Instruction> Values { get; set; }
 
     public DictionaryInstruction(List<Token> tokens)
     {
@@ -17,15 +17,25 @@ public class DictionaryInstruction : Instruction, IEquatable<DictionaryInstructi
         }
         
         Debug.Assert(results.Values.All(result => result is KeyValuePairInstruction));
-        
-        var kvpResults = results.Values.Cast<KeyValuePairInstruction>().ToList();
 
-        Values = kvpResults;
+        Values = new Dictionary<Instruction, Instruction>();
+        foreach (var kvp in results.Values)
+        {
+            if (kvp is KeyValuePairInstruction kvpInstruction)
+            {
+                Values.Add(kvpInstruction.Left, kvpInstruction.Right);
+            }
+            else
+            {
+                throw new Exception("Badly formed dictionary, fix this later");
+            }
+        }
+        
         Line = tokens[0].Line;
         Column = tokens[0].Column;
     }
 
-    public DictionaryInstruction(List<KeyValuePairInstruction> values)
+    public DictionaryInstruction(Dictionary<Instruction, Instruction> values)
     {
         Values = values;
     }
@@ -36,13 +46,13 @@ public class DictionaryInstruction : Instruction, IEquatable<DictionaryInstructi
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        var variableValue = new List<KeyValuePairVariable>();
+        var variableValue = new Dictionary<Variable, Variable>();
         foreach (var kvp in Values)
         {
-            var key = kvp.Left.Interpret(memory);
-            var value = kvp.Right.Interpret(memory);
+            var key = kvp.Key.Interpret(memory);
+            var value = kvp.Value.Interpret(memory);
             
-            variableValue.Add(new KeyValuePairVariable(key, value));
+            variableValue.Add(key, value);
         }
         return new DictionaryVariable(variableValue);
     }

@@ -10,10 +10,12 @@ public class DictionaryVariableTests
         [Test]
         public void HandlesIndex()
         {
-            var dictionary = new DictionaryVariable([
-                new KeyValuePairVariable(new IntegerVariable(1), new IntegerVariable(2)),
-                new KeyValuePairVariable(new StringVariable("asdf"), new IntegerVariable(4))
-            ]);
+            var dictionary = new DictionaryVariable(new Dictionary<Variable, Variable>()
+            {
+                { new IntegerVariable(1), new IntegerVariable(2) },
+                { new StringVariable("asdf"), new IntegerVariable(4) }
+            });
+            
             var indexInstruction = new SquareBracketsInstruction([new StringInstruction("asdf")]);
             var result = dictionary.GetItem(new Memory(), indexInstruction);
             Assert.That(result, Is.TypeOf<IntegerVariable>());
@@ -23,14 +25,18 @@ public class DictionaryVariableTests
         [Test]
         public void HandlesStackedIndices()
         {
-            var innerDictionary = new DictionaryVariable([
-                new KeyValuePairVariable(new StringVariable("qwer"), new IntegerVariable(3)),
-                new KeyValuePairVariable(new StringVariable("zxcv"), new IntegerVariable(5))
-            ]);
-            var dictionary = new DictionaryVariable([
-                new KeyValuePairVariable(new IntegerVariable(1), new IntegerVariable(2)),
-                new KeyValuePairVariable(new StringVariable("asdf"), innerDictionary)
-            ]);
+            var innerDictionary = new DictionaryVariable(new Dictionary<Variable, Variable>()
+            {
+                { new StringVariable("qwer"), new IntegerVariable(3) },
+                { new StringVariable("zxcv"), new IntegerVariable(5) }
+            });
+
+            var dictionary = new DictionaryVariable(new Dictionary<Variable, Variable>()
+            {
+                { new IntegerVariable(1), new IntegerVariable(2) },
+                { new StringVariable("asdf"), innerDictionary }
+            });
+            
             var indexInstruction = new SquareBracketsInstruction(
                 [new StringInstruction("asdf")], 
                 new SquareBracketsInstruction([new StringInstruction("zxcv")]));
@@ -46,10 +52,11 @@ public class DictionaryVariableTests
         [Test]
         public void HandlesIndex()
         {
-            var dictionary = new DictionaryVariable([
-                new KeyValuePairVariable(new IntegerVariable(1), new IntegerVariable(2)),
-                new KeyValuePairVariable(new StringVariable("asdf"), new IntegerVariable(4))
-            ]);
+            var dictionary = new DictionaryVariable(new Dictionary<Variable, Variable>()
+            {
+                { new IntegerVariable(1), new IntegerVariable(2) },
+                { new StringVariable("asdf"), new IntegerVariable(4) }
+            });
             var indexInstruction = new SquareBracketsInstruction([new StringInstruction("asdf")]);
             var valueVariable = new IntegerVariable(10);
             dictionary.SetItem(new Memory(), valueVariable, indexInstruction);
@@ -61,14 +68,17 @@ public class DictionaryVariableTests
         [Test]
         public void HandlesStackedIndices()
         {
-            var innerDictionary = new DictionaryVariable([
-                new KeyValuePairVariable(new StringVariable("qwer"), new IntegerVariable(3)),
-                new KeyValuePairVariable(new StringVariable("zxcv"), new IntegerVariable(5))
-            ]);
-            var dictionary = new DictionaryVariable([
-                new KeyValuePairVariable(new IntegerVariable(1), new IntegerVariable(2)),
-                new KeyValuePairVariable(new StringVariable("asdf"), innerDictionary)
-            ]);
+            var innerDictionary = new DictionaryVariable(new Dictionary<Variable, Variable>()
+            {
+                { new StringVariable("qwer"), new IntegerVariable(3) },
+                { new StringVariable("zxcv"), new IntegerVariable(5) }
+            });
+
+            var dictionary = new DictionaryVariable(new Dictionary<Variable, Variable>()
+            {
+                { new IntegerVariable(1), new IntegerVariable(2) },
+                { new StringVariable("asdf"), innerDictionary }
+            });
             var indexInstruction = new SquareBracketsInstruction(
                 [new StringInstruction("asdf")], 
                 new SquareBracketsInstruction([new StringInstruction("zxcv")]));
