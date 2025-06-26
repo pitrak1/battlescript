@@ -4,16 +4,6 @@ public class StringVariable(string? value = null) : ValueVariable, IEquatable<St
 {
     public string Value { get; set; } = value ?? "";
     
-    public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
-    {
-        throw new Exception("Cannot index a string variable");
-    }
-    
-    public override Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
-    {
-        throw new Exception("Cannot index a string variable");
-    }
-    
     // All the code below is to override equality
     public override bool Equals(object obj) => Equals(obj as StringVariable);
     public bool Equals(StringVariable? variable)

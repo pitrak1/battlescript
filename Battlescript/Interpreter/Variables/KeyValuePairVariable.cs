@@ -5,16 +5,6 @@ public class KeyValuePairVariable(Variable? left = null, Variable? right = null)
     public Variable? Left { get; set; } = left;
     public Variable? Right { get; set; } = right;
     
-    public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
-    {
-        throw new Exception("Cannot index a kvp variable");
-    }
-    
-    public override Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
-    {
-        throw new Exception("Cannot index a kvp variable");
-    }
-    
     // All the code below is to override equality
     public override bool Equals(object obj) => Equals(obj as KeyValuePairVariable);
     public bool Equals(KeyValuePairVariable? variable)

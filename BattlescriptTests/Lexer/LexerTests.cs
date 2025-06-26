@@ -272,20 +272,4 @@ public static class LexerTests
             Assert.That(result, Is.EquivalentTo(expected));
         }
     }
-
-    [TestFixture]
-    public class PrincipleTypes
-    {
-        [Test]
-        public void HandlesPrincipleTypes()
-        {
-            var lexer = new Lexer("__mapping__");
-            var result = lexer.Run();
-            var expected = new List<Token>()
-            {
-                new(Consts.TokenTypes.PrincipleType, "__mapping__")
-            };
-            Assert.That(result, Is.EquivalentTo(expected));
-        }
-    }
 }

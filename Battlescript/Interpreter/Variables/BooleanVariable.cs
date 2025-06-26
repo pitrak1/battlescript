@@ -4,16 +4,6 @@ public class BooleanVariable(bool? value = null) : ValueVariable, IEquatable<Boo
 {
     public bool Value { get; set; } = value ?? false;
     
-    public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
-    {
-        throw new Exception("Cannot index a boolean variable");
-    }
-    
-    public override Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
-    {
-        throw new Exception("Cannot index a boolean variable");
-    }
-    
     // All the code below is to override equality
     public override bool Equals(object obj) => Equals(obj as BooleanVariable);
     public bool Equals(BooleanVariable? variable)

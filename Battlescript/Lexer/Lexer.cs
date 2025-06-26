@@ -184,10 +184,6 @@ public class Lexer(string input)
         {
             type = Consts.TokenTypes.BuiltIn;
         }
-        else if (Consts.PrincipleTypes.Contains(word))
-        {
-            type = Consts.TokenTypes.PrincipleType;
-        }
         
         _tokens.Add(new Token(type, word, _line, _column));
         _index += word.Length;

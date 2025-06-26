@@ -88,22 +88,6 @@ public class ClassVariable (Dictionary<string, Variable>? values, List<ClassVari
             superclass.AddToObjectValues(objectValues);
         }
     }
-
-    public int AddClassToMemoryScopes(Memory memory)
-    {
-        var addedScopesCount = 0;
-        
-        // Reverse depth first search to add all required scopes to memory
-        for (var i = SuperClasses.Count - 1; i >= 0; i--)
-        {
-            var scopesCount = SuperClasses[i].AddClassToMemoryScopes(memory);
-            addedScopesCount += scopesCount;
-        }
-        
-        memory.AddScope(Values);
-
-        return addedScopesCount + 1;
-    }
     
     // All the code below is to override equality
     public override bool Equals(object obj) => Equals(obj as ClassVariable);

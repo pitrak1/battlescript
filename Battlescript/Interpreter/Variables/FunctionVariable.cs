@@ -5,16 +5,6 @@ public class FunctionVariable(List<Instruction>? parameters, List<Instruction>? 
     public List<Instruction> Parameters { get; set; } = parameters ?? [];
     public List<Instruction> Instructions { get; set; } = instructions ?? [];
     
-    public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
-    {
-        throw new Exception("Cannot index a function variable");
-    }
-    
-    public override Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
-    {
-        throw new Exception("Cannot index a function variable");
-    }
-    
     public Variable RunFunction(Memory memory, List<Variable> arguments, ObjectVariable? objectVariable = null)
     {
         memory.AddScope();

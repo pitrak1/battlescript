@@ -269,14 +269,6 @@ public static class Consts
         "copy"
     ];
     
-    public static readonly string[] PrincipleTypes =
-    [
-        "__numeric__",
-        "__sequence__",
-        "__mapping__",
-        "__exception__"
-    ];
-
     public enum TokenTypes
     {
         PrincipleType,
