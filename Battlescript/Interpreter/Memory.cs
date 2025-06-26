@@ -87,9 +87,4 @@ public class Memory(List<Dictionary<string, Variable>>? scopes = null)
             RemoveScope();
         }
     }
-
-    public List<Dictionary<string, Variable>> GetScopes()
-    {
-        return Scopes.ToList();
-    }
 }

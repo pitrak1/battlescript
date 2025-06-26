@@ -13,8 +13,8 @@ public static class MemoryTests
         {
             var memory = new Memory();
 
-            Assert.That(memory.GetScopes().Count, Is.EqualTo(1));
-            Assert.That(memory.GetScopes()[0], Is.Empty);
+            Assert.That(memory.Scopes.Count, Is.EqualTo(1));
+            Assert.That(memory.Scopes[0], Is.Empty);
         }
     }
 
@@ -27,8 +27,8 @@ public static class MemoryTests
             var memory = new Memory();
             memory.AddScope();
             
-            Assert.That(memory.GetScopes().Count, Is.EqualTo(2));
-            Assert.That(memory.GetScopes()[1], Is.Empty);
+            Assert.That(memory.Scopes.Count, Is.EqualTo(2));
+            Assert.That(memory.Scopes[1], Is.Empty);
         }
 
         [Test]
@@ -41,8 +41,8 @@ public static class MemoryTests
             };
             memory.AddScope(scope);
             
-            Assert.That(memory.GetScopes().Count, Is.EqualTo(2));
-            Assert.That(memory.GetScopes()[1], Is.EquivalentTo(scope));
+            Assert.That(memory.Scopes.Count, Is.EqualTo(2));
+            Assert.That(memory.Scopes[1], Is.EquivalentTo(scope));
         }
     }
 
@@ -59,7 +59,7 @@ public static class MemoryTests
             var memory = new Memory([scope]);
             var returnedScope = memory.RemoveScope();
             
-            Assert.That(memory.GetScopes().Count, Is.EqualTo(0));
+            Assert.That(memory.Scopes.Count, Is.EqualTo(0));
             Assert.That(returnedScope, Is.EquivalentTo(scope));
         }
     }
@@ -76,7 +76,7 @@ public static class MemoryTests
             memory.AddScope();
             memory.RemoveScopes(3);
             
-            Assert.That(memory.GetScopes().Count, Is.EqualTo(1));
+            Assert.That(memory.Scopes.Count, Is.EqualTo(1));
         }
     }
 
@@ -152,7 +152,7 @@ public static class MemoryTests
             var memory = new Memory();
             memory.AddScope();
             memory.SetVariable(new VariableInstruction("x"), new IntegerVariable(5));
-            var scopes = memory.GetScopes();
+            var scopes = memory.Scopes;
             
             Assert.That(scopes[1]["x"] is IntegerVariable);
             if (scopes[1]["x"] is IntegerVariable IntegerVariable)
@@ -170,7 +170,7 @@ public static class MemoryTests
             };
             var memory = new Memory([scope]);
             memory.SetVariable(new VariableInstruction("x"), new IntegerVariable(8));
-            var scopes = memory.GetScopes();
+            var scopes = memory.Scopes;
             
             Assert.That(scopes[0]["x"] is IntegerVariable);
             if (scopes[0]["x"] is IntegerVariable IntegerVariable)
@@ -192,7 +192,7 @@ public static class MemoryTests
             };
             var memory = new Memory([scope1, scope2]);
             memory.SetVariable(new VariableInstruction("x"), new IntegerVariable(8));
-            var scopes = memory.GetScopes();
+            var scopes = memory.Scopes;
             
             Assert.That(scopes[0]["x"] is IntegerVariable);
             if (scopes[0]["x"] is IntegerVariable IntegerVariable1)
@@ -219,7 +219,7 @@ public static class MemoryTests
                 "x",
                 new SquareBracketsInstruction([new IntegerInstruction(1)]));
             memory.SetVariable(variableInstructionWithIndex, new IntegerVariable(10));
-            var scopes = memory.GetScopes();
+            var scopes = memory.Scopes;
             
             Assert.That(scopes[0]["x"] is ListVariable);
             if (scopes[0]["x"] is ListVariable listVariable)
@@ -314,7 +314,7 @@ public static class MemoryTests
                 new SquareBracketsInstruction(
                     [new StringInstruction("y")]));
             memory.SetVariable(variableInstructionWithIndex, new IntegerVariable(10));
-            var scopes = memory.GetScopes();
+            var scopes = memory.Scopes;
             
             Assert.That(scopes[0]["y"] is ObjectVariable);
             if (scopes[0]["y"] is ObjectVariable objectVariable)
