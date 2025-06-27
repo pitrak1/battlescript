@@ -167,7 +167,7 @@ public static class Consts
         "__gt__",
         "__le__",
         "__ge__",
-        "__and__",  //NOT SUPPORTED IN V1
+        "__and__", //NOT SUPPORTED IN V1
         "__or__", //NOT SUPPORTED IN V1
         "__xor__", //NOT SUPPORTED IN V1
         "__lshift__", //NOT SUPPORTED IN V1
@@ -190,7 +190,6 @@ public static class Consts
         "__getitem__",
         "__setitem__"
     ];
-    public static readonly string[] Booleans = ["True", "False"];
 
     public static readonly string[] Operators = [
         "**",
@@ -253,7 +252,14 @@ public static class Consts
         "<<=",//NOT SUPPORTED IN V1
         ":=" //NOT SUPPORTED IN V1
     ];
-
+    
+    public static readonly string[] ConstantStrings = ["None", "True", "False"];
+    public enum Constants{
+        None,
+        True,
+        False,
+    }
+    
     public static readonly string[] ListMethods =
     [
         "append",
@@ -271,11 +277,10 @@ public static class Consts
     
     public enum TokenTypes
     {
-        PrincipleType,
         Integer,
         Float,
         String,
-        Boolean,
+        Constant,
         Keyword,
         Newline,
         Identifier,

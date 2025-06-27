@@ -60,7 +60,7 @@ public class ElseInstruction : Instruction, IEquatable<ElseInstruction>
             memory.RemoveScope();
         }
         
-        return new NoneVariable();
+        return new ConstantVariable();
     }
     
     // All the code below is to override equality

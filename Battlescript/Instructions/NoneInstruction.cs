@@ -8,7 +8,7 @@ public class NoneInstruction : Instruction, IEquatable<NoneInstruction>
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        return new NoneVariable();
+        return new ConstantVariable();
     }
     
     // All the code below is to override equality

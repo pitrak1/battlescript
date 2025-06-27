@@ -6,8 +6,8 @@ public static class Truthiness
     {
         switch (variable)
         {
-            case BooleanVariable booleanVariable:
-                return booleanVariable.Value;
+            case ConstantVariable constantVariable:
+                return constantVariable.Value == Consts.Constants.True;
             case IntegerVariable integerVariable:
                 return integerVariable.Value != 0;
             case FloatVariable floatVariable:
@@ -16,8 +16,6 @@ public static class Truthiness
                 return stringVariable.Value.Length > 0;
             case ListVariable listVariable:
                 return listVariable.Values.Count > 0;
-            case NoneVariable:
-                return false;
             case ClassVariable:
                 return true;
             case ObjectVariable:

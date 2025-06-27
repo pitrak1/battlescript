@@ -75,9 +75,9 @@ public static class OperatorTests
             var result = Operator.StandardOperation(
                 memory, 
                 "and", 
-                new BooleanVariable(true), 
-                new BooleanVariable(false));
-            Assert.That(result, Is.EqualTo(new BooleanVariable(false)));
+                new ConstantVariable(true), 
+                new ConstantVariable(false));
+            Assert.That(result, Is.EqualTo(new ConstantVariable(false)));
         }
         
         [Test]
@@ -88,8 +88,8 @@ public static class OperatorTests
                 memory, 
                 "not", 
                 null, 
-                new BooleanVariable(false));
-            Assert.That(result, Is.EqualTo(new BooleanVariable(true)));
+                new ConstantVariable(false));
+            Assert.That(result, Is.EqualTo(new ConstantVariable(true)));
         }
 
         [Test]

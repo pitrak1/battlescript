@@ -39,7 +39,7 @@ public class BuiltInInstruction : Instruction
                 return RunRangeFunction(memory);
         }
         // TODO
-        return new NoneVariable();
+        return new ConstantVariable();
     }
 
     private Variable RunRangeFunction(Memory memory)

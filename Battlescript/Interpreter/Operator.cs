@@ -11,7 +11,7 @@ public static class Operator
     {
         // Assignment operations should return the value to be assigned. The calling function is actually responsible
         // for assigning the value to the variable
-        if (operation == "=") return right ?? new NoneVariable();
+        if (operation == "=") return right ?? new ConstantVariable();
         
         var operationWithEqualsRemoved = AssignmentOperatorToStandardOperatorMap[operation];
         return ConductOperationWithOverride(memory, operationWithEqualsRemoved, operation, left, right);
@@ -58,8 +58,8 @@ public static class Operator
         {
             throw new InterpreterInvalidOperationException(operation, left, right);
         }
-
-        return operation == "is" ? new BooleanVariable(left == right) : new BooleanVariable(left != right);
+        
+        return operation == "is" ? new ConstantVariable(left == right) : new ConstantVariable(left != right);
     }
 
     private static Variable ConductInOperation(string operation, Variable? left, Variable? right)
@@ -68,17 +68,17 @@ public static class Operator
         {
             // if both operands are strings, we search for a substring
             var isContained = rightString.Value.Contains(leftString.Value);
-            return operation == "in" ? new BooleanVariable(isContained) : new BooleanVariable(!isContained);
+            return operation == "in" ? new ConstantVariable(isContained) : new ConstantVariable(!isContained);
         } else if (right is ListVariable rightList)
         {
             // If the right operand is a list, we search for a matching element
             var found = rightList.Values.Any(x => x.Equals(left));
-            return operation == "in" ? new BooleanVariable(found) : new BooleanVariable(!found);
+            return operation == "in" ? new ConstantVariable(found) : new ConstantVariable(!found);
         } else if (right is DictionaryVariable rightDictionary)
         {
             // If the right operand is a dictionary, we search for a matching key
             var found = rightDictionary.Values.Any(x => x.Key.Equals(left));
-            return operation == "in" ? new BooleanVariable(found) : new BooleanVariable(!found);
+            return operation == "in" ? new ConstantVariable(found) : new ConstantVariable(!found);
         }
         else
         {
@@ -116,10 +116,10 @@ public static class Operator
         // and has an override, use that one.
         if (leftOverride is not null)
         {
-            return leftOverride.RunFunction(memory, [left!, right ?? new NoneVariable()]);
+            return leftOverride.RunFunction(memory, [left!, right ?? new ConstantVariable()]);
         } else if (rightOverride is not null)
         {
-            return rightOverride.RunFunction(memory, [right!, left ?? new NoneVariable()]);
+            return rightOverride.RunFunction(memory, [right!, left ?? new ConstantVariable()]);
         }
         else
         {
@@ -263,22 +263,22 @@ public static class Operator
 
     private static Variable ConductBooleanOperation(string operation, Variable? left, Variable? right)
     {
-        if (left is BooleanVariable leftBoolean && right is BooleanVariable rightBoolean)
+        if (left is ConstantVariable leftBoolean && right is ConstantVariable rightBoolean)
         {
             if (operation == "and")
             {
-                return new BooleanVariable(leftBoolean.Value && rightBoolean.Value);
+                return new ConstantVariable(Truthiness.IsTruthy(leftBoolean) && Truthiness.IsTruthy(rightBoolean));
             } else if (operation == "or")
             {
-                return new BooleanVariable(leftBoolean.Value || rightBoolean.Value);
+                return new ConstantVariable(Truthiness.IsTruthy(leftBoolean) || Truthiness.IsTruthy(rightBoolean));
             }
             else
             {
                 throw new InterpreterInvalidOperationException(operation, left, right);
             }
-        } else if (right is BooleanVariable rightBoolean2 && operation == "not")
+        } else if (right is ConstantVariable rightBoolean2 && operation == "not")
         {
-            return new BooleanVariable(!rightBoolean2.Value);
+            return new ConstantVariable(!Truthiness.IsTruthy(rightBoolean2));
         }
         else
         {
@@ -319,7 +319,7 @@ public static class Operator
             }
             else if (result is bool)
             {
-                return new BooleanVariable((bool)result);
+                return new ConstantVariable((bool)result);
             }
             else
             {
@@ -334,7 +334,7 @@ public static class Operator
             }
             else if (result is bool)
             {
-                return new BooleanVariable((bool)result);
+                return new ConstantVariable((bool)result);
             }
             else
             {

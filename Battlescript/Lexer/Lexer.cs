@@ -172,9 +172,9 @@ public class Lexer(string input)
         {
             type = Consts.TokenTypes.Keyword;
         }
-        else if (Consts.Booleans.Contains(word))
+        else if (Consts.ConstantStrings.Contains(word))
         {
-            type = Consts.TokenTypes.Boolean;
+            type = Consts.TokenTypes.Constant;
         }
         else if (Consts.Operators.Contains(word))
         {

@@ -14,7 +14,7 @@ public static class ListVariableTests
             var listVariable = new ListVariable([
                 new IntegerVariable(5),
                 new StringVariable("a"),
-                new BooleanVariable(false)
+                new ConstantVariable(false)
             ]);
             var index = new IntegerInstruction(1);
             var result = listVariable.GetItem(new Memory(), new SquareBracketsInstruction([index]));
@@ -29,14 +29,14 @@ public static class ListVariableTests
             var listVariable = new ListVariable([
                 new IntegerVariable(5),
                 new StringVariable("a"),
-                new BooleanVariable(false),
+                new ConstantVariable(false),
                 new IntegerVariable(8)
             ]);
             var index = new KeyValuePairInstruction(new IntegerInstruction(1), new IntegerInstruction(2));
             var result = listVariable.GetItem(new Memory(), new SquareBracketsInstruction([index]));
             var expected = new ListVariable([
                 new StringVariable("a"),
-                new BooleanVariable(false)
+                new ConstantVariable(false)
             ]);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -47,7 +47,7 @@ public static class ListVariableTests
             var listVariable = new ListVariable([
                 new IntegerVariable(5),
                 new StringVariable("a"),
-                new BooleanVariable(false),
+                new ConstantVariable(false),
                 new IntegerVariable(8)
             ]);
             var index = new KeyValuePairInstruction(null, new IntegerInstruction(2));
@@ -55,7 +55,7 @@ public static class ListVariableTests
             var expected = new ListVariable([
                 new IntegerVariable(5),
                 new StringVariable("a"),
-                new BooleanVariable(false)
+                new ConstantVariable(false)
             ]);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -66,14 +66,14 @@ public static class ListVariableTests
             var listVariable = new ListVariable([
                 new IntegerVariable(5),
                 new StringVariable("a"),
-                new BooleanVariable(false),
+                new ConstantVariable(false),
                 new IntegerVariable(8)
             ]);
             var index = new KeyValuePairInstruction(new IntegerInstruction(1), null);
             var result = listVariable.GetItem(new Memory(), new SquareBracketsInstruction([index]));
             var expected = new ListVariable([
                 new StringVariable("a"),
-                new BooleanVariable(false),
+                new ConstantVariable(false),
                 new IntegerVariable(8)
             ]);
             Assert.That(result, Is.EqualTo(expected));
@@ -85,7 +85,7 @@ public static class ListVariableTests
             var listVariable = new ListVariable([
                 new IntegerVariable(5),
                 new StringVariable("a"),
-                new BooleanVariable(false),
+                new ConstantVariable(false),
                 new IntegerVariable(8)
             ]);
             var index = new KeyValuePairInstruction(null, null);
@@ -93,7 +93,7 @@ public static class ListVariableTests
             var expected = new ListVariable([
                 new IntegerVariable(5),
                 new StringVariable("a"),
-                new BooleanVariable(false),
+                new ConstantVariable(false),
                 new IntegerVariable(8)
             ]);
             Assert.That(result, Is.EqualTo(expected));
@@ -106,7 +106,7 @@ public static class ListVariableTests
                 new IntegerVariable(5),
                 new StringVariable("a"),
                 new ListVariable([new IntegerVariable(6), new StringVariable("b")]),
-                new BooleanVariable(false),
+                new ConstantVariable(false),
                 new IntegerVariable(8)
             ]);
             var index1 = new IntegerInstruction(2);
@@ -123,7 +123,7 @@ public static class ListVariableTests
             var listVariable = new ListVariable([
                 new IntegerVariable(5),
                 new StringVariable("a"),
-                new BooleanVariable(false),
+                new ConstantVariable(false),
                 new IntegerVariable(8)
             ]);
             var index1 = new KeyValuePairInstruction(new IntegerInstruction(1), null);
@@ -132,7 +132,7 @@ public static class ListVariableTests
             var result = listVariable.GetItem(new Memory(), indexInstruction);
             var expected = new ListVariable([
                 new StringVariable("a"),
-                new BooleanVariable(false)
+                new ConstantVariable(false)
             ]);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -147,7 +147,7 @@ public static class ListVariableTests
             var listVariable = new ListVariable([
                 new IntegerVariable(5),
                 new StringVariable("a"),
-                new BooleanVariable(false)
+                new ConstantVariable(false)
             ]);
             var index = new IntegerInstruction(1);
             var value = new StringVariable("b");
@@ -167,7 +167,7 @@ public static class ListVariableTests
                     new IntegerVariable(6),
                     new StringVariable("b")
                 ]),
-                new BooleanVariable(false)
+                new ConstantVariable(false)
             ]);
             var index1 = new IntegerInstruction(2);
             var index2 = new IntegerInstruction(1);

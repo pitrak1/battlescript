@@ -45,7 +45,7 @@ public class IfInstruction : Instruction, IEquatable<IfInstruction>
             Next.Interpret(memory, instructionContext, objectContext, lexicalContext);
         }
 
-        return new NoneVariable();
+        return new ConstantVariable();
     }
     
     // All the code below is to override equality

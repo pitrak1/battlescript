@@ -14,7 +14,7 @@ public static partial class InstructionTests
             var lexer = new Lexer("while True:");
             var lexerResult = lexer.Run();
             
-            var expected = new WhileInstruction(new BooleanInstruction(true));
+            var expected = new WhileInstruction(new ConstantInstruction("True"));
             
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
         }

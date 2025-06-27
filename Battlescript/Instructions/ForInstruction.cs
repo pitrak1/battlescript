@@ -63,7 +63,7 @@ public class ForInstruction : Instruction, IEquatable<ForInstruction>
 
                 memory.RemoveScope();
             }
-            return new NoneVariable();
+            return new ConstantVariable();
         }
         else
         {

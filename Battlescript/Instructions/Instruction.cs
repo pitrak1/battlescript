@@ -73,7 +73,7 @@ public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Ins
                 case "(":
                     return new ParensInstruction(tokens);
                 case ".":
-                    return new SquareBracketsInstruction(tokens, isMember: true);
+                    return new SquareBracketsInstruction(tokens);
                 case "{":
                     return new DictionaryInstruction(tokens);
                 case ":":
@@ -98,9 +98,9 @@ public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Ins
         {
             return new StringInstruction(tokens);
         }
-        else if (tokens[0].Type == Consts.TokenTypes.Boolean)
+        else if (tokens[0].Type == Consts.TokenTypes.Constant)
         {
-            return new BooleanInstruction(tokens);
+            return new ConstantInstruction(tokens);
         }
         else
         {

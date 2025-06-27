@@ -84,11 +84,11 @@ public static class LexerTests
         }
 
         [Test]
-        public void HandlesBooleans()
+        public void HandlesConstants()
         {
             var lexer = new Lexer("True");
             var result = lexer.Run();
-            var expected = new List<Token>() { new Token(Consts.TokenTypes.Boolean, "True") };
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Constant, "True") };
             Assert.That(result, Is.EquivalentTo(expected));
         }
 

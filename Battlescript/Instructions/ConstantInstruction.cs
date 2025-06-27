@@ -1,17 +1,17 @@
 namespace Battlescript;
 
-public class BooleanInstruction : Instruction, IEquatable<BooleanInstruction>
+public class ConstantInstruction : Instruction, IEquatable<ConstantInstruction>
 {
-    public bool Value { get; set; }
+    public string Value { get; set; }
 
-    public BooleanInstruction(List<Token> tokens)
+    public ConstantInstruction(List<Token> tokens)
     {
-        Value = tokens[0].Value == "True";
+        Value = tokens[0].Value;
         Line = tokens[0].Line;
         Column = tokens[0].Column;
     }
 
-    public BooleanInstruction(bool value)
+    public ConstantInstruction(string value)
     {
         Value = value;
     }
@@ -22,12 +22,20 @@ public class BooleanInstruction : Instruction, IEquatable<BooleanInstruction>
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        return new BooleanVariable(Value);
+        switch (Value)
+        {
+            case "True":
+                return new ConstantVariable(true);
+            case "False":
+                return new ConstantVariable(false);
+            default:
+                return new ConstantVariable();
+        }
     }
     
     // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as BooleanInstruction);
-    public bool Equals(BooleanInstruction? instruction)
+    public override bool Equals(object obj) => Equals(obj as ConstantInstruction);
+    public bool Equals(ConstantInstruction? instruction)
     {
         if (instruction is null) return false;
         if (ReferenceEquals(this, instruction)) return true;

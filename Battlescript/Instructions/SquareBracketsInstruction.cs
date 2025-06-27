@@ -7,9 +7,9 @@ public class SquareBracketsInstruction : Instruction, IEquatable<SquareBracketsI
     public List<Instruction> Values { get; set; }
     public Instruction? Next { get; set; }
 
-    public SquareBracketsInstruction(List<Token> tokens, bool isMember = false)
+    public SquareBracketsInstruction(List<Token> tokens)
     {
-        if (isMember)
+        if (tokens[0].Value == ".")
         {
             var indexValue = new StringInstruction(new List<Token>() { tokens[1] });
             Instruction? next = null;

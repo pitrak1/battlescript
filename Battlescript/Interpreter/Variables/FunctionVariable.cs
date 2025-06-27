@@ -15,7 +15,7 @@ public class FunctionVariable(List<Instruction>? parameters, List<Instruction>? 
             
         memory.RemoveScope();
         
-        return returnValue ?? new NoneVariable();
+        return returnValue ?? new ConstantVariable();
     }
 
     public Variable RunFunction(Memory memory, List<Instruction> arguments, ObjectVariable? objectVariable = null)
@@ -28,7 +28,7 @@ public class FunctionVariable(List<Instruction>? parameters, List<Instruction>? 
             
         memory.RemoveScope();
         
-        return returnValue ?? new NoneVariable();
+        return returnValue ?? new ConstantVariable();
     }
     
     private Variable? RunInstructions(Memory memory)
@@ -45,7 +45,7 @@ public class FunctionVariable(List<Instruction>? parameters, List<Instruction>? 
             return e.Value;
         }
         
-        return new NoneVariable();
+        return new ConstantVariable();
     }
     
     // All the code below is to override equality

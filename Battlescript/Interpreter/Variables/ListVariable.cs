@@ -123,7 +123,7 @@ public class ListVariable(List<Variable>? values = null) : ReferenceVariable, IE
 
         Values.Add(arguments[0]);
 
-        return new NoneVariable();
+        return new ConstantVariable();
     }
     
     // All the code below is to override equality

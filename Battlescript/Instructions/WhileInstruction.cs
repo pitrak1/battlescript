@@ -52,7 +52,7 @@ public class WhileInstruction : Instruction, IEquatable<WhileInstruction>
             condition = Condition.Interpret(memory);
         }
 
-        return new NoneVariable();
+        return new ConstantVariable();
     }
     
     // All the code below is to override equality
