@@ -76,8 +76,6 @@ public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Ins
                     return new SquareBracketsInstruction(tokens);
                 case "{":
                     return new DictionaryInstruction(tokens);
-                case ":":
-                    return new KeyValuePairInstruction(tokens);
                 default:
                     throw new ParserUnexpectedTokenException(tokens[0]);
             }

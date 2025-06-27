@@ -94,4 +94,8 @@ TODOs before v1:
 Support for constructors
 
 
-** HIGH PRIO: parens and unary operators and overriding assignment operators not working as expected **
+
+Dev TODOs:
+- Correct KeyValuePairInstruction/Variable to be a generic array to support range indices with three arguments (ex: `i[1:2:3]`)
+    - This will probably allows SquareBracketInstruction to support its value being an Instruction as they can now generically be an array instruction
+- Create more generic argument checking solution that can support Variable or Instruction arguments and can work with Battlescript functions as well as C# builtins

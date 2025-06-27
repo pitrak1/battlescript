@@ -2,7 +2,8 @@ using Battlescript;
 
 namespace BattlescriptTests;
 
-public class DictionaryVariableTests
+[TestFixture]
+public static class DictionaryVariableTests
 {
     [TestFixture]
     public class GetItem
