@@ -181,4 +181,120 @@ public static class ListVariableTests
             Assert.That(((StringVariable)innerListVariable.Values[1]).Value, Is.EqualTo("c"));
         }
     }
+
+    [TestFixture]
+    public class Methods
+    {
+        [Test]
+        public void Append()
+        {
+            var listVariable = new ListVariable([new IntegerVariable(5), new StringVariable("a")]);
+            listVariable.Append([new ConstantVariable(true)]);
+            var expected = new ListVariable([new IntegerVariable(5), new StringVariable("a"), new ConstantVariable(true)]);
+            Assert.That(listVariable, Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void Extend()
+        {
+            var listVariable = new ListVariable([new IntegerVariable(5), new StringVariable("a")]);
+            listVariable.Extend([
+                new ListVariable([new ConstantVariable(true), new StringVariable("b")])
+            ]);
+            var expected = new ListVariable([
+                new IntegerVariable(5), 
+                new StringVariable("a"), 
+                new ConstantVariable(true),
+                new StringVariable("b")]);
+            Assert.That(listVariable, Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void InsertAtStart()
+        {
+            var listVariable = new ListVariable([new IntegerVariable(5), new StringVariable("a")]);
+            listVariable.Insert([new IntegerVariable(0), new StringVariable("b")]);
+            var expected = new ListVariable([
+                new StringVariable("b"),
+                new IntegerVariable(5), 
+                new StringVariable("a")]);
+            Assert.That(listVariable, Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void InsertAtEnd()
+        {
+            var listVariable = new ListVariable([new IntegerVariable(5), new StringVariable("a")]);
+            listVariable.Insert([new IntegerVariable(2), new StringVariable("b")]);
+            var expected = new ListVariable([
+                new IntegerVariable(5), 
+                new StringVariable("a"),
+                new StringVariable("b")]);
+            Assert.That(listVariable, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void Remove()
+        {
+            var listVariable = new ListVariable([new IntegerVariable(5), new StringVariable("a")]);
+            listVariable.Remove([new StringVariable("a")]);
+            var expected = new ListVariable([new IntegerVariable(5)]);
+            Assert.That(listVariable, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void PopInMiddle()
+        {
+            var listVariable = new ListVariable([new IntegerVariable(5), new StringVariable("a"), new StringVariable("b")]);
+            var result = listVariable.Pop([new IntegerVariable(1)]);
+            var expected = new ListVariable([new IntegerVariable(5), new StringVariable("b")]);
+            Assert.That(listVariable, Is.EqualTo(expected));
+            Assert.That(result, Is.EqualTo(new StringVariable("a")));
+        }
+        
+        [Test]
+        public void PopAtEnd()
+        {
+            var listVariable = new ListVariable([new IntegerVariable(5), new StringVariable("a"), new StringVariable("b")]);
+            var result = listVariable.Pop([]);
+            var expected = new ListVariable([new IntegerVariable(5), new StringVariable("a")]);
+            Assert.That(listVariable, Is.EqualTo(expected));
+            Assert.That(result, Is.EqualTo(new StringVariable("b")));
+        }
+        
+        [Test]
+        public void Clear()
+        {
+            var listVariable = new ListVariable([new IntegerVariable(5), new StringVariable("a"), new StringVariable("b")]);
+            listVariable.Clear([]);
+            var expected = new ListVariable();
+            Assert.That(listVariable, Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void Count()
+        {
+            var listVariable = new ListVariable([new IntegerVariable(5), new StringVariable("b"), new StringVariable("b")]);
+            var result = listVariable.Count([new StringVariable("b")]);
+            var expected = new IntegerVariable(2);
+            Assert.That(result, Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void Reverse()
+        {
+            var listVariable = new ListVariable([new IntegerVariable(5), new StringVariable("a"), new StringVariable("b")]);
+            listVariable.Reverse([]);
+            var expected = new ListVariable([new StringVariable("b"), new StringVariable("a"), new IntegerVariable(5)]);
+            Assert.That(listVariable, Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void Copy()
+        {
+            var listVariable = new ListVariable([new IntegerVariable(5), new StringVariable("a"), new StringVariable("b")]);
+            var copy = listVariable.Copy([]);
+            Assert.That(listVariable, Is.EqualTo(copy));
+        }
+    }
 }

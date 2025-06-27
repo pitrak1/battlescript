@@ -108,13 +108,29 @@ public class ListVariable(List<Variable>? values = null) : ReferenceVariable, IE
         switch (method)
         {
             case "append":
-                return Append(memory, argumentVariables);
+                return Append(argumentVariables);
+            case "extend":
+                return Extend(argumentVariables);
+            case "insert":
+                return Insert(argumentVariables);
+            case "remove":
+                return Remove(argumentVariables);
+            case "pop":
+                return Pop(argumentVariables);
+            case "clear":
+                return Clear(argumentVariables);
+            case "count":
+                return Count(argumentVariables);
+            case "reverse":
+                return Reverse(argumentVariables);
+            case "copy":
+                return Copy(argumentVariables);
             default:
                 throw new Exception("Invalid list method: " + method);
         }
     }
 
-    private Variable Append(Memory memory, List<Variable> arguments)
+    public Variable Append(List<Variable> arguments)
     {
         if (arguments.Count != 1)
         {
@@ -124,6 +140,125 @@ public class ListVariable(List<Variable>? values = null) : ReferenceVariable, IE
         Values.Add(arguments[0]);
 
         return new ConstantVariable();
+    }
+    
+    public Variable Extend(List<Variable> arguments)
+    {
+        if (arguments.Count != 1 || arguments[0] is not ListVariable)
+        {
+            throw new Exception("Expected 1 list argument for list append");
+        }
+        var newList = arguments[0] as ListVariable;
+        Values.AddRange(newList.Values);
+
+        return new ConstantVariable();
+    }
+
+    public Variable Insert(List<Variable> arguments)
+    {
+        if (arguments.Count != 2 || arguments[0] is not IntegerVariable)
+        {
+            throw new Exception("Expected 2 arguments for list append, argument 1 must be integer in range + 1");
+        }
+        
+        var i = arguments[0] as IntegerVariable;
+        if (i.Value == Values.Count)
+        {
+            Values.Add(arguments[1]);
+        } else if (i.Value < Values.Count && i.Value >= 0)
+        {
+            Values.Insert(i.Value, arguments[1]);
+        }
+        else
+        {
+            throw new Exception("Expected 2 arguments for list append, argument 1 must be integer in range + 1");
+        }
+        
+        return new ConstantVariable();
+    }
+
+    public Variable Remove(List<Variable> arguments)
+    {
+        if (arguments.Count != 1)
+        {
+            throw new Exception("Expected 1 argument for list append");
+        }
+
+        if (!Values.Contains(arguments[0]))
+        {
+            throw new Exception("Python ValueError");
+        }
+
+        Values.Remove(arguments[0]);
+        
+        return new ConstantVariable();
+    }
+
+    public Variable Pop(List<Variable> arguments)
+    {
+        if (arguments.Count == 1 && arguments[0] is IntegerVariable i)
+        {
+            if (i.Value < Values.Count && i.Value >= 0)
+            {
+                var value = Values[i.Value];
+                Values.RemoveAt(i.Value);
+                return value;
+            }
+            else
+            {
+                throw new Exception("Argument 1 must be integer in range if given");
+            }
+        } else if (arguments.Count == 0)
+        {
+            var value = Values.Last();
+            Values.RemoveAt(Values.Count - 1);
+            return value;
+        }
+        else
+        {
+            throw new Exception("Expected 1 optional argument for list pop, argument 1 must be integer in range");
+        }
+    }
+
+    public Variable Clear(List<Variable> arguments)
+    {
+        Values.Clear();
+        return new ConstantVariable();
+    }
+
+    public Variable Count(List<Variable> arguments)
+    {
+        if (arguments.Count != 1)
+        {
+            throw new Exception("Expected 1 argument for list count");
+        }
+
+        var count = 0;
+        foreach (var value in Values)
+        {
+            if (value.Equals(arguments[0]))
+            {
+                count++;
+            }
+        }
+        
+        return new IntegerVariable(count);
+    }
+    
+    public Variable Reverse(List<Variable> arguments)
+    {
+        
+        Values.Reverse();
+        
+        return new ConstantVariable();
+    }
+    
+    public Variable Copy(List<Variable> arguments)
+    {
+
+        var copyValues = new List<Variable>(Values);
+        
+        return new ListVariable(copyValues);
     }
     
     // All the code below is to override equality

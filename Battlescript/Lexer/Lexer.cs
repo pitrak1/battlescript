@@ -195,8 +195,8 @@ public class Lexer(string input)
         // Get all next characters up until the newline
         var comment = LexerUtilities.GetNextCharactersInCollection(
             input, 
-            _index, 
-            new [] { '\n' }, 
+            _index,
+            ['\n'], 
             CollectionType.Exclusive
         );
         _index += comment.Length;

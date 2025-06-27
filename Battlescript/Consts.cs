@@ -268,9 +268,9 @@ public static class Consts
         "remove",
         "pop",
         "clear",
-        "index",
+        "index", // I'm not sure how to handle index yet
         "count",
-        "sort",
+        "sort", // This is going to be  more involved too
         "reverse",
         "copy"
     ];
