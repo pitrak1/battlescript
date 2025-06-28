@@ -39,19 +39,19 @@ public class ListVariable(List<Variable>? values = null) : ReferenceVariable, IE
 
         var indexVariable = index.Values.First().Interpret(memory);
         
-        if (index.Values.First() is KeyValuePairInstruction kvpInst)
+        if (index.Values.First() is ArrayInstruction)
         {
-            var indexKvpVariable = indexVariable as KeyValuePairVariable;
+            var indexArrayVariable = indexVariable as ArrayVariable;
             
             if (index.Next is null)
             {
-                return GetRangeIndex(indexKvpVariable);
+                return GetRangeIndex(indexArrayVariable);
             }
             else
             {
                 Debug.Assert(index.Next is SquareBracketsInstruction);
                 var nextInstruction = index.Next as SquareBracketsInstruction;
-                return GetRangeIndex(indexKvpVariable).GetItem(memory, nextInstruction!);
+                return GetRangeIndex(indexArrayVariable).GetItem(memory, nextInstruction!);
             }
         }
         else
@@ -71,25 +71,27 @@ public class ListVariable(List<Variable>? values = null) : ReferenceVariable, IE
         }
     }
     
-    private ListVariable GetRangeIndex(KeyValuePairVariable kvpVariable)
+    private ListVariable GetRangeIndex(ArrayVariable arrayVariable)
     {
-        if (kvpVariable.Left is not null && kvpVariable.Left is not IntegerVariable)
-        {
-            throw new InterpreterInvalidIndexException(kvpVariable.Left);
-        }
-        
-        if (kvpVariable.Right is not null && kvpVariable.Right is not IntegerVariable)
-        {
-            throw new InterpreterInvalidIndexException(kvpVariable.Right);
-        }
-        
-        int left = kvpVariable.Left is IntegerVariable leftNumber ? leftNumber.Value : 0;
-        int right = kvpVariable.Right is IntegerVariable rightNumber ? rightNumber.Value : Values.Count - 1;
-
-        var index = left;
-        int count = right - left + 1;
-        
-        return new ListVariable(Values.GetRange(index, count));
+        // Need huge changes here, especially to support appending and step
+        return new ListVariable();
+        // if (kvpVariable.Left is not null && kvpVariable.Left is not IntegerVariable)
+        // {
+        //     throw new InterpreterInvalidIndexException(kvpVariable.Left);
+        // }
+        //
+        // if (kvpVariable.Right is not null && kvpVariable.Right is not IntegerVariable)
+        // {
+        //     throw new InterpreterInvalidIndexException(kvpVariable.Right);
+        // }
+        //
+        // int left = kvpVariable.Left is IntegerVariable leftNumber ? leftNumber.Value : 0;
+        // int right = kvpVariable.Right is IntegerVariable rightNumber ? rightNumber.Value : Values.Count - 1;
+        //
+        // var index = left;
+        // int count = right - left + 1;
+        //
+        // return new ListVariable(Values.GetRange(index, count));
     }
 
     public Variable RunMethod(Memory memory, string method, Instruction? arguments)

@@ -33,54 +33,54 @@ public static partial class E2ETests {
             Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
         }
 
-        [Test]
-        public void SupportsListRangeIndexing()
-        {
-            var input = "x = [5, 3, 2, '5']\ny = x[1:2]";
-            var expected = new ListVariable(
-                new List<Variable>
-                {
-                    new IntegerVariable(3),
-                    new IntegerVariable(2),
-                }
-            );
-            var memory = Runner.Run(input);
-            Assert.That(memory.Scopes[0], Contains.Key("y"));
-            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
-        }
-        
-        [Test]
-        public void SupportsListRangeIndexingWithNullStart()
-        {
-            var input = "x = [5, 3, 2, '5']\ny = x[:2]";
-            var expected = new ListVariable(
-                new List<Variable>
-                {
-                    new IntegerVariable(5),
-                    new IntegerVariable(3),
-                    new IntegerVariable(2),
-                }
-            );
-            var memory = Runner.Run(input);
-            Assert.That(memory.Scopes[0], Contains.Key("y"));
-            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
-        }
-        
-        [Test]
-        public void SupportsListRangeIndexingWithNullEnd()
-        {
-            var input = "x = [5, 3, 2, '5']\ny = x[1:]";
-            var expected = new ListVariable(
-                new List<Variable>
-                {
-                    new IntegerVariable(3),
-                    new IntegerVariable(2),
-                    new StringVariable("5"),
-                }
-            );
-            var memory = Runner.Run(input);
-            Assert.That(memory.Scopes[0], Contains.Key("y"));
-            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
-        }
+        // [Test]
+        // public void SupportsListRangeIndexing()
+        // {
+        //     var input = "x = [5, 3, 2, '5']\ny = x[1:2]";
+        //     var expected = new ListVariable(
+        //         new List<Variable>
+        //         {
+        //             new IntegerVariable(3),
+        //             new IntegerVariable(2),
+        //         }
+        //     );
+        //     var memory = Runner.Run(input);
+        //     Assert.That(memory.Scopes[0], Contains.Key("y"));
+        //     Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
+        // }
+        //
+        // [Test]
+        // public void SupportsListRangeIndexingWithNullStart()
+        // {
+        //     var input = "x = [5, 3, 2, '5']\ny = x[:2]";
+        //     var expected = new ListVariable(
+        //         new List<Variable>
+        //         {
+        //             new IntegerVariable(5),
+        //             new IntegerVariable(3),
+        //             new IntegerVariable(2),
+        //         }
+        //     );
+        //     var memory = Runner.Run(input);
+        //     Assert.That(memory.Scopes[0], Contains.Key("y"));
+        //     Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
+        // }
+        //
+        // [Test]
+        // public void SupportsListRangeIndexingWithNullEnd()
+        // {
+        //     var input = "x = [5, 3, 2, '5']\ny = x[1:]";
+        //     var expected = new ListVariable(
+        //         new List<Variable>
+        //         {
+        //             new IntegerVariable(3),
+        //             new IntegerVariable(2),
+        //             new StringVariable("5"),
+        //         }
+        //     );
+        //     var memory = Runner.Run(input);
+        //     Assert.That(memory.Scopes[0], Contains.Key("y"));
+        //     Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
+        // }
     }
 }

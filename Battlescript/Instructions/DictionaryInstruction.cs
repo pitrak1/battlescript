@@ -16,14 +16,17 @@ public class DictionaryInstruction : Instruction, IEquatable<DictionaryInstructi
             throw new ParserUnexpectedTokenException(tokens[results.Count]);
         }
         
-        Debug.Assert(results.Values.All(result => result is KeyValuePairInstruction));
+        Debug.Assert(results.Values.All(result => result is ArrayInstruction arr && arr.Separator == ":"));
 
         Values = new Dictionary<Instruction, Instruction>();
         foreach (var kvp in results.Values)
         {
-            if (kvp is KeyValuePairInstruction kvpInstruction)
+            if (
+                kvp is ArrayInstruction arrayInstruction && 
+                arrayInstruction.Instructions.Count == 2 &&
+                arrayInstruction.Separator == ":")
             {
-                Values.Add(kvpInstruction.Left, kvpInstruction.Right);
+                Values.Add(arrayInstruction.Instructions[0], arrayInstruction.Instructions[1]);
             }
             else
             {

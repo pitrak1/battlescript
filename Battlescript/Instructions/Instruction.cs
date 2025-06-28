@@ -13,6 +13,7 @@ public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Ins
             types: [Consts.TokenTypes.Assignment]
         );
         var colonIndex = ParserUtilities.GetTokenIndex(tokens, [":"]);
+        var commaIndex = ParserUtilities.GetTokenIndex(tokens, [","]);
         var operatorIndex = ParserUtilities.GetOperatorIndex(tokens);
         
         if (assignmentIndex != -1)
@@ -56,9 +57,9 @@ public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Ins
         {
             return new BuiltInInstruction(tokens);
         }
-        else if (colonIndex != -1)
+        else if (colonIndex != -1 || commaIndex != -1)
         {
-            return new KeyValuePairInstruction(tokens);
+            return new ArrayInstruction(tokens);
         }
         else if (operatorIndex != -1)
         {

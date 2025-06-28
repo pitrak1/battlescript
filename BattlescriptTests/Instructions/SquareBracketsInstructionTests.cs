@@ -67,10 +67,10 @@ public static partial class InstructionTests
                 name: "x",
                 next: new SquareBracketsInstruction(
                     [
-                        new KeyValuePairInstruction(
+                        new ArrayInstruction(":", [
                             new IntegerInstruction(4),
                             new IntegerInstruction(5)
-                        )
+                        ])
                     ]
                 )
             );
@@ -161,10 +161,10 @@ public static partial class InstructionTests
                 name: "x",
                 next: new SquareBracketsInstruction(
                     [
-                        new KeyValuePairInstruction(
+                        new ArrayInstruction(":", [
                             new IntegerInstruction(4),
                             new IntegerInstruction(5)
-                        )
+                        ])
                     ]
                 )
             );

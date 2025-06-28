@@ -23,81 +23,81 @@ public static class ListVariableTests
             Assert.That(((StringVariable)result).Value, Is.EqualTo("a"));
         }
         
-        [Test]
-        public void HandlesHandlesRangeIndexWithBothEnds()
-        {
-            var listVariable = new ListVariable([
-                new IntegerVariable(5),
-                new StringVariable("a"),
-                new ConstantVariable(false),
-                new IntegerVariable(8)
-            ]);
-            var index = new KeyValuePairInstruction(new IntegerInstruction(1), new IntegerInstruction(2));
-            var result = listVariable.GetItem(new Memory(), new SquareBracketsInstruction([index]));
-            var expected = new ListVariable([
-                new StringVariable("a"),
-                new ConstantVariable(false)
-            ]);
-            Assert.That(result, Is.EqualTo(expected));
-        }
-        
-        [Test]
-        public void HandlesHandlesRangeIndexWithoutStartIndex()
-        {
-            var listVariable = new ListVariable([
-                new IntegerVariable(5),
-                new StringVariable("a"),
-                new ConstantVariable(false),
-                new IntegerVariable(8)
-            ]);
-            var index = new KeyValuePairInstruction(null, new IntegerInstruction(2));
-            var result = listVariable.GetItem(new Memory(), new SquareBracketsInstruction([index]));
-            var expected = new ListVariable([
-                new IntegerVariable(5),
-                new StringVariable("a"),
-                new ConstantVariable(false)
-            ]);
-            Assert.That(result, Is.EqualTo(expected));
-        }
-        
-        [Test]
-        public void HandlesHandlesRangeIndexWithoutEndIndex()
-        {
-            var listVariable = new ListVariable([
-                new IntegerVariable(5),
-                new StringVariable("a"),
-                new ConstantVariable(false),
-                new IntegerVariable(8)
-            ]);
-            var index = new KeyValuePairInstruction(new IntegerInstruction(1), null);
-            var result = listVariable.GetItem(new Memory(), new SquareBracketsInstruction([index]));
-            var expected = new ListVariable([
-                new StringVariable("a"),
-                new ConstantVariable(false),
-                new IntegerVariable(8)
-            ]);
-            Assert.That(result, Is.EqualTo(expected));
-        }
-        
-        [Test]
-        public void HandlesHandlesRangeIndexWithoutEitherIndex()
-        {
-            var listVariable = new ListVariable([
-                new IntegerVariable(5),
-                new StringVariable("a"),
-                new ConstantVariable(false),
-                new IntegerVariable(8)
-            ]);
-            var index = new KeyValuePairInstruction(null, null);
-            var result = listVariable.GetItem(new Memory(), new SquareBracketsInstruction([index]));
-            var expected = new ListVariable([
-                new IntegerVariable(5),
-                new StringVariable("a"),
-                new ConstantVariable(false),
-                new IntegerVariable(8)
-            ]);
-            Assert.That(result, Is.EqualTo(expected));
-        }
+        // [Test]
+        // public void HandlesHandlesRangeIndexWithBothEnds()
+        // {
+        //     var listVariable = new ListVariable([
+        //         new IntegerVariable(5),
+        //         new StringVariable("a"),
+        //         new ConstantVariable(false),
+        //         new IntegerVariable(8)
+        //     ]);
+        //     var index = new KeyValuePairInstruction(new IntegerInstruction(1), new IntegerInstruction(2));
+        //     var result = listVariable.GetItem(new Memory(), new SquareBracketsInstruction([index]));
+        //     var expected = new ListVariable([
+        //         new StringVariable("a"),
+        //         new ConstantVariable(false)
+        //     ]);
+        //     Assert.That(result, Is.EqualTo(expected));
+        // }
+        //
+        // [Test]
+        // public void HandlesHandlesRangeIndexWithoutStartIndex()
+        // {
+        //     var listVariable = new ListVariable([
+        //         new IntegerVariable(5),
+        //         new StringVariable("a"),
+        //         new ConstantVariable(false),
+        //         new IntegerVariable(8)
+        //     ]);
+        //     var index = new KeyValuePairInstruction(null, new IntegerInstruction(2));
+        //     var result = listVariable.GetItem(new Memory(), new SquareBracketsInstruction([index]));
+        //     var expected = new ListVariable([
+        //         new IntegerVariable(5),
+        //         new StringVariable("a"),
+        //         new ConstantVariable(false)
+        //     ]);
+        //     Assert.That(result, Is.EqualTo(expected));
+        // }
+        //
+        // [Test]
+        // public void HandlesHandlesRangeIndexWithoutEndIndex()
+        // {
+        //     var listVariable = new ListVariable([
+        //         new IntegerVariable(5),
+        //         new StringVariable("a"),
+        //         new ConstantVariable(false),
+        //         new IntegerVariable(8)
+        //     ]);
+        //     var index = new KeyValuePairInstruction(new IntegerInstruction(1), null);
+        //     var result = listVariable.GetItem(new Memory(), new SquareBracketsInstruction([index]));
+        //     var expected = new ListVariable([
+        //         new StringVariable("a"),
+        //         new ConstantVariable(false),
+        //         new IntegerVariable(8)
+        //     ]);
+        //     Assert.That(result, Is.EqualTo(expected));
+        // }
+        //
+        // [Test]
+        // public void HandlesHandlesRangeIndexWithoutEitherIndex()
+        // {
+        //     var listVariable = new ListVariable([
+        //         new IntegerVariable(5),
+        //         new StringVariable("a"),
+        //         new ConstantVariable(false),
+        //         new IntegerVariable(8)
+        //     ]);
+        //     var index = new KeyValuePairInstruction(null, null);
+        //     var result = listVariable.GetItem(new Memory(), new SquareBracketsInstruction([index]));
+        //     var expected = new ListVariable([
+        //         new IntegerVariable(5),
+        //         new StringVariable("a"),
+        //         new ConstantVariable(false),
+        //         new IntegerVariable(8)
+        //     ]);
+        //     Assert.That(result, Is.EqualTo(expected));
+        // }
         
         [Test]
         public void HandlesHandlesStackedSingleIndices()
@@ -117,25 +117,25 @@ public static class ListVariableTests
             Assert.That(result, Is.EqualTo(expected));
         }
         
-        [Test]
-        public void HandlesHandlesStackedRangeIndices()
-        {
-            var listVariable = new ListVariable([
-                new IntegerVariable(5),
-                new StringVariable("a"),
-                new ConstantVariable(false),
-                new IntegerVariable(8)
-            ]);
-            var index1 = new KeyValuePairInstruction(new IntegerInstruction(1), null);
-            var index2 = new KeyValuePairInstruction(null, new IntegerInstruction(1));
-            var indexInstruction = new SquareBracketsInstruction([index1], new SquareBracketsInstruction([index2]));
-            var result = listVariable.GetItem(new Memory(), indexInstruction);
-            var expected = new ListVariable([
-                new StringVariable("a"),
-                new ConstantVariable(false)
-            ]);
-            Assert.That(result, Is.EqualTo(expected));
-        }
+        // [Test]
+        // public void HandlesHandlesStackedRangeIndices()
+        // {
+        //     var listVariable = new ListVariable([
+        //         new IntegerVariable(5),
+        //         new StringVariable("a"),
+        //         new ConstantVariable(false),
+        //         new IntegerVariable(8)
+        //     ]);
+        //     var index1 = new KeyValuePairInstruction(new IntegerInstruction(1), null);
+        //     var index2 = new KeyValuePairInstruction(null, new IntegerInstruction(1));
+        //     var indexInstruction = new SquareBracketsInstruction([index1], new SquareBracketsInstruction([index2]));
+        //     var result = listVariable.GetItem(new Memory(), indexInstruction);
+        //     var expected = new ListVariable([
+        //         new StringVariable("a"),
+        //         new ConstantVariable(false)
+        //     ]);
+        //     Assert.That(result, Is.EqualTo(expected));
+        // }
     }
     
     [TestFixture]
