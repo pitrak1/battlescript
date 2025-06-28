@@ -3,6 +3,7 @@ namespace Battlescript;
 public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
 {
     public string Separator { get; set; }
+    public List<Instruction?> Values { get; set; }
 
     public ArrayInstruction(List<Token> tokens)
     {
@@ -13,14 +14,14 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
         if (commaIndex != -1)
         {
             var results = ParserUtilities.ParseEntriesBetweenSeparatingCharacters(tokens, [","]);
-            Instructions = results.Values;
+            Values = results.Values;
             Separator = ",";
             Line = tokens[commaIndex].Line;
             Column = tokens[commaIndex].Column;
         } else if (colonIndex != -1)
         {
             var results = ParserUtilities.ParseEntriesBetweenSeparatingCharacters(tokens, [":"]);
-            Instructions = results.Values;
+            Values = results.Values;
             Separator = ":";
             Line = tokens[colonIndex].Line;
             Column = tokens[colonIndex].Column;
@@ -31,10 +32,10 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
         }
     }
 
-    public ArrayInstruction(string separator, List<Instruction> instructions)
+    public ArrayInstruction(string separator, List<Instruction?> values)
     {
         Separator = separator;
-        Instructions = instructions;
+        Values = values;
     }
 
     public override Variable Interpret(
@@ -43,12 +44,12 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        var values = new List<Variable>();
+        var values = new List<Variable?>();
         foreach (var instruction in Instructions)
         {
             values.Add(instruction.Interpret(memory, instructionContext, objectContext, lexicalContext));
         }
-        return new ArrayVariable(values);
+        return new ArrayVariable(Separator, values);
     }
     
     // All the code below is to override equality
@@ -64,5 +65,5 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
         return base.Equals(instruction);
     }
     
-    public override int GetHashCode() => HashCode.Combine(Separator, Instructions);
+    public override int GetHashCode() => HashCode.Combine(Separator, Values);
 }

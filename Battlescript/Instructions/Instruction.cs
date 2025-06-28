@@ -6,8 +6,13 @@ public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Ins
     public int Column { get; set; } = column;
     public List<Instruction> Instructions { get; set; } = [];
 
-    public static Instruction Parse(List<Token> tokens)
+    public static Instruction? Parse(List<Token> tokens)
     {
+        if (tokens.Count == 0)
+        {
+            return null;
+        }
+        
         var assignmentIndex = ParserUtilities.GetTokenIndex(
             tokens, 
             types: [Consts.TokenTypes.Assignment]
