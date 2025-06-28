@@ -17,12 +17,12 @@ public abstract class Variable
         string index, 
         ObjectVariable? objectContext = null)
     {
-        SetItem(memory, valueVariable, new SquareBracketsInstruction([new StringInstruction(index)]), objectContext);
+        SetItem(memory, valueVariable, new SquareBracketsInstruction(new StringInstruction(index)), objectContext);
     }
     
     public virtual void SetItem(Memory memory, Variable valueVariable, int index, ObjectVariable? objectContext = null)
     {
-        SetItem(memory, valueVariable, new SquareBracketsInstruction([new IntegerInstruction(index)]), objectContext);
+        SetItem(memory, valueVariable, new SquareBracketsInstruction(new IntegerInstruction(index)), objectContext);
     }
 
     public virtual Variable? GetItem(
@@ -35,11 +35,11 @@ public abstract class Variable
 
     public Variable? GetItem(Memory memory, string index, ObjectVariable? objectContext = null)
     {
-        return GetItem(memory, new SquareBracketsInstruction([new StringInstruction(index)]), objectContext);
+        return GetItem(memory, new SquareBracketsInstruction(new StringInstruction(index)), objectContext);
     }
     
     public Variable? GetItem(Memory memory, int index, ObjectVariable? objectContext = null)
     {
-        return GetItem(memory, new SquareBracketsInstruction([new IntegerInstruction(index)]), objectContext);
+        return GetItem(memory, new SquareBracketsInstruction(new IntegerInstruction(index)), objectContext);
     }
 }

@@ -22,7 +22,7 @@ public static class ObjectVariableTests
                 {"x", new IntegerVariable(10)}
             });
             var objectVariable = classVariable.CreateObject();
-            var index = new SquareBracketsInstruction([new StringInstruction("x")]);
+            var index = new SquareBracketsInstruction(new StringInstruction("x"));
             var result = objectVariable.GetItem(new Memory(), index);
             Assert.That(result, Is.InstanceOf<IntegerVariable>());
             Assert.That(((IntegerVariable)result).Value, Is.EqualTo(5.0));
@@ -36,7 +36,7 @@ public static class ObjectVariableTests
                 {"x", new IntegerVariable(7)},
             });
             var objectVariable = classVariable.CreateObject();
-            var index = new SquareBracketsInstruction([new StringInstruction("x")]);
+            var index = new SquareBracketsInstruction(new StringInstruction("x"));
             var result = objectVariable.GetItem(new Memory(), index);
             Assert.That(result, Is.InstanceOf<IntegerVariable>());
             Assert.That(((IntegerVariable)result).Value, Is.EqualTo(7));
@@ -56,8 +56,8 @@ public static class ObjectVariableTests
             });
             var objectVariable = classVariable.CreateObject();
             var index = new SquareBracketsInstruction(
-                [new StringInstruction("asdf")],
-                new SquareBracketsInstruction([new StringInstruction("y")]));
+                new StringInstruction("asdf"),
+                new SquareBracketsInstruction(new StringInstruction("y")));
             var result = objectVariable.GetItem(new Memory(), index);
             Assert.That(result, Is.InstanceOf<IntegerVariable>());
             Assert.That(((IntegerVariable)result).Value, Is.EqualTo(6));
@@ -135,7 +135,7 @@ public static class ObjectVariableTests
                 {"x", new IntegerVariable(7)},
             });
             var objectVariable = classVariable.CreateObject();
-            var index = new SquareBracketsInstruction([new StringInstruction("x")]);
+            var index = new SquareBracketsInstruction(new StringInstruction("x"));
             objectVariable.SetItem(new Memory(), new IntegerVariable(10), index);
             var result = objectVariable.GetItem(new Memory(), index);
             Assert.That(result, Is.InstanceOf<IntegerVariable>());
@@ -156,8 +156,8 @@ public static class ObjectVariableTests
             });
             var objectVariable = classVariable.CreateObject();
             var index = new SquareBracketsInstruction(
-                [new StringInstruction("asdf")],
-                new SquareBracketsInstruction([new StringInstruction("y")]));
+                new StringInstruction("asdf"),
+                new SquareBracketsInstruction(new StringInstruction("y")));
             objectVariable.SetItem(new Memory(), new IntegerVariable(8), index, objectVariable);
             var result = objectVariable.GetItem(new Memory(), index);
             Assert.That(result, Is.InstanceOf<IntegerVariable>());

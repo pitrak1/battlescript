@@ -16,8 +16,7 @@ public class ClassVariable (Dictionary<string, Variable>? values, List<ClassVari
     
     public override Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
-        Debug.Assert(index.Values.Count == 1);
-        var indexVariable = index.Values.First().Interpret(memory);
+        var indexVariable = index.Value.Interpret(memory);
 
         Variable? foundItem;
         if (indexVariable is StringVariable indexStringVariable && indexStringVariable.Value == "__getitem__")

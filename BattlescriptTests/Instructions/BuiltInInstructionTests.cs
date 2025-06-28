@@ -45,7 +45,7 @@ public static partial class InstructionTests
             var expected = new BuiltInInstruction(
                 name: "super",
                 parameters: [new VariableInstruction("x"), new VariableInstruction("y")],
-                next: new SquareBracketsInstruction([new StringInstruction("asdf")])
+                next: new SquareBracketsInstruction(new StringInstruction("asdf"))
             );
             
             Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));

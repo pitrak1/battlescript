@@ -4,7 +4,7 @@ namespace Battlescript;
 
 public class SquareBracketsInstruction : Instruction, IEquatable<SquareBracketsInstruction>
 {
-    public List<Instruction> Values { get; set; }
+    public Instruction? Value { get; set; }
     public Instruction? Next { get; set; }
 
     public SquareBracketsInstruction(List<Token> tokens)
@@ -20,20 +20,22 @@ public class SquareBracketsInstruction : Instruction, IEquatable<SquareBracketsI
 
             // It seems like the easiest way to handle using the period for accessing members is to treat it exactly
             // like a square bracket (i.e. x.asdf = x["asdf"]).  This may change later once I know python better :P
-            Values = new List<Instruction> { indexValue };
+            Value = indexValue;
             Next = next;
         }
         else
         {
-            var results = ParserUtilities.ParseEntriesWithinSeparator(tokens, [","]);
+            var closingSeparator = Consts.MatchingSeparatorsMap[tokens[0].Value];
+            var closingSeparatorIndex = ParserUtilities.GetTokenIndex(tokens, [closingSeparator]);
+            var tokensWithinSeparator = tokens.GetRange(1, closingSeparatorIndex - 1);
 
             Instruction? next = null;
-            if (tokens.Count > results.Count)
+            if (tokens.Count > closingSeparatorIndex + 1)
             {
-                next = Parse(tokens.GetRange(results.Count, tokens.Count - results.Count));
+                next = Parse(tokens.GetRange(closingSeparatorIndex + 1, tokens.Count - closingSeparatorIndex - 1));
             }
 
-            Values = results.Values;
+            Value = Instruction.Parse(tokensWithinSeparator);
             Next = next;
         }
         
@@ -41,9 +43,9 @@ public class SquareBracketsInstruction : Instruction, IEquatable<SquareBracketsI
         Column = tokens[0].Column;
     }
 
-    public SquareBracketsInstruction(List<Instruction> values, Instruction? next = null)
+    public SquareBracketsInstruction(Instruction value, Instruction? next = null)
     {
-        Values = values;
+        Value = value;
         Next = next;
     }
 
@@ -56,9 +58,7 @@ public class SquareBracketsInstruction : Instruction, IEquatable<SquareBracketsI
         // Dealing with an index
         if (instructionContext is not null)
         {
-            if (Values.Count > 1) throw new Exception("Too many index values");
-
-            if (Values[0] is StringInstruction stringInstruction &&
+            if (Value is StringInstruction stringInstruction &&
                 Consts.ListMethods.Contains(stringInstruction.Value) &&
                 instructionContext is ListVariable listVariable)
             {
@@ -74,10 +74,18 @@ public class SquareBracketsInstruction : Instruction, IEquatable<SquareBracketsI
         else
         {
             var values = new List<Variable>();
-            foreach (var instructionValue in Values)
+            if (Value is ArrayInstruction arrayInstruction)
             {
-                values.Add(instructionValue.Interpret(memory));
+                foreach (var instructionValue in arrayInstruction.Values)
+                {
+                    values.Add(instructionValue.Interpret(memory));
+                }
             }
+            else if (Value is not null)
+            {
+                values.Add(Value.Interpret(memory));
+            }
+            
             return new ListVariable(values);
         }
     }
@@ -90,12 +98,12 @@ public class SquareBracketsInstruction : Instruction, IEquatable<SquareBracketsI
         if (ReferenceEquals(this, instruction)) return true;
         if (GetType() != instruction.GetType()) return false;
 
-        if (!Values.SequenceEqual(instruction.Values)) return false;
+        if (!Value.Equals(instruction.Value)) return false;
         
         if (Next is not null && !Next.Equals(instruction.Next)) return false;
         
         return base.Equals(instruction);
     }
     
-    public override int GetHashCode() => HashCode.Combine(Values, Next, Instructions);
+    public override int GetHashCode() => HashCode.Combine(Value, Next, Instructions);
 }

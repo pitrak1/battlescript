@@ -231,8 +231,8 @@ public static class ParserUtilitiesTests
 
             var expected = new List<Instruction>()
             {
-                new SquareBracketsInstruction([new IntegerInstruction(1)]),
-                new SquareBracketsInstruction([new IntegerInstruction(2)])
+                new SquareBracketsInstruction(new IntegerInstruction(1)),
+                new SquareBracketsInstruction(new IntegerInstruction(2))
             };
 
             Assert.That(parsed.Values, Is.EquivalentTo(expected));

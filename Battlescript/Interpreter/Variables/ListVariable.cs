@@ -8,9 +8,8 @@ public class ListVariable(List<Variable>? values = null) : ReferenceVariable, IE
     
     public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
-        Debug.Assert(index.Values.Count == 1);
 
-        var indexVariable = index.Values.First().Interpret(memory);
+        var indexVariable = index.Value.Interpret(memory);
         Debug.Assert(indexVariable is IntegerVariable);
 
         if (indexVariable is IntegerVariable indexNumberVariable)
@@ -35,11 +34,9 @@ public class ListVariable(List<Variable>? values = null) : ReferenceVariable, IE
     
     public override Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
-        Debug.Assert(index.Values.Count == 1);
-
-        var indexVariable = index.Values.First().Interpret(memory);
+        var indexVariable = index.Value.Interpret(memory);
         
-        if (index.Values.First() is ArrayInstruction)
+        if (index.Value is ArrayInstruction)
         {
             var indexArrayVariable = indexVariable as ArrayVariable;
             
@@ -151,28 +148,8 @@ public class ListVariable(List<Variable>? values = null) : ReferenceVariable, IE
                 index += step;
             }
         }
-        
-        
-        
-        // Need huge changes here, especially to support appending and step
+
         return result;
-        // if (kvpVariable.Left is not null && kvpVariable.Left is not IntegerVariable)
-        // {
-        //     throw new InterpreterInvalidIndexException(kvpVariable.Left);
-        // }
-        //
-        // if (kvpVariable.Right is not null && kvpVariable.Right is not IntegerVariable)
-        // {
-        //     throw new InterpreterInvalidIndexException(kvpVariable.Right);
-        // }
-        //
-        // int left = kvpVariable.Left is IntegerVariable leftNumber ? leftNumber.Value : 0;
-        // int right = kvpVariable.Right is IntegerVariable rightNumber ? rightNumber.Value : Values.Count - 1;
-        //
-        // var index = left;
-        // int count = right - left + 1;
-        //
-        // return new ListVariable(Values.GetRange(index, count));
     }
 
     public Variable RunMethod(Memory memory, string method, Instruction? arguments)

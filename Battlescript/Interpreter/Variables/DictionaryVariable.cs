@@ -8,9 +8,7 @@ public class DictionaryVariable(Dictionary<Variable, Variable>? values): Referen
     
     public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
-        Debug.Assert(index.Values.Count == 1);
-
-        var indexVariable = index.Values.First().Interpret(memory);
+        var indexVariable = index.Value.Interpret(memory);
         
         if (index.Next is null)
         {
@@ -25,9 +23,7 @@ public class DictionaryVariable(Dictionary<Variable, Variable>? values): Referen
 
     public override Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
-        Debug.Assert(index.Values.Count == 1);
-
-        var indexVariable = index.Values.First().Interpret(memory);
+        var indexVariable = index.Value.Interpret(memory);
         
         if (index.Next is null)
         {

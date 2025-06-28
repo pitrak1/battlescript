@@ -217,7 +217,7 @@ public static class MemoryTests
             var memory = new Memory([scope]);
             var variableInstructionWithIndex = new VariableInstruction(
                 "x",
-                new SquareBracketsInstruction([new IntegerInstruction(1)]));
+                new SquareBracketsInstruction(new IntegerInstruction(1)));
             memory.SetVariable(variableInstructionWithIndex, new IntegerVariable(10));
             var scopes = memory.Scopes;
             
@@ -252,7 +252,7 @@ public static class MemoryTests
             var memory = new Memory([scope]);
             var variableInstructionWithIndex = new VariableInstruction(
                 "x",
-                new SquareBracketsInstruction([new IntegerInstruction(5)]));
+                new SquareBracketsInstruction(new IntegerInstruction(5)));
             memory.SetVariable(variableInstructionWithIndex, new IntegerVariable(10));
             var expected = new DictionaryVariable(new Dictionary<Variable, Variable>()
             {
@@ -279,8 +279,8 @@ public static class MemoryTests
             var variableInstructionWithIndex = new VariableInstruction(
                 "x",
                 new SquareBracketsInstruction(
-                    [new IntegerInstruction(1)], 
-                    new SquareBracketsInstruction([new IntegerInstruction(5)])));
+                    new IntegerInstruction(1), 
+                    new SquareBracketsInstruction(new IntegerInstruction(5))));
             memory.SetVariable(variableInstructionWithIndex, new IntegerVariable(10));
             var expected = new ListVariable([
                 new IntegerVariable(5),
@@ -312,7 +312,7 @@ public static class MemoryTests
             var variableInstructionWithIndex = new VariableInstruction(
                 "y",
                 new SquareBracketsInstruction(
-                    [new StringInstruction("y")]));
+                    new StringInstruction("y")));
             memory.SetVariable(variableInstructionWithIndex, new IntegerVariable(10));
             var scopes = memory.Scopes;
             

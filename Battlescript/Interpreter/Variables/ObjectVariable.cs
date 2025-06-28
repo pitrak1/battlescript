@@ -10,8 +10,7 @@ public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable
 
     public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
-        Debug.Assert(index.Values.Count == 1);
-        var indexVariable = index.Values.First().Interpret(memory);
+        var indexVariable = index.Value.Interpret(memory);
 
         var setItemOverride = GetOverride(memory, "__setitem__");
         if (setItemOverride is not null)
@@ -46,8 +45,7 @@ public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable
     
     public override Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
-        Debug.Assert(index.Values.Count == 1);
-        var indexVariable = index.Values.First().Interpret(memory);
+        var indexVariable = index.Value.Interpret(memory);
 
         var getItemOverride = GetOverride(memory, "__getitem__");
         Variable? foundItem;
@@ -63,7 +61,7 @@ public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable
             }
             else
             {
-                foundItem = ClassVariable.GetItem(memory, new SquareBracketsInstruction([new StringInstruction(stringVariable.Value)]), this);
+                foundItem = ClassVariable.GetItem(memory, new SquareBracketsInstruction(new StringInstruction(stringVariable.Value)), this);
             }
         }
         else

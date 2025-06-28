@@ -17,7 +17,7 @@ public static class DictionaryVariableTests
                 { new StringVariable("asdf"), new IntegerVariable(4) }
             });
             
-            var indexInstruction = new SquareBracketsInstruction([new StringInstruction("asdf")]);
+            var indexInstruction = new SquareBracketsInstruction(new StringInstruction("asdf"));
             var result = dictionary.GetItem(new Memory(), indexInstruction);
             Assert.That(result, Is.TypeOf<IntegerVariable>());
             Assert.That(((IntegerVariable)result).Value, Is.EqualTo(4));
@@ -39,8 +39,8 @@ public static class DictionaryVariableTests
             });
             
             var indexInstruction = new SquareBracketsInstruction(
-                [new StringInstruction("asdf")], 
-                new SquareBracketsInstruction([new StringInstruction("zxcv")]));
+                new StringInstruction("asdf"), 
+                new SquareBracketsInstruction(new StringInstruction("zxcv")));
             var result = dictionary.GetItem(new Memory(), indexInstruction);
             Assert.That(result, Is.TypeOf<IntegerVariable>());
             Assert.That(((IntegerVariable)result).Value, Is.EqualTo(5));
@@ -58,7 +58,7 @@ public static class DictionaryVariableTests
                 { new IntegerVariable(1), new IntegerVariable(2) },
                 { new StringVariable("asdf"), new IntegerVariable(4) }
             });
-            var indexInstruction = new SquareBracketsInstruction([new StringInstruction("asdf")]);
+            var indexInstruction = new SquareBracketsInstruction(new StringInstruction("asdf"));
             var valueVariable = new IntegerVariable(10);
             dictionary.SetItem(new Memory(), valueVariable, indexInstruction);
             var result = dictionary.GetItem(new Memory(), indexInstruction);
@@ -81,8 +81,8 @@ public static class DictionaryVariableTests
                 { new StringVariable("asdf"), innerDictionary }
             });
             var indexInstruction = new SquareBracketsInstruction(
-                [new StringInstruction("asdf")], 
-                new SquareBracketsInstruction([new StringInstruction("zxcv")]));
+                new StringInstruction("asdf"), 
+                new SquareBracketsInstruction(new StringInstruction("zxcv")));
             var valueVariable = new IntegerVariable(10);
             dictionary.SetItem(new Memory(), valueVariable, indexInstruction);
             var result = dictionary.GetItem(new Memory(), indexInstruction);
