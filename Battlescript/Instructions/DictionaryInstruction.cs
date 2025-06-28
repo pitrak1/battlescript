@@ -23,10 +23,10 @@ public class DictionaryInstruction : Instruction, IEquatable<DictionaryInstructi
         {
             if (
                 kvp is ArrayInstruction arrayInstruction && 
-                arrayInstruction.Instructions.Count == 2 &&
+                arrayInstruction.Values.Count == 2 &&
                 arrayInstruction.Separator == ":")
             {
-                Values.Add(arrayInstruction.Instructions[0], arrayInstruction.Instructions[1]);
+                Values.Add(arrayInstruction.Values[0], arrayInstruction.Values[1]);
             }
             else
             {
