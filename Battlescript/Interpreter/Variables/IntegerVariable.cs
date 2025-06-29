@@ -1,8 +1,14 @@
 namespace Battlescript;
 
-public class IntegerVariable(int value) : ValueVariable
+public class IntegerVariable : Variable
 {
-    public int Value { get; set; } = value;
+    public int Value { get; set; }
+
+    public IntegerVariable(int value)
+    {
+        Value = value;
+        Type = Consts.VariableTypes.Value;
+    }
     
     // All the code below is to override equality
     public override bool Equals(object obj) => Equals(obj as IntegerVariable);

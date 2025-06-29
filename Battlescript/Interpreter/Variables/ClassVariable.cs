@@ -2,10 +2,17 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class ClassVariable (Dictionary<string, Variable>? values, List<ClassVariable>? superclasses = null) : ReferenceVariable, IEquatable<ClassVariable>
+public class ClassVariable : Variable, IEquatable<ClassVariable>
 {
-    public Dictionary<string, Variable> Values { get; set; } = values ?? [];
-    public List<ClassVariable> SuperClasses { get; set; } = superclasses ?? [];
+    public Dictionary<string, Variable> Values { get; set; }
+    public List<ClassVariable> SuperClasses { get; set; }
+
+    public ClassVariable(Dictionary<string, Variable>? values, List<ClassVariable>? superclasses = null)
+    {
+        Values = values ?? [];
+        SuperClasses = superclasses ?? [];
+        Type = Consts.VariableTypes.Reference;
+    }
     
     // I don't think you can use a setitem override on properties of a class.  You shouldn't be able to set any values
     // in a class directly other than static stuff, which will need to be handled in its own way

@@ -1,9 +1,16 @@
 namespace Battlescript;
 
-public class ArrayVariable(string? separator = null, List<Variable?>? values = null) : ReferenceVariable, IEquatable<ArrayVariable>
+public class ArrayVariable : Variable, IEquatable<ArrayVariable>
 {
-    public string Separator { get; set; } = separator ?? ",";
-    public List<Variable?> Values { get; set; } = values ?? [];
+    public string Separator { get; set; }
+    public List<Variable?> Values { get; set; }
+
+    public ArrayVariable(string? separator = null, List<Variable?>? values = null)
+    {
+        Separator = separator;
+        Values = values ?? [];
+        Type = Consts.VariableTypes.Reference;
+    }
 
     // All the code below is to override equality
     public override bool Equals(object obj) => Equals(obj as ArrayVariable);

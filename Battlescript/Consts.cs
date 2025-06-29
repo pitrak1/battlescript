@@ -290,4 +290,10 @@ public static class Consts
         BuiltIn,
         Breakpoint
     }
+
+    public enum VariableTypes
+    {
+        Value,
+        Reference
+    }
 }

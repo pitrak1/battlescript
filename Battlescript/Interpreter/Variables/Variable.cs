@@ -2,6 +2,8 @@ namespace Battlescript;
 
 public abstract class Variable
 {
+    public Consts.VariableTypes Type { get; set; } = Consts.VariableTypes.Value;
+    
     public virtual bool SetItem(
         Memory memory, 
         Variable valueVariable, 

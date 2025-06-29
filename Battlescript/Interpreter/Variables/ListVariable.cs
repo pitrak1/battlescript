@@ -2,9 +2,15 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class ListVariable(List<Variable>? values = null) : ReferenceVariable, IEquatable<ListVariable>
+public class ListVariable : Variable, IEquatable<ListVariable>
 {
-    public List<Variable> Values { get; set; } = values ?? [];
+    public List<Variable> Values { get; set; }
+
+    public ListVariable(List<Variable>? values = null)
+    {
+        Values = values ?? [];
+        Type = Consts.VariableTypes.Reference;
+    }
     
     public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {

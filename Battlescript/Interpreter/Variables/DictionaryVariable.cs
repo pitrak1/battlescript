@@ -2,9 +2,15 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class DictionaryVariable(Dictionary<Variable, Variable>? values): ReferenceVariable, IEquatable<DictionaryVariable>
+public class DictionaryVariable : Variable, IEquatable<DictionaryVariable>
 { 
-    public Dictionary<Variable, Variable> Values { get; set; } = values ?? [];
+    public Dictionary<Variable, Variable> Values { get; set; }
+
+    public DictionaryVariable(Dictionary<Variable, Variable>? values)
+    {
+        Values = values ?? [];
+        Type = Consts.VariableTypes.Reference;
+    }
     
     public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {

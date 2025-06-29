@@ -1,9 +1,16 @@
 namespace Battlescript;
 
-public class FunctionVariable(List<Instruction>? parameters, List<Instruction>? instructions) : ReferenceVariable, IEquatable<FunctionVariable>
+public class FunctionVariable : Variable, IEquatable<FunctionVariable>
 {
-    public List<Instruction> Parameters { get; set; } = parameters ?? [];
-    public List<Instruction> Instructions { get; set; } = instructions ?? [];
+    public List<Instruction> Parameters { get; set; }
+    public List<Instruction> Instructions { get; set; }
+
+    public FunctionVariable(List<Instruction>? parameters, List<Instruction>? instructions)
+    {
+        Parameters = parameters ?? [];
+        Instructions = instructions ?? [];
+        Type = Consts.VariableTypes.Reference;
+    }
     
     public Variable RunFunction(Memory memory, List<Variable> arguments, ObjectVariable? objectVariable = null)
     {

@@ -1,8 +1,14 @@
 namespace Battlescript;
 
-public class FloatVariable(double value) : ValueVariable
+public class FloatVariable : Variable
 {
-    public double Value { get; set; } = value;
+    public double Value { get; set; }
+
+    public FloatVariable(double value)
+    {
+        Value = value;
+        Type = Consts.VariableTypes.Value;
+    }
     
     // All the code below is to override equality
     public override bool Equals(object obj) => Equals(obj as FloatVariable);

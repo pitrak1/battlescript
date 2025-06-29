@@ -1,8 +1,13 @@
 namespace Battlescript;
 
-public class StringVariable(string? value = null) : ValueVariable, IEquatable<StringVariable>
+public class StringVariable : Variable, IEquatable<StringVariable>
 {
-    public string Value { get; set; } = value ?? "";
+    public string Value { get; set; }
+    public StringVariable(string? value = null)
+    {
+        Value = value ?? "";
+        Type = Consts.VariableTypes.Value;
+    }
     
     // All the code below is to override equality
     public override bool Equals(object obj) => Equals(obj as StringVariable);

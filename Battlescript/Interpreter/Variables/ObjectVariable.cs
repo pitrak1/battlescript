@@ -2,20 +2,26 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable classVariable) : 
-    ReferenceVariable, IEquatable<ObjectVariable>
+public class ObjectVariable : Variable, IEquatable<ObjectVariable>
 {
-    public Dictionary<string, Variable> Values { get; set; } = values ?? [];
-    public ClassVariable Class { get; set; } = classVariable;
+    public Dictionary<string, Variable> Values { get; set; }
+    public ClassVariable Class { get; set; }
+
+    public ObjectVariable(Dictionary<string, Variable>? values, ClassVariable classVariable)
+    {
+        Values = values ?? [];
+        Class = classVariable;
+        Type = Consts.VariableTypes.Reference;
+    }
 
     public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
         var indexVariable = index.Values[0].Interpret(memory);
 
-        var setItemOverride = GetOverride(memory, "__setitem__");
-        if (setItemOverride is not null)
+        var setItemOverride = GetItem(memory, "__setitem__");
+        if (setItemOverride is FunctionVariable functionVariable)
         {
-            setItemOverride.RunFunction(memory, [this, indexVariable, valueVariable], this);
+            functionVariable.RunFunction(memory, [this, indexVariable, valueVariable], this);
             return true;
         } else if (indexVariable is StringVariable stringVariable)
         {
@@ -47,11 +53,11 @@ public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable
     {
         var indexVariable = index.Values[0].Interpret(memory);
 
-        var getItemOverride = GetOverride(memory, "__getitem__");
+        var getItemOverride = Class.GetItem(memory, "__getitem__");
         Variable? foundItem;
-        if (getItemOverride is not null)
+        if (getItemOverride is FunctionVariable functionVariable)
         {
-            foundItem = getItemOverride.RunFunction(memory, [indexVariable], this);
+            foundItem = functionVariable.RunFunction(memory, [indexVariable], this);
         }
         else if (indexVariable is StringVariable stringVariable)
         {
@@ -76,19 +82,6 @@ public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable
         else
         {
             return foundItem;
-        }
-    }
-
-    public FunctionVariable? GetOverride(Memory memory, string overrideName)
-    {
-        var result = Class.GetItem(memory, overrideName, this);
-        if (result is not null && result is not FunctionVariable)
-        {
-            throw new Exception(overrideName + "is reserved and must be a function");
-        }
-        else
-        {
-            return result as FunctionVariable;
         }
     }
     
