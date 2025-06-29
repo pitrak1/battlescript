@@ -8,10 +8,12 @@ public class ClassInstruction : Instruction, IEquatable<ClassInstruction>
     public ClassInstruction(List<Token> tokens)
     {
         List<Instruction> superClasses = [];
-        if (tokens.Count > 3)
+        
+        // class name(): would be five tokens, so if it's more than 5, we know there are superclasses
+        if (tokens.Count > 5)
         {
-            var tokensInParens = tokens.GetRange(2, tokens.Count - 3);
-            superClasses = ParserUtilities.ParseEntriesWithinSeparator(tokensInParens, [","]).Values;
+            var tokensInParens = tokens.GetRange(3, tokens.Count - 5);
+            superClasses = InstructionUtilities.ParseEntriesBetweenSeparatingCharacters(tokensInParens, [","])!;
         }
 
         Name = tokens[1].Value;

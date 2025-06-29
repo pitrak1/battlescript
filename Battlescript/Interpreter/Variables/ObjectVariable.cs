@@ -6,11 +6,11 @@ public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable
     ReferenceVariable, IEquatable<ObjectVariable>
 {
     public Dictionary<string, Variable> Values { get; set; } = values ?? [];
-    public ClassVariable ClassVariable { get; set; } = classVariable;
+    public ClassVariable Class { get; set; } = classVariable;
 
     public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
-        var indexVariable = index.Value.Interpret(memory);
+        var indexVariable = index.Values[0].Interpret(memory);
 
         var setItemOverride = GetOverride(memory, "__setitem__");
         if (setItemOverride is not null)
@@ -45,7 +45,7 @@ public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable
     
     public override Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
-        var indexVariable = index.Value.Interpret(memory);
+        var indexVariable = index.Values[0].Interpret(memory);
 
         var getItemOverride = GetOverride(memory, "__getitem__");
         Variable? foundItem;
@@ -61,7 +61,7 @@ public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable
             }
             else
             {
-                foundItem = ClassVariable.GetItem(memory, new SquareBracketsInstruction(new StringInstruction(stringVariable.Value)), this);
+                foundItem = Class.GetItem(memory, new SquareBracketsInstruction(new StringInstruction(stringVariable.Value)), this);
             }
         }
         else
@@ -81,7 +81,7 @@ public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable
 
     public FunctionVariable? GetOverride(Memory memory, string overrideName)
     {
-        var result = ClassVariable.GetItem(memory, overrideName, this);
+        var result = Class.GetItem(memory, overrideName, this);
         if (result is not null && result is not FunctionVariable)
         {
             throw new Exception(overrideName + "is reserved and must be a function");
@@ -101,8 +101,8 @@ public class ObjectVariable (Dictionary<string, Variable>? values, ClassVariable
         if (GetType() != variable.GetType()) return false;
         
         var valuesEqual = Values.OrderBy(kvp => kvp.Key).SequenceEqual(variable.Values.OrderBy(kvp => kvp.Key));
-        return valuesEqual && ClassVariable.Equals(variable.ClassVariable);
+        return valuesEqual && Class.Equals(variable.Class);
     }
     
-    public override int GetHashCode() => HashCode.Combine(Values, ClassVariable);
+    public override int GetHashCode() => HashCode.Combine(Values, Class);
 }

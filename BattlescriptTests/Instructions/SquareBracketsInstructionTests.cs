@@ -14,12 +14,7 @@ public static partial class InstructionTests
             var lexer = new Lexer("[4, 'asdf']");
             var lexerResult = lexer.Run();
             
-            var expected = new SquareBracketsInstruction(
-                new ArrayInstruction(
-                    ",",
-                    [new IntegerInstruction(4), new StringInstruction("asdf")]
-                )
-            );
+            var expected = new SquareBracketsInstruction([new IntegerInstruction(4), new StringInstruction("asdf")]);
             
             Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
@@ -32,7 +27,7 @@ public static partial class InstructionTests
             
             var expected = new VariableInstruction(
                 name: "x",
-                next: new SquareBracketsInstruction(new IntegerInstruction(4))
+                next: new SquareBracketsInstruction([new IntegerInstruction(4)])
             );
             
             var result = InstructionFactory.Create(lexerResult);
@@ -48,8 +43,8 @@ public static partial class InstructionTests
             var expected = new VariableInstruction(
                 name: "x",
                 next: new SquareBracketsInstruction(
-                    value: new IntegerInstruction(4),
-                    next: new SquareBracketsInstruction(new IntegerInstruction(5))
+                    values: [new IntegerInstruction(4)],
+                    next: new SquareBracketsInstruction([new IntegerInstruction(5)])
                 )
             );
             
@@ -64,13 +59,10 @@ public static partial class InstructionTests
             
             var expected = new VariableInstruction(
                 name: "x",
-                next: new SquareBracketsInstruction(
-                    new ArrayInstruction(":", [
+                next: new SquareBracketsInstruction([
                         new IntegerInstruction(4),
                         new IntegerInstruction(5)
-                    ])
-                )
-            );
+            ]));
             Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
         
@@ -82,9 +74,9 @@ public static partial class InstructionTests
             
             var expected = new VariableInstruction(
                 name: "asdf",
-                next: new SquareBracketsInstruction(
+                next: new SquareBracketsInstruction([
                     new StringInstruction("asdf")
-                )
+                ])
             );
             Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
@@ -97,12 +89,12 @@ public static partial class InstructionTests
             
             var expected = new VariableInstruction(
                 name: "asdf",
-                next: new SquareBracketsInstruction(
+                next: new SquareBracketsInstruction([
                     new OperationInstruction(
                         "+",
                         new IntegerInstruction(1),
                         new IntegerInstruction(2))
-                )
+                ])
             );
             Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
@@ -140,8 +132,8 @@ public static partial class InstructionTests
             var expected = new VariableInstruction(
                 name: "x",
                 next: new SquareBracketsInstruction(
-                    value: new IntegerInstruction(4),
-                    next: new SquareBracketsInstruction(new IntegerInstruction(5))
+                    values: [new IntegerInstruction(4)],
+                    next: new SquareBracketsInstruction([new IntegerInstruction(5)])
                 )
             );
             
@@ -156,11 +148,10 @@ public static partial class InstructionTests
             
             var expected = new VariableInstruction(
                 name: "x",
-                next: new SquareBracketsInstruction(
-                        new ArrayInstruction(":", [
+                next: new SquareBracketsInstruction([
                             new IntegerInstruction(4),
                             new IntegerInstruction(5)
-                        ]))
+                        ])
             );
             Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
@@ -173,7 +164,7 @@ public static partial class InstructionTests
             
             var expected = new VariableInstruction(
                 name: "asdf",
-                next: new SquareBracketsInstruction(new StringInstruction("asdf"))
+                next: new SquareBracketsInstruction([new StringInstruction("asdf")])
             );
             Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
@@ -187,10 +178,10 @@ public static partial class InstructionTests
             var expected = new VariableInstruction(
                 name: "asdf",
                 next: new SquareBracketsInstruction(
-                    new OperationInstruction(
+                    [new OperationInstruction(
                         "+",
                         new IntegerInstruction(1),
-                        new IntegerInstruction(2))
+                        new IntegerInstruction(2))]
                 )
             );
             Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));

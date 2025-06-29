@@ -6,15 +6,15 @@ public class LambdaInstruction : Instruction, IEquatable<LambdaInstruction>
 
     public LambdaInstruction(List<Token> tokens)
     {
-        var colonIndex = ParserUtilities.GetTokenIndex(tokens, [":"]);
+        var colonIndex = InstructionUtilities.GetTokenIndex(tokens, [":"]);
 
         var parametersTokens = tokens.GetRange(1, colonIndex - 1);
-        var results = ParserUtilities.ParseEntriesBetweenSeparatingCharacters(parametersTokens, [","]);
+        var parameters = InstructionUtilities.ParseEntriesBetweenSeparatingCharacters(parametersTokens, [","]);
 
         var expressionTokens = tokens.GetRange(colonIndex + 1, tokens.Count - colonIndex - 1);
         var instruction = new ReturnInstruction(InstructionFactory.Create(expressionTokens));
         
-        Parameters = results.Values;
+        Parameters = parameters!;
         Instructions = [instruction];
         Line = tokens[0].Line;
         Column = tokens[0].Column;

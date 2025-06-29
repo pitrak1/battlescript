@@ -3,7 +3,7 @@ using Battlescript;
 namespace BattlescriptTests;
 
 [TestFixture]
-public static class ParserUtilitiesTests
+public static class InstructionUtilitiesTests
 {
     [TestFixture]
     public class GetTokenIndex
@@ -13,7 +13,7 @@ public static class ParserUtilitiesTests
         {
             var lexer = new Lexer("x = 1 + 2");
             var tokens = lexer.Run();
-            var index = ParserUtilities.GetTokenIndex(tokens, null, [Consts.TokenTypes.Assignment]);
+            var index = InstructionUtilities.GetTokenIndex(tokens, null, [Consts.TokenTypes.Assignment]);
             Assert.That(index, Is.EqualTo(1));
         }
 
@@ -22,7 +22,7 @@ public static class ParserUtilitiesTests
         {
             var lexer = new Lexer("x 1 + 2");
             var tokens = lexer.Run();
-            var index = ParserUtilities.GetTokenIndex(tokens, null, [Consts.TokenTypes.Assignment]);
+            var index = InstructionUtilities.GetTokenIndex(tokens, null, [Consts.TokenTypes.Assignment]);
             Assert.That(index, Is.EqualTo(-1));
         }
         
@@ -31,7 +31,7 @@ public static class ParserUtilitiesTests
         {
             var lexer = new Lexer("x = 1 + 2");
             var tokens = lexer.Run();
-            var index = ParserUtilities.GetTokenIndex(tokens, ["+"]);
+            var index = InstructionUtilities.GetTokenIndex(tokens, ["+"]);
             Assert.That(index, Is.EqualTo(3));
         }
 
@@ -40,7 +40,7 @@ public static class ParserUtilitiesTests
         {
             var lexer = new Lexer("x = 1 2");
             var tokens = lexer.Run();
-            var index = ParserUtilities.GetTokenIndex(tokens, ["+"]);
+            var index = InstructionUtilities.GetTokenIndex(tokens, ["+"]);
             Assert.That(index, Is.EqualTo(-1));
         }
 
@@ -49,7 +49,7 @@ public static class ParserUtilitiesTests
         {
             var lexer = new Lexer("x = [4 + 5]");
             var tokens = lexer.Run();
-            var index = ParserUtilities.GetTokenIndex(tokens, ["+"]);
+            var index = InstructionUtilities.GetTokenIndex(tokens, ["+"]);
             Assert.That(index, Is.EqualTo(-1));
         }
         
@@ -58,7 +58,7 @@ public static class ParserUtilitiesTests
         {
             var lexer = new Lexer("x = [4 + 5]");
             var tokens = lexer.Run();
-            var index = ParserUtilities.GetTokenIndex(tokens, ["["]);
+            var index = InstructionUtilities.GetTokenIndex(tokens, ["["]);
             Assert.That(index, Is.EqualTo(2));
         }
 
@@ -67,7 +67,7 @@ public static class ParserUtilitiesTests
         {
             var lexer = new Lexer("x = [4 + 5]");
             var tokens = lexer.Run();
-            var index = ParserUtilities.GetTokenIndex(tokens, ["]"]);
+            var index = InstructionUtilities.GetTokenIndex(tokens, ["]"]);
             Assert.That(index, Is.EqualTo(6));
         }
     }
@@ -80,7 +80,7 @@ public static class ParserUtilitiesTests
         {
             Lexer lexer = new Lexer("x = 1 + 2");
             var tokens = lexer.Run();
-            int index = ParserUtilities.GetOperatorIndex(tokens);
+            int index = InstructionUtilities.GetOperatorIndex(tokens);
             Assert.That(index, Is.EqualTo(3));
         }
 
@@ -89,7 +89,7 @@ public static class ParserUtilitiesTests
         {
             Lexer lexer = new Lexer("x = 1 + 2 + 3");
             var tokens = lexer.Run();
-            int index = ParserUtilities.GetOperatorIndex(tokens);
+            int index = InstructionUtilities.GetOperatorIndex(tokens);
             Assert.That(index, Is.EqualTo(5));
         }
 
@@ -98,7 +98,7 @@ public static class ParserUtilitiesTests
         {
             Lexer lexer = new Lexer("x = 1 + 2 * 3");
             var tokens = lexer.Run();
-            int index = ParserUtilities.GetOperatorIndex(tokens);
+            int index = InstructionUtilities.GetOperatorIndex(tokens);
             Assert.That(index, Is.EqualTo(3));
         }
 
@@ -107,7 +107,7 @@ public static class ParserUtilitiesTests
         {
             Lexer lexer = new Lexer("var x = 1 + x[1 + 2]");
             var tokens = lexer.Run();
-            int index = ParserUtilities.GetOperatorIndex(tokens);
+            int index = InstructionUtilities.GetOperatorIndex(tokens);
             Assert.That(index, Is.EqualTo(4));
         }
 
@@ -116,7 +116,7 @@ public static class ParserUtilitiesTests
         {
             Lexer lexer = new Lexer("x = 12");
             var tokens = lexer.Run();
-            int index = ParserUtilities.GetOperatorIndex(tokens);
+            int index = InstructionUtilities.GetOperatorIndex(tokens);
             Assert.That(index, Is.EqualTo(-1));
         }
     }
@@ -127,7 +127,7 @@ public static class ParserUtilitiesTests
         [Test]
         public void HandlesNoTokens()
         {
-            var result = ParserUtilities.ParseLeftAndRightAroundIndex([], 0);
+            var result = InstructionUtilities.ParseLeftAndRightAroundIndex([], 0);
             Assert.That(result.Left, Is.Null);
             Assert.That(result.Right, Is.Null);
         }
@@ -137,7 +137,7 @@ public static class ParserUtilitiesTests
         {
             var lexer = new Lexer("x = 5 + 6");
             var lexerResult = lexer.Run();
-            var result = ParserUtilities.ParseLeftAndRightAroundIndex(lexerResult, 0);
+            var result = InstructionUtilities.ParseLeftAndRightAroundIndex(lexerResult, 0);
             Assert.That(result.Left, Is.Null);
         }
         
@@ -146,7 +146,7 @@ public static class ParserUtilitiesTests
         {
             var lexer = new Lexer("x = 5 + 6");
             var lexerResult = lexer.Run();
-            var result = ParserUtilities.ParseLeftAndRightAroundIndex(lexerResult, lexerResult.Count - 1);
+            var result = InstructionUtilities.ParseLeftAndRightAroundIndex(lexerResult, lexerResult.Count - 1);
             Assert.That(result.Right, Is.Null);
         }
         
@@ -155,7 +155,7 @@ public static class ParserUtilitiesTests
         {
             var lexer = new Lexer("x = 5");
             var lexerResult = lexer.Run();
-            var result = ParserUtilities.ParseLeftAndRightAroundIndex(lexerResult, 1);
+            var result = InstructionUtilities.ParseLeftAndRightAroundIndex(lexerResult, 1);
             Assert.That(result.Left, Is.TypeOf<VariableInstruction>());
             Assert.That(result.Right, Is.TypeOf<IntegerInstruction>());
         }
@@ -168,74 +168,53 @@ public static class ParserUtilitiesTests
         public void NoTokens()
         {
             var parsed = 
-                ParserUtilities.ParseEntriesWithinSeparator([], []);
+                InstructionUtilities.ParseEntriesBetweenSeparatingCharacters([], []);
 
             Assert.That(parsed.Count, Is.EqualTo(0));
-            Assert.That(parsed.Values.Count, Is.EqualTo(0));
         }
-
-        [Test]
-        public void NoValues()
-        {
-            var lexer = new Lexer("[]");
-            var tokens = lexer.Run();
-            var parsed =
-                ParserUtilities.ParseEntriesWithinSeparator(tokens, []);
-            
-            Assert.That(parsed.Count, Is.EqualTo(2));
-            Assert.That(parsed.Values.Count, Is.EqualTo(0));
-        }
-
+        
         [Test]
         public void NoSeparatingCharacters()
         {
-            var lexer = new Lexer("[1]");
+            var lexer = new Lexer("1");
             var tokens = lexer.Run();
             var parsed =
-                ParserUtilities.ParseEntriesWithinSeparator(tokens, []);
-
-            Assert.That(parsed.Count, Is.EqualTo(3));
-
-            Assert.That(parsed.Values.Count, Is.EqualTo(1));
-
+                InstructionUtilities.ParseEntriesBetweenSeparatingCharacters(tokens, []);
             var expected = new IntegerInstruction(1);
-            Assert.That(parsed.Values[0], Is.EqualTo(expected));
+            Assert.That(parsed[0], Is.EqualTo(expected));
         }
 
         [Test]
         public void WithSeparatingCharacters()
         {
-            var lexer = new Lexer("[1, 2]");
+            var lexer = new Lexer("1, 2");
             var tokens = lexer.Run();
             var parsed =
-                ParserUtilities.ParseEntriesWithinSeparator(tokens, [","]);
-            Assert.That(parsed.Count, Is.EqualTo(5));
+                InstructionUtilities.ParseEntriesBetweenSeparatingCharacters(tokens, [","]);
 
             var expected = new List<Instruction>()
             {
                 new IntegerInstruction(1),
                 new IntegerInstruction(2)
             };
-            Assert.That(parsed.Values, Is.EquivalentTo(expected));
+            Assert.That(parsed, Is.EquivalentTo(expected));
         }
 
         [Test]
         public void RespectsInnerSeparators()
         {
-            var lexer = new Lexer("[[1], [2]]");
+            var lexer = new Lexer("[1, 2], [2]");
             var tokens = lexer.Run();
             var parsed =
-                ParserUtilities.ParseEntriesWithinSeparator(tokens, [","]);
-
-            Assert.That(parsed.Count, Is.EqualTo(9));
-
+                InstructionUtilities.ParseEntriesBetweenSeparatingCharacters(tokens, [","]);
+            
             var expected = new List<Instruction>()
             {
-                new SquareBracketsInstruction(new IntegerInstruction(1)),
+                new SquareBracketsInstruction([new IntegerInstruction(1), new IntegerInstruction(2)]),
                 new SquareBracketsInstruction(new IntegerInstruction(2))
             };
 
-            Assert.That(parsed.Values, Is.EquivalentTo(expected));
+            Assert.That(parsed, Is.EquivalentTo(expected));
         }
     }
 }

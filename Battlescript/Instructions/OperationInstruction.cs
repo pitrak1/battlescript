@@ -8,9 +8,9 @@ public class OperationInstruction : Instruction, IEquatable<OperationInstruction
 
     public OperationInstruction(List<Token> tokens)
     {
-        var operatorIndex = ParserUtilities.GetOperatorIndex(tokens);
+        var operatorIndex = InstructionUtilities.GetOperatorIndex(tokens);
         var operatorToken = tokens[operatorIndex];
-        var result = ParserUtilities.ParseLeftAndRightAroundIndex(tokens, operatorIndex);
+        var result = InstructionUtilities.ParseLeftAndRightAroundIndex(tokens, operatorIndex);
 
         Operation = operatorToken.Value;
         Left = result.Left;
@@ -18,14 +18,14 @@ public class OperationInstruction : Instruction, IEquatable<OperationInstruction
         Line = operatorToken.Line;
         Column = operatorToken.Column;
                 
-        if (result.Left is ParensInstruction left)
+        if (result.Left is ParenthesesInstruction left)
         {
-            Left = left.Instructions[0];
+            Left = left.Values[0];
         }
 
-        if (result.Right is ParensInstruction right)
+        if (result.Right is ParenthesesInstruction right)
         {
-            Right = right.Instructions[0];
+            Right = right.Values[0];
         }
     }
 

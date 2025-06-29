@@ -3,7 +3,6 @@ namespace Battlescript;
 public class IfInstruction : Instruction, IEquatable<IfInstruction>
 {
     public Instruction Condition { get; set; }
-    public Instruction? Next { get; set; }
 
     public IfInstruction(List<Token> tokens)
     {

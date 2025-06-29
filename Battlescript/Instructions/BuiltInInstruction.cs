@@ -5,15 +5,20 @@ public class BuiltInInstruction : Instruction
     public string Name { get; set; } 
     public List<Instruction> Parameters { get; set; }
     
-    public Instruction? Next { get; set; }
-    
     public BuiltInInstruction(List<Token> tokens)
     {
-        var tokensAfterBuiltinName = tokens.GetRange(1, tokens.Count - 1);
-        var results = ParserUtilities.ParseEntriesWithinSeparator(tokensAfterBuiltinName, [","]);
-        Next = tokensAfterBuiltinName.Count > results.Count  ? InstructionFactory.Create(tokens.Slice(results.Count + 1, tokens.Count - results.Count - 1)) : null;
+        var endOfArgumentsIndex = InstructionUtilities.GetTokenIndex(tokens, [")"]);
+        var argumentTokens = tokens.GetRange(2, endOfArgumentsIndex - 2);
+        
+        
+        Parameters = InstructionUtilities.ParseEntriesBetweenSeparatingCharacters(argumentTokens, [","])!;
+
+        if (tokens.Count > endOfArgumentsIndex + 1)
+        {
+            Next = InstructionFactory.Create(tokens.GetRange(endOfArgumentsIndex + 1, tokens.Count - endOfArgumentsIndex - 1));
+        }
+
         Name = tokens[0].Value;
-        Parameters = results.Values;
         Line = tokens[0].Line;
         Column = tokens[0].Column;
     }

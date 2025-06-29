@@ -6,7 +6,7 @@ namespace BattlescriptTests;
 public static partial class InstructionTests
 {
     [TestFixture]
-    public class ParensInstructionParse
+    public class ParenthesesInstructionParse
     {
         [Test]
         public void HandlesSimpleValueLists()
@@ -14,7 +14,7 @@ public static partial class InstructionTests
             var lexer = new Lexer("(4, 'asdf')");
             var lexerResult = lexer.Run();
             
-            var expected = new ParensInstruction(
+            var expected = new ParenthesesInstruction(
                 [
                     new IntegerInstruction(4),
                     new StringInstruction("asdf")
@@ -26,7 +26,7 @@ public static partial class InstructionTests
     }
     
     [TestFixture]
-    public class ParensInstructionInterpret
+    public class ParenthesesInstructionInterpret
     {
         [Test]
         public void HandlesFunctionCalls()

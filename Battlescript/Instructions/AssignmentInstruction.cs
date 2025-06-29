@@ -8,12 +8,12 @@ public class AssignmentInstruction : Instruction, IEquatable<AssignmentInstructi
 
     public AssignmentInstruction(List<Token> tokens)
     {
-        var assignmentIndex = ParserUtilities.GetTokenIndex(
+        var assignmentIndex = InstructionUtilities.GetTokenIndex(
             tokens, 
             types: [Consts.TokenTypes.Assignment]
         );
         var assignmentToken = tokens[assignmentIndex];
-        var operands = ParserUtilities.ParseLeftAndRightAroundIndex(tokens, assignmentIndex);
+        var operands = InstructionUtilities.ParseLeftAndRightAroundIndex(tokens, assignmentIndex);
         
         Operation = assignmentToken.Value;
         Left = operands.Left;

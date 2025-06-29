@@ -33,11 +33,11 @@ public class FunctionInstruction : Instruction, IEquatable<FunctionInstruction>
         //     ThrowErrorForToken("Expected ) for function definition", tokens[^2]);
         // }
 
-        var tokensInParens = tokens.GetRange(2, tokens.Count - 2);
-        var results = ParserUtilities.ParseEntriesWithinSeparator(tokensInParens, [","]);
+        var tokensInParens = tokens.GetRange(3, tokens.Count - 5);
+        var parameters = InstructionUtilities.ParseEntriesBetweenSeparatingCharacters(tokensInParens, [","]);
 
         var inDefaultArguments = false;
-        foreach (var parameter in results.Values)
+        foreach (var parameter in parameters)
         {
             if (parameter is AssignmentInstruction)
             {
@@ -49,7 +49,7 @@ public class FunctionInstruction : Instruction, IEquatable<FunctionInstruction>
         }
         
         Name = tokens[1].Value;
-        Parameters = results.Values;
+        Parameters = parameters!;
         Line = tokens[0].Line;
         Column = tokens[0].Column;
     }

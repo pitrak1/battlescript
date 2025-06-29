@@ -3,7 +3,6 @@ namespace Battlescript;
 public class VariableInstruction : Instruction, IEquatable<VariableInstruction>
 {
     public string Name { get; set; } 
-    public Instruction? Next { get; set; }
 
     public VariableInstruction(List<Token> tokens)
     {

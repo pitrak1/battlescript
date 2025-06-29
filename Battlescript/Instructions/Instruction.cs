@@ -5,6 +5,8 @@ public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Ins
     public int Line { get; set; } = line;
     public int Column { get; set; } = column;
     public List<Instruction> Instructions { get; set; } = [];
+    
+    public Instruction? Next { get; set; }
 
     // These three context are used for three distinct things:
     // - instructionContext is used for ongoing interpretations of a single instruction, i.e. a parens instruction

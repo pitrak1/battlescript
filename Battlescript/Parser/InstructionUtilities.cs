@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public static class ParserUtilities
+public static class InstructionUtilities
 {
     public static int GetTokenIndex(
         List<Token> tokens, 
@@ -133,98 +133,69 @@ public static class ParserUtilities
         return (left, right);
     }
     
-    public static (int Count, List<Instruction> Values) ParseEntriesWithinSeparator(
+    public static List<Instruction?> ParseEntriesBetweenSeparatingCharacters(
         List<Token> tokens, 
         List<string> separators
     )
     {
         // Early return for no tokens present
-        if (tokens.Count == 0) return (0, []);
-        
-        var closingSeparator = Consts.MatchingSeparatorsMap[tokens[0].Value];
-        var closingSeparatorIndex = GetTokenIndex(tokens, [closingSeparator]);
-        var tokensWithinSeparator = tokens.GetRange(1, closingSeparatorIndex - 1);
-        var results = GroupTokensWithSeparators(tokensWithinSeparator, separators);
-        
-        List<Instruction> values = [];
-        foreach (var entry in results.Entries)
-        {
-            if (entry.Count > 0)
-            {
-                values.Add(InstructionFactory.Create(entry));
-            }
-        }
-
-        return (results.Count + 2, values);
-    }
-    
-    public static (int Count, List<Instruction> Values) ParseEntriesBetweenSeparatingCharacters(
-        List<Token> tokens, 
-        List<string> separators
-    )
-    {
-        // Early return for no tokens present
-        if (tokens.Count == 0) return (0, []);
+        if (tokens.Count == 0) return [];
         
         var results = GroupTokensWithSeparators(tokens, separators);
         
-        List<Instruction> values = [];
-        foreach (var entry in results.Entries)
+        List<Instruction?> values = [];
+        foreach (var entry in results)
         {
             values.Add(InstructionFactory.Create(entry));
         }
 
-        return (results.Count, values);
+        return values;
     }
     
-    private static (int Count, List<List<Token>> Entries) GroupTokensWithSeparators(
+    private static List<List<Token>> GroupTokensWithSeparators(
         List<Token> tokens, 
         List<string> separatingCharacters)
     {
         List<string> separatorStack = [];
         List<List<Token>> entries = [];
         List<Token> currentTokenSet = [];
-        var totalTokenCount = 0;
 
-        while (totalTokenCount < tokens.Count)
+
+        foreach (var token in tokens)
         {
-            var currentToken = tokens[totalTokenCount];
-            
-            if (Consts.OpeningSeparators.Contains(currentToken.Value))
+            if (Consts.OpeningSeparators.Contains(token.Value))
             {
-                separatorStack.Add(currentToken.Value);
-                currentTokenSet.Add(currentToken);
+                separatorStack.Add(token.Value);
+                currentTokenSet.Add(token);
             }
-            else if (Consts.ClosingSeparators.Contains(currentToken.Value))
+            else if (Consts.ClosingSeparators.Contains(token.Value))
             {
-                if (DoesTokenMatchSeparator(currentToken, separatorStack[^1]))
+                if (DoesTokenMatchSeparator(token, separatorStack[^1]))
                 {
                     separatorStack.RemoveAt(separatorStack.Count - 1);
-                    currentTokenSet.Add(currentToken);
+                    currentTokenSet.Add(token);
                 }
                 else
                 {
-                    throw new ParserUnexpectedClosingSeparatorException(currentToken);
+                    throw new ParserUnexpectedClosingSeparatorException(token);
                 }
             }
-            else if (separatorStack.Count == 0 && separatingCharacters.Contains(currentToken.Value))
+            else if (separatorStack.Count == 0 && separatingCharacters.Contains(token.Value))
             {
                 entries.Add(currentTokenSet);
                 currentTokenSet = [];
             }
             else
             {
-                currentTokenSet.Add(currentToken);
+                currentTokenSet.Add(token);
             }
-            
-            totalTokenCount++;
         }
         
         entries.Add(currentTokenSet);
 
         if (separatorStack.Count == 0)
         {
-            return (totalTokenCount, entries);
+            return entries;
         }
         else
         {

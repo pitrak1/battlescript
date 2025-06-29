@@ -9,7 +9,7 @@ public class ListVariable(List<Variable>? values = null) : ReferenceVariable, IE
     public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
 
-        var indexVariable = index.Value.Interpret(memory);
+        var indexVariable = index.Values[0].Interpret(memory);
         Debug.Assert(indexVariable is IntegerVariable);
 
         if (indexVariable is IntegerVariable indexNumberVariable)
@@ -34,9 +34,9 @@ public class ListVariable(List<Variable>? values = null) : ReferenceVariable, IE
     
     public override Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
     {
-        var indexVariable = index.Value.Interpret(memory);
+        var indexVariable = index.Values[0].Interpret(memory);
         
-        if (index.Value is ArrayInstruction)
+        if (index is CommaSeparatedArrayInstruction)
         {
             var indexArrayVariable = indexVariable as ArrayVariable;
             
@@ -154,13 +154,13 @@ public class ListVariable(List<Variable>? values = null) : ReferenceVariable, IE
 
     public Variable RunMethod(Memory memory, string method, Instruction? arguments)
     {
-        if (arguments is not ParensInstruction parens)
+        if (arguments is not ParenthesesInstruction parens)
         {
             throw new Exception("must use parens to call list method, fix this later");
         }
 
         List<Variable> argumentVariables = [];
-        foreach (var arg in parens.Instructions)
+        foreach (var arg in parens.Values)
         {
             argumentVariables.Add(arg.Interpret(memory));
         }

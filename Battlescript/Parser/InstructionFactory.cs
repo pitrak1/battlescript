@@ -9,13 +9,13 @@ public static class InstructionFactory
             return null;
         }
         
-        var assignmentIndex = ParserUtilities.GetTokenIndex(
+        var assignmentIndex = InstructionUtilities.GetTokenIndex(
             tokens, 
             types: [Consts.TokenTypes.Assignment]
         );
-        var colonIndex = ParserUtilities.GetTokenIndex(tokens, [":"]);
-        var commaIndex = ParserUtilities.GetTokenIndex(tokens, [","]);
-        var operatorIndex = ParserUtilities.GetOperatorIndex(tokens);
+        var colonIndex = InstructionUtilities.GetTokenIndex(tokens, [":"]);
+        var commaIndex = InstructionUtilities.GetTokenIndex(tokens, [","]);
+        var operatorIndex = InstructionUtilities.GetOperatorIndex(tokens);
         
         if (assignmentIndex != -1)
         {
@@ -58,9 +58,12 @@ public static class InstructionFactory
         {
             return new BuiltInInstruction(tokens);
         }
-        else if (colonIndex != -1 || commaIndex != -1)
+        else if (commaIndex != -1)
         {
-            return new ArrayInstruction(tokens);
+            return new CommaSeparatedArrayInstruction(tokens);
+        } else if (colonIndex != -1)
+        {
+            return new ColonSeparatedArrayInstruction(tokens);
         }
         else if (operatorIndex != -1)
         {
@@ -73,11 +76,11 @@ public static class InstructionFactory
                 case "[":
                     return new SquareBracketsInstruction(tokens);
                 case "(":
-                    return new ParensInstruction(tokens);
+                    return new ParenthesesInstruction(tokens);
                 case ".":
                     return new SquareBracketsInstruction(tokens);
                 case "{":
-                    return new DictionaryInstruction(tokens);
+                    return new CurlyBracesInstruction(tokens);
                 default:
                     throw new ParserUnexpectedTokenException(tokens[0]);
             }

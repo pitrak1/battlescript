@@ -14,12 +14,10 @@ public static partial class InstructionTests
             var lexer = new Lexer("{4: 5, 6: 'asdf'}");
             var lexerResult = lexer.Run();
 
-            var expected = new DictionaryInstruction(new Dictionary<Instruction, Instruction>()
-            {
-                { new IntegerInstruction(4), new IntegerInstruction(5) },
-                { new IntegerInstruction(6), new StringInstruction("asdf") },
-            });
-            var result = InstructionFactory.Create(lexerResult);
+            var expected = new CurlyBracesInstruction([
+                new ColonSeparatedArrayInstruction([new IntegerInstruction(4), new IntegerInstruction(5)]),
+                new ColonSeparatedArrayInstruction([new IntegerInstruction(6), new StringInstruction("asdf")]),
+            ]);
             
             Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
@@ -29,12 +27,11 @@ public static partial class InstructionTests
         {
             var lexer = new Lexer("{'asdf': 5, 'qwer': 'asdf'}");
             var lexerResult = lexer.Run();
-            
-            var expected = new DictionaryInstruction(new Dictionary<Instruction, Instruction>()
-            {
-                { new StringInstruction("asdf"), new IntegerInstruction(5) },
-                { new StringInstruction("qwer"), new StringInstruction("asdf") },
-            });
+
+            var expected = new CurlyBracesInstruction([
+                new ColonSeparatedArrayInstruction([new StringInstruction("asdf"), new IntegerInstruction(5)]),
+                new ColonSeparatedArrayInstruction([new StringInstruction("qwer"), new StringInstruction("asdf")]),
+            ]);
             
             Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
