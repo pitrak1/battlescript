@@ -36,7 +36,7 @@ public static class InstructionFactory
                 case "class":
                     return new ClassInstruction(tokens);
                 case "None":
-                    return new NoneInstruction();
+                    return new ConstantInstruction("None");
                 case "for":
                     return new ForInstruction(tokens);
                 case "else":
@@ -45,7 +45,7 @@ public static class InstructionFactory
                 case "break":
                     return new BreakInstruction();
                 case "pass":
-                    return new NoneInstruction();
+                    return new ConstantInstruction("None");
                 case "continue":
                     return new ContinueInstruction();
                 case "lambda":
