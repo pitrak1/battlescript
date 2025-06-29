@@ -15,7 +15,7 @@ public class SquareBracketsInstruction : Instruction, IEquatable<SquareBracketsI
             Instruction? next = null;
             if (tokens.Count > 2)
             {
-                next = Parse(tokens.GetRange(2, tokens.Count - 2));
+                next = InstructionFactory.Create(tokens.GetRange(2, tokens.Count - 2));
             }
 
             // It seems like the easiest way to handle using the period for accessing members is to treat it exactly
@@ -32,10 +32,10 @@ public class SquareBracketsInstruction : Instruction, IEquatable<SquareBracketsI
             Instruction? next = null;
             if (tokens.Count > closingSeparatorIndex + 1)
             {
-                next = Parse(tokens.GetRange(closingSeparatorIndex + 1, tokens.Count - closingSeparatorIndex - 1));
+                next = InstructionFactory.Create(tokens.GetRange(closingSeparatorIndex + 1, tokens.Count - closingSeparatorIndex - 1));
             }
 
-            Value = Instruction.Parse(tokensWithinSeparator);
+            Value = InstructionFactory.Create(tokensWithinSeparator);
             Next = next;
         }
         

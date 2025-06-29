@@ -125,9 +125,9 @@ public static class ParserUtilities
     
     public static (Instruction? Left, Instruction? Right) ParseLeftAndRightAroundIndex(List<Token> tokens, int index)
     {
-        var left = index > 0 ? Instruction.Parse(tokens.GetRange(0, index)) : null;
+        var left = index > 0 ? InstructionFactory.Create(tokens.GetRange(0, index)) : null;
         var right = index < tokens.Count - 1 ? 
-            Instruction.Parse(tokens.GetRange(index + 1, tokens.Count - index - 1)) : 
+            InstructionFactory.Create(tokens.GetRange(index + 1, tokens.Count - index - 1)) : 
             null;
 
         return (left, right);
@@ -151,7 +151,7 @@ public static class ParserUtilities
         {
             if (entry.Count > 0)
             {
-                values.Add(Instruction.Parse(entry));
+                values.Add(InstructionFactory.Create(entry));
             }
         }
 
@@ -171,7 +171,7 @@ public static class ParserUtilities
         List<Instruction> values = [];
         foreach (var entry in results.Entries)
         {
-            values.Add(Instruction.Parse(entry));
+            values.Add(InstructionFactory.Create(entry));
         }
 
         return (results.Count, values);

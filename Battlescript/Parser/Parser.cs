@@ -65,7 +65,7 @@ public class Parser
         if (_currentTokens.Count != 0)
         {
             // Parse the current tokens, add to the current scope, and reset list of current tokens for next instruction
-            var instruction = Instruction.Parse(_currentTokens);
+            var instruction = InstructionFactory.Create(_currentTokens);
             _scopes[^1].Add(instruction);
             _currentTokens.Clear();
         }

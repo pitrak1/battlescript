@@ -11,7 +11,7 @@ public class BuiltInInstruction : Instruction
     {
         var tokensAfterBuiltinName = tokens.GetRange(1, tokens.Count - 1);
         var results = ParserUtilities.ParseEntriesWithinSeparator(tokensAfterBuiltinName, [","]);
-        Next = tokensAfterBuiltinName.Count > results.Count  ? Parse(tokens.Slice(results.Count + 1, tokens.Count - results.Count - 1)) : null;
+        Next = tokensAfterBuiltinName.Count > results.Count  ? InstructionFactory.Create(tokens.Slice(results.Count + 1, tokens.Count - results.Count - 1)) : null;
         Name = tokens[0].Value;
         Parameters = results.Values;
         Line = tokens[0].Line;

@@ -20,7 +20,7 @@ public static partial class InstructionTests
                 right: new IntegerInstruction(6)
             );
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
@@ -35,7 +35,7 @@ public static partial class InstructionTests
                 right: new OperationInstruction("+", new IntegerInstruction(5), new IntegerInstruction(6))
             );
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
     }
     

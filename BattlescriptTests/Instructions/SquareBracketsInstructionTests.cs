@@ -21,7 +21,7 @@ public static partial class InstructionTests
                 )
             );
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
@@ -35,8 +35,8 @@ public static partial class InstructionTests
                 next: new SquareBracketsInstruction(new IntegerInstruction(4))
             );
             
-            var result = Instruction.Parse(lexerResult);
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            var result = InstructionFactory.Create(lexerResult);
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
@@ -53,7 +53,7 @@ public static partial class InstructionTests
                 )
             );
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
@@ -71,7 +71,7 @@ public static partial class InstructionTests
                     ])
                 )
             );
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
@@ -86,7 +86,7 @@ public static partial class InstructionTests
                     new StringInstruction("asdf")
                 )
             );
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
 
         [Test]
@@ -104,7 +104,7 @@ public static partial class InstructionTests
                         new IntegerInstruction(2))
                 )
             );
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
     }
     
@@ -145,7 +145,7 @@ public static partial class InstructionTests
                 )
             );
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
@@ -162,7 +162,7 @@ public static partial class InstructionTests
                             new IntegerInstruction(5)
                         ]))
             );
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
@@ -175,7 +175,7 @@ public static partial class InstructionTests
                 name: "asdf",
                 next: new SquareBracketsInstruction(new StringInstruction("asdf"))
             );
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
 
         [Test]
@@ -193,7 +193,7 @@ public static partial class InstructionTests
                         new IntegerInstruction(2))
                 )
             );
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
     }
 }

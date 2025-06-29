@@ -12,7 +12,7 @@ public class LambdaInstruction : Instruction, IEquatable<LambdaInstruction>
         var results = ParserUtilities.ParseEntriesBetweenSeparatingCharacters(parametersTokens, [","]);
 
         var expressionTokens = tokens.GetRange(colonIndex + 1, tokens.Count - colonIndex - 1);
-        var instruction = new ReturnInstruction(Parse(expressionTokens));
+        var instruction = new ReturnInstruction(InstructionFactory.Create(expressionTokens));
         
         Parameters = results.Values;
         Instructions = [instruction];

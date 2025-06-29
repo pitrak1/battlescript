@@ -10,7 +10,7 @@ public class ReturnInstruction : Instruction, IEquatable<ReturnInstruction>
     {
         if (tokens.Count > 1)
         {
-            Value = Parse(tokens.GetRange(1, tokens.Count - 1));
+            Value = InstructionFactory.Create(tokens.GetRange(1, tokens.Count - 1));
         }
         
         Line = tokens[0].Line;

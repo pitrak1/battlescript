@@ -16,7 +16,7 @@ public static partial class InstructionTests
             
             var expected = new ClassInstruction("MyClass");
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
@@ -30,7 +30,7 @@ public static partial class InstructionTests
                 [new VariableInstruction("asdf")]
             );
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
     }
 

@@ -19,7 +19,7 @@ public static partial class InstructionTests
                 parameters: []
             );
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
@@ -33,7 +33,7 @@ public static partial class InstructionTests
                 parameters: [new VariableInstruction("x"), new VariableInstruction("y")]
             );
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
@@ -48,7 +48,7 @@ public static partial class InstructionTests
                 next: new SquareBracketsInstruction(new StringInstruction("asdf"))
             );
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
     }
 

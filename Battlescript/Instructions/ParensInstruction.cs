@@ -12,7 +12,7 @@ public class ParensInstruction : Instruction, IEquatable<ParensInstruction>
         Instruction? next = null;
         if (tokens.Count > results.Count)
         {
-            next = Parse(tokens.GetRange(results.Count, tokens.Count - results.Count));
+            next = InstructionFactory.Create(tokens.GetRange(results.Count, tokens.Count - results.Count));
         }
 
         Instructions = results.Values;

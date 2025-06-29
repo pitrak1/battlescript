@@ -18,7 +18,7 @@ public class ForInstruction : Instruction, IEquatable<ForInstruction>
         }
         
         BlockVariable = new VariableInstruction(tokens[1].Value);
-        Range = Parse(tokens.GetRange(3, tokens.Count - 4));
+        Range = InstructionFactory.Create(tokens.GetRange(3, tokens.Count - 4));
         Line = tokens[0].Line;
         Column = tokens[0].Column;
     }

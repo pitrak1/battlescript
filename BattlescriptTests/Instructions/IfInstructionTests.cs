@@ -16,7 +16,7 @@ public static partial class InstructionTests
             
             var expected = new IfInstruction(new ConstantInstruction("True"));
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
     }
 

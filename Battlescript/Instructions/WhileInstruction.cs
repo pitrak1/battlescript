@@ -11,7 +11,7 @@ public class WhileInstruction : Instruction, IEquatable<WhileInstruction>
             throw new ParserMissingExpectedTokenException(tokens[^1], ":");
         }
     
-        Condition = Parse(tokens.GetRange(1, tokens.Count - 2));
+        Condition = InstructionFactory.Create(tokens.GetRange(1, tokens.Count - 2));
         Line = tokens[0].Line;
         Column = tokens[0].Column;
     }

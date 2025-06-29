@@ -18,7 +18,7 @@ public static partial class InstructionTests
                 name: "func"
             );
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
@@ -32,7 +32,7 @@ public static partial class InstructionTests
                 parameters: [new VariableInstruction("asdf")]
             );
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
@@ -50,7 +50,7 @@ public static partial class InstructionTests
                 ]
             );
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
     }
 

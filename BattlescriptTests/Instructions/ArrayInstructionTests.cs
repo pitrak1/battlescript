@@ -19,7 +19,7 @@ public static class ArrayInstructionTests
                 new IntegerInstruction(6),
             ]);
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
@@ -33,7 +33,7 @@ public static class ArrayInstructionTests
                 new IntegerInstruction(6),
             ]);
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
@@ -47,7 +47,7 @@ public static class ArrayInstructionTests
                 new ArrayInstruction(":", [new IntegerInstruction(7), new IntegerInstruction(8)]),
             ]);
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
@@ -62,7 +62,7 @@ public static class ArrayInstructionTests
                 null
             ]);
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
     }
 }

@@ -19,9 +19,9 @@ public static partial class InstructionTests
                 { new IntegerInstruction(4), new IntegerInstruction(5) },
                 { new IntegerInstruction(6), new StringInstruction("asdf") },
             });
-            var result = Instruction.Parse(lexerResult);
+            var result = InstructionFactory.Create(lexerResult);
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
         
         [Test]
@@ -36,7 +36,7 @@ public static partial class InstructionTests
                 { new StringInstruction("qwer"), new StringInstruction("asdf") },
             });
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
     }
 

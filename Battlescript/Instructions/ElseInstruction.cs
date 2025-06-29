@@ -14,7 +14,7 @@ public class ElseInstruction : Instruction, IEquatable<ElseInstruction>
 
         if (tokens[0].Value == "elif")
         {
-            Condition = Parse(tokens.GetRange(1, tokens.Count - 2));
+            Condition = InstructionFactory.Create(tokens.GetRange(1, tokens.Count - 2));
         }
 
         Line = tokens[0].Line;

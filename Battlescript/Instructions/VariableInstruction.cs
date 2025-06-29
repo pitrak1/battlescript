@@ -8,7 +8,7 @@ public class VariableInstruction : Instruction, IEquatable<VariableInstruction>
     public VariableInstruction(List<Token> tokens)
     {
         Name = tokens[0].Value;
-        Next = tokens.Count > 1 ? Parse(tokens.Slice(1, tokens.Count - 1)) : null;
+        Next = tokens.Count > 1 ? InstructionFactory.Create(tokens.Slice(1, tokens.Count - 1)) : null;
         Line = tokens[0].Line;
         Column = tokens[0].Column;
     }

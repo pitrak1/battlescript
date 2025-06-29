@@ -16,7 +16,7 @@ public static partial class InstructionTests
             
             var expected = new VariableInstruction("asdf");
             
-            Assert.That(Instruction.Parse(lexerResult), Is.EqualTo(expected));
+            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
     }
 }
