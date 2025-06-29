@@ -23,6 +23,6 @@ public class ColonSeparatedArrayInstruction : GenericArrayInstruction<Instructio
         {
             values.Add(instruction.Interpret(memory, instructionContext, objectContext, lexicalContext));
         }
-        return new ArrayVariable(":", values);
+        return new ListVariable(values);
     }
 }

@@ -74,7 +74,7 @@ public class GenericArrayInstruction<T> : Instruction, IEquatable<GenericArrayIn
         {
             values.Add(instruction.Interpret(memory, instructionContext, objectContext, lexicalContext));
         }
-        return new ArrayVariable(",", values);
+        return new ListVariable(values);
     }
     
     // All the code below is to override equality

@@ -32,7 +32,7 @@ public static class ListVariableTests
                 new ConstantVariable(false),
                 new IntegerVariable(8)
             ]);
-            var index = new ArrayVariable(":", [new IntegerVariable(1), new IntegerVariable(2)]);
+            var index = new ListVariable([new IntegerVariable(1), new IntegerVariable(2)]);
             var result = listVariable.GetRangeIndex(index);
             var expected = new ListVariable([
                 new StringVariable("a"),
@@ -49,7 +49,7 @@ public static class ListVariableTests
                 new ConstantVariable(false),
                 new IntegerVariable(8)
             ]);
-            var index = new ArrayVariable(":", [null, new IntegerVariable(2)]);
+            var index = new ListVariable([null, new IntegerVariable(2)]);
             var result = listVariable.GetRangeIndex(index);
             var expected = new ListVariable([
                 new IntegerVariable(5),
@@ -67,7 +67,7 @@ public static class ListVariableTests
                 new ConstantVariable(false),
                 new IntegerVariable(8)
             ]);
-            var index = new ArrayVariable(":", [new IntegerVariable(1), null]);
+            var index = new ListVariable([new IntegerVariable(1), null]);
             var result = listVariable.GetRangeIndex(index);
             var expected = new ListVariable([
                 new StringVariable("a"),
@@ -86,7 +86,7 @@ public static class ListVariableTests
                 new ConstantVariable(false),
                 new IntegerVariable(8)
             ]);
-            var index = new ArrayVariable(":", [null, null]);
+            var index = new ListVariable([null, null]);
             var result = listVariable.GetRangeIndex(index);
             var expected = new ListVariable([
                 new IntegerVariable(5),
@@ -106,7 +106,7 @@ public static class ListVariableTests
                 new ConstantVariable(false),
                 new IntegerVariable(8)
             ]);
-            var index = new ArrayVariable(":", [new IntegerVariable(1), null, new IntegerVariable(2)]);
+            var index = new ListVariable([new IntegerVariable(1), null, new IntegerVariable(2)]);
             var result = listVariable.GetRangeIndex(index);
             var expected = new ListVariable([
                 new StringVariable("a"),
@@ -124,7 +124,7 @@ public static class ListVariableTests
                 new ConstantVariable(false),
                 new IntegerVariable(8)
             ]);
-            var index = new ArrayVariable(":", [new IntegerVariable(3), new IntegerVariable(0), new IntegerVariable(-2)]);
+            var index = new ListVariable([new IntegerVariable(3), new IntegerVariable(0), new IntegerVariable(-2)]);
             var result = listVariable.GetRangeIndex(index);
             var expected = new ListVariable([
                 new IntegerVariable(8),
@@ -142,7 +142,7 @@ public static class ListVariableTests
                 new ConstantVariable(false),
                 new IntegerVariable(8)
             ]);
-            var index = new ArrayVariable(":", [null, new IntegerVariable(1), new IntegerVariable(-1)]);
+            var index = new ListVariable([null, new IntegerVariable(1), new IntegerVariable(-1)]);
             var result = listVariable.GetRangeIndex(index);
             var expected = new ListVariable([
                 new IntegerVariable(8),
@@ -160,7 +160,7 @@ public static class ListVariableTests
                 new ConstantVariable(false),
                 new IntegerVariable(8)
             ]);
-            var index = new ArrayVariable(":", [new IntegerVariable(2), null, new IntegerVariable(-1)]);
+            var index = new ListVariable([new IntegerVariable(2), null, new IntegerVariable(-1)]);
             var result = listVariable.GetRangeIndex(index);
             var expected = new ListVariable([
                 new ConstantVariable(false),
@@ -179,7 +179,7 @@ public static class ListVariableTests
                 new ConstantVariable(false),
                 new IntegerVariable(8)
             ]);
-            var index = new ArrayVariable(":", [null, null, new IntegerVariable(-1)]);
+            var index = new ListVariable([null, null, new IntegerVariable(-1)]);
             var result = listVariable.GetRangeIndex(index);
             var expected = new ListVariable([
                 new IntegerVariable(8),

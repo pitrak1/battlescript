@@ -24,8 +24,6 @@ public static class Truthiness
                 return dictionaryVariable.Values.Count > 0;
             case FunctionVariable:
                 return true;
-            case ArrayVariable:
-                return true;
             default:
                 throw new Exception("Won't get here");
         }

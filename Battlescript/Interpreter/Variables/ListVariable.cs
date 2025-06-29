@@ -4,9 +4,9 @@ namespace Battlescript;
 
 public class ListVariable : Variable, IEquatable<ListVariable>
 {
-    public List<Variable> Values { get; set; }
+    public List<Variable?> Values { get; set; }
 
-    public ListVariable(List<Variable>? values = null)
+    public ListVariable(List<Variable?>? values = null)
     {
         Values = values ?? [];
         Type = Consts.VariableTypes.Reference;
@@ -44,7 +44,7 @@ public class ListVariable : Variable, IEquatable<ListVariable>
         
         if (index is CommaSeparatedArrayInstruction)
         {
-            var indexArrayVariable = indexVariable as ArrayVariable;
+            var indexArrayVariable = indexVariable as ListVariable;
             
             if (index.Next is null)
             {
@@ -74,14 +74,14 @@ public class ListVariable : Variable, IEquatable<ListVariable>
         }
     }
     
-    public ListVariable GetRangeIndex(ArrayVariable arrayVariable)
+    public ListVariable GetRangeIndex(ListVariable argVariable)
     {
         int start = 0;
         int stop = Values.Count;
         int step = 1;
         
         List<IntegerVariable?> values = [];
-        foreach (var value in arrayVariable.Values)
+        foreach (var value in argVariable.Values)
         {
             if (value is IntegerVariable integerVariable)
             {
