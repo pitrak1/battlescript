@@ -1,6 +1,6 @@
 using Battlescript;
 
-namespace BattlescriptTests;
+namespace BattlescriptTests.InstructionsTests;
 
 [TestFixture]
 public static partial class InstructionTests

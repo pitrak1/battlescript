@@ -1,13 +1,10 @@
-namespace BattlescriptTests;
+namespace BattlescriptTests.E2ETests;
 
 using Battlescript;
 
 [TestFixture]
-public static partial class E2ETests
+public class OperatorOverloading
 {
-    [TestFixture]
-    public class OperatorOverloading
-    {
 //         [Test]
 //         public void AllowsOperatorOverloading()
 //         {
@@ -43,5 +40,4 @@ public static partial class E2ETests
 //             var expected = new NumberVariable(7.0);
 //             E2EAssertions.AssertVariableValueFromInput(input, "y", expected);
 //         }
-    }
 }

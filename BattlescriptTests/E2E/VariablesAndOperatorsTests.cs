@@ -1,6 +1,6 @@
 using Battlescript;
 
-namespace BattlescriptTests;
+namespace BattlescriptTests.E2ETests;
 
 [TestFixture]
 public static class VariablesAndOperatorsTests

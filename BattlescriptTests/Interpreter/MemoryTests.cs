@@ -1,6 +1,6 @@
 using Battlescript;
 
-namespace BattlescriptTests;
+namespace BattlescriptTests.InterpreterTests;
 
 [TestFixture]
 public static class MemoryTests

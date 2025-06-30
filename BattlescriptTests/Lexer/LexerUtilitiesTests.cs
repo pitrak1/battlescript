@@ -1,6 +1,6 @@
 using Battlescript;
 
-namespace BattlescriptTests;
+namespace BattlescriptTests.LexerTests;
 
 [TestFixture]
 public static class LexerUtilitiesTests

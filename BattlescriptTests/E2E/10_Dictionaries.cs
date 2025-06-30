@@ -1,37 +1,34 @@
 using Battlescript;
 
-namespace BattlescriptTests;
+namespace BattlescriptTests.E2ETests;
 
 [TestFixture]
-public static partial class E2ETests {
-    [TestFixture]
-    public class Dictionaries
+public class Dictionaries
+{
+    [Test]
+    public void SupportsDictionaryDefinition()
     {
-        [Test]
-        public void SupportsDictionaryDefinition()
-        {
-            var input = "x = {'asdf': 5, 'qwer': '5'}";
-            var expected = new DictionaryVariable(
-                new Dictionary<Variable, Variable>()
-                {
-                    {new StringVariable("asdf"), new IntegerVariable(5)},
-                    {new StringVariable("qwer"), new StringVariable("5")}
-                }
-            );
-            var memory = Runner.Run(input);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
-        }
+        var input = "x = {'asdf': 5, 'qwer': '5'}";
+        var expected = new DictionaryVariable(
+            new Dictionary<Variable, Variable>()
+            {
+                {new StringVariable("asdf"), new IntegerVariable(5)},
+                {new StringVariable("qwer"), new StringVariable("5")}
+            }
+        );
+        var memory = Runner.Run(input);
+        Assert.That(memory.Scopes[0], Contains.Key("x"));
+        Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+    }
 
-        [Test]
-        public void SupportsDictionaryIndexing()
-        {
-            var input = "x = {'asdf': 5, 'qwer': '5'}\ny = x['qwer']";
-            var expected = new StringVariable("5");
-            var memory = Runner.Run(input);
-            
-            Assert.That(memory.Scopes[0], Contains.Key("y"));
-            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
-        }
+    [Test]
+    public void SupportsDictionaryIndexing()
+    {
+        var input = "x = {'asdf': 5, 'qwer': '5'}\ny = x['qwer']";
+        var expected = new StringVariable("5");
+        var memory = Runner.Run(input);
+        
+        Assert.That(memory.Scopes[0], Contains.Key("y"));
+        Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
     }
 }
