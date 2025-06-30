@@ -16,12 +16,12 @@ public class ClassVariable : Variable, IEquatable<ClassVariable>
     
     // I don't think you can use a setitem override on properties of a class.  You shouldn't be able to set any values
     // in a class directly other than static stuff, which will need to be handled in its own way
-    public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
+    public override bool SetItem(Memory memory, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
         throw new Exception("We don't currently support static properties and therefore setting anything at the class level");
     }
     
-    public override Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? GetItem(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
         var indexVariable = index.Values[0].Interpret(memory);
 
@@ -41,7 +41,7 @@ public class ClassVariable : Variable, IEquatable<ClassVariable>
             throw new Exception("Can't index a class with anything but a string");
         }
 
-        if (index.Next is SquareBracketsInstruction nextInstruction)
+        if (index.Next is ArrayInstruction nextInstruction)
         {
             return foundItem.GetItem(memory, nextInstruction, objectContext);
         }

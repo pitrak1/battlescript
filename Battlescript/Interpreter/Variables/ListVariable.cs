@@ -12,7 +12,7 @@ public class ListVariable : Variable, IEquatable<ListVariable>
         Type = Consts.VariableTypes.Reference;
     }
     
-    public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
+    public override bool SetItem(Memory memory, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
 
         var indexVariable = index.Values[0].Interpret(memory);
@@ -27,8 +27,8 @@ public class ListVariable : Variable, IEquatable<ListVariable>
             }
             else
             {
-                Debug.Assert(index.Next is SquareBracketsInstruction);
-                var nextInstruction = index.Next as SquareBracketsInstruction;
+                Debug.Assert(index.Next is ArrayInstruction);
+                var nextInstruction = index.Next as ArrayInstruction;
                 return Values[indexNumberVariable.Value].SetItem(memory, valueVariable, nextInstruction!);
             }
         }
@@ -38,11 +38,11 @@ public class ListVariable : Variable, IEquatable<ListVariable>
         }
     }
     
-    public override Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? GetItem(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
         var indexVariable = index.Values[0].Interpret(memory);
         
-        if (index is CommaSeparatedArrayInstruction)
+        if (index is ArrayInstruction { Separator: "," })
         {
             var indexArrayVariable = indexVariable as ListVariable;
             
@@ -52,8 +52,8 @@ public class ListVariable : Variable, IEquatable<ListVariable>
             }
             else
             {
-                Debug.Assert(index.Next is SquareBracketsInstruction);
-                var nextInstruction = index.Next as SquareBracketsInstruction;
+                Debug.Assert(index.Next is ArrayInstruction);
+                var nextInstruction = index.Next as ArrayInstruction;
                 return GetRangeIndex(indexArrayVariable).GetItem(memory, nextInstruction!);
             }
         }
@@ -67,8 +67,8 @@ public class ListVariable : Variable, IEquatable<ListVariable>
             }
             else
             {
-                Debug.Assert(index.Next is SquareBracketsInstruction);
-                var nextInstruction = index.Next as SquareBracketsInstruction;
+                Debug.Assert(index.Next is ArrayInstruction);
+                var nextInstruction = index.Next as ArrayInstruction;
                 return Values[indexNumberVariable.Value].GetItem(memory, nextInstruction!);
             }
         }
@@ -160,7 +160,7 @@ public class ListVariable : Variable, IEquatable<ListVariable>
 
     public Variable RunMethod(Memory memory, string method, Instruction? arguments)
     {
-        if (arguments is not ParenthesesInstruction parens)
+        if (arguments is not ArrayInstruction { Separator: "(" } parens)
         {
             throw new Exception("must use parens to call list method, fix this later");
         }

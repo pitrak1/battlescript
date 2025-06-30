@@ -14,7 +14,7 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
         Type = Consts.VariableTypes.Reference;
     }
 
-    public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
+    public override bool SetItem(Memory memory, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
         var indexVariable = index.Values[0].Interpret(memory);
 
@@ -27,7 +27,7 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
         {
             if (Values.ContainsKey(stringVariable.Value))
             {
-                if (index.Next is SquareBracketsInstruction nextInstruction)
+                if (index.Next is ArrayInstruction nextInstruction)
                 {
                     return Values[stringVariable.Value].SetItem(memory, valueVariable, nextInstruction, objectContext);
                 }
@@ -49,7 +49,7 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
         }
     }
     
-    public override Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? GetItem(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
         var indexVariable = index.Values[0].Interpret(memory);
 
@@ -67,7 +67,7 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
             }
             else
             {
-                foundItem = Class.GetItem(memory, new SquareBracketsInstruction(new StringInstruction(stringVariable.Value)), this);
+                foundItem = Class.GetItem(memory, new ArrayInstruction([new StringInstruction(stringVariable.Value)]), this);
             }
         }
         else
@@ -75,7 +75,7 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
             throw new Exception("Need to index an object with a string or override []");
         }
         
-        if (index.Next is SquareBracketsInstruction nextInstruction)
+        if (index.Next is ArrayInstruction nextInstruction)
         {
             return foundItem.GetItem(memory, nextInstruction);
         }

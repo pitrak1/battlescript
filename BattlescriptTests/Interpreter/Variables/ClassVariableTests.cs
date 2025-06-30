@@ -16,7 +16,7 @@ public static class ClassVariableTests
             {
                 {"__getitem__", getItemFunction}
             });
-            var index = new SquareBracketsInstruction(new StringInstruction("__getitem__"));
+            var index = new ArrayInstruction([new StringInstruction("__getitem__")], separator: "[");
             
             Assert.That(classVariable.GetItem(new Memory(), index), Is.SameAs(getItemFunction));
         }
@@ -30,7 +30,7 @@ public static class ClassVariableTests
                 {"__getitem__", getItemFunction}
             });
             var classVariable = new ClassVariable(null, [superclassVariable]);
-            var index = new SquareBracketsInstruction(new StringInstruction("__getitem__"));
+            var index = new ArrayInstruction([new StringInstruction("__getitem__")], separator: "[");
             
             Assert.That(classVariable.GetItem(new Memory(), index), Is.SameAs(getItemFunction));
         }
@@ -45,7 +45,7 @@ public static class ClassVariableTests
             });
             var superclassVariable = new ClassVariable(null, [superSuperclassVariable]);
             var classVariable = new ClassVariable(null, [superclassVariable]);
-            var index = new SquareBracketsInstruction(new StringInstruction("__getitem__"));
+            var index = new ArrayInstruction([new StringInstruction("__getitem__")], separator: "[");
             
             Assert.That(classVariable.GetItem(new Memory(), index), Is.SameAs(getItemFunction));
         }
@@ -64,7 +64,7 @@ public static class ClassVariableTests
                 {"__getitem__", getItemFunction}
             });
             var objectVariable = new ObjectVariable(null, classVariable);
-            var index = new SquareBracketsInstruction(new StringInstruction("x"));
+            var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
             
             Assert.That(
                 classVariable.GetItem(new Memory(), index, objectVariable), 
@@ -83,7 +83,7 @@ public static class ClassVariableTests
                 {"__getitem__", getItemFunction}
             });
             var objectVariable = new ObjectVariable(null, classVariable);
-            var index = new SquareBracketsInstruction(new StringInstruction("x"));
+            var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
             
             Assert.That(
                 classVariable.GetItem(new Memory(), index), 
@@ -97,7 +97,7 @@ public static class ClassVariableTests
             {
                 {"x", new StringVariable("asdf")}
             });
-            var index = new SquareBracketsInstruction(new StringInstruction("x"));
+            var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
             
             Assert.That(classVariable.GetItem(new Memory(), index), Is.EqualTo(new StringVariable("asdf")));
         }
@@ -110,7 +110,7 @@ public static class ClassVariableTests
                 {"x", new StringVariable("asdf")}
             });
             var classVariable = new ClassVariable(null, [superclassVariable]);
-            var index = new SquareBracketsInstruction(new StringInstruction("x"));
+            var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
             
             Assert.That(classVariable.GetItem(new Memory(), index), Is.EqualTo(new StringVariable("asdf")));
         }
@@ -124,7 +124,7 @@ public static class ClassVariableTests
             });
             var superclassVariable = new ClassVariable(null, [superSuperclassVariable]);
             var classVariable = new ClassVariable(null, [superclassVariable]);
-            var index = new SquareBracketsInstruction(new StringInstruction("x"));
+            var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
             
             Assert.That(classVariable.GetItem(new Memory(), index), Is.EqualTo(new StringVariable("asdf")));
         }

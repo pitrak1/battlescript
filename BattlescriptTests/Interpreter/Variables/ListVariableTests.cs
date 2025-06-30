@@ -17,7 +17,7 @@ public static class ListVariableTests
                 new ConstantVariable(false)
             ]);
             var index = new IntegerInstruction(1);
-            var result = listVariable.GetItem(new Memory(), new SquareBracketsInstruction(index));
+            var result = listVariable.GetItem(new Memory(), new ArrayInstruction([index], separator: "["));
             
             Assert.That(result, Is.TypeOf<StringVariable>());
             Assert.That(((StringVariable)result).Value, Is.EqualTo("a"));
@@ -202,7 +202,10 @@ public static class ListVariableTests
             ]);
             var index1 = new IntegerInstruction(2);
             var index2 = new IntegerInstruction(1);
-            var indexInstruction = new SquareBracketsInstruction(index1, new SquareBracketsInstruction(index2));
+            var indexInstruction = new ArrayInstruction(
+                [index1], 
+                new ArrayInstruction([index2], separator: "["), 
+                separator: "]");
             var result = listVariable.GetItem(new Memory(), indexInstruction);
             var expected = new StringVariable("b");
             Assert.That(result, Is.EqualTo(expected));
@@ -242,7 +245,7 @@ public static class ListVariableTests
             ]);
             var index = new IntegerInstruction(1);
             var value = new StringVariable("b");
-            listVariable.SetItem(new Memory(), value, new SquareBracketsInstruction(index));
+            listVariable.SetItem(new Memory(), value, new ArrayInstruction([index], separator: "["));
             
             Assert.That(listVariable.Values[1], Is.TypeOf<StringVariable>());
             Assert.That(((StringVariable)listVariable.Values[1]).Value, Is.EqualTo("b"));
@@ -263,7 +266,10 @@ public static class ListVariableTests
             var index1 = new IntegerInstruction(2);
             var index2 = new IntegerInstruction(1);
             var value = new StringVariable("c");
-            var indexInstruction = new SquareBracketsInstruction(index1, new SquareBracketsInstruction(index2));
+            var indexInstruction = new ArrayInstruction(
+                [index1], 
+                new ArrayInstruction([index2], separator: "["), 
+                separator: "]");
             listVariable.SetItem(new Memory(), value, indexInstruction);
             
             Assert.That(listVariable.Values[2], Is.TypeOf<ListVariable>());

@@ -18,7 +18,7 @@ public class Memory(List<Dictionary<string, Variable>>? scopes = null)
             if (Scopes[i].ContainsKey(variableInstruction.Name))
             {
                 var foundVariable = Scopes[i][variableInstruction.Name];
-                if (variableInstruction.Next is SquareBracketsInstruction squareBracketsInstruction)
+                if (variableInstruction.Next is ArrayInstruction { Separator: "[" } squareBracketsInstruction)
                 {
                     return foundVariable.GetItem(this, squareBracketsInstruction);
                 }
@@ -41,7 +41,7 @@ public class Memory(List<Dictionary<string, Variable>>? scopes = null)
             {
                 if (Scopes[i].ContainsKey(variableInstruction.Name))
                 {
-                    if (variableInstruction.Next is SquareBracketsInstruction squareBracketsInstruction)
+                    if (variableInstruction.Next is ArrayInstruction { Separator: "[" } squareBracketsInstruction)
                     {
                         Scopes[i][variableInstruction.Name].SetItem(
                             this, 

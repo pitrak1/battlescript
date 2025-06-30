@@ -210,8 +210,8 @@ public static class InstructionUtilitiesTests
             
             var expected = new List<Instruction>()
             {
-                new SquareBracketsInstruction([new IntegerInstruction(1), new IntegerInstruction(2)]),
-                new SquareBracketsInstruction(new IntegerInstruction(2))
+                new ArrayInstruction([new IntegerInstruction(1), new IntegerInstruction(2)], delimiter: ",", separator: "["),
+                new ArrayInstruction([new IntegerInstruction(2)], separator: "[")
             };
 
             Assert.That(parsed, Is.EquivalentTo(expected));

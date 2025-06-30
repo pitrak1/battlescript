@@ -32,7 +32,7 @@ public static partial class InstructionTests
                 operation: "+",
                 left: new VariableInstruction(
                     "x", 
-                    new SquareBracketsInstruction([new StringInstruction("i")])),
+                    new ArrayInstruction([new StringInstruction("i")], separator: "[")),
                 right: new IntegerInstruction(6)
             );
             

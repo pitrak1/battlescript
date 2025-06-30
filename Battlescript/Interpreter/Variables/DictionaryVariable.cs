@@ -12,7 +12,7 @@ public class DictionaryVariable : Variable, IEquatable<DictionaryVariable>
         Type = Consts.VariableTypes.Reference;
     }
     
-    public override bool SetItem(Memory memory, Variable valueVariable, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
+    public override bool SetItem(Memory memory, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
         var indexVariable = index.Values[0].Interpret(memory);
         
@@ -23,11 +23,11 @@ public class DictionaryVariable : Variable, IEquatable<DictionaryVariable>
         }
         else
         {
-            return Values[indexVariable].SetItem(memory, valueVariable, (SquareBracketsInstruction)index.Next);
+            return Values[indexVariable].SetItem(memory, valueVariable, (ArrayInstruction)index.Next);
         }
     }
 
-    public override Variable? GetItem(Memory memory, SquareBracketsInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? GetItem(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
         var indexVariable = index.Values[0].Interpret(memory);
         
@@ -37,7 +37,7 @@ public class DictionaryVariable : Variable, IEquatable<DictionaryVariable>
         }
         else
         {
-            return Values[indexVariable].GetItem(memory, (SquareBracketsInstruction)index.Next);
+            return Values[indexVariable].GetItem(memory, (ArrayInstruction)index.Next);
         }
     }
     

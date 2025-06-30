@@ -18,12 +18,12 @@ public class OperationInstruction : Instruction, IEquatable<OperationInstruction
         Line = operatorToken.Line;
         Column = operatorToken.Column;
                 
-        if (result.Left is ParenthesesInstruction left)
+        if (result.Left is ArrayInstruction { Separator: "(" } left)
         {
             Left = left.Values[0];
         }
 
-        if (result.Right is ParenthesesInstruction right)
+        if (result.Right is ArrayInstruction { Separator: "(" } right)
         {
             Right = right.Values[0];
         }
