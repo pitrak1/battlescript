@@ -162,13 +162,13 @@ public static class InstructionUtilitiesTests
     }
     
     [TestFixture]
-    public class ParseEntriesWithinSeparator
+    public class ParseEntriesBetweenDelimiters
     {
         [Test]
         public void NoTokens()
         {
             var parsed = 
-                InstructionUtilities.ParseEntriesBetweenSeparatingCharacters([], []);
+                InstructionUtilities.ParseEntriesBetweenDelimiters([], []);
 
             Assert.That(parsed.Count, Is.EqualTo(0));
         }
@@ -179,7 +179,7 @@ public static class InstructionUtilitiesTests
             var lexer = new Lexer("1");
             var tokens = lexer.Run();
             var parsed =
-                InstructionUtilities.ParseEntriesBetweenSeparatingCharacters(tokens, []);
+                InstructionUtilities.ParseEntriesBetweenDelimiters(tokens, []);
             var expected = new IntegerInstruction(1);
             Assert.That(parsed[0], Is.EqualTo(expected));
         }
@@ -190,7 +190,7 @@ public static class InstructionUtilitiesTests
             var lexer = new Lexer("1, 2");
             var tokens = lexer.Run();
             var parsed =
-                InstructionUtilities.ParseEntriesBetweenSeparatingCharacters(tokens, [","]);
+                InstructionUtilities.ParseEntriesBetweenDelimiters(tokens, [","]);
 
             var expected = new List<Instruction>()
             {
@@ -206,7 +206,7 @@ public static class InstructionUtilitiesTests
             var lexer = new Lexer("[1, 2], [2]");
             var tokens = lexer.Run();
             var parsed =
-                InstructionUtilities.ParseEntriesBetweenSeparatingCharacters(tokens, [","]);
+                InstructionUtilities.ParseEntriesBetweenDelimiters(tokens, [","]);
             
             var expected = new List<Instruction>()
             {

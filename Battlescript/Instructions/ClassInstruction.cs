@@ -13,7 +13,7 @@ public class ClassInstruction : Instruction, IEquatable<ClassInstruction>
         if (tokens.Count > 5)
         {
             var tokensInParens = tokens.GetRange(3, tokens.Count - 5);
-            superClasses = InstructionUtilities.ParseEntriesBetweenSeparatingCharacters(tokensInParens, [","])!;
+            superClasses = InstructionUtilities.ParseEntriesBetweenDelimiters(tokensInParens, [","])!;
         }
 
         Name = tokens[1].Value;

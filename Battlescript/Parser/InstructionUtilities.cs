@@ -133,15 +133,15 @@ public static class InstructionUtilities
         return (left, right);
     }
     
-    public static List<Instruction?> ParseEntriesBetweenSeparatingCharacters(
+    public static List<Instruction?> ParseEntriesBetweenDelimiters(
         List<Token> tokens, 
-        List<string> separators
+        List<string> delimiters
     )
     {
         // Early return for no tokens present
         if (tokens.Count == 0) return [];
         
-        var results = GroupTokensWithSeparators(tokens, separators);
+        var results = GroupTokensWithSeparators(tokens, delimiters);
         
         List<Instruction?> values = [];
         foreach (var entry in results)
@@ -154,7 +154,7 @@ public static class InstructionUtilities
     
     private static List<List<Token>> GroupTokensWithSeparators(
         List<Token> tokens, 
-        List<string> separatingCharacters)
+        List<string> delimiters)
     {
         List<string> separatorStack = [];
         List<List<Token>> entries = [];
@@ -180,7 +180,7 @@ public static class InstructionUtilities
                     throw new ParserUnexpectedClosingSeparatorException(token);
                 }
             }
-            else if (separatorStack.Count == 0 && separatingCharacters.Contains(token.Value))
+            else if (separatorStack.Count == 0 && delimiters.Contains(token.Value))
             {
                 entries.Add(currentTokenSet);
                 currentTokenSet = [];

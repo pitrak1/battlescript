@@ -9,7 +9,7 @@ public class LambdaInstruction : Instruction, IEquatable<LambdaInstruction>
         var colonIndex = InstructionUtilities.GetTokenIndex(tokens, [":"]);
 
         var parametersTokens = tokens.GetRange(1, colonIndex - 1);
-        var parameters = InstructionUtilities.ParseEntriesBetweenSeparatingCharacters(parametersTokens, [","]);
+        var parameters = InstructionUtilities.ParseEntriesBetweenDelimiters(parametersTokens, [","]);
 
         var expressionTokens = tokens.GetRange(colonIndex + 1, tokens.Count - colonIndex - 1);
         var instruction = new ReturnInstruction(InstructionFactory.Create(expressionTokens));

@@ -34,7 +34,7 @@ public class FunctionInstruction : Instruction, IEquatable<FunctionInstruction>
         // }
 
         var tokensInParens = tokens.GetRange(3, tokens.Count - 5);
-        var parameters = InstructionUtilities.ParseEntriesBetweenSeparatingCharacters(tokensInParens, [","]);
+        var parameters = InstructionUtilities.ParseEntriesBetweenDelimiters(tokensInParens, [","]);
 
         var inDefaultArguments = false;
         foreach (var parameter in parameters)

@@ -62,7 +62,7 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
 
         if (Delimiter is not null)
         {
-            Values = InstructionUtilities.ParseEntriesBetweenSeparatingCharacters(tokens, [Delimiter]);
+            Values = InstructionUtilities.ParseEntriesBetweenDelimiters(tokens, [Delimiter]);
         }
         else if (tokens.Count > 0)
         {

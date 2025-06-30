@@ -11,7 +11,7 @@ public class BuiltInInstruction : Instruction
         var argumentTokens = tokens.GetRange(2, endOfArgumentsIndex - 2);
         
         
-        Parameters = InstructionUtilities.ParseEntriesBetweenSeparatingCharacters(argumentTokens, [","])!;
+        Parameters = InstructionUtilities.ParseEntriesBetweenDelimiters(argumentTokens, [","])!;
 
         if (tokens.Count > endOfArgumentsIndex + 1)
         {
