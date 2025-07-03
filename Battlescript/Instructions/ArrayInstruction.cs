@@ -182,23 +182,15 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
         // Dealing with an index
         if (instructionContext is not null)
         {
-            if (Values.Count == 1)
+            if (Values[0] is StringInstruction stringInstruction &&
+                Consts.ListMethods.Contains(stringInstruction.Value) &&
+                instructionContext is ListVariable listVariable)
             {
-                if (Values[0] is StringInstruction stringInstruction &&
-                    Consts.ListMethods.Contains(stringInstruction.Value) &&
-                    instructionContext is ListVariable listVariable)
-                {
-                    return listVariable.RunMethod(memory, stringInstruction.Value, Next);
-                }
-                else
-                {
-                    var result = instructionContext.GetItem(memory, new ArrayInstruction([Values[0]]));
-                    return Next is not null ? Next.Interpret(memory, result, instructionContext as ObjectVariable) : result;
-                }
+                return listVariable.RunMethod(memory, stringInstruction.Value, Next);
             }
             else
             {
-                throw new Exception("Poorly formed index");
+                return instructionContext.GetItem(memory, this, objectContext);
             }
         }
         // Dealing with list creation

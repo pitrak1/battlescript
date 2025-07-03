@@ -49,7 +49,7 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
         }
     }
     
-    public override Variable? GetItem(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? GetItemDirectly(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
         var indexVariable = index.Values[0].Interpret(memory);
 
@@ -75,14 +75,7 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
             throw new Exception("Need to index an object with a string or override []");
         }
         
-        if (index.Next is ArrayInstruction nextInstruction)
-        {
-            return foundItem.GetItem(memory, nextInstruction);
-        }
-        else
-        {
-            return foundItem;
-        }
+        return foundItem;
     }
     
     // All the code below is to override equality

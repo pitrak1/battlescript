@@ -38,39 +38,25 @@ public class ListVariable : Variable, IEquatable<ListVariable>
         }
     }
     
-    public override Variable? GetItem(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? GetItemDirectly(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
-        var indexVariable = index.Values[0].Interpret(memory);
-        
-        if (index is ArrayInstruction { Separator: "," })
+        var indexVariable = index.Interpret(memory) as ListVariable;
+
+        if (indexVariable.Values.Count > 1)
         {
-            var indexArrayVariable = indexVariable as ListVariable;
-            
-            if (index.Next is null)
-            {
-                return GetRangeIndex(indexArrayVariable);
-            }
-            else
-            {
-                Debug.Assert(index.Next is ArrayInstruction);
-                var nextInstruction = index.Next as ArrayInstruction;
-                return GetRangeIndex(indexArrayVariable).GetItem(memory, nextInstruction!);
-            }
+            return GetRangeIndex(indexVariable);
         }
         else
         {
-            var indexNumberVariable = indexVariable as IntegerVariable;
-            
-            if (index.Next is null)
+            if (indexVariable.Values[0] is IntegerVariable indexInteger)
             {
-                return Values[indexNumberVariable.Value];
+                return Values[indexInteger.Value];
             }
             else
             {
-                Debug.Assert(index.Next is ArrayInstruction);
-                var nextInstruction = index.Next as ArrayInstruction;
-                return Values[indexNumberVariable.Value].GetItem(memory, nextInstruction!);
+                throw new Exception("Can't index a list with anything but a number");
             }
+            
         }
     }
     

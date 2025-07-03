@@ -21,7 +21,7 @@ public class ClassVariable : Variable, IEquatable<ClassVariable>
         throw new Exception("We don't currently support static properties and therefore setting anything at the class level");
     }
     
-    public override Variable? GetItem(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? GetItemDirectly(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
         var indexVariable = index.Values[0].Interpret(memory);
 
@@ -40,15 +40,8 @@ public class ClassVariable : Variable, IEquatable<ClassVariable>
         {
             throw new Exception("Can't index a class with anything but a string");
         }
-
-        if (index.Next is ArrayInstruction nextInstruction)
-        {
-            return foundItem.GetItem(memory, nextInstruction, objectContext);
-        }
-        else
-        {
-            return foundItem;
-        }
+        
+        return foundItem;
     }
 
     private Variable? FindItemDirectly(Memory memory, string item)

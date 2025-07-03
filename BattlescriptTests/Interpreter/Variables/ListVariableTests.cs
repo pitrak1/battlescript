@@ -205,7 +205,7 @@ public static class ListVariableTests
             var indexInstruction = new ArrayInstruction(
                 [index1], 
                 new ArrayInstruction([index2], separator: "["), 
-                separator: "]");
+                separator: "[");
             var result = listVariable.GetItem(new Memory(), indexInstruction);
             var expected = new StringVariable("b");
             Assert.That(result, Is.EqualTo(expected));

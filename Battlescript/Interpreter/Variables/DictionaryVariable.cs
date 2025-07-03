@@ -27,18 +27,10 @@ public class DictionaryVariable : Variable, IEquatable<DictionaryVariable>
         }
     }
 
-    public override Variable? GetItem(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? GetItemDirectly(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
         var indexVariable = index.Values[0].Interpret(memory);
-        
-        if (index.Next is null)
-        {
-            return Values[indexVariable];
-        }
-        else
-        {
-            return Values[indexVariable].GetItem(memory, (ArrayInstruction)index.Next);
-        }
+        return Values[indexVariable];
     }
     
     // All the code below is to override equality
