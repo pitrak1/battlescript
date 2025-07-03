@@ -12,18 +12,18 @@ public class DictionaryVariable : Variable, IEquatable<DictionaryVariable>
         Type = Consts.VariableTypes.Reference;
     }
     
-    public override bool SetItem(Memory memory, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? SetItemDirectly(Memory memory, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
-        var indexVariable = index.Values[0].Interpret(memory);
+        var indexVariable = index.Interpret(memory) as ListVariable;
         
         if (index.Next is null)
         {
-            Values[indexVariable] = valueVariable;
-            return true;
+            Values[indexVariable.Values[0]] = valueVariable;
+            return valueVariable;
         }
         else
         {
-            return Values[indexVariable].SetItem(memory, valueVariable, (ArrayInstruction)index.Next);
+            return Values[indexVariable.Values[0]];
         }
     }
 

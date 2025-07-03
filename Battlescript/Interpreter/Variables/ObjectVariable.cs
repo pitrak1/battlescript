@@ -14,33 +14,24 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
         Type = Consts.VariableTypes.Reference;
     }
 
-    public override bool SetItem(Memory memory, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? SetItemDirectly(Memory memory, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
         var indexVariable = index.Values[0].Interpret(memory);
 
         var setItemOverride = GetItem(memory, "__setitem__");
         if (setItemOverride is FunctionVariable functionVariable)
         {
-            functionVariable.RunFunction(memory, [this, indexVariable, valueVariable], this);
-            return true;
+            return functionVariable.RunFunction(memory, [this, indexVariable, valueVariable], this);
         } else if (indexVariable is StringVariable stringVariable)
         {
-            if (Values.ContainsKey(stringVariable.Value))
+            if (index.Next is null)
             {
-                if (index.Next is ArrayInstruction nextInstruction)
-                {
-                    return Values[stringVariable.Value].SetItem(memory, valueVariable, nextInstruction, objectContext);
-                }
-                else
-                {
-                    Values[stringVariable.Value] = valueVariable;
-                    return true;
-                }
+                Values[stringVariable.Value] = valueVariable;
+                return valueVariable;
             }
             else
             {
-                Values.Add(stringVariable.Value, valueVariable);
-                return true;
+                return Values[stringVariable.Value];
             }
         }
         else

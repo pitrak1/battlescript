@@ -12,24 +12,21 @@ public class ListVariable : Variable, IEquatable<ListVariable>
         Type = Consts.VariableTypes.Reference;
     }
     
-    public override bool SetItem(Memory memory, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? SetItemDirectly(Memory memory, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
+        // This needs to be rewritten to support ranged assignments, look at list methods in python to see test cases
+        var indexVariable = index.Interpret(memory) as ListVariable;
 
-        var indexVariable = index.Values[0].Interpret(memory);
-        Debug.Assert(indexVariable is IntegerVariable);
-
-        if (indexVariable is IntegerVariable indexNumberVariable)
+        if (indexVariable.Values[0] is IntegerVariable indexInteger)
         {
             if (index.Next is null)
             {
-                Values[indexNumberVariable.Value] = valueVariable;
-                return true;
+                Values[indexInteger.Value] = valueVariable;
+                return valueVariable;
             }
             else
             {
-                Debug.Assert(index.Next is ArrayInstruction);
-                var nextInstruction = index.Next as ArrayInstruction;
-                return Values[indexNumberVariable.Value].SetItem(memory, valueVariable, nextInstruction!);
+                return Values[indexInteger.Value];
             }
         }
         else

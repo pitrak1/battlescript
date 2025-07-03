@@ -269,7 +269,7 @@ public static class ListVariableTests
             var indexInstruction = new ArrayInstruction(
                 [index1], 
                 new ArrayInstruction([index2], separator: "["), 
-                separator: "]");
+                separator: "[");
             listVariable.SetItem(new Memory(), value, indexInstruction);
             
             Assert.That(listVariable.Values[2], Is.TypeOf<ListVariable>());
