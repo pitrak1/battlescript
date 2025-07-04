@@ -2,79 +2,84 @@ namespace Battlescript;
 
 public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
 {
-    public string? Separator { get; set; }
-    public string? Delimiter { get; set; }
-    public Instruction? Next { get; set; }
-    public List<Instruction?> Values { get; set; } = [];
+    public string? Separator { get; private set; }
+    public string? Delimiter { get; private set; }
+    public List<Instruction?> Values { get; private set; } = [];
 
     public ArrayInstruction(List<Token> tokens)
     {
-        // Must be an index
-        if (tokens[0].Value == ".")
+        if (tokens.First().Value == Consts.Period)
         {
-            Values = [new StringInstruction(new List<Token>() { tokens[1] })];
-            Separator = "[";
-            
-            if (tokens.Count > 2)
-            {
-                Next = InstructionFactory.Create(tokens.GetRange(2, tokens.Count - 2));
-            }
+            InitializeMember();
         }
-        else if (Consts.OpeningSeparators.Contains(tokens[0].Value))
+        else if (Consts.OpeningSeparators.Contains(tokens.First().Value))
         {
-            Separator = tokens[0].Value;
-            var closingSeparator = Consts.MatchingSeparatorsMap[tokens[0].Value];
-            var closingSeparatorIndex = InstructionUtilities.GetTokenIndex(tokens, [closingSeparator]);
-
-            var tokensInSeparators = tokens.GetRange(1, closingSeparatorIndex - 1);
-            PopulateFromTokens(tokensInSeparators);
-            
-            if (tokens.Count > closingSeparatorIndex + 1)
-            {
-                Next = InstructionFactory.Create(
-                    tokens.GetRange(
-                        closingSeparatorIndex + 1, 
-                        tokens.Count - closingSeparatorIndex - 1));
-            }
+            InitializeListWithSeparators();
         }
         else
         {
-            PopulateFromTokens(tokens);
+            InitializeListWithoutSeparators(tokens);
         }
 
-        Line = tokens[0].Line;
-        Column = tokens[0].Column;
-    }
+        Line = tokens.First().Line;
+        Column = tokens.First().Column;
+        return;
 
-    private void PopulateFromTokens(List<Token> tokens)
-    {
-        var commaIndex = InstructionUtilities.GetTokenIndex(tokens, [","]);
-        var colonIndex = InstructionUtilities.GetTokenIndex(tokens, [":"]);
-
-        // Prioritize grouping by commas over grouping by colons (ex: {3: 4, 5: 6})
-        if (commaIndex != -1)
+        void InitializeMember()
         {
-            Delimiter = ",";
-        } else if (colonIndex != -1)
-        {
-            Delimiter = ":";
+            Separator = Consts.SquareBrackets;
+            Values = [new StringInstruction([tokens[1]])];
+            InitializeNext(2);
         }
 
-        if (Delimiter is not null)
+        void InitializeListWithSeparators()
         {
-            Values = InstructionUtilities.ParseEntriesBetweenDelimiters(tokens, [Delimiter]);
+            Separator = tokens.First().Value;
+            var closingSeparator = Consts.MatchingSeparatorsMap[Separator];
+            var closingSeparatorIndex = InstructionUtilities.GetTokenIndex(tokens, [closingSeparator]);
+            var tokensInSeparators = tokens.GetRange(1, closingSeparatorIndex - 1);
+            InitializeListWithoutSeparators(tokensInSeparators);
+            InitializeNext(closingSeparatorIndex + 1);
         }
-        else if (tokens.Count > 0)
+
+        void InitializeNext(int expectedTokenCount)
         {
-            Values = [InstructionFactory.Create(tokens)];
+            if (tokens.Count > expectedTokenCount)
+            {
+                Next = InstructionFactory.Create(tokens.GetRange(expectedTokenCount, tokens.Count - expectedTokenCount));
+            }
+        }
+
+        void InitializeListWithoutSeparators(List<Token> tokenList)
+        {
+            var commaIndex = InstructionUtilities.GetTokenIndex(tokenList, [Consts.Comma]);
+            var colonIndex = InstructionUtilities.GetTokenIndex(tokenList, [Consts.Colon]);
+
+            // Prioritize grouping by commas over grouping by colons (ex: {3: 4, 5: 6})
+            if (commaIndex != -1)
+            {
+                Delimiter = Consts.Comma;
+            } else if (colonIndex != -1)
+            {
+                Delimiter = Consts.Colon;
+            }
+
+            if (Delimiter is not null)
+            {
+                Values = InstructionUtilities.ParseEntriesBetweenDelimiters(tokenList, [Delimiter]);
+            }
+            else if (tokenList.Count > 0)
+            {
+                Values = [InstructionFactory.Create(tokenList)];
+            }
         }
     }
 
     public ArrayInstruction(
         List<Instruction?> values, 
-        Instruction? next = null, 
         string? separator = null,
-        string? delimiter = null)
+        string? delimiter = null,
+        Instruction? next = null)
     {
         Values = values;
         Next = next;
@@ -90,131 +95,148 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
     {
         switch (Separator)
         {
-            case "{":
-                return CurlyBracesInterpret(memory, instructionContext, objectContext, lexicalContext);
-            case "(":
-                return ParenthesesInterpret(memory, instructionContext, objectContext, lexicalContext);
-            case "[":
-                return SquareBracketsInterpret(memory, instructionContext, objectContext, lexicalContext);
+            case Consts.CurlyBraces:
+                return CurlyBracesInterpret();
+            case Consts.Parentheses:
+                return ParenthesesInterpret();
+            case Consts.SquareBrackets:
+                return SquareBracketsInterpret();
             default:
-                throw new Exception($"Unrecognized Separator: {Separator}");
+                throw new Exception($"Unrecognized Separator: {Separator}, improve this later");
         }
-    }
 
-    private Variable CurlyBracesInterpret(
-        Memory memory,
-        Variable? instructionContext = null,
-        ObjectVariable? objectContext = null,
-        ClassVariable? lexicalContext = null)
-    {
-        var variableValue = new Dictionary<Variable, Variable>();
-        
-        if (Delimiter == ",")
+        Variable CurlyBracesInterpret()
         {
-            // More than 1 dictionary value
-            foreach (var dictValue in Values)
+            var variableValue = new Dictionary<Variable, Variable>();
+        
+            // Dictionaries will be an ArrayInstruction with colon delimiters and two values within an ArrayInstruction
+            // of comma delimiters if there are multiple entries. Dictionaries will be an ArrayInstruction of colon
+            // delimiters with two values if there is only one entry.
+            if (Delimiter == Consts.Comma)
             {
-                if (dictValue is ArrayInstruction { Delimiter: ":", Values.Count: 2 } kvpArray)
+                foreach (var dictValue in Values)
                 {
-                    var key = kvpArray.Values[0].Interpret(memory);
-                    var value = kvpArray.Values[1].Interpret(memory);
-            
-                    variableValue.Add(key, value);
+                    InterpretAndAddKvp(dictValue!);
+                }
+            } 
+            else if (Delimiter == Consts.Colon)
+            {
+                InterpretAndAddKvp(this);
+            } else if (Values.Count != 0)
+            {
+                throw new Exception("Badly formed dictionary");
+            }
+        
+            return new DictionaryVariable(variableValue);
+
+            void InterpretAndAddKvp(Instruction? instruction)
+            {
+                var kvp = IsValidKvp(instruction);
+                var key = kvp.Values[0]!.Interpret(memory);
+                var value = kvp.Values[1]!.Interpret(memory); 
+                variableValue.Add(key, value);
+            }
+
+            ArrayInstruction IsValidKvp(Instruction? instruction)
+            {
+                if (instruction is ArrayInstruction { Delimiter: ":", Values: [not null, not null] } kvpInstruction)
+                {
+                    return kvpInstruction;
                 }
                 else
                 {
-                    throw new Exception("Badly formed ditionary");
+                    throw new Exception("Badly formed dictionary");
                 }
             }
-        } else if (Values.Count == 2 && Delimiter == ":")
-        {
-            // Just 1 dicitonary value
-            var key = Values[0].Interpret(memory);
-            var value = Values[1].Interpret(memory);
-            
-            variableValue.Add(key, value);
         }
         
-        return new DictionaryVariable(variableValue);
-    }
-    
-    private Variable ParenthesesInterpret(
-        Memory memory,
-        Variable? instructionContext = null,
-        ObjectVariable? objectContext = null,
-        ClassVariable? lexicalContext = null)
-    {
-        if (instructionContext is FunctionVariable functionVariable)
+        Variable ParenthesesInterpret()
         {
-            return functionVariable.RunFunction(memory, Values, objectContext);
-        }
-        else
-        {
-            if (instructionContext is ClassVariable classVariable)
+            if (instructionContext is FunctionVariable functionVariable)
+            {
+                return functionVariable.RunFunction(memory, Values!, objectContext);
+            }
+            else if (instructionContext is ClassVariable classVariable)
             {
                 var objectVariable = classVariable.CreateObject();
-                var constructor = objectVariable.GetItem(memory, "__init__");
-                if (constructor is FunctionVariable constructorVariable)
-                {
-                    List<Variable> arguments = [];
-                    foreach (var argument in Values)
-                    {
-                        arguments.Add(argument.Interpret(memory, objectVariable, objectContext));
-                    }
-                    
-                    constructorVariable.RunFunction(memory, arguments, objectVariable);
-                }
+                RunConstructor(objectVariable);
                 return objectVariable;
             }
             else
             {
-                throw new Exception("Can only create an object of a class");
+                throw new Exception("Parens must follow a function or class");
+            }
+
+            void RunConstructor(ObjectVariable objectVariable)
+            {
+                var constructor = objectVariable.GetItem(memory, "__init__");
+                if (constructor is FunctionVariable constructorVariable)
+                {
+                    // This needs to be changed when I rewrite function args.  This currently doesn't support keyword
+                    // arguments like it should.
+                    List<Variable> arguments = [];
+                    foreach (var argument in Values)
+                    {
+                        arguments.Add(argument!.Interpret(memory, objectVariable, objectContext));
+                    }
+                
+                    constructorVariable.RunFunction(memory, arguments, objectVariable);
+                }
             }
         }
-    }
-    
-    private Variable SquareBracketsInterpret(
-        Memory memory,
-        Variable? instructionContext = null,
-        ObjectVariable? objectContext = null,
-        ClassVariable? lexicalContext = null)
-    {
-        // Dealing with an index
-        if (instructionContext is not null)
+        
+        Variable SquareBracketsInterpret()
         {
-            if (Values[0] is StringInstruction stringInstruction &&
-                Consts.ListMethods.Contains(stringInstruction.Value) &&
-                instructionContext is ListVariable listVariable)
+            if (instructionContext is not null)
             {
-                return listVariable.RunMethod(memory, stringInstruction.Value, Next);
+                return InterpretIndex();
             }
             else
             {
-                return instructionContext.GetItem(memory, this, objectContext);
+                return InterpretListCreation();
             }
-        }
-        // Dealing with list creation
-        else
-        {
-            var values = new List<Variable>();
-            
-            foreach (var instructionValue in Values)
+
+            Variable InterpretIndex()
             {
-                if (instructionValue is not null)
+                if (IsListMethod() && instructionContext is ListVariable listVariable)
                 {
-                    values.Add(instructionValue.Interpret(memory));
+                    var stringInstruction = Values[0] as StringInstruction;
+                    return listVariable.RunMethod(memory, stringInstruction!.Value, Next);
                 }
                 else
                 {
-                    throw new Exception("Poorly formed list initialization");
+                    return instructionContext.GetItem(memory, this, objectContext);
                 }
-                
             }
 
-            return new ListVariable(values);
+            bool IsListMethod()
+            {
+                return Values.First() is StringInstruction stringInstruction &&
+                       Consts.ListMethods.Contains(stringInstruction.Value);
+            }
+
+            Variable InterpretListCreation()
+            {
+                var values = new List<Variable>();
+            
+                foreach (var instructionValue in Values)
+                {
+                    if (instructionValue is not null)
+                    {
+                        values.Add(instructionValue.Interpret(memory));
+                    }
+                    else
+                    {
+                        throw new Exception("Poorly formed list initialization");
+                    }
+                
+                }
+
+                return new ListVariable(values!);
+            }
         }
     }
-    
+
     // All the code below is to override equality
     public override bool Equals(object obj) => Equals(obj as ArrayInstruction);
     public bool Equals(ArrayInstruction? instruction)

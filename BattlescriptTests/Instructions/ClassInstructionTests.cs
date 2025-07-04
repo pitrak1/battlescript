@@ -1,6 +1,6 @@
 using Battlescript;
 
-namespace BattlescriptTests.InstructionsTests;
+namespace BattlescriptTests.Instructions;
 
 [TestFixture]
 public static partial class InstructionTests
@@ -56,13 +56,14 @@ public static partial class InstructionTests
         [Test]
         public void HandlesClassDefinitionWithInheritance()
         {
-            var memory = Runner.Run(@"
-class asdf():
-    x = 1
+            var memory = Runner.Run("""
+                                    class asdf():
+                                        x = 1
 
-class qwer(asdf):
-    y = 2
-");
+                                    class qwer(asdf):
+                                        y = 2
+
+                                    """);
             var asdf = new ClassVariable(new Dictionary<string, Variable>()
             {
                 { "x", new IntegerVariable(1) }
@@ -84,16 +85,17 @@ class qwer(asdf):
         [Test]
         public void HandlesClassDefinitionWithMultipleInheritance()
         {
-            var memory = Runner.Run(@"
-class asdf:
-    x = 1
+            var memory = Runner.Run("""
+                                    class asdf:
+                                        x = 1
 
-class qwer:
-    y = 2
+                                    class qwer:
+                                        y = 2
 
-class zxcv(asdf, qwer):
-    z = 3
-");
+                                    class zxcv(asdf, qwer):
+                                        z = 3
+
+                                    """);
             
             var asdf = new ClassVariable(new Dictionary<string, Variable>()
             {

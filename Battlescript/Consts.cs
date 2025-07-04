@@ -31,6 +31,14 @@ public static class Consts
     public static readonly char[] Separators = ['(', ')', '{', '}', ',', '[', ']', ':', '.'];
     public static readonly string[] OpeningSeparators = ["(", "{", "["];
     public static readonly string[] ClosingSeparators = [")", "}", "]"];
+    
+    public const string SquareBrackets = "[";
+    public const string CurlyBraces = "{";
+    public const string Parentheses = "(";
+    public const string Period = ".";
+    public const string Comma = ",";
+    public const string Colon = ":";
+
     public static readonly Dictionary<string, string> MatchingSeparatorsMap = new() {
         {"(", ")"},
         {"{", "}"},

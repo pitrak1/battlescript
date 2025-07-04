@@ -96,7 +96,4 @@ Support for constructors
 
 
 Dev TODOs:
-- Correct KeyValuePairInstruction/Variable to be a generic array to support range indices with three arguments (ex: `i[1:2:3]`)
-    - Need to check getitem/setitem code
-
-- Create more generic argument checking solution that can support Variable or Instruction arguments and can work with Battlescript functions as well as C# builtins
+- Create more generic argument checking solution that can support Variable or Instruction arguments and can work with Battlescript functions as well as C# builtins, use this when claling constructor in ArrayInstruction/Interpret/ParenthesesInterpret

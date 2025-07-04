@@ -51,13 +51,14 @@ public static class ClassesAndObjectsTests
             {
                 { "i", new IntegerVariable(1234) }
             };
-            var input = @"
-class asdf:
-    i = 1234
-    def j():
-        return 5
+            var input = """
+                        class asdf:
+                            i = 1234
+                            def j():
+                                return 5
 
-x = asdf()";
+                        x = asdf()
+                        """;
             var expected = new ObjectVariable(
                 objectValues,
                 new ClassVariable(classValues));
@@ -93,16 +94,17 @@ x = asdf()";
         [Test]
         public void AllowsAccessingMethods()
         {
-            var input = @"
-class asdf:
-    i = 1234
+            var input = """
+                        class asdf:
+                            i = 1234
+                        
+                            def j(self):
+                                self.i = 2345
+                        x = asdf()
+                        x.j()
+                        y = x.i
 
-    def j(self):
-        self.i = 2345
-x = asdf()
-x.j()
-y = x.i
-";
+                        """;
             var expected = new IntegerVariable(2345);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("y"));
@@ -116,11 +118,12 @@ y = x.i
         [Test]
         public void SupportsClassesWithNoConstructors()
         {
-            var input = @"
-class asdf:
-    y = 5
-z = asdf()
-x = z.y";
+            var input = """
+                        class asdf:
+                            y = 5
+                        z = asdf()
+                        x = z.y
+                        """;
             var expected = new IntegerVariable(5);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
@@ -130,14 +133,15 @@ x = z.y";
         [Test]
         public void SupportsConstructorsWithNoParameters()
         {
-            var input = @"
-class asdf:
-    y = 5
-
-    def __init__(self):
-        self.y = 6
-z = asdf()
-x = z.y";
+            var input = """
+                        class asdf:
+                            y = 5
+                        
+                            def __init__(self):
+                                self.y = 6
+                        z = asdf()
+                        x = z.y
+                        """;
             var expected = new IntegerVariable(6);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
@@ -147,14 +151,15 @@ x = z.y";
         [Test]
         public void SupportsConstructorsWithParameters()
         {
-            var input = @"
-class asdf:
-    y = 5
-
-    def __init__(self, a):
-        self.y = a
-z = asdf(9)
-x = z.y";
+            var input = """
+                        class asdf:
+                            y = 5
+                        
+                            def __init__(self, a):
+                                self.y = a
+                        z = asdf(9)
+                        x = z.y
+                        """;
             var expected = new IntegerVariable(9);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
@@ -188,16 +193,17 @@ x = z.y";
         [Test]
         public void SupportsConstructorsInSuperclasses()
         {
-            var input = @"
-class asdf:
-    def __init__(self, a):
-        self.y = a
+            var input = """
+                        class asdf:
+                            def __init__(self, a):
+                                self.y = a
 
-class qwer(asdf):
-    y = 6
+                        class qwer(asdf):
+                            y = 6
 
-z = qwer(9)
-x = z.y";
+                        z = qwer(9)
+                        x = z.y
+                        """;
             var expected = new IntegerVariable(9);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
@@ -211,16 +217,17 @@ x = z.y";
         [Test]
         public void AllowsBinaryOperationOverloading()
         {
-            var input = @"
-class asdf:
-    i = 5
+            var input = """
+                        class asdf:
+                            i = 5
+                        
+                            def __add__(self, other):
+                                return self.i + other.i
 
-    def __add__(self, other):
-        return self.i + other.i
-
-z = asdf()
-y = asdf()
-x = z + y";
+                        z = asdf()
+                        y = asdf()
+                        x = z + y
+                        """;
             var expected = new IntegerVariable(10);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
@@ -230,15 +237,16 @@ x = z + y";
         [Test]
         public void AllowsUnaryOperationOverloading()
         {
-            var input = @"
-class asdf:
-    i = 5
+            var input = """
+                        class asdf:
+                            i = 5
+                        
+                            def __neg__(self):
+                                return -self.i
 
-    def __neg__(self):
-        return -self.i
-
-z = asdf()
-x = -z";
+                        z = asdf()
+                        x = -z
+                        """;
             var expected = new IntegerVariable(-5);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
@@ -248,18 +256,19 @@ x = -z";
         [Test]
         public void AllowsAssignmentOperationOverloading()
         {
-            var input = @"
-class asdf:
-    i = 5
+            var input = """
+                        class asdf:
+                            i = 5
+                        
+                            def __iadd__(self, other):
+                                self.i += other.i
+                                return self
 
-    def __iadd__(self, other):
-        self.i += other.i
-        return self
-
-z = asdf()
-y = asdf()
-z += y
-x = z.i";
+                        z = asdf()
+                        y = asdf()
+                        z += y
+                        x = z.i
+                        """;
             var expected = new IntegerVariable(10);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));

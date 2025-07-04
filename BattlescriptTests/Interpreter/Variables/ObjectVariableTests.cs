@@ -57,8 +57,8 @@ public static class ObjectVariableTests
             var objectVariable = classVariable.CreateObject();
             var index = new ArrayInstruction(
                 [new StringInstruction("asdf")],
-                new ArrayInstruction([new StringInstruction("y")], separator: "["),
-                separator: "[");
+                Consts.SquareBrackets,
+                next: new ArrayInstruction([new StringInstruction("y")], Consts.SquareBrackets));
             var result = objectVariable.GetItem(new Memory(), index);
             Assert.That(result, Is.InstanceOf<IntegerVariable>());
             Assert.That(((IntegerVariable)result).Value, Is.EqualTo(6));
@@ -158,8 +158,8 @@ public static class ObjectVariableTests
             var objectVariable = classVariable.CreateObject();
             var index = new ArrayInstruction(
                 [new StringInstruction("asdf")],
-                new ArrayInstruction([new StringInstruction("y")], separator: "["),
-                separator: "[");
+                Consts.SquareBrackets,
+                next: new ArrayInstruction([new StringInstruction("y")], Consts.SquareBrackets));
             objectVariable.SetItem(new Memory(), new IntegerVariable(8), index, objectVariable);
             var result = objectVariable.GetItem(new Memory(), index);
             Assert.That(result, Is.InstanceOf<IntegerVariable>());

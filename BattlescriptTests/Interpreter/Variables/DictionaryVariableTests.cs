@@ -40,8 +40,8 @@ public static class DictionaryVariableTests
             
             var indexInstruction = new ArrayInstruction(
                 [new StringInstruction("asdf")],
-                new ArrayInstruction([new StringInstruction("zxcv")], separator: "["), 
-                separator: "[");
+                Consts.SquareBrackets,
+                next: new ArrayInstruction([new StringInstruction("zxcv")], Consts.SquareBrackets));
             var result = dictionary.GetItem(new Memory(), indexInstruction);
             Assert.That(result, Is.TypeOf<IntegerVariable>());
             Assert.That(((IntegerVariable)result).Value, Is.EqualTo(5));
@@ -83,8 +83,8 @@ public static class DictionaryVariableTests
             });
             var indexInstruction = new ArrayInstruction(
                 [new StringInstruction("asdf")],
-                new ArrayInstruction([new StringInstruction("zxcv")], separator: "["), 
-                separator: "[");
+                Consts.SquareBrackets,
+                next: new ArrayInstruction([new StringInstruction("zxcv")], Consts.SquareBrackets));
             var valueVariable = new IntegerVariable(10);
             dictionary.SetItem(new Memory(), valueVariable, indexInstruction);
             var result = dictionary.GetItem(new Memory(), indexInstruction);

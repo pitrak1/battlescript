@@ -204,8 +204,8 @@ public static class ListVariableTests
             var index2 = new IntegerInstruction(1);
             var indexInstruction = new ArrayInstruction(
                 [index1], 
-                new ArrayInstruction([index2], separator: "["), 
-                separator: "[");
+                Consts.SquareBrackets,
+                next: new ArrayInstruction([index2], Consts.SquareBrackets));
             var result = listVariable.GetItem(new Memory(), indexInstruction);
             var expected = new StringVariable("b");
             Assert.That(result, Is.EqualTo(expected));
@@ -267,9 +267,9 @@ public static class ListVariableTests
             var index2 = new IntegerInstruction(1);
             var value = new StringVariable("c");
             var indexInstruction = new ArrayInstruction(
-                [index1], 
-                new ArrayInstruction([index2], separator: "["), 
-                separator: "[");
+                [index1],
+                Consts.SquareBrackets,
+                next: new ArrayInstruction([index2], Consts.SquareBrackets));
             listVariable.SetItem(new Memory(), value, indexInstruction);
             
             Assert.That(listVariable.Values[2], Is.TypeOf<ListVariable>());

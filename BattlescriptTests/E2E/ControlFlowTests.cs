@@ -210,12 +210,13 @@ public static class ControlFlowTests
         [Test]
         public void ForSupport()
         {
-            var input = @"
-x = 5
-for y in range(4):
-    if y == 2:
-        continue
-    x = x + y";
+            var input = """
+                        x = 5
+                        for y in range(4):
+                            if y == 2:
+                                continue
+                            x = x + y
+                        """;
             var expected = new IntegerVariable(9);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
@@ -225,14 +226,15 @@ for y in range(4):
         [Test]
         public void WhileSupport()
         {
-            var input = @"
-x = 5
-y = 0
-while y < 4:
-    y = y + 1
-    if y == 2:
-        continue
-    x = x + y";
+            var input = """
+                        x = 5
+                        y = 0
+                        while y < 4:
+                            y = y + 1
+                            if y == 2:
+                                continue
+                            x = x + y
+                        """;
             var expected = new IntegerVariable(13);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
@@ -246,12 +248,13 @@ while y < 4:
         [Test]
         public void ForSupport()
         {
-            var input = @"
-x = 5
-for y in range(4):
-    if y == 2:
-        break
-    x = x + y";
+            var input = """
+                        x = 5
+                        for y in range(4):
+                            if y == 2:
+                                break
+                            x = x + y
+                        """;
             var expected = new IntegerVariable(6);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
@@ -261,14 +264,15 @@ for y in range(4):
         [Test]
         public void WhileSupport()
         {
-            var input = @"
-x = 5
-y = 0
-while y < 4:
-    y = y + 1
-    if y == 2:
-        break
-    x = x + y";
+            var input = """
+                        x = 5
+                        y = 0
+                        while y < 4:
+                            y = y + 1
+                            if y == 2:
+                                break
+                            x = x + y
+                        """;
             var expected = new IntegerVariable(6);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
@@ -282,10 +286,11 @@ while y < 4:
         [Test]
         public void IsSupported()
         {
-            var input = @"
-x = 5
-if x == 5:
-    pass";
+            var input = """
+                        x = 5
+                        if x == 5:
+                            pass
+                        """;
             var expected = new IntegerVariable(5);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));

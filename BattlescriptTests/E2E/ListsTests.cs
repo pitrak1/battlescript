@@ -11,9 +11,10 @@ public static class ListsTests
         [Test]
         public void Append()
         {
-            var input = @"
-x = []
-x.append(1)";
+            var input = """
+                        x = []
+                        x.append(1)
+                        """;
             var expected = new ListVariable([new IntegerVariable(1)]);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));

@@ -279,9 +279,9 @@ public static class MemoryTests
             var variableInstructionWithIndex = new VariableInstruction(
                 "x",
                 new ArrayInstruction(
-                    [new IntegerInstruction(1)], 
-                    new ArrayInstruction([new IntegerInstruction(5)], separator: "["),
-                    separator: "["));
+                    [new IntegerInstruction(1)],
+                    Consts.SquareBrackets,
+                    next: new ArrayInstruction([new IntegerInstruction(5)], Consts.SquareBrackets)));
             memory.SetVariable(variableInstructionWithIndex, new IntegerVariable(10));
             var expected = new ListVariable([
                 new IntegerVariable(5),
