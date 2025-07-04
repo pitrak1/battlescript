@@ -29,7 +29,7 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
         {
             Separator = Consts.SquareBrackets;
             Values = [new StringInstruction([tokens[1]])];
-            InitializeNext(2);
+            ParseNext(tokens, 2);
         }
 
         void InitializeListWithSeparators()
@@ -39,17 +39,9 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
             var closingSeparatorIndex = InstructionUtilities.GetTokenIndex(tokens, [closingSeparator]);
             var tokensInSeparators = tokens.GetRange(1, closingSeparatorIndex - 1);
             InitializeListWithoutSeparators(tokensInSeparators);
-            InitializeNext(closingSeparatorIndex + 1);
+            ParseNext(tokens, closingSeparatorIndex + 1);
         }
-
-        void InitializeNext(int expectedTokenCount)
-        {
-            if (tokens.Count > expectedTokenCount)
-            {
-                Next = InstructionFactory.Create(tokens.GetRange(expectedTokenCount, tokens.Count - expectedTokenCount));
-            }
-        }
-
+        
         void InitializeListWithoutSeparators(List<Token> tokenList)
         {
             var commaIndex = InstructionUtilities.GetTokenIndex(tokenList, [Consts.Comma]);

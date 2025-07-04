@@ -12,12 +12,9 @@ public class BuiltInInstruction : Instruction
         
         
         Parameters = InstructionUtilities.ParseEntriesBetweenDelimiters(argumentTokens, [","])!;
-
-        if (tokens.Count > endOfArgumentsIndex + 1)
-        {
-            Next = InstructionFactory.Create(tokens.GetRange(endOfArgumentsIndex + 1, tokens.Count - endOfArgumentsIndex - 1));
-        }
-
+        
+        ParseNext(tokens, endOfArgumentsIndex + 1);
+        
         Name = tokens[0].Value;
         Line = tokens[0].Line;
         Column = tokens[0].Column;

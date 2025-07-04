@@ -20,6 +20,14 @@ public abstract class Instruction(int line = 0, int column = 0) : IEquatable<Ins
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null);
 
+    protected void ParseNext(List<Token> tokens, int expectedTokenCount)
+    {
+        if (tokens.Count > expectedTokenCount)
+        {
+            Next = InstructionFactory.Create(tokens.GetRange(expectedTokenCount, tokens.Count - expectedTokenCount));
+        }
+    }
+
     // All the code below is to override equality
     public override bool Equals(object obj) => Equals(obj as Instruction);
     public bool Equals(Instruction? instruction)
