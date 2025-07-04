@@ -164,15 +164,7 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
                 var constructor = objectVariable.GetItem(memory, "__init__");
                 if (constructor is FunctionVariable constructorVariable)
                 {
-                    // This needs to be changed when I rewrite function args.  This currently doesn't support keyword
-                    // arguments like it should.
-                    List<Variable> arguments = [];
-                    foreach (var argument in Values)
-                    {
-                        arguments.Add(argument!.Interpret(memory, objectVariable, objectContext));
-                    }
-                
-                    constructorVariable.RunFunction(memory, arguments, objectVariable);
+                    constructorVariable.RunFunction(memory, Values, objectVariable);
                 }
             }
         }

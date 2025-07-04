@@ -2,7 +2,7 @@ namespace Battlescript;
 
 public static class ArgumentTransfer
 {
-    public static void Run(
+    public static Dictionary<string, Variable> Run(
         Memory memory, 
         List<Variable> arguments, 
         List<Instruction> parameters,
@@ -24,11 +24,20 @@ public static class ArgumentTransfer
         }
         
         var parameterDefaultValues = GetParameterDefaultValues(memory, parameters, objectVariable);
-        ApplyArgumentsToParameters(memory, positionalArguments, new Dictionary<string, Variable>(), parameters, parameterDefaultValues);
+        return ApplyArgumentsToParameters(positionalArguments, new Dictionary<string, Variable>(), parameters, parameterDefaultValues);
+    }
 
+    public static void RunAndApply(
+        Memory memory,
+        List<Variable> arguments,
+        List<Instruction> parameters,
+        ObjectVariable? objectVariable = null)
+    {
+        var results = Run(memory, arguments, parameters, objectVariable);
+        Apply(memory, results);
     }
     
-    public static void Run(
+    public static Dictionary<string, Variable> Run(
         Memory memory, 
         List<Instruction> arguments,
         List<Instruction> parameters, 
@@ -36,7 +45,25 @@ public static class ArgumentTransfer
     {
         var (positionalArguments, keywordArguments) = ParseArguments(memory, arguments, objectVariable);
         var parameterDefaultValues = GetParameterDefaultValues(memory, parameters, objectVariable);
-        ApplyArgumentsToParameters(memory, positionalArguments, keywordArguments, parameters, parameterDefaultValues);
+        return ApplyArgumentsToParameters(positionalArguments, keywordArguments, parameters, parameterDefaultValues);
+    }
+    
+    public static void RunAndApply(
+        Memory memory,
+        List<Instruction> arguments,
+        List<Instruction> parameters,
+        ObjectVariable? objectVariable = null)
+    {
+        var results = Run(memory, arguments, parameters, objectVariable);
+        Apply(memory, results);
+    }
+
+    private static void Apply(Memory memory, Dictionary<string, Variable> results)
+    {
+        foreach (var (name, value) in results)
+        {
+            memory.SetVariable(new VariableInstruction(name), value);
+        }
     }
 
     private static (Dictionary<int, Variable>, Dictionary<string, Variable>)
@@ -104,13 +131,14 @@ public static class ArgumentTransfer
         return parameterDefaultValues;
     }
 
-    private static void ApplyArgumentsToParameters(
-        Memory memory, 
+    private static Dictionary<string, Variable> ApplyArgumentsToParameters(
         Dictionary<int, Variable> positionalArguments,
         Dictionary<string, Variable> keywordArguments, 
         List<Instruction> parameters,
         Dictionary<string, Variable> defaultValues)
     {
+        var results = new Dictionary<string, Variable>();
+        
         for (var i = 0; i < parameters.Count; i++)
         {
             var parameter = parameters[i];
@@ -131,15 +159,15 @@ public static class ArgumentTransfer
                 throw new InterpreterMultipleArgumentsForParameterException(parameterName);
             } else if (positionalArguments.ContainsKey(i))
             {
-                memory.SetVariable(new VariableInstruction(parameterName), positionalArguments[i]);
+                results.Add(parameterName, positionalArguments[i]);
                 positionalArguments.Remove(i);
             } else if (keywordArguments.ContainsKey(parameterName))
             {
-                memory.SetVariable(new VariableInstruction(parameterName), keywordArguments[parameterName]);
+                results.Add(parameterName, keywordArguments[parameterName]);
                 keywordArguments.Remove(parameterName);
             } else if (defaultValues.TryGetValue(parameterName, out var defaultValue))
             {
-                memory.SetVariable(new VariableInstruction(parameterName), defaultValue);
+                results.Add(parameterName, defaultValue);
             }
             else
             {
@@ -156,5 +184,7 @@ public static class ArgumentTransfer
         {
             throw new Exception("unknown keyword arguments at " + keywordArguments.Keys.ToList());
         }
+
+        return results;
     }
 }

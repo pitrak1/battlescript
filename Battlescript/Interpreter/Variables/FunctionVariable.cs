@@ -16,7 +16,7 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
     {
         memory.AddScope();
         
-        ArgumentTransfer.Run(memory, arguments, Parameters, objectVariable);
+        ArgumentTransfer.RunAndApply(memory, arguments, Parameters, objectVariable);
         
         var returnValue = RunInstructions(memory);
             
@@ -29,7 +29,7 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
     {
         memory.AddScope();
         
-        ArgumentTransfer.Run(memory, arguments, Parameters, objectVariable);
+        ArgumentTransfer.RunAndApply(memory, arguments, Parameters, objectVariable);
         
         var returnValue = RunInstructions(memory);
             
