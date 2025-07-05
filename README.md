@@ -93,7 +93,5 @@ TODOs before v1:
 
 Support for constructors
 
-
-
-Dev TODOs:
-- Create more generic argument checking solution that can support Variable or Instruction arguments and can work with Battlescript functions as well as C# builtins, use this when claling constructor in ArrayInstruction/Interpret/ParenthesesInterpret
+TODO:
+Probably want to make data model more closely match python's data model before doing explicit exception checking.  It will probably make things easier in the long run.

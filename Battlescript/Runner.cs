@@ -9,11 +9,24 @@ public static class Runner
         return memory;
     }
 
+    public static Dictionary<string, Variable> RunFilePath(string path)
+    {
+        var memory = new Memory();
+        var input = ReadFile(path);
+        RunPartial(memory, input);
+        return memory.Scopes.First();
+    }
+
     private static void LoadBuiltin(Memory memory, string builtinName)
     {
-        using StreamReader reader = new($"/Users/nickpitrak/Desktop/Battlescript/Battlescript/Builtins/{builtinName}.bs");
-        string text = reader.ReadToEnd();
+        string text = ReadFile(builtinName);
         RunPartial(memory, text);
+    }
+
+    private static string ReadFile(string path)
+    {
+        using StreamReader reader = new(path);
+        return reader.ReadToEnd();
     }
 
     private static void RunPartial(Memory memory, string input)

@@ -296,7 +296,7 @@ public static class Consts
         Operator,
         Assignment,
         BuiltIn,
-        Breakpoint
+        Breakpoint,
     }
 
     public enum VariableTypes

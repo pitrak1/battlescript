@@ -50,6 +50,8 @@ public static class InstructionFactory
                     return new ContinueInstruction();
                 case "lambda":
                     return new LambdaInstruction(tokens);
+                case "from":
+                    return new ImportInstruction(tokens);
                 default:
                     throw new ParserUnexpectedTokenException(tokens[0]);
             }
