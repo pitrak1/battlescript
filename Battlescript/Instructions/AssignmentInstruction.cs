@@ -16,8 +16,8 @@ public class AssignmentInstruction : Instruction, IEquatable<AssignmentInstructi
         var operands = InstructionUtilities.ParseLeftAndRightAroundIndex(tokens, assignmentIndex);
         
         Operation = assignmentToken.Value;
-        Left = operands.Left;
-        Right = operands.Right;
+        Left = operands.Left!;
+        Right = operands.Right!;
         Line = assignmentToken.Line;
         Column = assignmentToken.Column;
     }

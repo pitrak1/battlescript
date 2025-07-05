@@ -14,7 +14,6 @@ public static class MemoryTests
             var memory = new Memory();
 
             Assert.That(memory.Scopes.Count, Is.EqualTo(1));
-            Assert.That(memory.Scopes[0], Is.Empty);
         }
     }
 

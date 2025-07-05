@@ -76,13 +76,8 @@ public static partial class InstructionTests
                             new VariableInstruction("qwer")))
                 ]
             );
-
-            var expected = new Dictionary<string, Variable>()
-            {
-                ["func"] = functionVariable
-            };
             
-            Assert.That(memory.Scopes[0], Is.EquivalentTo(expected));
+            Assert.That(memory.Scopes[0]["func"], Is.EqualTo(functionVariable));
         }
         
     }

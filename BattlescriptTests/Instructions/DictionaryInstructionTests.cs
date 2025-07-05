@@ -44,51 +44,36 @@ public static partial class InstructionTests
         public void HandlesSimpleValues()
         {
             var memory = Runner.Run("x = {'asdf': 5, 'qwer': 'asdf'}");
-            var expected = new Dictionary<string, Variable>()
+            var expected = new DictionaryVariable(new Dictionary<Variable, Variable>()
             {
-                {
-                    "x", new DictionaryVariable(new Dictionary<Variable, Variable>()
-                    {
-                        {new StringVariable("asdf"), new IntegerVariable(5)},
-                        {new StringVariable("qwer"), new StringVariable("asdf")}
-                    })
-                }
-            };
-            Assert.That(memory.Scopes[0], Is.EquivalentTo(expected));
+                { new StringVariable("asdf"), new IntegerVariable(5) },
+                { new StringVariable("qwer"), new StringVariable("asdf") }
+            });
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
         public void AllowsStringsAndNumbersToBeUsedAsKeys()
         {
             var memory = Runner.Run("x = {'asdf': 5, 4: 'asdf'}");
-            var expected = new Dictionary<string, Variable>()
+            var expected = new DictionaryVariable(new Dictionary<Variable, Variable>()
             {
-                {
-                    "x", new DictionaryVariable(new Dictionary<Variable, Variable>()
-                    {
-                        {new StringVariable("asdf"), new IntegerVariable(5)},
-                        {new IntegerVariable(4), new StringVariable("asdf")}
-                    })
-                }
-            };
-            Assert.That(memory.Scopes[0], Is.EquivalentTo(expected));
+                { new StringVariable("asdf"), new IntegerVariable(5) },
+                { new IntegerVariable(4), new StringVariable("asdf") }
+            });
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
         [Test]
         public void HandlesExpressionValues()
         {
             var memory = Runner.Run("x = {'asdf': 5 + 6, 'qwer': 3 * 4}");
-            var expected = new Dictionary<string, Variable>()
+            var expected = new DictionaryVariable(new Dictionary<Variable, Variable>()
             {
-                {
-                    "x", new DictionaryVariable(new Dictionary<Variable, Variable>()
-                    {
-                        {new StringVariable("asdf"), new IntegerVariable(11)},
-                        {new StringVariable("qwer"), new IntegerVariable(12)}
-                    })
-                }
-            };
-            Assert.That(memory.Scopes[0], Is.EquivalentTo(expected));
+                { new StringVariable("asdf"), new IntegerVariable(11) },
+                { new StringVariable("qwer"), new IntegerVariable(12) }
+            });
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
     }
 }

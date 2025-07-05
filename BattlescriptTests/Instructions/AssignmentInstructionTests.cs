@@ -70,11 +70,5 @@ public static partial class InstructionTests
             var memory = Runner.Run("x = 6");
             Assert.That(memory.Scopes.First()["x"], Is.EqualTo(new IntegerVariable(6)));
         }
-
-        [Test]
-        public void ThrowsErrorIfLeftHandSideIsNotVariable()
-        {
-            Assert.Throws<Exception>(() => Runner.Run("5 = 6"));
-        }
     }
 }

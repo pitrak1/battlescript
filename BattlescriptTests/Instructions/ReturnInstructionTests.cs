@@ -28,21 +28,18 @@ public static partial class InstructionTests
         {
             var memory = Runner.Run("def func(asdf):\n\treturn asdf + 5\nx = func(4)");
 
-            var expected = new Dictionary<string, Variable>()
-            {
-                ["func"] = new FunctionVariable(
-                    [new VariableInstruction("asdf")],
-                    [
-                        new ReturnInstruction(
-                            new OperationInstruction(
-                                "+",
-                                new VariableInstruction("asdf"),
-                                new IntegerInstruction(5)))
-                    ]),
-                ["x"] = new IntegerVariable(9)
-            };
+            var funcVariable = new FunctionVariable(
+                [new VariableInstruction("asdf")],
+                [
+                    new ReturnInstruction(
+                        new OperationInstruction(
+                            "+",
+                            new VariableInstruction("asdf"),
+                            new IntegerInstruction(5)))
+                ]);
             
-            Assert.That(memory.Scopes[0], Is.EquivalentTo(expected));
+            Assert.That(memory.Scopes[0]["func"], Is.EqualTo(funcVariable));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(new IntegerVariable(9)));
         }
     }
 }

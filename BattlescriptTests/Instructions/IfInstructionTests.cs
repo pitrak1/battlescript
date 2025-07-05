@@ -27,24 +27,14 @@ public static partial class InstructionTests
         public void RunsCodeIfConditionIsTrue()
         {
             var memory = Runner.Run("x = 3\nif True:\n\tx = 5");
-            var expected = new Dictionary<string, Variable>()
-            {
-                ["x"] = new IntegerVariable(5)
-            };
-            
-            Assert.That(memory.Scopes[0], Is.EqualTo(expected));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(new IntegerVariable(5)));
         }
         
         [Test]
         public void DoesNotRunCodeIfConditionIsFalse()
         {
             var memory = Runner.Run("x = 3\nif False:\n\tx = 5");
-            var expected = new Dictionary<string, Variable>()
-            {
-                ["x"] = new IntegerVariable(3)
-            };
-            
-            Assert.That(memory.Scopes[0], Is.EqualTo(expected));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(new IntegerVariable(3)));
         }
     }
 }

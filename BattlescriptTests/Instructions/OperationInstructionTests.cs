@@ -76,11 +76,7 @@ public static partial class InstructionTests
         public void HandlesBinaryOperations()
         {
             var memory = Runner.Run("x = 5 + 6");
-            var expected = new Dictionary<string, Variable>()
-            {
-                ["x"] = new IntegerVariable(11)
-            };
-            Assert.That(memory.Scopes[0], Is.EqualTo(expected));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(new IntegerVariable(11)));
         }
     }
 }
