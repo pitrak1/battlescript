@@ -46,22 +46,14 @@ public static partial class InstructionTests
         public void HandlesSimpleAssignments()
         {
             var memory = Runner.Run("x = 6");
-            var expected = new Dictionary<string, Variable>
-            {
-                { "x", new IntegerVariable(6) }
-            };
-            Assert.That(memory.Scopes.First(), Is.EquivalentTo(expected));
+            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(new IntegerVariable(6)));
         }
         
         [Test]
         public void HandlesAssignmentOperators()
         {
             var memory = Runner.Run("x = 6\nx += 2");
-            var expected = new Dictionary<string, Variable>
-            {
-                { "x", new IntegerVariable(8) }
-            };
-            Assert.That(memory.Scopes.First(), Is.EquivalentTo(expected));
+            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(new IntegerVariable(8)));
         }
 
         [Test]

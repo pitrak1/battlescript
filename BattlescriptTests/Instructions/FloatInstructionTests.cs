@@ -27,11 +27,7 @@ public static partial class InstructionTests
         public void ReturnsNewNumberVariable()
         {
             var memory = Runner.Run("x = 5.4");
-            var expected = new Dictionary<string, Variable>
-            {
-                { "x", new FloatVariable(5.4) }
-            };
-            Assert.That(memory.Scopes.First(), Is.EquivalentTo(expected));
+            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(new FloatVariable(5.4)));
         }
     }
 }

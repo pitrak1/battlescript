@@ -5,6 +5,8 @@ public static class Runner
     public static Memory Run(string input)
     {
         var memory = new Memory();
+        LoadBuiltin(memory, "int");
+        memory.PopulateBuiltInReferences();
         RunPartial(memory, input);
         return memory;
     }
@@ -19,7 +21,7 @@ public static class Runner
 
     private static void LoadBuiltin(Memory memory, string builtinName)
     {
-        string text = ReadFile(builtinName);
+        string text = ReadFile($"/Users/nickpitrak/Desktop/Battlescript/Battlescript/BuiltIn/{builtinName}.bs");
         RunPartial(memory, text);
     }
 

@@ -41,16 +41,11 @@ public static partial class InstructionTests
         public void HandlesBasicClassDefinition()
         {
             var memory = Runner.Run("class MyClass:\n\tx = 1");
-            var expected = new Dictionary<string, Variable>()
+            var expected = new ClassVariable(new Dictionary<string, Variable>()
             {
-                {
-                    "MyClass", new ClassVariable(new Dictionary<string, Variable>()
-                    {
-                        { "x", new IntegerVariable(1) }
-                    })
-                }
-            };
-            Assert.That(memory.Scopes.First(), Is.EquivalentTo(expected));
+                { "x", new IntegerVariable(1) }
+            });
+            Assert.That(memory.Scopes.First()["MyClass"], Is.EqualTo(expected));
         }
         
         [Test]
@@ -73,13 +68,9 @@ public static partial class InstructionTests
             {
                 { "y", new IntegerVariable(2) }
             }, [asdf]);
-            
-            var expected = new Dictionary<string, Variable>()
-            {
-                {"asdf", asdf},
-                {"qwer", qwer}
-            };
-            Assert.That(memory.Scopes.First(), Is.EquivalentTo(expected));
+
+            Assert.That(memory.Scopes.First()["asdf"], Is.EqualTo(asdf));
+            Assert.That(memory.Scopes.First()["qwer"], Is.EqualTo(qwer));
         }
         
         [Test]
@@ -118,7 +109,9 @@ public static partial class InstructionTests
                 {"qwer", qwer},
                 {"zxcv", zxcv}
             };
-            Assert.That(memory.Scopes.First(), Is.EquivalentTo(expected));
+            Assert.That(memory.Scopes.First()["asdf"], Is.EqualTo(asdf));
+            Assert.That(memory.Scopes.First()["qwer"], Is.EqualTo(qwer));
+            Assert.That(memory.Scopes.First()["zxcv"], Is.EqualTo(zxcv));
         }
     }
 }

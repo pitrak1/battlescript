@@ -5,6 +5,13 @@ namespace Battlescript;
 public class Memory(List<Dictionary<string, Variable>>? scopes = null)
 {
     public List<Dictionary<string, Variable>> Scopes { get; } = scopes ?? [new Dictionary<string, Variable>()];
+
+    public Dictionary<string, Variable> BuiltInReferences = [];
+
+    public void PopulateBuiltInReferences()
+    {
+        BuiltInReferences["int"] = GetVariable("int")!;
+    }
     
     public Variable? GetVariable(string name)
     {

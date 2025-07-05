@@ -1,0 +1,4 @@
+class int:
+    __value = __numeric__
+
+    
