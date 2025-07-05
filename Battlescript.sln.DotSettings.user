@@ -8,6 +8,11 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=687838b1_002Df552_002D46e8_002D8d57_002D34a14f7f8934/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;BattlescriptTests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Project Location="/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests" Presentation="&amp;lt;BattlescriptTests&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=74e1b7fa_002D42d9_002D4292_002Dbb9f_002D8d301c430f54/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="BuiltInInstructionInterpret" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.Instructions.InstructionTests+BuiltInInstructionInterpret&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
 	
 	
 	

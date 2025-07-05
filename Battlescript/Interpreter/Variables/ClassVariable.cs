@@ -81,6 +81,26 @@ public class ClassVariable : Variable, IEquatable<ClassVariable>
         }
     }
     
+    public bool IsSubclass(ClassVariable classVariable)
+    {
+        if (Equals(classVariable))
+        {
+            return true;
+        }
+        else
+        {
+            foreach (var superclass in SuperClasses)
+            {
+                if (superclass.IsSubclass(classVariable))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+    
     // All the code below is to override equality
     public override bool Equals(object obj) => Equals(obj as ClassVariable);
     public bool Equals(ClassVariable? variable)

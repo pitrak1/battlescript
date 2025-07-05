@@ -68,6 +68,18 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
         
         return foundItem;
     }
+
+    public bool IsInstance(ClassVariable classVariable)
+    {
+        if (Class.Equals(classVariable))
+        {
+            return true;
+        }
+        else
+        {
+            return Class.IsSubclass(classVariable);
+        }
+    }
     
     // All the code below is to override equality
     public override bool Equals(object obj) => Equals(obj as ObjectVariable);

@@ -39,6 +39,10 @@ public class BuiltInInstruction : Instruction
                 break;
             case "range":
                 return RunRangeFunction(memory);
+            case "isinstance":
+                return RunIsInstanceFunction(memory);
+            case "issubclass":
+                return RunIsSubclassFunction(memory);
         }
         // TODO
         return new ConstantVariable();
@@ -98,6 +102,46 @@ public class BuiltInInstruction : Instruction
                 }
             }
             return new ListVariable(values);
+        }
+    }
+
+    private ConstantVariable RunIsInstanceFunction(Memory memory)
+    {
+        if (Parameters.Count != 2)
+        {
+            throw new Exception("Bad arguments, clean this up later");
+        }
+        
+        var objectExpression = Parameters[0].Interpret(memory);
+        var classExpression = Parameters[1].Interpret(memory);
+
+        if (objectExpression is ObjectVariable objectVariable && classExpression is ClassVariable classVariable)
+        {
+            return new ConstantVariable(objectVariable.IsInstance(classVariable));
+        }
+        else
+        {
+            throw new Exception("Bad arguments, clean this up later");
+        }
+    }
+    
+    private ConstantVariable RunIsSubclassFunction(Memory memory)
+    {
+        if (Parameters.Count != 2)
+        {
+            throw new Exception("Bad arguments, clean this up later");
+        }
+        
+        var firstExpression = Parameters[0].Interpret(memory);
+        var secondExpression = Parameters[1].Interpret(memory);
+
+        if (firstExpression is ClassVariable firstVariable && secondExpression is ClassVariable secondVariable)
+        {
+            return new ConstantVariable(firstVariable.IsSubclass(secondVariable));
+        }
+        else
+        {
+            throw new Exception("Bad arguments, clean this up later");
         }
     }
     
