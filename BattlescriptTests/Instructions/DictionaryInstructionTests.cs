@@ -15,8 +15,8 @@ public static partial class InstructionTests
             var lexerResult = lexer.Run();
 
             var expected = new ArrayInstruction([
-                new ArrayInstruction([new IntegerInstruction(4), new IntegerInstruction(5)], delimiter: ":"),
-                new ArrayInstruction([new IntegerInstruction(6), new StringInstruction("asdf")], delimiter: ":"),
+                new ArrayInstruction([new NumericInstruction(4), new NumericInstruction(5)], delimiter: ":"),
+                new ArrayInstruction([new NumericInstruction(6), new StringInstruction("asdf")], delimiter: ":"),
             ], separator: "{", delimiter: ",");
             
             Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
@@ -29,7 +29,7 @@ public static partial class InstructionTests
             var lexerResult = lexer.Run();
             
             var expected = new ArrayInstruction([
-                new ArrayInstruction([new StringInstruction("asdf"), new IntegerInstruction(5)], delimiter: ":"),
+                new ArrayInstruction([new StringInstruction("asdf"), new NumericInstruction(5)], delimiter: ":"),
                 new ArrayInstruction([new StringInstruction("qwer"), new StringInstruction("asdf")], delimiter: ":"),
             ], separator: "{", delimiter: ",");
             
@@ -46,7 +46,7 @@ public static partial class InstructionTests
             var memory = Runner.Run("x = {'asdf': 5, 'qwer': 'asdf'}");
             var expected = new DictionaryVariable(new Dictionary<Variable, Variable>()
             {
-                { new StringVariable("asdf"), new IntegerVariable(5) },
+                { new StringVariable("asdf"), BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5) },
                 { new StringVariable("qwer"), new StringVariable("asdf") }
             });
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -58,8 +58,8 @@ public static partial class InstructionTests
             var memory = Runner.Run("x = {'asdf': 5, 4: 'asdf'}");
             var expected = new DictionaryVariable(new Dictionary<Variable, Variable>()
             {
-                { new StringVariable("asdf"), new IntegerVariable(5) },
-                { new IntegerVariable(4), new StringVariable("asdf") }
+                { new StringVariable("asdf"), BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5) },
+                { BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4), new StringVariable("asdf") }
             });
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
@@ -70,8 +70,8 @@ public static partial class InstructionTests
             var memory = Runner.Run("x = {'asdf': 5 + 6, 'qwer': 3 * 4}");
             var expected = new DictionaryVariable(new Dictionary<Variable, Variable>()
             {
-                { new StringVariable("asdf"), new IntegerVariable(11) },
-                { new StringVariable("qwer"), new IntegerVariable(12) }
+                { new StringVariable("asdf"), BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 11) },
+                { new StringVariable("qwer"), BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 12) }
             });
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }

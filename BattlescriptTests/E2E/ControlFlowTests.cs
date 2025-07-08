@@ -12,7 +12,7 @@ public static class ControlFlowTests
         public void HandlesTrueIfStatement()
         {
             var input = "x = 5\nif x == 5:\n\tx = 6";
-            var expected = new IntegerVariable(6);
+            var expected = new NumericVariable(6);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -22,7 +22,7 @@ public static class ControlFlowTests
         public void HandlesFalseIfStatement()
         {
             var input = "x = 5\nif x == 6:\n\tx = 6";
-            var expected = new IntegerVariable(5);
+            var expected = new NumericVariable(5);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -32,7 +32,7 @@ public static class ControlFlowTests
         public void SupportsElseStatement()
         {
             var input = "x = 5\nif x == 6:\n\tx = 6\nelse:\n\tx = 7";
-            var expected = new IntegerVariable(7);
+            var expected = new NumericVariable(7);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -42,7 +42,7 @@ public static class ControlFlowTests
         public void SupportsElifStatement()
         {
             var input = "x = 5\nif x == 6:\n\tx = 6\nelif x < 8:\n\tx = 9\nelse:\n\tx = 7";
-            var expected = new IntegerVariable(9);
+            var expected = new NumericVariable(9);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -52,7 +52,7 @@ public static class ControlFlowTests
         public void SupportsElifStatementWithoutElse()
         {
             var input = "x = 5\nif x == 6:\n\tx = 6\nelif x < 8:\n\tx = 9";
-            var expected = new IntegerVariable(9);
+            var expected = new NumericVariable(9);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -62,7 +62,7 @@ public static class ControlFlowTests
         public void SupportsConsecutiveIfStatements()
         {
             var input = "x = 5\nif x < 6:\n\tx = 7\nif x >= 7:\n\tx = 9";
-            var expected = new IntegerVariable(9);
+            var expected = new NumericVariable(9);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -76,7 +76,7 @@ public static class ControlFlowTests
         public void HandlesTrueWhileStatement()
         {
             var input = "x = 5\nwhile x < 10:\n\tx += 1";
-            var expected = new IntegerVariable(10);
+            var expected = new NumericVariable(10);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -86,7 +86,7 @@ public static class ControlFlowTests
         public void HandlesFalseWhileStatement()
         {
             var input = "x = 5\nwhile x == 6:\n\tx = 10";
-            var expected = new IntegerVariable(5);
+            var expected = new NumericVariable(5);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -101,11 +101,11 @@ public static class ControlFlowTests
         {
             var input = "x = range(5)";
             var expected = new ListVariable([
-                new IntegerVariable(0),
-                new IntegerVariable(1),
-                new IntegerVariable(2),
-                new IntegerVariable(3),
-                new IntegerVariable(4),
+                new NumericVariable(0),
+                new NumericVariable(1),
+                new NumericVariable(2),
+                new NumericVariable(3),
+                new NumericVariable(4),
             ]);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
@@ -117,9 +117,9 @@ public static class ControlFlowTests
         {
             var input = "x = range(2, 5)";
             var expected = new ListVariable([
-                new IntegerVariable(2),
-                new IntegerVariable(3),
-                new IntegerVariable(4),
+                new NumericVariable(2),
+                new NumericVariable(3),
+                new NumericVariable(4),
             ]);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
@@ -131,10 +131,10 @@ public static class ControlFlowTests
         {
             var input = "x = range(2, 10, 2)";
             var expected = new ListVariable([
-                new IntegerVariable(2),
-                new IntegerVariable(4),
-                new IntegerVariable(6),
-                new IntegerVariable(8),
+                new NumericVariable(2),
+                new NumericVariable(4),
+                new NumericVariable(6),
+                new NumericVariable(8),
             ]);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
@@ -146,8 +146,8 @@ public static class ControlFlowTests
         {
             var input = "x = range(2, 5, 2)";
             var expected = new ListVariable([
-                new IntegerVariable(2),
-                new IntegerVariable(4),
+                new NumericVariable(2),
+                new NumericVariable(4),
             ]);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
@@ -159,10 +159,10 @@ public static class ControlFlowTests
         {
             var input = "x = range(2, -5, -2)";
             var expected = new ListVariable([
-                new IntegerVariable(2),
-                new IntegerVariable(0),
-                new IntegerVariable(-2),
-                new IntegerVariable(-4),
+                new NumericVariable(2),
+                new NumericVariable(0),
+                new NumericVariable(-2),
+                new NumericVariable(-4),
             ]);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
@@ -187,7 +187,7 @@ public static class ControlFlowTests
         public void ForLoopUsingRange()
         {
             var input = "x = 5\nfor y in range(3):\n\tx = x + y";
-            var expected = new IntegerVariable(8);
+            var expected = new NumericVariable(8);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -197,7 +197,7 @@ public static class ControlFlowTests
         public void ForLoopUsingList()
         {
             var input = "x = 5\nfor y in [-1, 3, 2]:\n\tx = x + y";
-            var expected = new IntegerVariable(9);
+            var expected = new NumericVariable(9);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -217,7 +217,7 @@ public static class ControlFlowTests
                                 continue
                             x = x + y
                         """;
-            var expected = new IntegerVariable(9);
+            var expected = new NumericVariable(9);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -235,7 +235,7 @@ public static class ControlFlowTests
                                 continue
                             x = x + y
                         """;
-            var expected = new IntegerVariable(13);
+            var expected = new NumericVariable(13);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -255,7 +255,7 @@ public static class ControlFlowTests
                                 break
                             x = x + y
                         """;
-            var expected = new IntegerVariable(6);
+            var expected = new NumericVariable(6);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -273,7 +273,7 @@ public static class ControlFlowTests
                                 break
                             x = x + y
                         """;
-            var expected = new IntegerVariable(6);
+            var expected = new NumericVariable(6);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -291,7 +291,7 @@ public static class ControlFlowTests
                         if x == 5:
                             pass
                         """;
-            var expected = new IntegerVariable(5);
+            var expected = new NumericVariable(5);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));

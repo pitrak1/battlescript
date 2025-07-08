@@ -38,12 +38,22 @@ public class ElseInstruction : Instruction, IEquatable<ElseInstruction>
             var condition = Condition.Interpret(memory);
             if (Truthiness.IsTruthy(condition))
             {
-                memory.AddScope();
-                foreach (var inst in Instructions)
+                try
                 {
-                    inst.Interpret(memory);
+                    memory.AddScope();
+                    foreach (var inst in Instructions)
+                    {
+                        inst.Interpret(memory);
+                    }
+
+                    memory.RemoveScope();
                 }
-                memory.RemoveScope();
+                catch (InternalReturnException e)
+                {
+                    memory.RemoveScope();
+                    throw;
+                }
+                
             } else if (Next is not null)
             {
                 return Next.Interpret(memory, instructionContext, objectContext, lexicalContext);
@@ -51,12 +61,19 @@ public class ElseInstruction : Instruction, IEquatable<ElseInstruction>
         }
         else
         {
-            memory.AddScope();
-            foreach (var inst in Instructions)
-            {
-                inst.Interpret(memory);
+            try {
+                memory.AddScope();
+                foreach (var inst in Instructions)
+                {
+                    inst.Interpret(memory);
+                }
+                memory.RemoveScope();
             }
-            memory.RemoveScope();
+            catch (InternalReturnException e)
+            {
+                memory.RemoveScope();
+                throw;
+            }
         }
         
         return new ConstantVariable();

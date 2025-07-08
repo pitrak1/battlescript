@@ -5,15 +5,16 @@ public static class Runner
     public static Memory Run(string input)
     {
         var memory = new Memory();
+        LoadBuiltin(memory, "numeric");
         LoadBuiltin(memory, "int");
+        LoadBuiltin(memory, "float");
         memory.PopulateBuiltInReferences();
         RunPartial(memory, input);
         return memory;
     }
 
-    public static Dictionary<string, Variable> RunFilePath(string path)
+    public static Dictionary<string, Variable> RunFilePath(Memory memory, string path)
     {
-        var memory = new Memory();
         var input = ReadFile(path);
         RunPartial(memory, input);
         return memory.Scopes.First();

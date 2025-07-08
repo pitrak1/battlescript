@@ -157,7 +157,7 @@ public static class InstructionUtilitiesTests
             var lexerResult = lexer.Run();
             var result = InstructionUtilities.ParseLeftAndRightAroundIndex(lexerResult, 1);
             Assert.That(result.Left, Is.TypeOf<VariableInstruction>());
-            Assert.That(result.Right, Is.TypeOf<IntegerInstruction>());
+            Assert.That(result.Right, Is.TypeOf<NumericInstruction>());
         }
     }
     
@@ -180,7 +180,7 @@ public static class InstructionUtilitiesTests
             var tokens = lexer.Run();
             var parsed =
                 InstructionUtilities.ParseEntriesBetweenDelimiters(tokens, []);
-            var expected = new IntegerInstruction(1);
+            var expected = new NumericInstruction(1);
             Assert.That(parsed[0], Is.EqualTo(expected));
         }
 
@@ -194,8 +194,8 @@ public static class InstructionUtilitiesTests
 
             var expected = new List<Instruction>()
             {
-                new IntegerInstruction(1),
-                new IntegerInstruction(2)
+                new NumericInstruction(1),
+                new NumericInstruction(2)
             };
             Assert.That(parsed, Is.EquivalentTo(expected));
         }
@@ -210,8 +210,8 @@ public static class InstructionUtilitiesTests
             
             var expected = new List<Instruction>()
             {
-                new ArrayInstruction([new IntegerInstruction(1), new IntegerInstruction(2)], delimiter: ",", separator: "["),
-                new ArrayInstruction([new IntegerInstruction(2)], separator: "[")
+                new ArrayInstruction([new NumericInstruction(1), new NumericInstruction(2)], delimiter: ",", separator: "["),
+                new ArrayInstruction([new NumericInstruction(2)], separator: "[")
             };
 
             Assert.That(parsed, Is.EquivalentTo(expected));

@@ -118,26 +118,14 @@ public class Lexer(string input)
     
     private void HandleNumber()
     {
-        // This is so we can skip the negative sign and search for numbers
-        var negativeSign = "";
-        if (input[_index] == '-')
-        {
-            negativeSign = "-";
-            _index++;
-            _column++;
-        }
-        
         var numberCharacters = LexerUtilities.GetNextCharactersInCollection(
             input, 
             _index, 
             Consts.NumberCharacters, 
             CollectionType.Inclusive
         );
-        
-        var isFloat = numberCharacters.Any(c => c == '.');
-        var type = isFloat ? Consts.TokenTypes.Float : Consts.TokenTypes.Integer;
 
-        _tokens.Add(new Token(type, negativeSign + numberCharacters, _line, _column));
+        _tokens.Add(new Token(Consts.TokenTypes.Numeric, numberCharacters, _line, _column));
         _index += numberCharacters.Length;
         _column += numberCharacters.Length;
     }
@@ -183,6 +171,10 @@ public class Lexer(string input)
         else if (Consts.BuiltInFunctions.Contains(word))
         {
             type = Consts.TokenTypes.BuiltIn;
+        }
+        else if (Consts.PrincipleTypes.Contains(word))
+        {
+            type = Consts.TokenTypes.PrincipleType;
         }
         
         _tokens.Add(new Token(type, word, _line, _column));

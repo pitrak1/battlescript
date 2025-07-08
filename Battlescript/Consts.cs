@@ -77,8 +77,6 @@ public static class Consts
         "while",
         "with",
         "yield",
-        "__list__",
-        "__dict__"
     ];
 
     // These are currently not used or implemented in any way, but I like having a list
@@ -91,7 +89,6 @@ public static class Consts
         "any",
         "ascii",
         "bin",
-        "bool",
         "breakpoint",
         "bytearray",
         "bytes",
@@ -101,14 +98,12 @@ public static class Consts
         "compile",
         "complex",
         "delattr",
-        "dict",
         "dir",
         "divmod",
         "enumerate",
         "eval",
         "exec",
         "filter",
-        "float",
         "format",
         "frozenset",
         "getattr",
@@ -119,12 +114,10 @@ public static class Consts
         "hex",
         "id",
         "input",
-        "int",
         "isinstance",
         "issubclass",
         "iter",
         "len",
-        "list",
         "locals",
         "map",
         "max",
@@ -147,7 +140,6 @@ public static class Consts
         "slice",
         "sorted",
         "staticmethod",
-        "str",
         "sum",
         "super",
         "tuple",
@@ -285,8 +277,6 @@ public static class Consts
     
     public enum TokenTypes
     {
-        Integer,
-        Float,
         String,
         Constant,
         Keyword,
@@ -297,6 +287,8 @@ public static class Consts
         Assignment,
         BuiltIn,
         Breakpoint,
+        PrincipleType,
+        Numeric,
     }
 
     public enum VariableTypes
@@ -304,4 +296,11 @@ public static class Consts
         Value,
         Reference
     }
+
+    public readonly static string[] PrincipleTypes =
+    [
+        "__numeric__"
+    ];
+
+    public static readonly string[] BuiltInTypes = ["numeric", "int", "float"];
 }

@@ -73,7 +73,7 @@ public class ImportInstruction : Instruction, IEquatable<ImportInstruction>
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        var importedScope = Runner.RunFilePath(FilePath);
+        var importedScope = Runner.RunFilePath(memory, FilePath);
         foreach (var name in ImportNames)
         {
             if (name == "*")
@@ -81,7 +81,10 @@ public class ImportInstruction : Instruction, IEquatable<ImportInstruction>
                 var dictValues = new Dictionary<Variable, Variable>();
                 foreach (var (key, value) in importedScope)
                 {
-                    dictValues.Add(new StringVariable(key), value);
+                    if (!Consts.BuiltInTypes.Contains(key))
+                    {
+                        dictValues.Add(new StringVariable(key), value);
+                    }
                 }
                 memory.SetVariable(new VariableInstruction(FileName), new DictionaryVariable(dictValues));
             }

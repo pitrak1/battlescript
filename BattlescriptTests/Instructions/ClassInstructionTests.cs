@@ -43,7 +43,7 @@ public static partial class InstructionTests
             var memory = Runner.Run("class MyClass:\n\tx = 1");
             var expected = new ClassVariable(new Dictionary<string, Variable>()
             {
-                { "x", new IntegerVariable(1) }
+                { "x", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1) }
             });
             Assert.That(memory.Scopes.First()["MyClass"], Is.EqualTo(expected));
         }
@@ -61,12 +61,12 @@ public static partial class InstructionTests
                                     """);
             var asdf = new ClassVariable(new Dictionary<string, Variable>()
             {
-                { "x", new IntegerVariable(1) }
+                { "x", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1) }
             });
 
             var qwer = new ClassVariable(new Dictionary<string, Variable>()
             {
-                { "y", new IntegerVariable(2) }
+                { "y", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2) }
             }, [asdf]);
 
             Assert.That(memory.Scopes.First()["asdf"], Is.EqualTo(asdf));
@@ -90,17 +90,17 @@ public static partial class InstructionTests
             
             var asdf = new ClassVariable(new Dictionary<string, Variable>()
             {
-                { "x", new IntegerVariable(1) }
+                { "x", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1) }
             });
 
             var qwer = new ClassVariable(new Dictionary<string, Variable>()
             {
-                { "y", new IntegerVariable(2) }
+                { "y", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2) }
             });
 
             var zxcv = new ClassVariable(new Dictionary<string, Variable>()
             {
-                { "z", new IntegerVariable(3) }
+                { "z", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3) }
             }, [asdf, qwer]);
             
             var expected = new Dictionary<string, Variable>()

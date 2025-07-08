@@ -58,8 +58,8 @@ public static class ArrayInstructionTests
         {
             var expected = new ArrayInstruction(
                 [
-                    new ArrayInstruction([new VariableInstruction("asdf"), new IntegerInstruction(3)], delimiter: ":"),
-                    new ArrayInstruction([new VariableInstruction("qwer"), new IntegerInstruction(4)], delimiter: ":"),
+                    new ArrayInstruction([new VariableInstruction("asdf"), new NumericInstruction(3)], delimiter: ":"),
+                    new ArrayInstruction([new VariableInstruction("qwer"), new NumericInstruction(4)], delimiter: ":"),
                 ],
                 separator: "{",
                 delimiter: ","
@@ -74,22 +74,24 @@ public static class ArrayInstructionTests
         [Test]
         public void HandlesDictionaryWithMultipleValues()
         {
+            var memory = Runner.Run("x = {'asdf': 3, 'qwer': 4}");
             var expected = new DictionaryVariable(new Dictionary<Variable, Variable>()
             {
-                {new StringVariable("asdf"), new IntegerVariable(3)},
-                {new StringVariable("qwer"), new IntegerVariable(4)},
+                {new StringVariable("asdf"), BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)},
+                {new StringVariable("qwer"), BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4)},
             });
-            Assertions.AssertInputProducesValueInMemory("x = {'asdf': 3, 'qwer': 4}", "x", expected);
+            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
         }
         
         [Test]
         public void HandlesDictionaryWithSingleValue()
         {
+            var memory = Runner.Run("x = {'asdf': 3}");
             var expected = new DictionaryVariable(new Dictionary<Variable, Variable>()
             {
-                {new StringVariable("asdf"), new IntegerVariable(3)},
+                {new StringVariable("asdf"), BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)},
             });
-            Assertions.AssertInputProducesValueInMemory("x = {'asdf': 3}", "x", expected);
+            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
         }
     }
     
@@ -99,19 +101,32 @@ public static class ArrayInstructionTests
         [Test]
         public void HandlesFunctionCalls()
         {
-            var expected = new IntegerVariable(9);
+            
             var input = """
                         def asdf(y, z):
                             return y + z
 
                         x = asdf(4, 5)
                         """;
-            Assertions.AssertInputProducesValueInMemory(input, "x", expected);
+            var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9);
+            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
         }
         
         [Test]
         public void HandlesClassInstantiation()
         {
+            var input = """
+                        class asdf:
+                            i = 4
+                            j = 5
+                        
+                            def asdf(self, y):
+                                self.j = y
+
+                        x = asdf()
+                        """;
+            var memory = Runner.Run(input);
             var methodVariable = new FunctionVariable(
                 [new VariableInstruction("self"), new VariableInstruction("y")],
                 [
@@ -124,34 +139,23 @@ public static class ArrayInstructionTests
                 ]);
             var classVariable = new ClassVariable(new Dictionary<string, Variable>()
             {
-                { "i", new IntegerVariable(4) },
-                { "j", new IntegerVariable(5) },
+                { "i", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4) },
+                { "j", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5) },
                 { "asdf", methodVariable }
             });
             var expected = new ObjectVariable(
                 new Dictionary<string, Variable>()
                 {
-                    {"i", new IntegerVariable(4)},
-                    {"j", new IntegerVariable(5)}
+                    {"i", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4) },
+                    {"j", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5)}
                 },
                 classVariable);
-            var input = """
-                        class asdf:
-                            i = 4
-                            j = 5
-                        
-                            def asdf(self, y):
-                                self.j = y
-
-                        x = asdf()
-                        """;
-            Assertions.AssertInputProducesValueInMemory(input, "x", expected);
+            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
         }
         
         [Test]
         public void CallsConstructorIfDefined()
         {
-            var expected = new IntegerVariable(9);
             var input = """
                         class asdf:
                             i = 4
@@ -162,7 +166,9 @@ public static class ArrayInstructionTests
                         y = asdf(9)
                         x = y.i
                         """;
-            Assertions.AssertInputProducesValueInMemory(input, "x", expected);
+            var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9);
+            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
         }
     }
 
@@ -172,63 +178,75 @@ public static class ArrayInstructionTests
         [Test]
         public void HandlesListCreation()
         {
-            var expected = new ListVariable([new IntegerVariable(9), new IntegerVariable(8), new IntegerVariable(7)]);
-            Assertions.AssertInputProducesValueInMemory("x = [9, 8, 7]", "x", expected);
+            var memory = Runner.Run("x = [9, 8, 7]");
+            var expected = new ListVariable([
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9), 
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8), 
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 7)]);
+            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
         }
         
         [Test]
         public void HandlesBasicIndex()
         {
-            var expected = new IntegerVariable(8);
             var input = """
                         y = [9, 8, 7]
                         x = y[1]
                         """;
-            Assertions.AssertInputProducesValueInMemory(input, "x", expected);
+            var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8);
+            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
         }
         
         [Test]
         public void HandlesStackedIndices()
         {
-            var expected = new IntegerVariable(3);
             var input = """
                         y = [9, [1, 2, 3], 7]
                         x = y[1][2]
                         """;
-            Assertions.AssertInputProducesValueInMemory(input, "x", expected);
+            var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3);
+            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
         }
         
         [Test]
         public void HandlesRangeIndex()
         {
-            var expected = new ListVariable([new IntegerVariable(9), new IntegerVariable(8), new IntegerVariable(7)]);
             var input = """
                         y = [1, 2, 9, 8, 7, 3, 4]
                         x = y[2:5]
                         """;
-            Assertions.AssertInputProducesValueInMemory(input, "x", expected);
+            var memory = Runner.Run(input);
+            var expected = new ListVariable([
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9), 
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8), 
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 7)]);
+            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
         }
         
         [Test]
         public void HandlesMembers()
         {
-            var expected = new IntegerVariable(3);
             var input = """
                         y = {'asdf': 3, 'qwer': 4}
                         x = y.asdf
                         """;
-            Assertions.AssertInputProducesValueInMemory(input, "x", expected);
+            var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3);
+            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
         }
         
         [Test]
         public void HandlesIndexingWithExpressions()
         {
-            var expected = new IntegerVariable(8);
             var input = """
                         y = [1, 2, 9, 8, 7, 3, 4]
                         x = y[1 + 2]
                         """;
-            Assertions.AssertInputProducesValueInMemory(input, "x", expected);
+            var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8);
+            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
         }
     }
 }

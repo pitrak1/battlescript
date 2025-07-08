@@ -93,5 +93,8 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
         return valuesEqual && Class.Equals(variable.Class);
     }
     
-    public override int GetHashCode() => HashCode.Combine(Values, Class);
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Values, Class);
+    }
 }

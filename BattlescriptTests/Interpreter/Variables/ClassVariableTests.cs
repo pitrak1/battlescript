@@ -18,7 +18,7 @@ public static class ClassVariableTests
             });
             var index = new ArrayInstruction([new StringInstruction("__getitem__")], separator: "[");
             
-            Assert.That(classVariable.GetItem(new Memory(), index), Is.SameAs(getItemFunction));
+            Assert.That(classVariable.GetItem(Runner.Run(""), index), Is.SameAs(getItemFunction));
         }
 
         [Test]
@@ -32,7 +32,7 @@ public static class ClassVariableTests
             var classVariable = new ClassVariable(null, [superclassVariable]);
             var index = new ArrayInstruction([new StringInstruction("__getitem__")], separator: "[");
             
-            Assert.That(classVariable.GetItem(new Memory(), index), Is.SameAs(getItemFunction));
+            Assert.That(classVariable.GetItem(Runner.Run(""), index), Is.SameAs(getItemFunction));
         }
         
         [Test]
@@ -47,7 +47,7 @@ public static class ClassVariableTests
             var classVariable = new ClassVariable(null, [superclassVariable]);
             var index = new ArrayInstruction([new StringInstruction("__getitem__")], separator: "[");
             
-            Assert.That(classVariable.GetItem(new Memory(), index), Is.SameAs(getItemFunction));
+            Assert.That(classVariable.GetItem(Runner.Run(""), index), Is.SameAs(getItemFunction));
         }
         
         [Test]
@@ -57,18 +57,18 @@ public static class ClassVariableTests
             // and we're showing this by indexing with "x" because it doesn't matter what we index with
             var getItemFunction = new FunctionVariable(
                 [new VariableInstruction("self"), new VariableInstruction("index")], 
-                [new ReturnInstruction(new IntegerInstruction(5))]);
+                [new ReturnInstruction(new NumericInstruction(5))]);
             var classVariable = new ClassVariable(new Dictionary<string, Variable>()
             {
-                {"x", new IntegerVariable(7)},
+                {"x", new NumericVariable(7)},
                 {"__getitem__", getItemFunction}
             });
             var objectVariable = new ObjectVariable(null, classVariable);
             var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
             
             Assert.That(
-                classVariable.GetItem(new Memory(), index, objectVariable), 
-                Is.EqualTo(new IntegerVariable(5)));
+                classVariable.GetItem(Runner.Run(""), index, objectVariable), 
+                Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "int", 5.0)));
         }
         
         [Test]
@@ -76,18 +76,18 @@ public static class ClassVariableTests
         {
             var getItemFunction = new FunctionVariable(
                 [new VariableInstruction("self"), new VariableInstruction("index")], 
-                [new ReturnInstruction(new IntegerInstruction(5))]);
+                [new ReturnInstruction(new NumericInstruction(5))]);
             var classVariable = new ClassVariable(new Dictionary<string, Variable>()
             {
-                {"x", new IntegerVariable(7)},
+                {"x", new NumericVariable(7)},
                 {"__getitem__", getItemFunction}
             });
             var objectVariable = new ObjectVariable(null, classVariable);
             var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
             
             Assert.That(
-                classVariable.GetItem(new Memory(), index), 
-                Is.EqualTo(new IntegerVariable(7)));
+                classVariable.GetItem(Runner.Run(""), index), 
+                Is.EqualTo(new NumericVariable(7)));
         }
 
         [Test]
@@ -99,7 +99,7 @@ public static class ClassVariableTests
             });
             var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
             
-            Assert.That(classVariable.GetItem(new Memory(), index), Is.EqualTo(new StringVariable("asdf")));
+            Assert.That(classVariable.GetItem(Runner.Run(""), index), Is.EqualTo(new StringVariable("asdf")));
         }
         
         [Test]
@@ -112,7 +112,7 @@ public static class ClassVariableTests
             var classVariable = new ClassVariable(null, [superclassVariable]);
             var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
             
-            Assert.That(classVariable.GetItem(new Memory(), index), Is.EqualTo(new StringVariable("asdf")));
+            Assert.That(classVariable.GetItem(Runner.Run(""), index), Is.EqualTo(new StringVariable("asdf")));
         }
         
         [Test]
@@ -126,7 +126,7 @@ public static class ClassVariableTests
             var classVariable = new ClassVariable(null, [superclassVariable]);
             var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
             
-            Assert.That(classVariable.GetItem(new Memory(), index), Is.EqualTo(new StringVariable("asdf")));
+            Assert.That(classVariable.GetItem(Runner.Run(""), index), Is.EqualTo(new StringVariable("asdf")));
         }
     }
 }

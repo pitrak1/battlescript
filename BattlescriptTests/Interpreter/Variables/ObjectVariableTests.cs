@@ -15,17 +15,16 @@ public static class ObjectVariableTests
             // and we're showing this by indexing with "x" because it doesn't matter what we index with
             var getItemFunction = new FunctionVariable(
                 [new VariableInstruction("self"), new VariableInstruction("index")], 
-                [new ReturnInstruction(new IntegerInstruction(5))]);
+                [new ReturnInstruction(new NumericInstruction(5))]);
             var classVariable = new ClassVariable(new Dictionary<string, Variable>()
             {
                 {"__getitem__", getItemFunction},
-                {"x", new IntegerVariable(10)}
+                {"x", new NumericVariable(10)}
             });
             var objectVariable = classVariable.CreateObject();
             var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
-            var result = objectVariable.GetItem(new Memory(), index);
-            Assert.That(result, Is.InstanceOf<IntegerVariable>());
-            Assert.That(((IntegerVariable)result).Value, Is.EqualTo(5.0));
+            var result = objectVariable.GetItem(Runner.Run(""), index);
+            Assert.That(result, Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "int", 5)));
         }
         
         [Test]
@@ -33,13 +32,13 @@ public static class ObjectVariableTests
         {
             var classVariable = new ClassVariable(new Dictionary<string, Variable>()
             {
-                {"x", new IntegerVariable(7)},
+                {"x", new NumericVariable(7)},
             });
             var objectVariable = classVariable.CreateObject();
             var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
             var result = objectVariable.GetItem(new Memory(), index);
-            Assert.That(result, Is.InstanceOf<IntegerVariable>());
-            Assert.That(((IntegerVariable)result).Value, Is.EqualTo(7));
+            Assert.That(result, Is.InstanceOf<NumericVariable>());
+            Assert.That(((NumericVariable)result).Value, Is.EqualTo(7));
         }
 
         [Test]
@@ -47,11 +46,11 @@ public static class ObjectVariableTests
         {
             var innerClassVariable = new ClassVariable(new Dictionary<string, Variable>()
             {
-                { "y", new IntegerVariable(6) }
+                { "y", new NumericVariable(6) }
             });
             var classVariable = new ClassVariable(new Dictionary<string, Variable>()
             {
-                {"x", new IntegerVariable(7)},
+                {"x", new NumericVariable(7)},
                 {"asdf", innerClassVariable.CreateObject()}
             });
             var objectVariable = classVariable.CreateObject();
@@ -60,8 +59,8 @@ public static class ObjectVariableTests
                 Consts.SquareBrackets,
                 next: new ArrayInstruction([new StringInstruction("y")], Consts.SquareBrackets));
             var result = objectVariable.GetItem(new Memory(), index);
-            Assert.That(result, Is.InstanceOf<IntegerVariable>());
-            Assert.That(((IntegerVariable)result).Value, Is.EqualTo(6));
+            Assert.That(result, Is.InstanceOf<NumericVariable>());
+            Assert.That(((NumericVariable)result).Value, Is.EqualTo(6));
         }
     }
     
@@ -112,20 +111,20 @@ public static class ObjectVariableTests
         //             new AssignmentInstruction(
         //                 "=", 
         //                 new VariableInstruction("self", new SquareBracketsInstruction([new VariableInstruction("key")])),
-        //                 new IntegerInstruction(5)
+        //                 new NumericInstruction(5)
         //                 ),
         //         ]);
         //     var classVariable = new ClassVariable(new Dictionary<string, Variable>()
         //     {
         //         {"__setitem__", setItemFunction},
-        //         {"x", new IntegerVariable(10.0)}
+        //         {"x", new NumericVariable(10.0)}
         //     });
         //     var objectVariable = classVariable.CreateObject();
         //     var index = new SquareBracketsInstruction([new StringInstruction("x")]);
-        //     objectVariable.SetItem(new Memory(), new IntegerVariable(8.0), index, objectVariable);
+        //     objectVariable.SetItem(new Memory(), new NumericVariable(8.0), index, objectVariable);
         //     var result = objectVariable.GetItem(new Memory(), index);
-        //     Assert.That(result, Is.InstanceOf<IntegerVariable>());
-        //     Assert.That(((IntegerVariable)result).Value, Is.EqualTo(5.0));
+        //     Assert.That(result, Is.InstanceOf<NumericVariable>());
+        //     Assert.That(((NumericVariable)result).Value, Is.EqualTo(5.0));
         // }
         
         [Test]
@@ -133,14 +132,14 @@ public static class ObjectVariableTests
         {
             var classVariable = new ClassVariable(new Dictionary<string, Variable>()
             {
-                {"x", new IntegerVariable(7)},
+                {"x", new NumericVariable(7)},
             });
             var objectVariable = classVariable.CreateObject();
             var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
-            objectVariable.SetItem(new Memory(), new IntegerVariable(10), index);
+            objectVariable.SetItem(new Memory(), new NumericVariable(10), index);
             var result = objectVariable.GetItem(new Memory(), index);
-            Assert.That(result, Is.InstanceOf<IntegerVariable>());
-            Assert.That(((IntegerVariable)result).Value, Is.EqualTo(10));
+            Assert.That(result, Is.InstanceOf<NumericVariable>());
+            Assert.That(((NumericVariable)result).Value, Is.EqualTo(10));
         }
         
         [Test]
@@ -148,11 +147,11 @@ public static class ObjectVariableTests
         {
             var innerClassVariable = new ClassVariable(new Dictionary<string, Variable>()
             {
-                { "y", new IntegerVariable(6) }
+                { "y", new NumericVariable(6) }
             });
             var classVariable = new ClassVariable(new Dictionary<string, Variable>()
             {
-                {"x", new IntegerVariable(7)},
+                {"x", new NumericVariable(7)},
                 {"asdf", innerClassVariable.CreateObject()}
             });
             var objectVariable = classVariable.CreateObject();
@@ -160,10 +159,10 @@ public static class ObjectVariableTests
                 [new StringInstruction("asdf")],
                 Consts.SquareBrackets,
                 next: new ArrayInstruction([new StringInstruction("y")], Consts.SquareBrackets));
-            objectVariable.SetItem(new Memory(), new IntegerVariable(8), index, objectVariable);
+            objectVariable.SetItem(new Memory(), new NumericVariable(8), index, objectVariable);
             var result = objectVariable.GetItem(new Memory(), index);
-            Assert.That(result, Is.InstanceOf<IntegerVariable>());
-            Assert.That(((IntegerVariable)result).Value, Is.EqualTo(8));
+            Assert.That(result, Is.InstanceOf<NumericVariable>());
+            Assert.That(((NumericVariable)result).Value, Is.EqualTo(8));
         }
     }
 }

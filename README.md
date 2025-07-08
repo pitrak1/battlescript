@@ -94,4 +94,5 @@ TODOs before v1:
 Support for constructors
 
 TODO:
-Probably want to make data model more closely match python's data model before doing explicit exception checking.  It will probably make things easier in the long run.
+Need to fix GetHashCode to be more comprehensive
+Need to fix truthiness and falsiness for ints/floats

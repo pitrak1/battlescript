@@ -56,6 +56,10 @@ public static class InstructionFactory
                     throw new ParserUnexpectedTokenException(tokens[0]);
             }
         }
+        else if (tokens[0].Type == Consts.TokenTypes.PrincipleType)
+        {
+            return new PrincipleTypeInstruction(tokens);
+        }
         else if (tokens[0].Type == Consts.TokenTypes.BuiltIn)
         {
             return new BuiltInInstruction(tokens);
@@ -76,14 +80,6 @@ public static class InstructionFactory
         {
             return new VariableInstruction(tokens);
         }
-        else if (tokens[0].Type == Consts.TokenTypes.Float)
-        {
-            return new FloatInstruction(tokens);
-        }
-        else if (tokens[0].Type == Consts.TokenTypes.Integer)
-        {
-            return new IntegerInstruction(tokens);
-        }
         else if (tokens[0].Type == Consts.TokenTypes.String)
         {
             return new StringInstruction(tokens);
@@ -91,6 +87,10 @@ public static class InstructionFactory
         else if (tokens[0].Type == Consts.TokenTypes.Constant)
         {
             return new ConstantInstruction(tokens);
+        }
+        else if (tokens[0].Type == Consts.TokenTypes.Numeric)
+        {
+            return new NumericInstruction(tokens);
         }
         else
         {

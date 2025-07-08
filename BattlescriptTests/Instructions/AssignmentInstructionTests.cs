@@ -17,7 +17,7 @@ public static partial class InstructionTests
             var expected = new AssignmentInstruction(
                 operation: "=",
                 left: new VariableInstruction("x"),
-                right: new IntegerInstruction(6)
+                right: new NumericInstruction(6)
             );
             
             Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
@@ -32,7 +32,7 @@ public static partial class InstructionTests
             var expected = new AssignmentInstruction(
                 operation: "=",
                 left: new VariableInstruction("x"),
-                right: new OperationInstruction("+", new IntegerInstruction(5), new IntegerInstruction(6))
+                right: new OperationInstruction("+", new NumericInstruction(5), new NumericInstruction(6))
             );
             
             Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
@@ -46,21 +46,21 @@ public static partial class InstructionTests
         public void HandlesSimpleAssignments()
         {
             var memory = Runner.Run("x = 6");
-            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(new IntegerVariable(6)));
+            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6)));
         }
         
         [Test]
         public void HandlesAssignmentOperators()
         {
             var memory = Runner.Run("x = 6\nx += 2");
-            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(new IntegerVariable(8)));
+            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8)));
         }
 
         [Test]
         public void ReturnsAssignedVariable()
         {
             var memory = Runner.Run("x = 6");
-            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(new IntegerVariable(6)));
+            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6)));
         }
     }
 }

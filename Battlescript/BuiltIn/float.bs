@@ -1,8 +1,8 @@
-class int(numeric):
-    __value = __numeric__(0)
+class float(numeric):
+    __value = __numeric__(0.0)
 
     def __init__(self, value):
-        if isinstance(value, int):
+        if isinstance(value, float):
             self.__value = value.__value
         else:
             self.__value = value
@@ -28,23 +28,18 @@ class int(numeric):
     def __pow__(self, other):
         return self.__perform_operation(other, '**')
 
-    def __pos__(self):
-        return int(self.__value)
-
-    def __neg__(self):
-        return int(-self.__value)
-
     def __iadd__(self, other):
         self.__value = self.__get_operation_result(other, '+')
         return self
 
-    def __perform_operation(self, other, operation):
-        if operation == '/':
-            return float(self.__get_operation_result(other, operation))
-        elif operation == '//':
-            return int(self.__get_operation_result(other, operation))
-        elif isinstance(other, float):
-            return float(self.__get_operation_result(other, operation))
-        elif isinstance(other, int):
-            return int(self.__get_operation_result(other, operation))
+    def __pos__(self):
+        return float(self.__value)
 
+    def __neg__(self):
+        return float(-self.__value)
+
+    def __perform_operation(self, other, operation):
+        if operation == '//':
+            return int(self.__get_operation_result(other, operation))
+        elif isinstance(other, float) or isinstance(other, int):
+            return float(self.__get_operation_result(other, operation))

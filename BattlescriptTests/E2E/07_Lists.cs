@@ -12,7 +12,7 @@ public class Lists
         var expected = new ListVariable(
             new List<Variable>
             {
-                new IntegerVariable(5),
+                new NumericVariable(5),
                 new StringVariable("5"),
             }
         );
@@ -38,8 +38,8 @@ public class Lists
     //     var expected = new ListVariable(
     //         new List<Variable>
     //         {
-    //             new IntegerVariable(3),
-    //             new IntegerVariable(2),
+    //             new NumericVariable(3),
+    //             new NumericVariable(2),
     //         }
     //     );
     //     var memory = Runner.Run(input);
@@ -54,9 +54,9 @@ public class Lists
     //     var expected = new ListVariable(
     //         new List<Variable>
     //         {
-    //             new IntegerVariable(5),
-    //             new IntegerVariable(3),
-    //             new IntegerVariable(2),
+    //             new NumericVariable(5),
+    //             new NumericVariable(3),
+    //             new NumericVariable(2),
     //         }
     //     );
     //     var memory = Runner.Run(input);
@@ -71,8 +71,8 @@ public class Lists
     //     var expected = new ListVariable(
     //         new List<Variable>
     //         {
-    //             new IntegerVariable(3),
-    //             new IntegerVariable(2),
+    //             new NumericVariable(3),
+    //             new NumericVariable(2),
     //             new StringVariable("5"),
     //         }
     //     );

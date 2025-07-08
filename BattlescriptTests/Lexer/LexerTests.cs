@@ -13,7 +13,7 @@ public static class LexerTests
         {
             var lexer = new Lexer("213");
             var result = lexer.Run();
-            var expected = new List<Token>() { new Token(Consts.TokenTypes.Integer, "213") };
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Numeric, "213") };
             Assert.That(result, Is.EquivalentTo(expected));
         }
 
@@ -22,7 +22,7 @@ public static class LexerTests
         {
             var lexer = new Lexer("1.23");
             var result = lexer.Run();
-            var expected = new List<Token>() { new Token(Consts.TokenTypes.Float, "1.23") };
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Numeric, "1.23") };
             Assert.That(result, Is.EquivalentTo(expected));
         }
         
@@ -31,7 +31,7 @@ public static class LexerTests
         {
             var lexer = new Lexer(".23");
             var result = lexer.Run();
-            var expected = new List<Token>() { new Token(Consts.TokenTypes.Float, ".23") };
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Numeric, ".23") };
             Assert.That(result, Is.EquivalentTo(expected));
         }
     }

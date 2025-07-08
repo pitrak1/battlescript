@@ -17,21 +17,15 @@ public class ListVariable : Variable, IEquatable<ListVariable>
         // This needs to be rewritten to support ranged assignments, look at list methods in python to see test cases
         var indexVariable = index.Interpret(memory) as ListVariable;
 
-        if (indexVariable.Values[0] is IntegerVariable indexInteger)
+        var indexInt = BuiltInTypeHelper.GetIntValueFromVariable(memory, indexVariable.Values[0]);
+        if (index.Next is null)
         {
-            if (index.Next is null)
-            {
-                Values[indexInteger.Value] = valueVariable;
-                return valueVariable;
-            }
-            else
-            {
-                return Values[indexInteger.Value];
-            }
+            Values[indexInt] = valueVariable;
+            return valueVariable;
         }
         else
         {
-            throw new Exception("Can't index a list with anything but a number");
+            return Values[indexInt];
         }
     }
     
@@ -41,62 +35,53 @@ public class ListVariable : Variable, IEquatable<ListVariable>
 
         if (indexVariable.Values.Count > 1)
         {
-            return GetRangeIndex(indexVariable);
+            return GetRangeIndex(memory, indexVariable);
         }
         else
         {
-            if (indexVariable.Values[0] is IntegerVariable indexInteger)
-            {
-                return Values[indexInteger.Value];
-            }
-            else
-            {
-                throw new Exception("Can't index a list with anything but a number");
-            }
-            
+            var indexInt = BuiltInTypeHelper.GetIntValueFromVariable(memory, indexVariable.Values[0]);
+            return Values[indexInt];
         }
     }
     
-    public ListVariable GetRangeIndex(ListVariable argVariable)
+    public ListVariable GetRangeIndex(Memory memory, ListVariable argVariable)
     {
         int start = 0;
         int stop = Values.Count;
         int step = 1;
         
-        List<IntegerVariable?> values = [];
+        List<int?> values = [];
         foreach (var value in argVariable.Values)
         {
-            if (value is IntegerVariable integerVariable)
-            {
-                values.Add(integerVariable);
-            } else if (value is null)
+            if (value is null)
             {
                 values.Add(null);
             }
             else
             {
-                throw new Exception("Invalid range index, fix this later");
+                var indexInt = BuiltInTypeHelper.GetIntValueFromVariable(memory, value);
+                values.Add(indexInt);
             }
         }
         
         if (values.Count == 3)
         {
-            if (values[2] is IntegerVariable stepInt)
+            if (values[2] is not null)
             {
-                step = stepInt.Value;
+                step = values[2] ?? 1;
             }
-            
-            if (values[0] is IntegerVariable startInt)
+
+            if (values[0] is not null)
             {
-                start = startInt.Value % Values.Count;
+                start = values[0] % Values.Count ?? 0;
             } else if (values[0] is null && step < 0)
             {
                 start = Values.Count - 1;
             }
 
-            if (values[1] is IntegerVariable stopInt)
+            if (values[1] is not null)
             {
-                stop = stopInt.Value % Values.Count;
+                stop = values[1] % Values.Count ?? Values.Count;
             }
             else if (values[1] is null && step < 0)
             {
@@ -104,14 +89,14 @@ public class ListVariable : Variable, IEquatable<ListVariable>
             }
         } else if (values.Count == 2)
         {
-            if (values[0] is IntegerVariable startInt)
+            if (values[0] is not null)
             {
-                start = startInt.Value % Values.Count;
+                start = values[0] % Values.Count ?? 0;
             }
-            
-            if (values[1] is IntegerVariable stopInt)
+
+            if (values[1] is not null)
             {
-                stop = stopInt.Value % Values.Count;
+                stop = values[1] % Values.Count ?? Values.Count;
             }
         }
         else
@@ -205,12 +190,12 @@ public class ListVariable : Variable, IEquatable<ListVariable>
 
     public Variable Insert(List<Variable> arguments)
     {
-        if (arguments.Count != 2 || arguments[0] is not IntegerVariable)
+        if (arguments.Count != 2 || arguments[0] is not NumericVariable)
         {
             throw new Exception("Expected 2 arguments for list append, argument 1 must be integer in range + 1");
         }
         
-        var i = arguments[0] as IntegerVariable;
+        var i = arguments[0] as NumericVariable;
         if (i.Value == Values.Count)
         {
             Values.Add(arguments[1]);
@@ -245,7 +230,7 @@ public class ListVariable : Variable, IEquatable<ListVariable>
 
     public Variable Pop(List<Variable> arguments)
     {
-        if (arguments.Count == 1 && arguments[0] is IntegerVariable i)
+        if (arguments.Count == 1 && arguments[0] is NumericVariable i)
         {
             if (i.Value < Values.Count && i.Value >= 0)
             {
@@ -291,7 +276,7 @@ public class ListVariable : Variable, IEquatable<ListVariable>
             }
         }
         
-        return new IntegerVariable(count);
+        return new NumericVariable(count);
     }
     
     public Variable Reverse(List<Variable> arguments)

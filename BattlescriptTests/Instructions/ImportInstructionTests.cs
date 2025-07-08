@@ -39,7 +39,7 @@ public static class ImportInstructionTests
         {
             var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
             var memory = Runner.Run($"from '{filePath}' import x");
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(new IntegerVariable(5)));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5)));
         }
         
         [Test]
@@ -48,9 +48,12 @@ public static class ImportInstructionTests
             var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
             var memory = Runner.Run($"from '{filePath}' import x, y, z");
 
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(new IntegerVariable(5)));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5)));
             Assert.That(memory.Scopes[0]["y"], Is.EqualTo(
-                new ListVariable([new IntegerVariable(1), new IntegerVariable(2), new IntegerVariable(3)])));
+                new ListVariable([
+                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1), 
+                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2), 
+                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)])));
             Assert.That(memory.Scopes[0]["z"], Is.EqualTo(new StringVariable("asdf")));
         }
         
@@ -61,10 +64,13 @@ public static class ImportInstructionTests
             var memory = Runner.Run($"from '{filePath}' import *");
             var expected = new DictionaryVariable(new Dictionary<Variable, Variable>()
             {
-                { new StringVariable("x"), new IntegerVariable(5) },
+                { new StringVariable("x"), BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5) },
                 {
                     new StringVariable("y"),
-                    new ListVariable([new IntegerVariable(1), new IntegerVariable(2), new IntegerVariable(3)])
+                    new ListVariable([
+                        BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1), 
+                        BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2), 
+                        BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)])
                 },
                 { new StringVariable("z"), new StringVariable("asdf") }
             });

@@ -32,8 +32,8 @@ public static class VariablesAndOperatorsTests
         public void SupportsFloats()
         {
             var input = "x = 5.5";
-            var expected = new FloatVariable(5.5);
             var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 5.5);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
@@ -42,8 +42,8 @@ public static class VariablesAndOperatorsTests
         public void SupportsIntegers()
         {
             var input = "x = 5";
-            var expected = new IntegerVariable(5);
             var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
@@ -82,8 +82,11 @@ public static class VariablesAndOperatorsTests
         public void SupportsClasses()
         {
             var input = "class asdf():\n\ty = 3";
-            var expected = new ClassVariable(new Dictionary<string, Variable> {{"y", new IntegerVariable(3)}});
             var memory = Runner.Run(input);
+            var expected = new ClassVariable(new Dictionary<string, Variable>
+            {
+                {"y", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)}
+            });
             Assert.That(memory.Scopes[0], Contains.Key("asdf"));
             Assert.That(memory.Scopes[0]["asdf"], Is.EqualTo(expected));
         }
@@ -92,9 +95,13 @@ public static class VariablesAndOperatorsTests
         public void SupportsObjects()
         {
             var input = "class asdf():\n\ty = 3\nx = asdf()";
-            var classValues = new Dictionary<string, Variable> { { "y", new IntegerVariable(3) } };
-            var expected = new ObjectVariable(classValues, new ClassVariable(classValues));
             var memory = Runner.Run(input);
+            var classValues = new Dictionary<string, Variable>
+            {
+                { "y", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3) }
+            };
+            var expected = new ObjectVariable(classValues, new ClassVariable(classValues));
+            
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
@@ -107,8 +114,8 @@ public static class VariablesAndOperatorsTests
         public void SupportsUnaryPlus()
         {
             var input = "x = 6\ny = +x";
-            var expected = new IntegerVariable(6);
             var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6);
             Assert.That(memory.Scopes[0], Contains.Key("y"));
             Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
         }
@@ -117,8 +124,8 @@ public static class VariablesAndOperatorsTests
         public void SupportsUnaryMinus()
         {
             var input = "x = 6\ny = -x";
-            var expected = new IntegerVariable(-6);
             var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", -6);
             Assert.That(memory.Scopes[0], Contains.Key("y"));
             Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
         }
@@ -240,7 +247,7 @@ public static class VariablesAndOperatorsTests
         public void SupportsAddAssignment()
         {
             var input = "x = 5\nx += 5";
-            var expected = new IntegerVariable(10);
+            var expected = new NumericVariable(10);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -250,7 +257,7 @@ public static class VariablesAndOperatorsTests
         public void SupportsSubtractAssignment()
         {
             var input = "x = 5\nx -= 5";
-            var expected = new IntegerVariable(0);
+            var expected = new NumericVariable(0);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -260,7 +267,7 @@ public static class VariablesAndOperatorsTests
         public void SupportsMultiplyAssignment()
         {
             var input = "x = 5\nx *= 5";
-            var expected = new IntegerVariable(25);
+            var expected = new NumericVariable(25);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -270,7 +277,7 @@ public static class VariablesAndOperatorsTests
         public void SupportsTrueDivisionAssignment()
         {
             var input = "x = 8\nx /= 5";
-            var expected = new FloatVariable(1.6);
+            var expected = new NumericVariable(1.6);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -280,7 +287,7 @@ public static class VariablesAndOperatorsTests
         public void SupportsFloorDivisionAssignment()
         {
             var input = "x = 8\nx //= 5";
-            var expected = new IntegerVariable(1);
+            var expected = new NumericVariable(1);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -290,7 +297,7 @@ public static class VariablesAndOperatorsTests
         public void SupportsModuloAssignment()
         {
             var input = "x = 9\nx %= 2";
-            var expected = new IntegerVariable(1);
+            var expected = new NumericVariable(1);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -300,7 +307,7 @@ public static class VariablesAndOperatorsTests
         public void SupportsPowerAssignment()
         {
             var input = "x = 9\nx **= 2";
-            var expected = new IntegerVariable(81);
+            var expected = new NumericVariable(81);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -314,7 +321,7 @@ public static class VariablesAndOperatorsTests
         public void HandlesParenthesisAsLeftOperand()
         {
             var input = "x = (1 + 2) * 2";
-            var expected = new IntegerVariable(6);
+            var expected = new NumericVariable(6);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -324,7 +331,7 @@ public static class VariablesAndOperatorsTests
         public void HandlesParenthesisAsRightOperand()
         {
             var input = "x = 2 * (1 + 2)";
-            var expected = new IntegerVariable(6);
+            var expected = new NumericVariable(6);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -338,7 +345,7 @@ public static class VariablesAndOperatorsTests
         public void ValuesParenthesesOverPower()
         {
             var input = "x = 2 ** (1 + 2)";
-            var expected = new IntegerVariable(8);
+            var expected = new NumericVariable(8);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -348,7 +355,7 @@ public static class VariablesAndOperatorsTests
         public void ValuesPowerOverDivisionMultiplicationAndModulo()
         {
             var input = "x = 4 * 2 ** 3";
-            var expected = new IntegerVariable(32);
+            var expected = new NumericVariable(32);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -358,7 +365,7 @@ public static class VariablesAndOperatorsTests
         public void ValuesDivisionMultiplicationAndModuloOverAdditionAndSubtraction()
         {
             var input = "x = 8 - 16 // 4";
-            var expected = new IntegerVariable(4);
+            var expected = new NumericVariable(4);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -385,7 +392,7 @@ public static class VariablesAndOperatorsTests
         public void UnaryOperatorsReturnIntegerIfGivenInteger()
         {
             var input = "x = -1";
-            var expected = new IntegerVariable(-1);
+            var expected = new NumericVariable(-1);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -395,7 +402,7 @@ public static class VariablesAndOperatorsTests
         public void UnaryOperatorsReturnFloatIfGivenFloat()
         {
             var input = "x = -1.0";
-            var expected = new FloatVariable(-1);
+            var expected = new NumericVariable(-1);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -405,7 +412,7 @@ public static class VariablesAndOperatorsTests
         public void TrueDivisionAlwaysReturnsAFloat()
         {
             var input = "x = 12/3";
-            var expected = new FloatVariable(4);
+            var expected = new NumericVariable(4);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -415,7 +422,7 @@ public static class VariablesAndOperatorsTests
         public void FloorDivisionAlwaysReturnsAnInteger()
         {
             var input = "x = 13.5//3.2";
-            var expected = new IntegerVariable(4);
+            var expected = new NumericVariable(4);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -425,7 +432,7 @@ public static class VariablesAndOperatorsTests
         public void OtherOperatorsReturnIntegerIfBothOperandsAreIntegers()
         {
             var input = "x = 12 * 3";
-            var expected = new IntegerVariable(36);
+            var expected = new NumericVariable(36);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -435,7 +442,7 @@ public static class VariablesAndOperatorsTests
         public void OtherOperatorsReturnFloatIfBothOperandsAreFloats()
         {
             var input = "x = 2.5 * 4.0";
-            var expected = new FloatVariable(10);
+            var expected = new NumericVariable(10);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -445,7 +452,7 @@ public static class VariablesAndOperatorsTests
         public void OtherOperatorsReturnFloatIfEitherOperandIsFloat()
         {
             var input = "x = 2.5 * 4";
-            var expected = new FloatVariable(10);
+            var expected = new NumericVariable(10);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));

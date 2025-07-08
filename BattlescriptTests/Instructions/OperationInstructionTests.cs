@@ -16,8 +16,8 @@ public static partial class InstructionTests
             
             var expected = new OperationInstruction(
                 operation: "+",
-                left: new IntegerInstruction(5),
-                right: new IntegerInstruction(6)
+                left: new NumericInstruction(5),
+                right: new NumericInstruction(6)
             );
             Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
         }
@@ -33,7 +33,7 @@ public static partial class InstructionTests
                 left: new VariableInstruction(
                     "x", 
                     new ArrayInstruction([new StringInstruction("i")], separator: "[")),
-                right: new IntegerInstruction(6)
+                right: new NumericInstruction(6)
             );
             
             Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
@@ -47,7 +47,7 @@ public static partial class InstructionTests
             
             var expected = new OperationInstruction(
                 operation: "~",
-                right: new IntegerInstruction(6)
+                right: new NumericInstruction(6)
             );
             
             Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
@@ -61,8 +61,8 @@ public static partial class InstructionTests
             
             var expected = new OperationInstruction(
                 operation: "*",
-                left: new IntegerInstruction(4),
-                right: new OperationInstruction("+", new IntegerInstruction(5), new IntegerInstruction(5))
+                left: new NumericInstruction(4),
+                right: new OperationInstruction("+", new NumericInstruction(5), new NumericInstruction(5))
             );
             
             Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
@@ -76,7 +76,7 @@ public static partial class InstructionTests
         public void HandlesBinaryOperations()
         {
             var memory = Runner.Run("x = 5 + 6");
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(new IntegerVariable(11)));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 11)));
         }
     }
 }

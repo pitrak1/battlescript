@@ -12,7 +12,7 @@ public class Dictionaries
         var expected = new DictionaryVariable(
             new Dictionary<Variable, Variable>()
             {
-                {new StringVariable("asdf"), new IntegerVariable(5)},
+                {new StringVariable("asdf"), new NumericVariable(5)},
                 {new StringVariable("qwer"), new StringVariable("5")}
             }
         );

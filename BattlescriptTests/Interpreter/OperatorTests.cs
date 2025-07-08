@@ -11,67 +11,67 @@ public static class OperatorTests
         [Test]
         public void ReturnsIntegerIfBothOperandsAreIntegers()
         {
-            var memory = new Memory();
+            var memory = Runner.Run("");
             var result = Operator.StandardOperation(
                 memory, 
                 "+", 
-                new IntegerVariable(5), 
-                new IntegerVariable(6));
-            Assert.That(result, Is.EqualTo(new IntegerVariable(11)));
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5), 
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6));
+            Assert.That(result, Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 11)));
         }
         
         [Test]
         public void ReturnsFloatIfEitherOperandIsFloat()
         {
-            var memory = new Memory();
+            var memory = Runner.Run("");
             var result = Operator.StandardOperation(
                 memory, 
                 "+", 
-                new IntegerVariable(5), 
-                new FloatVariable(6.0));
-            Assert.That(result, Is.EqualTo(new FloatVariable(11.0)));
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5), 
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 6.0));
+            Assert.That(result, Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 11.0)));
         }
         
         [Test]
         public void ReturnsFloatForTrueDivision()
         {
-            var memory = new Memory();
+            var memory = Runner.Run("");
             var result = Operator.StandardOperation(
                 memory, 
                 "/", 
-                new IntegerVariable(5), 
-                new IntegerVariable(2));
-            Assert.That(result, Is.EqualTo(new FloatVariable(2.5)));
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5), 
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2));
+            Assert.That(result, Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 2.5)));
         }
         
         [Test]
         public void ReturnsIntegerForFloorDivision()
         {
-            var memory = new Memory();
+            var memory = Runner.Run("");
             var result = Operator.StandardOperation(
                 memory, 
                 "//", 
-                new FloatVariable(10.1), 
-                new FloatVariable(2.5));
-            Assert.That(result, Is.EqualTo(new IntegerVariable(4)));
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 10.1), 
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 2.5));
+            Assert.That(result, Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4)));
         }
 
         [Test]
         public void HandlesUnaryMathematicalOperators()
         {
-            var memory = new Memory();
+            var memory = Runner.Run("");
             var result = Operator.StandardOperation(
                 memory, 
                 "-", 
                 null, 
-                new FloatVariable(2.5));
-            Assert.That(result, Is.EqualTo(new FloatVariable(-2.5)));
+                new NumericVariable(5));
+            Assert.That(result, Is.EqualTo(new NumericVariable(-5)));
         }
         
         [Test]
         public void HandlesBinaryLogicalOperations()
         {
-            var memory = new Memory();
+            var memory = Runner.Run("");
             var result = Operator.StandardOperation(
                 memory, 
                 "and", 
@@ -83,7 +83,7 @@ public static class OperatorTests
         [Test]
         public void HandlesUnaryLogicalOperations()
         {
-            var memory = new Memory();
+            var memory = Runner.Run("");
             var result = Operator.StandardOperation(
                 memory, 
                 "not", 
@@ -96,13 +96,13 @@ public static class OperatorTests
         public void HandlesObjectOperationsIfOverrideIsPresent()
         {
             // In this case, we're just creating a class that has + overridden with a function that just returns 5
-            var memory = new Memory();
+            var memory = Runner.Run("");
             var addFunction = new FunctionVariable(
                 [new VariableInstruction("self"), new VariableInstruction("other")], 
-                [new ReturnInstruction(new IntegerInstruction(5))]);
+                [new ReturnInstruction(new NumericInstruction(5))]);
             var classVariable = new ClassVariable(new Dictionary<string, Variable>()
             {
-                {"x", new IntegerVariable(7)},
+                {"x", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 7)},
                 {"__add__", addFunction}
             });
             var objectVariable = classVariable.CreateObject();
@@ -113,7 +113,7 @@ public static class OperatorTests
                 "+", 
                 objectVariable, 
                 objectVariable);
-            Assert.That(result, Is.EqualTo(new IntegerVariable(5)));
+            Assert.That(result, Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5)));
         }
     }
 
@@ -123,21 +123,21 @@ public static class OperatorTests
         [Test]
         public void ReturnsRightIfStandardAssignmentOperator()
         {
-            var memory = new Memory();
-            var result = Operator.AssignmentOperation(memory, "=", null, new IntegerVariable(5));
-            Assert.That(result, Is.EqualTo(new IntegerVariable(5)));
+            var memory = Runner.Run("");
+            var result = Operator.AssignmentOperation(memory, "=", null, new NumericVariable(8));
+            Assert.That(result, Is.EqualTo(new NumericVariable(8)));
         }
         
         [Test]
         public void ConductsOperationOfTruncatedOperatorIfNotStandardAssignmentOperator()
         {
-            var memory = new Memory();
+            var memory = Runner.Run("");
             var result = Operator.AssignmentOperation(
                 memory, 
                 "+=", 
-                new IntegerVariable(8), 
-                new IntegerVariable(5));
-            Assert.That(result, Is.EqualTo(new IntegerVariable(13)));
+                new NumericVariable(8), 
+                new NumericVariable(5));
+            Assert.That(result, Is.EqualTo(new NumericVariable(13)));
         }
     }
 }

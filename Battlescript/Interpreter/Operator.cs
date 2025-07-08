@@ -42,10 +42,14 @@ public static class Operator
         {
             return ConductObjectOperation(memory, operation, originalOperation, left, right);
         }
+        else if (operation == "==" || operation == "!=")
+        {
+            return ConductEqualityOperation(operation, left, right);
+        }
         else if (Consts.NumericalOperators.Contains(operation))
         {
             return ConductNumericalOperation(operation, left, right);
-        } 
+        }
         else
         {
             return ConductBooleanOperation(operation, left, right);
@@ -183,55 +187,50 @@ public static class Operator
         {"-", "__neg__"},
     };
     
+    private static Variable ConductEqualityOperation(string operation, Variable? left, Variable? right)
+    {
+        var equality = left?.Equals(right) ?? right?.Equals(left) ?? false;
+        return operation == "==" ? new ConstantVariable(equality) : new ConstantVariable(!equality);
+    }
+    
     private static Variable ConductNumericalOperation(string operation, Variable? left, Variable? right)
     {
-        // This may be made easier by using a generic __numeric__ variable type with a dynamic value instead of this
-        // crazy bs
         if (left is null && right is not null)
         {
             return ConductUnaryNumericalOperation(operation, right);
         }
         
-        double leftDouble;
-        double rightDouble;
-        try
-        {
-            leftDouble = GetValueAsDouble(left);
-            rightDouble = GetValueAsDouble(right);
-        }
-        catch (InterpreterInvalidOperationException)
-        {
-            throw new InterpreterInvalidOperationException(operation, left, right);
-        }
-        
+        var leftValue = ((NumericVariable)left).Value;
+        var rightValue = ((NumericVariable)right).Value;
+
         switch (operation)
         {
             case "**":
-                return CreateResultWithType(Math.Pow(leftDouble, rightDouble), operation, left, right);
+                return new NumericVariable(Math.Pow(leftValue, rightValue));
             case "*":
-                return CreateResultWithType(leftDouble * rightDouble, operation, left, right);
+                return new NumericVariable(leftValue * rightValue);
             case "/":
-                return CreateResultWithType(leftDouble / rightDouble, operation, left, right);
+                return new NumericVariable((double)leftValue / rightValue);
             case "//":
-                return CreateResultWithType(Math.Floor(leftDouble / rightDouble), operation, left, right);
+                return new NumericVariable(Math.Floor(leftValue / rightValue));
             case "%":
-                return CreateResultWithType(leftDouble % rightDouble, operation, left, right);
+                return new NumericVariable(leftValue % rightValue);
             case "+":
-                return CreateResultWithType(leftDouble + rightDouble, operation, left, right);
+                return new NumericVariable(leftValue + rightValue);
             case "-":
-                return CreateResultWithType(leftDouble - rightDouble, operation, left, right);
+                return new NumericVariable(leftValue - rightValue);
             case "==":
-                return CreateResultWithType(Math.Abs(leftDouble - rightDouble) < Consts.FloatingPointTolerance, operation, left, right);
+                return new NumericVariable(Math.Abs(leftValue - rightValue) < Consts.FloatingPointTolerance);
             case "!=":
-                return CreateResultWithType(Math.Abs(leftDouble - rightDouble) > Consts.FloatingPointTolerance, operation, left, right);
+                return new NumericVariable(Math.Abs(leftValue - rightValue) > Consts.FloatingPointTolerance);
             case ">":
-                return CreateResultWithType(leftDouble > rightDouble, operation, left, right);
+                return new NumericVariable(leftValue > rightValue);
             case ">=":
-                return CreateResultWithType(leftDouble >= rightDouble, operation, left, right);
+                return new NumericVariable(leftValue >= rightValue);
             case "<":
-                return CreateResultWithType(leftDouble < rightDouble, operation, left, right);
+                return new NumericVariable(leftValue < rightValue);
             case "<=":
-                return CreateResultWithType(leftDouble <= rightDouble, operation, left, right);
+                return new NumericVariable(leftValue <= rightValue);
             default:
                 throw new InterpreterInvalidOperationException(operation, left, right);
         }
@@ -244,14 +243,10 @@ public static class Operator
             case "+":
                 return right;
             case "-":
-                if (right is IntegerVariable rightInt)
+                if (right is NumericVariable rightNum)
                 {
-                    return new IntegerVariable(-rightInt.Value);
+                    return new NumericVariable(-rightNum.Value);
                 } 
-                else if (right is FloatVariable rightFloat)
-                {
-                    return new FloatVariable(-rightFloat.Value);
-                }
                 else
                 {
                     throw new InterpreterInvalidOperationException(operation, null, right);
@@ -280,67 +275,6 @@ public static class Operator
         {
             return new ConstantVariable(!Truthiness.IsTruthy(rightBoolean2));
         }
-        else
-        {
-            throw new InterpreterInvalidOperationException(operation, left, right);
-        }
-    }
-
-    private static double GetValueAsDouble(Variable? variable)
-    {
-        if (variable is IntegerVariable integerVariable)
-        {
-            return integerVariable.Value;
-        } else if (variable is FloatVariable floatVariable)
-        {
-            return floatVariable.Value;
-        }
-        else
-        {
-            throw new InterpreterInvalidOperationException("", variable, variable);
-        }
-    }
-    
-    private static Variable CreateResultWithType(dynamic result, string operation, Variable? left, Variable? right)
-    {
-        if (operation == "/")
-        {
-            return new FloatVariable(result);
-        }
-        else if (operation == "//")
-        {
-            return new IntegerVariable((int)result);
-        }
-        else if (left is IntegerVariable && right is IntegerVariable)
-        {
-            if (result is int or double)
-            {
-                return new IntegerVariable((int)result);
-            }
-            else if (result is bool)
-            {
-                return new ConstantVariable((bool)result);
-            }
-            else
-            {
-                throw new InterpreterInvalidOperationException(operation, left, right);
-            }
-        } 
-        else if (left is IntegerVariable or FloatVariable && right is IntegerVariable or FloatVariable)
-        {
-            if (result is int or double)
-            {
-                return new FloatVariable(result);
-            }
-            else if (result is bool)
-            {
-                return new ConstantVariable((bool)result);
-            }
-            else
-            {
-                throw new InterpreterInvalidOperationException(operation, left, right);
-            }
-        } 
         else
         {
             throw new InterpreterInvalidOperationException(operation, left, right);

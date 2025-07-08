@@ -16,7 +16,7 @@ public static class ClassesAndObjectsTests
             var expected = new ClassVariable(
                 new Dictionary<string, Variable>()
                 {
-                    {"i", new IntegerVariable(1234)}
+                    {"i", new NumericVariable(1234)}
                 });
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("asdf"));
@@ -28,7 +28,7 @@ public static class ClassesAndObjectsTests
         {
             var values = new Dictionary<string, Variable>()
             {
-                { "i", new IntegerVariable(1234) }
+                { "i", new NumericVariable(1234) }
             };
             var input = "class asdf:\n\ti = 1234\nx = asdf()";
             var expected = new ObjectVariable(
@@ -44,12 +44,12 @@ public static class ClassesAndObjectsTests
         {
             var classValues = new Dictionary<string, Variable>()
             {
-                { "i", new IntegerVariable(1234) },
-                { "j", new FunctionVariable([], [new ReturnInstruction(new IntegerInstruction(1234))])}
+                { "i", new NumericVariable(1234) },
+                { "j", new FunctionVariable([], [new ReturnInstruction(new NumericInstruction(1234))])}
             };
             var objectValues = new Dictionary<string, Variable>()
             {
-                { "i", new IntegerVariable(1234) }
+                { "i", new NumericVariable(1234) }
             };
             var input = """
                         class asdf:
@@ -70,7 +70,7 @@ public static class ClassesAndObjectsTests
         public void AllowsAccessingValueMembers()
         {
             var input = "class asdf:\n\ti = 1234\nx = asdf()\ny = x.i";
-            var expected = new IntegerVariable(1234);
+            var expected = new NumericVariable(1234);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("y"));
             Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
@@ -83,7 +83,7 @@ public static class ClassesAndObjectsTests
             var expected = new ClassVariable(
                 new Dictionary<string, Variable>()
                 {
-                    { "i", new IntegerVariable(1234) }
+                    { "i", new NumericVariable(1234) }
                 }
             );
             var memory = Runner.Run(input);
@@ -105,7 +105,7 @@ public static class ClassesAndObjectsTests
                         y = x.i
 
                         """;
-            var expected = new IntegerVariable(2345);
+            var expected = new NumericVariable(2345);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("y"));
             Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
@@ -124,7 +124,7 @@ public static class ClassesAndObjectsTests
                         z = asdf()
                         x = z.y
                         """;
-            var expected = new IntegerVariable(5);
+            var expected = new NumericVariable(5);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -142,7 +142,7 @@ public static class ClassesAndObjectsTests
                         z = asdf()
                         x = z.y
                         """;
-            var expected = new IntegerVariable(6);
+            var expected = new NumericVariable(6);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -160,7 +160,7 @@ public static class ClassesAndObjectsTests
                         z = asdf(9)
                         x = z.y
                         """;
-            var expected = new IntegerVariable(9);
+            var expected = new NumericVariable(9);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -179,12 +179,12 @@ public static class ClassesAndObjectsTests
             var superclass = new ClassVariable(
                 new Dictionary<string, Variable>()
                 {
-                    { "i", new IntegerVariable(1234) }
+                    { "i", new NumericVariable(1234) }
                 });
             var expected = new ClassVariable(
                 new Dictionary<string, Variable>()
                 {
-                    { "j", new IntegerVariable(2345) }
+                    { "j", new NumericVariable(2345) }
                 }, [superclass]);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0]["qwer"], Is.EqualTo(expected));
@@ -204,7 +204,7 @@ public static class ClassesAndObjectsTests
                         z = qwer(9)
                         x = z.y
                         """;
-            var expected = new IntegerVariable(9);
+            var expected = new NumericVariable(9);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -228,7 +228,7 @@ public static class ClassesAndObjectsTests
                         y = asdf()
                         x = z + y
                         """;
-            var expected = new IntegerVariable(10);
+            var expected = new NumericVariable(10);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -247,7 +247,7 @@ public static class ClassesAndObjectsTests
                         z = asdf()
                         x = -z
                         """;
-            var expected = new IntegerVariable(-5);
+            var expected = new NumericVariable(-5);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
@@ -269,7 +269,7 @@ public static class ClassesAndObjectsTests
                         z += y
                         x = z.i
                         """;
-            var expected = new IntegerVariable(10);
+            var expected = new NumericVariable(10);
             var memory = Runner.Run(input);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));

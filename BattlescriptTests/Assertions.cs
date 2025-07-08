@@ -11,12 +11,4 @@ public static class Assertions
         
         Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
     }
-
-    public static void AssertInputProducesValueInMemory(string input, string variableName, Variable? expected)
-    {
-        var memory = Runner.Run(input);
-        
-        Assert.That(memory.Scopes[0], Contains.Key(variableName));
-        Assert.That(memory.Scopes[0][variableName], Is.EqualTo(expected));
-    }
 }

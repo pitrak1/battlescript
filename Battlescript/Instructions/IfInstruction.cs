@@ -32,12 +32,21 @@ public class IfInstruction : Instruction, IEquatable<IfInstruction>
         var condition = Condition.Interpret(memory);
         if (Truthiness.IsTruthy(condition))
         {
-            memory.AddScope();
-            foreach (var inst in Instructions)
+            try
             {
-                inst.Interpret(memory);
+                memory.AddScope();
+                foreach (var inst in Instructions)
+                {
+                    inst.Interpret(memory);
+                }
+
+                memory.RemoveScope();
             }
-            memory.RemoveScope();
+            catch (InternalReturnException e)
+            {
+                memory.RemoveScope();
+                throw;
+            }
         }
         else if (Next is not null)
         {

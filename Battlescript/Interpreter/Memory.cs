@@ -6,11 +6,12 @@ public class Memory(List<Dictionary<string, Variable>>? scopes = null)
 {
     public List<Dictionary<string, Variable>> Scopes { get; } = scopes ?? [new Dictionary<string, Variable>()];
 
-    public Dictionary<string, Variable> BuiltInReferences = [];
+    public Dictionary<string, ClassVariable> BuiltInReferences = [];
 
     public void PopulateBuiltInReferences()
     {
-        BuiltInReferences["int"] = GetVariable("int")!;
+        BuiltInReferences["int"] = GetVariable("int") as ClassVariable;
+        BuiltInReferences["float"] = GetVariable("float") as ClassVariable;
     }
     
     public Variable? GetVariable(string name)

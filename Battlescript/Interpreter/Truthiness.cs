@@ -8,10 +8,8 @@ public static class Truthiness
         {
             case ConstantVariable constantVariable:
                 return constantVariable.Value == Consts.Constants.True;
-            case IntegerVariable integerVariable:
-                return integerVariable.Value != 0;
-            case FloatVariable floatVariable:
-                return floatVariable.Value != 0;
+            case NumericVariable numVariable:
+                return numVariable.Value != 0;
             case StringVariable stringVariable:
                 return stringVariable.Value.Length > 0;
             case ListVariable listVariable:

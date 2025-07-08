@@ -24,7 +24,7 @@ public abstract class Variable
     
     public void SetItem(Memory memory, Variable value, int index, ObjectVariable? objectContext = null)
     {
-        SetItem(memory, value, new ArrayInstruction([new IntegerInstruction(index)]), objectContext);
+        SetItem(memory, value, new ArrayInstruction([new NumericInstruction(index)]), objectContext);
     }
     
     public virtual Variable? SetItemDirectly(Memory memory, Variable value, ArrayInstruction index, ObjectVariable? objectContext = null)
@@ -55,7 +55,7 @@ public abstract class Variable
     
     public Variable? GetItem(Memory memory, int index, ObjectVariable? objectContext = null)
     {
-        return GetItem(memory, new ArrayInstruction([new IntegerInstruction(index)]), objectContext);
+        return GetItem(memory, new ArrayInstruction([new NumericInstruction(index)]), objectContext);
     }
 
     public virtual Variable? GetItemDirectly(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)

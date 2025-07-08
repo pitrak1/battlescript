@@ -43,6 +43,8 @@ public class BuiltInInstruction : Instruction
                 return RunIsInstanceFunction(memory);
             case "issubclass":
                 return RunIsSubclassFunction(memory);
+            case "print":
+                return RunPrint(memory);
         }
         // TODO
         return new ConstantVariable();
@@ -57,21 +59,21 @@ public class BuiltInInstruction : Instruction
         if (Parameters.Count == 1)
         {
             var countExpression = Parameters[0].Interpret(memory);
-            count = ((IntegerVariable)countExpression).Value;
+            count = BuiltInTypeHelper.GetIntValueFromVariable(memory, countExpression);
         } else if (Parameters.Count == 2)
         {
             var startingValueExpression = Parameters[0].Interpret(memory);
             var countExpression = Parameters[1].Interpret(memory);
-            startingValue = ((IntegerVariable)startingValueExpression).Value;
-            count = ((IntegerVariable)countExpression).Value;
+            startingValue = BuiltInTypeHelper.GetIntValueFromVariable(memory, startingValueExpression);
+            count = BuiltInTypeHelper.GetIntValueFromVariable(memory, countExpression);
         } else if (Parameters.Count == 3)
         {
             var startingValueExpression = Parameters[0].Interpret(memory);
             var countExpression = Parameters[1].Interpret(memory);
             var stepExpression = Parameters[2].Interpret(memory);
-            startingValue = ((IntegerVariable)startingValueExpression).Value;
-            count = ((IntegerVariable)countExpression).Value;
-            step = ((IntegerVariable)stepExpression).Value;
+            startingValue = BuiltInTypeHelper.GetIntValueFromVariable(memory, startingValueExpression);
+            count = BuiltInTypeHelper.GetIntValueFromVariable(memory, countExpression);
+            step = BuiltInTypeHelper.GetIntValueFromVariable(memory, stepExpression);
         }
         else
         {
@@ -86,7 +88,7 @@ public class BuiltInInstruction : Instruction
             {
                 for (var i = startingValue; i < count; i += step)
                 {
-                    values.Add(new IntegerVariable(i));
+                    values.Add(new NumericVariable(i));
                 }
             }
             
@@ -98,7 +100,7 @@ public class BuiltInInstruction : Instruction
             {
                 for (var i = startingValue; i > count; i += step)
                 {
-                    values.Add(new IntegerVariable(i));
+                    values.Add(new NumericVariable(i));
                 }
             }
             return new ListVariable(values);
@@ -121,7 +123,7 @@ public class BuiltInInstruction : Instruction
         }
         else
         {
-            throw new Exception("Bad arguments, clean this up later");
+            return new ConstantVariable(false);
         }
     }
     
@@ -138,6 +140,25 @@ public class BuiltInInstruction : Instruction
         if (firstExpression is ClassVariable firstVariable && secondExpression is ClassVariable secondVariable)
         {
             return new ConstantVariable(firstVariable.IsSubclass(secondVariable));
+        }
+        else
+        {
+            throw new Exception("Bad arguments, clean this up later");
+        }
+    }
+
+    private ConstantVariable RunPrint(Memory memory)
+    {
+        if (Parameters.Count != 1)
+        {
+            throw new Exception("Bad arguments, clean this up later");
+        }
+        
+        var firstExpression = Parameters[0].Interpret(memory);
+        if (firstExpression is StringVariable stringVariable)
+        {
+            Console.WriteLine(stringVariable.Value);
+            return new ConstantVariable();
         }
         else
         {

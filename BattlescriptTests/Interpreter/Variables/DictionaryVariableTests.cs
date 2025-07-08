@@ -13,14 +13,14 @@ public static class DictionaryVariableTests
         {
             var dictionary = new DictionaryVariable(new Dictionary<Variable, Variable>()
             {
-                { new IntegerVariable(1), new IntegerVariable(2) },
-                { new StringVariable("asdf"), new IntegerVariable(4) }
+                { new NumericVariable(1), new NumericVariable(2) },
+                { new StringVariable("asdf"), new NumericVariable(4) }
             });
             
             var indexInstruction = new ArrayInstruction([new StringInstruction("asdf")], separator: "[");
             var result = dictionary.GetItem(new Memory(), indexInstruction);
-            Assert.That(result, Is.TypeOf<IntegerVariable>());
-            Assert.That(((IntegerVariable)result).Value, Is.EqualTo(4));
+            Assert.That(result, Is.TypeOf<NumericVariable>());
+            Assert.That(((NumericVariable)result).Value, Is.EqualTo(4));
         }
         
         [Test]
@@ -28,13 +28,13 @@ public static class DictionaryVariableTests
         {
             var innerDictionary = new DictionaryVariable(new Dictionary<Variable, Variable>()
             {
-                { new StringVariable("qwer"), new IntegerVariable(3) },
-                { new StringVariable("zxcv"), new IntegerVariable(5) }
+                { new StringVariable("qwer"), new NumericVariable(3) },
+                { new StringVariable("zxcv"), new NumericVariable(5) }
             });
 
             var dictionary = new DictionaryVariable(new Dictionary<Variable, Variable>()
             {
-                { new IntegerVariable(1), new IntegerVariable(2) },
+                { new NumericVariable(1), new NumericVariable(2) },
                 { new StringVariable("asdf"), innerDictionary }
             });
             
@@ -43,8 +43,8 @@ public static class DictionaryVariableTests
                 Consts.SquareBrackets,
                 next: new ArrayInstruction([new StringInstruction("zxcv")], Consts.SquareBrackets));
             var result = dictionary.GetItem(new Memory(), indexInstruction);
-            Assert.That(result, Is.TypeOf<IntegerVariable>());
-            Assert.That(((IntegerVariable)result).Value, Is.EqualTo(5));
+            Assert.That(result, Is.TypeOf<NumericVariable>());
+            Assert.That(((NumericVariable)result).Value, Is.EqualTo(5));
         }
     }
     
@@ -56,15 +56,15 @@ public static class DictionaryVariableTests
         {
             var dictionary = new DictionaryVariable(new Dictionary<Variable, Variable>()
             {
-                { new IntegerVariable(1), new IntegerVariable(2) },
-                { new StringVariable("asdf"), new IntegerVariable(4) }
+                { new NumericVariable(1), new NumericVariable(2) },
+                { new StringVariable("asdf"), new NumericVariable(4) }
             });
             var indexInstruction = new ArrayInstruction([new StringInstruction("asdf")], separator: "[");
-            var valueVariable = new IntegerVariable(10);
+            var valueVariable = new NumericVariable(10);
             dictionary.SetItem(new Memory(), valueVariable, indexInstruction);
             var result = dictionary.GetItem(new Memory(), indexInstruction);
-            Assert.That(result, Is.TypeOf<IntegerVariable>());
-            Assert.That(((IntegerVariable)result).Value, Is.EqualTo(10));
+            Assert.That(result, Is.TypeOf<NumericVariable>());
+            Assert.That(((NumericVariable)result).Value, Is.EqualTo(10));
         }
         
         [Test]
@@ -72,24 +72,24 @@ public static class DictionaryVariableTests
         {
             var innerDictionary = new DictionaryVariable(new Dictionary<Variable, Variable>()
             {
-                { new StringVariable("qwer"), new IntegerVariable(3) },
-                { new StringVariable("zxcv"), new IntegerVariable(5) }
+                { new StringVariable("qwer"), new NumericVariable(3) },
+                { new StringVariable("zxcv"), new NumericVariable(5) }
             });
 
             var dictionary = new DictionaryVariable(new Dictionary<Variable, Variable>()
             {
-                { new IntegerVariable(1), new IntegerVariable(2) },
+                { new NumericVariable(1), new NumericVariable(2) },
                 { new StringVariable("asdf"), innerDictionary }
             });
             var indexInstruction = new ArrayInstruction(
                 [new StringInstruction("asdf")],
                 Consts.SquareBrackets,
                 next: new ArrayInstruction([new StringInstruction("zxcv")], Consts.SquareBrackets));
-            var valueVariable = new IntegerVariable(10);
+            var valueVariable = new NumericVariable(10);
             dictionary.SetItem(new Memory(), valueVariable, indexInstruction);
             var result = dictionary.GetItem(new Memory(), indexInstruction);
-            Assert.That(result, Is.TypeOf<IntegerVariable>());
-            Assert.That(((IntegerVariable)result).Value, Is.EqualTo(10));
+            Assert.That(result, Is.TypeOf<NumericVariable>());
+            Assert.That(((NumericVariable)result).Value, Is.EqualTo(10));
         }
     }
 }
