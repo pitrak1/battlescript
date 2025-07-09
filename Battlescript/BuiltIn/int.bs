@@ -34,8 +34,50 @@ class int(numeric):
     def __neg__(self):
         return int(-self.__value)
 
+    def __eq__(self, other):
+        return self.__perform_operation(other, '==')
+
+    def __ne__(self, other):
+        return self.__perform_operation(other, '!=')
+
+    def __lt__(self, other):
+        return self.__perform_operation(other, '<')
+
+    def __gt__(self, other):
+        return self.__perform_operation(other, '>')
+
+    def __le__(self, other):
+        return self.__perform_operation(other, '<=')
+
+    def __ge__(self, other):
+        return self.__perform_operation(other, '>=')
+
     def __iadd__(self, other):
         self.__value = self.__get_operation_result(other, '+')
+        return self
+
+    def __isub__(self, other):
+        self.__value = self.__get_operation_result(other, '-')
+        return self
+    
+    def __imul__(self, other):
+        self.__value = self.__get_operation_result(other, '*')
+        return self
+
+    def __itruediv__(self, other):
+        self.__value = self.__get_operation_result(other, '/')
+        return self
+
+    def __ifloordiv__(self, other):
+        self.__value = self.__get_operation_result(other, '//')
+        return self
+
+    def __imod__(self, other):
+        self.__value = self.__get_operation_result(other, '%')
+        return self
+
+    def __ipow__(self, other):
+        self.__value = self.__get_operation_result(other, '**')
         return self
 
     def __perform_operation(self, other, operation):

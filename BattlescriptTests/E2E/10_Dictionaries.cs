@@ -9,14 +9,15 @@ public class Dictionaries
     public void SupportsDictionaryDefinition()
     {
         var input = "x = {'asdf': 5, 'qwer': '5'}";
+        var memory = Runner.Run(input);
         var expected = new DictionaryVariable(
             new Dictionary<Variable, Variable>()
             {
-                {new StringVariable("asdf"), new NumericVariable(5)},
+                {new StringVariable("asdf"), BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5)},
                 {new StringVariable("qwer"), new StringVariable("5")}
             }
         );
-        var memory = Runner.Run(input);
+        
         Assert.That(memory.Scopes[0], Contains.Key("x"));
         Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
     }

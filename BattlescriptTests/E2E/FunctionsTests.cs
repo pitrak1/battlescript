@@ -27,7 +27,7 @@ public class FunctionsTests
             Assert.That(memory.Scopes[0], Contains.Key("func"));
             Assert.That(memory.Scopes[0]["func"], Is.EqualTo(expected));
         }
-
+    
         [Test]
         public void HandlesFunctionDefinitionWithOneArgument()
         {
@@ -71,7 +71,7 @@ public class FunctionsTests
             Assert.That(memory.Scopes[0]["func"], Is.EqualTo(expected));
         }
     }
-
+    
     [TestFixture]
     public class BasicFunctionCalls
     {
@@ -84,8 +84,8 @@ public class FunctionsTests
                             x = 5
                         func()
                         """;
-            var expected = new NumericVariable(5);
             var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
@@ -99,13 +99,13 @@ public class FunctionsTests
                             x = y + z
                         func(2, 3)
                         """;
-            var expected = new NumericVariable(5);
             var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
     }
-
+    
     [TestFixture]
     public class ReturnValues
     {
@@ -117,8 +117,8 @@ public class FunctionsTests
                             return 15
                         x = func()
                         """;
-            var expected = new NumericVariable(15);
             var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 15);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
@@ -131,8 +131,8 @@ public class FunctionsTests
                             return y + z
                         x = func(4, 8)
                         """;
-            var expected = new NumericVariable(12);
             var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 12);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
@@ -148,13 +148,13 @@ public class FunctionsTests
                             x = 6
                         func()
                         """;
-            var expected = new NumericVariable(5);
             var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
     }
-
+    
     [TestFixture]
     public class DefaultArguments
     {
@@ -166,8 +166,8 @@ public class FunctionsTests
                             return y
                         x = func(6)
                         """;
-            var expected = new NumericVariable(6);
             var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
@@ -180,12 +180,12 @@ public class FunctionsTests
                             return y
                         x = func()
                         """;
-            var expected = new NumericVariable(5);
             var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
-
+    
         [Test]
         public void DefaultArgumentsMustBeAfterRequiredArguments()
         {
@@ -196,7 +196,7 @@ public class FunctionsTests
             Assert.Throws<Exception>(() => Runner.Run(input));
         }
     }
-
+    
     [TestFixture]
     public class KeywordArguments
     {
@@ -208,8 +208,8 @@ public class FunctionsTests
                             return y
                         x = func(y = 6)
                         """;
-            var expected = new NumericVariable(6);
             var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
@@ -222,8 +222,8 @@ public class FunctionsTests
                             return x + y
                         x = func(4, y = 6)
                         """;
-            var expected = new NumericVariable(10);
             var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 10);
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
@@ -272,7 +272,7 @@ public class FunctionsTests
             Assert.Throws<Exception>(() => Runner.Run(input));
         }
     }
-
+    
     [TestFixture]
     public class LambdaFunctions
     {

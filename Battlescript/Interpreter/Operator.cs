@@ -210,9 +210,9 @@ public static class Operator
             case "*":
                 return new NumericVariable(leftValue * rightValue);
             case "/":
-                return new NumericVariable((double)leftValue / rightValue);
+                return new NumericVariable((double)leftValue / (double)rightValue);
             case "//":
-                return new NumericVariable(Math.Floor(leftValue / rightValue));
+                return new NumericVariable(Math.Floor((double)leftValue / (double)rightValue));
             case "%":
                 return new NumericVariable(leftValue % rightValue);
             case "+":
