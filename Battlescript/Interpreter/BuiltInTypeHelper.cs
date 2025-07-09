@@ -12,6 +12,19 @@ public static class BuiltInTypeHelper
 
         return null;
     }
+
+    public static bool IsVariableAnyBuiltInClass(Memory memory, Variable variable)
+    {
+        foreach (var builtInClass in memory.BuiltInReferences.Values)
+        {
+            if (variable is ObjectVariable objectVariable && objectVariable.Class.Equals(builtInClass))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
     
     public static int GetIntValueFromVariable(Memory memory, Variable variable)
     {

@@ -262,10 +262,10 @@ public static class Operator
         {
             if (operation == "and")
             {
-                return new ConstantVariable(Truthiness.IsTruthy(leftBoolean) && Truthiness.IsTruthy(rightBoolean));
+                return new ConstantVariable(Truthiness.IsTruthy(Runner.Run(""), leftBoolean) && Truthiness.IsTruthy(Runner.Run(""), rightBoolean));
             } else if (operation == "or")
             {
-                return new ConstantVariable(Truthiness.IsTruthy(leftBoolean) || Truthiness.IsTruthy(rightBoolean));
+                return new ConstantVariable(Truthiness.IsTruthy(Runner.Run(""), leftBoolean) || Truthiness.IsTruthy(Runner.Run(""), rightBoolean));
             }
             else
             {
@@ -273,7 +273,7 @@ public static class Operator
             }
         } else if (right is ConstantVariable rightBoolean2 && operation == "not")
         {
-            return new ConstantVariable(!Truthiness.IsTruthy(rightBoolean2));
+            return new ConstantVariable(!Truthiness.IsTruthy(Runner.Run(""), rightBoolean2));
         }
         else
         {

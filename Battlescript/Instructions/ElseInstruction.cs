@@ -36,7 +36,7 @@ public class ElseInstruction : Instruction, IEquatable<ElseInstruction>
         if (Condition is not null)
         {
             var condition = Condition.Interpret(memory);
-            if (Truthiness.IsTruthy(condition))
+            if (Truthiness.IsTruthy(memory, condition))
             {
                 try
                 {

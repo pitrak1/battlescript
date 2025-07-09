@@ -28,7 +28,7 @@ public class WhileInstruction : Instruction, IEquatable<WhileInstruction>
         ClassVariable? lexicalContext = null)
     {
         var condition = Condition.Interpret(memory);
-        while (Truthiness.IsTruthy(condition))
+        while (Truthiness.IsTruthy(memory, condition))
         {
             memory.AddScope();
 

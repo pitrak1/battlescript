@@ -2,7 +2,7 @@ namespace Battlescript;
 
 public static class Truthiness
 {
-    public static bool IsTruthy(Variable variable)
+    public static bool IsTruthy(Memory memory, Variable variable)
     {
         switch (variable)
         {
@@ -17,7 +17,7 @@ public static class Truthiness
             case ClassVariable:
                 return true;
             case ObjectVariable:
-                return true;
+                return IsObjectTruthy(memory, variable);
             case DictionaryVariable dictionaryVariable:
                 return dictionaryVariable.Values.Count > 0;
             case FunctionVariable:
@@ -25,5 +25,24 @@ public static class Truthiness
             default:
                 throw new Exception("Won't get here");
         }
+    }
+
+    private static bool IsObjectTruthy(Memory memory, Variable variable)
+    {
+        var intObject = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "int", variable);
+        if (intObject is not null)
+        {
+            var value = intObject.Values["__value"] as NumericVariable;
+            return value.Value != 0;
+        }
+        
+        var floatObject = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "float", variable);
+        if (floatObject is not null)
+        {
+            var value = floatObject.Values["__value"] as NumericVariable;
+            return Math.Abs(value.Value) > Consts.FloatingPointTolerance;
+        }
+
+        return true;
     }
 }

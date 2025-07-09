@@ -30,7 +30,7 @@ public class IfInstruction : Instruction, IEquatable<IfInstruction>
         ClassVariable? lexicalContext = null)
     {
         var condition = Condition.Interpret(memory);
-        if (Truthiness.IsTruthy(condition))
+        if (Truthiness.IsTruthy(memory, condition))
         {
             try
             {
