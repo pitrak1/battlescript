@@ -156,7 +156,14 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
             }
             else
             {
-                throw new Exception("Parens must follow a function or class");
+                if (Values.Count == 1)
+                {
+                    return Values[0]!.Interpret(memory);
+                }
+                else
+                {
+                    throw new Exception("Parens must follow a function or class");
+                }
             }
 
             void RunConstructor(ObjectVariable objectVariable)

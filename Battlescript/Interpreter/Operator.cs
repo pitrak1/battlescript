@@ -63,7 +63,9 @@ public static class Operator
             throw new InterpreterInvalidOperationException(operation, left, right);
         }
         
-        return operation == "is" ? new ConstantVariable(left == right) : new ConstantVariable(left != right);
+        return operation == "is" ? 
+            BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", left == right) : 
+            BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", left != right);
     }
 
     private static Variable ConductInOperation(string operation, Variable? left, Variable? right)
@@ -72,17 +74,23 @@ public static class Operator
         {
             // if both operands are strings, we search for a substring
             var isContained = rightString.Value.Contains(leftString.Value);
-            return operation == "in" ? new ConstantVariable(isContained) : new ConstantVariable(!isContained);
+            return operation == "in" ? 
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", isContained) : 
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", !isContained);
         } else if (right is ListVariable rightList)
         {
             // If the right operand is a list, we search for a matching element
             var found = rightList.Values.Any(x => x.Equals(left));
-            return operation == "in" ? new ConstantVariable(found) : new ConstantVariable(!found);
+            return operation == "in" ? 
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", found) : 
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", !found);
         } else if (right is DictionaryVariable rightDictionary)
         {
             // If the right operand is a dictionary, we search for a matching key
             var found = rightDictionary.Values.Any(x => x.Key.Equals(left));
-            return operation == "in" ? new ConstantVariable(found) : new ConstantVariable(!found);
+            return operation == "in" ? 
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", found) : 
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", !found);
         }
         else
         {
@@ -95,6 +103,28 @@ public static class Operator
         if (left is null)
         {
             return ConductUnaryObjectOperation(memory, operation, originalOperation, right);
+        }
+        
+        // or, and, and not are special operators and can't be overridden.  In python 3, you can overwrite the 
+        // __bool__ method to change how a class is interpreted as a boolean, but for now, we'll do it here
+        if (operation == "or")
+        {
+            var leftTruthiness = Truthiness.IsTruthy(Runner.Run(""), left);
+            if (leftTruthiness) return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", true);
+            
+            var rightTruthiness = Truthiness.IsTruthy(Runner.Run(""), right);
+            return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", rightTruthiness);
+        } else if (operation == "and")
+        {
+            var leftTruthiness = Truthiness.IsTruthy(Runner.Run(""), left);
+            if (!leftTruthiness) return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", false);
+            
+            var rightTruthiness = Truthiness.IsTruthy(Runner.Run(""), right);
+            return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", rightTruthiness);
+        } else if (operation == "not")
+        {
+            var rightTruthiness = Truthiness.IsTruthy(Runner.Run(""), right);
+            return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", rightTruthiness);
         }
         
         OperationToOverrideMap.TryGetValue(originalOperation, out var overrideName);
@@ -220,17 +250,17 @@ public static class Operator
             case "-":
                 return new NumericVariable(leftValue - rightValue);
             case "==":
-                return new NumericVariable(Math.Abs(leftValue - rightValue) < Consts.FloatingPointTolerance);
+                return new NumericVariable(Math.Abs(leftValue - rightValue) < Consts.FloatingPointTolerance ? 1 : 0);
             case "!=":
-                return new NumericVariable(Math.Abs(leftValue - rightValue) > Consts.FloatingPointTolerance);
+                return new NumericVariable(Math.Abs(leftValue - rightValue) > Consts.FloatingPointTolerance ? 1 : 0);
             case ">":
-                return new NumericVariable(leftValue > rightValue);
+                return new NumericVariable(leftValue > rightValue ? 1 : 0);
             case ">=":
-                return new NumericVariable(leftValue >= rightValue);
+                return new NumericVariable(leftValue >= rightValue ? 1 : 0);
             case "<":
-                return new NumericVariable(leftValue < rightValue);
+                return new NumericVariable(leftValue < rightValue ? 1 : 0);
             case "<=":
-                return new NumericVariable(leftValue <= rightValue);
+                return new NumericVariable(leftValue <= rightValue ? 1 : 0);
             default:
                 throw new InterpreterInvalidOperationException(operation, left, right);
         }

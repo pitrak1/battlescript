@@ -12,6 +12,7 @@ public class Memory(List<Dictionary<string, Variable>>? scopes = null)
     {
         BuiltInReferences["int"] = GetVariable("int") as ClassVariable;
         BuiltInReferences["float"] = GetVariable("float") as ClassVariable;
+        BuiltInReferences["bool"] = GetVariable("bool") as ClassVariable;
     }
     
     public Variable? GetVariable(string name)

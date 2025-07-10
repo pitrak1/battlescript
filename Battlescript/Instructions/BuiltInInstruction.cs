@@ -1,3 +1,6 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
 namespace Battlescript;
 
 public class BuiltInInstruction : Instruction
@@ -158,6 +161,20 @@ public class BuiltInInstruction : Instruction
         if (firstExpression is StringVariable stringVariable)
         {
             Console.WriteLine(stringVariable.Value);
+            return new ConstantVariable();
+        }
+        else if (firstExpression is NumericVariable numericVariable)
+        {
+            Console.WriteLine(numericVariable.Value);
+            return new ConstantVariable();
+        }
+        else if (firstExpression is ObjectVariable objectVariable)
+        {
+            
+            var jsonString = JsonConvert.SerializeObject(
+                objectVariable.Values, Formatting.Indented,
+                new JsonConverter[] {new StringEnumConverter()});
+            Console.WriteLine(jsonString);
             return new ConstantVariable();
         }
         else

@@ -85,6 +85,8 @@ class int(numeric):
             return float(self.__get_operation_result(other, operation))
         elif operation == '//':
             return int(self.__get_operation_result(other, operation))
+        elif operation in ['==', '!=', '<', '>', '<=', '>=']:
+            return bool(self.__get_operation_result(other, operation))
         elif isinstance(other, float):
             return float(self.__get_operation_result(other, operation))
         elif isinstance(other, int):

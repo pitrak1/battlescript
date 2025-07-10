@@ -85,5 +85,7 @@ class float(numeric):
             return int(self.__get_operation_result(other, operation))
         # this didn't work, need to figure it out
         # elif isinstance(other, float) or isinstance(other, int):
+        elif operation in ['==', '!=', '<', '>', '<=', '>=']:
+            return bool(self.__get_operation_result(other, operation))
         else:
             return float(self.__get_operation_result(other, operation))

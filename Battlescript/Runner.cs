@@ -8,6 +8,7 @@ public static class Runner
         LoadBuiltin(memory, "numeric");
         LoadBuiltin(memory, "int");
         LoadBuiltin(memory, "float");
+        LoadBuiltin(memory, "bool");
         memory.PopulateBuiltInReferences();
         RunPartial(memory, input);
         return memory;

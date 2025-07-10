@@ -33,7 +33,7 @@ public static class Truthiness
         if (intObject is not null)
         {
             var value = intObject.Values["__value"] as NumericVariable;
-            return value.Value != 0;
+            return value.Value is bool ? value.Value : value.Value != 0;
         }
         
         var floatObject = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "float", variable);
@@ -41,6 +41,13 @@ public static class Truthiness
         {
             var value = floatObject.Values["__value"] as NumericVariable;
             return Math.Abs(value.Value) > Consts.FloatingPointTolerance;
+        }
+        
+        var boolObject = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "bool", variable);
+        if (boolObject is not null)
+        {
+            var value = boolObject.Values["__value"] as NumericVariable;
+            return value.Value == 1;
         }
 
         return true;

@@ -49,6 +49,10 @@ public static class BuiltInTypeHelper
         {
             objectVariable.Values["__value"] = new NumericVariable(value);
             return objectVariable;
+        } else if (value is bool)
+        {
+            objectVariable.Values["__value"] = new NumericVariable(value ? 1 : 0);
+            return objectVariable;
         }
         
         objectVariable.Values["__value"] = value;

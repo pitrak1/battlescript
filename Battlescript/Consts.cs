@@ -302,5 +302,5 @@ public static class Consts
         "__numeric__"
     ];
 
-    public static readonly string[] BuiltInTypes = ["numeric", "int", "float"];
+    public static readonly string[] BuiltInTypes = ["numeric", "int", "float", "bool"];
 }

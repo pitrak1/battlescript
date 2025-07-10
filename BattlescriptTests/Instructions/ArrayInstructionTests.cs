@@ -170,6 +170,16 @@ public static class ArrayInstructionTests
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9);
             Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
         }
+
+        [Test]
+        public void HandlesNumericExpression()
+        {
+            var input = "x = ((4 - 2) * 3) >= (2 * (5 + 5)) or isinstance(5, int)";
+            // var input = "x = ((4 - 2) * 3) >= (2 * (5 + 5))";
+            var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", true);
+            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
+        }
     }
 
     [TestFixture]

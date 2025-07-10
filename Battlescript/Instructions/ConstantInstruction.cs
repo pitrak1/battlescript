@@ -22,14 +22,16 @@ public class ConstantInstruction : Instruction, IEquatable<ConstantInstruction>
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        switch (Value)
+        if (Value == "True" || Value == "False")
         {
-            case "True":
-                return new ConstantVariable(true);
-            case "False":
-                return new ConstantVariable(false);
-            default:
-                return new ConstantVariable();
+            var boolClass = memory.BuiltInReferences["bool"];
+            var boolObject = boolClass.CreateObject();
+            boolObject.Values["__value"] = new NumericVariable(Value == "True" ? 1 : 0);
+            return boolObject;
+        }
+        else
+        {
+            return new ConstantVariable();
         }
     }
     
