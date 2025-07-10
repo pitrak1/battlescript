@@ -44,10 +44,10 @@ public static partial class InstructionTests
         public void HandlesSimpleValues()
         {
             var memory = Runner.Run("x = {'asdf': 5, 'qwer': 'asdf'}");
-            var expected = new DictionaryVariable(new Dictionary<Variable, Variable>()
+            var expected = new DictionaryVariable(null, new Dictionary<string, Variable>()
             {
-                { new StringVariable("asdf"), BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5) },
-                { new StringVariable("qwer"), new StringVariable("asdf") }
+                { "asdf", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5) },
+                { "qwer", new StringVariable("asdf") }
             });
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
@@ -56,11 +56,10 @@ public static partial class InstructionTests
         public void AllowsStringsAndNumbersToBeUsedAsKeys()
         {
             var memory = Runner.Run("x = {'asdf': 5, 4: 'asdf'}");
-            var expected = new DictionaryVariable(new Dictionary<Variable, Variable>()
-            {
-                { new StringVariable("asdf"), BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5) },
-                { BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4), new StringVariable("asdf") }
-            });
+            var expected = new DictionaryVariable(
+                new Dictionary<int, Variable>() { { 4, new StringVariable("asdf") } },
+                new Dictionary<string, Variable>()
+                    { { "asdf", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5) } });
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
         
@@ -68,10 +67,10 @@ public static partial class InstructionTests
         public void HandlesExpressionValues()
         {
             var memory = Runner.Run("x = {'asdf': 5 + 6, 'qwer': 3 * 4}");
-            var expected = new DictionaryVariable(new Dictionary<Variable, Variable>()
+            var expected = new DictionaryVariable(null, new Dictionary<string, Variable>()
             {
-                { new StringVariable("asdf"), BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 11) },
-                { new StringVariable("qwer"), BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 12) }
+                { "asdf", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 11) },
+                { "qwer", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 12) }
             });
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }

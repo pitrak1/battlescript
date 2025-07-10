@@ -39,6 +39,20 @@ public static class BuiltInTypeHelper
             throw new Exception("Variable is not an int");
         }
     }
+    
+    public static int GetStringValueFromVariable(Memory memory, Variable variable)
+    {
+        var builtInClass = memory.BuiltInReferences["string"];
+        if (variable is ObjectVariable objectVariable && objectVariable.Class.Equals(builtInClass))
+        {
+            var valueVariable = objectVariable.Values["__value"];
+            return ((NumericVariable)valueVariable).Value;
+        }
+        else
+        {
+            throw new Exception("Variable is not an int");
+        }
+    }
 
     public static Variable CreateBuiltInTypeWithValue(Memory memory, string builtInType, dynamic value)
     {

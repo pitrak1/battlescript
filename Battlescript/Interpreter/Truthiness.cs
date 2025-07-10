@@ -19,7 +19,7 @@ public static class Truthiness
             case ObjectVariable:
                 return IsObjectTruthy(memory, variable);
             case DictionaryVariable dictionaryVariable:
-                return dictionaryVariable.Values.Count > 0;
+                return dictionaryVariable.IntValues.Count > 0 || dictionaryVariable.StringValues.Count > 0;
             case FunctionVariable:
                 return true;
             default:

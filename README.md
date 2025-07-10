@@ -96,3 +96,9 @@ Support for constructors
 TODO:
 Need to fix GetHashCode to be more comprehensive
 Need to fix truthiness and falsiness for ints/floats
+
+
+In DictionaryVariable.cs#23, these are true:
+
+`indexVariable.Values[0].Equals(Values.Keys.First())` returns true
+`indexVariable.Values[0] == Values.Keys.First()` returns false, this shouldn't be this way if we overrode == and !=

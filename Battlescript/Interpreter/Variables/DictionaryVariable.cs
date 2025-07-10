@@ -4,33 +4,78 @@ namespace Battlescript;
 
 public class DictionaryVariable : Variable, IEquatable<DictionaryVariable>
 { 
-    public Dictionary<Variable, Variable> Values { get; set; }
+    public Dictionary<int, Variable> IntValues { get; set; }
+    public Dictionary<string, Variable> StringValues { get; set; }
 
-    public DictionaryVariable(Dictionary<Variable, Variable>? values)
+    public DictionaryVariable(Dictionary<int, Variable>? intValues = null, Dictionary<string, Variable>? stringValues = null)
     {
-        Values = values ?? [];
+        IntValues = intValues ?? new Dictionary<int, Variable>();
+        StringValues = stringValues ?? new Dictionary<string, Variable>();
         Type = Consts.VariableTypes.Reference;
     }
     
     public override Variable? SetItemDirectly(Memory memory, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
+        var indexValue = GetIndexValue(memory, index);
+        if (indexValue.IntValue is not null)
+        {
+            var intValue = indexValue.IntValue.Value;
+            if (index.Next is null)
+            {
+                IntValues[intValue] = valueVariable;
+                return valueVariable;
+            }
+            else
+            {
+                return IntValues[intValue];
+            }
+        } 
+        else
+        {
+            var stringValue = indexValue.StringValue;
+            if (index.Next is null)
+            {
+                StringValues[stringValue!] = valueVariable;
+                return valueVariable;
+            }
+            else
+            {
+                return StringValues[stringValue!];
+            }
+        }
+    }
+
+    private (int? IntValue, string? StringValue) GetIndexValue(Memory memory, ArrayInstruction index)
+    {
         var indexVariable = index.Interpret(memory) as ListVariable;
         
-        if (index.Next is null)
+        var intObject = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "int", indexVariable.Values[0]);
+        if (intObject is not null)
         {
-            Values[indexVariable.Values[0]] = valueVariable;
-            return valueVariable;
+            return (BuiltInTypeHelper.GetIntValueFromVariable(memory, indexVariable.Values[0]), null);
+        } else if (indexVariable.Values[0] is StringVariable stringVariable)
+        {
+            return (null, stringVariable.Value);
         }
         else
         {
-            return Values[indexVariable.Values[0]];
+            throw new Exception("Invlaid dictionary index, must be int or string");
         }
     }
 
     public override Variable? GetItemDirectly(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
-        var indexVariable = index.Values[0].Interpret(memory);
-        return Values[indexVariable];
+        var indexValue = GetIndexValue(memory, index);
+        if (indexValue.IntValue is not null)
+        {
+            var intValue = indexValue.IntValue.Value;
+            return IntValues[intValue];
+        }
+        else
+        {
+            var stringValue = indexValue.StringValue;
+            return StringValues[stringValue!];
+        }
     }
     
     // All the code below is to override equality
@@ -41,8 +86,10 @@ public class DictionaryVariable : Variable, IEquatable<DictionaryVariable>
         if (ReferenceEquals(this, variable)) return true;
         if (GetType() != variable.GetType()) return false;
         
-        return Values.SequenceEqual(variable.Values);
+        var intEqual = IntValues.OrderBy(kvp => kvp.Key).SequenceEqual(variable.IntValues.OrderBy(kvp => kvp.Key));
+        var stringEqual = StringValues.OrderBy(kvp => kvp.Key).SequenceEqual(variable.StringValues.OrderBy(kvp => kvp.Key));
+        return intEqual && stringEqual;
     }
     
-    public override int GetHashCode() => HashCode.Combine(Values);
+    public override int GetHashCode() => HashCode.Combine(IntValues, StringValues);
 }

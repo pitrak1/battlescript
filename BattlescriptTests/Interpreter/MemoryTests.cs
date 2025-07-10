@@ -217,132 +217,132 @@ public static class MemoryTests
         
         // These are currently not passing because our variable comparer is not working correctly for equals. We need to
         // figure out the correct and comprehensive way to use GetHashCode to make it work
-        //
-        // [Test]
-        // public void SupportsAssigningToLists()
-        // {
-        //     var scope = new Dictionary<string, Variable>()
-        //     {
-        //         { "x", new ListVariable([new NumericVariable(5), new NumericVariable(8)]) }
-        //     };
-        //     var memory = Runner.Run("");
-        //     memory.AddScope(scope);
-        //     var variableInstructionWithIndex = new VariableInstruction(
-        //         "x",
-        //         new ArrayInstruction([new NumericInstruction(1)], separator: "["));
-        //     memory.SetVariable(variableInstructionWithIndex, new NumericVariable(10));
-        //     var scopes = memory.Scopes;
-        //     
-        //     Assert.That(scopes[0]["x"] is ListVariable);
-        //     if (scopes[0]["x"] is ListVariable listVariable)
-        //     {
-        //         Assert.That(listVariable.Values.Count, Is.EqualTo(2));
-        //         Assert.That(listVariable.Values[0] is NumericVariable);
-        //         if (listVariable.Values[0] is NumericVariable NumericVariable1)
-        //         {
-        //             Assert.That(NumericVariable1.Value, Is.EqualTo(5));
-        //         }
-        //         
-        //         Assert.That(listVariable.Values[1] is NumericVariable);
-        //         if (listVariable.Values[1] is NumericVariable NumericVariable2)
-        //         {
-        //             Assert.That(NumericVariable2.Value, Is.EqualTo(10));
-        //         }
-        //     }
-        // }
-        //
-        // [Test]
-        // public void SupportsAssigningToDictionaries()
-        // {
-        //     var scope = new Dictionary<string, Variable>()
-        //     {
-        //         { "x", new DictionaryVariable(new Dictionary<Variable, Variable>()
-        //             {
-        //                 {BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "int", 5), new NumericVariable(8)}
-        //             })}
-        //     };
-        //     var memory = Runner.Run("");
-        //     memory.AddScope(scope);
-        //     var variableInstructionWithIndex = new VariableInstruction(
-        //         "x",
-        //         new ArrayInstruction([new NumericInstruction(5)], separator: "["));
-        //     memory.SetVariable(variableInstructionWithIndex, new NumericVariable(10));
-        //     var expected = new DictionaryVariable(new Dictionary<Variable, Variable>()
-        //     {
-        //         {BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "int", 5), new NumericVariable(10) }
-        //     });
-        //     
-        //     Assert.That(memory.Scopes[1], Contains.Key("x"));
-        //     Assert.That(memory.Scopes[1]["x"], Is.EqualTo(expected));
-        // }
-        //
-        // [Test]
-        // public void SupportsAssigningToDictionariesAndLists()
-        // {
-        //     var scope = new Dictionary<string, Variable>()
-        //     {
-        //         { "x", new ListVariable([
-        //             BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "int", 5), 
-        //             new DictionaryVariable(new Dictionary<Variable, Variable>()
-        //             {
-        //                 {BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "int", 5), new NumericVariable(8)}
-        //             })])}
-        //     };
-        //     var memory = Runner.Run("");
-        //     memory.AddScope(scope);
-        //     var variableInstructionWithIndex = new VariableInstruction(
-        //         "x",
-        //         new ArrayInstruction(
-        //             [new NumericInstruction(1)],
-        //             Consts.SquareBrackets,
-        //             next: new ArrayInstruction([new NumericInstruction(5)], Consts.SquareBrackets)));
-        //     memory.SetVariable(variableInstructionWithIndex, new NumericVariable(10));
-        //     var expected = new ListVariable([
-        //         BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "int", 5),
-        //         new DictionaryVariable(new Dictionary<Variable, Variable>()
-        //         {
-        //             { BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "int", 5), new NumericVariable(10) }
-        //         })
-        //     ]);
-        //     
-        //     Assert.That(memory.Scopes[1], Contains.Key("x"));
-        //     Assert.That(memory.Scopes[1]["x"], Is.EqualTo(expected));
-        // }
-        //
-        // [Test]
-        // public void SupportsAssigningToObjects()
-        // {
-        //     var classValues = new Dictionary<string, Variable>()
-        //     {
-        //         { "y", new NumericVariable(6) }
-        //     };
-        //     var classVariable = new ClassVariable(classValues);
-        //     var scope = new Dictionary<string, Variable>()
-        //     {
-        //         { "x", classVariable },
-        //         { "y", new ObjectVariable(classValues, classVariable) }
-        //     };
-        //         
-        //     var memory = Runner.Run("");
-        //     memory.AddScope(scope);
-        //     var variableInstructionWithIndex = new VariableInstruction(
-        //         "y",
-        //         new ArrayInstruction(
-        //             [new StringInstruction("y")], separator: "["));
-        //     memory.SetVariable(variableInstructionWithIndex, new NumericVariable(10));
-        //     var scopes = memory.Scopes;
-        //     
-        //     Assert.That(scopes[2]["y"] is ObjectVariable);
-        //     if (scopes[2]["y"] is ObjectVariable objectVariable)
-        //     {
-        //         Assert.That(objectVariable.Values.ContainsKey("y"));
-        //         Assert.That(objectVariable.Values["y"] is NumericVariable);
-        //
-        //         if (objectVariable.Values["y"] is NumericVariable NumericVariable)
-        //         {
-        //             Assert.That(NumericVariable.Value, Is.EqualTo(10));
-        //         }
-        //     }
-        // }
+        
+        [Test]
+        public void SupportsAssigningToLists()
+        {
+            var scope = new Dictionary<string, Variable>()
+            {
+                { "x", new ListVariable([new NumericVariable(5), new NumericVariable(8)]) }
+            };
+            var memory = Runner.Run("");
+            memory.AddScope(scope);
+            var variableInstructionWithIndex = new VariableInstruction(
+                "x",
+                new ArrayInstruction([new NumericInstruction(1)], separator: "["));
+            memory.SetVariable(variableInstructionWithIndex, new NumericVariable(10));
+            var scopes = memory.Scopes;
+            
+            Assert.That(scopes[1]["x"] is ListVariable);
+            if (scopes[1]["x"] is ListVariable listVariable)
+            {
+                Assert.That(listVariable.Values.Count, Is.EqualTo(2));
+                Assert.That(listVariable.Values[0] is NumericVariable);
+                if (listVariable.Values[0] is NumericVariable NumericVariable1)
+                {
+                    Assert.That(NumericVariable1.Value, Is.EqualTo(5));
+                }
+                
+                Assert.That(listVariable.Values[1] is NumericVariable);
+                if (listVariable.Values[1] is NumericVariable NumericVariable2)
+                {
+                    Assert.That(NumericVariable2.Value, Is.EqualTo(10));
+                }
+            }
+        }
+        
+        [Test]
+        public void SupportsAssigningToDictionaries()
+        {
+            var scope = new Dictionary<string, Variable>()
+            {
+                { "x", new DictionaryVariable(new Dictionary<int, Variable>()
+                    {
+                        {5, new NumericVariable(8)}
+                    })}
+            };
+            var memory = Runner.Run("");
+            memory.AddScope(scope);
+            var variableInstructionWithIndex = new VariableInstruction(
+                "x",
+                new ArrayInstruction([new NumericInstruction(5)], separator: "["));
+            memory.SetVariable(variableInstructionWithIndex, new NumericVariable(10));
+            var expected = new DictionaryVariable(new Dictionary<int, Variable>()
+            {
+                {5, new NumericVariable(10) }
+            });
+            
+            Assert.That(memory.Scopes[1], Contains.Key("x"));
+            Assert.That(memory.Scopes[1]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void SupportsAssigningToDictionariesAndLists()
+        {
+            var scope = new Dictionary<string, Variable>()
+            {
+                { "x", new ListVariable([
+                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "int", 5), 
+                    new DictionaryVariable(new Dictionary<int, Variable>()
+                    {
+                        {5, new NumericVariable(8)}
+                    })])}
+            };
+            var memory = Runner.Run("");
+            memory.AddScope(scope);
+            var variableInstructionWithIndex = new VariableInstruction(
+                "x",
+                new ArrayInstruction(
+                    [new NumericInstruction(1)],
+                    Consts.SquareBrackets,
+                    next: new ArrayInstruction([new NumericInstruction(5)], Consts.SquareBrackets)));
+            memory.SetVariable(variableInstructionWithIndex, new NumericVariable(10));
+            var expected = new ListVariable([
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "int", 5),
+                new DictionaryVariable(new Dictionary<int, Variable>()
+                {
+                    { 5, new NumericVariable(10) }
+                })
+            ]);
+            
+            Assert.That(memory.Scopes[1], Contains.Key("x"));
+            Assert.That(memory.Scopes[1]["x"], Is.EqualTo(expected));
+        }
+        
+        [Test]
+        public void SupportsAssigningToObjects()
+        {
+            var classValues = new Dictionary<string, Variable>()
+            {
+                { "y", new NumericVariable(6) }
+            };
+            var classVariable = new ClassVariable(classValues);
+            var scope = new Dictionary<string, Variable>()
+            {
+                { "x", classVariable },
+                { "y", new ObjectVariable(classValues, classVariable) }
+            };
+                
+            var memory = Runner.Run("");
+            memory.AddScope(scope);
+            var variableInstructionWithIndex = new VariableInstruction(
+                "y",
+                new ArrayInstruction(
+                    [new StringInstruction("y")], separator: "["));
+            memory.SetVariable(variableInstructionWithIndex, new NumericVariable(10));
+            var scopes = memory.Scopes;
+            
+            Assert.That(scopes[1]["y"] is ObjectVariable);
+            if (scopes[1]["y"] is ObjectVariable objectVariable)
+            {
+                Assert.That(objectVariable.Values.ContainsKey("y"));
+                Assert.That(objectVariable.Values["y"] is NumericVariable);
+        
+                if (objectVariable.Values["y"] is NumericVariable NumericVariable)
+                {
+                    Assert.That(NumericVariable.Value, Is.EqualTo(10));
+                }
+            }
+        }
     }
 }

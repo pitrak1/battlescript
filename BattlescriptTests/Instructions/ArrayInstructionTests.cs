@@ -75,10 +75,10 @@ public static class ArrayInstructionTests
         public void HandlesDictionaryWithMultipleValues()
         {
             var memory = Runner.Run("x = {'asdf': 3, 'qwer': 4}");
-            var expected = new DictionaryVariable(new Dictionary<Variable, Variable>()
+            var expected = new DictionaryVariable(null, new Dictionary<string, Variable>()
             {
-                {new StringVariable("asdf"), BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)},
-                {new StringVariable("qwer"), BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4)},
+                {"asdf", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)},
+                {"qwer", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4)},
             });
             Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
         }
@@ -87,9 +87,9 @@ public static class ArrayInstructionTests
         public void HandlesDictionaryWithSingleValue()
         {
             var memory = Runner.Run("x = {'asdf': 3}");
-            var expected = new DictionaryVariable(new Dictionary<Variable, Variable>()
+            var expected = new DictionaryVariable(null, new Dictionary<string, Variable>()
             {
-                {new StringVariable("asdf"), BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)},
+                {"asdf", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)},
             });
             Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
         }

@@ -10,11 +10,11 @@ public class Dictionaries
     {
         var input = "x = {'asdf': 5, 'qwer': '5'}";
         var memory = Runner.Run(input);
-        var expected = new DictionaryVariable(
-            new Dictionary<Variable, Variable>()
+        var expected = new DictionaryVariable(null, 
+            new Dictionary<string, Variable>()
             {
-                {new StringVariable("asdf"), BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5)},
-                {new StringVariable("qwer"), new StringVariable("5")}
+                { "asdf", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5)},
+                {"qwer", new StringVariable("5")}
             }
         );
         

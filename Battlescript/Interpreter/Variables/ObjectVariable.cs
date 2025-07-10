@@ -95,6 +95,14 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
     
     public override int GetHashCode()
     {
-        return HashCode.Combine(Values, Class);
+        int hash = 17;
+        foreach (var kvp in Values.OrderBy(kvp => kvp.Key))
+        {
+            hash = hash * 23 + kvp.Key.GetHashCode();
+            hash = hash * 23 + kvp.Value.GetHashCode();
+        }
+        
+        hash = hash * 23 + Class.GetHashCode();
+        return hash;
     }
 }

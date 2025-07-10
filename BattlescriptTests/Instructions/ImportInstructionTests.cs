@@ -62,17 +62,17 @@ public static class ImportInstructionTests
         {
             var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
             var memory = Runner.Run($"from '{filePath}' import *");
-            var expected = new DictionaryVariable(new Dictionary<Variable, Variable>()
+            var expected = new DictionaryVariable(null, new Dictionary<string, Variable>()
             {
-                { new StringVariable("x"), BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5) },
+                { "x", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5) },
                 {
-                    new StringVariable("y"),
+                    "y",
                     new ListVariable([
                         BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1), 
                         BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2), 
                         BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)])
                 },
-                { new StringVariable("z"), new StringVariable("asdf") }
+                { "z", new StringVariable("asdf") }
             });
             
             Assert.That(memory.Scopes[0]["import"], Is.EqualTo(expected));

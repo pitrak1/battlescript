@@ -99,7 +99,8 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
 
         Variable CurlyBracesInterpret()
         {
-            var variableValue = new Dictionary<Variable, Variable>();
+            var stringValues = new Dictionary<string, Variable>();
+            var intValues = new Dictionary<int, Variable>();
         
             // Dictionaries will be an ArrayInstruction with colon delimiters and two values within an ArrayInstruction
             // of comma delimiters if there are multiple entries. Dictionaries will be an ArrayInstruction of colon
@@ -119,14 +120,21 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
                 throw new Exception("Badly formed dictionary");
             }
         
-            return new DictionaryVariable(variableValue);
+            return new DictionaryVariable(intValues, stringValues);
 
             void InterpretAndAddKvp(Instruction? instruction)
             {
                 var kvp = IsValidKvp(instruction);
-                var key = kvp.Values[0]!.Interpret(memory);
                 var value = kvp.Values[1]!.Interpret(memory); 
-                variableValue.Add(key, value);
+                var indexValue = GetIndexValue(memory, kvp.Values[0]!);
+                if (indexValue.IntValue is not null)
+                {
+                    intValues.Add(indexValue.IntValue.Value, value);
+                }
+                else
+                {
+                    stringValues.Add(indexValue.StringValue!, value);
+                }
             }
 
             ArrayInstruction IsValidKvp(Instruction? instruction)
@@ -138,6 +146,33 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
                 else
                 {
                     throw new Exception("Badly formed dictionary");
+                }
+            }
+            
+            (int? IntValue, string? StringValue) GetIndexValue(Memory memory, Instruction index)
+            {
+                Variable indexVariable;
+                if (index is ArrayInstruction)
+                {
+                    var listVariable = index.Interpret(memory) as ListVariable;
+                    indexVariable = listVariable.Values[0]!;
+                }
+                else
+                {
+                    indexVariable = index.Interpret(memory);
+                }
+        
+                var intObject = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "int", indexVariable);
+                if (intObject is not null)
+                {
+                    return (BuiltInTypeHelper.GetIntValueFromVariable(memory, indexVariable), null);
+                } else if (indexVariable is StringVariable stringVariable)
+                {
+                    return (null, stringVariable.Value);
+                }
+                else
+                {
+                    throw new Exception("Invlaid dictionary index, must be int or string");
                 }
             }
         }

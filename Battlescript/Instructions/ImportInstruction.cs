@@ -78,15 +78,15 @@ public class ImportInstruction : Instruction, IEquatable<ImportInstruction>
         {
             if (name == "*")
             {
-                var dictValues = new Dictionary<Variable, Variable>();
+                var stringValues = new Dictionary<string, Variable>();
                 foreach (var (key, value) in importedScope)
                 {
                     if (!Consts.BuiltInTypes.Contains(key))
                     {
-                        dictValues.Add(new StringVariable(key), value);
+                        stringValues.Add(key, value);
                     }
                 }
-                memory.SetVariable(new VariableInstruction(FileName), new DictionaryVariable(dictValues));
+                memory.SetVariable(new VariableInstruction(FileName), new DictionaryVariable(null, stringValues));
             }
             else if (importedScope.ContainsKey(name))
             {

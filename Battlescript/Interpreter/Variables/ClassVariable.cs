@@ -113,5 +113,20 @@ public class ClassVariable : Variable, IEquatable<ClassVariable>
         return SuperClasses.SequenceEqual(variable.SuperClasses) && valuesEqual;
     }
     
-    public override int GetHashCode() => HashCode.Combine(Values, SuperClasses);
+    public override int GetHashCode()
+    {
+        int hash = 17;
+        foreach (var kvp in Values.OrderBy(kvp => kvp.Key))
+        {
+            hash = hash * 23 + kvp.Key.GetHashCode();
+            hash = hash * 23 + kvp.Value.GetHashCode();
+        }
+
+        foreach (var superclass in SuperClasses)
+        {
+            hash = hash * 23 + superclass.GetHashCode();
+        }
+        
+        return hash;
+    }
 }

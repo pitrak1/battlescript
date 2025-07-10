@@ -87,7 +87,22 @@ public static class Operator
         } else if (right is DictionaryVariable rightDictionary)
         {
             // If the right operand is a dictionary, we search for a matching key
-            var found = rightDictionary.Values.Any(x => x.Key.Equals(left));
+            bool found = false;
+            var intObject = BuiltInTypeHelper.IsVariableBuiltInClass(Runner.Run(""), "int", left);
+            if (intObject is not null)
+            {
+                var intValue = BuiltInTypeHelper.GetIntValueFromVariable(Runner.Run(""), left);
+                found = rightDictionary.IntValues.Any(x => x.Key.Equals(intValue));
+            } 
+            else if (left is StringVariable leftString2)
+            {
+                found = rightDictionary.StringValues.Any(x => x.Key.Equals(leftString2.Value));
+            }
+            else
+            {
+                throw new InterpreterInvalidOperationException(operation, left, right);
+            }
+
             return operation == "in" ? 
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", found) : 
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", !found);
