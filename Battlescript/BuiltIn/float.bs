@@ -53,32 +53,25 @@ class float(numeric):
         return self.__perform_operation(other, '>=')
 
     def __iadd__(self, other):
-        self.__value = self.__get_operation_result(other, '+')
-        return self
+        return self.__perform_operation(other, '+')
 
     def __isub__(self, other):
-        self.__value = self.__get_operation_result(other, '-')
-        return self
+        return self.__perform_operation(other, '-')
     
     def __imul__(self, other):
-        self.__value = self.__get_operation_result(other, '*')
-        return self
+        return self.__perform_operation(other, '*')
 
     def __itruediv__(self, other):
-        self.__value = self.__get_operation_result(other, '/')
-        return self
+        return self.__perform_operation(other, '/')
 
     def __ifloordiv__(self, other):
-        self.__value = self.__get_operation_result(other, '//')
-        return self
+        return self.__perform_operation(other, '//')
 
     def __imod__(self, other):
-        self.__value = self.__get_operation_result(other, '%')
-        return self
+        return self.__perform_operation(other, '%')
 
     def __ipow__(self, other):
-        self.__value = self.__get_operation_result(other, '**')
-        return self
+        return self.__perform_operation(other, '**')
 
     def __perform_operation(self, other, operation):
         if operation == '//':

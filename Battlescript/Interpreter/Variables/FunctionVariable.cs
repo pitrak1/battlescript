@@ -9,7 +9,6 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
     {
         Parameters = parameters ?? [];
         Instructions = instructions ?? [];
-        Type = Consts.VariableTypes.Reference;
     }
     
     public Variable RunFunction(Memory memory, List<Variable> arguments, ObjectVariable? objectVariable = null)

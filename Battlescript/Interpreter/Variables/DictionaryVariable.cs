@@ -11,7 +11,6 @@ public class DictionaryVariable : Variable, IEquatable<DictionaryVariable>
     {
         IntValues = intValues ?? new Dictionary<int, Variable>();
         StringValues = stringValues ?? new Dictionary<string, Variable>();
-        Type = Consts.VariableTypes.Reference;
     }
     
     public override Variable? SetItemDirectly(Memory memory, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)

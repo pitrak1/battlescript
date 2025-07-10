@@ -155,13 +155,6 @@ public static class VariablesAndOperatorsTests
             Assert.That(memory.Scopes[0], Contains.Key("z"));
             Assert.That(memory.Scopes[0]["z"], Is.EqualTo(expected));
         }
-        
-        // [Test]
-        // public void ThrowsErrorIfEitherValueIsValueType()
-        // {
-        //     var input = "x = {}\nz = x is 5";
-        //     Assert.Throws<InterpreterInvalidOperationException>(() => Runner.Run(input));
-        // }
     }
     
     [TestFixture]
@@ -275,17 +268,16 @@ public static class VariablesAndOperatorsTests
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
-        
-        // Need to find a way to properly test float values in objects
-        // [Test]
-        // public void SupportsTrueDivisionAssignment()
-        // {
-        //     var input = "x = 8\nx /= 5";
-        //     var memory = Runner.Run(input);
-        //     var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 1.6);
-        //     Assert.That(memory.Scopes[0], Contains.Key("x"));
-        //     Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
-        // }
+
+        [Test]
+        public void SupportsTrueDivisionAssignment()
+        {
+            var input = "x = 8\nx /= 5";
+            var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 1.6);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+        }
         
         [Test]
         public void SupportsFloorDivisionAssignment()
@@ -365,29 +357,25 @@ public static class VariablesAndOperatorsTests
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
 
-        // These tests will fail until we properly implement booleans in battlescript
-        // [Test]
-        // public void ValuesDivisionMultiplicationAndModuloOverAdditionAndSubtraction()
-        // {
-        //     var input = "x = 8 - 16 // 4";
-        //     var memory = Runner.Run(input);
-        //     var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4);
-        //     Assert.That(memory.Scopes[0], Contains.Key("x"));
-        //     Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
-        // }
-        //
-        // [Test]
-        // public void ValuesAdditionAndSubtractionOverComparison()
-        // {
-        //     var input = "x = 3 <= 8 - 7";
-        //     var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", false);
-        //     var memory = Runner.Run(input);
-        //     Assert.That(memory.Scopes[0], Contains.Key("x"));
-        //     Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
-        // }
+        [Test]
+        public void ValuesDivisionMultiplicationAndModuloOverAdditionAndSubtraction()
+        {
+            var input = "x = 8 - 16 // 4";
+            var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+        }
         
-        // I would have liked to add test cases here to make sure the precedence order is
-        // Comparison > not > and > or, but I can't come up with good test cases. Maybe I'll come back to this.
+        [Test]
+        public void ValuesAdditionAndSubtractionOverComparison()
+        {
+            var input = "x = 3 <= 8 - 7";
+            var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", false);
+            Assert.That(memory.Scopes[0], Contains.Key("x"));
+            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+        }
     }
     
     [TestFixture]

@@ -260,27 +260,28 @@ public static class ClassesAndObjectsTests
             Assert.That(memory.Scopes[0], Contains.Key("x"));
             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
         }
-
-//         [Test]
-//         public void AllowsAssignmentOperationOverloading()
-//         {
-//             var input = """
-//                         class asdf:
-//                             i = 5
-//                         
-//                             def __iadd__(self, other):
-//                                 self.i += other.i
-//                                 return self
+        
+        // Definitely need to take a closer look here.  We may have to do some wonky stuff to make this work right
+//           [Test]
+//           public void AllowsAssignmentOperationOverloading()
+//           {
+//               var input = """
+//                           class asdf:
+//                               i = 5
+//                           
+//                               def __iadd__(self, other):
+//                                   self.i = self.i + other.i
+//                                   return self
 //
-//                         z = asdf()
-//                         y = asdf()
-//                         z += y
-//                         x = z.i
-//                         """;
-//             var memory = Runner.Run(input);
-//             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 10);
-//             Assert.That(memory.Scopes[0], Contains.Key("x"));
-//             Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
-//         }
+//                           z = asdf()
+//                           y = asdf()
+//                           z += y
+//                           x = z.i
+//                           """;
+//               var memory = Runner.Run(input);
+//               var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 10);
+//               Assert.That(memory.Scopes[0], Contains.Key("x"));
+//               Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+//           }
     }
 }

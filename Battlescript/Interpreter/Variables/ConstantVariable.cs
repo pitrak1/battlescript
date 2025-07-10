@@ -7,7 +7,6 @@ public class ConstantVariable : Variable, IEquatable<ConstantVariable>
     public ConstantVariable(Consts.Constants value)
     {
         Value = value;
-        Type = Consts.VariableTypes.Value;
     }
 
     public ConstantVariable(bool? value = null)
@@ -23,7 +22,6 @@ public class ConstantVariable : Variable, IEquatable<ConstantVariable>
         {
             Value = Consts.Constants.False;
         }
-        Type = Consts.VariableTypes.Value;
     }
     
     // All the code below is to override equality

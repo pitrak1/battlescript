@@ -9,7 +9,6 @@ public class ListVariable : Variable, IEquatable<ListVariable>
     public ListVariable(List<Variable?>? values = null)
     {
         Values = values ?? [];
-        Type = Consts.VariableTypes.Reference;
     }
     
     public override Variable? SetItemDirectly(Memory memory, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)

@@ -40,9 +40,9 @@ public static class BuiltInTypeHelper
         }
     }
     
-    public static int GetStringValueFromVariable(Memory memory, Variable variable)
+    public static double GetFloatValueFromVariable(Memory memory, Variable variable)
     {
-        var builtInClass = memory.BuiltInReferences["string"];
+        var builtInClass = memory.BuiltInReferences["float"];
         if (variable is ObjectVariable objectVariable && objectVariable.Class.Equals(builtInClass))
         {
             var valueVariable = objectVariable.Values["__value"];
@@ -50,7 +50,7 @@ public static class BuiltInTypeHelper
         }
         else
         {
-            throw new Exception("Variable is not an int");
+            throw new Exception("Variable is not a float");
         }
     }
 

@@ -22,7 +22,6 @@ public class NumericVariable : Variable
     public NumericVariable(dynamic value)
     {
         _value = value;
-        Type = Consts.VariableTypes.Value;
     }
     
     // All the code below is to override equality

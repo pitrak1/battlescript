@@ -28,7 +28,7 @@ class numeric:
             if self.__value < other.__value:
                 return __numeric__(1)
             else:
-                return __numeric(0)
+                return __numeric__(0)
         elif operation == '>':
             if self.__value > other.__value:
                 return __numeric__(1)

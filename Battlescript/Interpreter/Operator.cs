@@ -58,7 +58,7 @@ public static class Operator
 
     private static Variable ConductIsOperation(string operation, Variable? left, Variable? right)
     {
-        if (left.Type == Consts.VariableTypes.Value || right.Type == Consts.VariableTypes.Value)
+        if (left is not (ObjectVariable or ClassVariable or DictionaryVariable or ListVariable) || right is not (ObjectVariable or ClassVariable or DictionaryVariable or ListVariable))
         {
             throw new InterpreterInvalidOperationException(operation, left, right);
         }

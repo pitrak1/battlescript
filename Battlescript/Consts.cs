@@ -290,13 +290,7 @@ public static class Consts
         PrincipleType,
         Numeric,
     }
-
-    public enum VariableTypes
-    {
-        Value,
-        Reference
-    }
-
+    
     public readonly static string[] PrincipleTypes =
     [
         "__numeric__"

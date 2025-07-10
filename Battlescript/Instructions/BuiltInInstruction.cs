@@ -91,7 +91,7 @@ public class BuiltInInstruction : Instruction
             {
                 for (var i = startingValue; i < count; i += step)
                 {
-                    values.Add(new NumericVariable(i));
+                    values.Add(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", i));
                 }
             }
             
@@ -103,7 +103,7 @@ public class BuiltInInstruction : Instruction
             {
                 for (var i = startingValue; i > count; i += step)
                 {
-                    values.Add(new NumericVariable(i));
+                    values.Add(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", i));
                 }
             }
             return new ListVariable(values);

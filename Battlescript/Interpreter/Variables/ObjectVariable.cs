@@ -11,7 +11,6 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
     {
         Values = values ?? [];
         Class = classVariable;
-        Type = Consts.VariableTypes.Reference;
     }
 
     public override Variable? SetItemDirectly(Memory memory, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)

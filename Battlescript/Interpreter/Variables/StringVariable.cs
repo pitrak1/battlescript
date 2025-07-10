@@ -6,7 +6,6 @@ public class StringVariable : Variable, IEquatable<StringVariable>
     public StringVariable(string? value = null)
     {
         Value = value ?? "";
-        Type = Consts.VariableTypes.Value;
     }
     
     // All the code below is to override equality
