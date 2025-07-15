@@ -1,6 +1,4 @@
-class bool(numeric):
-    __value = __numeric__(0)
-
+class bool(int):
     def __init__(self, value):
         if isinstance(value, bool):
             self.__value = value.__value

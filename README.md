@@ -94,11 +94,9 @@ TODOs before v1:
 Support for constructors
 
 TODO:
-Need to fix GetHashCode to be more comprehensive
-Need to fix truthiness and falsiness for ints/floats
-
-
-In DictionaryVariable.cs#23, these are true:
-
-`indexVariable.Values[0].Equals(Values.Keys.First())` returns true
-`indexVariable.Values[0] == Values.Keys.First()` returns false, this shouldn't be this way if we overrode == and !=
+- Reconsider adding bool to battlescript code, may be better grouped with None in c# code COnstantVariable (UPDATE: given that bools act as integers in almost eveyr context, it's probably better to keep it in bs, we'll find more uses for ConstantVariable and ConstantInstruction as time goes on)
+- Need to bring in sequence, should consider if it's just lists/sets/tuples or also strings
+- Need to consider how to bring in mappings/dictionaries.  may or may not be worth it
+- Assert
+- Need to go through and test things once everything that's likely going to be moved to battlescript i smoved
+- Need to figure out try/catch and exceptions in bs

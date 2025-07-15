@@ -4,11 +4,6 @@ public class ConstantVariable : Variable, IEquatable<ConstantVariable>
 {
     public Consts.Constants Value { get; set; }
 
-    public ConstantVariable(Consts.Constants value)
-    {
-        Value = value;
-    }
-
     public ConstantVariable(bool? value = null)
     {
         if (value is null)
