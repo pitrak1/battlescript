@@ -12,42 +12,41 @@ public static class ClassVariableTests
         public void FindsGetItemMethodWhenPresentInClass()
         {
             var getItemFunction = new FunctionVariable([], []);
-            var classVariable = new ClassVariable(new Dictionary<string, Variable>()
+            var classVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
                 {"__getitem__", getItemFunction}
             });
             var index = new ArrayInstruction([new StringInstruction("__getitem__")], separator: "[");
-            
-            Assert.That(classVariable.GetItem(Runner.Run(""), index), Is.SameAs(getItemFunction));
+            Assertions.AssertVariablesEqual(classVariable.GetItem(Runner.Run(""), index), getItemFunction);
         }
 
         [Test]
         public void FindsGetItemMethodWhenPresentInSuperclasses()
         {
             var getItemFunction = new FunctionVariable([], []);
-            var superclassVariable = new ClassVariable(new Dictionary<string, Variable>()
+            var superclassVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
                 {"__getitem__", getItemFunction}
             });
-            var classVariable = new ClassVariable(null, [superclassVariable]);
+            var classVariable = new ClassVariable("asdf", null, [superclassVariable]);
             var index = new ArrayInstruction([new StringInstruction("__getitem__")], separator: "[");
             
-            Assert.That(classVariable.GetItem(Runner.Run(""), index), Is.SameAs(getItemFunction));
+            Assertions.AssertVariablesEqual(classVariable.GetItem(Runner.Run(""), index), getItemFunction);
         }
         
         [Test]
         public void FindsGetItemMethodWhenPresentInSupersuperclasses()
         {
             var getItemFunction = new FunctionVariable([], []);
-            var superSuperclassVariable = new ClassVariable(new Dictionary<string, Variable>()
+            var superSuperclassVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
                 {"__getitem__", getItemFunction}
             });
-            var superclassVariable = new ClassVariable(null, [superSuperclassVariable]);
-            var classVariable = new ClassVariable(null, [superclassVariable]);
+            var superclassVariable = new ClassVariable("asdf", null, [superSuperclassVariable]);
+            var classVariable = new ClassVariable("asdf", null, [superclassVariable]);
             var index = new ArrayInstruction([new StringInstruction("__getitem__")], separator: "[");
             
-            Assert.That(classVariable.GetItem(Runner.Run(""), index), Is.SameAs(getItemFunction));
+            Assertions.AssertVariablesEqual(classVariable.GetItem(Runner.Run(""), index), getItemFunction);
         }
         
         [Test]
@@ -58,7 +57,7 @@ public static class ClassVariableTests
             var getItemFunction = new FunctionVariable(
                 [new VariableInstruction("self"), new VariableInstruction("index")], 
                 [new ReturnInstruction(new NumericInstruction(5))]);
-            var classVariable = new ClassVariable(new Dictionary<string, Variable>()
+            var classVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
                 {"x", new NumericVariable(7)},
                 {"__getitem__", getItemFunction}
@@ -66,9 +65,9 @@ public static class ClassVariableTests
             var objectVariable = new ObjectVariable(null, classVariable);
             var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
             
-            Assert.That(
+            Assertions.AssertVariablesEqual(
                 classVariable.GetItem(Runner.Run(""), index, objectVariable), 
-                Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "int", 5.0)));
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "int", 5.0));
         }
         
         [Test]
@@ -77,7 +76,7 @@ public static class ClassVariableTests
             var getItemFunction = new FunctionVariable(
                 [new VariableInstruction("self"), new VariableInstruction("index")], 
                 [new ReturnInstruction(new NumericInstruction(5))]);
-            var classVariable = new ClassVariable(new Dictionary<string, Variable>()
+            var classVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
                 {"x", new NumericVariable(7)},
                 {"__getitem__", getItemFunction}
@@ -85,48 +84,48 @@ public static class ClassVariableTests
             var objectVariable = new ObjectVariable(null, classVariable);
             var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
             
-            Assert.That(
+            Assertions.AssertVariablesEqual(
                 classVariable.GetItem(Runner.Run(""), index), 
-                Is.EqualTo(new NumericVariable(7)));
+                new NumericVariable(7));
         }
 
         [Test]
         public void FindsValuePresentInClassIfNoOverridePresentAndIndexIsNotGetItemMethod()
         {
-            var classVariable = new ClassVariable(new Dictionary<string, Variable>()
+            var classVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
                 {"x", new StringVariable("asdf")}
             });
             var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
             
-            Assert.That(classVariable.GetItem(Runner.Run(""), index), Is.EqualTo(new StringVariable("asdf")));
+            Assertions.AssertVariablesEqual(classVariable.GetItem(Runner.Run(""), index), new StringVariable("asdf"));
         }
         
         [Test]
         public void FindsValuePresentInSuperclassIfNoOverridePresentAndIndexIsNotGetItemMethod()
         {
-            var superclassVariable = new ClassVariable(new Dictionary<string, Variable>()
+            var superclassVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
                 {"x", new StringVariable("asdf")}
             });
-            var classVariable = new ClassVariable(null, [superclassVariable]);
+            var classVariable = new ClassVariable("asdf", null, [superclassVariable]);
             var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
             
-            Assert.That(classVariable.GetItem(Runner.Run(""), index), Is.EqualTo(new StringVariable("asdf")));
+            Assertions.AssertVariablesEqual(classVariable.GetItem(Runner.Run(""), index), new StringVariable("asdf"));
         }
         
         [Test]
         public void FindsValuePresentInSuperSuperclassIfNoOverridePresentAndIndexIsNotGetItemMethod()
         {
-            var superSuperclassVariable = new ClassVariable(new Dictionary<string, Variable>()
+            var superSuperclassVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
                 {"x", new StringVariable("asdf")}
             });
-            var superclassVariable = new ClassVariable(null, [superSuperclassVariable]);
-            var classVariable = new ClassVariable(null, [superclassVariable]);
+            var superclassVariable = new ClassVariable("asdf", null, [superSuperclassVariable]);
+            var classVariable = new ClassVariable("asdf", null, [superclassVariable]);
             var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
             
-            Assert.That(classVariable.GetItem(Runner.Run(""), index), Is.EqualTo(new StringVariable("asdf")));
+            Assertions.AssertVariablesEqual(classVariable.GetItem(Runner.Run(""), index), new StringVariable("asdf"));
         }
     }
 }

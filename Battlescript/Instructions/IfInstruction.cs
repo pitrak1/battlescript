@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class IfInstruction : Instruction, IEquatable<IfInstruction>
+public class IfInstruction : Instruction
 {
     public Instruction Condition { get; set; }
 
@@ -55,19 +55,4 @@ public class IfInstruction : Instruction, IEquatable<IfInstruction>
 
         return new ConstantVariable();
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as IfInstruction);
-    public bool Equals(IfInstruction? instruction)
-    {
-        if (instruction is null) return false;
-        if (ReferenceEquals(this, instruction)) return true;
-        if (GetType() != instruction.GetType()) return false;
-        
-        if (!Condition.Equals(instruction.Condition)) return false;
-        
-        return base.Equals(instruction);
-    }
-    
-    public override int GetHashCode() => HashCode.Combine(Condition, Instructions);
 }

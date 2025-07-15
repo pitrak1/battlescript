@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class Token : IEquatable<Token>
+public class Token
 {
     public Consts.TokenTypes Type { get; set; }
     public string Value { get; set; }
@@ -14,16 +14,4 @@ public class Token : IEquatable<Token>
         Line = line;
         Column = column;
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object? obj) => Equals(obj as Token);
-    public bool Equals(Token? token)
-    {
-        if (token is null) return false;
-        if (ReferenceEquals(this, token)) return true;
-        if (GetType() != token.GetType()) return false;
-        return Type == token.Type && Value == token.Value;
-    }
-    
-    public override int GetHashCode() => HashCode.Combine(Type, Value);
 }

@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class NumericInstruction : Instruction, IEquatable<NumericInstruction>
+public class NumericInstruction : Instruction
 {
     private dynamic _value;
     public dynamic Value
@@ -64,19 +64,4 @@ public class NumericInstruction : Instruction, IEquatable<NumericInstruction>
             return intObject;
         }
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as NumericInstruction);
-    public bool Equals(NumericInstruction? instruction)
-    {
-        if (instruction is null) return false;
-        if (ReferenceEquals(this, instruction)) return true;
-        if (GetType() != instruction.GetType()) return false;
-
-        if (Value != instruction.Value) return false;
-        
-        return base.Equals(instruction);
-    }
-    
-    public override int GetHashCode() => HashCode.Combine(Value, Instructions);
 }

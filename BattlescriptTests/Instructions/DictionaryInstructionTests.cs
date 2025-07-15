@@ -11,29 +11,21 @@ public static partial class InstructionTests
         [Test]
         public void AllowsNumbersToBeUsedAsKeys()
         {
-            var lexer = new Lexer("{4: 5, 6: 'asdf'}");
-            var lexerResult = lexer.Run();
-
             var expected = new ArrayInstruction([
                 new ArrayInstruction([new NumericInstruction(4), new NumericInstruction(5)], delimiter: ":"),
                 new ArrayInstruction([new NumericInstruction(6), new StringInstruction("asdf")], delimiter: ":"),
             ], separator: "{", delimiter: ",");
-            
-            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
+            Assertions.AssertInputProducesParserOutput("{4: 5, 6: 'asdf'}", expected);
         }
         
         [Test]
         public void AllowsStringsToBeUsedAsKeys()
         {
-            var lexer = new Lexer("{'asdf': 5, 'qwer': 'asdf'}");
-            var lexerResult = lexer.Run();
-            
             var expected = new ArrayInstruction([
                 new ArrayInstruction([new StringInstruction("asdf"), new NumericInstruction(5)], delimiter: ":"),
                 new ArrayInstruction([new StringInstruction("qwer"), new StringInstruction("asdf")], delimiter: ":"),
             ], separator: "{", delimiter: ",");
-            
-            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
+            Assertions.AssertInputProducesParserOutput("{'asdf': 5, 'qwer': 'asdf'}", expected);
         }
     }
 

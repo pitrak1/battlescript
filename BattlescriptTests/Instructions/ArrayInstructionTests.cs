@@ -80,7 +80,7 @@ public static class ArrayInstructionTests
                 {"asdf", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)},
                 {"qwer", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4)},
             });
-            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -91,7 +91,7 @@ public static class ArrayInstructionTests
             {
                 {"asdf", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)},
             });
-            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
     
@@ -110,7 +110,7 @@ public static class ArrayInstructionTests
                         """;
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9);
-            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -137,7 +137,7 @@ public static class ArrayInstructionTests
                             new ArrayInstruction([new VariableInstruction("j")], separator: "[")),
                         new VariableInstruction("y"))
                 ]);
-            var classVariable = new ClassVariable(new Dictionary<string, Variable>()
+            var classVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
                 { "i", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4) },
                 { "j", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5) },
@@ -150,7 +150,7 @@ public static class ArrayInstructionTests
                     {"j", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5)}
                 },
                 classVariable);
-            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -168,7 +168,7 @@ public static class ArrayInstructionTests
                         """;
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9);
-            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
 
         [Test]
@@ -178,7 +178,7 @@ public static class ArrayInstructionTests
             // var input = "x = ((4 - 2) * 3) >= (2 * (5 + 5))";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", true);
-            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
 
@@ -193,7 +193,7 @@ public static class ArrayInstructionTests
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9), 
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8), 
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 7)]);
-            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -205,7 +205,7 @@ public static class ArrayInstructionTests
                         """;
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8);
-            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -217,7 +217,7 @@ public static class ArrayInstructionTests
                         """;
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3);
-            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -232,7 +232,7 @@ public static class ArrayInstructionTests
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9), 
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8), 
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 7)]);
-            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -244,7 +244,7 @@ public static class ArrayInstructionTests
                         """;
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3);
-            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -256,7 +256,7 @@ public static class ArrayInstructionTests
                         """;
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8);
-            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
 }

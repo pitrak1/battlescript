@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class ClassInstruction : Instruction, IEquatable<ClassInstruction>
+public class ClassInstruction : Instruction
 {
     public string Name { get; set; } 
     public List<Instruction> Superclasses { get; set; }
@@ -51,23 +51,8 @@ public class ClassInstruction : Instruction, IEquatable<ClassInstruction>
         }
 
         var classScope = memory.RemoveScope();
-        var classVariable = new ClassVariable(classScope, superclasses);
+        var classVariable = new ClassVariable(Name, classScope, superclasses);
         memory.SetVariable(new VariableInstruction(Name), classVariable);
         return classVariable;
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as ClassInstruction);
-    public bool Equals(ClassInstruction? instruction)
-    {
-        if (instruction is null) return false;
-        if (ReferenceEquals(this, instruction)) return true;
-        if (GetType() != instruction.GetType()) return false;
-        
-        if (!Superclasses.SequenceEqual(instruction.Superclasses) || Name != instruction.Name) return false;
-        
-        return base.Equals(instruction);
-    }
-    
-    public override int GetHashCode() => HashCode.Combine(Name, Superclasses, Instructions);
 }

@@ -17,7 +17,7 @@ public static class OperatorTests
                 "+", 
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5), 
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6));
-            Assert.That(result, Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 11)));
+            Assertions.AssertVariablesEqual(result, BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 11));
         }
         
         [Test]
@@ -29,7 +29,7 @@ public static class OperatorTests
                 "+", 
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5), 
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 6.0));
-            Assert.That(result, Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 11.0)));
+            Assertions.AssertVariablesEqual(result, BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 11.0));
         }
         
         [Test]
@@ -41,7 +41,7 @@ public static class OperatorTests
                 "/", 
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5), 
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2));
-            Assert.That(result, Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 2.5)));
+            Assertions.AssertVariablesEqual(result, BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 2.5));
         }
         
         [Test]
@@ -53,7 +53,7 @@ public static class OperatorTests
                 "//", 
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 10.1), 
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 2.5));
-            Assert.That(result, Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4)));
+            Assertions.AssertVariablesEqual(result, BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4));
         }
 
         [Test]
@@ -65,7 +65,7 @@ public static class OperatorTests
                 "-", 
                 null, 
                 new NumericVariable(5));
-            Assert.That(result, Is.EqualTo(new NumericVariable(-5)));
+            Assertions.AssertVariablesEqual(result, new NumericVariable(-5));
         }
         
         [Test]
@@ -77,7 +77,7 @@ public static class OperatorTests
                 "and", 
                 new ConstantVariable(true), 
                 new ConstantVariable(false));
-            Assert.That(result, Is.EqualTo(new ConstantVariable(false)));
+            Assertions.AssertVariablesEqual(result, new ConstantVariable(false));
         }
         
         [Test]
@@ -89,7 +89,7 @@ public static class OperatorTests
                 "not", 
                 null, 
                 new ConstantVariable(false));
-            Assert.That(result, Is.EqualTo(new ConstantVariable(true)));
+            Assertions.AssertVariablesEqual(result, new ConstantVariable(true));
         }
 
         [Test]
@@ -100,7 +100,7 @@ public static class OperatorTests
             var addFunction = new FunctionVariable(
                 [new VariableInstruction("self"), new VariableInstruction("other")], 
                 [new ReturnInstruction(new NumericInstruction(5))]);
-            var classVariable = new ClassVariable(new Dictionary<string, Variable>()
+            var classVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
                 {"x", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 7)},
                 {"__add__", addFunction}
@@ -113,7 +113,7 @@ public static class OperatorTests
                 "+", 
                 objectVariable, 
                 objectVariable);
-            Assert.That(result, Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5)));
+            Assertions.AssertVariablesEqual(result, BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5));
         }
     }
 
@@ -125,7 +125,7 @@ public static class OperatorTests
         {
             var memory = Runner.Run("");
             var result = Operator.AssignmentOperation(memory, "=", null, new NumericVariable(8));
-            Assert.That(result, Is.EqualTo(new NumericVariable(8)));
+            Assertions.AssertVariablesEqual(result, new NumericVariable(8));
         }
         
         [Test]
@@ -137,7 +137,7 @@ public static class OperatorTests
                 "+=", 
                 new NumericVariable(8), 
                 new NumericVariable(5));
-            Assert.That(result, Is.EqualTo(new NumericVariable(13)));
+            Assertions.AssertVariablesEqual(result, new NumericVariable(13));
         }
     }
 }

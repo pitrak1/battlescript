@@ -4,11 +4,13 @@ namespace Battlescript;
 
 public class ClassVariable : Variable, IEquatable<ClassVariable>
 {
+    public string Name { get; set; }
     public Dictionary<string, Variable> Values { get; set; }
     public List<ClassVariable> SuperClasses { get; set; }
 
-    public ClassVariable(Dictionary<string, Variable>? values, List<ClassVariable>? superclasses = null)
+    public ClassVariable(string name, Dictionary<string, Variable>? values, List<ClassVariable>? superclasses = null)
     {
+        Name = name;
         Values = values ?? [];
         SuperClasses = superclasses ?? [];
     }
@@ -107,6 +109,7 @@ public class ClassVariable : Variable, IEquatable<ClassVariable>
         if (variable is null) return false;
         if (ReferenceEquals(this, variable)) return true;
         if (GetType() != variable.GetType()) return false;
+        if (Name != variable.Name) return false;
         
         var valuesEqual = Values.OrderBy(kvp => kvp.Key).SequenceEqual(variable.Values.OrderBy(kvp => kvp.Key));
         return SuperClasses.SequenceEqual(variable.SuperClasses) && valuesEqual;

@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class ConstantInstruction : Instruction, IEquatable<ConstantInstruction>
+public class ConstantInstruction : Instruction
 {
     public string Value { get; set; }
 
@@ -34,19 +34,4 @@ public class ConstantInstruction : Instruction, IEquatable<ConstantInstruction>
             return new ConstantVariable();
         }
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as ConstantInstruction);
-    public bool Equals(ConstantInstruction? instruction)
-    {
-        if (instruction is null) return false;
-        if (ReferenceEquals(this, instruction)) return true;
-        if (GetType() != instruction.GetType()) return false;
-
-        if (Value != instruction.Value) return false;
-        
-        return base.Equals(instruction);
-    }
-    
-    public override int GetHashCode() => HashCode.Combine(Value, Instructions);
 }

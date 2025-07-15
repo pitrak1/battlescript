@@ -11,23 +11,17 @@ public static partial class InstructionTests
         [Test]
         public void HandlesBinaryOperations()
         {
-            var lexer = new Lexer("5 + 6");
-            var lexerResult = lexer.Run();
-            
             var expected = new OperationInstruction(
                 operation: "+",
                 left: new NumericInstruction(5),
                 right: new NumericInstruction(6)
             );
-            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
+            Assertions.AssertInputProducesParserOutput("5 + 6", expected);
         }
         
         [Test]
         public void HandlesBinaryOperationsWithExpressions()
         {
-            var lexer = new Lexer("x.i + 6");
-            var lexerResult = lexer.Run();
-            
             var expected = new OperationInstruction(
                 operation: "+",
                 left: new VariableInstruction(
@@ -35,37 +29,28 @@ public static partial class InstructionTests
                     new ArrayInstruction([new StringInstruction("i")], separator: "[")),
                 right: new NumericInstruction(6)
             );
-            
-            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
+            Assertions.AssertInputProducesParserOutput("x.i + 6", expected);
         }
         
         [Test]
         public void HandlesUnaryOperators()
         {
-            var lexer = new Lexer("~6");
-            var lexerResult = lexer.Run();
-            
             var expected = new OperationInstruction(
-                operation: "~",
+                operation: "-",
                 right: new NumericInstruction(6)
             );
-            
-            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
+            Assertions.AssertInputProducesParserOutput("-6", expected);
         }
 
         [Test]
         public void HandlesParenthesis()
         {
-            var lexer = new Lexer("4 * (5 + 5)");
-            var lexerResult = lexer.Run();
-            
             var expected = new OperationInstruction(
                 operation: "*",
                 left: new NumericInstruction(4),
                 right: new OperationInstruction("+", new NumericInstruction(5), new NumericInstruction(5))
             );
-            
-            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
+            Assertions.AssertInputProducesParserOutput("4 * (5 + 5)", expected);
         }
     }
     

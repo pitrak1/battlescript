@@ -11,12 +11,8 @@ public static partial class InstructionTests
         [Test]
         public void ProperlyParsesCondition()
         {
-            var lexer = new Lexer("if True:");
-            var lexerResult = lexer.Run();
-            
             var expected = new IfInstruction(new ConstantInstruction("True"));
-            
-            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
+            Assertions.AssertInputProducesParserOutput("if True:", expected);
         }
     }
 

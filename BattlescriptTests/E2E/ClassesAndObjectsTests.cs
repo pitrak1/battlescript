@@ -14,14 +14,13 @@ public static class ClassesAndObjectsTests
         {
             var input = "class asdf:\n\ti = 1234";
             var memory = Runner.Run(input);
-            var expected = new ClassVariable(
+            var expected = new ClassVariable("asdf",
                 new Dictionary<string, Variable>()
                 {
                     {"i", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1234)}
                 });
             
-            Assert.That(memory.Scopes[0], Contains.Key("asdf"));
-            Assert.That(memory.Scopes[0]["asdf"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["asdf"], expected);
         }
         
         [Test]
@@ -35,10 +34,9 @@ public static class ClassesAndObjectsTests
             };
             var expected = new ObjectVariable(
                 values,
-                new ClassVariable(values));
+                new ClassVariable("asdf", values));
             
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -56,7 +54,7 @@ public static class ClassesAndObjectsTests
             var classValues = new Dictionary<string, Variable>()
             {
                 { "i", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1234) },
-                { "j", new FunctionVariable([], [new ReturnInstruction(new NumericInstruction(1234))])}
+                { "j", new FunctionVariable([], [new ReturnInstruction(new NumericInstruction(5))])}
             };
             var objectValues = new Dictionary<string, Variable>()
             {
@@ -65,9 +63,9 @@ public static class ClassesAndObjectsTests
             
             var expected = new ObjectVariable(
                 objectValues,
-                new ClassVariable(classValues));
+                new ClassVariable("asdf", classValues));
             
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -77,8 +75,7 @@ public static class ClassesAndObjectsTests
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1234);
             
-            Assert.That(memory.Scopes[0], Contains.Key("y"));
-            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], expected);
         }
         
         [Test]
@@ -86,15 +83,14 @@ public static class ClassesAndObjectsTests
         {
             var input = "class asdf:\n\ti = 1234\nx = asdf()\nx.i = 6";
             var memory = Runner.Run(input);
-            var expected = new ClassVariable(
+            var expected = new ClassVariable("asdf",
                 new Dictionary<string, Variable>()
                 {
                     { "i", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1234) }
                 }
             );
             
-            Assert.That(memory.Scopes[0], Contains.Key("asdf"));
-            Assert.That(memory.Scopes[0]["asdf"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["asdf"], expected);
         }
         
         [Test]
@@ -113,8 +109,7 @@ public static class ClassesAndObjectsTests
                         """;
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2345);
-            Assert.That(memory.Scopes[0], Contains.Key("y"));
-            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], expected);
         }
     }
     
@@ -133,8 +128,7 @@ public static class ClassesAndObjectsTests
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5);
             
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -151,8 +145,7 @@ public static class ClassesAndObjectsTests
                         """;
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -169,8 +162,7 @@ public static class ClassesAndObjectsTests
                         """;
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         
@@ -185,17 +177,16 @@ public static class ClassesAndObjectsTests
             var input = "class asdf:\n\ti = 1234\nclass qwer(asdf):\n\tj = 2345";
             var memory = Runner.Run(input);
             var superclass = new ClassVariable(
-                new Dictionary<string, Variable>()
+                "asdf", new Dictionary<string, Variable>()
                 {
                     { "i", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1234) }
                 });
-            var expected = new ClassVariable(
+            var expected = new ClassVariable("qwer",
                 new Dictionary<string, Variable>()
                 {
                     { "j", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2345) }
                 }, [superclass]);
-            
-            Assert.That(memory.Scopes[0]["qwer"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["qwer"], expected);
         }
         
         [Test]
@@ -214,8 +205,7 @@ public static class ClassesAndObjectsTests
                         """;
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
 
@@ -238,8 +228,7 @@ public static class ClassesAndObjectsTests
                         """;
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 10);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -257,8 +246,7 @@ public static class ClassesAndObjectsTests
                         """;
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", -5);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         // Definitely need to take a closer look here.  We may have to do some wonky stuff to make this work right

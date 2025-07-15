@@ -16,7 +16,7 @@ public static class ObjectVariableTests
             var getItemFunction = new FunctionVariable(
                 [new VariableInstruction("self"), new VariableInstruction("index")], 
                 [new ReturnInstruction(new NumericInstruction(5))]);
-            var classVariable = new ClassVariable(new Dictionary<string, Variable>()
+            var classVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
                 {"__getitem__", getItemFunction},
                 {"x", new NumericVariable(10)}
@@ -24,31 +24,31 @@ public static class ObjectVariableTests
             var objectVariable = classVariable.CreateObject();
             var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
             var result = objectVariable.GetItem(Runner.Run(""), index);
-            Assert.That(result, Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "int", 5)));
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "int", 5);
+            Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
         public void DoesNotRunOverrideIfObjectContextIsNotGiven()
         {
-            var classVariable = new ClassVariable(new Dictionary<string, Variable>()
+            var classVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
                 {"x", new NumericVariable(7)},
             });
             var objectVariable = classVariable.CreateObject();
             var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
             var result = objectVariable.GetItem(new Memory(), index);
-            Assert.That(result, Is.InstanceOf<NumericVariable>());
-            Assert.That(((NumericVariable)result).Value, Is.EqualTo(7));
+            Assertions.AssertVariablesEqual(result, new NumericVariable(7));
         }
 
         [Test]
         public void HandlesStackedIndices()
         {
-            var innerClassVariable = new ClassVariable(new Dictionary<string, Variable>()
+            var innerClassVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
                 { "y", new NumericVariable(6) }
             });
-            var classVariable = new ClassVariable(new Dictionary<string, Variable>()
+            var classVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
                 {"x", new NumericVariable(7)},
                 {"asdf", innerClassVariable.CreateObject()}
@@ -59,8 +59,7 @@ public static class ObjectVariableTests
                 Consts.SquareBrackets,
                 next: new ArrayInstruction([new StringInstruction("y")], Consts.SquareBrackets));
             var result = objectVariable.GetItem(new Memory(), index);
-            Assert.That(result, Is.InstanceOf<NumericVariable>());
-            Assert.That(((NumericVariable)result).Value, Is.EqualTo(6));
+            Assertions.AssertVariablesEqual(result, new NumericVariable(6));
         }
     }
     
@@ -130,7 +129,7 @@ public static class ObjectVariableTests
         [Test]
         public void DoesNotRunOverrideIfObjectContextIsNotGiven()
         {
-            var classVariable = new ClassVariable(new Dictionary<string, Variable>()
+            var classVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
                 {"x", new NumericVariable(7)},
             });
@@ -138,18 +137,17 @@ public static class ObjectVariableTests
             var index = new ArrayInstruction([new StringInstruction("x")], separator: "[");
             objectVariable.SetItem(new Memory(), new NumericVariable(10), index);
             var result = objectVariable.GetItem(new Memory(), index);
-            Assert.That(result, Is.InstanceOf<NumericVariable>());
-            Assert.That(((NumericVariable)result).Value, Is.EqualTo(10));
+            Assertions.AssertVariablesEqual(result, new NumericVariable(10));
         }
         
         [Test]
         public void HandlesStackedIndices()
         {
-            var innerClassVariable = new ClassVariable(new Dictionary<string, Variable>()
+            var innerClassVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
                 { "y", new NumericVariable(6) }
             });
-            var classVariable = new ClassVariable(new Dictionary<string, Variable>()
+            var classVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
                 {"x", new NumericVariable(7)},
                 {"asdf", innerClassVariable.CreateObject()}
@@ -161,8 +159,7 @@ public static class ObjectVariableTests
                 next: new ArrayInstruction([new StringInstruction("y")], Consts.SquareBrackets));
             objectVariable.SetItem(new Memory(), new NumericVariable(8), index, objectVariable);
             var result = objectVariable.GetItem(new Memory(), index);
-            Assert.That(result, Is.InstanceOf<NumericVariable>());
-            Assert.That(((NumericVariable)result).Value, Is.EqualTo(8));
+            Assertions.AssertVariablesEqual(result, new NumericVariable(8));
         }
     }
 }

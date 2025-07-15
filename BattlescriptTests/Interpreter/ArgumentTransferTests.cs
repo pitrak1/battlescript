@@ -17,11 +17,8 @@ public static class ArgumentTransferTests
             var parameters = new List<Instruction>() { new VariableInstruction("x"), new VariableInstruction("y") };
             ArgumentTransfer.RunAndApply(memory, arguments, parameters);
             
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5)));
-            
-            Assert.That(memory.Scopes[0], Contains.Key("y"));
-            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6)));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6));
         }
         
         [Test]
@@ -37,11 +34,8 @@ public static class ArgumentTransferTests
             var parameters = new List<Instruction>() { new VariableInstruction("x"), new VariableInstruction("y") };
             ArgumentTransfer.RunAndApply(memory, arguments, parameters);
             
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6)));
-            
-            Assert.That(memory.Scopes[0], Contains.Key("y"));
-            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5)));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5));
         }
         
         [Test]
@@ -57,11 +51,8 @@ public static class ArgumentTransferTests
             var parameters = new List<Instruction>() { new VariableInstruction("x"), new VariableInstruction("y") };
             ArgumentTransfer.RunAndApply(memory, arguments, parameters);
             
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5)));
-            
-            Assert.That(memory.Scopes[0], Contains.Key("y"));
-            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6)));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6));
         }
         
         [Test]
@@ -121,12 +112,8 @@ public static class ArgumentTransferTests
                 new AssignmentInstruction("=", new VariableInstruction("y"), new NumericInstruction(6))
             };
             ArgumentTransfer.RunAndApply(memory, arguments, parameters);
-            
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5)));
-            
-            Assert.That(memory.Scopes[0], Contains.Key("y"));
-            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6)));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6));
         }
         
         [Test]
@@ -145,12 +132,8 @@ public static class ArgumentTransferTests
                 new AssignmentInstruction("=", new VariableInstruction("y"), new NumericInstruction(6))
             };
             ArgumentTransfer.RunAndApply(memory, arguments, parameters);
-            
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5)));
-            
-            Assert.That(memory.Scopes[0], Contains.Key("y"));
-            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9)));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9));
         }
         
         [Test]
@@ -169,12 +152,8 @@ public static class ArgumentTransferTests
                 new AssignmentInstruction("=", new VariableInstruction("y"), new NumericInstruction(6))
             };
             ArgumentTransfer.RunAndApply(memory, arguments, parameters);
-            
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5)));
-            
-            Assert.That(memory.Scopes[0], Contains.Key("y"));
-            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9)));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9));
         }
         
         [Test]
@@ -214,15 +193,11 @@ public static class ArgumentTransferTests
                 { "i", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5) },
                 { "j", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6) }
             };
-            var objectContext = new ObjectVariable(classValues, new ClassVariable(classValues));
+            var objectContext = new ObjectVariable(classValues, new ClassVariable("asdf", classValues));
                 
             ArgumentTransfer.RunAndApply(memory, arguments, parameters, objectContext);
-            
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(objectContext));
-            
-            Assert.That(memory.Scopes[0], Contains.Key("y"));
-            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5)));        
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], objectContext);
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5));
         }
     }
 
@@ -237,12 +212,8 @@ public static class ArgumentTransferTests
             var arguments = new List<Variable>() { new NumericVariable(5), new NumericVariable(6) };
             var parameters = new List<Instruction>() { new VariableInstruction("x"), new VariableInstruction("y") };
             ArgumentTransfer.RunAndApply(memory, arguments, parameters);
-            
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(new NumericVariable(5)));
-            
-            Assert.That(memory.Scopes[0], Contains.Key("y"));
-            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(new NumericVariable(6)));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6));
         }
         
         [Test]
@@ -257,14 +228,10 @@ public static class ArgumentTransferTests
                 { "i", new NumericVariable(5) },
                 { "j", new NumericVariable(6) }
             };
-            var objectContext = new ObjectVariable(classValues, new ClassVariable(classValues));
+            var objectContext = new ObjectVariable(classValues, new ClassVariable("asdf", classValues));
             ArgumentTransfer.RunAndApply(memory, arguments, parameters, objectContext);
-            
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(objectContext));
-            
-            Assert.That(memory.Scopes[0], Contains.Key("y"));
-            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(new NumericVariable(5)));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], objectContext);
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5));
         }
     }
 }

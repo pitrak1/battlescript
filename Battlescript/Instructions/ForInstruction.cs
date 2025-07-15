@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class ForInstruction : Instruction, IEquatable<ForInstruction>
+public class ForInstruction : Instruction
 {
     public VariableInstruction BlockVariable { get; set; }
     public Instruction Range { get; set; }
@@ -70,19 +70,5 @@ public class ForInstruction : Instruction, IEquatable<ForInstruction>
             throw new Exception("Invalid iterator for loop, fix this later");
         }
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as ForInstruction);
-    public bool Equals(ForInstruction? instruction)
-    {
-        if (instruction is null) return false;
-        if (ReferenceEquals(this, instruction)) return true;
-        if (GetType() != instruction.GetType()) return false;
 
-        if (!Range.Equals(instruction.Range)) return false;
-        
-        return base.Equals(instruction);
-    }
-    
-    public override int GetHashCode() => HashCode.Combine(Range, Instructions);
 }

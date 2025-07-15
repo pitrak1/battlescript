@@ -94,11 +94,7 @@ public static class MemoryTests
             memory.AddScope(scope);
             var returnedVariable = memory.GetVariable("x");
             
-            Assert.That(returnedVariable is NumericVariable);
-            if (returnedVariable is NumericVariable NumericVariable)
-            {
-                Assert.That(NumericVariable.Value, Is.EqualTo(5));
-            }
+            Assertions.AssertVariablesEqual(returnedVariable, new NumericVariable(5));
         }
         
         [Test]
@@ -117,11 +113,7 @@ public static class MemoryTests
             memory.AddScope(scope2);
             var returnedVariable = memory.GetVariable("x");
             
-            Assert.That(returnedVariable is NumericVariable);
-            if (returnedVariable is NumericVariable NumericVariable)
-            {
-                Assert.That(NumericVariable.Value, Is.EqualTo(5));
-            }
+            Assertions.AssertVariablesEqual(returnedVariable, new NumericVariable(5));
         }
 
         [Test]
@@ -140,11 +132,7 @@ public static class MemoryTests
             memory.AddScope(scope2);
             var returnedVariable = memory.GetVariable("x");
             
-            Assert.That(returnedVariable is NumericVariable);
-            if (returnedVariable is NumericVariable NumericVariable)
-            {
-                Assert.That(NumericVariable.Value, Is.EqualTo(8));
-            }
+            Assertions.AssertVariablesEqual(returnedVariable, new NumericVariable(8));
         }
     }
 
@@ -159,11 +147,7 @@ public static class MemoryTests
             memory.SetVariable(new VariableInstruction("x"), new NumericVariable(5));
             var scopes = memory.Scopes;
             
-            Assert.That(scopes[1]["x"] is NumericVariable);
-            if (scopes[1]["x"] is NumericVariable NumericVariable)
-            {
-                Assert.That(NumericVariable.Value, Is.EqualTo(5));
-            }
+            Assertions.AssertVariablesEqual(scopes[1]["x"], new NumericVariable(5));
         }
 
         [Test]
@@ -178,11 +162,7 @@ public static class MemoryTests
             memory.SetVariable(new VariableInstruction("x"), new NumericVariable(8));
             var scopes = memory.Scopes;
             
-            Assert.That(scopes[1]["x"] is NumericVariable);
-            if (scopes[1]["x"] is NumericVariable NumericVariable)
-            {
-                Assert.That(NumericVariable.Value, Is.EqualTo(8));
-            }
+            Assertions.AssertVariablesEqual(scopes[1]["x"], new NumericVariable(8));
         }
 
         [Test]
@@ -202,17 +182,9 @@ public static class MemoryTests
             memory.SetVariable(new VariableInstruction("x"), new NumericVariable(8));
             var scopes = memory.Scopes;
             
-            Assert.That(scopes[1]["x"] is NumericVariable);
-            if (scopes[1]["x"] is NumericVariable NumericVariable1)
-            {
-                Assert.That(NumericVariable1.Value, Is.EqualTo(5));
-            }
+            Assertions.AssertVariablesEqual(scopes[1]["x"], new NumericVariable(5));
             
-            Assert.That(scopes[2]["x"] is NumericVariable);
-            if (scopes[2]["x"] is NumericVariable NumericVariable2)
-            {
-                Assert.That(NumericVariable2.Value, Is.EqualTo(8));
-            }
+            Assertions.AssertVariablesEqual(scopes[2]["x"], new NumericVariable(8));
         }
         
         // These are currently not passing because our variable comparer is not working correctly for equals. We need to
@@ -233,22 +205,7 @@ public static class MemoryTests
             memory.SetVariable(variableInstructionWithIndex, new NumericVariable(10));
             var scopes = memory.Scopes;
             
-            Assert.That(scopes[1]["x"] is ListVariable);
-            if (scopes[1]["x"] is ListVariable listVariable)
-            {
-                Assert.That(listVariable.Values.Count, Is.EqualTo(2));
-                Assert.That(listVariable.Values[0] is NumericVariable);
-                if (listVariable.Values[0] is NumericVariable NumericVariable1)
-                {
-                    Assert.That(NumericVariable1.Value, Is.EqualTo(5));
-                }
-                
-                Assert.That(listVariable.Values[1] is NumericVariable);
-                if (listVariable.Values[1] is NumericVariable NumericVariable2)
-                {
-                    Assert.That(NumericVariable2.Value, Is.EqualTo(10));
-                }
-            }
+            Assertions.AssertVariablesEqual(scopes[1]["x"], new ListVariable([new NumericVariable(5), new NumericVariable(10)]));
         }
         
         [Test]
@@ -271,9 +228,7 @@ public static class MemoryTests
             {
                 {5, new NumericVariable(10) }
             });
-            
-            Assert.That(memory.Scopes[1], Contains.Key("x"));
-            Assert.That(memory.Scopes[1]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes[1]["x"], expected);
         }
         
         [Test]
@@ -305,8 +260,7 @@ public static class MemoryTests
                 })
             ]);
             
-            Assert.That(memory.Scopes[1], Contains.Key("x"));
-            Assert.That(memory.Scopes[1]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes[1]["x"], expected);
         }
         
         [Test]
@@ -316,7 +270,7 @@ public static class MemoryTests
             {
                 { "y", new NumericVariable(6) }
             };
-            var classVariable = new ClassVariable(classValues);
+            var classVariable = new ClassVariable("asdf", classValues);
             var scope = new Dictionary<string, Variable>()
             {
                 { "x", classVariable },

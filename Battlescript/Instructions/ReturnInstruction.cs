@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class ReturnInstruction : Instruction, IEquatable<ReturnInstruction>
+public class ReturnInstruction : Instruction
 {
     public Instruction? Value { get; set; }
 
@@ -31,19 +31,4 @@ public class ReturnInstruction : Instruction, IEquatable<ReturnInstruction>
         var returnValue = Value?.Interpret(memory);
         throw new InternalReturnException(returnValue);
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as ReturnInstruction);
-    public bool Equals(ReturnInstruction? instruction)
-    {
-        if (instruction is null) return false;
-        if (ReferenceEquals(this, instruction)) return true;
-        if (GetType() != instruction.GetType()) return false;
-
-        if (!Value.Equals(instruction.Value)) return false;
-        
-        return base.Equals(instruction);
-    }
-    
-    public override int GetHashCode() => HashCode.Combine(Value, Instructions);
 }

@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class ImportInstruction : Instruction, IEquatable<ImportInstruction>
+public class ImportInstruction : Instruction
 {
     public string FilePath { get; set; }
     
@@ -100,20 +100,4 @@ public class ImportInstruction : Instruction, IEquatable<ImportInstruction>
 
         return new ConstantVariable();
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as ImportInstruction);
-    public bool Equals(ImportInstruction? instruction)
-    {
-        if (instruction is null) return false;
-        if (ReferenceEquals(this, instruction)) return true;
-        if (GetType() != instruction.GetType()) return false;
-        
-        if (FilePath != instruction.FilePath) return false;
-        if (!ImportNames.SequenceEqual(instruction.ImportNames)) return false;
-        
-        return base.Equals(instruction);
-    }
-    
-    public override int GetHashCode() => HashCode.Combine(FilePath, ImportNames, Instructions);
 }

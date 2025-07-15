@@ -11,36 +11,25 @@ public static partial class InstructionTests
         [Test]
         public void HandlesSimpleDefinition()
         {
-            var lexer = new Lexer("def func():");
-            var lexerResult = lexer.Run();
-            
             var expected = new FunctionInstruction(
                 name: "func"
             );
-            
-            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
+            Assertions.AssertInputProducesParserOutput("def func():", expected);
         }
         
         [Test]
         public void HandlesDefinitionWithPositionalArgument()
         {
-            var lexer = new Lexer("def func(asdf):");
-            var lexerResult = lexer.Run();
-            
             var expected = new FunctionInstruction(
                 name: "func",
                 parameters: [new VariableInstruction("asdf")]
             );
-            
-            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
+            Assertions.AssertInputProducesParserOutput("def func(asdf):", expected);
         }
         
         [Test]
         public void HandlesDefinitionWithMultiplePositionalArguments()
         {
-            var lexer = new Lexer("def func(asdf, qwer):");
-            var lexerResult = lexer.Run();
-            
             var expected = new FunctionInstruction(
                 name: "func",
                 parameters: 
@@ -49,8 +38,7 @@ public static partial class InstructionTests
                     new VariableInstruction("qwer")
                 ]
             );
-            
-            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
+            Assertions.AssertInputProducesParserOutput("def func(asdf, qwer):", expected);
         }
     }
 
@@ -76,8 +64,7 @@ public static partial class InstructionTests
                             new VariableInstruction("qwer")))
                 ]
             );
-            
-            Assert.That(memory.Scopes[0]["func"], Is.EqualTo(functionVariable));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["func"], functionVariable);
         }
         
     }

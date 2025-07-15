@@ -15,8 +15,7 @@ public static class ControlFlowTests
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6);
             
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -25,8 +24,7 @@ public static class ControlFlowTests
             var input = "x = 5\nif x == 6:\n\tx = 6";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -35,8 +33,7 @@ public static class ControlFlowTests
             var input = "x = 5\nif x == 6:\n\tx = 6\nelse:\n\tx = 7";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 7);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     
         [Test]
@@ -45,8 +42,7 @@ public static class ControlFlowTests
             var input = "x = 5\nif x == 6:\n\tx = 6\nelif x < 8:\n\tx = 9\nelse:\n\tx = 7";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -55,8 +51,7 @@ public static class ControlFlowTests
             var input = "x = 5\nif x == 6:\n\tx = 6\nelif x < 8:\n\tx = 9";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -65,8 +60,7 @@ public static class ControlFlowTests
             var input = "x = 5\nif x < 6:\n\tx = 7\nif x >= 7:\n\tx = 9";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
     
@@ -79,8 +73,7 @@ public static class ControlFlowTests
             var input = "x = 5\nwhile x < 10:\n\tx += 1";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 10);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -89,8 +82,7 @@ public static class ControlFlowTests
             var input = "x = 5\nwhile x == 6:\n\tx = 10";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
     
@@ -109,8 +101,7 @@ public static class ControlFlowTests
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3),
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4),
             ]);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -123,8 +114,7 @@ public static class ControlFlowTests
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3),
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4),
             ]);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -138,8 +128,7 @@ public static class ControlFlowTests
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6),
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8),
             ]);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -151,8 +140,7 @@ public static class ControlFlowTests
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4),
             ]);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -166,8 +154,7 @@ public static class ControlFlowTests
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", -2),
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", -4),
             ]);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -176,8 +163,7 @@ public static class ControlFlowTests
             var input = "x = range(2, -5, 2)";
             var expected = new ListVariable([]);
             var memory = Runner.Run(input);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
     
@@ -190,8 +176,7 @@ public static class ControlFlowTests
             var input = "x = 5\nfor y in range(3):\n\tx = x + y";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -200,8 +185,7 @@ public static class ControlFlowTests
             var input = "x = 5\nfor y in [-1, 3, 2]:\n\tx = x + y";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
     
@@ -220,8 +204,7 @@ public static class ControlFlowTests
                         """;
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     
         [Test]
@@ -238,8 +221,7 @@ public static class ControlFlowTests
                         """;
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 13);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
     
@@ -258,8 +240,7 @@ public static class ControlFlowTests
                         """;
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     
         [Test]
@@ -276,8 +257,7 @@ public static class ControlFlowTests
                         """;
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
     
@@ -294,8 +274,7 @@ public static class ControlFlowTests
                         """;
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
 }

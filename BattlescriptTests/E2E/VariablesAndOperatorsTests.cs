@@ -14,8 +14,7 @@ public static class VariablesAndOperatorsTests
             var input = "x = 'asdf'";
             var expected = new StringVariable("asdf");
             var memory = Runner.Run(input);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], expected);
         }
         
         [Test]
@@ -24,8 +23,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = \"asdf\"";
             var expected = new StringVariable("asdf");
             var memory = Runner.Run(input);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -34,8 +33,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 5.5";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 5.5);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -44,8 +43,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 5";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
 
         [Test]
@@ -55,8 +54,8 @@ public static class VariablesAndOperatorsTests
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", 1);
             
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -65,8 +64,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = []";
             var expected = new ListVariable([]);
             var memory = Runner.Run(input);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -75,8 +74,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = {}";
             var expected = new DictionaryVariable([]);
             var memory = Runner.Run(input);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -84,12 +83,11 @@ public static class VariablesAndOperatorsTests
         {
             var input = "class asdf():\n\ty = 3";
             var memory = Runner.Run(input);
-            var expected = new ClassVariable(new Dictionary<string, Variable>
+            var expected = new ClassVariable("asdf", new Dictionary<string, Variable>
             {
                 {"y", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)}
             });
-            Assert.That(memory.Scopes[0], Contains.Key("asdf"));
-            Assert.That(memory.Scopes[0]["asdf"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["asdf"], expected);
         }
         
         [Test]
@@ -101,10 +99,10 @@ public static class VariablesAndOperatorsTests
             {
                 { "y", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3) }
             };
-            var expected = new ObjectVariable(classValues, new ClassVariable(classValues));
+            var expected = new ObjectVariable(classValues, new ClassVariable("asdf", classValues));
             
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
 
@@ -117,8 +115,7 @@ public static class VariablesAndOperatorsTests
             var input = "x = 6\ny = +x";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6);
-            Assert.That(memory.Scopes[0], Contains.Key("y"));
-            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], expected);
         }
 
         [Test]
@@ -127,8 +124,7 @@ public static class VariablesAndOperatorsTests
             var input = "x = 6\ny = -x";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", -6);
-            Assert.That(memory.Scopes[0], Contains.Key("y"));
-            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], expected);
         }
     }
     
@@ -141,8 +137,7 @@ public static class VariablesAndOperatorsTests
             var input = "x = []\ny = x\nz = x is y";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", true);
-            Assert.That(memory.Scopes[0], Contains.Key("z"));
-            Assert.That(memory.Scopes[0]["z"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["z"], expected);
         }
         
         [Test]
@@ -152,8 +147,7 @@ public static class VariablesAndOperatorsTests
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", false);
             
-            Assert.That(memory.Scopes[0], Contains.Key("z"));
-            Assert.That(memory.Scopes[0]["z"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["z"], expected);
         }
     }
     
@@ -166,8 +160,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 'asd' in 'asdf'";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", true);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -176,8 +170,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 'asdx' in 'asdf'";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", false);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -193,8 +187,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 5 in [1, 2, 3, 4, 5]";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", true);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -203,8 +197,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 6 in [1, 2, 3, 4, 5]";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", false);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -213,8 +207,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 5 in {5: 4, 3: 2}";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", true);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -223,8 +217,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 6 in {5: 4, 3: 2}";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", false);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -245,8 +239,8 @@ public static class VariablesAndOperatorsTests
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 10);
             
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -255,8 +249,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 5\nx -= 5";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 0);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -265,8 +259,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 5\nx *= 5";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 25);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
 
         [Test]
@@ -275,8 +269,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 8\nx /= 5";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 1.6);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -285,8 +279,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 8\nx //= 5";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -295,8 +289,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 9\nx %= 2";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -305,8 +299,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 9\nx **= 2";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 81);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
 
@@ -319,8 +313,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = (1 + 2) * 2";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -329,8 +323,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 2 * (1 + 2)";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
 
@@ -343,8 +337,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 2 ** (1 + 2)";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -353,8 +347,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 4 * 2 ** 3";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 32);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
 
         [Test]
@@ -363,8 +357,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 8 - 16 // 4";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -373,8 +367,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 3 <= 8 - 7";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", false);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
     
@@ -387,8 +381,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = -1";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", -1);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -398,8 +392,8 @@ public static class VariablesAndOperatorsTests
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", -1.0);
             
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -408,8 +402,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 12/3";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 4.0);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -419,8 +413,8 @@ public static class VariablesAndOperatorsTests
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4);
             
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -429,8 +423,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 12 * 3";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 36);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -439,8 +433,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 2.5 * 4.0";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 10.0);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -449,8 +443,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = 2.5 * 4";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 10.0);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
     
@@ -463,8 +457,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = False\nif []:\n\tx = True";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", false);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -473,8 +467,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = False\nif [1]:\n\tx = True";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", true);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -483,8 +477,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = False\nif {}:\n\tx = True";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", false);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -493,8 +487,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = False\nif {'asdf': 1}:\n\tx = True";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", true);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -503,8 +497,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = False\nif '':\n\tx = True";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", false);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -513,8 +507,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = False\nif 'asdf':\n\tx = True";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", true);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -523,8 +517,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = False\nif 0:\n\tx = True";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", false);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -533,8 +527,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = False\nif 1:\n\tx = True";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", true);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -543,8 +537,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = False\nif 0.0:\n\tx = True";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", false);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -553,8 +547,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = False\nif 1.5:\n\tx = True";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", true);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -563,8 +557,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = False\nif False:\n\tx = True";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", false);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -573,8 +567,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = False\nif True:\n\tx = True";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", true);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
@@ -583,8 +577,8 @@ public static class VariablesAndOperatorsTests
             var input = "x = False\nif None:\n\tx = True";
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", false);
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
 }

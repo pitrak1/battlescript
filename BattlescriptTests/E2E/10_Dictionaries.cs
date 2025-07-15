@@ -17,9 +17,7 @@ public class Dictionaries
                 {"qwer", new StringVariable("5")}
             }
         );
-        
-        Assert.That(memory.Scopes[0], Contains.Key("x"));
-        Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+        Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], expected);
     }
 
     [Test]
@@ -29,7 +27,6 @@ public class Dictionaries
         var expected = new StringVariable("5");
         var memory = Runner.Run(input);
         
-        Assert.That(memory.Scopes[0], Contains.Key("y"));
-        Assert.That(memory.Scopes[0]["y"], Is.EqualTo(expected));
+        Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], expected);
     }
 }

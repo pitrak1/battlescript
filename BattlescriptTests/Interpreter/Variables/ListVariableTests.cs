@@ -18,9 +18,7 @@ public static class ListVariableTests
             ]);
             var index = new NumericInstruction(1);
             var result = listVariable.GetItem(Runner.Run(""), new ArrayInstruction([index], separator: "["));
-            
-            Assert.That(result, Is.TypeOf<StringVariable>());
-            Assert.That(((StringVariable)result).Value, Is.EqualTo("a"));
+            Assertions.AssertVariablesEqual(result, new StringVariable("a"));
         }
         
         [Test]
@@ -40,7 +38,7 @@ public static class ListVariableTests
             var expected = new ListVariable([
                 new StringVariable("a"),
             ]);
-            Assert.That(result, Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
@@ -59,7 +57,7 @@ public static class ListVariableTests
                 new NumericVariable(5),
                 new StringVariable("a"),
             ]);
-            Assert.That(result, Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
@@ -79,7 +77,7 @@ public static class ListVariableTests
                 new ConstantVariable(false),
                 new NumericVariable(8)
             ]);
-            Assert.That(result, Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
@@ -100,7 +98,7 @@ public static class ListVariableTests
                 new ConstantVariable(false),
                 new NumericVariable(8)
             ]);
-            Assert.That(result, Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
@@ -122,7 +120,7 @@ public static class ListVariableTests
                 new StringVariable("a"),
                 new NumericVariable(8)
             ]);
-            Assert.That(result, Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
@@ -144,7 +142,7 @@ public static class ListVariableTests
                 new NumericVariable(8),
                 new StringVariable("a"),
             ]);
-            Assert.That(result, Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
@@ -166,7 +164,7 @@ public static class ListVariableTests
                 new NumericVariable(8),
                 new ConstantVariable(false),
             ]);
-            Assert.That(result, Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
@@ -189,7 +187,7 @@ public static class ListVariableTests
                 new StringVariable("a"),
                 new NumericVariable(5),
             ]);
-            Assert.That(result, Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
@@ -210,7 +208,7 @@ public static class ListVariableTests
                 new StringVariable("a"),
                 new NumericVariable(5),
             ]);
-            Assert.That(result, Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
@@ -231,7 +229,7 @@ public static class ListVariableTests
                 next: new ArrayInstruction([index2], Consts.SquareBrackets));
             var result = listVariable.GetItem(Runner.Run(""), indexInstruction);
             var expected = new StringVariable("b");
-            Assert.That(result, Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(result, expected);
         }
         
         // [Test]
@@ -251,7 +249,7 @@ public static class ListVariableTests
         //         new StringVariable("a"),
         //         new ConstantVariable(false)
         //     ]);
-        //     Assert.That(result, Is.EqualTo(expected));
+        //     Assertions.AssertVariablesEqual(result, expected);
         // }
     }
     
@@ -270,8 +268,7 @@ public static class ListVariableTests
             var value = new StringVariable("b");
             listVariable.SetItem(Runner.Run(""), value, new ArrayInstruction([index], separator: "["));
             
-            Assert.That(listVariable.Values[1], Is.TypeOf<StringVariable>());
-            Assert.That(((StringVariable)listVariable.Values[1]).Value, Is.EqualTo("b"));
+            Assertions.AssertVariablesEqual(listVariable.Values[1], value);
         }
         
         [Test]
@@ -297,8 +294,7 @@ public static class ListVariableTests
             
             Assert.That(listVariable.Values[2], Is.TypeOf<ListVariable>());
             var innerListVariable = (ListVariable)listVariable.Values[2];
-            Assert.That(innerListVariable.Values[1], Is.TypeOf<StringVariable>());
-            Assert.That(((StringVariable)innerListVariable.Values[1]).Value, Is.EqualTo("c"));
+            Assertions.AssertVariablesEqual(innerListVariable.Values[1], value);
         }
     }
 
@@ -311,7 +307,7 @@ public static class ListVariableTests
             var listVariable = new ListVariable([new NumericVariable(5), new StringVariable("a")]);
             listVariable.Append([new ConstantVariable(true)]);
             var expected = new ListVariable([new NumericVariable(5), new StringVariable("a"), new ConstantVariable(true)]);
-            Assert.That(listVariable, Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(listVariable, expected);
         }
         
         [Test]
@@ -326,7 +322,7 @@ public static class ListVariableTests
                 new StringVariable("a"), 
                 new ConstantVariable(true),
                 new StringVariable("b")]);
-            Assert.That(listVariable, Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(listVariable, expected);
         }
         
         [Test]
@@ -338,7 +334,7 @@ public static class ListVariableTests
                 new StringVariable("b"),
                 new NumericVariable(5), 
                 new StringVariable("a")]);
-            Assert.That(listVariable, Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(listVariable, expected);
         }
         
         [Test]
@@ -350,7 +346,7 @@ public static class ListVariableTests
                 new NumericVariable(5), 
                 new StringVariable("a"),
                 new StringVariable("b")]);
-            Assert.That(listVariable, Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(listVariable, expected);
         }
 
         [Test]
@@ -359,7 +355,7 @@ public static class ListVariableTests
             var listVariable = new ListVariable([new NumericVariable(5), new StringVariable("a")]);
             listVariable.Remove([new StringVariable("a")]);
             var expected = new ListVariable([new NumericVariable(5)]);
-            Assert.That(listVariable, Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(listVariable, expected);
         }
 
         [Test]
@@ -368,8 +364,8 @@ public static class ListVariableTests
             var listVariable = new ListVariable([new NumericVariable(5), new StringVariable("a"), new StringVariable("b")]);
             var result = listVariable.Pop([new NumericVariable(1)]);
             var expected = new ListVariable([new NumericVariable(5), new StringVariable("b")]);
-            Assert.That(listVariable, Is.EqualTo(expected));
-            Assert.That(result, Is.EqualTo(new StringVariable("a")));
+            Assertions.AssertVariablesEqual(listVariable, expected);
+            Assertions.AssertVariablesEqual(result, new StringVariable("a"));
         }
         
         [Test]
@@ -378,8 +374,8 @@ public static class ListVariableTests
             var listVariable = new ListVariable([new NumericVariable(5), new StringVariable("a"), new StringVariable("b")]);
             var result = listVariable.Pop([]);
             var expected = new ListVariable([new NumericVariable(5), new StringVariable("a")]);
-            Assert.That(listVariable, Is.EqualTo(expected));
-            Assert.That(result, Is.EqualTo(new StringVariable("b")));
+            Assertions.AssertVariablesEqual(listVariable, expected);
+            Assertions.AssertVariablesEqual(result, new StringVariable("b"));
         }
         
         [Test]
@@ -388,7 +384,7 @@ public static class ListVariableTests
             var listVariable = new ListVariable([new NumericVariable(5), new StringVariable("a"), new StringVariable("b")]);
             listVariable.Clear([]);
             var expected = new ListVariable();
-            Assert.That(listVariable, Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(listVariable, expected);
         }
         
         [Test]
@@ -397,7 +393,7 @@ public static class ListVariableTests
             var listVariable = new ListVariable([new NumericVariable(5), new StringVariable("b"), new StringVariable("b")]);
             var result = listVariable.Count([new StringVariable("b")]);
             var expected = new NumericVariable(2);
-            Assert.That(result, Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
@@ -406,7 +402,7 @@ public static class ListVariableTests
             var listVariable = new ListVariable([new NumericVariable(5), new StringVariable("a"), new StringVariable("b")]);
             listVariable.Reverse([]);
             var expected = new ListVariable([new StringVariable("b"), new StringVariable("a"), new NumericVariable(5)]);
-            Assert.That(listVariable, Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(listVariable, expected);
         }
         
         [Test]
@@ -414,7 +410,7 @@ public static class ListVariableTests
         {
             var listVariable = new ListVariable([new NumericVariable(5), new StringVariable("a"), new StringVariable("b")]);
             var copy = listVariable.Copy([]);
-            Assert.That(listVariable, Is.EqualTo(copy));
+            Assertions.AssertVariablesEqual(listVariable, copy);
         }
     }
 }

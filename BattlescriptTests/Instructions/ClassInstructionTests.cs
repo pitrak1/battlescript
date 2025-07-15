@@ -11,26 +11,18 @@ public static partial class InstructionTests
         [Test]
         public void HandlesBasicClassDefinition()
         {
-            var lexer = new Lexer("class MyClass:");
-            var lexerResult = lexer.Run();
-            
             var expected = new ClassInstruction("MyClass");
-            
-            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
+            Assertions.AssertInputProducesParserOutput("class MyClass:", expected);
         }
         
         [Test]
         public void HandlesClassDefinitionWithInheritance()
         {
-            var lexer = new Lexer("class MyClass(asdf):");
-            var lexerResult = lexer.Run();
-            
             var expected = new ClassInstruction(
                 "MyClass",
                 [new VariableInstruction("asdf")]
             );
-            
-            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
+            Assertions.AssertInputProducesParserOutput("class MyClass(asdf):", expected);
         }
     }
 
@@ -41,7 +33,7 @@ public static partial class InstructionTests
         public void HandlesBasicClassDefinition()
         {
             var memory = Runner.Run("class MyClass:\n\tx = 1");
-            var expected = new ClassVariable(new Dictionary<string, Variable>()
+            var expected = new ClassVariable("MyClass", new Dictionary<string, Variable>()
             {
                 { "x", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1) }
             });
@@ -59,12 +51,12 @@ public static partial class InstructionTests
                                         y = 2
 
                                     """);
-            var asdf = new ClassVariable(new Dictionary<string, Variable>()
+            var asdf = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
                 { "x", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1) }
             });
 
-            var qwer = new ClassVariable(new Dictionary<string, Variable>()
+            var qwer = new ClassVariable("qwer", new Dictionary<string, Variable>()
             {
                 { "y", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2) }
             }, [asdf]);
@@ -88,17 +80,17 @@ public static partial class InstructionTests
 
                                     """);
             
-            var asdf = new ClassVariable(new Dictionary<string, Variable>()
+            var asdf = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
                 { "x", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1) }
             });
 
-            var qwer = new ClassVariable(new Dictionary<string, Variable>()
+            var qwer = new ClassVariable("qwer", new Dictionary<string, Variable>()
             {
                 { "y", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2) }
             });
 
-            var zxcv = new ClassVariable(new Dictionary<string, Variable>()
+            var zxcv = new ClassVariable("zxcv", new Dictionary<string, Variable>()
             {
                 { "z", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3) }
             }, [asdf, qwer]);

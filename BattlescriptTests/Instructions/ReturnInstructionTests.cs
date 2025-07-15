@@ -11,12 +11,8 @@ public static partial class InstructionTests
         [Test]
         public void HandlesSimpleValue()
         {
-            var lexer = new Lexer("return 4");
-            var lexerResult = lexer.Run();
-            
             var expected = new ReturnInstruction(new NumericInstruction(4));
-            
-            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
+            Assertions.AssertInputProducesParserOutput("return 4", expected);
         }
     }
 
@@ -37,9 +33,8 @@ public static partial class InstructionTests
                             new VariableInstruction("asdf"),
                             new NumericInstruction(5)))
                 ]);
-            
-            Assert.That(memory.Scopes[0]["func"], Is.EqualTo(funcVariable));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9)));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["func"], funcVariable);
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9));
         }
     }
 }

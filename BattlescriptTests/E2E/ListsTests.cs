@@ -18,8 +18,7 @@ public static class ListsTests
             var memory = Runner.Run(input);
             var expected = new ListVariable([BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1)]);
             
-            Assert.That(memory.Scopes[0], Contains.Key("x"));
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
 }

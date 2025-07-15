@@ -95,6 +95,8 @@ Support for constructors
 
 TODO:
 - Reconsider adding bool to battlescript code, may be better grouped with None in c# code COnstantVariable (UPDATE: given that bools act as integers in almost eveyr context, it's probably better to keep it in bs, we'll find more uses for ConstantVariable and ConstantInstruction as time goes on)
+- chnage most of instruction tests to not use partial class
+- Build more comprehensive testing messages for builtin objects
 - Need to bring in sequence, should consider if it's just lists/sets/tuples or also strings
 - Need to consider how to bring in mappings/dictionaries.  may or may not be worth it
 - Assert

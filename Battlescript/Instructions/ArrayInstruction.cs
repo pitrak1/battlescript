@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
+public class ArrayInstruction : Instruction
 {
     public string? Separator { get; private set; }
     public string? Delimiter { get; private set; }
@@ -262,21 +262,4 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
             }
         }
     }
-
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as ArrayInstruction);
-    public bool Equals(ArrayInstruction? instruction)
-    {
-        if (instruction is null) return false;
-        if (ReferenceEquals(this, instruction)) return true;
-        if (GetType() != instruction.GetType()) return false;
-        
-        if (Separator != instruction.Separator || Delimiter != instruction.Delimiter) return false;
-        if (Next is not null && !Next.Equals(instruction.Next)) return false;
-        if (!Values.SequenceEqual(instruction.Values)) return false;
-        
-        return base.Equals(instruction);
-    }
-    
-    public override int GetHashCode() => HashCode.Combine(Separator, Delimiter, Values, Next);
 }

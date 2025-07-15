@@ -5,31 +5,18 @@ public static class BuiltInTypeHelper
     public static ObjectVariable? IsVariableBuiltInClass(Memory memory, string builtInType, Variable variable)
     {
         var builtInClass = memory.BuiltInReferences[builtInType];
-        if (variable is ObjectVariable objectVariable && objectVariable.Class.Equals(builtInClass))
+        if (variable is ObjectVariable objectVariable && objectVariable.Class.Name == builtInClass.Name)
         {
             return objectVariable;
         }
 
         return null;
     }
-
-    public static bool IsVariableAnyBuiltInClass(Memory memory, Variable variable)
-    {
-        foreach (var builtInClass in memory.BuiltInReferences.Values)
-        {
-            if (variable is ObjectVariable objectVariable && objectVariable.Class.Equals(builtInClass))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
     
     public static int GetIntValueFromVariable(Memory memory, Variable variable)
     {
         var builtInClass = memory.BuiltInReferences["int"];
-        if (variable is ObjectVariable objectVariable && objectVariable.Class.Equals(builtInClass))
+        if (variable is ObjectVariable objectVariable && objectVariable.Class.Name.Equals(builtInClass.Name))
         {
             var valueVariable = objectVariable.Values["__value"];
             return ((NumericVariable)valueVariable).Value;

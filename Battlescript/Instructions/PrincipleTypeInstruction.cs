@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class PrincipleTypeInstruction : Instruction, IEquatable<PrincipleTypeInstruction>
+public class PrincipleTypeInstruction : Instruction
 {
     public string Value { get; set; }
     public List<Instruction> Parameters { get; set; }
@@ -43,19 +43,4 @@ public class PrincipleTypeInstruction : Instruction, IEquatable<PrincipleTypeIns
         }
         return new ConstantVariable();
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as PrincipleTypeInstruction);
-    public bool Equals(PrincipleTypeInstruction? instruction)
-    {
-        if (instruction is null) return false;
-        if (ReferenceEquals(this, instruction)) return true;
-        if (GetType() != instruction.GetType()) return false;
-
-        if (Value != instruction.Value) return false;
-        
-        return base.Equals(instruction);
-    }
-    
-    public override int GetHashCode() => HashCode.Combine(Value, Instructions);
 }

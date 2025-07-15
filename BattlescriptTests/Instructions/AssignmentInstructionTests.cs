@@ -11,31 +11,23 @@ public static partial class InstructionTests
         [Test]
         public void HandlesSimpleAssignments()
         {
-            var lexer = new Lexer("x = 6");
-            var lexerResult = lexer.Run();
-            
             var expected = new AssignmentInstruction(
                 operation: "=",
                 left: new VariableInstruction("x"),
                 right: new NumericInstruction(6)
             );
-            
-            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
+            Assertions.AssertInputProducesParserOutput("x = 6", expected);
         }
         
         [Test]
         public void HandlesExpressionAssignments()
         {
-            var lexer = new Lexer("x = 6 + 5");
-            var lexerResult = lexer.Run();
-            
             var expected = new AssignmentInstruction(
                 operation: "=",
                 left: new VariableInstruction("x"),
-                right: new OperationInstruction("+", new NumericInstruction(5), new NumericInstruction(6))
+                right: new OperationInstruction("+", new NumericInstruction(6), new NumericInstruction(5))
             );
-            
-            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
+            Assertions.AssertInputProducesParserOutput("x = 6 + 5", expected);
         }
     }
     

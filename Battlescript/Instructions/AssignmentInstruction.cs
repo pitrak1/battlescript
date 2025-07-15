@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class AssignmentInstruction : Instruction, IEquatable<AssignmentInstruction>
+public class AssignmentInstruction : Instruction
 {
     public string Operation { get; set; } 
     public Instruction Left { get; set; }
@@ -50,19 +50,4 @@ public class AssignmentInstruction : Instruction, IEquatable<AssignmentInstructi
             throw new Exception("Cannot assign to anything but variable");
         }
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as AssignmentInstruction);
-    public bool Equals(AssignmentInstruction? instruction)
-    {
-        if (instruction is null) return false;
-        if (ReferenceEquals(this, instruction)) return true;
-        if (GetType() != instruction.GetType()) return false;
-
-        if (Operation != instruction.Operation || !Left.Equals(instruction.Left) || !Right.Equals(instruction.Right)) return false;
-        
-        return base.Equals(instruction);
-    }
-    
-    public override int GetHashCode() => HashCode.Combine(Operation, Left, Right, Instructions);
 }

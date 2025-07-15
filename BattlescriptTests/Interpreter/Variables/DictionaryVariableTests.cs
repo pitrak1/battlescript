@@ -17,8 +17,7 @@ public static class DictionaryVariableTests
             
             var indexInstruction = new ArrayInstruction([new StringInstruction("asdf")], separator: "[");
             var result = dictionary.GetItem(Runner.Run(""), indexInstruction);
-            Assert.That(result, Is.TypeOf<NumericVariable>());
-            Assert.That(((NumericVariable)result).Value, Is.EqualTo(4));
+            Assertions.AssertVariablesEqual(result, new NumericVariable(4));
         }
         
         [Test]
@@ -41,8 +40,7 @@ public static class DictionaryVariableTests
                 Consts.SquareBrackets,
                 next: new ArrayInstruction([new StringInstruction("zxcv")], Consts.SquareBrackets));
             var result = dictionary.GetItem(Runner.Run(""), indexInstruction);
-            Assert.That(result, Is.TypeOf<NumericVariable>());
-            Assert.That(((NumericVariable)result).Value, Is.EqualTo(5));
+            Assertions.AssertVariablesEqual(result, new NumericVariable(5));
         }
     }
     
@@ -59,8 +57,7 @@ public static class DictionaryVariableTests
             var valueVariable = new NumericVariable(10);
             dictionary.SetItem(Runner.Run(""), valueVariable, indexInstruction);
             var result = dictionary.GetItem(Runner.Run(""), indexInstruction);
-            Assert.That(result, Is.TypeOf<NumericVariable>());
-            Assert.That(((NumericVariable)result).Value, Is.EqualTo(10));
+            Assertions.AssertVariablesEqual(result, valueVariable);
         }
         
         [Test]
@@ -85,8 +82,7 @@ public static class DictionaryVariableTests
             var valueVariable = new NumericVariable(10);
             dictionary.SetItem(Runner.Run(""), valueVariable, indexInstruction);
             var result = dictionary.GetItem(Runner.Run(""), indexInstruction);
-            Assert.That(result, Is.TypeOf<NumericVariable>());
-            Assert.That(((NumericVariable)result).Value, Is.EqualTo(10));
+            Assertions.AssertVariablesEqual(result, valueVariable);
         }
     }
 }

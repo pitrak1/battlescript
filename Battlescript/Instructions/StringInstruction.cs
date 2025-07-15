@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class StringInstruction : Instruction, IEquatable<StringInstruction>
+public class StringInstruction : Instruction
 {
     public string Value { get; set; }
 
@@ -24,19 +24,4 @@ public class StringInstruction : Instruction, IEquatable<StringInstruction>
     {
         return new StringVariable(Value);
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as StringInstruction);
-    public bool Equals(StringInstruction? instruction)
-    {
-        if (instruction is null) return false;
-        if (ReferenceEquals(this, instruction)) return true;
-        if (GetType() != instruction.GetType()) return false;
-
-        if (Value != instruction.Value) return false;
-        
-        return base.Equals(instruction);
-    }
-    
-    public override int GetHashCode() => HashCode.Combine(Value, Instructions);
 }

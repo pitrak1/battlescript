@@ -182,19 +182,4 @@ public class BuiltInInstruction : Instruction
             throw new Exception("Bad arguments, clean this up later");
         }
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as BuiltInInstruction);
-    public bool Equals(BuiltInInstruction? instruction)
-    {
-        if (instruction is null) return false;
-        if (ReferenceEquals(this, instruction)) return true;
-        if (GetType() != instruction.GetType()) return false;
-        
-        if (!Parameters.SequenceEqual(instruction.Parameters) || Name != instruction.Name || !Next.Equals(instruction.Next)) return false;
-        
-        return true;
-    }
-    
-    public override int GetHashCode() => HashCode.Combine(Parameters, Name);
 }

@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class LambdaInstruction : Instruction, IEquatable<LambdaInstruction>
+public class LambdaInstruction : Instruction
 {
     public List<Instruction> Parameters { get; set; }
 
@@ -34,19 +34,4 @@ public class LambdaInstruction : Instruction, IEquatable<LambdaInstruction>
     {
         return new FunctionVariable(Parameters, Instructions);
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as LambdaInstruction);
-    public bool Equals(LambdaInstruction? instruction)
-    {
-        if (instruction is null) return false;
-        if (ReferenceEquals(this, instruction)) return true;
-        if (GetType() != instruction.GetType()) return false;
-        
-        if (!Parameters.SequenceEqual(instruction.Parameters)) return false;
-        
-        return base.Equals(instruction);
-    }
-    
-    public override int GetHashCode() => HashCode.Combine(Parameters, Instructions);
 }

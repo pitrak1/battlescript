@@ -11,23 +11,15 @@ public static class ImportInstructionTests
         [Test]
         public void HandlesImportingListsOfVariables()
         {
-            var lexer = new Lexer("from '/test/x.bs' import x, y, z");
-            var lexerResult = lexer.Run();
-            
             var expected = new ImportInstruction("/test/x.bs", ["x", "y", "z"]);
-            
-            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
+            Assertions.AssertInputProducesParserOutput("from '/test/x.bs' import x, y, z", expected);
         }
 
         [Test]
         public void HandlesImportingEntireModule()
         {
-            var lexer = new Lexer("from '/test/x.bs' import *");
-            var lexerResult = lexer.Run();
-            
             var expected = new ImportInstruction("/test/x.bs", ["*"]);
-            
-            Assert.That(InstructionFactory.Create(lexerResult), Is.EqualTo(expected));
+            Assertions.AssertInputProducesParserOutput("from '/test/x.bs' import *", expected);
         }
     }
 
