@@ -3,10 +3,10 @@ using Battlescript;
 namespace BattlescriptTests.Instructions;
 
 [TestFixture]
-public static partial class InstructionTests
+public static class OperationInstructionTests
 {
     [TestFixture]
-    public class OperationInstructionParse
+    public class Parse
     {
         [Test]
         public void HandlesBinaryOperations()
@@ -55,7 +55,7 @@ public static partial class InstructionTests
     }
     
     [TestFixture]
-    public class OperationInstructionInterpret
+    public class Interpret
     {
         [Test]
         public void HandlesBinaryOperations()

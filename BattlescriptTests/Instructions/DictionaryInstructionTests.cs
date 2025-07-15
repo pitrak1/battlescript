@@ -3,10 +3,10 @@ using Battlescript;
 namespace BattlescriptTests.Instructions;
 
 [TestFixture]
-public static partial class InstructionTests
+public static class DictionaryInstructionTests
 {
     [TestFixture]
-    public class DictionaryInstructionParse
+    public class Parse
     {
         [Test]
         public void AllowsNumbersToBeUsedAsKeys()
@@ -30,7 +30,7 @@ public static partial class InstructionTests
     }
 
     [TestFixture]
-    public class DictionaryInstructionInterpret
+    public class Interpret
     {
         [Test]
         public void HandlesSimpleValues()

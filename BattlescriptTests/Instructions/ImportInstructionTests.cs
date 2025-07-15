@@ -6,7 +6,7 @@ namespace BattlescriptTests.Instructions;
 public static class ImportInstructionTests
 {
     [TestFixture]
-    public class ImportInstructionParse
+    public class Parse
     {
         [Test]
         public void HandlesImportingListsOfVariables()
@@ -24,7 +24,7 @@ public static class ImportInstructionTests
     }
 
     [TestFixture]
-    public class ImportInstructionInterpret
+    public class Interpret
     {
         [Test]
         public void HandlesImportingSimpleVariables()

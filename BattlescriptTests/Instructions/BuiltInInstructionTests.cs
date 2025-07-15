@@ -3,10 +3,10 @@ using Battlescript;
 namespace BattlescriptTests.Instructions;
 
 [TestFixture]
-public static partial class InstructionTests
+public static class BuiltInInstructionTests
 {
     [TestFixture]
-    public class BuiltInInstructionParse
+    public class Parse
     {
         [Test]
         public void HandlesNoArguments()
@@ -41,7 +41,7 @@ public static partial class InstructionTests
     }
 
     [TestFixture]
-    public class BuiltInInstructionInterpret
+    public class Interpret
     {
         [TestFixture]
         public class IsInstance

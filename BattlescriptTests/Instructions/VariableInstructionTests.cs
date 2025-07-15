@@ -3,10 +3,10 @@ using Battlescript;
 namespace BattlescriptTests.Instructions;
 
 [TestFixture]
-public static partial class InstructionTests
+public static class VariableInstructionTests
 {
     [TestFixture]
-    public class VariableInstructionParse
+    public class Parse
     {
         [Test]
         public void HandlesSimpleName()

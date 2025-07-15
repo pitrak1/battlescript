@@ -3,10 +3,10 @@ using Battlescript;
 namespace BattlescriptTests.Instructions;
 
 [TestFixture]
-public static partial class InstructionTests
+public static class StringInstructionTests
 {
     [TestFixture]
-    public class StringInstructionParse
+    public class Parse
     {
         [Test]
         public void HandlesSingleQuoteStrings()
@@ -17,7 +17,7 @@ public static partial class InstructionTests
     }
     
     [TestFixture]
-    public class StringInstructionInterpret
+    public class Interpret
     {
         [Test]
         public void HandlesSingleQuoteStrings()

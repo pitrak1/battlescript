@@ -3,10 +3,10 @@ using Battlescript;
 namespace BattlescriptTests.Instructions;
 
 [TestFixture]
-public static partial class InstructionTests
+public static class IfInstructionTests
 {
     [TestFixture]
-    public class IfInstructionParse
+    public class Parse
     {
         [Test]
         public void ProperlyParsesCondition()
@@ -17,7 +17,7 @@ public static partial class InstructionTests
     }
 
     [TestFixture]
-    public class IfInstructionInterpret
+    public class Interpret
     {
         [Test]
         public void RunsCodeIfConditionIsTrue()
