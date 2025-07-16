@@ -14,18 +14,30 @@ public abstract class Variable
             result.SetItemDirectly(memory, value, index.Next as ArrayInstruction, objectContext);
         }
     }
-    
-    public void SetItem(Memory memory, Variable value, string index, ObjectVariable? objectContext = null)
-    {
-        SetItem(memory, value, new ArrayInstruction([new StringInstruction(index)]), objectContext);
-    }
-    
-    public void SetItem(Memory memory, Variable value, int index, ObjectVariable? objectContext = null)
-    {
-        SetItem(memory, value, new ArrayInstruction([new NumericInstruction(index)]), objectContext);
-    }
-    
+
     public virtual Variable? SetItemDirectly(Memory memory, Variable value, ArrayInstruction index, ObjectVariable? objectContext = null)
+    {
+        throw new InterpreterInvalidIndexException(this);
+    }
+    
+    public void SetMember(
+        Memory memory, 
+        Variable value, 
+        MemberInstruction member,
+        ObjectVariable? objectContext = null)
+    {
+        var result = SetMemberDirectly(memory, value, member, objectContext);
+        if (member.Next is ArrayInstruction arrayInstruction)
+        {
+            result.SetItemDirectly(memory, value, arrayInstruction, objectContext);
+        }
+        else if (member.Next is MemberInstruction memberInstruction)
+        {
+            result.SetMemberDirectly(memory, value, memberInstruction, objectContext);
+        }
+    }
+
+    public virtual Variable? SetMemberDirectly(Memory memory, Variable value, MemberInstruction member, ObjectVariable? objectContext = null)
     {
         throw new InterpreterInvalidIndexException(this);
     }
@@ -45,18 +57,32 @@ public abstract class Variable
             return result;
         }
     }
-
-    public Variable? GetItem(Memory memory, string index, ObjectVariable? objectContext = null)
+    
+    public virtual Variable? GetItemDirectly(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
-        return GetItem(memory, new ArrayInstruction([new StringInstruction(index)]), objectContext);
+        throw new InterpreterInvalidIndexException(this);
     }
     
-    public Variable? GetItem(Memory memory, int index, ObjectVariable? objectContext = null)
+    public Variable? GetMember(
+        Memory memory,
+        MemberInstruction member,
+        ObjectVariable? objectContext = null)
     {
-        return GetItem(memory, new ArrayInstruction([new NumericInstruction(index)]), objectContext);
+        var result = GetMemberDirectly(memory, member, objectContext);
+        if (member.Next is not null)
+        {
+            return member.Next.Interpret(memory, result, objectContext);
+        }
+        else
+        {
+            return result;
+        }
     }
 
-    public virtual Variable? GetItemDirectly(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
+    public virtual Variable? GetMemberDirectly(
+        Memory memory,
+        MemberInstruction member,
+        ObjectVariable? objectContext = null)
     {
         throw new InterpreterInvalidIndexException(this);
     }

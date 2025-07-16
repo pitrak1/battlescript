@@ -17,25 +17,33 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
     {
         var indexVariable = index.Values[0].Interpret(memory);
 
-        var setItemOverride = GetItem(memory, "__setitem__");
+        var setItemOverride = Class.GetMember(memory, new MemberInstruction("__setitem__"));
         if (setItemOverride is FunctionVariable functionVariable)
         {
-            return functionVariable.RunFunction(memory, [this, indexVariable, valueVariable], this);
-        } else if (indexVariable is StringVariable stringVariable)
-        {
-            if (index.Next is null)
-            {
-                Values[stringVariable.Value] = valueVariable;
-                return valueVariable;
-            }
-            else
-            {
-                return Values[stringVariable.Value];
-            }
+            return functionVariable.RunFunction(memory, [indexVariable, valueVariable], this);
         }
         else
         {
-            throw new Exception("Can't index a class with anything but a string");
+            throw new Exception("Must define __setitem__ to index an object");
+        }
+    }
+
+    public override Variable? SetMemberDirectly(
+        Memory memory, 
+        Variable valueVariable, 
+        MemberInstruction member, 
+        ObjectVariable? objectContext = null)
+    {
+        var memberName = member.Value;
+        
+        if (member.Next is null)
+        {
+            Values[memberName] = valueVariable;
+            return valueVariable;
+        }
+        else
+        {
+            return Values[memberName];
         }
     }
     
@@ -43,29 +51,31 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
     {
         var indexVariable = index.Values[0].Interpret(memory);
 
-        var getItemOverride = Class.GetItem(memory, "__getitem__");
-        Variable? foundItem;
+        var getItemOverride = Class.GetMember(memory, new MemberInstruction("__getitem__"));
         if (getItemOverride is FunctionVariable functionVariable)
         {
-            foundItem = functionVariable.RunFunction(memory, [indexVariable], this);
-        }
-        else if (indexVariable is StringVariable stringVariable)
-        {
-            if (Values.ContainsKey(stringVariable.Value))
-            { 
-                foundItem = Values[stringVariable.Value];
-            }
-            else
-            {
-                foundItem = Class.GetItem(memory, new ArrayInstruction([new StringInstruction(stringVariable.Value)]), this);
-            }
+            return functionVariable.RunFunction(memory, [indexVariable], this);
         }
         else
         {
-            throw new Exception("Need to index an object with a string or override []");
+            throw new Exception("Must define __getitem__ to index an object");
         }
-        
-        return foundItem;
+    }
+
+    public override Variable? GetMemberDirectly(
+        Memory memory, 
+        MemberInstruction member,
+        ObjectVariable? objectContext = null)
+    {
+        var memberName = member.Value;
+        if (Values.ContainsKey(memberName))
+        { 
+            return Values[memberName];
+        }
+        else
+        {
+            return Class.GetMember(memory, new MemberInstruction(memberName), this);
+        }
     }
 
     public bool IsInstance(ClassVariable classVariable)

@@ -152,13 +152,13 @@ public static class Operator
         FunctionVariable? leftOverride = null;
         if (left is ObjectVariable leftObject)
         {
-            leftOverride = leftObject.GetItem(memory, overrideName) as FunctionVariable;
+            leftOverride = leftObject.GetMember(memory, new MemberInstruction(overrideName)) as FunctionVariable;
         }
         
         FunctionVariable? rightOverride = null;
         if (right is ObjectVariable rightObject)
         {
-            rightOverride = rightObject.GetItem(memory, overrideName) as FunctionVariable;
+            rightOverride = rightObject.GetMember(memory, new MemberInstruction(overrideName)) as FunctionVariable;
         }
 
         // If left operand is an object and has an override, use that one.  Otherwise, if right operand is an object
@@ -212,7 +212,7 @@ public static class Operator
         FunctionVariable? rightOverride = null;
         if (right is ObjectVariable rightObject)
         {
-            rightOverride = rightObject.GetItem(memory, overrideName) as FunctionVariable;
+            rightOverride = rightObject.GetMember(memory, new MemberInstruction(overrideName)) as FunctionVariable;
         }
         
         var rightObjectVariable = right as ObjectVariable;

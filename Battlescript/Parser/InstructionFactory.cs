@@ -72,6 +72,10 @@ public static class InstructionFactory
         {
             return new OperationInstruction(tokens);
         }
+        else if (tokens[0].Value == Consts.Period)
+        {
+            return new MemberInstruction(tokens);
+        }
         else if (tokens[0].Type == Consts.TokenTypes.Separator)
         {
             return new ArrayInstruction(tokens);

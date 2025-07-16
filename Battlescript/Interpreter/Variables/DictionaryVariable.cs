@@ -28,7 +28,7 @@ public class DictionaryVariable : Variable, IEquatable<DictionaryVariable>
             {
                 return IntValues[intValue];
             }
-        } 
+        }
         else
         {
             var stringValue = indexValue.StringValue;

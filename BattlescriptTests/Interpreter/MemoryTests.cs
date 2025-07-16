@@ -281,8 +281,7 @@ public static class MemoryTests
             memory.AddScope(scope);
             var variableInstructionWithIndex = new VariableInstruction(
                 "y",
-                new ArrayInstruction(
-                    [new StringInstruction("y")], separator: "["));
+                new MemberInstruction("y"));
             memory.SetVariable(variableInstructionWithIndex, new NumericVariable(10));
             var scopes = memory.Scopes;
             

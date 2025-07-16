@@ -31,6 +31,10 @@ public class Memory(List<Dictionary<string, Variable>>? scopes = null)
                 {
                     return foundVariable.GetItem(this, squareBracketsInstruction);
                 }
+                else if (variableInstruction.Next is MemberInstruction memberInstruction)
+                {
+                    return foundVariable.GetMember(this, memberInstruction);
+                }
                 else
                 {
                     return foundVariable;
@@ -56,6 +60,13 @@ public class Memory(List<Dictionary<string, Variable>>? scopes = null)
                             this, 
                             valueVariable, 
                             squareBracketsInstruction);
+                    }
+                    else if (variableInstruction.Next is MemberInstruction memberInstruction)
+                    {
+                        Scopes[i][variableInstruction.Name].SetMember(
+                            this, 
+                            valueVariable, 
+                            memberInstruction);
                     }
                     else
                     {

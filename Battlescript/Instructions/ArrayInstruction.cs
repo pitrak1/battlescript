@@ -8,11 +8,7 @@ public class ArrayInstruction : Instruction
 
     public ArrayInstruction(List<Token> tokens)
     {
-        if (tokens.First().Value == Consts.Period)
-        {
-            InitializeMember();
-        }
-        else if (Consts.OpeningSeparators.Contains(tokens.First().Value))
+        if (Consts.OpeningSeparators.Contains(tokens.First().Value))
         {
             InitializeListWithSeparators();
         }
@@ -24,13 +20,6 @@ public class ArrayInstruction : Instruction
         Line = tokens.First().Line;
         Column = tokens.First().Column;
         return;
-
-        void InitializeMember()
-        {
-            Separator = Consts.SquareBrackets;
-            Values = [new StringInstruction([tokens[1]])];
-            ParseNext(tokens, 2);
-        }
 
         void InitializeListWithSeparators()
         {
@@ -203,7 +192,7 @@ public class ArrayInstruction : Instruction
 
             void RunConstructor(ObjectVariable objectVariable)
             {
-                var constructor = objectVariable.GetItem(memory, "__init__");
+                var constructor = objectVariable.Class.GetMember(memory, new MemberInstruction("__init__"));
                 if (constructor is FunctionVariable constructorVariable)
                 {
                     constructorVariable.RunFunction(memory, Values, objectVariable);

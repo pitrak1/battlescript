@@ -41,7 +41,7 @@ public static class DictionaryInstructionTests
                 { "asdf", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5) },
                 { "qwer", new StringVariable("asdf") }
             });
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], expected);
         }
         
         [Test]
@@ -52,7 +52,7 @@ public static class DictionaryInstructionTests
                 new Dictionary<int, Variable>() { { 4, new StringVariable("asdf") } },
                 new Dictionary<string, Variable>()
                     { { "asdf", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5) } });
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], expected);
         }
         
         [Test]
@@ -64,7 +64,7 @@ public static class DictionaryInstructionTests
                 { "asdf", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 11) },
                 { "qwer", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 12) }
             });
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], expected);
         }
     }
 }

@@ -236,18 +236,6 @@ public static class ArrayInstructionTests
         }
         
         [Test]
-        public void HandlesMembers()
-        {
-            var input = """
-                        y = {'asdf': 3, 'qwer': 4}
-                        x = y.asdf
-                        """;
-            var memory = Runner.Run(input);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
-        }
-        
-        [Test]
         public void HandlesIndexingWithExpressions()
         {
             var input = """

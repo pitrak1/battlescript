@@ -14,49 +14,41 @@ public class ClassVariable : Variable, IEquatable<ClassVariable>
         Values = values ?? [];
         SuperClasses = superclasses ?? [];
     }
-    
-    public override Variable? GetItemDirectly(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
-    {
-        var indexVariable = index.Values[0].Interpret(memory);
 
-        Variable? foundItem;
-        if (indexVariable is StringVariable indexStringVariable && indexStringVariable.Value == "__getitem__")
-        {
-            foundItem = FindItemDirectly(memory, "__getitem__");
-        } else if (GetItem(memory, "__getitem__") is FunctionVariable functionVariable && objectContext is not null)
-        {
-            foundItem = functionVariable.RunFunction(memory, [indexVariable], objectContext);
-        } else if (indexVariable is StringVariable stringVariable)
-        {
-            foundItem = FindItemDirectly(memory, stringVariable.Value);
-        }
-        else
-        {
-            throw new Exception("Can't index a class with anything but a string");
-        }
-        
-        return foundItem;
-    }
-
-    private Variable? FindItemDirectly(Memory memory, string item)
+    public override Variable? GetMemberDirectly(Memory memory, MemberInstruction member, ObjectVariable? objectContext = null)
     {
-        if (Values.ContainsKey(item))
+        var memberName = member.Value;
+        if (Values.ContainsKey(memberName))
         {
-            return Values[item];
+            return Values[memberName];
         }
         else
         {
             foreach (var superclass in SuperClasses)
             {
-                var result = superclass.GetItem(memory, item);
+                var result = superclass.GetMemberDirectly(memory, member, objectContext);
                 if (result is not null)
                 {
                     return result;
                 }
             }
+            return null;
         }
+    }
+    
+    public override Variable? GetItemDirectly(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
+    {
+        var indexVariable = index.Values[0].Interpret(memory);
 
-        return null;
+        var getItemFunction = GetMemberDirectly(memory, new MemberInstruction("__getitem__"));
+        if (getItemFunction is FunctionVariable functionVariable && objectContext is not null)
+        {
+            return functionVariable.RunFunction(memory, [indexVariable], objectContext);
+        }
+        else
+        {
+            throw new Exception("Must define __getitem__ to index a class");
+        }
     }
     
     public ObjectVariable CreateObject()
