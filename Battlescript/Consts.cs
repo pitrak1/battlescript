@@ -79,7 +79,6 @@ public static class Consts
         "yield",
     ];
 
-    // These are currently not used or implemented in any way, but I like having a list
     public static readonly string[] BuiltInFunctions =
     [
         "abs",
@@ -146,49 +145,6 @@ public static class Consts
         "type",
         "vars",
         "zip"
-    ];
-
-    public static readonly string[] OverrideMethods =
-    [
-        "__add__",
-        "__sub__",
-        "__mul__",
-        "__truediv__",
-        "__floordiv__",
-        "__mod__",
-        "__pow__",
-        "__matmul__", //NOT SUPPORTED IN V1
-        "__neg__",
-        "__pos__",
-        "__invert__", //NOT SUPPORTED IN V1
-        "__eq__",
-        "__ne__",
-        "__lt__",
-        "__gt__",
-        "__le__",
-        "__ge__",
-        "__and__", //NOT SUPPORTED IN V1
-        "__or__", //NOT SUPPORTED IN V1
-        "__xor__", //NOT SUPPORTED IN V1
-        "__lshift__", //NOT SUPPORTED IN V1
-        "__rshift__", //NOT SUPPORTED IN V1
-        "__iadd__",
-        "__isub__",
-        "__imul__",
-        "__itruediv__",
-        "__ifloordiv__",
-        "__imod__",
-        "__ipow__",
-        "__iand__", //NOT SUPPORTED IN V1
-        "__ior__", //NOT SUPPORTED IN V1
-        "__ixor__", //NOT SUPPORTED IN V1
-        "__ilshift__", //NOT SUPPORTED IN V1
-        "__irshift__", //NOT SUPPORTED IN V1
-        "__str__",
-        "__repr__",
-        "__len__",
-        "__getitem__",
-        "__setitem__"
     ];
 
     public static readonly string[] Operators = [
@@ -260,21 +216,6 @@ public static class Consts
         False,
     }
     
-    public static readonly string[] ListMethods =
-    [
-        "append",
-        "extend",
-        "insert",
-        "remove",
-        "pop",
-        "clear",
-        "index", // I'm not sure how to handle index yet
-        "count",
-        "sort", // This is going to be  more involved too
-        "reverse",
-        "copy"
-    ];
-    
     public enum TokenTypes
     {
         String,
@@ -291,7 +232,7 @@ public static class Consts
         Numeric,
     }
     
-    public readonly static string[] PrincipleTypes =
+    public static readonly string[] PrincipleTypes =
     [
         "__numeric__",
         "__sequence__"

@@ -10,10 +10,10 @@ public class Memory(List<Dictionary<string, Variable>>? scopes = null)
 
     public void PopulateBuiltInReferences()
     {
-        BuiltInReferences["int"] = GetVariable("int") as ClassVariable;
-        BuiltInReferences["float"] = GetVariable("float") as ClassVariable;
-        BuiltInReferences["bool"] = GetVariable("bool") as ClassVariable;
-        BuiltInReferences["list"] = GetVariable("list") as ClassVariable;
+        foreach (var builtin in Consts.BuiltInTypes)
+        {
+            BuiltInReferences[builtin] = GetVariable(builtin) as ClassVariable;
+        }
     }
     
     public Variable? GetVariable(string name)

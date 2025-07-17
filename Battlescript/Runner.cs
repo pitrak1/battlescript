@@ -5,11 +5,12 @@ public static class Runner
     public static Memory Run(string input)
     {
         var memory = new Memory();
-        LoadBuiltin(memory, "numeric");
-        LoadBuiltin(memory, "int");
-        LoadBuiltin(memory, "float");
-        LoadBuiltin(memory, "bool");
-        LoadBuiltin(memory, "list");
+        
+        foreach (var builtin in Consts.BuiltInTypes)
+        {
+            LoadBuiltin(memory, builtin);
+        }
+
         memory.PopulateBuiltInReferences();
         RunPartial(memory, input);
         return memory;
