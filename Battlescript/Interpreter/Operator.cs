@@ -58,7 +58,7 @@ public static class Operator
 
     private static Variable ConductIsOperation(string operation, Variable? left, Variable? right)
     {
-        if (left is not (ObjectVariable or ClassVariable or DictionaryVariable or ListVariable) || right is not (ObjectVariable or ClassVariable or DictionaryVariable or ListVariable))
+        if (left is not (ObjectVariable or ClassVariable or DictionaryVariable) || right is not (ObjectVariable or ClassVariable or DictionaryVariable))
         {
             throw new InterpreterInvalidOperationException(operation, left, right);
         }
@@ -70,6 +70,7 @@ public static class Operator
 
     private static Variable ConductInOperation(string operation, Variable? left, Variable? right)
     {
+        var rightList = BuiltInTypeHelper.IsVariableBuiltInClass(Runner.Run(""), "list", right);
         if (left is StringVariable leftString && right is StringVariable rightString)
         {
             // if both operands are strings, we search for a substring
@@ -77,10 +78,10 @@ public static class Operator
             return operation == "in" ? 
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", isContained) : 
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", !isContained);
-        } else if (right is ListVariable rightList)
+        } else if (rightList is not null)
         {
             // If the right operand is a list, we search for a matching element
-            var found = rightList.Values.Any(x => x.Equals(left));
+            var found = (rightList.Values["__value"] as SequenceVariable).Values.Any(x => x.Equals(left));
             return operation == "in" ? 
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", found) : 
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", !found);

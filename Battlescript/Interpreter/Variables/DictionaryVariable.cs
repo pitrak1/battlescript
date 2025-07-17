@@ -46,13 +46,13 @@ public class DictionaryVariable : Variable, IEquatable<DictionaryVariable>
 
     private (int? IntValue, string? StringValue) GetIndexValue(Memory memory, ArrayInstruction index)
     {
-        var indexVariable = index.Interpret(memory) as ListVariable;
+        var indexVariable = index.Values.Select(x => x.Interpret(memory)).ToList();
         
-        var intObject = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "int", indexVariable.Values[0]);
+        var intObject = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "int", indexVariable[0]);
         if (intObject is not null)
         {
-            return (BuiltInTypeHelper.GetIntValueFromVariable(memory, indexVariable.Values[0]), null);
-        } else if (indexVariable.Values[0] is StringVariable stringVariable)
+            return (BuiltInTypeHelper.GetIntValueFromVariable(memory, indexVariable[0]), null);
+        } else if (indexVariable[0] is StringVariable stringVariable)
         {
             return (null, stringVariable.Value);
         }

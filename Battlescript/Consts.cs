@@ -293,8 +293,9 @@ public static class Consts
     
     public readonly static string[] PrincipleTypes =
     [
-        "__numeric__"
+        "__numeric__",
+        "__sequence__"
     ];
 
-    public static readonly string[] BuiltInTypes = ["numeric", "int", "float", "bool"];
+    public static readonly string[] BuiltInTypes = ["numeric", "int", "float", "bool", "list"];
 }

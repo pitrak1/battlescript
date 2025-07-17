@@ -250,14 +250,14 @@ public static class Assertions
             case NumericVariable numericVariable:
                 CompareNumericVariables(numericVariable, expected as NumericVariable);
                 break;
+            case SequenceVariable sequenceVariable:
+                CompareSequenceVariables(sequenceVariable, expected as SequenceVariable);
+                break;
             case ConstantVariable constantVariable:
                 CompareConstantVariables(constantVariable, expected as ConstantVariable);
                 break;
             case ObjectVariable objectVariable:
                 CompareObjectVariables(objectVariable, expected as ObjectVariable);
-                break;
-            case ListVariable listVariable:
-                CompareListVariables(listVariable, expected as ListVariable);
                 break;
             case ClassVariable classVariable:
                 CompareClassVariables(classVariable, expected as ClassVariable);
@@ -278,6 +278,15 @@ public static class Assertions
         void CompareNumericVariables(NumericVariable input, NumericVariable expected)
         {
             Assert.That(input.Value, Is.EqualTo(expected.Value));
+        }
+
+        void CompareSequenceVariables(SequenceVariable input, SequenceVariable expected)
+        {
+            Assert.That(input.Values.Count, Is.EqualTo(expected.Values.Count));
+            for (var i = 0; i < input.Values.Count; i++)
+            {
+                AssertVariablesEqual(input.Values[i], expected.Values[i]);
+            }
         }
 
         void CompareConstantVariables(ConstantVariable input, ConstantVariable expected)
@@ -309,15 +318,6 @@ public static class Assertions
             for (var i = 0; i < input.SuperClasses.Count; i++)
             {
                 CompareClassVariables(input.SuperClasses[i], expected.SuperClasses[i]);
-            }
-        }
-
-        void CompareListVariables(ListVariable input, ListVariable expected)
-        {
-            Assert.That(input.Values.Count, Is.EqualTo(expected.Values.Count));
-            for (var i = 0; i < input.Values.Count; i++)
-            {
-                AssertVariablesEqual(input.Values[i], expected.Values[i]);
             }
         }
 

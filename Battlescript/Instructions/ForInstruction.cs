@@ -37,12 +37,14 @@ public class ForInstruction : Instruction
     {
         var range = Range.Interpret(memory);
 
-        if (range is ListVariable rangeList)
+        var listVariable = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "list", range);
+        if (listVariable is not null)
         {
-            for (var i = 0; i < rangeList.Values.Count; i++)
+            var values = (listVariable.Values["__value"] as SequenceVariable).Values;
+            for (var i = 0; i < values.Count; i++)
             {
                 memory.AddScope();
-                memory.AddVariableToLastScope(BlockVariable, rangeList.Values[i]);
+                memory.AddVariableToLastScope(BlockVariable, values[i]);
 
                 try
                 {

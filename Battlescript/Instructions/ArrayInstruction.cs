@@ -141,10 +141,10 @@ public class ArrayInstruction : Instruction
             (int? IntValue, string? StringValue) GetIndexValue(Memory memory, Instruction index)
             {
                 Variable indexVariable;
-                if (index is ArrayInstruction)
+                if (index is ArrayInstruction indexInst)
                 {
-                    var listVariable = index.Interpret(memory) as ListVariable;
-                    indexVariable = listVariable.Values[0]!;
+                    var listVariable = indexInst.Values.Select(x => x.Interpret(memory)).ToList();
+                    indexVariable = listVariable[0]!;
                 }
                 else
                 {
@@ -213,15 +213,7 @@ public class ArrayInstruction : Instruction
 
             Variable InterpretIndex()
             {
-                if (IsListMethod() && instructionContext is ListVariable listVariable)
-                {
-                    var stringInstruction = Values[0] as StringInstruction;
-                    return listVariable.RunMethod(memory, stringInstruction!.Value, Next);
-                }
-                else
-                {
-                    return instructionContext.GetItem(memory, this, objectContext);
-                }
+                return instructionContext.GetItem(memory, this, objectContext);
             }
 
             bool IsListMethod()
@@ -247,7 +239,7 @@ public class ArrayInstruction : Instruction
                 
                 }
 
-                return new ListVariable(values!);
+                return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", values);
             }
         }
     }

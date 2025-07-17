@@ -12,8 +12,6 @@ public static class Truthiness
                 return numVariable.Value != 0;
             case StringVariable stringVariable:
                 return stringVariable.Value.Length > 0;
-            case ListVariable listVariable:
-                return listVariable.Values.Count > 0;
             case ClassVariable:
                 return true;
             case ObjectVariable:
@@ -48,6 +46,13 @@ public static class Truthiness
         {
             var value = boolObject.Values["__value"] as NumericVariable;
             return value.Value == 1;
+        }
+        
+        var listObject = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "list", variable);
+        if (listObject is not null)
+        {
+            var value = listObject.Values["__value"] as SequenceVariable;
+            return value.Values.Count > 0;
         }
 
         return true;

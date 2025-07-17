@@ -94,13 +94,13 @@ public static class ControlFlowTests
         {
             var input = "x = range(5)";
             var memory = Runner.Run(input);
-            var expected = new ListVariable([
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", new List<Variable>() {
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 0),
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1),
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3),
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4),
-            ]);
+            });
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
@@ -109,11 +109,11 @@ public static class ControlFlowTests
         {
             var input = "x = range(2, 5)";
             var memory = Runner.Run(input);
-            var expected = new ListVariable([
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", new List<Variable>() {
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3),
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4),
-            ]);
+            });
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
@@ -122,12 +122,12 @@ public static class ControlFlowTests
         {
             var input = "x = range(2, 10, 2)";
             var memory = Runner.Run(input);
-            var expected = new ListVariable([
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", new List<Variable>() {
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4),
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6),
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8),
-            ]);
+            });
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
@@ -136,10 +136,10 @@ public static class ControlFlowTests
         {
             var input = "x = range(2, 5, 2)";
             var memory = Runner.Run(input);
-            var expected = new ListVariable([
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", new List<Variable>() {
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4),
-            ]);
+            });
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
@@ -148,12 +148,12 @@ public static class ControlFlowTests
         {
             var input = "x = range(2, -5, -2)";
             var memory = Runner.Run(input);
-            var expected = new ListVariable([
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", new List<Variable>() {
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 0),
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", -2),
                 BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", -4),
-            ]);
+            });
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
@@ -161,8 +161,9 @@ public static class ControlFlowTests
         public void ReturnsEmptyListIfGivenInfiniteRange()
         {
             var input = "x = range(2, -5, 2)";
-            var expected = new ListVariable([]);
             var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", new List<Variable>());
+            
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }

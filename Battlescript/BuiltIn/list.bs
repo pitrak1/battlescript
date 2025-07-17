@@ -1,0 +1,17 @@
+class list:
+    __value = __sequence__()
+
+    def __init__(self, value):
+        if isinstance(value, list):
+            self.__value = value.__value
+        else:
+            self.__value = value
+
+    def __getitem__(self, index):
+        if isinstance(index, int):
+            return self.__value[index]
+
+    def __setitem__(self, key, value):
+        if isinstance(key, int):
+            self.__value[key] = value
+        

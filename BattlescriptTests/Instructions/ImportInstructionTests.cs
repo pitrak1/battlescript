@@ -31,7 +31,7 @@ public static class ImportInstructionTests
         {
             var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
             var memory = Runner.Run($"from '{filePath}' import x");
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5)));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5));
         }
         
         [Test]
@@ -40,13 +40,13 @@ public static class ImportInstructionTests
             var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
             var memory = Runner.Run($"from '{filePath}' import x, y, z");
 
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5)));
-            Assert.That(memory.Scopes[0]["y"], Is.EqualTo(
-                new ListVariable([
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1), 
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2), 
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)])));
-            Assert.That(memory.Scopes[0]["z"], Is.EqualTo(new StringVariable("asdf")));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], 
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", new List<Variable>() {
+                        BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1), 
+                        BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2), 
+                        BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)}));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["z"], new StringVariable("asdf"));
         }
         
         [Test]
@@ -58,16 +58,14 @@ public static class ImportInstructionTests
             {
                 { "x", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5) },
                 {
-                    "y",
-                    new ListVariable([
+                    "y", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", new List<Variable>() {
                         BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1), 
                         BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2), 
-                        BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)])
+                        BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)})
                 },
                 { "z", new StringVariable("asdf") }
             });
-            
-            Assert.That(memory.Scopes[0]["import"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["import"], expected);
         }
     }
     

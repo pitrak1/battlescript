@@ -40,6 +40,8 @@ public class PrincipleTypeInstruction : Instruction
                     return new NumericVariable(numInstruction.Value);
                 }
                 return new NumericVariable(0);
+            case "__sequence__":
+                return new SequenceVariable();
         }
         return new ConstantVariable();
     }

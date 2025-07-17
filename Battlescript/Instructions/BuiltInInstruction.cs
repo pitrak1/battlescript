@@ -95,7 +95,7 @@ public class BuiltInInstruction : Instruction
                 }
             }
             
-            return new ListVariable(values);
+            return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", values);
         }
         else
         {
@@ -106,7 +106,7 @@ public class BuiltInInstruction : Instruction
                     values.Add(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", i));
                 }
             }
-            return new ListVariable(values);
+            return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", values);
         }
     }
 

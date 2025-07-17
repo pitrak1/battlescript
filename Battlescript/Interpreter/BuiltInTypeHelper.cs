@@ -54,6 +54,10 @@ public static class BuiltInTypeHelper
         {
             objectVariable.Values["__value"] = new NumericVariable(value ? 1 : 0);
             return objectVariable;
+        } else if (value is List<Variable>)
+        {
+            objectVariable.Values["__value"] = new SequenceVariable(value);
+            return objectVariable;
         }
         
         objectVariable.Values["__value"] = value;

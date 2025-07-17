@@ -62,8 +62,8 @@ public static class VariablesAndOperatorsTests
         public void SupportsLists()
         {
             var input = "x = []";
-            var expected = new ListVariable([]);
             var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", new List<Variable>());
             
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
