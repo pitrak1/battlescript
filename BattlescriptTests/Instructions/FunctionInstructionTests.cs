@@ -18,7 +18,7 @@ public static class FunctionInstructionTests
         }
         
         [Test]
-        public void HandlesDefinitionWithPositionalArgument()
+        public void HandlesDefinitionWithArgument()
         {
             var expected = new FunctionInstruction(
                 name: "func",
@@ -28,7 +28,7 @@ public static class FunctionInstructionTests
         }
         
         [Test]
-        public void HandlesDefinitionWithMultiplePositionalArguments()
+        public void HandlesDefinitionWithMultipleArguments()
         {
             var expected = new FunctionInstruction(
                 name: "func",
@@ -39,6 +39,26 @@ public static class FunctionInstructionTests
                 ]
             );
             Assertions.AssertInputProducesParserOutput("def func(asdf, qwer):", expected);
+        }
+        
+        [Test]
+        public void HandlesDefinitionWithDefaultArguments()
+        {
+            var expected = new FunctionInstruction(
+                name: "func",
+                parameters: 
+                [
+                    new VariableInstruction("asdf"),
+                    new AssignmentInstruction("=", new VariableInstruction("qwer"), new NumericInstruction(1234))
+                ]
+            );
+            Assertions.AssertInputProducesParserOutput("def func(asdf, qwer=1234):", expected);
+        }
+        
+        [Test]
+        public void ThrowsErrorIfDefaultArgumentIsBeforeRequiredArgument()
+        {
+            Assert.Throws<Exception>(() => Assertions.AssertInputProducesParserOutput("def func(qwer=1234, asdf):", new NumericInstruction(1234)));
         }
     }
 

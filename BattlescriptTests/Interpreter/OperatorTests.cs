@@ -124,7 +124,7 @@ public static class OperatorTests
         public void ReturnsRightIfStandardAssignmentOperator()
         {
             var memory = Runner.Run("");
-            var result = Operator.AssignmentOperation(memory, "=", null, new NumericVariable(8));
+            var result = Operator.AssignmentOperation(memory, "=", null, new NumericInstruction(8));
             Assertions.AssertVariablesEqual(result, new NumericVariable(8));
         }
         
@@ -135,8 +135,8 @@ public static class OperatorTests
             var result = Operator.AssignmentOperation(
                 memory, 
                 "+=", 
-                new NumericVariable(8), 
-                new NumericVariable(5));
+                new NumericInstruction(8), 
+                new NumericInstruction(5));
             Assertions.AssertVariablesEqual(result, new NumericVariable(13));
         }
     }

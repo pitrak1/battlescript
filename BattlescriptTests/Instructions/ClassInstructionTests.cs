@@ -14,7 +14,7 @@ public static class ClassInstructionTests
             var expected = new ClassInstruction("MyClass");
             Assertions.AssertInputProducesParserOutput("class MyClass:", expected);
         }
-        
+
         [Test]
         public void HandlesClassDefinitionWithInheritance()
         {
@@ -23,6 +23,16 @@ public static class ClassInstructionTests
                 [new VariableInstruction("asdf")]
             );
             Assertions.AssertInputProducesParserOutput("class MyClass(asdf):", expected);
+        }
+        
+        [Test]
+        public void HandlesClassDefinitionWithMultipleInheritance()
+        {
+            var expected = new ClassInstruction(
+                "MyClass",
+                [new VariableInstruction("asdf"), new VariableInstruction("qwer")]
+            );
+            Assertions.AssertInputProducesParserOutput("class MyClass(asdf, qwer):", expected);
         }
     }
 
@@ -37,7 +47,7 @@ public static class ClassInstructionTests
             {
                 { "x", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1) }
             });
-            Assert.That(memory.Scopes.First()["MyClass"], Is.EqualTo(expected));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["MyClass"], expected);
         }
         
         [Test]
@@ -61,8 +71,8 @@ public static class ClassInstructionTests
                 { "y", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2) }
             }, [asdf]);
 
-            Assert.That(memory.Scopes.First()["asdf"], Is.EqualTo(asdf));
-            Assert.That(memory.Scopes.First()["qwer"], Is.EqualTo(qwer));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["asdf"], asdf);
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["qwer"], qwer);
         }
         
         [Test]
@@ -95,15 +105,9 @@ public static class ClassInstructionTests
                 { "z", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3) }
             }, [asdf, qwer]);
             
-            var expected = new Dictionary<string, Variable>()
-            {
-                {"asdf", asdf},
-                {"qwer", qwer},
-                {"zxcv", zxcv}
-            };
-            Assert.That(memory.Scopes.First()["asdf"], Is.EqualTo(asdf));
-            Assert.That(memory.Scopes.First()["qwer"], Is.EqualTo(qwer));
-            Assert.That(memory.Scopes.First()["zxcv"], Is.EqualTo(zxcv));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["asdf"], asdf);
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["qwer"], qwer);
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["zxcv"], zxcv);
         }
     }
 }

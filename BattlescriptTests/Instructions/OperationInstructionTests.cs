@@ -26,7 +26,7 @@ public static class OperationInstructionTests
                 operation: "+",
                 left: new VariableInstruction(
                     "x", 
-                    new ArrayInstruction([new StringInstruction("i")], separator: "[")),
+                    new MemberInstruction("i")),
                 right: new NumericInstruction(6)
             );
             Assertions.AssertInputProducesParserOutput("x.i + 6", expected);
@@ -61,7 +61,7 @@ public static class OperationInstructionTests
         public void HandlesBinaryOperations()
         {
             var memory = Runner.Run("x = 5 + 6");
-            Assert.That(memory.Scopes[0]["x"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 11)));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 11));
         }
     }
 }

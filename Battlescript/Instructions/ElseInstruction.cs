@@ -38,28 +38,21 @@ public class ElseInstruction : Instruction
             var condition = Condition.Interpret(memory);
             if (Truthiness.IsTruthy(memory, condition))
             {
-                try
-                {
-                    memory.AddScope();
-                    foreach (var inst in Instructions)
-                    {
-                        inst.Interpret(memory);
-                    }
+                CreateScopeAndRunInstructions();
 
-                    memory.RemoveScope();
-                }
-                catch (InternalReturnException e)
-                {
-                    memory.RemoveScope();
-                    throw;
-                }
-                
             } else if (Next is not null)
             {
                 return Next.Interpret(memory, instructionContext, objectContext, lexicalContext);
             }
         }
         else
+        {
+            CreateScopeAndRunInstructions();
+        }
+        
+        return new ConstantVariable();
+
+        void CreateScopeAndRunInstructions()
         {
             try {
                 memory.AddScope();
@@ -75,7 +68,5 @@ public class ElseInstruction : Instruction
                 throw;
             }
         }
-        
-        return new ConstantVariable();
     }
 }

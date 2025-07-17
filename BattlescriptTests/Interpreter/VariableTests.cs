@@ -1,6 +1,6 @@
 using Battlescript;
 
-namespace BattlescriptTests.InterpreterTests.VariablesTests;
+namespace BattlescriptTests.InterpreterTests;
 
 [TestFixture]
 public static class VariableTests

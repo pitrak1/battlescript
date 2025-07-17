@@ -180,14 +180,7 @@ public class ArrayInstruction : Instruction
             }
             else
             {
-                if (Values.Count == 1)
-                {
-                    return Values[0]!.Interpret(memory);
-                }
-                else
-                {
-                    throw new Exception("Parens must follow a function or class");
-                }
+                throw new Exception("Parens must follow a function or class");
             }
 
             void RunConstructor(ObjectVariable objectVariable)
@@ -204,22 +197,11 @@ public class ArrayInstruction : Instruction
         {
             if (instructionContext is not null)
             {
-                return InterpretIndex();
+                return instructionContext.GetItem(memory, this, objectContext);
             }
             else
             {
                 return InterpretListCreation();
-            }
-
-            Variable InterpretIndex()
-            {
-                return instructionContext.GetItem(memory, this, objectContext);
-            }
-
-            bool IsListMethod()
-            {
-                return Values.First() is StringInstruction stringInstruction &&
-                       Consts.ListMethods.Contains(stringInstruction.Value);
             }
 
             Variable InterpretListCreation()

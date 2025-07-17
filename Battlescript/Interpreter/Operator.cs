@@ -7,14 +7,17 @@ public static class Operator
         return ConductOperationWithOverride(memory, operation, operation, left, right);
     }
     
-    public static Variable AssignmentOperation(Memory memory, string operation, Variable? left, Variable? right)
+    public static Variable AssignmentOperation(Memory memory, string operation, Instruction? left, Instruction? right)
     {
         // Assignment operations should return the value to be assigned. The calling function is actually responsible
         // for assigning the value to the variable
-        if (operation == "=") return right ?? new ConstantVariable();
+        var rightVariable = right?.Interpret(memory);
+        if (operation == "=") return rightVariable ?? new ConstantVariable();
+        
+        var leftVariable = left?.Interpret(memory);
         
         var operationWithEqualsRemoved = AssignmentOperatorToStandardOperatorMap[operation];
-        return ConductOperationWithOverride(memory, operationWithEqualsRemoved, operation, left, right);
+        return ConductOperationWithOverride(memory, operationWithEqualsRemoved, operation, leftVariable, rightVariable);
     }
 
     private static readonly Dictionary<string, string> AssignmentOperatorToStandardOperatorMap = new()

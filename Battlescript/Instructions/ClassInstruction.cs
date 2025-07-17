@@ -39,10 +39,22 @@ public class ClassInstruction : Instruction
         {
             foreach (var superclassInstruction in Superclasses)
             {
-                superclasses.Add(superclassInstruction.Interpret(memory) as ClassVariable);
+                var superclass = superclassInstruction.Interpret(memory);
+                if (superclass is ClassVariable superclassVariable)
+                {
+                    superclasses.Add(superclassVariable);
+                }
+                else
+                {
+                    throw new Exception($"Superclass {superclass} is not a class");
+                }
             }
         }
         
+        // There's an issue here that if we assign to a variable in the class definition using SetVariable, it may assign
+        // to a scope outside the scope of the class that already exists in a lower scope.  We may need to create a new
+        // memory instance to run it in there, but if we do that, we may lose refernences we need to define the class.
+        // I'll have to think about this.
         memory.AddScope();
 
         foreach (var instruction in Instructions)

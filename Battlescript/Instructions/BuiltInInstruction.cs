@@ -38,8 +38,6 @@ public class BuiltInInstruction : Instruction
     {
         switch (Name)
         {
-            case "super":
-                break;
             case "range":
                 return RunRangeFunction(memory);
             case "isinstance":

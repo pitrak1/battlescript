@@ -55,7 +55,7 @@ public static class Assertions
         Assert.That(expected, Is.Not.Null);
         
         if (ReferenceEquals(input, expected)) return;
-        if (input.GetType() != expected.GetType()) return;
+        Assert.That(input.GetType(), Is.EqualTo(expected.GetType()));
 
         if (input.Next is not null) AssertInstructionsEqual(input.Next, expected.Next);
         AssertInstructionListsEqual(input.Instructions!, expected.Instructions!);
@@ -115,6 +115,9 @@ public static class Assertions
                 return;
             case WhileInstruction whileInstruction:
                 CompareWhileInstructions(whileInstruction, expected as WhileInstruction);
+                return;
+            case MemberInstruction memberInstruction:
+                CompareMemberInstructions(memberInstruction, expected as MemberInstruction);
                 return;
             default:
                 return;
@@ -223,6 +226,11 @@ public static class Assertions
         void CompareWhileInstructions(WhileInstruction inputInst, WhileInstruction expectedInst)
         {
             AssertInstructionsEqual(inputInst.Condition, expectedInst.Condition);
+        }
+
+        void CompareMemberInstructions(MemberInstruction inputInst, MemberInstruction expectedInst)
+        {
+            Assert.That(inputInst.Value, Is.EqualTo(expectedInst.Value));
         }
     }
     

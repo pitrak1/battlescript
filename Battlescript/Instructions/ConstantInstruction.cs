@@ -24,10 +24,7 @@ public class ConstantInstruction : Instruction
     {
         if (Value == "True" || Value == "False")
         {
-            var boolClass = memory.BuiltInReferences["bool"];
-            var boolObject = boolClass.CreateObject();
-            boolObject.Values["__value"] = new NumericVariable(Value == "True" ? 1 : 0);
-            return boolObject;
+            return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", Value == "True");
         }
         else
         {

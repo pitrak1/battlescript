@@ -38,21 +38,24 @@ public static class AssignmentInstructionTests
         public void HandlesSimpleAssignments()
         {
             var memory = Runner.Run("x = 6");
-            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6)));
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6);
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
         [Test]
         public void HandlesAssignmentOperators()
         {
             var memory = Runner.Run("x = 6\nx += 2");
-            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8)));
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8);
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
 
         [Test]
         public void ReturnsAssignedVariable()
         {
             var memory = Runner.Run("x = 6");
-            Assert.That(memory.Scopes.First()["x"], Is.EqualTo(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6)));
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6);
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
 }

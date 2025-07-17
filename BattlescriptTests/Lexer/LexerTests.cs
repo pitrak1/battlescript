@@ -6,7 +6,7 @@ namespace BattlescriptTests.LexerTests;
 public static class LexerTests
 {
     [TestFixture]
-    public class Numbers
+    public class Numerics
     {
         [Test]
         public void HandlesIntegers()

@@ -7,51 +7,29 @@ public class FunctionInstruction : Instruction
 
     public FunctionInstruction(List<Token> tokens)
     {
-        // def keyword, function name, open parens, close parens, and colon
-        // if (tokens.Count < 5)
-        // {
-        //     ThrowErrorForToken("Invalid function definition", tokens[0]);
-        // }
-        //
-        // if (tokens[^1].Value != ":")
-        // {
-        //     ThrowErrorForToken("Function definition should end with colon", tokens[0]);
-        // }
-        //
-        // if (tokens[1].Type != Consts.TokenTypes.Identifier)
-        // {
-        //     ThrowErrorForToken("Invalid function name", tokens[1]);
-        // }
-        //
-        // if (tokens[2].Type != Consts.TokenTypes.Separator || tokens[2].Value != "(")
-        // {
-        //     ThrowErrorForToken("Expected ( for function definition", tokens[2]);
-        // }
-        //
-        // if (tokens[^2].Type != Consts.TokenTypes.Separator || tokens[^2].Value != ")")
-        // {
-        //     ThrowErrorForToken("Expected ) for function definition", tokens[^2]);
-        // }
-
         var tokensInParens = tokens.GetRange(3, tokens.Count - 5);
         var parameters = InstructionUtilities.ParseEntriesBetweenDelimiters(tokensInParens, [","]);
-
-        var inDefaultArguments = false;
-        foreach (var parameter in parameters)
-        {
-            if (parameter is AssignmentInstruction)
-            {
-                inDefaultArguments = true;
-            } else if (parameter is VariableInstruction && inDefaultArguments)
-            {
-                throw new Exception("Required arguments have to be before default arguments, fix this later");
-            }
-        }
+        CheckThatDefaultArgumentsFollowRequiredArguments();
         
         Name = tokens[1].Value;
         Parameters = parameters!;
         Line = tokens[0].Line;
         Column = tokens[0].Column;
+
+        void CheckThatDefaultArgumentsFollowRequiredArguments()
+        {
+            var inDefaultArguments = false;
+            foreach (var parameter in parameters)
+            {
+                if (parameter is AssignmentInstruction)
+                {
+                    inDefaultArguments = true;
+                } else if (parameter is VariableInstruction && inDefaultArguments)
+                {
+                    throw new Exception("Required arguments have to be before default arguments, fix this later");
+                }
+            }
+        }
     }
 
     public FunctionInstruction(string name, List<Instruction>? parameters = null, List<Instruction>? instructions = null)

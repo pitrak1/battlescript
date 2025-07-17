@@ -35,13 +35,9 @@ public class AssignmentInstruction : Instruction
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        var left = Left.Interpret(memory);
-        var right = Right.Interpret(memory);
-        
-        var result = Operator.AssignmentOperation(memory, Operation, left, right);
-        
         if (Left is VariableInstruction variableInst)
         {
+            var result = Operator.AssignmentOperation(memory, Operation, Left, Right);
             memory.SetVariable(variableInst, result);
             return result;
         }
