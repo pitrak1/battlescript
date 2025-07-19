@@ -124,6 +124,43 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
 
         return result;
     }
+
+    public Variable? Operate(Memory memory, string operation, Variable? other)
+    {
+        switch (operation)
+        {
+            case "+":
+                if (other is SequenceVariable sequenceVariable)
+                {
+                    return new SequenceVariable(Values.Concat(sequenceVariable.Values).ToList());
+                }
+                else
+                {
+                    throw new Exception("Cannot add sequence and non-sequence");
+                }
+            case "*":
+                var intVariable = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "int", other);
+                if (intVariable is not null)
+                {
+                    var intValue = BuiltInTypeHelper.GetIntValueFromVariable(memory, other);
+                    var values = new List<Variable>();
+                    for (var i = 0; i < intValue; i++)
+                    {
+                        foreach (var value in Values)
+                        {
+                            values.Add(value);
+                        }
+                    }
+                    return new SequenceVariable(values);
+                }
+                else
+                {
+                    throw new Exception("Cannot multiply sequence and non-int");
+                }
+            default:
+                throw new Exception("Invalid operation");
+        }
+    }
     
     // All the code below is to override equality
     public override bool Equals(object obj) => Equals(obj as SequenceVariable);

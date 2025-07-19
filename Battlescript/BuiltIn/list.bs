@@ -14,4 +14,9 @@ class list:
     def __setitem__(self, key, value):
         if isinstance(key, int):
             self.__value[key] = value
+
+    def __add__(self, other):
+        if isinstance(other, list):
+            return list(self.__value + other.__value)
+        return NotImplemented
         

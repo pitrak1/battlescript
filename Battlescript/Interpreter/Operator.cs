@@ -51,6 +51,13 @@ public static class Operator
         }
         else if (Consts.NumericalOperators.Contains(operation))
         {
+            if (left is SequenceVariable leftSequence)
+            {
+                return leftSequence.Operate(memory, operation, right);
+            } else if (right is SequenceVariable rightSequence)
+            {
+                return rightSequence.Operate(memory, operation, left);
+            }
             return ConductNumericalOperation(operation, left, right);
         }
         else
