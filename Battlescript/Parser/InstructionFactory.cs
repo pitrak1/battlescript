@@ -52,6 +52,14 @@ public static class InstructionFactory
                     return new LambdaInstruction(tokens);
                 case "from":
                     return new ImportInstruction(tokens);
+                case "raise":
+                    return new RaiseInstruction(tokens);
+                case "try":
+                    return new TryInstruction(tokens);
+                case "except":
+                    return new ExceptInstruction(tokens);
+                case "finally":
+                    return new FinallyInstruction(tokens);
                 default:
                     throw new ParserUnexpectedTokenException(tokens[0]);
             }

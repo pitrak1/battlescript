@@ -238,5 +238,5 @@ public static class Consts
         "__sequence__"
     ];
 
-    public static readonly string[] BuiltInTypes = ["numeric", "int", "float", "bool", "list"];
+    public static readonly string[] BuiltInTypes = ["numeric", "int", "float", "bool", "list", "Exception"];
 }

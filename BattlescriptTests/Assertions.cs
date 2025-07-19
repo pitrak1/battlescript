@@ -119,6 +119,15 @@ public static class Assertions
             case MemberInstruction memberInstruction:
                 CompareMemberInstructions(memberInstruction, expected as MemberInstruction);
                 return;
+            case TryInstruction tryInstruction:
+                CompareTryInstructions(tryInstruction, expected as TryInstruction);
+                return;
+            case ExceptInstruction exceptInstruction:
+                CompareExceptInstructions(exceptInstruction, expected as ExceptInstruction);
+                return;
+            case FinallyInstruction finallyInstruction:
+                CompareFinallyInstructions(finallyInstruction, expected as FinallyInstruction);
+                return;
             default:
                 return;
         }
@@ -231,6 +240,28 @@ public static class Assertions
         void CompareMemberInstructions(MemberInstruction inputInst, MemberInstruction expectedInst)
         {
             Assert.That(inputInst.Value, Is.EqualTo(expectedInst.Value));
+        }
+        
+        void CompareTryInstructions(TryInstruction inputInst, TryInstruction expectedInst)
+        {
+            Assert.That(inputInst.Excepts.Count, Is.EqualTo(expectedInst.Excepts.Count));
+            for (var i = 0; i < inputInst.Excepts.Count; i++)
+            {
+                AssertInstructionsEqual(inputInst.Excepts[i], expectedInst.Excepts[i]);
+            }
+            
+            AssertInstructionsEqual(inputInst.Else, expectedInst.Else);
+            AssertInstructionsEqual(inputInst.Finally, expectedInst.Finally);
+        }
+        
+        void CompareExceptInstructions(ExceptInstruction inputInst, ExceptInstruction expectedInst)
+        {
+            AssertInstructionsEqual(inputInst.Value, expectedInst.Value);
+        }
+        
+        void CompareFinallyInstructions(FinallyInstruction inputInst, FinallyInstruction expectedInst)
+        {
+            return;
         }
     }
     
