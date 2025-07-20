@@ -23,9 +23,9 @@ public class ListTests
                                 y = x.__value
                                 """);
         Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], new SequenceVariable([
-            BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1),
-            BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
-            BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3),
+            BsTypes.Create(memory, "int", 1),
+            BsTypes.Create(memory, "int", 2),
+            BsTypes.Create(memory, "int", 3),
         ]));
     }
     
@@ -36,7 +36,7 @@ public class ListTests
                                 x = [1, 2, 3]
                                 y = x[1]
                                 """);
-        Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2));
+        Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], BsTypes.Create(memory, "int", 2));
     }
 
     [Test]
@@ -47,6 +47,6 @@ public class ListTests
                                 x[1] = 4
                                 y = x[1]
                                 """);
-        Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4));
+        Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], BsTypes.Create(memory, "int", 4));
     }
 }

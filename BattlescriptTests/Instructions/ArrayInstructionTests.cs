@@ -11,38 +11,38 @@ public static class ArrayInstructionTests
         [Test]
         public void HandlesArrayWithoutSeparators()
         {
-            var expected = new ArrayInstruction(
+            var Create = new ArrayInstruction(
                 [new VariableInstruction("asdf"), new VariableInstruction("qwer")],
                 delimiter: Consts.Comma);
-            Assertions.AssertInputProducesParserOutput("asdf, qwer", expected);
+            Assertions.AssertInputProducesParserOutput("asdf, qwer", Create);
         }
         
         [Test]
         public void HandlesArrayWithSeparators()
         {
-            var expected = new ArrayInstruction(
+            var Create = new ArrayInstruction(
                 [new VariableInstruction("asdf"), new VariableInstruction("qwer")],
                 Consts.SquareBrackets,
                 Consts.Comma);
-            Assertions.AssertInputProducesParserOutput("[asdf, qwer]", expected);
+            Assertions.AssertInputProducesParserOutput("[asdf, qwer]", Create);
         }
         
         [Test]
         public void HandlesArrayWithSeparatorsAndNext()
         {
-            var expected = new ArrayInstruction(
+            var Create = new ArrayInstruction(
                 [new VariableInstruction("asdf"), new VariableInstruction("qwer")],
                 Consts.CurlyBraces,
                 Consts.Comma,
                 new ArrayInstruction([], Consts.Parentheses)
             );
-            Assertions.AssertInputProducesParserOutput("{asdf, qwer}()", expected);
+            Assertions.AssertInputProducesParserOutput("{asdf, qwer}()", Create);
         }
         
         [Test]
         public void PrioritizesCommasOverColons()
         {
-            var expected = new ArrayInstruction(
+            var Create = new ArrayInstruction(
                 [
                     new ArrayInstruction([new VariableInstruction("asdf"), new NumericInstruction(3)], delimiter: ":"),
                     new ArrayInstruction([new VariableInstruction("qwer"), new NumericInstruction(4)], delimiter: ":"),
@@ -50,7 +50,7 @@ public static class ArrayInstructionTests
                 separator: "{",
                 delimiter: ","
             );
-            Assertions.AssertInputProducesParserOutput("{asdf: 3, qwer: 4}", expected);
+            Assertions.AssertInputProducesParserOutput("{asdf: 3, qwer: 4}", Create);
         }
     }
 
@@ -61,45 +61,45 @@ public static class ArrayInstructionTests
         public void HandlesDictionaryWithMultipleValues()
         {
             var memory = Runner.Run("x = {'asdf': 3, 'qwer': 4}");
-            var expected = new DictionaryVariable(null, new Dictionary<string, Variable>()
+            var Create = new DictionaryVariable(null, new Dictionary<string, Variable>()
             {
-                {"asdf", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)},
-                {"qwer", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4)},
+                {"asdf", BsTypes.Create(memory, "int", 3)},
+                {"qwer", BsTypes.Create(memory, "int", 4)},
             });
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
         }
         
         [Test]
         public void HandlesDictionaryWithSingleValue()
         {
             var memory = Runner.Run("x = {'asdf': 3}");
-            var expected = new DictionaryVariable(null, new Dictionary<string, Variable>()
+            var Create = new DictionaryVariable(null, new Dictionary<string, Variable>()
             {
-                {"asdf", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)},
+                {"asdf", BsTypes.Create(memory, "int", 3)},
             });
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
         }
         
         [Test]
         public void HandlesDictionaryWithStringKey()
         {
             var memory = Runner.Run("x = {'asdf': 3}");
-            var expected = new DictionaryVariable(null, new Dictionary<string, Variable>()
+            var Create = new DictionaryVariable(null, new Dictionary<string, Variable>()
             {
-                {"asdf", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)},
+                {"asdf", BsTypes.Create(memory, "int", 3)},
             });
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
         }
         
         [Test]
         public void HandlesDictionaryWithIntegerKey()
         {
             var memory = Runner.Run("x = {4: 3}");
-            var expected = new DictionaryVariable(new Dictionary<int, Variable>()
+            var Create = new DictionaryVariable(new Dictionary<int, Variable>()
             {
-                {4, BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3)},
+                {4, BsTypes.Create(memory, "int", 3)},
             });
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
         }
     }
     
@@ -117,8 +117,8 @@ public static class ArrayInstructionTests
                         x = asdf(4, 5)
                         """;
             var memory = Runner.Run(input);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            var Create = BsTypes.Create(memory, "int", 9);
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
         }
         
         [Test]
@@ -145,18 +145,18 @@ public static class ArrayInstructionTests
                 ]);
             var classVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
-                { "i", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4) },
-                { "j", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5) },
+                { "i", BsTypes.Create(memory, "int", 4) },
+                { "j", BsTypes.Create(memory, "int", 5) },
                 { "asdf", methodVariable }
             });
-            var expected = new ObjectVariable(
+            var Create = new ObjectVariable(
                 new Dictionary<string, Variable>()
                 {
-                    {"i", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4) },
-                    {"j", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5)}
+                    {"i", BsTypes.Create(memory, "int", 4) },
+                    {"j", BsTypes.Create(memory, "int", 5)}
                 },
                 classVariable);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
         }
         
         [Test]
@@ -173,8 +173,8 @@ public static class ArrayInstructionTests
                         x = y.i
                         """;
             var memory = Runner.Run(input);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            var Create = BsTypes.Create(memory, "int", 9);
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
         }
 
         [Test]
@@ -183,8 +183,8 @@ public static class ArrayInstructionTests
             var input = "x = ((4 - 2) * 3) >= (2 * (5 + 5)) or isinstance(5, int)";
             // var input = "x = ((4 - 2) * 3) >= (2 * (5 + 5))";
             var memory = Runner.Run(input);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", true);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            var Create = BsTypes.Create(memory, "bool", true);
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
         }
     }
 
@@ -195,11 +195,11 @@ public static class ArrayInstructionTests
         public void HandlesListCreation()
         {
             var memory = Runner.Run("x = [9, 8, 7]");
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", new List<Variable>() {
-                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9),
-                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8),
-                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 7)});
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            var Create = BsTypes.Create(memory, "list", new List<Variable>() {
+                BsTypes.Create(memory, "int", 9),
+                BsTypes.Create(memory, "int", 8),
+                BsTypes.Create(memory, "int", 7)});
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
         }
         
         [Test]
@@ -210,8 +210,8 @@ public static class ArrayInstructionTests
                         x = y[1]
                         """;
             var memory = Runner.Run(input);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            var Create = BsTypes.Create(memory, "int", 8);
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
         }
     }
 }

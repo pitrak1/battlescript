@@ -35,12 +35,11 @@ public class ForInstruction : Instruction
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        var range = Range.Interpret(memory);
+        var range = Range.Interpret(memory) as ObjectVariable;
 
-        var listVariable = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "list", range);
-        if (listVariable is not null)
+        if (BsTypes.Is(memory, "list", range))
         {
-            var values = (listVariable.Values["__value"] as SequenceVariable).Values;
+            var values = (range.Values["__value"] as SequenceVariable).Values;
             for (var i = 0; i < values.Count; i++)
             {
                 memory.AddScope();

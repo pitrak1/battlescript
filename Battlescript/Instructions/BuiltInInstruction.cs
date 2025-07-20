@@ -62,21 +62,21 @@ public class BuiltInInstruction : Instruction
         if (Parameters.Count == 1)
         {
             var countExpression = Parameters[0].Interpret(memory);
-            count = BuiltInTypeHelper.GetIntValueFromVariable(memory, countExpression);
+            count = BsTypes.GetIntValueFromVariable(memory, countExpression);
         } else if (Parameters.Count == 2)
         {
             var startingValueExpression = Parameters[0].Interpret(memory);
             var countExpression = Parameters[1].Interpret(memory);
-            startingValue = BuiltInTypeHelper.GetIntValueFromVariable(memory, startingValueExpression);
-            count = BuiltInTypeHelper.GetIntValueFromVariable(memory, countExpression);
+            startingValue = BsTypes.GetIntValueFromVariable(memory, startingValueExpression);
+            count = BsTypes.GetIntValueFromVariable(memory, countExpression);
         } else if (Parameters.Count == 3)
         {
             var startingValueExpression = Parameters[0].Interpret(memory);
             var countExpression = Parameters[1].Interpret(memory);
             var stepExpression = Parameters[2].Interpret(memory);
-            startingValue = BuiltInTypeHelper.GetIntValueFromVariable(memory, startingValueExpression);
-            count = BuiltInTypeHelper.GetIntValueFromVariable(memory, countExpression);
-            step = BuiltInTypeHelper.GetIntValueFromVariable(memory, stepExpression);
+            startingValue = BsTypes.GetIntValueFromVariable(memory, startingValueExpression);
+            count = BsTypes.GetIntValueFromVariable(memory, countExpression);
+            step = BsTypes.GetIntValueFromVariable(memory, stepExpression);
         }
         else
         {
@@ -91,11 +91,11 @@ public class BuiltInInstruction : Instruction
             {
                 for (var i = startingValue; i < count; i += step)
                 {
-                    values.Add(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", i));
+                    values.Add(BsTypes.Create(memory, "int", i));
                 }
             }
             
-            return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", values);
+            return BsTypes.Create(memory, "list", values);
         }
         else
         {
@@ -103,14 +103,14 @@ public class BuiltInInstruction : Instruction
             {
                 for (var i = startingValue; i > count; i += step)
                 {
-                    values.Add(BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", i));
+                    values.Add(BsTypes.Create(memory, "int", i));
                 }
             }
-            return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", values);
+            return BsTypes.Create(memory, "list", values);
         }
     }
 
-    private ConstantVariable RunIsInstanceFunction(Memory memory)
+    private Variable RunIsInstanceFunction(Memory memory)
     {
         if (Parameters.Count != 2)
         {
@@ -123,11 +123,12 @@ public class BuiltInInstruction : Instruction
             switch (principleTypeInstruction.Value)
             {
                 case "__numeric__":
-                    return new ConstantVariable(objectExpression is NumericVariable);
+                    return BsTypes.Create(memory, "bool",
+                        objectExpression is NumericVariable);
                 case "__sequence__":
-                    return new ConstantVariable(objectExpression is SequenceVariable);
+                    return BsTypes.Create(memory, "bool", objectExpression is SequenceVariable);
                 default:
-                    return new ConstantVariable(false);
+                    return BsTypes.Create(memory, "bool", false);
             }
         }
         else
@@ -136,16 +137,16 @@ public class BuiltInInstruction : Instruction
         
             if (objectExpression is ObjectVariable objectVariable && classExpression is ClassVariable classVariable)
             {
-                return new ConstantVariable(objectVariable.IsInstance(classVariable));
+                return BsTypes.Create(memory, "bool", objectVariable.IsInstance(classVariable));
             }
             else
             {
-                return new ConstantVariable(false);
+                return BsTypes.Create(memory, "bool", false);
             }
         }
     }
     
-    private ConstantVariable RunIsSubclassFunction(Memory memory)
+    private Variable RunIsSubclassFunction(Memory memory)
     {
         if (Parameters.Count != 2)
         {
@@ -157,7 +158,7 @@ public class BuiltInInstruction : Instruction
 
         if (firstExpression is ClassVariable firstVariable && secondExpression is ClassVariable secondVariable)
         {
-            return new ConstantVariable(firstVariable.IsSubclass(secondVariable));
+            return BsTypes.Create(memory, "bool", firstVariable.IsSubclass(secondVariable));
         }
         else
         {
@@ -221,19 +222,18 @@ public class BuiltInInstruction : Instruction
         var firstExpression = Parameters[0].Interpret(memory);
         if (firstExpression is StringVariable stringVariable)
         {
-            return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", stringVariable.Value.Length);
+            return BsTypes.Create(memory, "int", stringVariable.Value.Length);
         }
         else if (firstExpression is SequenceVariable sequenceVariable)
         {
-            return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", sequenceVariable.Values.Count);
+            return BsTypes.Create(memory, "int", sequenceVariable.Values.Count);
         }
         else if (firstExpression is ObjectVariable objectVariable)
         {
-            var listVariable = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "list", objectVariable);
-            if (listVariable is not null)
+            if (BsTypes.Is(memory, "list", objectVariable))
             {
-                var value = listVariable.Values["__value"] as SequenceVariable;
-                return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", value.Values.Count);
+                var value = objectVariable.Values["__value"] as SequenceVariable;
+                return BsTypes.Create(memory, "int", value.Values.Count);
             }
             throw new Exception("Bad arguments, clean this up later");
         }

@@ -2,22 +2,7 @@ namespace Battlescript;
 
 public class ConstantVariable : Variable, IEquatable<ConstantVariable>
 {
-    public Consts.Constants Value { get; set; }
-
-    public ConstantVariable(bool? value = null)
-    {
-        if (value is null)
-        {
-            Value = Consts.Constants.None;
-        } else if (value == true)
-        {
-            Value = Consts.Constants.True;
-        }
-        else
-        {
-            Value = Consts.Constants.False;
-        }
-    }
+    public Consts.Constants Value { get; set; } = Consts.Constants.None;
     
     // All the code below is to override equality
     public override bool Equals(object obj) => Equals(obj as ConstantVariable);

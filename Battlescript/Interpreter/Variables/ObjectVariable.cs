@@ -20,7 +20,7 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
         var setItemOverride = Class.GetMember(memory, new MemberInstruction("__setitem__"));
         if (setItemOverride is FunctionVariable functionVariable)
         {
-            var indexArgument = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", indexVariable);
+            var indexArgument = BsTypes.Create(memory, "list", indexVariable);
             return functionVariable.RunFunction(memory, [indexArgument, valueVariable], this);
         }
         else
@@ -51,7 +51,7 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
     public override Variable? GetItemDirectly(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
         var indexVariables = index.Values.Select(x => x?.Interpret(memory) ?? null).ToList();
-        var indexList = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", indexVariables);
+        var indexList = BsTypes.Create(memory, "list", indexVariables);
 
         var getItemOverride = Class.GetMember(memory, new MemberInstruction("__getitem__"));
         if (getItemOverride is FunctionVariable functionVariable)

@@ -27,31 +27,27 @@ public static class Truthiness
 
     private static bool IsObjectTruthy(Memory memory, Variable variable)
     {
-        var intObject = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "int", variable);
-        if (intObject is not null)
+        if (BsTypes.Is(memory, "int", variable))
         {
-            var value = intObject.Values["__value"] as NumericVariable;
+            var value = (variable as ObjectVariable).Values["__value"] as NumericVariable;
             return value.Value is bool ? value.Value : value.Value != 0;
         }
         
-        var floatObject = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "float", variable);
-        if (floatObject is not null)
+        if (BsTypes.Is(memory, "float", variable))
         {
-            var value = floatObject.Values["__value"] as NumericVariable;
+            var value = (variable as ObjectVariable).Values["__value"] as NumericVariable;
             return Math.Abs(value.Value) > Consts.FloatingPointTolerance;
         }
         
-        var boolObject = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "bool", variable);
-        if (boolObject is not null)
+        if (BsTypes.Is(memory, "bool", variable))
         {
-            var value = boolObject.Values["__value"] as NumericVariable;
+            var value = (variable as ObjectVariable).Values["__value"] as NumericVariable;
             return value.Value == 1;
         }
         
-        var listObject = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "list", variable);
-        if (listObject is not null)
+        if (BsTypes.Is(memory, "list", variable))
         {
-            var value = listObject.Values["__value"] as SequenceVariable;
+            var value = (variable as ObjectVariable).Values["__value"] as SequenceVariable;
             return value.Values.Count > 0;
         }
 

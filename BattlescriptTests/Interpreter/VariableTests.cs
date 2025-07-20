@@ -15,7 +15,7 @@ public static class VariableTests
                                     x = [1, 2, 3]
                                     y = x[1]
                                     """);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2);
+            var expected = BsTypes.Create(memory, "int", 2);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], expected);
         }
 
@@ -54,7 +54,7 @@ public static class VariableTests
                                     x = asdf()
                                     y = x[1]
                                     """);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6);
+            var expected = BsTypes.Create(memory, "int", 6);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], expected);
         }
     }
@@ -70,7 +70,7 @@ public static class VariableTests
                                     x[1] = 4
                                     y = x[1]
                                     """);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4);
+            var expected = BsTypes.Create(memory, "int", 4);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], expected);
         }
 
@@ -94,7 +94,7 @@ public static class VariableTests
                                     x["zxcv"] = 2
                                     y = x["zxcv"]
                                     """);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2);
+            var expected = BsTypes.Create(memory, "int", 2);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], expected);
         }
 
@@ -115,7 +115,7 @@ public static class VariableTests
                                     x[1] = 9
                                     y = x.i
                                     """);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9);
+            var expected = BsTypes.Create(memory, "int", 9);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], expected);
         }
     }
@@ -133,7 +133,7 @@ public static class VariableTests
                                     x = asdf()
                                     y = x.i
                                     """);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5);
+            var expected = BsTypes.Create(memory, "int", 5);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], expected);
         }
 
@@ -146,7 +146,7 @@ public static class VariableTests
                                         
                                     y = asdf.i
                                     """);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5);
+            var expected = BsTypes.Create(memory, "int", 5);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], expected);
         }
     }
@@ -165,7 +165,7 @@ public static class VariableTests
                                     x.i = 9
                                     y = x.i
                                     """);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 9);
+            var expected = BsTypes.Create(memory, "int", 9);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], expected);
         }
     }

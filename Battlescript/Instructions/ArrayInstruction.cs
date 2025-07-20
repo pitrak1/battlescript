@@ -151,10 +151,9 @@ public class ArrayInstruction : Instruction
                     indexVariable = index.Interpret(memory);
                 }
         
-                var intObject = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "int", indexVariable);
-                if (intObject is not null)
+                if (BsTypes.Is(memory, "int", indexVariable))
                 {
-                    return (BuiltInTypeHelper.GetIntValueFromVariable(memory, indexVariable), null);
+                    return (BsTypes.GetIntValueFromVariable(memory, indexVariable), null);
                 } else if (indexVariable is StringVariable stringVariable)
                 {
                     return (null, stringVariable.Value);
@@ -221,7 +220,7 @@ public class ArrayInstruction : Instruction
                 
                 }
 
-                return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", values);
+                return BsTypes.Create(memory, "list", values);
             }
         }
     }

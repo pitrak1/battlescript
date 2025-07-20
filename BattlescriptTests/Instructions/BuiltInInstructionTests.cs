@@ -51,12 +51,12 @@ public static class BuiltInInstructionTests
             {
                 var input = "x = range(5)";
                 var memory = Runner.Run(input);
-                var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", new List<Variable>() {
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 0),
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1),
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3),
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4),
+                var expected = BsTypes.Create(memory, "list", new List<Variable>() {
+                    BsTypes.Create(memory, "int", 0),
+                    BsTypes.Create(memory, "int", 1),
+                    BsTypes.Create(memory, "int", 2),
+                    BsTypes.Create(memory, "int", 3),
+                    BsTypes.Create(memory, "int", 4),
                 });
                 Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
             }
@@ -66,10 +66,10 @@ public static class BuiltInInstructionTests
             {
                 var input = "x = range(2, 5)";
                 var memory = Runner.Run(input);
-                var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", new List<Variable>() {
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3),
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4),
+                var expected = BsTypes.Create(memory, "list", new List<Variable>() {
+                    BsTypes.Create(memory, "int", 2),
+                    BsTypes.Create(memory, "int", 3),
+                    BsTypes.Create(memory, "int", 4),
                 });
                 Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
             }
@@ -79,11 +79,11 @@ public static class BuiltInInstructionTests
             {
                 var input = "x = range(2, 10, 2)";
                 var memory = Runner.Run(input);
-                var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", new List<Variable>() {
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4),
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6),
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8),
+                var expected = BsTypes.Create(memory, "list", new List<Variable>() {
+                    BsTypes.Create(memory, "int", 2),
+                    BsTypes.Create(memory, "int", 4),
+                    BsTypes.Create(memory, "int", 6),
+                    BsTypes.Create(memory, "int", 8),
                 });
                 Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
             }
@@ -93,9 +93,9 @@ public static class BuiltInInstructionTests
             {
                 var input = "x = range(2, 5, 2)";
                 var memory = Runner.Run(input);
-                var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", new List<Variable>() {
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4),
+                var expected = BsTypes.Create(memory, "list", new List<Variable>() {
+                    BsTypes.Create(memory, "int", 2),
+                    BsTypes.Create(memory, "int", 4),
                 });
                 Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
             }
@@ -105,11 +105,11 @@ public static class BuiltInInstructionTests
             {
                 var input = "x = range(2, -5, -2)";
                 var memory = Runner.Run(input);
-                var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", new List<Variable>() {
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 0),
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", -2),
-                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", -4),
+                var expected = BsTypes.Create(memory, "list", new List<Variable>() {
+                    BsTypes.Create(memory, "int", 2),
+                    BsTypes.Create(memory, "int", 0),
+                    BsTypes.Create(memory, "int", -2),
+                    BsTypes.Create(memory, "int", -4),
                 });
                 Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
             }
@@ -119,7 +119,7 @@ public static class BuiltInInstructionTests
             {
                 var input = "x = range(2, -5, 2)";
                 var memory = Runner.Run(input);
-                var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", new List<Variable>());
+                var expected = BsTypes.Create(memory, "list", new List<Variable>());
                 
                 Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
             }
@@ -138,7 +138,8 @@ public static class BuiltInInstructionTests
                                         x = asdf()
                                         y = isinstance(x, asdf)
                                         """);
-                Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], new ConstantVariable(true));
+                var expected = BsTypes.Create(memory, "bool", true);
+                Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], expected);
             }
             
             [Test]
@@ -154,7 +155,8 @@ public static class BuiltInInstructionTests
                                         x = qwer()
                                         y = isinstance(x, asdf)
                                         """);
-                Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], new ConstantVariable(true));
+                var expected = BsTypes.Create(memory, "bool", true);
+                Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], expected);
             }
             
             [Test]
@@ -170,7 +172,8 @@ public static class BuiltInInstructionTests
                                         x = qwer()
                                         y = isinstance(x, asdf)
                                         """);
-                Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], new ConstantVariable(false));
+                var expected = BsTypes.Create(memory, "bool", false);
+                Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], expected);
             }
         }
         
@@ -186,7 +189,8 @@ public static class BuiltInInstructionTests
                                             
                                         y = issubclass(asdf, asdf)
                                         """);
-                Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], new ConstantVariable(true));
+                var expected = BsTypes.Create(memory, "bool", true);
+                Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], expected);
             }
             
             [Test]
@@ -201,7 +205,8 @@ public static class BuiltInInstructionTests
                                             
                                         y = issubclass(qwer, asdf)
                                         """);
-                Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], new ConstantVariable(true));
+                var expected = BsTypes.Create(memory, "bool", true);
+                Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], expected);
             }
             
             [Test]
@@ -216,7 +221,8 @@ public static class BuiltInInstructionTests
                                             
                                         y = issubclass(asdf, qwer)
                                         """);
-                Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], new ConstantVariable(false));
+                var expected = BsTypes.Create(memory, "bool", false);
+                Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], expected);
             }
         }
     }

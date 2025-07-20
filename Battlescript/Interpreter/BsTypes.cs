@@ -1,16 +1,11 @@
 namespace Battlescript;
 
-public static class BuiltInTypeHelper
+public static class BsTypes
 {
-    public static ObjectVariable? IsVariableBuiltInClass(Memory memory, string builtInType, Variable variable)
+    public static bool Is(Memory memory, string builtInType, Variable variable)
     {
         var builtInClass = memory.BuiltInReferences[builtInType];
-        if (variable is ObjectVariable objectVariable && objectVariable.Class.Name == builtInClass.Name)
-        {
-            return objectVariable;
-        }
-
-        return null;
+        return variable is ObjectVariable objectVariable && objectVariable.Class.Name == builtInClass.Name;
     }
     
     public static int GetIntValueFromVariable(Memory memory, Variable variable)
@@ -41,7 +36,7 @@ public static class BuiltInTypeHelper
         }
     }
 
-    public static Variable CreateBuiltInTypeWithValue(Memory memory, string builtInType, dynamic value)
+    public static Variable Create(Memory memory, string builtInType, dynamic value)
     {
         var builtInClass = memory.BuiltInReferences[builtInType];
         var objectVariable = builtInClass.CreateObject();

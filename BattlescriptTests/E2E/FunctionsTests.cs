@@ -82,7 +82,7 @@ public class FunctionsTests
                         func()
                         """;
             var memory = Runner.Run(input);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5);
+            var expected = BsTypes.Create(memory, "int", 5);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
@@ -96,7 +96,7 @@ public class FunctionsTests
                         func(2, 3)
                         """;
             var memory = Runner.Run(input);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5);
+            var expected = BsTypes.Create(memory, "int", 5);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
@@ -113,7 +113,7 @@ public class FunctionsTests
                         x = func()
                         """;
             var memory = Runner.Run(input);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 15);
+            var expected = BsTypes.Create(memory, "int", 15);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
@@ -126,7 +126,7 @@ public class FunctionsTests
                         x = func(4, 8)
                         """;
             var memory = Runner.Run(input);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 12);
+            var expected = BsTypes.Create(memory, "int", 12);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
@@ -142,7 +142,7 @@ public class FunctionsTests
                         func()
                         """;
             var memory = Runner.Run(input);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5);
+            var expected = BsTypes.Create(memory, "int", 5);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     }
@@ -159,7 +159,7 @@ public class FunctionsTests
                         x = func(6)
                         """;
             var memory = Runner.Run(input);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6);
+            var expected = BsTypes.Create(memory, "int", 6);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
@@ -172,7 +172,7 @@ public class FunctionsTests
                         x = func()
                         """;
             var memory = Runner.Run(input);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5);
+            var expected = BsTypes.Create(memory, "int", 5);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
     
@@ -199,7 +199,7 @@ public class FunctionsTests
                         x = func(y = 6)
                         """;
             var memory = Runner.Run(input);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6);
+            var expected = BsTypes.Create(memory, "int", 6);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         
@@ -212,7 +212,7 @@ public class FunctionsTests
                         x = func(4, y = 6)
                         """;
             var memory = Runner.Run(input);
-            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 10);
+            var expected = BsTypes.Create(memory, "int", 10);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
         

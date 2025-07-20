@@ -15,20 +15,19 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
     {
         // This needs to be rewritten to support ranged assignments, look at list methods in python to see test cases
         var indexVariable = index.Values[0].Interpret(memory);
-        var indexList = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "list", indexVariable);
+        var indexList = indexVariable as ObjectVariable;
         var indexSequence = indexList.Values["__value"] as SequenceVariable;
 
         if (indexSequence.Values.Count > 1)
         {
             if (index.Next is null)
             {
-                var listValue = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "list", valueVariable);
                 if (valueVariable is SequenceVariable sequenceVariable)
                 {
                     SetRangeIndex(memory, sequenceVariable, indexSequence.Values);
-                } else if (listValue is not null)
+                } else if (BsTypes.Is(memory, "list", valueVariable))
                 {
-                    SetRangeIndex(memory, listValue.Values["__value"] as SequenceVariable, indexSequence.Values);
+                    SetRangeIndex(memory, (valueVariable as ObjectVariable).Values["__value"] as SequenceVariable, indexSequence.Values);
                 }
                 else
                 {
@@ -43,7 +42,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         } 
         else 
         {
-            var indexInt = BuiltInTypeHelper.GetIntValueFromVariable(memory, indexSequence.Values[0]);
+            var indexInt = BsTypes.GetIntValueFromVariable(memory, indexSequence.Values[0]);
             if (index.Next is null)
             {
                 Values[indexInt] = valueVariable;
@@ -82,7 +81,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
     {
         var indexVariable = index.Values[0].Interpret(memory);
         // For single index, this is an int
-        var indexList = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "list", indexVariable);
+        var indexList = indexVariable as ObjectVariable;
         var indexSequence = indexList.Values["__value"] as SequenceVariable;
         
         // var indexInt = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "int", indexVariable);
@@ -92,7 +91,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         }
         else
         {
-            var indexInt = BuiltInTypeHelper.GetIntValueFromVariable(memory, indexSequence.Values[0]);
+            var indexInt = BsTypes.GetIntValueFromVariable(memory, indexSequence.Values[0]);
             return Values[indexInt];
         }
     }
@@ -133,7 +132,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         {
             if (argVariable[2] is not null && argVariable[2] is not ConstantVariable { Value: Consts.Constants.None} )
             {
-                step = BuiltInTypeHelper.GetIntValueFromVariable(memory, argVariable[2]);
+                step = BsTypes.GetIntValueFromVariable(memory, argVariable[2]);
                 
                 if (step < 0)
                 {
@@ -147,7 +146,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         {
             if (argVariable[1] is not null && argVariable[1] is not ConstantVariable { Value: Consts.Constants.None})
             {
-                stop = BuiltInTypeHelper.GetIntValueFromVariable(memory, argVariable[1]) % Values.Count;
+                stop = BsTypes.GetIntValueFromVariable(memory, argVariable[1]) % Values.Count;
             }
         }
         
@@ -155,7 +154,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         {
             if (argVariable[0] is not null && argVariable[0] is not ConstantVariable { Value: Consts.Constants.None})
             {
-                start = BuiltInTypeHelper.GetIntValueFromVariable(memory, argVariable[0]) % Values.Count;
+                start = BsTypes.GetIntValueFromVariable(memory, argVariable[0]) % Values.Count;
             }
         }
         
@@ -176,10 +175,9 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
                     throw new Exception("Cannot add sequence and non-sequence");
                 }
             case "*":
-                var intVariable = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "int", other);
-                if (intVariable is not null)
+                if (BsTypes.Is(memory, "int", other))
                 {
-                    var intValue = BuiltInTypeHelper.GetIntValueFromVariable(memory, other);
+                    var intValue = BsTypes.GetIntValueFromVariable(memory, other);
                     var values = new List<Variable>();
                     for (var i = 0; i < intValue; i++)
                     {

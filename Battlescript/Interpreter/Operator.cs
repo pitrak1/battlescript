@@ -74,35 +74,33 @@ public static class Operator
         }
         
         return operation == "is" ? 
-            BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", left == right) : 
-            BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", left != right);
+            BsTypes.Create(Runner.Run(""), "bool", left == right) : 
+            BsTypes.Create(Runner.Run(""), "bool", left != right);
     }
 
     private static Variable ConductInOperation(string operation, Variable? left, Variable? right)
     {
-        var rightList = BuiltInTypeHelper.IsVariableBuiltInClass(Runner.Run(""), "list", right);
         if (left is StringVariable leftString && right is StringVariable rightString)
         {
             // if both operands are strings, we search for a substring
             var isContained = rightString.Value.Contains(leftString.Value);
             return operation == "in" ? 
-                BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", isContained) : 
-                BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", !isContained);
-        } else if (rightList is not null)
+                BsTypes.Create(Runner.Run(""), "bool", isContained) : 
+                BsTypes.Create(Runner.Run(""), "bool", !isContained);
+        } else if (BsTypes.Is(Runner.Run(""), "list", right))
         {
             // If the right operand is a list, we search for a matching element
-            var found = (rightList.Values["__value"] as SequenceVariable).Values.Any(x => x.Equals(left));
+            var found = ((right as ObjectVariable).Values["__value"] as SequenceVariable).Values.Any(x => x.Equals(left));
             return operation == "in" ? 
-                BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", found) : 
-                BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", !found);
+                BsTypes.Create(Runner.Run(""), "bool", found) : 
+                BsTypes.Create(Runner.Run(""), "bool", !found);
         } else if (right is DictionaryVariable rightDictionary)
         {
             // If the right operand is a dictionary, we search for a matching key
             bool found = false;
-            var intObject = BuiltInTypeHelper.IsVariableBuiltInClass(Runner.Run(""), "int", left);
-            if (intObject is not null)
+            if (BsTypes.Is(Runner.Run(""), "int", left))
             {
-                var intValue = BuiltInTypeHelper.GetIntValueFromVariable(Runner.Run(""), left);
+                var intValue = BsTypes.GetIntValueFromVariable(Runner.Run(""), left);
                 found = rightDictionary.IntValues.Any(x => x.Key.Equals(intValue));
             } 
             else if (left is StringVariable leftString2)
@@ -115,8 +113,8 @@ public static class Operator
             }
 
             return operation == "in" ? 
-                BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", found) : 
-                BuiltInTypeHelper.CreateBuiltInTypeWithValue(Runner.Run(""), "bool", !found);
+                BsTypes.Create(Runner.Run(""), "bool", found) : 
+                BsTypes.Create(Runner.Run(""), "bool", !found);
         }
         else
         {
@@ -126,32 +124,33 @@ public static class Operator
     
     private static Variable ConductObjectOperation(Memory memory, string operation, string originalOperation, Variable? left, Variable? right)
     {
-        if (left is null)
-        {
-            return ConductUnaryObjectOperation(memory, operation, originalOperation, right);
-        }
-        
         // or, and, and not are special operators and can't be overridden.  In python 3, you can overwrite the 
         // __bool__ method to change how a class is interpreted as a boolean, but for now, we'll do it here
         if (operation == "or")
         {
             var leftTruthiness = Truthiness.IsTruthy(Runner.Run(""), left);
-            if (leftTruthiness) return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", true);
+            if (leftTruthiness) return BsTypes.Create(memory, "bool", true);
             
             var rightTruthiness = Truthiness.IsTruthy(Runner.Run(""), right);
-            return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", rightTruthiness);
+            return BsTypes.Create(memory, "bool", rightTruthiness);
         } else if (operation == "and")
         {
             var leftTruthiness = Truthiness.IsTruthy(Runner.Run(""), left);
-            if (!leftTruthiness) return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", false);
+            if (!leftTruthiness) return BsTypes.Create(memory, "bool", false);
             
             var rightTruthiness = Truthiness.IsTruthy(Runner.Run(""), right);
-            return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", rightTruthiness);
+            return BsTypes.Create(memory, "bool", rightTruthiness);
         } else if (operation == "not")
         {
             var rightTruthiness = Truthiness.IsTruthy(Runner.Run(""), right);
-            return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", rightTruthiness);
+            return BsTypes.Create(memory, "bool", !rightTruthiness);
         }
+        
+        if (left is null)
+        {
+            return ConductUnaryObjectOperation(memory, operation, originalOperation, right);
+        }
+        
         OperationToOverrideMap.TryGetValue(originalOperation, out var overrideName);
         
         if (overrideName is null)
@@ -245,7 +244,8 @@ public static class Operator
     private static Variable ConductEqualityOperation(string operation, Variable? left, Variable? right)
     {
         var equality = left?.Equals(right) ?? right?.Equals(left) ?? false;
-        return operation == "==" ? new ConstantVariable(equality) : new ConstantVariable(!equality);
+        equality = operation == "==" ? equality : !equality;
+        return BsTypes.Create(Runner.Run(""), "bool", equality);
     }
     
     private static Variable ConductNumericalOperation(string operation, Variable? left, Variable? right)
@@ -317,10 +317,12 @@ public static class Operator
         {
             if (operation == "and")
             {
-                return new ConstantVariable(Truthiness.IsTruthy(Runner.Run(""), leftBoolean) && Truthiness.IsTruthy(Runner.Run(""), rightBoolean));
+                var value = Truthiness.IsTruthy(Runner.Run(""), leftBoolean) && Truthiness.IsTruthy(Runner.Run(""), rightBoolean);
+                return BsTypes.Create(Runner.Run(""), "bool", value);
             } else if (operation == "or")
             {
-                return new ConstantVariable(Truthiness.IsTruthy(Runner.Run(""), leftBoolean) || Truthiness.IsTruthy(Runner.Run(""), rightBoolean));
+                var value = Truthiness.IsTruthy(Runner.Run(""), leftBoolean) || Truthiness.IsTruthy(Runner.Run(""), rightBoolean);
+                return BsTypes.Create(Runner.Run(""), "bool", value);
             }
             else
             {
@@ -328,7 +330,8 @@ public static class Operator
             }
         } else if (right is ConstantVariable rightBoolean2 && operation == "not")
         {
-            return new ConstantVariable(!Truthiness.IsTruthy(Runner.Run(""), rightBoolean2));
+            var value = !Truthiness.IsTruthy(Runner.Run(""), rightBoolean2);
+            return BsTypes.Create(Runner.Run(""), "bool", value);
         }
         else
         {

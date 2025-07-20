@@ -15,9 +15,9 @@ public static class OperatorTests
             var result = Operator.StandardOperation(
                 memory, 
                 "+", 
-                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5), 
-                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6));
-            Assertions.AssertVariablesEqual(result, BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 11));
+                BsTypes.Create(memory, "int", 5), 
+                BsTypes.Create(memory, "int", 6));
+            Assertions.AssertVariablesEqual(result, BsTypes.Create(memory, "int", 11));
         }
         
         [Test]
@@ -27,9 +27,9 @@ public static class OperatorTests
             var result = Operator.StandardOperation(
                 memory, 
                 "+", 
-                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5), 
-                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 6.0));
-            Assertions.AssertVariablesEqual(result, BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 11.0));
+                BsTypes.Create(memory, "int", 5), 
+                BsTypes.Create(memory, "float", 6.0));
+            Assertions.AssertVariablesEqual(result, BsTypes.Create(memory, "float", 11.0));
         }
         
         [Test]
@@ -39,9 +39,9 @@ public static class OperatorTests
             var result = Operator.StandardOperation(
                 memory, 
                 "/", 
-                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5), 
-                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2));
-            Assertions.AssertVariablesEqual(result, BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 2.5));
+                BsTypes.Create(memory, "int", 5), 
+                BsTypes.Create(memory, "int", 2));
+            Assertions.AssertVariablesEqual(result, BsTypes.Create(memory, "float", 2.5));
         }
         
         [Test]
@@ -51,9 +51,9 @@ public static class OperatorTests
             var result = Operator.StandardOperation(
                 memory, 
                 "//", 
-                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 10.1), 
-                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "float", 2.5));
-            Assertions.AssertVariablesEqual(result, BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4));
+                BsTypes.Create(memory, "float", 10.1), 
+                BsTypes.Create(memory, "float", 2.5));
+            Assertions.AssertVariablesEqual(result, BsTypes.Create(memory, "int", 4));
         }
 
         [Test]
@@ -64,8 +64,8 @@ public static class OperatorTests
                 memory, 
                 "-", 
                 null, 
-                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5));
-            Assertions.AssertVariablesEqual(result, BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", -5));
+                BsTypes.Create(memory, "int", 5));
+            Assertions.AssertVariablesEqual(result, BsTypes.Create(memory, "int", -5));
         }
         
         [Test]
@@ -75,9 +75,10 @@ public static class OperatorTests
             var result = Operator.StandardOperation(
                 memory, 
                 "and", 
-                new ConstantVariable(true), 
-                new ConstantVariable(false));
-            Assertions.AssertVariablesEqual(result, new ConstantVariable(false));
+                BsTypes.Create(memory, "bool", true), 
+                BsTypes.Create(memory, "bool", false));
+            var expected = BsTypes.Create(memory, "bool", false);
+            Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
@@ -88,8 +89,9 @@ public static class OperatorTests
                 memory, 
                 "not", 
                 null, 
-                new ConstantVariable(false));
-            Assertions.AssertVariablesEqual(result, new ConstantVariable(true));
+                BsTypes.Create(memory, "bool", false));
+            var expected = BsTypes.Create(memory, "bool", true);
+            Assertions.AssertVariablesEqual(result, expected);
         }
 
         [Test]
@@ -102,7 +104,7 @@ public static class OperatorTests
                 [new ReturnInstruction(new NumericInstruction(5))]);
             var classVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
-                {"x", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 7)},
+                {"x", BsTypes.Create(memory, "int", 7)},
                 {"__add__", addFunction}
             });
             var objectVariable = classVariable.CreateObject();
@@ -113,7 +115,7 @@ public static class OperatorTests
                 "+", 
                 objectVariable, 
                 objectVariable);
-            Assertions.AssertVariablesEqual(result, BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5));
+            Assertions.AssertVariablesEqual(result, BsTypes.Create(memory, "int", 5));
         }
     }
 
@@ -125,7 +127,7 @@ public static class OperatorTests
         {
             var memory = Runner.Run("");
             var result = Operator.AssignmentOperation(memory, "=", null, new NumericInstruction(8));
-            Assertions.AssertVariablesEqual(result, BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8));
+            Assertions.AssertVariablesEqual(result, BsTypes.Create(memory, "int", 8));
         }
         
         [Test]
@@ -137,7 +139,7 @@ public static class OperatorTests
                 "+=", 
                 new NumericInstruction(8), 
                 new NumericInstruction(5));
-            Assertions.AssertVariablesEqual(result, BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 13));
+            Assertions.AssertVariablesEqual(result, BsTypes.Create(memory, "int", 13));
         }
     }
 }
