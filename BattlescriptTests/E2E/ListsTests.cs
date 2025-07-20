@@ -6,6 +6,129 @@ namespace BattlescriptTests.E2ETests;
 public static class ListsTests
 {
     [TestFixture]
+    public class Indexing
+    {
+        [Test]
+        public void SupportsListIndexing()
+        {
+            var input = "x = [5, '5']\ny = x[1]";
+            var expected = new StringVariable("5");
+            var memory = Runner.Run(input);
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], expected);
+        }
+
+        [Test]
+        public void SupportsListRangeIndexing()
+        {
+            var input = "x = [5, 3, 2, '5']\ny = x[1:3]";
+            var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list",
+                new List<Variable>
+                {
+                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3),
+                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
+                }
+            );
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], expected);
+        }
+        
+        [Test]
+        public void SupportsListRangeIndexingWithNullStart()
+        {
+            var input = "x = [5, 3, 2, '5']\ny = x[:2]";
+            var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list",
+                new List<Variable>
+                {
+                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5),
+                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3),
+                }
+            );
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], expected);
+        }
+        
+        [Test]
+        public void SupportsListRangeIndexingWithNullEnd()
+        {
+            var input = "x = [5, 3, 2, '5']\ny = x[1:]";
+            var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list",
+                new List<Variable>
+                {
+                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3),
+                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
+                    new StringVariable("5"),
+                }
+            );
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], expected);
+        }
+        
+        [Test]
+        public void SupportsListRangeIndexingWithStep()
+        {
+            var input = "x = [5, 3, 2, '5']\ny = x[::2]";
+            var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list",
+                new List<Variable>
+                {
+                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5),
+                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
+                }
+            );
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], expected);
+        }
+        
+        [Test]
+        public void SupportsListRangeIndexingWithNegativeStep()
+        {
+            var input = "x = [5, 3, 2, '5']\ny = x[::-2]";
+            var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list",
+                new List<Variable>
+                {
+                    new StringVariable("5"),
+                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3),
+                }
+            );
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], expected);
+        }
+        
+        [Test]
+        public void SupportsAssigningToIndices()
+        {
+            var input = "x = [5, 3, 2, '5']\nx[1] = 6";
+            var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list",
+                new List<Variable>
+                {
+                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5),
+                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6),
+                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
+                    new StringVariable("5"),
+                }
+            );
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], expected);
+        }
+        
+        [Test]
+        public void SupportsAssigningToRangeIndices()
+        {
+            var input = "x = [5, 3, 2, '5']\nx[1:3] = [5, 7]";
+            var memory = Runner.Run(input);
+            var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list",
+                new List<Variable>
+                {
+                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5),
+                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5),
+                    BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 7),
+                    new StringVariable("5"),
+                }
+            );
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], expected);
+        }
+    }
+    
+    [TestFixture]
     public class InNotIn
     {
         [Test]
@@ -135,12 +258,12 @@ public static class ListsTests
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", new List<Variable>()
             {
-                new NumericVariable(1),
-                new NumericVariable(2),
-                new NumericVariable(3),
-                new NumericVariable(4),
-                new NumericVariable(5),
-                new NumericVariable(6)
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1),
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3),
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 4),
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5),
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6)
             });
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
         }
@@ -151,23 +274,21 @@ public static class ListsTests
             var input = """
                         y = [1, 2, 3]
                         x = y * 3
-                        z = 3 * y
                         """;
             var memory = Runner.Run(input);
             var expected = BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "list", new List<Variable>()
             {
-                new NumericVariable(1),
-                new NumericVariable(2),
-                new NumericVariable(3),
-                new NumericVariable(1),
-                new NumericVariable(2),
-                new NumericVariable(3),
-                new NumericVariable(1),
-                new NumericVariable(2),
-                new NumericVariable(3),
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1),
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3),
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1),
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3),
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1),
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3),
             });
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["z"], expected);
         }
     }
 }

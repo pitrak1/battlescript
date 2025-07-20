@@ -209,7 +209,7 @@ public static class ArgumentTransferTests
         {
             // Function: (x, y)     Call: (5, 6)
             var memory = Runner.Run("");
-            var arguments = new List<Variable>() { new NumericVariable(5), new NumericVariable(6) };
+            var arguments = new List<Variable>() { BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5), BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6) };
             var parameters = new List<Instruction>() { new VariableInstruction("x"), new VariableInstruction("y") };
             ArgumentTransfer.RunAndApply(memory, arguments, parameters);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5));
@@ -221,12 +221,12 @@ public static class ArgumentTransferTests
         {
             // Function: (x, y)     Call: (5)
             var memory = Runner.Run("");
-            var arguments = new List<Variable>() { new NumericVariable(5) };
+            var arguments = new List<Variable>() { BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5) };
             var parameters = new List<Instruction>() { new VariableInstruction("x"), new VariableInstruction("y") };
             var classValues = new Dictionary<string, Variable>()
             {
-                { "i", new NumericVariable(5) },
-                { "j", new NumericVariable(6) }
+                { "i", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5) },
+                { "j", BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 6) }
             };
             var objectContext = new ObjectVariable(classValues, new ClassVariable("asdf", classValues));
             ArgumentTransfer.RunAndApply(memory, arguments, parameters, objectContext);

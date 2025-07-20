@@ -152,7 +152,6 @@ public static class Operator
             var rightTruthiness = Truthiness.IsTruthy(Runner.Run(""), right);
             return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "bool", rightTruthiness);
         }
-        
         OperationToOverrideMap.TryGetValue(originalOperation, out var overrideName);
         
         if (overrideName is null)

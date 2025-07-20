@@ -64,8 +64,8 @@ public static class OperatorTests
                 memory, 
                 "-", 
                 null, 
-                new NumericVariable(5));
-            Assertions.AssertVariablesEqual(result, new NumericVariable(-5));
+                BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 5));
+            Assertions.AssertVariablesEqual(result, BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", -5));
         }
         
         [Test]
@@ -125,7 +125,7 @@ public static class OperatorTests
         {
             var memory = Runner.Run("");
             var result = Operator.AssignmentOperation(memory, "=", null, new NumericInstruction(8));
-            Assertions.AssertVariablesEqual(result, new NumericVariable(8));
+            Assertions.AssertVariablesEqual(result, BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 8));
         }
         
         [Test]
@@ -137,7 +137,7 @@ public static class OperatorTests
                 "+=", 
                 new NumericInstruction(8), 
                 new NumericInstruction(5));
-            Assertions.AssertVariablesEqual(result, new NumericVariable(13));
+            Assertions.AssertVariablesEqual(result, BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 13));
         }
     }
 }

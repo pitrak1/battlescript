@@ -12,7 +12,7 @@ public class ListTests
                                 x = []
                                 y = x.__value
                                 """);
-        Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], new SequenceVariable());
+        Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], new SequenceVariable());
     }
     
     [Test]
@@ -22,7 +22,7 @@ public class ListTests
                                 x = [1, 2, 3]
                                 y = x.__value
                                 """);
-        Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], new SequenceVariable([
+        Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], new SequenceVariable([
             BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 1),
             BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 2),
             BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", 3),

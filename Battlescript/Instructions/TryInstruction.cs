@@ -39,6 +39,16 @@ public class TryInstruction : Instruction
                 inst.Interpret(memory);
                 memory.RemoveScope();
             }
+            
+            if (Finally is not null)
+            {
+                memory.AddScope();
+                foreach (var inst in Finally.Instructions)
+                {
+                    inst.Interpret(memory);
+                }
+                memory.RemoveScope();
+            }
         }
         catch (InternalRaiseException e)
         {

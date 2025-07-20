@@ -46,6 +46,8 @@ public class BuiltInInstruction : Instruction
                 return RunIsSubclassFunction(memory);
             case "print":
                 return RunPrint(memory);
+            case "len":
+                return RunLen(memory);
         }
         // TODO
         return new ConstantVariable();
@@ -116,15 +118,30 @@ public class BuiltInInstruction : Instruction
         }
         
         var objectExpression = Parameters[0].Interpret(memory);
-        var classExpression = Parameters[1].Interpret(memory);
-
-        if (objectExpression is ObjectVariable objectVariable && classExpression is ClassVariable classVariable)
+        if (Parameters[1] is PrincipleTypeInstruction principleTypeInstruction)
         {
-            return new ConstantVariable(objectVariable.IsInstance(classVariable));
+            switch (principleTypeInstruction.Value)
+            {
+                case "__numeric__":
+                    return new ConstantVariable(objectExpression is NumericVariable);
+                case "__sequence__":
+                    return new ConstantVariable(objectExpression is SequenceVariable);
+                default:
+                    return new ConstantVariable(false);
+            }
         }
         else
         {
-            return new ConstantVariable(false);
+            var classExpression = Parameters[1].Interpret(memory);
+        
+            if (objectExpression is ObjectVariable objectVariable && classExpression is ClassVariable classVariable)
+            {
+                return new ConstantVariable(objectVariable.IsInstance(classVariable));
+            }
+            else
+            {
+                return new ConstantVariable(false);
+            }
         }
     }
     
@@ -174,6 +191,51 @@ public class BuiltInInstruction : Instruction
                 new JsonConverter[] {new StringEnumConverter()});
             Console.WriteLine(jsonString);
             return new ConstantVariable();
+        }
+        else if (firstExpression is SequenceVariable sequenceVariable)
+        {
+            var jsonString = JsonConvert.SerializeObject(
+                sequenceVariable.Values, Formatting.Indented,
+                new JsonConverter[] {new StringEnumConverter()});
+            Console.WriteLine(jsonString);
+            return new ConstantVariable();
+        }
+        else if (firstExpression is ConstantVariable constantVariable)
+        {
+            Console.WriteLine(constantVariable.Value);
+            return new ConstantVariable();
+        }
+        else
+        {
+            throw new Exception("Bad arguments, clean this up later");
+        }
+    }
+
+    private Variable RunLen(Memory memory)
+    {
+        if (Parameters.Count != 1)
+        {
+            throw new Exception("Bad arguments, clean this up later");
+        }
+        
+        var firstExpression = Parameters[0].Interpret(memory);
+        if (firstExpression is StringVariable stringVariable)
+        {
+            return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", stringVariable.Value.Length);
+        }
+        else if (firstExpression is SequenceVariable sequenceVariable)
+        {
+            return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", sequenceVariable.Values.Count);
+        }
+        else if (firstExpression is ObjectVariable objectVariable)
+        {
+            var listVariable = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "list", objectVariable);
+            if (listVariable is not null)
+            {
+                var value = listVariable.Values["__value"] as SequenceVariable;
+                return BuiltInTypeHelper.CreateBuiltInTypeWithValue(memory, "int", value.Values.Count);
+            }
+            throw new Exception("Bad arguments, clean this up later");
         }
         else
         {

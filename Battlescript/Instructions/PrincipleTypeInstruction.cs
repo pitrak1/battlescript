@@ -7,15 +7,18 @@ public class PrincipleTypeInstruction : Instruction
 
     public PrincipleTypeInstruction(List<Token> tokens)
     {
-        var endOfArgumentsIndex = InstructionUtilities.GetTokenIndex(tokens, [")"]);
-        var argumentTokens = tokens.GetRange(2, endOfArgumentsIndex - 2);
-        Parameters = InstructionUtilities.ParseEntriesBetweenDelimiters(argumentTokens, [","])!;
-        
-        if (tokens.Count > endOfArgumentsIndex + 1)
+        if (tokens.Count > 1)
         {
-            throw new ParserUnexpectedTokenException(tokens[endOfArgumentsIndex + 1]);
+            var endOfArgumentsIndex = InstructionUtilities.GetTokenIndex(tokens, [")"]);
+            var argumentTokens = tokens.GetRange(2, endOfArgumentsIndex - 2);
+            Parameters = InstructionUtilities.ParseEntriesBetweenDelimiters(argumentTokens, [","])!;
+        
+            if (tokens.Count > endOfArgumentsIndex + 1)
+            {
+                throw new ParserUnexpectedTokenException(tokens[endOfArgumentsIndex + 1]);
+            }
         }
-
+        
         Value = tokens[0].Value;
         Line = tokens[0].Line;
         Column = tokens[0].Column;

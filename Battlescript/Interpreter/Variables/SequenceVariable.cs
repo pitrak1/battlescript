@@ -14,95 +14,93 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
     public override Variable? SetItemDirectly(Memory memory, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
         // This needs to be rewritten to support ranged assignments, look at list methods in python to see test cases
-        var indexVariable = index.Values.Select(x => x.Interpret(memory)).ToList();
+        var indexVariable = index.Values[0].Interpret(memory);
+        var indexList = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "list", indexVariable);
+        var indexSequence = indexList.Values["__value"] as SequenceVariable;
 
-        var indexInt = BuiltInTypeHelper.GetIntValueFromVariable(memory, indexVariable[0]);
-        if (index.Next is null)
+        if (indexSequence.Values.Count > 1)
         {
-            Values[indexInt] = valueVariable;
+            if (index.Next is null)
+            {
+                var listValue = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "list", valueVariable);
+                if (valueVariable is SequenceVariable sequenceVariable)
+                {
+                    SetRangeIndex(memory, sequenceVariable, indexSequence.Values);
+                } else if (listValue is not null)
+                {
+                    SetRangeIndex(memory, listValue.Values["__value"] as SequenceVariable, indexSequence.Values);
+                }
+                else
+                {
+                    throw new Exception("Cannot assign sequence to non-sequence");
+                }
+                return valueVariable;
+            }
+            else
+            {
+                return GetRangeIndex(memory, indexSequence.Values);
+            }
+        } 
+        else 
+        {
+            var indexInt = BuiltInTypeHelper.GetIntValueFromVariable(memory, indexSequence.Values[0]);
+            if (index.Next is null)
+            {
+                Values[indexInt] = valueVariable;
+            }
             return valueVariable;
+        }
+    }
+    
+    public void SetRangeIndex(Memory memory, SequenceVariable valueVariable, List<Variable> argVariable)
+    {
+        var (start, stop, step) = GetRangeIndexValues(memory, argVariable);
+        
+        int index = start;
+        int valueIndex = 0;
+        if (step < 0)
+        {
+            while (index > stop)
+            {
+                Values[index] = valueVariable.Values[valueIndex];
+                index += step;
+                valueIndex += 1;
+            }
         }
         else
         {
-            return Values[indexInt];
+            while (index < stop)
+            {
+                Values[index] = valueVariable.Values[valueIndex];
+                index += step;
+                valueIndex += 1;
+            }
         }
     }
     
     public override Variable? GetItemDirectly(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
-        var indexVariable = index.Values.Select(x => x.Interpret(memory)).ToList();
-
-        if (indexVariable.Count > 1)
+        var indexVariable = index.Values[0].Interpret(memory);
+        // For single index, this is an int
+        var indexList = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "list", indexVariable);
+        var indexSequence = indexList.Values["__value"] as SequenceVariable;
+        
+        // var indexInt = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "int", indexVariable);
+        if (indexSequence.Values.Count > 1)
         {
-            return GetRangeIndex(memory, indexVariable);
+            return GetRangeIndex(memory, indexSequence.Values);
         }
         else
         {
-            var indexInt = BuiltInTypeHelper.GetIntValueFromVariable(memory, indexVariable[0]);
+            var indexInt = BuiltInTypeHelper.GetIntValueFromVariable(memory, indexSequence.Values[0]);
             return Values[indexInt];
         }
     }
     
     public SequenceVariable GetRangeIndex(Memory memory, List<Variable> argVariable)
     {
-        int start = 0;
-        int stop = Values.Count;
-        int step = 1;
+        var (start, stop, step) = GetRangeIndexValues(memory, argVariable);
         
-        List<int?> values = [];
-        foreach (var value in argVariable)
-        {
-            if (value is null)
-            {
-                values.Add(null);
-            }
-            else
-            {
-                var indexInt = BuiltInTypeHelper.GetIntValueFromVariable(memory, value);
-                values.Add(indexInt);
-            }
-        }
-        
-        if (values.Count == 3)
-        {
-            if (values[2] is not null)
-            {
-                step = values[2] ?? 1;
-            }
-
-            if (values[0] is not null)
-            {
-                start = values[0] % Values.Count ?? 0;
-            } else if (values[0] is null && step < 0)
-            {
-                start = Values.Count - 1;
-            }
-
-            if (values[1] is not null)
-            {
-                stop = values[1] % Values.Count ?? Values.Count;
-            }
-            else if (values[1] is null && step < 0)
-            {
-                stop = -1;
-            }
-        } else if (values.Count == 2)
-        {
-            if (values[0] is not null)
-            {
-                start = values[0] % Values.Count ?? 0;
-            }
-
-            if (values[1] is not null)
-            {
-                stop = values[1] % Values.Count ?? Values.Count;
-            }
-        }
-        else
-        {
-            throw new Exception("Invalid range index, fix this later");
-        }
-
         int index = start;
         SequenceVariable result = new SequenceVariable();
         if (step < 0)
@@ -125,6 +123,45 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         return result;
     }
 
+    public (int start, int stop, int step) GetRangeIndexValues(Memory memory, List<Variable> argVariable)
+    {
+        int start = 0;
+        int stop = Values.Count;
+        int step = 1;
+
+        if (argVariable.Count >= 3)
+        {
+            if (argVariable[2] is not null && argVariable[2] is not ConstantVariable { Value: Consts.Constants.None} )
+            {
+                step = BuiltInTypeHelper.GetIntValueFromVariable(memory, argVariable[2]);
+                
+                if (step < 0)
+                {
+                    start = Values.Count - 1;
+                    stop = -1;
+                }
+            }
+        }
+        
+        if (argVariable.Count >= 2)
+        {
+            if (argVariable[1] is not null && argVariable[1] is not ConstantVariable { Value: Consts.Constants.None})
+            {
+                stop = BuiltInTypeHelper.GetIntValueFromVariable(memory, argVariable[1]) % Values.Count;
+            }
+        }
+        
+        if (argVariable.Count >= 1)
+        {
+            if (argVariable[0] is not null && argVariable[0] is not ConstantVariable { Value: Consts.Constants.None})
+            {
+                start = BuiltInTypeHelper.GetIntValueFromVariable(memory, argVariable[0]) % Values.Count;
+            }
+        }
+        
+        return (start, stop, step);
+    }
+
     public Variable? Operate(Memory memory, string operation, Variable? other)
     {
         switch (operation)
@@ -145,6 +182,18 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
                     var intValue = BuiltInTypeHelper.GetIntValueFromVariable(memory, other);
                     var values = new List<Variable>();
                     for (var i = 0; i < intValue; i++)
+                    {
+                        foreach (var value in Values)
+                        {
+                            values.Add(value);
+                        }
+                    }
+                    return new SequenceVariable(values);
+                }
+                else if (other is NumericVariable numVariable)
+                {
+                    var values = new List<Variable>();
+                    for (var i = 0; i < numVariable.Value; i++)
                     {
                         foreach (var value in Values)
                         {

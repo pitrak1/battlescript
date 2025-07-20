@@ -279,7 +279,7 @@ public static class Assertions
     {
         Assert.That(input, Is.Not.Null);
         if (ReferenceEquals(input, expected)) return;
-        if (input.GetType() != expected.GetType()) return;
+        Assert.That(input.GetType(), Is.EqualTo(expected.GetType()));
 
         switch (input)
         {

@@ -7,16 +7,22 @@ class list:
         else:
             self.__value = value
 
-    def __getitem__(self, index):
-        if isinstance(index, int):
-            return self.__value[index]
+    def __getitem__(self, key):
+        result = self.__value[key]
+        if isinstance(result, __sequence__):
+            return list(result)
+        else:
+            return result
 
     def __setitem__(self, key, value):
-        if isinstance(key, int):
-            self.__value[key] = value
+        self.__value[key] = value
 
     def __add__(self, other):
         if isinstance(other, list):
             return list(self.__value + other.__value)
+        return NotImplemented
+
+    def __mul__(self, other):
+        return list(self.__value * other.__value)
         return NotImplemented
         
