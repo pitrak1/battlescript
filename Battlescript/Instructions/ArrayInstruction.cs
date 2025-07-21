@@ -153,7 +153,7 @@ public class ArrayInstruction : Instruction
         
                 if (BsTypes.Is(memory, "int", indexVariable))
                 {
-                    return (BsTypes.GetIntValueFromVariable(memory, indexVariable), null);
+                    return (BsTypes.GetIntValue(memory, indexVariable), null);
                 } else if (indexVariable is StringVariable stringVariable)
                 {
                     return (null, stringVariable.Value);

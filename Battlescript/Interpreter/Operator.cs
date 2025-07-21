@@ -100,7 +100,7 @@ public static class Operator
             bool found = false;
             if (BsTypes.Is(Runner.Run(""), "int", left))
             {
-                var intValue = BsTypes.GetIntValueFromVariable(Runner.Run(""), left);
+                var intValue = BsTypes.GetIntValue(Runner.Run(""), left);
                 found = rightDictionary.IntValues.Any(x => x.Key.Equals(intValue));
             } 
             else if (left is StringVariable leftString2)

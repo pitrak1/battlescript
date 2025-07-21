@@ -7,7 +7,7 @@ public static class Truthiness
         switch (variable)
         {
             case ConstantVariable constantVariable:
-                return constantVariable.Value == Consts.Constants.True;
+                return false;
             case NumericVariable numVariable:
                 return numVariable.Value != 0;
             case StringVariable stringVariable:
@@ -29,28 +29,27 @@ public static class Truthiness
     {
         if (BsTypes.Is(memory, "int", variable))
         {
-            var value = (variable as ObjectVariable).Values["__value"] as NumericVariable;
-            return value.Value is bool ? value.Value : value.Value != 0;
-        }
-        
-        if (BsTypes.Is(memory, "float", variable))
+            var value = BsTypes.GetIntValue(memory, variable);
+            return value != 0;
+        } 
+        else if (BsTypes.Is(memory, "float", variable))
         {
-            var value = (variable as ObjectVariable).Values["__value"] as NumericVariable;
-            return Math.Abs(value.Value) > Consts.FloatingPointTolerance;
+            var value = BsTypes.GetFloatValue(memory, variable);
+            return Math.Abs(value) > Consts.FloatingPointTolerance;
         }
-        
-        if (BsTypes.Is(memory, "bool", variable))
+        else if (BsTypes.Is(memory, "bool", variable))
         {
-            var value = (variable as ObjectVariable).Values["__value"] as NumericVariable;
-            return value.Value == 1;
+            var value = BsTypes.GetBoolValue(memory, variable);
+            return value;
         }
-        
-        if (BsTypes.Is(memory, "list", variable))
+        else if (BsTypes.Is(memory, "list", variable))
         {
-            var value = (variable as ObjectVariable).Values["__value"] as SequenceVariable;
+            var value = BsTypes.GetListValue(memory, variable);
             return value.Values.Count > 0;
         }
-
-        return true;
+        else
+        {
+            return true;
+        }
     }
 }

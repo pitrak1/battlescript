@@ -62,21 +62,21 @@ public class BuiltInInstruction : Instruction
         if (Parameters.Count == 1)
         {
             var countExpression = Parameters[0].Interpret(memory);
-            count = BsTypes.GetIntValueFromVariable(memory, countExpression);
+            count = BsTypes.GetIntValue(memory, countExpression);
         } else if (Parameters.Count == 2)
         {
             var startingValueExpression = Parameters[0].Interpret(memory);
             var countExpression = Parameters[1].Interpret(memory);
-            startingValue = BsTypes.GetIntValueFromVariable(memory, startingValueExpression);
-            count = BsTypes.GetIntValueFromVariable(memory, countExpression);
+            startingValue = BsTypes.GetIntValue(memory, startingValueExpression);
+            count = BsTypes.GetIntValue(memory, countExpression);
         } else if (Parameters.Count == 3)
         {
             var startingValueExpression = Parameters[0].Interpret(memory);
             var countExpression = Parameters[1].Interpret(memory);
             var stepExpression = Parameters[2].Interpret(memory);
-            startingValue = BsTypes.GetIntValueFromVariable(memory, startingValueExpression);
-            count = BsTypes.GetIntValueFromVariable(memory, countExpression);
-            step = BsTypes.GetIntValueFromVariable(memory, stepExpression);
+            startingValue = BsTypes.GetIntValue(memory, startingValueExpression);
+            count = BsTypes.GetIntValue(memory, countExpression);
+            step = BsTypes.GetIntValue(memory, stepExpression);
         }
         else
         {

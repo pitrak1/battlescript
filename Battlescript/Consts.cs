@@ -212,8 +212,6 @@ public static class Consts
     public static readonly string[] ConstantStrings = ["None", "True", "False"];
     public enum Constants{
         None,
-        True,
-        False,
     }
     
     public enum TokenTypes

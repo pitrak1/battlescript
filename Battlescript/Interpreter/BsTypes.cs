@@ -8,34 +8,6 @@ public static class BsTypes
         return variable is ObjectVariable objectVariable && objectVariable.Class.Name == builtInClass.Name;
     }
     
-    public static int GetIntValueFromVariable(Memory memory, Variable variable)
-    {
-        var builtInClass = memory.BuiltInReferences["int"];
-        if (variable is ObjectVariable objectVariable && objectVariable.Class.Name.Equals(builtInClass.Name))
-        {
-            var valueVariable = objectVariable.Values["__value"];
-            return ((NumericVariable)valueVariable).Value;
-        }
-        else
-        {
-            throw new Exception("Variable is not an int");
-        }
-    }
-    
-    public static double GetFloatValueFromVariable(Memory memory, Variable variable)
-    {
-        var builtInClass = memory.BuiltInReferences["float"];
-        if (variable is ObjectVariable objectVariable && objectVariable.Class.Equals(builtInClass))
-        {
-            var valueVariable = objectVariable.Values["__value"];
-            return ((NumericVariable)valueVariable).Value;
-        }
-        else
-        {
-            throw new Exception("Variable is not a float");
-        }
-    }
-
     public static Variable Create(Memory memory, string builtInType, dynamic value)
     {
         var builtInClass = memory.BuiltInReferences[builtInType];
@@ -57,5 +29,57 @@ public static class BsTypes
         
         objectVariable.Values["__value"] = value;
         return objectVariable;
+    }
+    
+    public static int GetIntValue(Memory memory, Variable variable)
+    {
+        if (Is(memory, "int", variable) && variable is ObjectVariable objectVariable)
+        {
+            var valueVariable = objectVariable.Values["__value"];
+            return ((NumericVariable)valueVariable).Value;
+        }
+        else
+        {
+            throw new Exception("Variable is not an int");
+        }
+    }
+    
+    public static double GetFloatValue(Memory memory, Variable variable)
+    {
+        if (Is(memory, "float", variable) && variable is ObjectVariable objectVariable)
+        {
+            var valueVariable = objectVariable.Values["__value"];
+            return ((NumericVariable)valueVariable).Value;
+        }
+        else
+        {
+            throw new Exception("Variable is not a float");
+        }
+    }
+    
+    public static bool GetBoolValue(Memory memory, Variable variable)
+    {
+        if (Is(memory, "bool", variable) && variable is ObjectVariable objectVariable)
+        {
+            var valueVariable = objectVariable.Values["__value"];
+            return ((NumericVariable)valueVariable).Value != 0;
+        }
+        else
+        {
+            throw new Exception("Variable is not a bool");
+        }
+    }
+    
+    public static SequenceVariable GetListValue(Memory memory, Variable variable)
+    {
+        if (Is(memory, "list", variable) && variable is ObjectVariable objectVariable)
+        {
+            var valueVariable = objectVariable.Values["__value"] as SequenceVariable;
+            return valueVariable!;
+        }
+        else
+        {
+            throw new Exception("Variable is not a list");
+        }
     }
 }

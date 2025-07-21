@@ -50,7 +50,7 @@ public class DictionaryVariable : Variable, IEquatable<DictionaryVariable>
         
         if (BsTypes.Is(memory, "int", indexVariable[0]))
         {
-            return (BsTypes.GetIntValueFromVariable(memory, indexVariable[0]), null);
+            return (BsTypes.GetIntValue(memory, indexVariable[0]), null);
         } else if (indexVariable[0] is StringVariable stringVariable)
         {
             return (null, stringVariable.Value);
