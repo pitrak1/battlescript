@@ -81,7 +81,7 @@ public class ImportInstruction : Instruction
                 var stringValues = new Dictionary<string, Variable>();
                 foreach (var (key, value) in importedScope)
                 {
-                    if (!Consts.BuiltInTypes.Contains(key))
+                    if (!BsTypes.TypeStrings.Contains(key))
                     {
                         stringValues.Add(key, value);
                     }

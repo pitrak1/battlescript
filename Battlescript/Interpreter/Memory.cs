@@ -6,14 +6,20 @@ public class Memory(List<Dictionary<string, Variable>>? scopes = null)
 {
     public List<Dictionary<string, Variable>> Scopes { get; } = scopes ?? [new Dictionary<string, Variable>()];
 
-    public Dictionary<string, ClassVariable> BuiltInReferences = [];
+    public Dictionary<BsTypes.Types, ClassVariable> BuiltInReferences = [];
 
     public void PopulateBuiltInReferences()
     {
-        foreach (var builtin in Consts.BuiltInTypes)
+        foreach (var builtin in BsTypes.TypeStrings)
         {
-            BuiltInReferences[builtin] = GetVariable(builtin) as ClassVariable;
+            var type = BsTypes.GetTypeFromString(builtin);
+            BuiltInReferences[type] = GetVariable(builtin) as ClassVariable;
         }
+    }
+
+    public ClassVariable GetBuiltIn(BsTypes.Types type)
+    {
+        return BuiltInReferences[type];
     }
     
     public Variable? GetVariable(string name)

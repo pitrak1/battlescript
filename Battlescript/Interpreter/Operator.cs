@@ -74,8 +74,8 @@ public static class Operator
         }
         
         return operation == "is" ? 
-            BsTypes.Create(Runner.Run(""), "bool", left == right) : 
-            BsTypes.Create(Runner.Run(""), "bool", left != right);
+            BsTypes.Create(Runner.Run(""), BsTypes.Types.Bool, left == right) : 
+            BsTypes.Create(Runner.Run(""), BsTypes.Types.Bool, left != right);
     }
 
     private static Variable ConductInOperation(string operation, Variable? left, Variable? right)
@@ -85,20 +85,20 @@ public static class Operator
             // if both operands are strings, we search for a substring
             var isContained = rightString.Value.Contains(leftString.Value);
             return operation == "in" ? 
-                BsTypes.Create(Runner.Run(""), "bool", isContained) : 
-                BsTypes.Create(Runner.Run(""), "bool", !isContained);
-        } else if (BsTypes.Is(Runner.Run(""), "list", right))
+                BsTypes.Create(Runner.Run(""), BsTypes.Types.Bool, isContained) : 
+                BsTypes.Create(Runner.Run(""), BsTypes.Types.Bool, !isContained);
+        } else if (BsTypes.Is(Runner.Run(""), BsTypes.Types.List, right))
         {
             // If the right operand is a list, we search for a matching element
             var found = ((right as ObjectVariable).Values["__value"] as SequenceVariable).Values.Any(x => x.Equals(left));
             return operation == "in" ? 
-                BsTypes.Create(Runner.Run(""), "bool", found) : 
-                BsTypes.Create(Runner.Run(""), "bool", !found);
+                BsTypes.Create(Runner.Run(""), BsTypes.Types.Bool, found) : 
+                BsTypes.Create(Runner.Run(""), BsTypes.Types.Bool, !found);
         } else if (right is DictionaryVariable rightDictionary)
         {
             // If the right operand is a dictionary, we search for a matching key
             bool found = false;
-            if (BsTypes.Is(Runner.Run(""), "int", left))
+            if (BsTypes.Is(Runner.Run(""), BsTypes.Types.Int, left))
             {
                 var intValue = BsTypes.GetIntValue(Runner.Run(""), left);
                 found = rightDictionary.IntValues.Any(x => x.Key.Equals(intValue));
@@ -113,8 +113,8 @@ public static class Operator
             }
 
             return operation == "in" ? 
-                BsTypes.Create(Runner.Run(""), "bool", found) : 
-                BsTypes.Create(Runner.Run(""), "bool", !found);
+                BsTypes.Create(Runner.Run(""), BsTypes.Types.Bool, found) : 
+                BsTypes.Create(Runner.Run(""), BsTypes.Types.Bool, !found);
         }
         else
         {
@@ -129,21 +129,21 @@ public static class Operator
         if (operation == "or")
         {
             var leftTruthiness = Truthiness.IsTruthy(Runner.Run(""), left);
-            if (leftTruthiness) return BsTypes.Create(memory, "bool", true);
+            if (leftTruthiness) return BsTypes.Create(memory, BsTypes.Types.Bool, true);
             
             var rightTruthiness = Truthiness.IsTruthy(Runner.Run(""), right);
-            return BsTypes.Create(memory, "bool", rightTruthiness);
+            return BsTypes.Create(memory, BsTypes.Types.Bool, rightTruthiness);
         } else if (operation == "and")
         {
             var leftTruthiness = Truthiness.IsTruthy(Runner.Run(""), left);
-            if (!leftTruthiness) return BsTypes.Create(memory, "bool", false);
+            if (!leftTruthiness) return BsTypes.Create(memory, BsTypes.Types.Bool, false);
             
             var rightTruthiness = Truthiness.IsTruthy(Runner.Run(""), right);
-            return BsTypes.Create(memory, "bool", rightTruthiness);
+            return BsTypes.Create(memory, BsTypes.Types.Bool, rightTruthiness);
         } else if (operation == "not")
         {
             var rightTruthiness = Truthiness.IsTruthy(Runner.Run(""), right);
-            return BsTypes.Create(memory, "bool", !rightTruthiness);
+            return BsTypes.Create(memory, BsTypes.Types.Bool, !rightTruthiness);
         }
         
         if (left is null)
@@ -245,7 +245,7 @@ public static class Operator
     {
         var equality = left?.Equals(right) ?? right?.Equals(left) ?? false;
         equality = operation == "==" ? equality : !equality;
-        return BsTypes.Create(Runner.Run(""), "bool", equality);
+        return BsTypes.Create(Runner.Run(""), BsTypes.Types.Bool, equality);
     }
     
     private static Variable ConductNumericalOperation(string operation, Variable? left, Variable? right)
@@ -318,11 +318,11 @@ public static class Operator
             if (operation == "and")
             {
                 var value = Truthiness.IsTruthy(Runner.Run(""), leftBoolean) && Truthiness.IsTruthy(Runner.Run(""), rightBoolean);
-                return BsTypes.Create(Runner.Run(""), "bool", value);
+                return BsTypes.Create(Runner.Run(""), BsTypes.Types.Bool, value);
             } else if (operation == "or")
             {
                 var value = Truthiness.IsTruthy(Runner.Run(""), leftBoolean) || Truthiness.IsTruthy(Runner.Run(""), rightBoolean);
-                return BsTypes.Create(Runner.Run(""), "bool", value);
+                return BsTypes.Create(Runner.Run(""), BsTypes.Types.Bool, value);
             }
             else
             {
@@ -331,7 +331,7 @@ public static class Operator
         } else if (right is ConstantVariable rightBoolean2 && operation == "not")
         {
             var value = !Truthiness.IsTruthy(Runner.Run(""), rightBoolean2);
-            return BsTypes.Create(Runner.Run(""), "bool", value);
+            return BsTypes.Create(Runner.Run(""), BsTypes.Types.Bool, value);
         }
         else
         {

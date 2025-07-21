@@ -211,7 +211,7 @@ public static class TryInstructionTests
                                     finally:
                                         x = 3
                                     """);
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], BsTypes.Create(memory, "int", 3));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], BsTypes.Create(memory, BsTypes.Types.Int, 3));
         }
         
         [Test]
@@ -227,8 +227,8 @@ public static class TryInstructionTests
                                     finally:
                                         x = 2
                                     """);
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], BsTypes.Create(memory, "int", 2));
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], BsTypes.Create(memory, "int", 2));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], BsTypes.Create(memory, BsTypes.Types.Int, 2));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], BsTypes.Create(memory, BsTypes.Types.Int, 2));
         }
         
         [Test]
@@ -244,8 +244,8 @@ public static class TryInstructionTests
                                     finally:
                                         x = 2
                                     """);
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], BsTypes.Create(memory, "int", 2));
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], BsTypes.Create(memory, "int", 2));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], BsTypes.Create(memory, BsTypes.Types.Int, 2));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], BsTypes.Create(memory, BsTypes.Types.Int, 2));
         }
         
         // We'll have to write some additional tests here for running finally block if exceptions are raised in

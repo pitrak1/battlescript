@@ -13,7 +13,7 @@ public class Dictionaries
         var expected = new DictionaryVariable(null, 
             new Dictionary<string, Variable>()
             {
-                { "asdf", BsTypes.Create(memory, "int", 5)},
+                { "asdf", BsTypes.Create(memory, BsTypes.Types.Int, 5)},
                 {"qwer", new StringVariable("5")}
             }
         );

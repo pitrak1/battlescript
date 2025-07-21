@@ -24,7 +24,7 @@ public class ConstantInstruction : Instruction
     {
         if (Value == "True" || Value == "False")
         {
-            return BsTypes.Create(memory, "bool", Value == "True");
+            return BsTypes.Create(memory, BsTypes.Types.Bool, Value == "True");
         }
         else
         {

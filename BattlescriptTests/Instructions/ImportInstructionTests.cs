@@ -31,7 +31,7 @@ public static class ImportInstructionTests
         {
             var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
             var memory = Runner.Run($"from '{filePath}' import x");
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], BsTypes.Create(memory, "int", 5));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], BsTypes.Create(memory, BsTypes.Types.Int, 5));
         }
         
         [Test]
@@ -40,12 +40,12 @@ public static class ImportInstructionTests
             var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
             var memory = Runner.Run($"from '{filePath}' import x, y, z");
 
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], BsTypes.Create(memory, "int", 5));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], BsTypes.Create(memory, BsTypes.Types.Int, 5));
             Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], 
-                BsTypes.Create(memory, "list", new List<Variable>() {
-                        BsTypes.Create(memory, "int", 1), 
-                        BsTypes.Create(memory, "int", 2), 
-                        BsTypes.Create(memory, "int", 3)}));
+                BsTypes.Create(memory, BsTypes.Types.List, new List<Variable>() {
+                        BsTypes.Create(memory, BsTypes.Types.Int, 1), 
+                        BsTypes.Create(memory, BsTypes.Types.Int, 2), 
+                        BsTypes.Create(memory, BsTypes.Types.Int, 3)}));
             Assertions.AssertVariablesEqual(memory.Scopes[0]["z"], new StringVariable("asdf"));
         }
         
@@ -56,12 +56,12 @@ public static class ImportInstructionTests
             var memory = Runner.Run($"from '{filePath}' import *");
             var expected = new DictionaryVariable(null, new Dictionary<string, Variable>()
             {
-                { "x", BsTypes.Create(memory, "int", 5) },
+                { "x", BsTypes.Create(memory, BsTypes.Types.Int, 5) },
                 {
-                    "y", BsTypes.Create(memory, "list", new List<Variable>() {
-                        BsTypes.Create(memory, "int", 1), 
-                        BsTypes.Create(memory, "int", 2), 
-                        BsTypes.Create(memory, "int", 3)})
+                    "y", BsTypes.Create(memory, BsTypes.Types.List, new List<Variable>() {
+                        BsTypes.Create(memory, BsTypes.Types.Int, 1), 
+                        BsTypes.Create(memory, BsTypes.Types.Int, 2), 
+                        BsTypes.Create(memory, BsTypes.Types.Int, 3)})
                 },
                 { "z", new StringVariable("asdf") }
             });

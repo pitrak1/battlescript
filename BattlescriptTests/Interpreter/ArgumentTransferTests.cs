@@ -17,8 +17,8 @@ public static class ArgumentTransferTests
             var parameters = new List<Instruction>() { new VariableInstruction("x"), new VariableInstruction("y") };
             ArgumentTransfer.RunAndApply(memory, arguments, parameters);
             
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BsTypes.Create(memory, "int", 5));
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BsTypes.Create(memory, "int", 6));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BsTypes.Create(memory, BsTypes.Types.Int, 5));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BsTypes.Create(memory, BsTypes.Types.Int, 6));
         }
         
         [Test]
@@ -34,8 +34,8 @@ public static class ArgumentTransferTests
             var parameters = new List<Instruction>() { new VariableInstruction("x"), new VariableInstruction("y") };
             ArgumentTransfer.RunAndApply(memory, arguments, parameters);
             
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BsTypes.Create(memory, "int", 6));
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BsTypes.Create(memory, "int", 5));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BsTypes.Create(memory, BsTypes.Types.Int, 6));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BsTypes.Create(memory, BsTypes.Types.Int, 5));
         }
         
         [Test]
@@ -51,8 +51,8 @@ public static class ArgumentTransferTests
             var parameters = new List<Instruction>() { new VariableInstruction("x"), new VariableInstruction("y") };
             ArgumentTransfer.RunAndApply(memory, arguments, parameters);
             
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BsTypes.Create(memory, "int", 5));
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BsTypes.Create(memory, "int", 6));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BsTypes.Create(memory, BsTypes.Types.Int, 5));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BsTypes.Create(memory, BsTypes.Types.Int, 6));
         }
         
         [Test]
@@ -112,8 +112,8 @@ public static class ArgumentTransferTests
                 new AssignmentInstruction("=", new VariableInstruction("y"), new NumericInstruction(6))
             };
             ArgumentTransfer.RunAndApply(memory, arguments, parameters);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BsTypes.Create(memory, "int", 5));
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BsTypes.Create(memory, "int", 6));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BsTypes.Create(memory, BsTypes.Types.Int, 5));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BsTypes.Create(memory, BsTypes.Types.Int, 6));
         }
         
         [Test]
@@ -132,8 +132,8 @@ public static class ArgumentTransferTests
                 new AssignmentInstruction("=", new VariableInstruction("y"), new NumericInstruction(6))
             };
             ArgumentTransfer.RunAndApply(memory, arguments, parameters);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BsTypes.Create(memory, "int", 5));
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BsTypes.Create(memory, "int", 9));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BsTypes.Create(memory, BsTypes.Types.Int, 5));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BsTypes.Create(memory, BsTypes.Types.Int, 9));
         }
         
         [Test]
@@ -152,8 +152,8 @@ public static class ArgumentTransferTests
                 new AssignmentInstruction("=", new VariableInstruction("y"), new NumericInstruction(6))
             };
             ArgumentTransfer.RunAndApply(memory, arguments, parameters);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BsTypes.Create(memory, "int", 5));
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BsTypes.Create(memory, "int", 9));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BsTypes.Create(memory, BsTypes.Types.Int, 5));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BsTypes.Create(memory, BsTypes.Types.Int, 9));
         }
         
         [Test]
@@ -190,14 +190,14 @@ public static class ArgumentTransferTests
             };
             var classValues = new Dictionary<string, Variable>()
             {
-                { "i", BsTypes.Create(memory, "int", 5) },
-                { "j", BsTypes.Create(memory, "int", 6) }
+                { "i", BsTypes.Create(memory, BsTypes.Types.Int, 5) },
+                { "j", BsTypes.Create(memory, BsTypes.Types.Int, 6) }
             };
             var objectContext = new ObjectVariable(classValues, new ClassVariable("asdf", classValues));
                 
             ArgumentTransfer.RunAndApply(memory, arguments, parameters, objectContext);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], objectContext);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BsTypes.Create(memory, "int", 5));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BsTypes.Create(memory, BsTypes.Types.Int, 5));
         }
     }
 
@@ -209,11 +209,11 @@ public static class ArgumentTransferTests
         {
             // Function: (x, y)     Call: (5, 6)
             var memory = Runner.Run("");
-            var arguments = new List<Variable>() { BsTypes.Create(memory, "int", 5), BsTypes.Create(memory, "int", 6) };
+            var arguments = new List<Variable>() { BsTypes.Create(memory, BsTypes.Types.Int, 5), BsTypes.Create(memory, BsTypes.Types.Int, 6) };
             var parameters = new List<Instruction>() { new VariableInstruction("x"), new VariableInstruction("y") };
             ArgumentTransfer.RunAndApply(memory, arguments, parameters);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BsTypes.Create(memory, "int", 5));
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BsTypes.Create(memory, "int", 6));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BsTypes.Create(memory, BsTypes.Types.Int, 5));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BsTypes.Create(memory, BsTypes.Types.Int, 6));
         }
         
         [Test]
@@ -221,17 +221,17 @@ public static class ArgumentTransferTests
         {
             // Function: (x, y)     Call: (5)
             var memory = Runner.Run("");
-            var arguments = new List<Variable>() { BsTypes.Create(memory, "int", 5) };
+            var arguments = new List<Variable>() { BsTypes.Create(memory, BsTypes.Types.Int, 5) };
             var parameters = new List<Instruction>() { new VariableInstruction("x"), new VariableInstruction("y") };
             var classValues = new Dictionary<string, Variable>()
             {
-                { "i", BsTypes.Create(memory, "int", 5) },
-                { "j", BsTypes.Create(memory, "int", 6) }
+                { "i", BsTypes.Create(memory, BsTypes.Types.Int, 5) },
+                { "j", BsTypes.Create(memory, BsTypes.Types.Int, 6) }
             };
             var objectContext = new ObjectVariable(classValues, new ClassVariable("asdf", classValues));
             ArgumentTransfer.RunAndApply(memory, arguments, parameters, objectContext);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], objectContext);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BsTypes.Create(memory, "int", 5));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["y"], BsTypes.Create(memory, BsTypes.Types.Int, 5));
         }
     }
 }

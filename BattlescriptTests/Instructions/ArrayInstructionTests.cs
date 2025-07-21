@@ -63,8 +63,8 @@ public static class ArrayInstructionTests
             var memory = Runner.Run("x = {'asdf': 3, 'qwer': 4}");
             var Create = new DictionaryVariable(null, new Dictionary<string, Variable>()
             {
-                {"asdf", BsTypes.Create(memory, "int", 3)},
-                {"qwer", BsTypes.Create(memory, "int", 4)},
+                {"asdf", BsTypes.Create(memory, BsTypes.Types.Int, 3)},
+                {"qwer", BsTypes.Create(memory, BsTypes.Types.Int, 4)},
             });
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
         }
@@ -75,7 +75,7 @@ public static class ArrayInstructionTests
             var memory = Runner.Run("x = {'asdf': 3}");
             var Create = new DictionaryVariable(null, new Dictionary<string, Variable>()
             {
-                {"asdf", BsTypes.Create(memory, "int", 3)},
+                {"asdf", BsTypes.Create(memory, BsTypes.Types.Int, 3)},
             });
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
         }
@@ -86,7 +86,7 @@ public static class ArrayInstructionTests
             var memory = Runner.Run("x = {'asdf': 3}");
             var Create = new DictionaryVariable(null, new Dictionary<string, Variable>()
             {
-                {"asdf", BsTypes.Create(memory, "int", 3)},
+                {"asdf", BsTypes.Create(memory, BsTypes.Types.Int, 3)},
             });
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
         }
@@ -97,7 +97,7 @@ public static class ArrayInstructionTests
             var memory = Runner.Run("x = {4: 3}");
             var Create = new DictionaryVariable(new Dictionary<int, Variable>()
             {
-                {4, BsTypes.Create(memory, "int", 3)},
+                {4, BsTypes.Create(memory, BsTypes.Types.Int, 3)},
             });
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
         }
@@ -117,7 +117,7 @@ public static class ArrayInstructionTests
                         x = asdf(4, 5)
                         """;
             var memory = Runner.Run(input);
-            var Create = BsTypes.Create(memory, "int", 9);
+            var Create = BsTypes.Create(memory, BsTypes.Types.Int, 9);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
         }
         
@@ -145,15 +145,15 @@ public static class ArrayInstructionTests
                 ]);
             var classVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
-                { "i", BsTypes.Create(memory, "int", 4) },
-                { "j", BsTypes.Create(memory, "int", 5) },
+                { "i", BsTypes.Create(memory, BsTypes.Types.Int, 4) },
+                { "j", BsTypes.Create(memory, BsTypes.Types.Int, 5) },
                 { "asdf", methodVariable }
             });
             var Create = new ObjectVariable(
                 new Dictionary<string, Variable>()
                 {
-                    {"i", BsTypes.Create(memory, "int", 4) },
-                    {"j", BsTypes.Create(memory, "int", 5)}
+                    {"i", BsTypes.Create(memory, BsTypes.Types.Int, 4) },
+                    {"j", BsTypes.Create(memory, BsTypes.Types.Int, 5)}
                 },
                 classVariable);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
@@ -173,7 +173,7 @@ public static class ArrayInstructionTests
                         x = y.i
                         """;
             var memory = Runner.Run(input);
-            var Create = BsTypes.Create(memory, "int", 9);
+            var Create = BsTypes.Create(memory, BsTypes.Types.Int, 9);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
         }
 
@@ -183,7 +183,7 @@ public static class ArrayInstructionTests
             var input = "x = ((4 - 2) * 3) >= (2 * (5 + 5)) or isinstance(5, int)";
             // var input = "x = ((4 - 2) * 3) >= (2 * (5 + 5))";
             var memory = Runner.Run(input);
-            var Create = BsTypes.Create(memory, "bool", true);
+            var Create = BsTypes.Create(memory, BsTypes.Types.Bool, true);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
         }
     }
@@ -195,10 +195,10 @@ public static class ArrayInstructionTests
         public void HandlesListCreation()
         {
             var memory = Runner.Run("x = [9, 8, 7]");
-            var Create = BsTypes.Create(memory, "list", new List<Variable>() {
-                BsTypes.Create(memory, "int", 9),
-                BsTypes.Create(memory, "int", 8),
-                BsTypes.Create(memory, "int", 7)});
+            var Create = BsTypes.Create(memory, BsTypes.Types.List, new List<Variable>() {
+                BsTypes.Create(memory, BsTypes.Types.Int, 9),
+                BsTypes.Create(memory, BsTypes.Types.Int, 8),
+                BsTypes.Create(memory, BsTypes.Types.Int, 7)});
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
         }
         
@@ -210,7 +210,7 @@ public static class ArrayInstructionTests
                         x = y[1]
                         """;
             var memory = Runner.Run(input);
-            var Create = BsTypes.Create(memory, "int", 8);
+            var Create = BsTypes.Create(memory, BsTypes.Types.Int, 8);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
         }
     }

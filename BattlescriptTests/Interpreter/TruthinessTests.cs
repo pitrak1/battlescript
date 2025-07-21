@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using Battlescript;
 
 namespace BattlescriptTests.InterpreterTests;
@@ -120,7 +119,7 @@ public class TruthinessTests
         [Test]
         public void NonZeroIntReturnsTrue()
         {
-            var variable = BsTypes.Create(_memory, "int", 4);
+            var variable = BsTypes.Create(_memory, BsTypes.Types.Int, 4);
             var result = Truthiness.IsTruthy(_memory, variable);
             Assert.IsTrue(result);
         }
@@ -128,7 +127,7 @@ public class TruthinessTests
         [Test]
         public void ZeroIntReturnsFalse()
         {
-            var variable = BsTypes.Create(_memory, "int", 0);
+            var variable = BsTypes.Create(_memory, BsTypes.Types.Int, 0);
             var result = Truthiness.IsTruthy(_memory, variable);
             Assert.IsFalse(result);
         }
@@ -136,7 +135,7 @@ public class TruthinessTests
         [Test]
         public void NonZeroFloatReturnsTrue()
         {
-            var variable = BsTypes.Create(_memory, "float", 4.5);
+            var variable = BsTypes.Create(_memory, BsTypes.Types.Float, 4.5);
             var result = Truthiness.IsTruthy(_memory, variable);
             Assert.IsTrue(result);
         }
@@ -144,7 +143,7 @@ public class TruthinessTests
         [Test]
         public void ZeroFloatReturnsFalse()
         {
-            var variable = BsTypes.Create(_memory, "float", 0.0);
+            var variable = BsTypes.Create(_memory, BsTypes.Types.Float, 0.0);
             var result = Truthiness.IsTruthy(_memory, variable);
             Assert.IsFalse(result);
         }
@@ -152,7 +151,7 @@ public class TruthinessTests
         [Test]
         public void TrueBoolReturnsTrue()
         {
-            var variable = BsTypes.Create(_memory, "bool", true);
+            var variable = BsTypes.Create(_memory, BsTypes.Types.Bool, true);
             var result = Truthiness.IsTruthy(_memory, variable);
             Assert.IsTrue(result);
         }
@@ -160,7 +159,7 @@ public class TruthinessTests
         [Test]
         public void FalseBoolReturnsFalse()
         {
-            var variable = BsTypes.Create(_memory, "bool", false);
+            var variable = BsTypes.Create(_memory, BsTypes.Types.Bool, false);
             var result = Truthiness.IsTruthy(_memory, variable);
             Assert.IsFalse(result);
         }
@@ -168,10 +167,10 @@ public class TruthinessTests
         [Test]
         public void NonEmptyListReturnsTrue()
         {
-            var variable = BsTypes.Create(_memory, "list", new List<Variable>()
+            var variable = BsTypes.Create(_memory, BsTypes.Types.List, new SequenceVariable(new List<Variable?>()
             {
                 new NumericVariable(1)
-            });
+            }));
             var result = Truthiness.IsTruthy(_memory, variable);
             Assert.IsTrue(result);
         }
@@ -179,7 +178,7 @@ public class TruthinessTests
         [Test]
         public void EmptyListReturnsFalse()
         {
-            var variable = BsTypes.Create(_memory, "list", new List<Variable>());
+            var variable = BsTypes.Create(_memory, BsTypes.Types.List, new SequenceVariable(new List<Variable?>()));
             var result = Truthiness.IsTruthy(_memory, variable);
             Assert.IsFalse(result);
         }

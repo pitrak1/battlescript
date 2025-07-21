@@ -25,7 +25,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
                 if (valueVariable is SequenceVariable sequenceVariable)
                 {
                     SetRangeIndex(memory, sequenceVariable, indexSequence.Values);
-                } else if (BsTypes.Is(memory, "list", valueVariable))
+                } else if (BsTypes.Is(memory, BsTypes.Types.List, valueVariable))
                 {
                     SetRangeIndex(memory, (valueVariable as ObjectVariable).Values["__value"] as SequenceVariable, indexSequence.Values);
                 }
@@ -175,7 +175,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
                     throw new Exception("Cannot add sequence and non-sequence");
                 }
             case "*":
-                if (BsTypes.Is(memory, "int", other))
+                if (BsTypes.Is(memory, BsTypes.Types.Int, other))
                 {
                     var intValue = BsTypes.GetIntValue(memory, other);
                     var values = new List<Variable>();

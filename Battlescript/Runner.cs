@@ -6,7 +6,7 @@ public static class Runner
     {
         var memory = new Memory();
         
-        foreach (var builtin in Consts.BuiltInTypes)
+        foreach (var builtin in BsTypes.TypeStrings)
         {
             LoadBuiltin(memory, builtin);
         }

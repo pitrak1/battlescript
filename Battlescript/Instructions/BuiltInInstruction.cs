@@ -91,11 +91,11 @@ public class BuiltInInstruction : Instruction
             {
                 for (var i = startingValue; i < count; i += step)
                 {
-                    values.Add(BsTypes.Create(memory, "int", i));
+                    values.Add(BsTypes.Create(memory, BsTypes.Types.Int, i));
                 }
             }
             
-            return BsTypes.Create(memory, "list", values);
+            return BsTypes.Create(memory, BsTypes.Types.List, values);
         }
         else
         {
@@ -103,10 +103,10 @@ public class BuiltInInstruction : Instruction
             {
                 for (var i = startingValue; i > count; i += step)
                 {
-                    values.Add(BsTypes.Create(memory, "int", i));
+                    values.Add(BsTypes.Create(memory, BsTypes.Types.Int, i));
                 }
             }
-            return BsTypes.Create(memory, "list", values);
+            return BsTypes.Create(memory, BsTypes.Types.List, values);
         }
     }
 
@@ -123,12 +123,12 @@ public class BuiltInInstruction : Instruction
             switch (principleTypeInstruction.Value)
             {
                 case "__numeric__":
-                    return BsTypes.Create(memory, "bool",
+                    return BsTypes.Create(memory, BsTypes.Types.Bool,
                         objectExpression is NumericVariable);
                 case "__sequence__":
-                    return BsTypes.Create(memory, "bool", objectExpression is SequenceVariable);
+                    return BsTypes.Create(memory, BsTypes.Types.Bool, objectExpression is SequenceVariable);
                 default:
-                    return BsTypes.Create(memory, "bool", false);
+                    return BsTypes.Create(memory, BsTypes.Types.Bool, false);
             }
         }
         else
@@ -137,11 +137,11 @@ public class BuiltInInstruction : Instruction
         
             if (objectExpression is ObjectVariable objectVariable && classExpression is ClassVariable classVariable)
             {
-                return BsTypes.Create(memory, "bool", objectVariable.IsInstance(classVariable));
+                return BsTypes.Create(memory, BsTypes.Types.Bool, objectVariable.IsInstance(classVariable));
             }
             else
             {
-                return BsTypes.Create(memory, "bool", false);
+                return BsTypes.Create(memory, BsTypes.Types.Bool, false);
             }
         }
     }
@@ -158,7 +158,7 @@ public class BuiltInInstruction : Instruction
 
         if (firstExpression is ClassVariable firstVariable && secondExpression is ClassVariable secondVariable)
         {
-            return BsTypes.Create(memory, "bool", firstVariable.IsSubclass(secondVariable));
+            return BsTypes.Create(memory, BsTypes.Types.Bool, firstVariable.IsSubclass(secondVariable));
         }
         else
         {
@@ -222,18 +222,18 @@ public class BuiltInInstruction : Instruction
         var firstExpression = Parameters[0].Interpret(memory);
         if (firstExpression is StringVariable stringVariable)
         {
-            return BsTypes.Create(memory, "int", stringVariable.Value.Length);
+            return BsTypes.Create(memory, BsTypes.Types.Int, stringVariable.Value.Length);
         }
         else if (firstExpression is SequenceVariable sequenceVariable)
         {
-            return BsTypes.Create(memory, "int", sequenceVariable.Values.Count);
+            return BsTypes.Create(memory, BsTypes.Types.Int, sequenceVariable.Values.Count);
         }
         else if (firstExpression is ObjectVariable objectVariable)
         {
-            if (BsTypes.Is(memory, "list", objectVariable))
+            if (BsTypes.Is(memory, BsTypes.Types.List, objectVariable))
             {
                 var value = objectVariable.Values["__value"] as SequenceVariable;
-                return BsTypes.Create(memory, "int", value.Values.Count);
+                return BsTypes.Create(memory, BsTypes.Types.Int, value.Values.Count);
             }
             throw new Exception("Bad arguments, clean this up later");
         }

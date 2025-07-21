@@ -37,7 +37,7 @@ public class ForInstruction : Instruction
     {
         var range = Range.Interpret(memory) as ObjectVariable;
 
-        if (BsTypes.Is(memory, "list", range))
+        if (BsTypes.Is(memory, BsTypes.Types.List, range))
         {
             var values = (range.Values["__value"] as SequenceVariable).Values;
             for (var i = 0; i < values.Count; i++)

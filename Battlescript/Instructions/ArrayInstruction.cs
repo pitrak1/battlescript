@@ -151,7 +151,7 @@ public class ArrayInstruction : Instruction
                     indexVariable = index.Interpret(memory);
                 }
         
-                if (BsTypes.Is(memory, "int", indexVariable))
+                if (BsTypes.Is(memory, BsTypes.Types.Int, indexVariable))
                 {
                     return (BsTypes.GetIntValue(memory, indexVariable), null);
                 } else if (indexVariable is StringVariable stringVariable)
@@ -220,7 +220,7 @@ public class ArrayInstruction : Instruction
                 
                 }
 
-                return BsTypes.Create(memory, "list", values);
+                return BsTypes.Create(memory, BsTypes.Types.List, values);
             }
         }
     }

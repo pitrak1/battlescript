@@ -27,22 +27,22 @@ public static class Truthiness
 
     private static bool IsObjectTruthy(Memory memory, Variable variable)
     {
-        if (BsTypes.Is(memory, "int", variable))
+        if (BsTypes.Is(memory, BsTypes.Types.Int, variable))
         {
             var value = BsTypes.GetIntValue(memory, variable);
             return value != 0;
         } 
-        else if (BsTypes.Is(memory, "float", variable))
+        else if (BsTypes.Is(memory, BsTypes.Types.Float, variable))
         {
             var value = BsTypes.GetFloatValue(memory, variable);
             return Math.Abs(value) > Consts.FloatingPointTolerance;
         }
-        else if (BsTypes.Is(memory, "bool", variable))
+        else if (BsTypes.Is(memory, BsTypes.Types.Bool, variable))
         {
             var value = BsTypes.GetBoolValue(memory, variable);
             return value;
         }
-        else if (BsTypes.Is(memory, "list", variable))
+        else if (BsTypes.Is(memory, BsTypes.Types.List, variable))
         {
             var value = BsTypes.GetListValue(memory, variable);
             return value.Values.Count > 0;

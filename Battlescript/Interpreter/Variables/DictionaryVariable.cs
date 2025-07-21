@@ -48,7 +48,7 @@ public class DictionaryVariable : Variable, IEquatable<DictionaryVariable>
     {
         var indexVariable = index.Values.Select(x => x.Interpret(memory)).ToList();
         
-        if (BsTypes.Is(memory, "int", indexVariable[0]))
+        if (BsTypes.Is(memory, BsTypes.Types.Int, indexVariable[0]))
         {
             return (BsTypes.GetIntValue(memory, indexVariable[0]), null);
         } else if (indexVariable[0] is StringVariable stringVariable)

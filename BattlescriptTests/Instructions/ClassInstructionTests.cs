@@ -45,7 +45,7 @@ public static class ClassInstructionTests
             var memory = Runner.Run("class MyClass:\n\tx = 1");
             var expected = new ClassVariable("MyClass", new Dictionary<string, Variable>()
             {
-                { "x", BsTypes.Create(memory, "int", 1) }
+                { "x", BsTypes.Create(memory, BsTypes.Types.Int, 1) }
             });
             Assertions.AssertVariablesEqual(memory.Scopes.First()["MyClass"], expected);
         }
@@ -63,12 +63,12 @@ public static class ClassInstructionTests
                                     """);
             var asdf = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
-                { "x", BsTypes.Create(memory, "int", 1) }
+                { "x", BsTypes.Create(memory, BsTypes.Types.Int, 1) }
             });
 
             var qwer = new ClassVariable("qwer", new Dictionary<string, Variable>()
             {
-                { "y", BsTypes.Create(memory, "int", 2) }
+                { "y", BsTypes.Create(memory, BsTypes.Types.Int, 2) }
             }, [asdf]);
 
             Assertions.AssertVariablesEqual(memory.Scopes.First()["asdf"], asdf);
@@ -92,17 +92,17 @@ public static class ClassInstructionTests
             
             var asdf = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
-                { "x", BsTypes.Create(memory, "int", 1) }
+                { "x", BsTypes.Create(memory, BsTypes.Types.Int, 1) }
             });
 
             var qwer = new ClassVariable("qwer", new Dictionary<string, Variable>()
             {
-                { "y", BsTypes.Create(memory, "int", 2) }
+                { "y", BsTypes.Create(memory, BsTypes.Types.Int, 2) }
             });
 
             var zxcv = new ClassVariable("zxcv", new Dictionary<string, Variable>()
             {
-                { "z", BsTypes.Create(memory, "int", 3) }
+                { "z", BsTypes.Create(memory, BsTypes.Types.Int, 3) }
             }, [asdf, qwer]);
             
             Assertions.AssertVariablesEqual(memory.Scopes.First()["asdf"], asdf);

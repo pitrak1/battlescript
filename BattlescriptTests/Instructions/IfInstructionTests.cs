@@ -23,14 +23,14 @@ public static class IfInstructionTests
         public void RunsCodeIfConditionIsTrue()
         {
             var memory = Runner.Run("x = 3\nif True:\n\tx = 5");
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], BsTypes.Create(memory, "int", 5));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], BsTypes.Create(memory, BsTypes.Types.Int, 5));
         }
         
         [Test]
         public void DoesNotRunCodeIfConditionIsFalse()
         {
             var memory = Runner.Run("x = 3\nif False:\n\tx = 5");
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], BsTypes.Create(memory, "int", 3));
+            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], BsTypes.Create(memory, BsTypes.Types.Int, 3));
         }
     }
 }

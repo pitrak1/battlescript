@@ -51,14 +51,14 @@ public class NumericInstruction : Instruction
     {
         if (Value is double)
         {
-            var floatClass = memory.BuiltInReferences["float"];
+            var floatClass = memory.GetBuiltIn(BsTypes.Types.Float);
             var floatObject = floatClass.CreateObject();
             floatObject.Values["__value"] = new NumericVariable(Value);
             return floatObject;
         }
         else
         {
-            var intClass = memory.BuiltInReferences["int"];
+            var intClass = memory.GetBuiltIn(BsTypes.Types.Int);
             var intObject = intClass.CreateObject();
             intObject.Values["__value"] = new NumericVariable(Value);
             return intObject;

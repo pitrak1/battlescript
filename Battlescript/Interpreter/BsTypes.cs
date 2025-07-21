@@ -2,15 +2,79 @@ namespace Battlescript;
 
 public static class BsTypes
 {
-    public static bool Is(Memory memory, string builtInType, Variable variable)
+    public enum Types
     {
-        var builtInClass = memory.BuiltInReferences[builtInType];
-        return variable is ObjectVariable objectVariable && objectVariable.Class.Name == builtInClass.Name;
+        Numeric,
+        Int,
+        Float,
+        Bool,
+        List,
+        Exception
     }
     
-    public static Variable Create(Memory memory, string builtInType, dynamic value)
+    public static readonly string[] TypeStrings = ["numeric", "int", "float", "bool", "list", "Exception"];
+    
+    private static readonly Dictionary<string, Types> StringsToTypes = new() {
+        {"numeric", Types.Numeric},
+        {"int", Types.Int},
+        {"float", Types.Float},
+        {"bool", Types.Bool},
+        {"list", Types.List},
+        {"Exception", Types.Exception}
+    };
+    
+    private static readonly Dictionary<Types, string> TypesToStrings = new() {
+        {Types.Numeric, "numeric"},
+        {Types.Int, "int"},
+        {Types.Float, "float"},
+        {Types.Bool, "bool"},
+        {Types.List, "list"},
+        {Types.Exception, "Exception"}
+    };
+
+    public static Types GetTypeFromString(string type)
     {
-        var builtInClass = memory.BuiltInReferences[builtInType];
+        return StringsToTypes[type];
+    }
+
+    public static string GetStringFromType(Types type)
+    {
+        return TypesToStrings[type];
+    }
+    
+    public static bool Is(Memory memory, Types type, Variable variable)
+    {
+        var builtInClass = memory.GetBuiltIn(type);
+        return variable is ObjectVariable objectVariable && objectVariable.Class.Name == builtInClass.Name;
+    }
+
+    public static Types GetType(Memory memory, Variable variable)
+    {
+        if (Is(memory, Types.Int, variable))
+        {
+            return Types.Int;
+        } 
+        else if (Is(memory, Types.Float, variable))
+        {
+            return Types.Float;
+        }
+        else if (Is(memory, Types.Bool, variable))
+        {
+            return Types.Bool;
+        }
+        else if (Is(memory, Types.List, variable))
+        {
+            return Types.List;
+        }
+        else
+        {
+            throw new Exception("Variable is not a built in type");
+        }
+    }
+    
+    public static Variable Create(Memory memory, Types type, dynamic value)
+    {
+        var builtInClass = memory.GetBuiltIn(type);
         var objectVariable = builtInClass.CreateObject();
 
         if (value is int || value is double)
@@ -33,7 +97,7 @@ public static class BsTypes
     
     public static int GetIntValue(Memory memory, Variable variable)
     {
-        if (Is(memory, "int", variable) && variable is ObjectVariable objectVariable)
+        if (Is(memory, Types.Int, variable) && variable is ObjectVariable objectVariable)
         {
             var valueVariable = objectVariable.Values["__value"];
             return ((NumericVariable)valueVariable).Value;
@@ -46,7 +110,7 @@ public static class BsTypes
     
     public static double GetFloatValue(Memory memory, Variable variable)
     {
-        if (Is(memory, "float", variable) && variable is ObjectVariable objectVariable)
+        if (Is(memory, Types.Float, variable) && variable is ObjectVariable objectVariable)
         {
             var valueVariable = objectVariable.Values["__value"];
             return ((NumericVariable)valueVariable).Value;
@@ -59,7 +123,7 @@ public static class BsTypes
     
     public static bool GetBoolValue(Memory memory, Variable variable)
     {
-        if (Is(memory, "bool", variable) && variable is ObjectVariable objectVariable)
+        if (Is(memory, Types.Bool, variable) && variable is ObjectVariable objectVariable)
         {
             var valueVariable = objectVariable.Values["__value"];
             return ((NumericVariable)valueVariable).Value != 0;
@@ -72,7 +136,7 @@ public static class BsTypes
     
     public static SequenceVariable GetListValue(Memory memory, Variable variable)
     {
-        if (Is(memory, "list", variable) && variable is ObjectVariable objectVariable)
+        if (Is(memory, Types.List, variable) && variable is ObjectVariable objectVariable)
         {
             var valueVariable = objectVariable.Values["__value"] as SequenceVariable;
             return valueVariable!;

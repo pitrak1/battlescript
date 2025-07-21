@@ -235,6 +235,4 @@ public static class Consts
         "__numeric__",
         "__sequence__"
     ];
-
-    public static readonly string[] BuiltInTypes = ["numeric", "int", "float", "bool", "list", "Exception"];
 }

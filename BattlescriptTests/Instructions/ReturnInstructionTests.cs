@@ -34,7 +34,7 @@ public static class ReturnInstructionTests
                             new NumericInstruction(5)))
                 ]);
             Assertions.AssertVariablesEqual(memory.Scopes.First()["func"], funcVariable);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BsTypes.Create(memory, "int", 9));
+            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BsTypes.Create(memory, BsTypes.Types.Int, 9));
         }
     }
 }
