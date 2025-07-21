@@ -24,7 +24,7 @@ public class FunctionsTests
                         right: new NumericInstruction(5))
                 ]);
             var memory = Runner.Run(input);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["func"], expected);
+            Assertions.AssertVariable(memory, "func", expected);
         }
     
         [Test]
@@ -43,7 +43,7 @@ public class FunctionsTests
                         right: new VariableInstruction("asdf"))
                 ]);
             var memory = Runner.Run(input);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["func"], expected);
+            Assertions.AssertVariable(memory, "func", expected);
         }
         
         [Test]
@@ -65,7 +65,7 @@ public class FunctionsTests
                         right: new VariableInstruction("asdf"))
                 ]);
             var memory = Runner.Run(input);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["func"], expected);
+            Assertions.AssertVariable(memory, "func", expected);
         }
     }
     
@@ -83,7 +83,7 @@ public class FunctionsTests
                         """;
             var memory = Runner.Run(input);
             var expected = BsTypes.Create(memory, BsTypes.Types.Int, 5);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
         
         [Test]
@@ -97,7 +97,7 @@ public class FunctionsTests
                         """;
             var memory = Runner.Run(input);
             var expected = BsTypes.Create(memory, BsTypes.Types.Int, 5);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
     }
     
@@ -114,7 +114,7 @@ public class FunctionsTests
                         """;
             var memory = Runner.Run(input);
             var expected = BsTypes.Create(memory, BsTypes.Types.Int, 15);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
         
         [Test]
@@ -127,7 +127,7 @@ public class FunctionsTests
                         """;
             var memory = Runner.Run(input);
             var expected = BsTypes.Create(memory, BsTypes.Types.Int, 12);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
         
         [Test]
@@ -143,7 +143,7 @@ public class FunctionsTests
                         """;
             var memory = Runner.Run(input);
             var expected = BsTypes.Create(memory, BsTypes.Types.Int, 5);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
     }
     
@@ -160,7 +160,7 @@ public class FunctionsTests
                         """;
             var memory = Runner.Run(input);
             var expected = BsTypes.Create(memory, BsTypes.Types.Int, 6);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
         
         [Test]
@@ -173,7 +173,7 @@ public class FunctionsTests
                         """;
             var memory = Runner.Run(input);
             var expected = BsTypes.Create(memory, BsTypes.Types.Int, 5);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
     
         [Test]
@@ -200,7 +200,7 @@ public class FunctionsTests
                         """;
             var memory = Runner.Run(input);
             var expected = BsTypes.Create(memory, BsTypes.Types.Int, 6);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
         
         [Test]
@@ -213,7 +213,7 @@ public class FunctionsTests
                         """;
             var memory = Runner.Run(input);
             var expected = BsTypes.Create(memory, BsTypes.Types.Int, 10);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
         
         [Test]
@@ -274,7 +274,7 @@ public class FunctionsTests
                 [new VariableInstruction("y")],
                 [new ReturnInstruction(new OperationInstruction("+", new VariableInstruction("y"), new NumericInstruction(5)))]);
             var memory = Runner.Run(input);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
     }
 }

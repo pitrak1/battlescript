@@ -39,7 +39,7 @@ public static class AssignmentInstructionTests
         {
             var memory = Runner.Run("x = 6");
             var expected = BsTypes.Create(memory, BsTypes.Types.Int, 6);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
         
         [Test]
@@ -47,7 +47,7 @@ public static class AssignmentInstructionTests
         {
             var memory = Runner.Run("x = 6\nx += 2");
             var expected = BsTypes.Create(memory, BsTypes.Types.Int, 8);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
 
         [Test]
@@ -55,7 +55,7 @@ public static class AssignmentInstructionTests
         {
             var memory = Runner.Run("x = 6");
             var expected = BsTypes.Create(memory, BsTypes.Types.Int, 6);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
     }
 }

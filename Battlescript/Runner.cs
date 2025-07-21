@@ -12,6 +12,7 @@ public static class Runner
         }
 
         memory.PopulateBuiltInReferences();
+        memory.AddScope();
         RunPartial(memory, input);
         return memory;
     }
@@ -20,7 +21,7 @@ public static class Runner
     {
         var input = ReadFile(path);
         RunPartial(memory, input);
-        return memory.Scopes.First();
+        return memory.RemoveScope();
     }
 
     private static void LoadBuiltin(Memory memory, string builtinName)

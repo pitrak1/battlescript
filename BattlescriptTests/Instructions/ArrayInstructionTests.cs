@@ -66,7 +66,7 @@ public static class ArrayInstructionTests
                 {"asdf", BsTypes.Create(memory, BsTypes.Types.Int, 3)},
                 {"qwer", BsTypes.Create(memory, BsTypes.Types.Int, 4)},
             });
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
+            Assertions.AssertVariable(memory, "x", Create);
         }
         
         [Test]
@@ -77,7 +77,7 @@ public static class ArrayInstructionTests
             {
                 {"asdf", BsTypes.Create(memory, BsTypes.Types.Int, 3)},
             });
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
+            Assertions.AssertVariable(memory, "x", Create);
         }
         
         [Test]
@@ -88,7 +88,7 @@ public static class ArrayInstructionTests
             {
                 {"asdf", BsTypes.Create(memory, BsTypes.Types.Int, 3)},
             });
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
+            Assertions.AssertVariable(memory, "x", Create);
         }
         
         [Test]
@@ -99,7 +99,7 @@ public static class ArrayInstructionTests
             {
                 {4, BsTypes.Create(memory, BsTypes.Types.Int, 3)},
             });
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
+            Assertions.AssertVariable(memory, "x", Create);
         }
     }
     
@@ -118,7 +118,7 @@ public static class ArrayInstructionTests
                         """;
             var memory = Runner.Run(input);
             var Create = BsTypes.Create(memory, BsTypes.Types.Int, 9);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
+            Assertions.AssertVariable(memory, "x", Create);
         }
         
         [Test]
@@ -156,7 +156,7 @@ public static class ArrayInstructionTests
                     {"j", BsTypes.Create(memory, BsTypes.Types.Int, 5)}
                 },
                 classVariable);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
+            Assertions.AssertVariable(memory, "x", Create);
         }
         
         [Test]
@@ -174,7 +174,7 @@ public static class ArrayInstructionTests
                         """;
             var memory = Runner.Run(input);
             var Create = BsTypes.Create(memory, BsTypes.Types.Int, 9);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
+            Assertions.AssertVariable(memory, "x", Create);
         }
 
         [Test]
@@ -184,7 +184,7 @@ public static class ArrayInstructionTests
             // var input = "x = ((4 - 2) * 3) >= (2 * (5 + 5))";
             var memory = Runner.Run(input);
             var Create = BsTypes.Create(memory, BsTypes.Types.Bool, true);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
+            Assertions.AssertVariable(memory, "x", Create);
         }
     }
 
@@ -199,7 +199,7 @@ public static class ArrayInstructionTests
                 BsTypes.Create(memory, BsTypes.Types.Int, 9),
                 BsTypes.Create(memory, BsTypes.Types.Int, 8),
                 BsTypes.Create(memory, BsTypes.Types.Int, 7)});
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
+            Assertions.AssertVariable(memory, "x", Create);
         }
         
         [Test]
@@ -211,7 +211,7 @@ public static class ArrayInstructionTests
                         """;
             var memory = Runner.Run(input);
             var Create = BsTypes.Create(memory, BsTypes.Types.Int, 8);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], Create);
+            Assertions.AssertVariable(memory, "x", Create);
         }
     }
 }

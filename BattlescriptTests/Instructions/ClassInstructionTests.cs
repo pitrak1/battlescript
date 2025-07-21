@@ -47,7 +47,7 @@ public static class ClassInstructionTests
             {
                 { "x", BsTypes.Create(memory, BsTypes.Types.Int, 1) }
             });
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["MyClass"], expected);
+            Assertions.AssertVariable(memory, "MyClass", expected);
         }
         
         [Test]
@@ -71,8 +71,8 @@ public static class ClassInstructionTests
                 { "y", BsTypes.Create(memory, BsTypes.Types.Int, 2) }
             }, [asdf]);
 
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["asdf"], asdf);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["qwer"], qwer);
+            Assertions.AssertVariable(memory, "asdf", asdf);
+            Assertions.AssertVariable(memory, "qwer", qwer);
         }
         
         [Test]
@@ -105,9 +105,9 @@ public static class ClassInstructionTests
                 { "z", BsTypes.Create(memory, BsTypes.Types.Int, 3) }
             }, [asdf, qwer]);
             
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["asdf"], asdf);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["qwer"], qwer);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["zxcv"], zxcv);
+            Assertions.AssertVariable(memory, "asdf", asdf);
+            Assertions.AssertVariable(memory, "qwer", qwer);
+            Assertions.AssertVariable(memory, "zxcv", zxcv);
         }
     }
 }

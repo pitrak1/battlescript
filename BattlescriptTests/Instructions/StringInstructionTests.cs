@@ -23,7 +23,7 @@ public static class StringInstructionTests
         public void HandlesSingleQuoteStrings()
         {
             var memory = Runner.Run("x = 'asdf'");
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], new StringVariable("asdf"));
+            Assertions.AssertVariable(memory, "x", new StringVariable("asdf"));
         }
     }
 }

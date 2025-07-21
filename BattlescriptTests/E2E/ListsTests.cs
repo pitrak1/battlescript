@@ -14,7 +14,7 @@ public static class ListsTests
             var input = "x = [5, '5']\ny = x[1]";
             var expected = new StringVariable("5");
             var memory = Runner.Run(input);
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], expected);
+            Assertions.AssertVariable(memory, "y", expected);
         }
 
         [Test]
@@ -29,7 +29,7 @@ public static class ListsTests
                     BsTypes.Create(memory, BsTypes.Types.Int, 2),
                 }
             );
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], expected);
+            Assertions.AssertVariable(memory, "y", expected);
         }
         
         [Test]
@@ -44,7 +44,7 @@ public static class ListsTests
                     BsTypes.Create(memory, BsTypes.Types.Int, 3),
                 }
             );
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], expected);
+            Assertions.AssertVariable(memory, "y", expected);
         }
         
         [Test]
@@ -60,7 +60,7 @@ public static class ListsTests
                     new StringVariable("5"),
                 }
             );
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], expected);
+            Assertions.AssertVariable(memory, "y", expected);
         }
         
         [Test]
@@ -75,7 +75,7 @@ public static class ListsTests
                     BsTypes.Create(memory, BsTypes.Types.Int, 2),
                 }
             );
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], expected);
+            Assertions.AssertVariable(memory, "y", expected);
         }
         
         [Test]
@@ -90,7 +90,7 @@ public static class ListsTests
                     BsTypes.Create(memory, BsTypes.Types.Int, 3),
                 }
             );
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], expected);
+            Assertions.AssertVariable(memory, "y", expected);
         }
         
         [Test]
@@ -107,7 +107,7 @@ public static class ListsTests
                     new StringVariable("5"),
                 }
             );
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
         
         [Test]
@@ -124,7 +124,7 @@ public static class ListsTests
                     new StringVariable("5"),
                 }
             );
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
     }
     
@@ -141,7 +141,7 @@ public static class ListsTests
             var memory = Runner.Run(input);
             var expected = BsTypes.Create(memory, BsTypes.Types.Bool, true);
             
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
         
         [Test]
@@ -154,7 +154,7 @@ public static class ListsTests
             var memory = Runner.Run(input);
             var expected = BsTypes.Create(memory, BsTypes.Types.Bool, false);
             
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
 
         [Test]
@@ -167,7 +167,7 @@ public static class ListsTests
             var memory = Runner.Run(input);
             var expected = BsTypes.Create(memory, BsTypes.Types.Bool, true);
             
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
         
         [Test]
@@ -180,7 +180,7 @@ public static class ListsTests
             var memory = Runner.Run(input);
             var expected = BsTypes.Create(memory, BsTypes.Types.Bool, false);
             
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
     }
     
@@ -198,7 +198,7 @@ public static class ListsTests
             var memory = Runner.Run(input);
             var expected = BsTypes.Create(memory, BsTypes.Types.Bool, true);
             
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
         
         [Test]
@@ -212,7 +212,7 @@ public static class ListsTests
             var memory = Runner.Run(input);
             var expected = BsTypes.Create(memory, BsTypes.Types.Bool, false);
             
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
 
         [Test]
@@ -226,7 +226,7 @@ public static class ListsTests
             var memory = Runner.Run(input);
             var expected = BsTypes.Create(memory, BsTypes.Types.Bool, true);
             
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
         
         [Test]
@@ -240,7 +240,7 @@ public static class ListsTests
             var memory = Runner.Run(input);
             var expected = BsTypes.Create(memory, BsTypes.Types.Bool, false);
             
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
     }
 
@@ -265,7 +265,7 @@ public static class ListsTests
                 BsTypes.Create(memory, BsTypes.Types.Int, 5),
                 BsTypes.Create(memory, BsTypes.Types.Int, 6)
             });
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
         
         [Test]
@@ -288,7 +288,7 @@ public static class ListsTests
                 BsTypes.Create(memory, BsTypes.Types.Int, 2),
                 BsTypes.Create(memory, BsTypes.Types.Int, 3),
             });
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], expected);
+            Assertions.AssertVariable(memory, "x", expected);
         }
     }
 }

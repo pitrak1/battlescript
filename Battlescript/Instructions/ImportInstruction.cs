@@ -78,15 +78,7 @@ public class ImportInstruction : Instruction
         {
             if (name == "*")
             {
-                var stringValues = new Dictionary<string, Variable>();
-                foreach (var (key, value) in importedScope)
-                {
-                    if (!BsTypes.TypeStrings.Contains(key))
-                    {
-                        stringValues.Add(key, value);
-                    }
-                }
-                memory.SetVariable(new VariableInstruction(FileName), new DictionaryVariable(null, stringValues));
+                memory.SetVariable(new VariableInstruction(FileName), new DictionaryVariable(null, importedScope));
             }
             else if (importedScope.ContainsKey(name))
             {

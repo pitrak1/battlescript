@@ -84,7 +84,7 @@ public static class FunctionInstructionTests
                             new VariableInstruction("qwer")))
                 ]
             );
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["func"], functionVariable);
+            Assertions.AssertVariable(memory, "func", functionVariable);
         }
         
     }

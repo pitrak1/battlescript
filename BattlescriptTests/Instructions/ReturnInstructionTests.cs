@@ -33,8 +33,8 @@ public static class ReturnInstructionTests
                             new VariableInstruction("asdf"),
                             new NumericInstruction(5)))
                 ]);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["func"], funcVariable);
-            Assertions.AssertVariablesEqual(memory.Scopes.First()["x"], BsTypes.Create(memory, BsTypes.Types.Int, 9));
+            Assertions.AssertVariable(memory, "func", funcVariable);
+            Assertions.AssertVariable(memory, "x", BsTypes.Create(memory, BsTypes.Types.Int, 9));
         }
     }
 }

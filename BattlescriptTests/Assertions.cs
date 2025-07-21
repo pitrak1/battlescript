@@ -275,6 +275,12 @@ public static class Assertions
         AssertInstructionsEqual(parserResult, expected);
     }
 
+    public static void AssertVariable(Memory memory, string name, Variable expected)
+    {
+        var variable = memory.GetVariable(name);
+        AssertVariablesEqual(variable, expected);
+    }
+
     public static void AssertVariablesEqual(Variable? input, Variable expected)
     {
         Assert.That(input, Is.Not.Null);

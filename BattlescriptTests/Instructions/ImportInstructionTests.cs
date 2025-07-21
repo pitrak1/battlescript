@@ -31,7 +31,7 @@ public static class ImportInstructionTests
         {
             var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
             var memory = Runner.Run($"from '{filePath}' import x");
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], BsTypes.Create(memory, BsTypes.Types.Int, 5));
+            Assertions.AssertVariable(memory, "x", BsTypes.Create(memory, BsTypes.Types.Int, 5));
         }
         
         [Test]
@@ -40,13 +40,13 @@ public static class ImportInstructionTests
             var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
             var memory = Runner.Run($"from '{filePath}' import x, y, z");
 
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["x"], BsTypes.Create(memory, BsTypes.Types.Int, 5));
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["y"], 
+            Assertions.AssertVariable(memory, "x", BsTypes.Create(memory, BsTypes.Types.Int, 5));
+            Assertions.AssertVariable(memory, "y", 
                 BsTypes.Create(memory, BsTypes.Types.List, new List<Variable>() {
                         BsTypes.Create(memory, BsTypes.Types.Int, 1), 
                         BsTypes.Create(memory, BsTypes.Types.Int, 2), 
                         BsTypes.Create(memory, BsTypes.Types.Int, 3)}));
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["z"], new StringVariable("asdf"));
+            Assertions.AssertVariable(memory, "z", new StringVariable("asdf"));
         }
         
         [Test]
@@ -65,7 +65,7 @@ public static class ImportInstructionTests
                 },
                 { "z", new StringVariable("asdf") }
             });
-            Assertions.AssertVariablesEqual(memory.Scopes[0]["import"], expected);
+            Assertions.AssertVariable(memory, "import", expected);
         }
     }
     

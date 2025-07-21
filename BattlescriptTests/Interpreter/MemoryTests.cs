@@ -11,7 +11,7 @@ public static class MemoryTests
         [Test]
         public void CreatesEmptyScopeOnObjectCreation()
         {
-            var memory = Runner.Run("");
+            var memory = new Memory();
 
             Assert.That(memory.Scopes.Count, Is.EqualTo(1));
         }
@@ -23,7 +23,7 @@ public static class MemoryTests
         [Test]
         public void AddsEmptyScopeIfNoArgumentProvided()
         {
-            var memory = Runner.Run("");
+            var memory = new Memory();
             memory.AddScope();
             
             Assert.That(memory.Scopes.Count, Is.EqualTo(2));
@@ -33,7 +33,7 @@ public static class MemoryTests
         [Test]
         public void AddsExistingScopeIfArgumentProvided()
         {
-            var memory = Runner.Run("");
+            var memory = new Memory();
             var scope = new Dictionary<string, Variable>()
             {
                 { "x", new NumericVariable(5) }
@@ -55,7 +55,7 @@ public static class MemoryTests
             {
                 { "x", new NumericVariable(5) }
             };
-            var memory = Runner.Run("");
+            var memory = new Memory();
             memory.AddScope(scope);
             var returnedScope = memory.RemoveScope();
             
@@ -70,7 +70,7 @@ public static class MemoryTests
         [Test]
         public void RemovesScopeCountGiven()
         {
-            var memory = Runner.Run("");
+            var memory = new Memory();
             memory.AddScope();
             memory.AddScope();
             memory.AddScope();
@@ -90,7 +90,7 @@ public static class MemoryTests
             {
                 { "x", new NumericVariable(5) }
             };
-            var memory = Runner.Run("");
+            var memory = new Memory();
             memory.AddScope(scope);
             var returnedVariable = memory.GetVariable("x");
             
@@ -108,7 +108,7 @@ public static class MemoryTests
             {
                 { "y", new NumericVariable(8) }
             };
-            var memory = Runner.Run("");
+            var memory = new Memory();
             memory.AddScope(scope1);
             memory.AddScope(scope2);
             var returnedVariable = memory.GetVariable("x");
@@ -127,7 +127,7 @@ public static class MemoryTests
             {
                 { "x", new NumericVariable(8) }
             };
-            var memory = Runner.Run("");
+            var memory = new Memory();
             memory.AddScope(scope1);
             memory.AddScope(scope2);
             var returnedVariable = memory.GetVariable("x");
@@ -142,7 +142,7 @@ public static class MemoryTests
         [Test]
         public void CreatesVariableInLastScopeIfDoesNotExist()
         {
-            var memory = Runner.Run("");
+            var memory = new Memory();
             memory.AddScope();
             memory.SetVariable(new VariableInstruction("x"), new NumericVariable(5));
             var scopes = memory.Scopes;
@@ -157,7 +157,7 @@ public static class MemoryTests
             {
                 { "x", new NumericVariable(5) }
             };
-            var memory = Runner.Run("");
+            var memory = new Memory();
             memory.AddScope(scope);
             memory.SetVariable(new VariableInstruction("x"), new NumericVariable(8));
             var scopes = memory.Scopes;
@@ -176,7 +176,7 @@ public static class MemoryTests
             {
                 { "x", new NumericVariable(6) }
             };
-            var memory = Runner.Run("");
+            var memory = new Memory();
             memory.AddScope(scope1);
             memory.AddScope(scope2);
             memory.SetVariable(new VariableInstruction("x"), new NumericVariable(8));

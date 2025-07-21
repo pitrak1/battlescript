@@ -12,7 +12,7 @@ public class IntTests
                                 x = 0
                                 y = x.__value
                                 """);
-        Assert.That(memory.Scopes[0]["y"], Is.EqualTo(new NumericVariable(0)));
+        Assertions.AssertVariable(memory, "y", new NumericVariable(0));
     }
     
     [Test]
@@ -22,7 +22,7 @@ public class IntTests
                                 x = 5
                                 y = x.__value
                                 """);
-        Assert.That(memory.Scopes[0]["y"], Is.EqualTo(new NumericVariable(5)));
+        Assertions.AssertVariable(memory, "y", new NumericVariable(5));
     }
     
     [Test]
@@ -34,7 +34,7 @@ public class IntTests
                                 z = x + y
                                 a = z.__value
                                 """);
-        Assert.That(memory.Scopes[0]["a"], Is.EqualTo(new NumericVariable(8)));
+        Assertions.AssertVariable(memory, "a", new NumericVariable(8));
     }
     
     [Test]
@@ -46,7 +46,7 @@ public class IntTests
                                 z = x - y
                                 a = z.__value
                                 """);
-        Assert.That(memory.Scopes[0]["a"], Is.EqualTo(new NumericVariable(2)));
+        Assertions.AssertVariable(memory, "a", new NumericVariable(2));
     }
     
     [Test]
@@ -58,6 +58,6 @@ public class IntTests
                                 z = x * y
                                 a = z.__value
                                 """);
-        Assert.That(memory.Scopes[0]["a"], Is.EqualTo(new NumericVariable(15)));
+        Assertions.AssertVariable(memory, "a", new NumericVariable(15));
     }
 }
