@@ -68,9 +68,9 @@ public static class Operator
                 var rightNot = Truthiness.IsTruthy(memory, right!);
                 return BsTypes.Create(memory, BsTypes.Types.Bool, !rightNot);
             case "is":
-                return BsTypes.Create(memory, BsTypes.Types.Bool, left == right);
+                return BsTypes.Create(memory, BsTypes.Types.Bool, ReferenceEquals(left, right));
             case "is not":
-                return BsTypes.Create(memory, BsTypes.Types.Bool, left != right);
+                return BsTypes.Create(memory, BsTypes.Types.Bool, !ReferenceEquals(left, right));
             case "in":
                 return BsTypes.Create(memory, BsTypes.Types.Bool, GetInValue());
             case "not in":

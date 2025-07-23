@@ -170,7 +170,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
                 case "*":
                     return MultiplySequence(otherNumeric);
                 case "==":
-                    return BsTypes.Create(memory, BsTypes.Types.Bool, false);
+                    return new NumericVariable(0);
                 default:
                     throw new InterpreterInvalidOperationException(operation, this, other);
             }
@@ -182,7 +182,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
                 case "+":
                     return new SequenceVariable(Values.Concat(otherSequence.Values).ToList());
                 case "==":
-                    return BsTypes.Create(memory, BsTypes.Types.Bool, CompareSequences(otherSequence));
+                    return CompareSequences(otherSequence) ? new NumericVariable(1) : new NumericVariable(0);
                 default:
                     throw new InterpreterInvalidOperationException(operation, this, other);
             }

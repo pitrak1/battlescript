@@ -31,31 +31,58 @@ public class NumericVariable : Variable
             switch (operation)
             {
                 case "**":
-                    return new NumericVariable(Math.Pow(_value, otherNumeric.Value));
+                    var powValue = isInverted
+                        ? Math.Pow(otherNumeric.Value, _value)
+                        : Math.Pow(_value, otherNumeric.Value);
+                    return new NumericVariable(powValue);
                 case "*":
                     return new NumericVariable(_value * otherNumeric.Value);
                 case "/":
-                    return new NumericVariable((double)_value / (double)otherNumeric.Value);
+                    var divValue = isInverted
+                        ? (double)otherNumeric.Value / (double)_value
+                        : (double)_value / (double)otherNumeric.Value;
+                    return new NumericVariable(divValue);
                 case "//":
-                    return new NumericVariable(Math.Floor((double)_value / (double)otherNumeric.Value));
+                    var floorDivValue = isInverted
+                        ? Math.Floor((double)otherNumeric.Value / (double)_value)
+                        : Math.Floor((double)_value / (double)otherNumeric.Value);
+                    return new NumericVariable(floorDivValue);
                 case "%":
-                    return new NumericVariable(_value % otherNumeric.Value);
+                    var modValue = isInverted
+                        ? otherNumeric.Value % _value
+                        : _value % otherNumeric.Value;
+                    return new NumericVariable(modValue);
                 case "+":
                     return new NumericVariable(_value + otherNumeric.Value);
                 case "-":
-                    return new NumericVariable(_value - otherNumeric.Value);
+                    var subValue = isInverted
+                        ? otherNumeric.Value - _value
+                        : _value - otherNumeric.Value;
+                    return new NumericVariable(subValue);
                 case "==":
                     return new NumericVariable(Math.Abs(_value - otherNumeric.Value) < Consts.FloatingPointTolerance ? 1 : 0);
                 case "!=":
                     return new NumericVariable(Math.Abs(_value - otherNumeric.Value) > Consts.FloatingPointTolerance ? 1 : 0);
                 case ">":
-                    return new NumericVariable(_value > otherNumeric.Value ? 1 : 0);
+                    var gValue = isInverted
+                        ? otherNumeric.Value > _value
+                        : _value > otherNumeric.Value;
+                    return new NumericVariable(gValue ? 1 : 0);
                 case ">=":
-                    return new NumericVariable(_value >= otherNumeric.Value ? 1 : 0);
+                    var geValue = isInverted
+                        ? otherNumeric.Value >= _value
+                        : _value >= otherNumeric.Value;
+                    return new NumericVariable(geValue ? 1 : 0);
                 case "<":
-                    return new NumericVariable(_value < otherNumeric.Value ? 1 : 0);
+                    var lValue = isInverted
+                        ? otherNumeric.Value < _value
+                        : _value < otherNumeric.Value;
+                    return new NumericVariable(lValue ? 1 : 0);
                 case "<=":
-                    return new NumericVariable(_value <= otherNumeric.Value ? 1 : 0);
+                    var leValue = isInverted
+                        ? otherNumeric.Value <= _value
+                        : _value <= otherNumeric.Value;
+                    return new NumericVariable(leValue ? 1 : 0);
                 default:
                     throw new InterpreterInvalidOperationException(operation, this, other);
             }
