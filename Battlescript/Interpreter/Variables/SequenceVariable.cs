@@ -161,51 +161,83 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         return (start, stop, step);
     }
 
-    public Variable? Operate(Memory memory, string operation, Variable? other)
+    public override Variable Operate(Memory memory, string operation, Variable? other, bool isInverted = false)
     {
-        switch (operation)
+        if (other is NumericVariable otherNumeric)
         {
-            case "+":
-                if (other is SequenceVariable sequenceVariable)
+            switch (operation)
+            {
+                case "*":
+                    return MultiplySequence(otherNumeric);
+                case "==":
+                    return BsTypes.Create(memory, BsTypes.Types.Bool, false);
+                default:
+                    throw new InterpreterInvalidOperationException(operation, this, other);
+            }
+        } 
+        else if (other is SequenceVariable otherSequence)
+        {
+            switch (operation)
+            {
+                case "+":
+                    return new SequenceVariable(Values.Concat(otherSequence.Values).ToList());
+                case "==":
+                    return BsTypes.Create(memory, BsTypes.Types.Bool, CompareSequences(otherSequence));
+                default:
+                    throw new InterpreterInvalidOperationException(operation, this, other);
+            }
+        }
+        else if (other is null)
+        {
+            throw new InterpreterInvalidOperationException(operation, this, other);
+        }
+        else
+        {
+            return other.Operate(memory, operation, this);
+        }
+
+        bool SequenceContains(Variable? value)
+        {
+            for (var i = 0; i < Values.Count; i++)
+            {
+                if (Values[i].Equals(value))
                 {
-                    return new SequenceVariable(Values.Concat(sequenceVariable.Values).ToList());
+                    return true;
                 }
-                else
+            }
+
+            return false;
+        }
+        
+        bool CompareSequences(SequenceVariable otherSequence)
+        {
+            if (Values.Count != otherSequence.Values.Count)
+            {
+                return false;
+            }
+            
+            for (var i = 0; i < Values.Count; i++)
+            {
+                if (!Values[i].Equals(otherSequence.Values[i]))
                 {
-                    throw new Exception("Cannot add sequence and non-sequence");
+                    return false;
                 }
-            case "*":
-                if (BsTypes.Is(memory, BsTypes.Types.Int, other))
+            }
+
+            return true;
+        }
+
+        Variable MultiplySequence(NumericVariable otherNumeric)
+        {
+            var values = new List<Variable>();
+            for (var i = 0; i < otherNumeric.Value; i++)
+            {
+                foreach (var value in Values)
                 {
-                    var intValue = BsTypes.GetIntValue(memory, other);
-                    var values = new List<Variable>();
-                    for (var i = 0; i < intValue; i++)
-                    {
-                        foreach (var value in Values)
-                        {
-                            values.Add(value);
-                        }
-                    }
-                    return new SequenceVariable(values);
+                    values.Add(value);
                 }
-                else if (other is NumericVariable numVariable)
-                {
-                    var values = new List<Variable>();
-                    for (var i = 0; i < numVariable.Value; i++)
-                    {
-                        foreach (var value in Values)
-                        {
-                            values.Add(value);
-                        }
-                    }
-                    return new SequenceVariable(values);
-                }
-                else
-                {
-                    throw new Exception("Cannot multiply sequence and non-int");
-                }
-            default:
-                throw new Exception("Invalid operation");
+            }
+            return new SequenceVariable(values);
         }
     }
     

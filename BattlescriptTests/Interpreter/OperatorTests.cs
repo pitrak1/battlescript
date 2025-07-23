@@ -12,7 +12,7 @@ public static class OperatorTests
         public void ReturnsIntegerIfBothOperandsAreIntegers()
         {
             var memory = Runner.Run("");
-            var result = Operator.StandardOperation(
+            var result = Operator.Operate(
                 memory, 
                 "+", 
                 BsTypes.Create(memory, BsTypes.Types.Int, 5), 
@@ -24,7 +24,7 @@ public static class OperatorTests
         public void ReturnsFloatIfEitherOperandIsFloat()
         {
             var memory = Runner.Run("");
-            var result = Operator.StandardOperation(
+            var result = Operator.Operate(
                 memory, 
                 "+", 
                 BsTypes.Create(memory, BsTypes.Types.Int, 5), 
@@ -36,7 +36,7 @@ public static class OperatorTests
         public void ReturnsFloatForTrueDivision()
         {
             var memory = Runner.Run("");
-            var result = Operator.StandardOperation(
+            var result = Operator.Operate(
                 memory, 
                 "/", 
                 BsTypes.Create(memory, BsTypes.Types.Int, 5), 
@@ -48,7 +48,7 @@ public static class OperatorTests
         public void ReturnsIntegerForFloorDivision()
         {
             var memory = Runner.Run("");
-            var result = Operator.StandardOperation(
+            var result = Operator.Operate(
                 memory, 
                 "//", 
                 BsTypes.Create(memory, BsTypes.Types.Float, 10.1), 
@@ -60,7 +60,7 @@ public static class OperatorTests
         public void HandlesUnaryMathematicalOperators()
         {
             var memory = Runner.Run("");
-            var result = Operator.StandardOperation(
+            var result = Operator.Operate(
                 memory, 
                 "-", 
                 null, 
@@ -72,7 +72,7 @@ public static class OperatorTests
         public void HandlesBinaryLogicalOperations()
         {
             var memory = Runner.Run("");
-            var result = Operator.StandardOperation(
+            var result = Operator.Operate(
                 memory, 
                 "and", 
                 BsTypes.Create(memory, BsTypes.Types.Bool, true), 
@@ -85,7 +85,7 @@ public static class OperatorTests
         public void HandlesUnaryLogicalOperations()
         {
             var memory = Runner.Run("");
-            var result = Operator.StandardOperation(
+            var result = Operator.Operate(
                 memory, 
                 "not", 
                 null, 
@@ -110,7 +110,7 @@ public static class OperatorTests
             var objectVariable = classVariable.CreateObject();
             memory.SetVariable(new VariableInstruction("asdf"), objectVariable);
             
-            var result = Operator.StandardOperation(
+            var result = Operator.Operate(
                 memory, 
                 "+", 
                 objectVariable, 
@@ -126,7 +126,7 @@ public static class OperatorTests
         public void ReturnsRightIfStandardAssignmentOperator()
         {
             var memory = Runner.Run("");
-            var result = Operator.AssignmentOperation(memory, "=", null, new NumericInstruction(8));
+            var result = Operator.Assign(memory, "=", null, new NumericInstruction(8));
             Assertions.AssertVariablesEqual(result, BsTypes.Create(memory, BsTypes.Types.Int, 8));
         }
         
@@ -134,7 +134,7 @@ public static class OperatorTests
         public void ConductsOperationOfTruncatedOperatorIfNotStandardAssignmentOperator()
         {
             var memory = Runner.Run("");
-            var result = Operator.AssignmentOperation(
+            var result = Operator.Assign(
                 memory, 
                 "+=", 
                 new NumericInstruction(8), 

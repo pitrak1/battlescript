@@ -44,6 +44,6 @@ public class OperationInstruction : Instruction
     {
         var left = Left?.Interpret(memory);
         var right = Right?.Interpret(memory);
-        return Operator.StandardOperation(memory, Operation, left, right);
+        return Operator.Operate(memory, Operation, left, right);
     }
 }

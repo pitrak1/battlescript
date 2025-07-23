@@ -7,7 +7,31 @@ public class StringVariable : Variable, IEquatable<StringVariable>
     {
         Value = value ?? "";
     }
-    
+
+    public override Variable Operate(Memory memory, string operation, Variable? other, bool isInverted = false)
+    {
+        if (other is StringVariable otherString)
+        {
+            switch (operation)
+            {
+                case "+":
+                    return new StringVariable(Value + otherString.Value);
+                case "==":
+                    return BsTypes.Create(memory, BsTypes.Types.Bool, Value == otherString.Value);
+                default:
+                    throw new InterpreterInvalidOperationException(operation, this, other);
+            }
+        }
+        else if (other is null)
+        {
+            throw new InterpreterInvalidOperationException(operation, this, other);
+        }
+        else
+        {
+            return other.Operate(memory, operation, this);
+        }
+    }
+
     // All the code below is to override equality
     public override bool Equals(object obj) => Equals(obj as StringVariable);
     public bool Equals(StringVariable? variable)

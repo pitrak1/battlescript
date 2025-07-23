@@ -37,7 +37,7 @@ public class AssignmentInstruction : Instruction
     {
         if (Left is VariableInstruction variableInst)
         {
-            var result = Operator.AssignmentOperation(memory, Operation, Left, Right);
+            var result = Operator.Assign(memory, Operation, Left, Right);
             memory.SetVariable(variableInst, result);
             return result;
         }
