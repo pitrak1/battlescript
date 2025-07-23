@@ -78,11 +78,11 @@ public class ImportInstruction : Instruction
         {
             if (name == "*")
             {
-                memory.SetVariable(new VariableInstruction(FileName), new DictionaryVariable(null, importedScope));
+                memory.SetVariable(new VariableInstruction(FileName), new DictionaryVariable(null, importedScope.Variables));
             }
-            else if (importedScope.ContainsKey(name))
+            else if (importedScope.Variables.ContainsKey(name))
             {
-                memory.SetVariable(new VariableInstruction(name), importedScope[name]);
+                memory.SetVariable(new VariableInstruction(name), importedScope.Variables[name]);
             }
             else
             {

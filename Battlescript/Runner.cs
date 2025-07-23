@@ -17,7 +17,7 @@ public static class Runner
         return memory;
     }
 
-    public static Dictionary<string, Variable> RunFilePath(Memory memory, string path)
+    public static MemoryScope RunFilePath(Memory memory, string path)
     {
         var input = ReadFile(path);
         RunPartial(memory, input);
