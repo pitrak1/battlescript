@@ -6,7 +6,7 @@ public class AssignmentInstruction : Instruction
     public Instruction Left { get; set; }
     public Instruction Right { get; set; }
 
-    public AssignmentInstruction(List<Token> tokens)
+    public AssignmentInstruction(List<Token> tokens) : base(tokens)
     {
         var assignmentIndex = InstructionUtilities.GetTokenIndex(
             tokens, 
@@ -18,11 +18,9 @@ public class AssignmentInstruction : Instruction
         Operation = assignmentToken.Value;
         Left = operands.Left!;
         Right = operands.Right!;
-        Line = assignmentToken.Line;
-        Column = assignmentToken.Column;
     }
 
-    public AssignmentInstruction(string operation, Instruction left, Instruction right)
+    public AssignmentInstruction(string operation, Instruction left, Instruction right) : base([])
     {
         Operation = operation;
         Left = left;

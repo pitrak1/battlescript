@@ -4,15 +4,13 @@ public class VariableInstruction : Instruction
 {
     public string Name { get; set; } 
 
-    public VariableInstruction(List<Token> tokens)
+    public VariableInstruction(List<Token> tokens) : base(tokens)
     {
         Name = tokens[0].Value;
         ParseNext(tokens, 1);
-        Line = tokens[0].Line;
-        Column = tokens[0].Column;
     }
 
-    public VariableInstruction(string name, Instruction? next = null)
+    public VariableInstruction(string name, Instruction? next = null) : base([])
     {
         Name = name;
         Next = next;

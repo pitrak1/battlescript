@@ -136,6 +136,7 @@ public static class ArrayInstructionTests
                         """;
             var memory = Runner.Run(input);
             var methodVariable = new FunctionVariable(
+                "asdf",
                 [new VariableInstruction("self"), new VariableInstruction("y")],
                 [
                     new AssignmentInstruction(

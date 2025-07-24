@@ -4,14 +4,12 @@ public class ConstantInstruction : Instruction
 {
     public string Value { get; set; }
 
-    public ConstantInstruction(List<Token> tokens)
+    public ConstantInstruction(List<Token> tokens) : base(tokens)
     {
         Value = tokens[0].Value;
-        Line = tokens[0].Line;
-        Column = tokens[0].Column;
     }
 
-    public ConstantInstruction(string value)
+    public ConstantInstruction(string value) : base([])
     {
         Value = value;
     }

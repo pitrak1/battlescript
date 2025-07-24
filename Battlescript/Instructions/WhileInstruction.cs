@@ -4,7 +4,7 @@ public class WhileInstruction : Instruction
 {
     public Instruction Condition { get; set; }
 
-    public WhileInstruction(List<Token> tokens)
+    public WhileInstruction(List<Token> tokens) : base(tokens)
     {
         if (tokens[^1].Value != ":")
         {
@@ -12,11 +12,9 @@ public class WhileInstruction : Instruction
         }
     
         Condition = InstructionFactory.Create(tokens.GetRange(1, tokens.Count - 2));
-        Line = tokens[0].Line;
-        Column = tokens[0].Column;
     }
 
-    public WhileInstruction(Instruction condition)
+    public WhileInstruction(Instruction condition) : base([])
     {
         Condition = condition;
     }

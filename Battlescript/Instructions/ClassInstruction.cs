@@ -5,7 +5,7 @@ public class ClassInstruction : Instruction
     public string Name { get; set; } 
     public List<Instruction> Superclasses { get; set; }
 
-    public ClassInstruction(List<Token> tokens)
+    public ClassInstruction(List<Token> tokens) : base(tokens)
     {
         List<Instruction> superClasses = [];
         
@@ -18,11 +18,9 @@ public class ClassInstruction : Instruction
 
         Name = tokens[1].Value;
         Superclasses = superClasses;
-        Line = tokens[0].Line;
-        Column = tokens[0].Column;
     }
 
-    public ClassInstruction(string name, List<Instruction>? superclasses = null)
+    public ClassInstruction(string name, List<Instruction>? superclasses = null) : base([])
     {
         Name = name;
         Superclasses = superclasses ?? [];

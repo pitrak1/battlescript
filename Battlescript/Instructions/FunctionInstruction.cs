@@ -5,7 +5,7 @@ public class FunctionInstruction : Instruction
     public string Name { get; set; } 
     public List<Instruction> Parameters { get; set; }
 
-    public FunctionInstruction(List<Token> tokens)
+    public FunctionInstruction(List<Token> tokens) : base(tokens)
     {
         var tokensInParens = tokens.GetRange(3, tokens.Count - 5);
         var parameters = InstructionUtilities.ParseEntriesBetweenDelimiters(tokensInParens, [","]);
@@ -13,8 +13,6 @@ public class FunctionInstruction : Instruction
         
         Name = tokens[1].Value;
         Parameters = parameters!;
-        Line = tokens[0].Line;
-        Column = tokens[0].Column;
 
         void CheckThatDefaultArgumentsFollowRequiredArguments()
         {
@@ -32,7 +30,7 @@ public class FunctionInstruction : Instruction
         }
     }
 
-    public FunctionInstruction(string name, List<Instruction>? parameters = null, List<Instruction>? instructions = null)
+    public FunctionInstruction(string name, List<Instruction>? parameters = null, List<Instruction>? instructions = null) : base([])
     {
         Name = name;
         Parameters = parameters ?? [];
@@ -45,7 +43,7 @@ public class FunctionInstruction : Instruction
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        var functionValue = new FunctionVariable(Parameters, Instructions);
+        var functionValue = new FunctionVariable(Name, Parameters, Instructions);
         memory.SetVariable(new VariableInstruction(Name), functionValue);
         return functionValue;
     }

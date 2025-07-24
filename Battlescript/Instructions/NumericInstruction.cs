@@ -19,7 +19,7 @@ public class NumericInstruction : Instruction
         }
     }
 
-    public NumericInstruction(List<Token> tokens)
+    public NumericInstruction(List<Token> tokens) : base(tokens)
     {
         if (tokens.Count > 1)
         {
@@ -34,11 +34,9 @@ public class NumericInstruction : Instruction
         {
             _value = int.Parse(tokens[0].Value);
         }
-        Line = tokens[0].Line;
-        Column = tokens[0].Column;
     }
 
-    public NumericInstruction(dynamic value)
+    public NumericInstruction(dynamic value) : base([])
     {
         _value = value;
     }

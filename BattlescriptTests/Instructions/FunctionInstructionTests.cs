@@ -71,6 +71,7 @@ public static class FunctionInstructionTests
             var memory = Runner.Run("def func(asdf, qwer):\n\treturn asdf + qwer");
             
             var functionVariable = new FunctionVariable(
+                "func",
                 parameters: 
                 [
                     new VariableInstruction("asdf"),

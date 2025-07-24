@@ -4,7 +4,7 @@ public class LambdaInstruction : Instruction
 {
     public List<Instruction> Parameters { get; set; }
 
-    public LambdaInstruction(List<Token> tokens)
+    public LambdaInstruction(List<Token> tokens) : base(tokens)
     {
         var colonIndex = InstructionUtilities.GetTokenIndex(tokens, [":"]);
 
@@ -16,11 +16,9 @@ public class LambdaInstruction : Instruction
         
         Parameters = parameters!;
         Instructions = [instruction];
-        Line = tokens[0].Line;
-        Column = tokens[0].Column;
     }
 
-    public LambdaInstruction(List<Instruction>? parameters = null, List<Instruction>? instructions = null)
+    public LambdaInstruction(List<Instruction>? parameters = null, List<Instruction>? instructions = null) : base([])
     {
         Parameters = parameters ?? [];
         Instructions = instructions ?? [];
@@ -32,6 +30,6 @@ public class LambdaInstruction : Instruction
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        return new FunctionVariable(Parameters, Instructions);
+        return new FunctionVariable(null, Parameters, Instructions);
     }
 }

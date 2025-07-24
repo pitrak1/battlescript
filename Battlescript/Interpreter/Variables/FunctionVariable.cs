@@ -2,11 +2,13 @@ namespace Battlescript;
 
 public class FunctionVariable : Variable, IEquatable<FunctionVariable>
 {
+    public string? Name { get; set; }
     public List<Instruction> Parameters { get; set; }
     public List<Instruction> Instructions { get; set; }
 
-    public FunctionVariable(List<Instruction>? parameters, List<Instruction>? instructions)
+    public FunctionVariable(string? name, List<Instruction>? parameters, List<Instruction>? instructions)
     {
+        Name = name;
         Parameters = parameters ?? [];
         Instructions = instructions ?? [];
     }

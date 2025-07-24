@@ -4,14 +4,12 @@ public class StringInstruction : Instruction
 {
     public string Value { get; set; }
 
-    public StringInstruction(List<Token> tokens)
+    public StringInstruction(List<Token> tokens) : base(tokens)
     {
         Value = tokens[0].Value;
-        Line = tokens[0].Line;
-        Column = tokens[0].Column;
     }
 
-    public StringInstruction(string value)
+    public StringInstruction(string value) : base([])
     {
         Value = value;
     }

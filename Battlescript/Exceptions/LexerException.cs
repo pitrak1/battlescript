@@ -1,4 +1,4 @@
 namespace Battlescript;
 
-public class LexerException(string invalidCharacters, int line, int column) : Exception(
-    "Lexer Error: Invalid character found at line " + line + ", column " + column + ":" + invalidCharacters);
+public class LexerException(string invalidCharacters, int line, string fileName) : Exception(
+    $"Lexer Error: Invalid character found at file {fileName}, line {line}: {invalidCharacters}");

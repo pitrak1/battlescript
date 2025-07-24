@@ -7,17 +7,13 @@ public class TryInstruction : Instruction
     public List<ExceptInstruction> Excepts { get; set; } = [];
     public ElseInstruction? Else { get; set; }
     public FinallyInstruction? Finally { get; set; }
-    public TryInstruction(List<Token> tokens)
-    {
-        Line = tokens[0].Line;
-        Column = tokens[0].Column;
-    }
+    public TryInstruction(List<Token> tokens) : base(tokens) {}
 
     public TryInstruction(
         List<Instruction> instructions,
         List<ExceptInstruction>? excepts = null, 
         ElseInstruction? elseInstruction = null, 
-        FinallyInstruction? finallyInstruction = null)
+        FinallyInstruction? finallyInstruction = null) : base([])
     {
         Instructions = instructions;
         Excepts = excepts ?? [];

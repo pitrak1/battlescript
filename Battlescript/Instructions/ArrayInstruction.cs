@@ -6,7 +6,7 @@ public class ArrayInstruction : Instruction
     public string? Delimiter { get; private set; }
     public List<Instruction?> Values { get; private set; } = [];
 
-    public ArrayInstruction(List<Token> tokens)
+    public ArrayInstruction(List<Token> tokens) : base(tokens)
     {
         if (Consts.OpeningSeparators.Contains(tokens.First().Value))
         {
@@ -16,9 +16,6 @@ public class ArrayInstruction : Instruction
         {
             InitializeListWithoutSeparators(tokens);
         }
-
-        Line = tokens.First().Line;
-        Column = tokens.First().Column;
         return;
 
         void InitializeListWithSeparators()
@@ -60,7 +57,7 @@ public class ArrayInstruction : Instruction
         List<Instruction?> values, 
         string? separator = null,
         string? delimiter = null,
-        Instruction? next = null)
+        Instruction? next = null) : base([])
     {
         Values = values;
         Next = next;

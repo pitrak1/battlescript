@@ -6,7 +6,7 @@ public class OperationInstruction : Instruction
     public Instruction? Left { get; set; } 
     public Instruction? Right { get; set; }
 
-    public OperationInstruction(List<Token> tokens)
+    public OperationInstruction(List<Token> tokens) : base(tokens)
     {
         var operatorIndex = InstructionUtilities.GetOperatorIndex(tokens);
         var operatorToken = tokens[operatorIndex];
@@ -15,8 +15,6 @@ public class OperationInstruction : Instruction
         Operation = operatorToken.Value;
         Left = result.Left;
         Right = result.Right;
-        Line = operatorToken.Line;
-        Column = operatorToken.Column;
                 
         if (result.Left is ArrayInstruction { Separator: "(" } left)
         {
@@ -29,7 +27,7 @@ public class OperationInstruction : Instruction
         }
     }
 
-    public OperationInstruction(string operation, Instruction? left = null, Instruction? right = null)
+    public OperationInstruction(string operation, Instruction? left = null, Instruction? right = null) : base([])
     {
         Operation = operation;
         Left = left;

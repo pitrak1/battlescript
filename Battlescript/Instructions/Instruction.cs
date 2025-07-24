@@ -1,12 +1,24 @@
 namespace Battlescript;
 
-public abstract class Instruction(int line = 0, int column = 0)
+public abstract class Instruction
 {
-    public int Line { get; set; } = line;
-    public int Column { get; set; } = column;
-    public List<Instruction> Instructions { get; set; } = [];
+    public int? Line { get; set; }
+    public string? FileName { get; set; }
+    public string? Expression { get; set; }
+    public List<Instruction> Instructions { get; set; }
     
     public Instruction? Next { get; set; }
+
+    public Instruction(List<Token> tokens)
+    {
+        if (tokens.Count > 0)
+        {
+            Line = tokens[0].Line;
+            FileName = tokens[0].FileName;
+            Expression = tokens[0].Expression;
+        }
+        Instructions = [];
+    }
 
     // These three context are used for three distinct things:
     // - instructionContext is used for ongoing interpretations of a single instruction, i.e. a parens instruction

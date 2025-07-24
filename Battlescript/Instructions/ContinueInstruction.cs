@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class ContinueInstruction : Instruction
+public class ContinueInstruction() : Instruction([])
 {
     public override Variable Interpret(
         Memory memory, 

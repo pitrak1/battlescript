@@ -91,7 +91,7 @@ public class TruthinessTests
         [Test]
         public void FunctionVariableReturnsTrue()
         {
-            var variable = new FunctionVariable(null, null);
+            var variable = new FunctionVariable(null, null, null);
             var result = Truthiness.IsTruthy(_memory, variable);
             Assert.IsTrue(result);
         }

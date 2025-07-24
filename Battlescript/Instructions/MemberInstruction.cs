@@ -4,13 +4,13 @@ public class MemberInstruction : Instruction
 {
     public string Value { get; set; }
 
-    public MemberInstruction(List<Token> tokens)
+    public MemberInstruction(List<Token> tokens) : base(tokens)
     {
         Value = tokens[1].Value;
         ParseNext(tokens, 2);
     }
 
-    public MemberInstruction(string value, Instruction? next = null)
+    public MemberInstruction(string value, Instruction? next = null) : base([])
     {
         Value = value;
         Next = next;

@@ -7,7 +7,7 @@ public class ImportInstruction : Instruction
     public string FileName { get; set; }
     public List<string> ImportNames { get; set; } = [];
     
-    public ImportInstruction(List<Token> tokens)
+    public ImportInstruction(List<Token> tokens) : base(tokens)
     {
         if (tokens[0].Value != "from")
         {
@@ -27,9 +27,6 @@ public class ImportInstruction : Instruction
         FilePath = tokens[1].Value;
         FileName = Path.GetFileNameWithoutExtension(FilePath);
         InitializeImportNames();
-        
-        Line = tokens[0].Line;
-        Column = tokens[0].Column;
         return;
 
         void InitializeImportNames()
@@ -60,7 +57,7 @@ public class ImportInstruction : Instruction
         }
     }
 
-    public ImportInstruction(string filePath, List<string> importNames)
+    public ImportInstruction(string filePath, List<string> importNames) : base([])
     {
         FilePath = filePath;
         FileName = Path.GetFileNameWithoutExtension(FilePath);

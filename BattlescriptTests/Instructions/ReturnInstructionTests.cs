@@ -25,6 +25,7 @@ public static class ReturnInstructionTests
             var memory = Runner.Run("def func(asdf):\n\treturn asdf + 5\nx = func(4)");
 
             var funcVariable = new FunctionVariable(
+                "func",
                 [new VariableInstruction("asdf")],
                 [
                     new ReturnInstruction(

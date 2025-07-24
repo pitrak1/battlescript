@@ -4,7 +4,7 @@ public class IfInstruction : Instruction
 {
     public Instruction Condition { get; set; }
 
-    public IfInstruction(List<Token> tokens)
+    public IfInstruction(List<Token> tokens) : base(tokens)
     {
         if (tokens[^1].Value != ":")
         {
@@ -12,11 +12,9 @@ public class IfInstruction : Instruction
         }
 
         Condition = InstructionFactory.Create(tokens.GetRange(1, tokens.Count - 2));
-        Line = tokens[0].Line;
-        Column = tokens[0].Column;
     }
 
-    public IfInstruction(Instruction condition, Instruction? next = null, List<Instruction>? instructions = null)
+    public IfInstruction(Instruction condition, Instruction? next = null, List<Instruction>? instructions = null) : base([])
     {
         Condition = condition;
         Next = next;

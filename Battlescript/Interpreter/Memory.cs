@@ -100,6 +100,11 @@ public class Memory(List<MemoryScope>? scopes = null)
         Scopes.Add(scope ?? new MemoryScope());
     }
 
+    public void AddScope(int lineNumber, string location, string context)
+    {
+        Scopes.Add(new MemoryScope(null, Scopes.Last().FileName, lineNumber, location, context));
+    }
+
     public MemoryScope RemoveScope()
     {
         var removedScope = Scopes[^1];
@@ -112,6 +117,16 @@ public class Memory(List<MemoryScope>? scopes = null)
         for (var i = 0; i < count; i++)
         {
             RemoveScope();
+        }
+    }
+
+    public void PrintStacktrace()
+    {
+        Console.WriteLine("Traceback (most recent call last):");
+        for (var i = Scopes.Count - 1; i >= 0; i--)
+        {
+            Console.WriteLine($"\tFile {Scopes[i].FileName}, line {Scopes[i].LineNumber}, in {Scopes[i].FunctionName ?? "<module>"}");
+            Console.WriteLine("\t" + Scopes[i].Expression);
         }
     }
 }

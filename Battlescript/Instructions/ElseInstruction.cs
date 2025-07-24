@@ -4,7 +4,7 @@ public class ElseInstruction : Instruction
 {
     public Instruction? Condition { get; set; }
 
-    public ElseInstruction(List<Token> tokens)
+    public ElseInstruction(List<Token> tokens) : base(tokens)
     {
         if (tokens[^1].Value != ":")
         {
@@ -15,12 +15,9 @@ public class ElseInstruction : Instruction
         {
             Condition = InstructionFactory.Create(tokens.GetRange(1, tokens.Count - 2));
         }
-
-        Line = tokens[0].Line;
-        Column = tokens[0].Column;
     }
 
-    public ElseInstruction(Instruction? condition, Instruction? next, List<Instruction>? instructions = null)
+    public ElseInstruction(Instruction? condition, Instruction? next, List<Instruction>? instructions = null) : base([])
     {
         Condition = condition;
         Next = next;

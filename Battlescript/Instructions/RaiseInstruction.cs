@@ -6,11 +6,9 @@ public class RaiseInstruction : Instruction
 {
     public Instruction? Value { get; set; }
 
-    public RaiseInstruction(List<Token> tokens)
+    public RaiseInstruction(List<Token> tokens) : base(tokens)
     {
         Value = InstructionFactory.Create(tokens.GetRange(1, tokens.Count - 1));
-        Line = tokens[0].Line;
-        Column = tokens[0].Column;
     }
     
     public override Variable Interpret(

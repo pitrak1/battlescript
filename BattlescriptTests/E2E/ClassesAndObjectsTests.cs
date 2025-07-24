@@ -54,7 +54,7 @@ public static class ClassesAndObjectsTests
             var classValues = new Dictionary<string, Variable>()
             {
                 { "i", BsTypes.Create(memory, BsTypes.Types.Int, 1234) },
-                { "j", new FunctionVariable([], [new ReturnInstruction(new NumericInstruction(5))])}
+                { "j", new FunctionVariable("j", [], [new ReturnInstruction(new NumericInstruction(5))])}
             };
             var objectValues = new Dictionary<string, Variable>()
             {

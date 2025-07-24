@@ -5,7 +5,7 @@ public class PrincipleTypeInstruction : Instruction
     public string Value { get; set; }
     public List<Instruction> Parameters { get; set; }
 
-    public PrincipleTypeInstruction(List<Token> tokens)
+    public PrincipleTypeInstruction(List<Token> tokens) : base(tokens)
     {
         if (tokens.Count > 1)
         {
@@ -20,11 +20,9 @@ public class PrincipleTypeInstruction : Instruction
         }
         
         Value = tokens[0].Value;
-        Line = tokens[0].Line;
-        Column = tokens[0].Column;
     }
 
-    public PrincipleTypeInstruction(string value)
+    public PrincipleTypeInstruction(string value) : base([])
     {
         Value = value;
     }

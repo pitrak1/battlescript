@@ -16,6 +16,7 @@ public class FunctionsTests
                             x = 5
                         """;
             var expected = new FunctionVariable(
+                "func",
                 [],
                 [
                     new AssignmentInstruction(
@@ -35,6 +36,7 @@ public class FunctionsTests
                             x = asdf
                         """;
             var expected = new FunctionVariable(
+                "func",
                 [new VariableInstruction("asdf")],
                 [
                     new AssignmentInstruction(
@@ -54,6 +56,7 @@ public class FunctionsTests
                             x = asdf
                         """;
             var expected = new FunctionVariable(
+                "func",
                 [
                     new VariableInstruction("asdf"),
                     new VariableInstruction("qwer")
@@ -271,6 +274,7 @@ public class FunctionsTests
                         x = lambda y: y + 5
                         """;
             var expected = new FunctionVariable(
+                null,
                 [new VariableInstruction("y")],
                 [new ReturnInstruction(new OperationInstruction("+", new VariableInstruction("y"), new NumericInstruction(5)))]);
             var memory = Runner.Run(input);

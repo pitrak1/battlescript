@@ -8,7 +8,7 @@ public class BuiltInInstruction : Instruction
     public string Name { get; set; } 
     public List<Instruction> Parameters { get; set; }
     
-    public BuiltInInstruction(List<Token> tokens)
+    public BuiltInInstruction(List<Token> tokens) : base(tokens)
     {
         var endOfArgumentsIndex = InstructionUtilities.GetTokenIndex(tokens, [")"]);
         var argumentTokens = tokens.GetRange(2, endOfArgumentsIndex - 2);
@@ -19,11 +19,9 @@ public class BuiltInInstruction : Instruction
         ParseNext(tokens, endOfArgumentsIndex + 1);
         
         Name = tokens[0].Value;
-        Line = tokens[0].Line;
-        Column = tokens[0].Column;
     }
     
-    public BuiltInInstruction(string name, List<Instruction>? parameters = null, Instruction? next = null)
+    public BuiltInInstruction(string name, List<Instruction>? parameters = null, Instruction? next = null) : base([])
     {
         Name = name;
         Parameters = parameters ?? [];

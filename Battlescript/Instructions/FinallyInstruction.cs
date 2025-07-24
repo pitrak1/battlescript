@@ -4,13 +4,9 @@ namespace Battlescript;
 
 public class FinallyInstruction : Instruction
 {
-    public FinallyInstruction(List<Token> tokens)
-    {
-        Line = tokens[0].Line;
-        Column = tokens[0].Column;
-    }
+    public FinallyInstruction(List<Token> tokens) : base(tokens) {}
 
-    public FinallyInstruction(List<Instruction> instructions)
+    public FinallyInstruction(List<Instruction> instructions) : base([])
     {
         Instructions = instructions;
     }
