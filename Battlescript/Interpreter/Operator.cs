@@ -2,7 +2,7 @@ namespace Battlescript;
 
 public static class Operator
 {
-    public static Variable Assign(Memory memory, string operation, Instruction? left, Instruction? right)
+    public static Variable Assign(Memory memory, string operation, Instruction? left, Instruction? right, Instruction? originalInstruction = null)
     {
         // Assignment operations should return the value to be assigned. The calling function is actually responsible
         // for assigning the value to the variable
@@ -15,7 +15,7 @@ public static class Operator
         {
             var leftVariable = left?.Interpret(memory);
             var operationWithEqualsRemoved = AssignmentOperatorToStandardOperatorMap[operation];
-            return ConductOperation(memory, operationWithEqualsRemoved, operation, leftVariable, rightVariable);
+            return ConductOperation(memory, operationWithEqualsRemoved, operation, leftVariable, rightVariable, originalInstruction);
         }
     }
 
@@ -30,24 +30,24 @@ public static class Operator
         {"**=", "**"},
     };
     
-    public static Variable Operate(Memory memory, string operation, Variable? left, Variable? right)
+    public static Variable Operate(Memory memory, string operation, Variable? left, Variable? right, Instruction? originalInstruction = null)
     {
-        return ConductOperation(memory, operation, operation, left, right);
+        return ConductOperation(memory, operation, operation, left, right, originalInstruction);
     }
     
-    private static Variable ConductOperation(Memory memory, string operation, string originalOperation, Variable? left, Variable? right)
+    private static Variable ConductOperation(Memory memory, string operation, string originalOperation, Variable? left, Variable? right, Instruction? originalInstruction = null)
     {
         if (Consts.CommonOperators.Contains(operation))
         {
-            return ConductCommonOperation(memory, operation, left, right);
+            return ConductCommonOperation(memory, operation, left, right, originalInstruction);
         }
         else if (left is ObjectVariable || right is ObjectVariable)
         {
-            return ConductObjectOperation(memory, originalOperation, left, right);
+            return ConductObjectOperation(memory, originalOperation, left, right, originalInstruction);
         }
         else
         {
-            return ConductStandardOperation(memory, operation, left, right);
+            return ConductStandardOperation(memory, operation, left, right, originalInstruction);
         }
     }
 
@@ -55,7 +55,8 @@ public static class Operator
         Memory memory, 
         string operation, 
         Variable? left, 
-        Variable? right)
+        Variable? right,
+        Instruction? originalInstruction = null)
     {
         // The operators handled here will be the same regardless of type or have complex type interactions
         switch (operation)
@@ -128,7 +129,7 @@ public static class Operator
         }
     }
     
-    private static Variable ConductObjectOperation(Memory memory, string operation, Variable? left, Variable? right)
+    private static Variable ConductObjectOperation(Memory memory, string operation, Variable? left, Variable? right, Instruction? originalInstruction = null)
     {
         var (leftOverride, rightOverride) = GetOverride();
 
@@ -138,21 +139,21 @@ public static class Operator
         {
             if (right is null)
             {
-                return leftOverride.RunFunction(memory, new List<Variable>(), left as ObjectVariable);
+                return leftOverride.RunFunction(memory, new List<Variable>(), left as ObjectVariable, originalInstruction);
             }
             else
             {
-                return leftOverride.RunFunction(memory, [right], left as ObjectVariable);
+                return leftOverride.RunFunction(memory, [right], left as ObjectVariable, originalInstruction);
             }
         } else if (rightOverride is not null)
         {
             if (left is null)
             {
-                return rightOverride.RunFunction(memory, new List<Variable>(), right as ObjectVariable);
+                return rightOverride.RunFunction(memory, new List<Variable>(), right as ObjectVariable, originalInstruction);
             }
             else
             {
-                return rightOverride.RunFunction(memory, [left], right as ObjectVariable);
+                return rightOverride.RunFunction(memory, [left], right as ObjectVariable, originalInstruction);
             }
         }
         else
@@ -225,7 +226,7 @@ public static class Operator
         { "-", "__neg__" },
     };
     
-    private static Variable ConductStandardOperation(Memory memory, string operation, Variable? left, Variable? right)
+    private static Variable ConductStandardOperation(Memory memory, string operation, Variable? left, Variable? right, Instruction? originalInstruction = null)
     {
         if (left is not null)
         {

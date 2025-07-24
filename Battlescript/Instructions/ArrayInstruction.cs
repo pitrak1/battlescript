@@ -166,7 +166,7 @@ public class ArrayInstruction : Instruction
         {
             if (instructionContext is FunctionVariable functionVariable)
             {
-                return functionVariable.RunFunction(memory, Values!, objectContext);
+                return functionVariable.RunFunction(memory, Values!, objectContext, this);
             }
             else if (instructionContext is ClassVariable classVariable)
             {
@@ -184,7 +184,7 @@ public class ArrayInstruction : Instruction
                 var constructor = objectVariable.Class.GetMember(memory, new MemberInstruction("__init__"));
                 if (constructor is FunctionVariable constructorVariable)
                 {
-                    constructorVariable.RunFunction(memory, Values, objectVariable);
+                    constructorVariable.RunFunction(memory, Values, objectVariable, this);
                 }
             }
         }

@@ -4,7 +4,7 @@ public static class Runner
 {
     public static Memory Run(string input)
     {
-        var memory = new Memory([new MemoryScope(null, "builtin")]);
+        var memory = new Memory([new MemoryScope("builtin")]);
         
         foreach (var builtin in BsTypes.TypeStrings)
         {
@@ -14,7 +14,7 @@ public static class Runner
         memory.PopulateBuiltInReferences();
         try
         {
-            memory.AddScope(new MemoryScope(null, "main"));
+            memory.AddScope(new MemoryScope("main"));
             RunPartial(memory, input, "main");
         }
         catch (Exception e)

@@ -53,7 +53,7 @@ public class ClassInstruction : Instruction
         // to a scope outside the scope of the class that already exists in a lower scope.  We may need to create a new
         // memory instance to run it in there, but if we do that, we may lose refernences we need to define the class.
         // I'll have to think about this.
-        memory.AddScope();
+        memory.AddScope(new MemoryScope(FileName, Line, Name, Expression));
 
         foreach (var instruction in Instructions)
         {

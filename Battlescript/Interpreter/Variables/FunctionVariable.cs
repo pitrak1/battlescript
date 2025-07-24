@@ -13,29 +13,39 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
         Instructions = instructions ?? [];
     }
     
-    public Variable RunFunction(Memory memory, List<Variable> arguments, ObjectVariable? objectVariable = null)
+    public Variable RunFunction(Memory memory, List<Variable> arguments, ObjectVariable? objectVariable = null, Instruction? inst = null)
     {
-        memory.AddScope();
+        if (inst is not null)
+        {
+            var scope = new MemoryScope(inst.FileName, inst.Line, Name, inst.Expression);
+            memory.AddScope(scope);
+        }
+        else
+        {
+            memory.AddScope();
+        }
         
         ArgumentTransfer.RunAndApply(memory, arguments, Parameters, objectVariable);
-        
         var returnValue = RunInstructions(memory);
-            
         memory.RemoveScope();
-        
         return returnValue ?? new ConstantVariable();
     }
 
-    public Variable RunFunction(Memory memory, List<Instruction> arguments, ObjectVariable? objectVariable = null)
+    public Variable RunFunction(Memory memory, List<Instruction> arguments, ObjectVariable? objectVariable = null, Instruction? inst = null)
     {
-        memory.AddScope();
+        if (inst is not null)
+        {
+            var scope = new MemoryScope(inst.FileName, inst.Line, Name, inst.Expression);
+            memory.AddScope(scope);
+        }
+        else
+        {
+            memory.AddScope();
+        }
         
         ArgumentTransfer.RunAndApply(memory, arguments, Parameters, objectVariable);
-        
         var returnValue = RunInstructions(memory);
-            
         memory.RemoveScope();
-        
         return returnValue ?? new ConstantVariable();
     }
     

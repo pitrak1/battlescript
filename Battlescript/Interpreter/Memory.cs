@@ -4,7 +4,7 @@ namespace Battlescript;
 
 public class Memory(List<MemoryScope>? scopes = null)
 {
-    public List<MemoryScope> Scopes { get; } = scopes ?? [new MemoryScope()];
+    public List<MemoryScope> Scopes { get; } = scopes ?? [new MemoryScope(null)];
 
     public Dictionary<BsTypes.Types, ClassVariable> BuiltInReferences = [];
 
@@ -97,12 +97,7 @@ public class Memory(List<MemoryScope>? scopes = null)
     
     public void AddScope(MemoryScope? scope = null)
     {
-        Scopes.Add(scope ?? new MemoryScope());
-    }
-
-    public void AddScope(int lineNumber, string location, string context)
-    {
-        Scopes.Add(new MemoryScope(null, Scopes.Last().FileName, lineNumber, location, context));
+        Scopes.Add(scope ?? new MemoryScope(null));
     }
 
     public MemoryScope RemoveScope()
@@ -123,9 +118,9 @@ public class Memory(List<MemoryScope>? scopes = null)
     public void PrintStacktrace()
     {
         Console.WriteLine("Traceback (most recent call last):");
-        for (var i = Scopes.Count - 1; i >= 0; i--)
+        for (var i = Scopes.Count - 1; i >= 1; i--)
         {
-            Console.WriteLine($"\tFile {Scopes[i].FileName}, line {Scopes[i].LineNumber}, in {Scopes[i].FunctionName ?? "<module>"}");
+            Console.WriteLine($"\tFile {Scopes[i].FileName}, line {Scopes[i].Line}, in {Scopes[i].FunctionName ?? "<module>"}");
             Console.WriteLine("\t" + Scopes[i].Expression);
         }
     }
