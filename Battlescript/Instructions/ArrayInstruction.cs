@@ -106,7 +106,7 @@ public class ArrayInstruction : Instruction
                 throw new Exception("Badly formed dictionary");
             }
         
-            return BsTypes.Create(memory, BsTypes.Types.Dictionary, new MappingVariable(intValues, stringValues));
+            return memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(intValues, stringValues));
 
             void InterpretAndAddKvp(Instruction? instruction)
             {
@@ -148,9 +148,9 @@ public class ArrayInstruction : Instruction
                     indexVariable = index.Interpret(memory);
                 }
         
-                if (BsTypes.Is(memory, BsTypes.Types.Int, indexVariable))
+                if (memory.Is(Memory.BsTypes.Int, indexVariable))
                 {
-                    return (BsTypes.GetIntValue(memory, indexVariable), null);
+                    return (memory.GetIntValue(indexVariable), null);
                 } else if (indexVariable is StringVariable stringVariable)
                 {
                     return (null, stringVariable.Value);
@@ -217,7 +217,7 @@ public class ArrayInstruction : Instruction
                 
                 }
 
-                return BsTypes.Create(memory, BsTypes.Types.List, values);
+                return memory.CreateBsType(Memory.BsTypes.List, values);
             }
         }
     }

@@ -15,7 +15,7 @@ public static class VariableTests
                                     x = [1, 2, 3]
                                     y = x[1]
                                     """);
-            var expected = BsTypes.Create(memory, BsTypes.Types.Int, 2);
+            var expected = memory.CreateBsType(Memory.BsTypes.Int, 2);
             Assertions.AssertVariable(memory, "y", expected);
         }
 
@@ -54,7 +54,7 @@ public static class VariableTests
                                     x = asdf()
                                     y = x[1]
                                     """);
-            var expected = BsTypes.Create(memory, BsTypes.Types.Int, 6);
+            var expected = memory.CreateBsType(Memory.BsTypes.Int, 6);
             Assertions.AssertVariable(memory, "y", expected);
         }
     }
@@ -70,7 +70,7 @@ public static class VariableTests
                                     x[1] = 4
                                     y = x[1]
                                     """);
-            var expected = BsTypes.Create(memory, BsTypes.Types.Int, 4);
+            var expected = memory.CreateBsType(Memory.BsTypes.Int, 4);
             Assertions.AssertVariable(memory, "y", expected);
         }
 
@@ -94,7 +94,7 @@ public static class VariableTests
                                     x["zxcv"] = 2
                                     y = x["zxcv"]
                                     """);
-            var expected = BsTypes.Create(memory, BsTypes.Types.Int, 2);
+            var expected = memory.CreateBsType(Memory.BsTypes.Int, 2);
             Assertions.AssertVariable(memory, "y", expected);
         }
 
@@ -115,7 +115,7 @@ public static class VariableTests
                                     x[1] = 9
                                     y = x.i
                                     """);
-            var expected = BsTypes.Create(memory, BsTypes.Types.Int, 9);
+            var expected = memory.CreateBsType(Memory.BsTypes.Int, 9);
             Assertions.AssertVariable(memory, "y", expected);
         }
     }
@@ -133,7 +133,7 @@ public static class VariableTests
                                     x = asdf()
                                     y = x.i
                                     """);
-            var expected = BsTypes.Create(memory, BsTypes.Types.Int, 5);
+            var expected = memory.CreateBsType(Memory.BsTypes.Int, 5);
             Assertions.AssertVariable(memory, "y", expected);
         }
 
@@ -146,7 +146,7 @@ public static class VariableTests
                                         
                                     y = asdf.i
                                     """);
-            var expected = BsTypes.Create(memory, BsTypes.Types.Int, 5);
+            var expected = memory.CreateBsType(Memory.BsTypes.Int, 5);
             Assertions.AssertVariable(memory, "y", expected);
         }
     }
@@ -165,7 +165,7 @@ public static class VariableTests
                                     x.i = 9
                                     y = x.i
                                     """);
-            var expected = BsTypes.Create(memory, BsTypes.Types.Int, 9);
+            var expected = memory.CreateBsType(Memory.BsTypes.Int, 9);
             Assertions.AssertVariable(memory, "y", expected);
         }
     }

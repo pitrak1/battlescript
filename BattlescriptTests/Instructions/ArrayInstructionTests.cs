@@ -61,10 +61,10 @@ public static class ArrayInstructionTests
         public void HandlesDictionaryWithMultipleValues()
         {
             var memory = Runner.Run("x = {'asdf': 3, 'qwer': 4}");
-            var expected = BsTypes.Create(memory, BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
+            var expected = memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
             {
-                {"asdf", BsTypes.Create(memory, BsTypes.Types.Int, 3)},
-                {"qwer", BsTypes.Create(memory, BsTypes.Types.Int, 4)},
+                {"asdf", memory.CreateBsType(Memory.BsTypes.Int, 3)},
+                {"qwer", memory.CreateBsType(Memory.BsTypes.Int, 4)},
             }));
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -73,9 +73,9 @@ public static class ArrayInstructionTests
         public void HandlesDictionaryWithSingleValue()
         {
             var memory = Runner.Run("x = {'asdf': 3}");
-            var expected = BsTypes.Create(memory, BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
+            var expected = memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
             {
-                {"asdf", BsTypes.Create(memory, BsTypes.Types.Int, 3)},
+                {"asdf", memory.CreateBsType(Memory.BsTypes.Int, 3)},
             }));
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -84,9 +84,9 @@ public static class ArrayInstructionTests
         public void HandlesDictionaryWithStringKey()
         {
             var memory = Runner.Run("x = {'asdf': 3}");
-            var expected = BsTypes.Create(memory, BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
+            var expected = memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
             {
-                {"asdf", BsTypes.Create(memory, BsTypes.Types.Int, 3)},
+                {"asdf", memory.CreateBsType(Memory.BsTypes.Int, 3)},
             }));
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -95,9 +95,9 @@ public static class ArrayInstructionTests
         public void HandlesDictionaryWithIntegerKey()
         {
             var memory = Runner.Run("x = {4: 3}");
-            var expected = BsTypes.Create(memory, BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
+            var expected = memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
             {
-                {4, BsTypes.Create(memory, BsTypes.Types.Int, 3)},
+                {4, memory.CreateBsType(Memory.BsTypes.Int, 3)},
             }));
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -117,7 +117,7 @@ public static class ArrayInstructionTests
                         x = asdf(4, 5)
                         """;
             var memory = Runner.Run(input);
-            var expected = BsTypes.Create(memory, BsTypes.Types.Int, 9);
+            var expected = memory.CreateBsType(Memory.BsTypes.Int, 9);
             Assertions.AssertVariable(memory, "x", expected);
         }
         
@@ -146,15 +146,15 @@ public static class ArrayInstructionTests
                 ]);
             var classVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
-                { "i", BsTypes.Create(memory, BsTypes.Types.Int, 4) },
-                { "j", BsTypes.Create(memory, BsTypes.Types.Int, 5) },
+                { "i", memory.CreateBsType(Memory.BsTypes.Int, 4) },
+                { "j", memory.CreateBsType(Memory.BsTypes.Int, 5) },
                 { "asdf", methodVariable }
             });
             var expected = new ObjectVariable(
                 new Dictionary<string, Variable>()
                 {
-                    {"i", BsTypes.Create(memory, BsTypes.Types.Int, 4) },
-                    {"j", BsTypes.Create(memory, BsTypes.Types.Int, 5)}
+                    {"i", memory.CreateBsType(Memory.BsTypes.Int, 4) },
+                    {"j", memory.CreateBsType(Memory.BsTypes.Int, 5)}
                 },
                 classVariable);
             Assertions.AssertVariable(memory, "x", expected);
@@ -174,7 +174,7 @@ public static class ArrayInstructionTests
                         x = y.i
                         """;
             var memory = Runner.Run(input);
-            var expected = BsTypes.Create(memory, BsTypes.Types.Int, 9);
+            var expected = memory.CreateBsType(Memory.BsTypes.Int, 9);
             Assertions.AssertVariable(memory, "x", expected);
         }
 
@@ -184,7 +184,7 @@ public static class ArrayInstructionTests
             var input = "x = ((4 - 2) * 3) >= (2 * (5 + 5)) or isinstance(5, int)";
             // var input = "x = ((4 - 2) * 3) >= (2 * (5 + 5))";
             var memory = Runner.Run(input);
-            var expected = BsTypes.Create(memory, BsTypes.Types.Bool, true);
+            var expected = memory.CreateBsType(Memory.BsTypes.Bool, true);
             Assertions.AssertVariable(memory, "x", expected);
         }
     }
@@ -196,10 +196,10 @@ public static class ArrayInstructionTests
         public void HandlesListCreation()
         {
             var memory = Runner.Run("x = [9, 8, 7]");
-            var expected = BsTypes.Create(memory, BsTypes.Types.List, new List<Variable>() {
-                BsTypes.Create(memory, BsTypes.Types.Int, 9),
-                BsTypes.Create(memory, BsTypes.Types.Int, 8),
-                BsTypes.Create(memory, BsTypes.Types.Int, 7)});
+            var expected = memory.CreateBsType(Memory.BsTypes.List, new List<Variable>() {
+                memory.CreateBsType(Memory.BsTypes.Int, 9),
+                memory.CreateBsType(Memory.BsTypes.Int, 8),
+                memory.CreateBsType(Memory.BsTypes.Int, 7)});
             Assertions.AssertVariable(memory, "x", expected);
         }
         
@@ -211,7 +211,7 @@ public static class ArrayInstructionTests
                         x = y[1]
                         """;
             var memory = Runner.Run(input);
-            var expected = BsTypes.Create(memory, BsTypes.Types.Int, 8);
+            var expected = memory.CreateBsType(Memory.BsTypes.Int, 8);
             Assertions.AssertVariable(memory, "x", expected);
         }
     }

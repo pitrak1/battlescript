@@ -62,20 +62,20 @@ public static class Operator
         switch (operation)
         {
             case "or":
-                return BsTypes.Create(memory, BsTypes.Types.Bool, GetOrValue());
+                return memory.CreateBsType(Memory.BsTypes.Bool, GetOrValue());
             case "and":
-                return BsTypes.Create(memory, BsTypes.Types.Bool, GetAndValue());
+                return memory.CreateBsType(Memory.BsTypes.Bool, GetAndValue());
             case "not":
                 var rightNot = Truthiness.IsTruthy(memory, right!);
-                return BsTypes.Create(memory, BsTypes.Types.Bool, !rightNot);
+                return memory.CreateBsType(Memory.BsTypes.Bool, !rightNot);
             case "is":
-                return BsTypes.Create(memory, BsTypes.Types.Bool, ReferenceEquals(left, right));
+                return memory.CreateBsType(Memory.BsTypes.Bool, ReferenceEquals(left, right));
             case "is not":
-                return BsTypes.Create(memory, BsTypes.Types.Bool, !ReferenceEquals(left, right));
+                return memory.CreateBsType(Memory.BsTypes.Bool, !ReferenceEquals(left, right));
             case "in":
-                return BsTypes.Create(memory, BsTypes.Types.Bool, GetInValue());
+                return memory.CreateBsType(Memory.BsTypes.Bool, GetInValue());
             case "not in":
-                return BsTypes.Create(memory, BsTypes.Types.Bool, !GetInValue());
+                return memory.CreateBsType(Memory.BsTypes.Bool, !GetInValue());
             default:
                 throw new Exception("Won't get here");
         }
@@ -110,18 +110,18 @@ public static class Operator
             if (left is StringVariable leftString && right is StringVariable rightString)
             {
                 return rightString.Value.Contains(leftString.Value);
-            } else if (BsTypes.Is(memory, BsTypes.Types.List, right))
+            } else if (memory.Is(Memory.BsTypes.List, right))
             {
-                var listValue = BsTypes.GetListValue(memory, right);
+                var listValue = memory.GetListValue(right);
                 return listValue.Values.Any(x => x.Equals(left));
-            } else if (BsTypes.Is(memory, BsTypes.Types.Dictionary, right) && BsTypes.Is(memory, BsTypes.Types.Int, left))
+            } else if (memory.Is(Memory.BsTypes.Dictionary, right) && memory.Is(Memory.BsTypes.Int, left))
             {
-                var dictValue1 = BsTypes.GetDictValue(memory, right);
-                var intValue = BsTypes.GetIntValue(memory, left);
+                var dictValue1 = memory.GetDictValue(right);
+                var intValue = memory.GetIntValue(left);
                 return dictValue1.IntValues.Any(x => x.Key.Equals(intValue));
-            } else if (BsTypes.Is(memory, BsTypes.Types.Dictionary, right) && left is StringVariable leftString2)
+            } else if (memory.Is(Memory.BsTypes.Dictionary, right) && left is StringVariable leftString2)
             {
-                var dictValue2 = BsTypes.GetDictValue(memory, right);
+                var dictValue2 = memory.GetDictValue(right);
                 return dictValue2.StringValues.Any(x => x.Key.Equals(leftString2.Value));
             }
             else

@@ -17,7 +17,7 @@ public class StringVariable : Variable, IEquatable<StringVariable>
                 case "+":
                     return new StringVariable(Value + otherString.Value);
                 case "==":
-                    return BsTypes.Create(memory, BsTypes.Types.Bool, Value == otherString.Value);
+                    return memory.CreateBsType(Memory.BsTypes.Bool, Value == otherString.Value);
                 default:
                     throw new InterpreterInvalidOperationException(operation, this, other);
             }

@@ -49,17 +49,11 @@ public class NumericInstruction : Instruction
     {
         if (Value is double)
         {
-            var floatClass = memory.GetBuiltIn(BsTypes.Types.Float);
-            var floatObject = floatClass.CreateObject();
-            floatObject.Values["__value"] = new NumericVariable(Value);
-            return floatObject;
+            return memory.CreateBsType(Memory.BsTypes.Float, Value);
         }
         else
         {
-            var intClass = memory.GetBuiltIn(BsTypes.Types.Int);
-            var intObject = intClass.CreateObject();
-            intObject.Values["__value"] = new NumericVariable(Value);
-            return intObject;
+            return memory.CreateBsType(Memory.BsTypes.Int, Value);
         }
     }
 }

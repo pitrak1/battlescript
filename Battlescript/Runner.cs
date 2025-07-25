@@ -6,12 +6,12 @@ public static class Runner
     {
         var memory = new Memory([new MemoryScope("builtin")]);
         
-        foreach (var builtin in BsTypes.TypeStrings)
+        foreach (var builtin in Memory.BsTypeStrings)
         {
             LoadBuiltin(memory, builtin);
         }
 
-        memory.PopulateBuiltInReferences();
+        memory.PopulateBsTypeReferences();
         try
         {
             memory.AddScope(new MemoryScope("main"));

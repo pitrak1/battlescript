@@ -27,29 +27,29 @@ public static class Truthiness
 
     private static bool IsObjectTruthy(Memory memory, Variable variable)
     {
-        if (BsTypes.Is(memory, BsTypes.Types.Int, variable))
+        if (memory.Is(Memory.BsTypes.Int, variable))
         {
-            var value = BsTypes.GetIntValue(memory, variable);
+            var value = memory.GetIntValue(variable);
             return value != 0;
         } 
-        else if (BsTypes.Is(memory, BsTypes.Types.Float, variable))
+        else if (memory.Is(Memory.BsTypes.Float, variable))
         {
-            var value = BsTypes.GetFloatValue(memory, variable);
+            var value = memory.GetFloatValue(variable);
             return Math.Abs(value) > Consts.FloatingPointTolerance;
         }
-        else if (BsTypes.Is(memory, BsTypes.Types.Bool, variable))
+        else if (memory.Is(Memory.BsTypes.Bool, variable))
         {
-            var value = BsTypes.GetBoolValue(memory, variable);
+            var value = memory.GetBoolValue(variable);
             return value;
         }
-        else if (BsTypes.Is(memory, BsTypes.Types.List, variable))
+        else if (memory.Is(Memory.BsTypes.List, variable))
         {
-            var value = BsTypes.GetListValue(memory, variable);
+            var value = memory.GetListValue(variable);
             return value.Values.Count > 0;
         }
-        else if (BsTypes.Is(memory, BsTypes.Types.Dictionary, variable))
+        else if (memory.Is(Memory.BsTypes.Dictionary, variable))
         {
-            var value = BsTypes.GetDictValue(memory, variable);
+            var value = memory.GetDictValue(variable);
             return value.IntValues.Count > 0 || value.StringValues.Count > 0;
         }
         else

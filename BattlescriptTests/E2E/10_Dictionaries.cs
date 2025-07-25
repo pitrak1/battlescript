@@ -10,10 +10,10 @@ public class Dictionaries
     {
         var input = "x = {'asdf': 5, 'qwer': '5'}";
         var memory = Runner.Run(input);
-        var expected = BsTypes.Create(memory, BsTypes.Types.Dictionary, new MappingVariable(null, 
+        var expected = memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(null, 
             new Dictionary<string, Variable>()
             {
-                { "asdf", BsTypes.Create(memory, BsTypes.Types.Int, 5)},
+                { "asdf", memory.CreateBsType(Memory.BsTypes.Int, 5)},
                 {"qwer", new StringVariable("5")}
             }
         ));

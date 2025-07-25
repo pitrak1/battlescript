@@ -211,7 +211,7 @@ public static class TryInstructionTests
                                     finally:
                                         x = 3
                                     """);
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(memory, BsTypes.Types.Int, 3));
+            Assertions.AssertVariable(memory, "x", memory.CreateBsType(Memory.BsTypes.Int, 3));
         }
         
         [Test]
@@ -227,8 +227,8 @@ public static class TryInstructionTests
                                     finally:
                                         x = 2
                                     """);
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(memory, BsTypes.Types.Int, 2));
-            Assertions.AssertVariable(memory, "y", BsTypes.Create(memory, BsTypes.Types.Int, 2));
+            Assertions.AssertVariable(memory, "x", memory.CreateBsType(Memory.BsTypes.Int, 2));
+            Assertions.AssertVariable(memory, "y", memory.CreateBsType(Memory.BsTypes.Int, 2));
         }
         
         [Test]
@@ -244,8 +244,8 @@ public static class TryInstructionTests
                                     finally:
                                         x = 2
                                     """);
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(memory, BsTypes.Types.Int, 2));
-            Assertions.AssertVariable(memory, "y", BsTypes.Create(memory, BsTypes.Types.Int, 2));
+            Assertions.AssertVariable(memory, "x", memory.CreateBsType(Memory.BsTypes.Int, 2));
+            Assertions.AssertVariable(memory, "y", memory.CreateBsType(Memory.BsTypes.Int, 2));
         }
         
         // We'll have to write some additional tests here for running finally block if exceptions are raised in

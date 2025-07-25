@@ -6,20 +6,145 @@ public class Memory(List<MemoryScope>? scopes = null)
 {
     public List<MemoryScope> Scopes { get; } = scopes ?? [new MemoryScope(null)];
 
-    public Dictionary<BsTypes.Types, ClassVariable> BuiltInReferences = [];
-
-    public void PopulateBuiltInReferences()
+    public enum BsTypes
     {
-        foreach (var builtin in BsTypes.TypeStrings)
+        Numeric,
+        Int,
+        Float,
+        Bool,
+        List,
+        Exception,
+        Dictionary,
+        String
+    }
+    
+    public static readonly string[] BsTypeStrings = ["numeric", "int", "float", "bool", "list", "Exception", "dict", "str"];
+    
+    private static readonly Dictionary<string, BsTypes> BsStringsToTypes = new() {
+        {"numeric", BsTypes.Numeric},
+        {"int", BsTypes.Int},
+        {"float", BsTypes.Float},
+        {"bool", BsTypes.Bool},
+        {"list", BsTypes.List},
+        {"Exception", BsTypes.Exception},
+        {"dict", BsTypes.Dictionary},
+        {"str", BsTypes.String}
+    };
+    
+    private static readonly Dictionary<BsTypes, string> BsTypesToStrings = new() {
+        {BsTypes.Numeric, "numeric"},
+        {BsTypes.Int, "int"},
+        {BsTypes.Float, "float"},
+        {BsTypes.Bool, "bool"},
+        {BsTypes.List, "list"},
+        {BsTypes.Exception, "Exception"},
+        {BsTypes.Dictionary, "dict"},
+        {BsTypes.String, "str"}
+    };
+
+    public Dictionary<BsTypes, ClassVariable> BsTypeReferences = [];
+    
+    public void PopulateBsTypeReferences()
+    {
+        foreach (var builtin in BsTypeStrings)
         {
-            var type = BsTypes.GetTypeFromString(builtin);
-            BuiltInReferences[type] = GetVariable(builtin) as ClassVariable;
+            var type = BsStringsToTypes[builtin];
+            BsTypeReferences[type] = GetVariable(builtin) as ClassVariable;
+        }
+    }
+    
+    public bool Is(BsTypes type, Variable variable)
+    {
+        var builtInClass = BsTypeReferences[type];
+        return variable is ObjectVariable objectVariable && objectVariable.Class.Name == builtInClass.Name;
+    }
+    
+    public Variable CreateBsType(BsTypes type, dynamic value)
+    {
+        var builtInClass = BsTypeReferences[type];
+        var objectVariable = builtInClass.CreateObject();
+
+        if (value is int || value is double)
+        {
+            objectVariable.Values["__value"] = new NumericVariable(value);
+            return objectVariable;
+        } else if (value is bool)
+        {
+            objectVariable.Values["__value"] = new NumericVariable(value ? 1 : 0);
+            return objectVariable;
+        } else if (value is List<Variable>)
+        {
+            objectVariable.Values["__value"] = new SequenceVariable(value);
+            return objectVariable;
+        }
+        
+        objectVariable.Values["__value"] = value;
+        return objectVariable;
+    }
+    
+    public int GetIntValue(Variable variable)
+    {
+        if (Is(BsTypes.Int, variable) && variable is ObjectVariable objectVariable)
+        {
+            var valueVariable = objectVariable.Values["__value"];
+            return ((NumericVariable)valueVariable).Value;
+        }
+        else
+        {
+            throw new Exception("Variable is not an int");
+        }
+    }
+    
+    public double GetFloatValue(Variable variable)
+    {
+        if (Is(BsTypes.Float, variable) && variable is ObjectVariable objectVariable)
+        {
+            var valueVariable = objectVariable.Values["__value"];
+            return ((NumericVariable)valueVariable).Value;
+        }
+        else
+        {
+            throw new Exception("Variable is not a float");
+        }
+    }
+    
+    public bool GetBoolValue(Variable variable)
+    {
+        if (Is(BsTypes.Bool, variable) && variable is ObjectVariable objectVariable)
+        {
+            var valueVariable = objectVariable.Values["__value"];
+            return ((NumericVariable)valueVariable).Value != 0;
+        }
+        else
+        {
+            throw new Exception("Variable is not a bool");
         }
     }
 
-    public ClassVariable GetBuiltIn(BsTypes.Types type)
+    public SequenceVariable GetListValue(Variable variable)
     {
-        return BuiltInReferences[type];
+        if (Is(BsTypes.List, variable) && variable is ObjectVariable objectVariable)
+        {
+            var valueVariable = objectVariable.Values["__value"] as SequenceVariable;
+            return valueVariable!;
+        }
+        else
+        {
+            throw new Exception("Variable is not a list");
+        }
+    }
+    
+    public MappingVariable GetDictValue(Variable variable)
+    {
+        if (Is(BsTypes.Dictionary, variable) && variable is ObjectVariable objectVariable)
+        {
+            var valueVariable = objectVariable.Values["__value"] as MappingVariable;
+            return valueVariable!;
+        }
+        else
+        {
+            throw new Exception("Variable is not a dict");
+        }
     }
     
     public Variable? GetVariable(string name)

@@ -25,7 +25,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
                 if (valueVariable is SequenceVariable sequenceVariable)
                 {
                     SetRangeIndex(memory, sequenceVariable, indexSequence.Values);
-                } else if (BsTypes.Is(memory, BsTypes.Types.List, valueVariable))
+                } else if (memory.Is(Memory.BsTypes.List, valueVariable))
                 {
                     SetRangeIndex(memory, (valueVariable as ObjectVariable).Values["__value"] as SequenceVariable, indexSequence.Values);
                 }
@@ -42,7 +42,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         } 
         else 
         {
-            var indexInt = BsTypes.GetIntValue(memory, indexSequence.Values[0]);
+            var indexInt = memory.GetIntValue(indexSequence.Values[0]);
             if (index.Next is null)
             {
                 Values[indexInt] = valueVariable;
@@ -91,7 +91,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         }
         else
         {
-            var indexInt = BsTypes.GetIntValue(memory, indexSequence.Values[0]);
+            var indexInt = memory.GetIntValue(indexSequence.Values[0]);
             return Values[indexInt];
         }
     }
@@ -132,7 +132,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         {
             if (argVariable[2] is not null && argVariable[2] is not ConstantVariable { Value: Consts.Constants.None} )
             {
-                step = BsTypes.GetIntValue(memory, argVariable[2]);
+                step = memory.GetIntValue(argVariable[2]);
                 
                 if (step < 0)
                 {
@@ -146,7 +146,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         {
             if (argVariable[1] is not null && argVariable[1] is not ConstantVariable { Value: Consts.Constants.None})
             {
-                stop = BsTypes.GetIntValue(memory, argVariable[1]) % Values.Count;
+                stop = memory.GetIntValue(argVariable[1]) % Values.Count;
             }
         }
         
@@ -154,7 +154,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         {
             if (argVariable[0] is not null && argVariable[0] is not ConstantVariable { Value: Consts.Constants.None})
             {
-                start = BsTypes.GetIntValue(memory, argVariable[0]) % Values.Count;
+                start = memory.GetIntValue(argVariable[0]) % Values.Count;
             }
         }
         
