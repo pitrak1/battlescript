@@ -307,8 +307,8 @@ public static class Assertions
             case ClassVariable classVariable:
                 CompareClassVariables(classVariable, expected as ClassVariable);
                 break;
-            case DictionaryVariable dictionaryVariable:
-                CompareDictionaryVariables(dictionaryVariable, expected as DictionaryVariable);
+            case MappingVariable mappingVariable:
+                CompareMappingVariables(mappingVariable, expected as MappingVariable);
                 break;
             case FunctionVariable functionVariable:
                 CompareFunctionVariables(functionVariable, expected as FunctionVariable);
@@ -372,7 +372,7 @@ public static class Assertions
             AssertInstructionListsEqual(input.Instructions!, expected.Instructions!);
         }
 
-        void CompareDictionaryVariables(DictionaryVariable input, DictionaryVariable expected)
+        void CompareMappingVariables(MappingVariable input, MappingVariable expected)
         {
             CompareVariableDictionaries(input.StringValues, expected.StringValues);
             

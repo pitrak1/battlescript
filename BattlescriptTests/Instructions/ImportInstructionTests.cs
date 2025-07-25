@@ -54,7 +54,7 @@ public static class ImportInstructionTests
         {
             var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
             var memory = Runner.Run($"from '{filePath}' import *");
-            var expected = new DictionaryVariable(null, new Dictionary<string, Variable>()
+            var expected = BsTypes.Create(memory, BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
             {
                 { "x", BsTypes.Create(memory, BsTypes.Types.Int, 5) },
                 {
@@ -64,7 +64,7 @@ public static class ImportInstructionTests
                         BsTypes.Create(memory, BsTypes.Types.Int, 3)})
                 },
                 { "z", new StringVariable("asdf") }
-            });
+            }));
             Assertions.AssertVariable(memory, "import", expected);
         }
     }

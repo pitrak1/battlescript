@@ -9,10 +9,12 @@ public static class BsTypes
         Float,
         Bool,
         List,
-        Exception
+        Exception,
+        Dictionary,
+        String
     }
     
-    public static readonly string[] TypeStrings = ["numeric", "int", "float", "bool", "list", "Exception"];
+    public static readonly string[] TypeStrings = ["numeric", "int", "float", "bool", "list", "Exception", "dict", "str"];
     
     private static readonly Dictionary<string, Types> StringsToTypes = new() {
         {"numeric", Types.Numeric},
@@ -20,7 +22,9 @@ public static class BsTypes
         {"float", Types.Float},
         {"bool", Types.Bool},
         {"list", Types.List},
-        {"Exception", Types.Exception}
+        {"Exception", Types.Exception},
+        {"dict", Types.Dictionary},
+        {"str", Types.String}
     };
     
     private static readonly Dictionary<Types, string> TypesToStrings = new() {
@@ -29,7 +33,9 @@ public static class BsTypes
         {Types.Float, "float"},
         {Types.Bool, "bool"},
         {Types.List, "list"},
-        {Types.Exception, "Exception"}
+        {Types.Exception, "Exception"},
+        {Types.Dictionary, "dict"},
+        {Types.String, "str"}
     };
 
     public static Types GetTypeFromString(string type)
@@ -144,6 +150,19 @@ public static class BsTypes
         else
         {
             throw new Exception("Variable is not a list");
+        }
+    }
+
+    public static MappingVariable GetDictValue(Memory memory, Variable variable)
+    {
+        if (Is(memory, Types.Dictionary, variable) && variable is ObjectVariable objectVariable)
+        {
+            var valueVariable = objectVariable.Values["__value"] as MappingVariable;
+            return valueVariable!;
+        }
+        else
+        {
+            throw new Exception("Variable is not a dict");
         }
     }
 }

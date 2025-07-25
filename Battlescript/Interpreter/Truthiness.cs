@@ -16,8 +16,8 @@ public static class Truthiness
                 return true;
             case ObjectVariable:
                 return IsObjectTruthy(memory, variable);
-            case DictionaryVariable dictionaryVariable:
-                return dictionaryVariable.IntValues.Count > 0 || dictionaryVariable.StringValues.Count > 0;
+            case MappingVariable mappingVariable:
+                return mappingVariable.IntValues.Count > 0 || mappingVariable.StringValues.Count > 0;
             case FunctionVariable:
                 return true;
             default:
@@ -46,6 +46,11 @@ public static class Truthiness
         {
             var value = BsTypes.GetListValue(memory, variable);
             return value.Values.Count > 0;
+        }
+        else if (BsTypes.Is(memory, BsTypes.Types.Dictionary, variable))
+        {
+            var value = BsTypes.GetDictValue(memory, variable);
+            return value.IntValues.Count > 0 || value.StringValues.Count > 0;
         }
         else
         {

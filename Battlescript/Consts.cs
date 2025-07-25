@@ -235,6 +235,8 @@ public static class Consts
     public static readonly string[] PrincipleTypes =
     [
         "__numeric__",
-        "__sequence__"
+        "__sequence__",
+        "__mapping__",
+        "__string__",
     ];
 }

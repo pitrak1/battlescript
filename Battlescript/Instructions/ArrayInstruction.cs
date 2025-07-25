@@ -106,7 +106,7 @@ public class ArrayInstruction : Instruction
                 throw new Exception("Badly formed dictionary");
             }
         
-            return new DictionaryVariable(intValues, stringValues);
+            return BsTypes.Create(memory, BsTypes.Types.Dictionary, new MappingVariable(intValues, stringValues));
 
             void InterpretAndAddKvp(Instruction? instruction)
             {

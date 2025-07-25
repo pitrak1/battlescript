@@ -217,11 +217,11 @@ public static class OperatorTests
                 _memory,
                 "in",
                 BsTypes.Create(_memory, BsTypes.Types.Int, 1),
-                new DictionaryVariable(new Dictionary<int, Variable>()
+                BsTypes.Create(_memory, BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
                 {
                     { 1, new NumericVariable(1) },
                     { 2, new NumericVariable(2) }
-                }));
+                })));
             var expected = BsTypes.Create(_memory, BsTypes.Types.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
@@ -233,11 +233,11 @@ public static class OperatorTests
                 _memory,
                 "in",
                 BsTypes.Create(_memory, BsTypes.Types.Int, 3),
-                new DictionaryVariable(new Dictionary<int, Variable>()
+                BsTypes.Create(_memory, BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
                 {
                     { 1, new NumericVariable(1) },
                     { 2, new NumericVariable(2) }
-                }));
+                })));
             var expected = BsTypes.Create(_memory, BsTypes.Types.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
@@ -249,11 +249,11 @@ public static class OperatorTests
                 _memory,
                 "in",
                 new StringVariable("asdf"),
-                new DictionaryVariable(null, new Dictionary<string, Variable>()
+                BsTypes.Create(_memory, BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
                 {
                     { "asdf", new NumericVariable(1) },
                     { "qwer", new NumericVariable(2) }
-                }));
+                })));
             var expected = BsTypes.Create(_memory, BsTypes.Types.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
@@ -265,11 +265,11 @@ public static class OperatorTests
                 _memory,
                 "in",
                 new StringVariable("asdf"),
-                new DictionaryVariable(null, new Dictionary<string, Variable>()
+                BsTypes.Create(_memory, BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
                 {
                     { "qwer", new NumericVariable(1) },
                     { "zxcv", new NumericVariable(2) }
-                }));
+                })));
             var expected = BsTypes.Create(_memory, BsTypes.Types.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
@@ -281,11 +281,11 @@ public static class OperatorTests
                 _memory,
                 "not in",
                 BsTypes.Create(_memory, BsTypes.Types.Int, 3),
-                new DictionaryVariable(new Dictionary<int, Variable>()
+                BsTypes.Create(_memory, BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
                 {
                     { 1, new NumericVariable(1) },
                     { 2, new NumericVariable(2) }
-                }));
+                })));
             var expected = BsTypes.Create(_memory, BsTypes.Types.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
@@ -297,11 +297,11 @@ public static class OperatorTests
                 _memory,
                 "not in",
                 BsTypes.Create(_memory, BsTypes.Types.Int, 1),
-                new DictionaryVariable(new Dictionary<int, Variable>()
+                BsTypes.Create(_memory, BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
                 {
                     { 1, new NumericVariable(1) },
                     { 2, new NumericVariable(2) }
-                }));
+                })));
             var expected = BsTypes.Create(_memory, BsTypes.Types.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
@@ -313,11 +313,11 @@ public static class OperatorTests
                 _memory,
                 "not in",
                 new StringVariable("zxcv"),
-                new DictionaryVariable(null, new Dictionary<string, Variable>()
+                BsTypes.Create(_memory, BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
                 {
                     { "asdf", new NumericVariable(1) },
                     { "qwer", new NumericVariable(2) }
-                }));
+                })));
             var expected = BsTypes.Create(_memory, BsTypes.Types.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
@@ -329,11 +329,11 @@ public static class OperatorTests
                 _memory,
                 "not in",
                 new StringVariable("asdf"),
-                new DictionaryVariable(null, new Dictionary<string, Variable>()
+                BsTypes.Create(_memory, BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
                 {
                     { "asdf", new NumericVariable(1) },
                     { "zxcv", new NumericVariable(2) }
-                }));
+                })));
             var expected = BsTypes.Create(_memory, BsTypes.Types.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }

@@ -1,0 +1,17 @@
+class dict:
+    __value = __mapping__()
+
+    def __init__(self, value):
+        if isinstance(value, dict):
+            self.__value = value.__value
+        else:
+            self.__value = value
+
+    def __getitem__(self, key):
+        print(key)
+        return self.__value[key]
+
+    def __setitem__(self, key, value):
+        self.__value[key] = value
+
+    

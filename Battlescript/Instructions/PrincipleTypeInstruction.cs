@@ -43,6 +43,10 @@ public class PrincipleTypeInstruction : Instruction
                 return new NumericVariable(0);
             case "__sequence__":
                 return new SequenceVariable();
+            case "__mapping__":
+                return new MappingVariable();
+            case "__string__":
+                return new StringVariable();
         }
         return new ConstantVariable();
     }

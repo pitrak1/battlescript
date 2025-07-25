@@ -114,13 +114,15 @@ public static class Operator
             {
                 var listValue = BsTypes.GetListValue(memory, right);
                 return listValue.Values.Any(x => x.Equals(left));
-            } else if (right is DictionaryVariable rightDictionary && BsTypes.Is(memory, BsTypes.Types.Int, left))
+            } else if (BsTypes.Is(memory, BsTypes.Types.Dictionary, right) && BsTypes.Is(memory, BsTypes.Types.Int, left))
             {
+                var dictValue1 = BsTypes.GetDictValue(memory, right);
                 var intValue = BsTypes.GetIntValue(memory, left);
-                return rightDictionary.IntValues.Any(x => x.Key.Equals(intValue));
-            } else if (right is DictionaryVariable rightDictionary2 && left is StringVariable leftString2)
+                return dictValue1.IntValues.Any(x => x.Key.Equals(intValue));
+            } else if (BsTypes.Is(memory, BsTypes.Types.Dictionary, right) && left is StringVariable leftString2)
             {
-                return rightDictionary2.StringValues.Any(x => x.Key.Equals(leftString2.Value));
+                var dictValue2 = BsTypes.GetDictValue(memory, right);
+                return dictValue2.StringValues.Any(x => x.Key.Equals(leftString2.Value));
             }
             else
             {

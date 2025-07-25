@@ -59,9 +59,9 @@ public class TruthinessTests
         }
 
         [Test]
-        public void DictionaryVariableWithIntValuesReturnsTrue()
+        public void MappingVariableWithIntValuesReturnsTrue()
         {
-            var variable = new DictionaryVariable(new Dictionary<int, Variable>()
+            var variable = new MappingVariable(new Dictionary<int, Variable>()
             {
                 {1, new NumericVariable(10)}
             });
@@ -70,9 +70,9 @@ public class TruthinessTests
         }
 
         [Test]
-        public void DictionaryVariableWithStringValuesReturnsTrue()
+        public void MappingVariableWithStringValuesReturnsTrue()
         {
-            var variable = new DictionaryVariable(null, new Dictionary<string, Variable>()
+            var variable = new MappingVariable(null, new Dictionary<string, Variable>()
             {
                 {"asdf", new NumericVariable(10)}
             });
@@ -83,7 +83,7 @@ public class TruthinessTests
         [Test]
         public void EmptyDictionaryVariableReturnsTrue()
         {
-            var variable = new DictionaryVariable();
+            var variable = new MappingVariable();
             var result = Truthiness.IsTruthy(_memory, variable);
             Assert.IsFalse(result);
         }

@@ -2,12 +2,12 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class DictionaryVariable : Variable, IEquatable<DictionaryVariable>
+public class MappingVariable : Variable, IEquatable<MappingVariable>
 { 
     public Dictionary<int, Variable> IntValues { get; set; }
     public Dictionary<string, Variable> StringValues { get; set; }
 
-    public DictionaryVariable(Dictionary<int, Variable>? intValues = null, Dictionary<string, Variable>? stringValues = null)
+    public MappingVariable(Dictionary<int, Variable>? intValues = null, Dictionary<string, Variable>? stringValues = null)
     {
         IntValues = intValues ?? new Dictionary<int, Variable>();
         StringValues = stringValues ?? new Dictionary<string, Variable>();
@@ -46,12 +46,14 @@ public class DictionaryVariable : Variable, IEquatable<DictionaryVariable>
 
     private (int? IntValue, string? StringValue) GetIndexValue(Memory memory, ArrayInstruction index)
     {
-        var indexVariable = index.Values.Select(x => x.Interpret(memory)).ToList();
+        var indexVariable = index.Values[0].Interpret(memory);
+        var indexList = indexVariable as ObjectVariable;
+        var indexSequence = indexList.Values["__value"] as SequenceVariable;
         
-        if (BsTypes.Is(memory, BsTypes.Types.Int, indexVariable[0]))
+        if (BsTypes.Is(memory, BsTypes.Types.Int, indexSequence.Values[0]))
         {
-            return (BsTypes.GetIntValue(memory, indexVariable[0]), null);
-        } else if (indexVariable[0] is StringVariable stringVariable)
+            return (BsTypes.GetIntValue(memory, indexSequence.Values[0]), null);
+        } else if (indexSequence.Values[0] is StringVariable stringVariable)
         {
             return (null, stringVariable.Value);
         }
@@ -77,8 +79,8 @@ public class DictionaryVariable : Variable, IEquatable<DictionaryVariable>
     }
     
     // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as DictionaryVariable);
-    public bool Equals(DictionaryVariable? variable)
+    public override bool Equals(object obj) => Equals(obj as MappingVariable);
+    public bool Equals(MappingVariable? variable)
     {
         if (variable is null) return false;
         if (ReferenceEquals(this, variable)) return true;

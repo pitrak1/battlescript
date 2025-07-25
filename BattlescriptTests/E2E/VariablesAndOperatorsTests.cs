@@ -72,8 +72,8 @@ public static class VariablesAndOperatorsTests
         public void SupportsDictionaries()
         {
             var input = "x = {}";
-            var expected = new DictionaryVariable([]);
             var memory = Runner.Run(input);
+            var expected = BsTypes.Create(memory, BsTypes.Types.Dictionary, new MappingVariable([]));
             
             Assertions.AssertVariable(memory, "x", expected);
         }
