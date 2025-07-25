@@ -14,12 +14,12 @@ public class StringInstruction : Instruction
         Value = value;
     }
     
-    public override Variable Interpret(
+    public override Variable? Interpret(
         Memory memory, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        return new StringVariable(Value);
+        return memory.CreateBsType(Memory.BsTypes.String, Value);
     }
 }

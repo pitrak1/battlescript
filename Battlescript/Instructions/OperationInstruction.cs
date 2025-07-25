@@ -34,7 +34,7 @@ public class OperationInstruction : Instruction
         Right = right;
     }
 
-    public override Variable Interpret(        
+    public override Variable? Interpret(        
         Memory memory, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,

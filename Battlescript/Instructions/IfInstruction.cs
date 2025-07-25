@@ -21,7 +21,7 @@ public class IfInstruction : Instruction
         Instructions = instructions ?? [];
     }
 
-    public override Variable Interpret(
+    public override Variable? Interpret(
         Memory memory, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
@@ -51,6 +51,6 @@ public class IfInstruction : Instruction
             Next.Interpret(memory, instructionContext, objectContext, lexicalContext);
         }
 
-        return new ConstantVariable();
+        return null;
     }
 }

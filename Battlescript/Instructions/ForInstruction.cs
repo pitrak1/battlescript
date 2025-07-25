@@ -27,7 +27,7 @@ public class ForInstruction : Instruction
         Range = range;
     }
 
-    public override Variable Interpret(
+    public override Variable? Interpret(
         Memory memory, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
@@ -62,7 +62,7 @@ public class ForInstruction : Instruction
 
                 memory.RemoveScope();
             }
-            return new ConstantVariable();
+            return null;
         }
         else
         {

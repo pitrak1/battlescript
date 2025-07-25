@@ -1,4 +1,4 @@
-class float(numeric):
+class float:
     __value = __numeric__(0.0)
 
     def __init__(self, value):
@@ -8,25 +8,25 @@ class float(numeric):
             self.__value = value
 
     def __add__(self, other):
-        return self.__perform_operation(other, '+')
+        return float(self.__value + other.__value)
 
     def __sub__(self, other):
-        return self.__perform_operation(other, '-')
+        return float(self.__value - other.__value)
 
     def __mul__(self, other):
-        return self.__perform_operation(other, '*')
+        return float(self.__value * other.__value)
 
     def __truediv__(self, other):
-        return self.__perform_operation(other, '/')
+        return float(self.__value / other.__value)
 
     def __floordiv__(self, other):
-        return self.__perform_operation(other, '//')
+        return int(self.__value // other.__value)
 
     def __mod__(self, other):
-        return self.__perform_operation(other, '%')
+        return float(self.__value % other.__value)
 
     def __pow__(self, other):
-        return self.__perform_operation(other, '**')
+        return float(self.__value ** other.__value)
 
     def __pos__(self):
         return float(self.__value)
@@ -35,50 +35,40 @@ class float(numeric):
         return float(-self.__value)
 
     def __eq__(self, other):
-        return self.__perform_operation(other, '==')
+        return bool(self.__value == other.__value)
 
     def __ne__(self, other):
-        return self.__perform_operation(other, '!=')
+        return bool(self.__value != other.__value)
 
     def __lt__(self, other):
-        return self.__perform_operation(other, '<')
+        return bool(self.__value < other.__value)
 
     def __gt__(self, other):
-        return self.__perform_operation(other, '>')
+        return bool(self.__value > other.__value)
 
     def __le__(self, other):
-        return self.__perform_operation(other, '<=')
+        return bool(self.__value <= other.__value)
 
     def __ge__(self, other):
-        return self.__perform_operation(other, '>=')
+        return bool(self.__value >= other.__value)
 
     def __iadd__(self, other):
-        return self.__perform_operation(other, '+')
+        return float(self.__value + other.__value)
 
     def __isub__(self, other):
-        return self.__perform_operation(other, '-')
-    
+        return float(self.__value - other.__value)
+
     def __imul__(self, other):
-        return self.__perform_operation(other, '*')
+        return float(self.__value * other.__value)
 
     def __itruediv__(self, other):
-        return self.__perform_operation(other, '/')
+        return float(self.__value / other.__value)
 
     def __ifloordiv__(self, other):
-        return self.__perform_operation(other, '//')
+        return int(self.__value // other.__value)
 
     def __imod__(self, other):
-        return self.__perform_operation(other, '%')
+        return float(self.__value % other.__value)
 
     def __ipow__(self, other):
-        return self.__perform_operation(other, '**')
-
-    def __perform_operation(self, other, operation):
-        if operation == '//':
-            return int(self.__get_operation_result(other, operation))
-        # this didn't work, need to figure it out
-        # elif isinstance(other, float) or isinstance(other, int):
-        elif operation in ['==', '!=', '<', '>', '<=', '>=']:
-            return bool(self.__get_operation_result(other, operation))
-        else:
-            return float(self.__get_operation_result(other, operation))
+        return float(self.__value ** other.__value)

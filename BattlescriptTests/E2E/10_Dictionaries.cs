@@ -14,7 +14,7 @@ public class Dictionaries
             new Dictionary<string, Variable>()
             {
                 { "asdf", memory.CreateBsType(Memory.BsTypes.Int, 5)},
-                {"qwer", new StringVariable("5")}
+                {"qwer", memory.CreateBsType(Memory.BsTypes.String, "5")}
             }
         ));
         Assertions.AssertVariable(memory, "x", expected);
@@ -24,8 +24,8 @@ public class Dictionaries
     public void SupportsDictionaryIndexing()
     {
         var input = "x = {'asdf': 5, 'qwer': '5'}\ny = x['qwer']";
-        var expected = new StringVariable("5");
         var memory = Runner.Run(input);
+        var expected = memory.CreateBsType(Memory.BsTypes.String, "5");
         
         Assertions.AssertVariable(memory, "y", expected);
     }

@@ -46,7 +46,7 @@ public static class ImportInstructionTests
                         memory.CreateBsType(Memory.BsTypes.Int, 1), 
                         memory.CreateBsType(Memory.BsTypes.Int, 2), 
                         memory.CreateBsType(Memory.BsTypes.Int, 3)}));
-            Assertions.AssertVariable(memory, "z", new StringVariable("asdf"));
+            Assertions.AssertVariable(memory, "z", memory.CreateBsType(Memory.BsTypes.String, "asdf"));
         }
         
         [Test]
@@ -63,7 +63,7 @@ public static class ImportInstructionTests
                         memory.CreateBsType(Memory.BsTypes.Int, 2), 
                         memory.CreateBsType(Memory.BsTypes.Int, 3)})
                 },
-                { "z", new StringVariable("asdf") }
+                { "z", memory.CreateBsType(Memory.BsTypes.String, "asdf") }
             }));
             Assertions.AssertVariable(memory, "import", expected);
         }

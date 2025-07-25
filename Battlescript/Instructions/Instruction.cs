@@ -26,7 +26,7 @@ public abstract class Instruction
     // - objectContext is used for class methods because the first argument to a method will always be `self`
     // - lexicalContext is used for keywords like `super` because we need to know in what class a method was actually
     // defined to find its superclass, the object is not enough
-    public abstract Variable Interpret(
+    public abstract Variable? Interpret(
         Memory memory,
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,

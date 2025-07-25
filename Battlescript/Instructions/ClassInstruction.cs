@@ -26,7 +26,7 @@ public class ClassInstruction : Instruction
         Superclasses = superclasses ?? [];
     }
 
-    public override Variable Interpret(
+    public override Variable? Interpret(
         Memory memory, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,

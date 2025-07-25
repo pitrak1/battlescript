@@ -8,7 +8,6 @@ public class Memory(List<MemoryScope>? scopes = null)
 
     public enum BsTypes
     {
-        Numeric,
         Int,
         Float,
         Bool,
@@ -18,10 +17,9 @@ public class Memory(List<MemoryScope>? scopes = null)
         String
     }
     
-    public static readonly string[] BsTypeStrings = ["numeric", "int", "float", "bool", "list", "Exception", "dict", "str"];
+    public static readonly string[] BsTypeStrings = ["int", "float", "bool", "list", "Exception", "dict", "str"];
     
     private static readonly Dictionary<string, BsTypes> BsStringsToTypes = new() {
-        {"numeric", BsTypes.Numeric},
         {"int", BsTypes.Int},
         {"float", BsTypes.Float},
         {"bool", BsTypes.Bool},
@@ -32,7 +30,6 @@ public class Memory(List<MemoryScope>? scopes = null)
     };
     
     private static readonly Dictionary<BsTypes, string> BsTypesToStrings = new() {
-        {BsTypes.Numeric, "numeric"},
         {BsTypes.Int, "int"},
         {BsTypes.Float, "float"},
         {BsTypes.Bool, "bool"},
@@ -75,6 +72,10 @@ public class Memory(List<MemoryScope>? scopes = null)
         } else if (value is List<Variable>)
         {
             objectVariable.Values["__value"] = new SequenceVariable(value);
+            return objectVariable;
+        } else if (value is string)
+        {
+            objectVariable.Values["__value"] = new StringVariable(value);
             return objectVariable;
         }
         
@@ -144,6 +145,19 @@ public class Memory(List<MemoryScope>? scopes = null)
         else
         {
             throw new Exception("Variable is not a dict");
+        }
+    }
+    
+    public string GetStringValue(Variable variable)
+    {
+        if (Is(BsTypes.String, variable) && variable is ObjectVariable objectVariable)
+        {
+            var valueVariable = objectVariable.Values["__value"] as StringVariable;
+            return valueVariable!.Value;
+        }
+        else
+        {
+            throw new Exception("Variable is not a str");
         }
     }
     

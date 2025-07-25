@@ -41,7 +41,7 @@ public class NumericInstruction : Instruction
         _value = value;
     }
     
-    public override Variable Interpret(        
+    public override Variable? Interpret(        
         Memory memory, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,

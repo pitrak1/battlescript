@@ -64,7 +64,7 @@ public class ImportInstruction : Instruction
         ImportNames = importNames;
     }
 
-    public override Variable Interpret(
+    public override Variable? Interpret(
         Memory memory, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
@@ -87,6 +87,6 @@ public class ImportInstruction : Instruction
             }
         }
 
-        return new ConstantVariable();
+        return null;
     }
 }

@@ -12,8 +12,8 @@ public static class VariablesAndOperatorsTests
         public void SupportsStringVariablesUsingSingleQuotes()
         {
             var input = "x = 'asdf'";
-            var expected = new StringVariable("asdf");
             var memory = Runner.Run(input);
+            var expected = memory.CreateBsType(Memory.BsTypes.String, "asdf");
             Assertions.AssertVariable(memory, "x", expected);
         }
         
@@ -21,8 +21,8 @@ public static class VariablesAndOperatorsTests
         public void SupportsStringVariablesUsingDoubleQuotes()
         {
             var input = "x = \"asdf\"";
-            var expected = new StringVariable("asdf");
             var memory = Runner.Run(input);
+            var expected = memory.CreateBsType(Memory.BsTypes.String, "asdf");
             
             Assertions.AssertVariable(memory, "x", expected);
         }

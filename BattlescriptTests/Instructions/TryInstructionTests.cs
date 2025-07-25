@@ -138,7 +138,7 @@ public static class TryInstructionTests
                                     else:
                                         x = 'asdf'
                                     """);
-            Assertions.AssertVariable(memory, "x", new StringVariable("asdf"));
+            Assertions.AssertVariable(memory, "x", memory.CreateBsType(Memory.BsTypes.String, "asdf"));
         }
         
         [Test]
@@ -151,7 +151,7 @@ public static class TryInstructionTests
                                     except Exception:
                                         x = 'qwer'
                                     """);
-            Assertions.AssertVariable(memory, "x", new StringVariable("qwer"));
+            Assertions.AssertVariable(memory, "x", memory.CreateBsType(Memory.BsTypes.String, "qwer"));
         }
         
         [Test]
@@ -166,7 +166,7 @@ public static class TryInstructionTests
                                     else:
                                         x = 'asdf'
                                     """);
-            Assertions.AssertVariable(memory, "x", new StringVariable("qwer"));
+            Assertions.AssertVariable(memory, "x", memory.CreateBsType(Memory.BsTypes.String, "qwer"));
         }
         
         [Test]
@@ -181,7 +181,7 @@ public static class TryInstructionTests
                                     else:
                                         x = 'asdf'
                                     """);
-            Assertions.AssertVariable(memory, "x", new StringVariable("asdf"));
+            Assertions.AssertVariable(memory, "x", memory.CreateBsType(Memory.BsTypes.String, "asdf"));
         }
         
         [Test]
@@ -198,7 +198,7 @@ public static class TryInstructionTests
                                     else:
                                         x = 'asdf'
                                     """);
-            Assertions.AssertVariable(memory, "x", new StringVariable("zxcv"));
+            Assertions.AssertVariable(memory, "x", memory.CreateBsType(Memory.BsTypes.String, "zxcv"));
         }
         
         [Test]

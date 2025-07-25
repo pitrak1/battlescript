@@ -65,7 +65,7 @@ public class ArrayInstruction : Instruction
         Delimiter = delimiter;
     }
     
-    public override Variable Interpret(
+    public override Variable? Interpret(
         Memory memory, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
@@ -151,9 +151,9 @@ public class ArrayInstruction : Instruction
                 if (memory.Is(Memory.BsTypes.Int, indexVariable))
                 {
                     return (memory.GetIntValue(indexVariable), null);
-                } else if (indexVariable is StringVariable stringVariable)
+                } else if (memory.Is(Memory.BsTypes.String, indexVariable))
                 {
-                    return (null, stringVariable.Value);
+                    return (null, memory.GetStringValue(indexVariable));
                 }
                 else
                 {

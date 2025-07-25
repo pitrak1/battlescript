@@ -11,7 +11,7 @@ public class FinallyInstruction : Instruction
         Instructions = instructions;
     }
     
-    public override Variable Interpret(
+    public override Variable? Interpret(
         Memory memory, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
@@ -23,7 +23,7 @@ public class FinallyInstruction : Instruction
             inst.Interpret(memory);
         }
         memory.RemoveScope();
-        
-        return new ConstantVariable();
+
+        return null;
     }
 }

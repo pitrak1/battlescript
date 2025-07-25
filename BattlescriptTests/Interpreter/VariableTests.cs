@@ -26,7 +26,7 @@ public static class VariableTests
                                     x = {1: "asdf", 2: "qwer"}
                                     y = x[1]
                                     """);
-            var expected = new StringVariable("asdf");
+            var expected = memory.CreateBsType(Memory.BsTypes.String, "asdf");
             Assertions.AssertVariable(memory, "y", expected);
         }
 
@@ -37,7 +37,7 @@ public static class VariableTests
                                     x = {1: "asdf", "zxcv": "qwer"}
                                     y = x["zxcv"]
                                     """);
-            var expected = new StringVariable("qwer");
+            var expected = memory.CreateBsType(Memory.BsTypes.String, "qwer");
             Assertions.AssertVariable(memory, "y", expected);
         }
 
@@ -82,7 +82,7 @@ public static class VariableTests
                                     x[1] = "zxcv"
                                     y = x[1]
                                     """);
-            var expected = new StringVariable("zxcv");
+            var expected = memory.CreateBsType(Memory.BsTypes.String, "zxcv");
             Assertions.AssertVariable(memory, "y", expected);
         }
 

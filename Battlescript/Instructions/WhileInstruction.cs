@@ -19,7 +19,7 @@ public class WhileInstruction : Instruction
         Condition = condition;
     }
 
-    public override Variable Interpret(
+    public override Variable? Interpret(
         Memory memory, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
@@ -50,6 +50,6 @@ public class WhileInstruction : Instruction
             condition = Condition.Interpret(memory);
         }
 
-        return new ConstantVariable();
+        return null;
     }
 }

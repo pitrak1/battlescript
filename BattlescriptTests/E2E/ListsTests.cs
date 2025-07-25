@@ -12,8 +12,9 @@ public static class ListsTests
         public void SupportsListIndexing()
         {
             var input = "x = [5, '5']\ny = x[1]";
-            var expected = new StringVariable("5");
             var memory = Runner.Run(input);
+            var expected = memory.CreateBsType(Memory.BsTypes.String, "5");
+            
             Assertions.AssertVariable(memory, "y", expected);
         }
 
@@ -57,7 +58,7 @@ public static class ListsTests
                 {
                     memory.CreateBsType(Memory.BsTypes.Int, 3),
                     memory.CreateBsType(Memory.BsTypes.Int, 2),
-                    new StringVariable("5"),
+                    memory.CreateBsType(Memory.BsTypes.String, "5"),
                 }
             );
             Assertions.AssertVariable(memory, "y", expected);
@@ -86,7 +87,7 @@ public static class ListsTests
             var expected = memory.CreateBsType(Memory.BsTypes.List,
                 new List<Variable>
                 {
-                    new StringVariable("5"),
+                    memory.CreateBsType(Memory.BsTypes.String, "5"),
                     memory.CreateBsType(Memory.BsTypes.Int, 3),
                 }
             );
@@ -104,7 +105,7 @@ public static class ListsTests
                     memory.CreateBsType(Memory.BsTypes.Int, 5),
                     memory.CreateBsType(Memory.BsTypes.Int, 6),
                     memory.CreateBsType(Memory.BsTypes.Int, 2),
-                    new StringVariable("5"),
+                    memory.CreateBsType(Memory.BsTypes.String, "5"),
                 }
             );
             Assertions.AssertVariable(memory, "x", expected);
@@ -121,7 +122,7 @@ public static class ListsTests
                     memory.CreateBsType(Memory.BsTypes.Int, 5),
                     memory.CreateBsType(Memory.BsTypes.Int, 5),
                     memory.CreateBsType(Memory.BsTypes.Int, 7),
-                    new StringVariable("5"),
+                    memory.CreateBsType(Memory.BsTypes.String, "5"),
                 }
             );
             Assertions.AssertVariable(memory, "x", expected);

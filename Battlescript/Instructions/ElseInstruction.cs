@@ -24,7 +24,7 @@ public class ElseInstruction : Instruction
         Instructions = instructions ?? [];
     }
 
-    public override Variable Interpret(
+    public override Variable? Interpret(
         Memory memory, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,

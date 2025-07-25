@@ -52,6 +52,11 @@ public static class Truthiness
             var value = memory.GetDictValue(variable);
             return value.IntValues.Count > 0 || value.StringValues.Count > 0;
         }
+        else if (memory.Is(Memory.BsTypes.String, variable))
+        {
+            var value = memory.GetStringValue(variable);
+            return value.Length > 0;
+        }
         else
         {
             return true;

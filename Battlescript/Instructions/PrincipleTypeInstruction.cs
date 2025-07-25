@@ -27,7 +27,7 @@ public class PrincipleTypeInstruction : Instruction
         Value = value;
     }
     
-    public override Variable Interpret(        
+    public override Variable? Interpret(        
         Memory memory, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
@@ -48,6 +48,6 @@ public class PrincipleTypeInstruction : Instruction
             case "__string__":
                 return new StringVariable();
         }
-        return new ConstantVariable();
+        return null;
     }
 }

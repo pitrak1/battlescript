@@ -6,3 +6,9 @@ class str:
             self.__value = value.__value
         else:
             self.__value = value
+
+    def __eq__(self, other):
+        if isinstance(other, str):
+            return self.__value == other.__value
+        else:
+            return False

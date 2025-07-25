@@ -53,9 +53,9 @@ public class MappingVariable : Variable, IEquatable<MappingVariable>
         if (memory.Is(Memory.BsTypes.Int, indexSequence.Values[0]))
         {
             return (memory.GetIntValue(indexSequence.Values[0]), null);
-        } else if (indexSequence.Values[0] is StringVariable stringVariable)
+        } else if (memory.Is(Memory.BsTypes.String, indexSequence.Values[0]))
         {
-            return (null, stringVariable.Value);
+            return (null, memory.GetStringValue(indexSequence.Values[0]));
         }
         else
         {

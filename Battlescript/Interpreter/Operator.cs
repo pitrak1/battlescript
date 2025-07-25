@@ -107,9 +107,11 @@ public static class Operator
         
         bool GetInValue()
         {
-            if (left is StringVariable leftString && right is StringVariable rightString)
+            if (memory.Is(Memory.BsTypes.String, left) && memory.Is(Memory.BsTypes.String, right))
             {
-                return rightString.Value.Contains(leftString.Value);
+                var leftString = memory.GetStringValue(left);
+                var rightString = memory.GetStringValue(right);
+                return rightString.Contains(leftString);
             } else if (memory.Is(Memory.BsTypes.List, right))
             {
                 var listValue = memory.GetListValue(right);
@@ -119,10 +121,11 @@ public static class Operator
                 var dictValue1 = memory.GetDictValue(right);
                 var intValue = memory.GetIntValue(left);
                 return dictValue1.IntValues.Any(x => x.Key.Equals(intValue));
-            } else if (memory.Is(Memory.BsTypes.Dictionary, right) && left is StringVariable leftString2)
+            } else if (memory.Is(Memory.BsTypes.Dictionary, right) && memory.Is(Memory.BsTypes.String, left))
             {
                 var dictValue2 = memory.GetDictValue(right);
-                return dictValue2.StringValues.Any(x => x.Key.Equals(leftString2.Value));
+                var stringValue = memory.GetStringValue(left);
+                return dictValue2.StringValues.Any(x => x.Key.Equals(stringValue));
             }
             else
             {

@@ -21,7 +21,7 @@ public class TryInstruction : Instruction
         Finally = finallyInstruction;
     }
     
-    public override Variable Interpret(
+    public override Variable? Interpret(
         Memory memory, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
@@ -90,6 +90,6 @@ public class TryInstruction : Instruction
             }
         }
         
-        return new ConstantVariable();
+        return null;
     }
 }

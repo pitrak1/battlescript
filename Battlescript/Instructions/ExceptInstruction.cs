@@ -18,7 +18,7 @@ public class ExceptInstruction : Instruction
         Instructions = instructions;
     }
     
-    public override Variable Interpret(
+    public override Variable? Interpret(
         Memory memory, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
@@ -30,7 +30,6 @@ public class ExceptInstruction : Instruction
             inst.Interpret(memory);
         }
         memory.RemoveScope();
-        
-        return new ConstantVariable();
+        return null;
     }
 }

@@ -106,10 +106,10 @@ public static class OperatorTests
         public void HandlesTrueInOperationWithString()
         {
             var result = Operator.Operate(
-                _memory, 
-                "in", 
-                new StringVariable("sd"), 
-                new StringVariable("asdf"));
+                _memory,
+                "in",
+                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("sd")),
+                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("asdf")));
             var expected = _memory.CreateBsType(Memory.BsTypes.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
@@ -120,8 +120,8 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory, 
                 "in", 
-                new StringVariable("fa"), 
-                new StringVariable("asdf"));
+                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("fa")),
+                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("asdf")));
             var expected = _memory.CreateBsType(Memory.BsTypes.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
@@ -132,8 +132,8 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory, 
                 "not in", 
-                new StringVariable("fa"), 
-                new StringVariable("asdf"));
+                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("fa")),
+                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("asdf")));
             var expected = _memory.CreateBsType(Memory.BsTypes.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
@@ -144,8 +144,8 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory, 
                 "not in", 
-                new StringVariable("sd"), 
-                new StringVariable("asdf"));
+                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("sd")),
+                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("asdf")));
             var expected = _memory.CreateBsType(Memory.BsTypes.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
@@ -248,7 +248,7 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory,
                 "in",
-                new StringVariable("asdf"),
+                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("asdf")),
                 _memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
                 {
                     { "asdf", new NumericVariable(1) },
@@ -264,7 +264,7 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory,
                 "in",
-                new StringVariable("asdf"),
+                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("asdf")),
                 _memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
                 {
                     { "qwer", new NumericVariable(1) },
@@ -312,7 +312,7 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory,
                 "not in",
-                new StringVariable("zxcv"),
+                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("zxcv")),
                 _memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
                 {
                     { "asdf", new NumericVariable(1) },
@@ -328,7 +328,7 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory,
                 "not in",
-                new StringVariable("asdf"),
+                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("asdf")),
                 _memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
                 {
                     { "asdf", new NumericVariable(1) },

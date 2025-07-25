@@ -28,7 +28,7 @@ public class BuiltInInstruction : Instruction
         Next = next;
     }
     
-    public override Variable Interpret(
+    public override Variable? Interpret(
         Memory memory, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
@@ -43,7 +43,8 @@ public class BuiltInInstruction : Instruction
             case "issubclass":
                 return RunIsSubclassFunction(memory);
             case "print":
-                return RunPrint(memory);
+                RunPrint(memory);
+                break;
             case "len":
                 return RunLen(memory);
         }
@@ -164,7 +165,7 @@ public class BuiltInInstruction : Instruction
         }
     }
 
-    private ConstantVariable RunPrint(Memory memory)
+    private void RunPrint(Memory memory)
     {
         if (Parameters.Count != 1)
         {
@@ -175,12 +176,10 @@ public class BuiltInInstruction : Instruction
         if (firstExpression is StringVariable stringVariable)
         {
             Console.WriteLine(stringVariable.Value);
-            return new ConstantVariable();
         }
         else if (firstExpression is NumericVariable numericVariable)
         {
             Console.WriteLine(numericVariable.Value);
-            return new ConstantVariable();
         }
         else if (firstExpression is ObjectVariable objectVariable)
         {
@@ -189,7 +188,6 @@ public class BuiltInInstruction : Instruction
                 objectVariable.Values, Formatting.Indented,
                 new JsonConverter[] {new StringEnumConverter()});
             Console.WriteLine(jsonString);
-            return new ConstantVariable();
         }
         else if (firstExpression is SequenceVariable sequenceVariable)
         {
@@ -197,12 +195,10 @@ public class BuiltInInstruction : Instruction
                 sequenceVariable.Values, Formatting.Indented,
                 new JsonConverter[] {new StringEnumConverter()});
             Console.WriteLine(jsonString);
-            return new ConstantVariable();
         }
         else if (firstExpression is ConstantVariable constantVariable)
         {
             Console.WriteLine(constantVariable.Value);
-            return new ConstantVariable();
         }
         else
         {

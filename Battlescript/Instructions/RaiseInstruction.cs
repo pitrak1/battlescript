@@ -11,7 +11,7 @@ public class RaiseInstruction : Instruction
         Value = InstructionFactory.Create(tokens.GetRange(1, tokens.Count - 1));
     }
     
-    public override Variable Interpret(
+    public override Variable? Interpret(
         Memory memory, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
