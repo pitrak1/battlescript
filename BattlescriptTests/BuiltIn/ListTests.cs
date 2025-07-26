@@ -23,9 +23,9 @@ public class ListTests
                                 y = x.__value
                                 """);
         Assertions.AssertVariable(memory, "y", new SequenceVariable([
-            memory.CreateBsType(Memory.BsTypes.Int, 1),
-            memory.CreateBsType(Memory.BsTypes.Int, 2),
-            memory.CreateBsType(Memory.BsTypes.Int, 3),
+            memory.Create(Memory.BsTypes.Int, 1),
+            memory.Create(Memory.BsTypes.Int, 2),
+            memory.Create(Memory.BsTypes.Int, 3),
         ]));
     }
     
@@ -36,7 +36,7 @@ public class ListTests
                                 x = [1, 2, 3]
                                 y = x[1]
                                 """);
-        Assertions.AssertVariable(memory, "y", memory.CreateBsType(Memory.BsTypes.Int, 2));
+        Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Int, 2));
     }
 
     [Test]
@@ -47,6 +47,6 @@ public class ListTests
                                 x[1] = 4
                                 y = x[1]
                                 """);
-        Assertions.AssertVariable(memory, "y", memory.CreateBsType(Memory.BsTypes.Int, 4));
+        Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Int, 4));
     }
 }

@@ -75,7 +75,7 @@ public class ImportInstruction : Instruction
         {
             if (name == "*")
             {
-                memory.SetVariable(new VariableInstruction(FileName), memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(null, importedScope.Variables)));
+                memory.SetVariable(new VariableInstruction(FileName), memory.Create(Memory.BsTypes.Dictionary, new MappingVariable(null, importedScope.Variables)));
             }
             else if (importedScope.Variables.ContainsKey(name))
             {

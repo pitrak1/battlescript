@@ -31,7 +31,7 @@ public static class ImportInstructionTests
         {
             var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
             var memory = Runner.Run($"from '{filePath}' import x");
-            Assertions.AssertVariable(memory, "x", memory.CreateBsType(Memory.BsTypes.Int, 5));
+            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Int, 5));
         }
         
         [Test]
@@ -40,13 +40,13 @@ public static class ImportInstructionTests
             var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
             var memory = Runner.Run($"from '{filePath}' import x, y, z");
 
-            Assertions.AssertVariable(memory, "x", memory.CreateBsType(Memory.BsTypes.Int, 5));
+            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Int, 5));
             Assertions.AssertVariable(memory, "y", 
-                memory.CreateBsType(Memory.BsTypes.List, new List<Variable>() {
-                        memory.CreateBsType(Memory.BsTypes.Int, 1), 
-                        memory.CreateBsType(Memory.BsTypes.Int, 2), 
-                        memory.CreateBsType(Memory.BsTypes.Int, 3)}));
-            Assertions.AssertVariable(memory, "z", memory.CreateBsType(Memory.BsTypes.String, "asdf"));
+                memory.Create(Memory.BsTypes.List, new List<Variable>() {
+                        memory.Create(Memory.BsTypes.Int, 1), 
+                        memory.Create(Memory.BsTypes.Int, 2), 
+                        memory.Create(Memory.BsTypes.Int, 3)}));
+            Assertions.AssertVariable(memory, "z", memory.Create(Memory.BsTypes.String, "asdf"));
         }
         
         [Test]
@@ -54,16 +54,16 @@ public static class ImportInstructionTests
         {
             var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
             var memory = Runner.Run($"from '{filePath}' import *");
-            var expected = memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
+            var expected = memory.Create(Memory.BsTypes.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
             {
-                { "x", memory.CreateBsType(Memory.BsTypes.Int, 5) },
+                { "x", memory.Create(Memory.BsTypes.Int, 5) },
                 {
-                    "y", memory.CreateBsType(Memory.BsTypes.List, new List<Variable>() {
-                        memory.CreateBsType(Memory.BsTypes.Int, 1), 
-                        memory.CreateBsType(Memory.BsTypes.Int, 2), 
-                        memory.CreateBsType(Memory.BsTypes.Int, 3)})
+                    "y", memory.Create(Memory.BsTypes.List, new List<Variable>() {
+                        memory.Create(Memory.BsTypes.Int, 1), 
+                        memory.Create(Memory.BsTypes.Int, 2), 
+                        memory.Create(Memory.BsTypes.Int, 3)})
                 },
-                { "z", memory.CreateBsType(Memory.BsTypes.String, "asdf") }
+                { "z", memory.Create(Memory.BsTypes.String, "asdf") }
             }));
             Assertions.AssertVariable(memory, "import", expected);
         }

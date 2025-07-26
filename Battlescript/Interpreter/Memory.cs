@@ -56,7 +56,7 @@ public class Memory(List<MemoryScope>? scopes = null)
         return variable is ObjectVariable objectVariable && objectVariable.Class.Name == builtInClass.Name;
     }
     
-    public Variable CreateBsType(BsTypes type, dynamic value)
+    public Variable Create(BsTypes type, dynamic value)
     {
         var builtInClass = BsTypeReferences[type];
         var objectVariable = builtInClass.CreateObject();

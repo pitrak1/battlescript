@@ -17,7 +17,7 @@ public static class ClassesAndObjectsTests
             var expected = new ClassVariable("asdf",
                 new Dictionary<string, Variable>()
                 {
-                    {"i", memory.CreateBsType(Memory.BsTypes.Int, 1234)}
+                    {"i", memory.Create(Memory.BsTypes.Int, 1234)}
                 });
             
             Assertions.AssertVariable(memory, "asdf", expected);
@@ -30,7 +30,7 @@ public static class ClassesAndObjectsTests
             var memory = Runner.Run(input);
             var values = new Dictionary<string, Variable>()
             {
-                { "i", memory.CreateBsType(Memory.BsTypes.Int, 1234) }
+                { "i", memory.Create(Memory.BsTypes.Int, 1234) }
             };
             var expected = new ObjectVariable(
                 values,
@@ -53,12 +53,12 @@ public static class ClassesAndObjectsTests
             var memory = Runner.Run(input);
             var classValues = new Dictionary<string, Variable>()
             {
-                { "i", memory.CreateBsType(Memory.BsTypes.Int, 1234) },
+                { "i", memory.Create(Memory.BsTypes.Int, 1234) },
                 { "j", new FunctionVariable("j", [], [new ReturnInstruction(new NumericInstruction(5))])}
             };
             var objectValues = new Dictionary<string, Variable>()
             {
-                { "i", memory.CreateBsType(Memory.BsTypes.Int, 1234) }
+                { "i", memory.Create(Memory.BsTypes.Int, 1234) }
             };
             
             var expected = new ObjectVariable(
@@ -73,7 +73,7 @@ public static class ClassesAndObjectsTests
         {
             var input = "class asdf:\n\ti = 1234\nx = asdf()\ny = x.i";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 1234);
+            var expected = memory.Create(Memory.BsTypes.Int, 1234);
             
             Assertions.AssertVariable(memory, "y", expected);
         }
@@ -86,7 +86,7 @@ public static class ClassesAndObjectsTests
             var expected = new ClassVariable("asdf",
                 new Dictionary<string, Variable>()
                 {
-                    { "i", memory.CreateBsType(Memory.BsTypes.Int, 1234) }
+                    { "i", memory.Create(Memory.BsTypes.Int, 1234) }
                 }
             );
             
@@ -108,7 +108,7 @@ public static class ClassesAndObjectsTests
 
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 2345);
+            var expected = memory.Create(Memory.BsTypes.Int, 2345);
             Assertions.AssertVariable(memory, "y", expected);
         }
     }
@@ -126,7 +126,7 @@ public static class ClassesAndObjectsTests
                         x = z.y
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 5);
+            var expected = memory.Create(Memory.BsTypes.Int, 5);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -144,7 +144,7 @@ public static class ClassesAndObjectsTests
                         x = z.y
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 6);
+            var expected = memory.Create(Memory.BsTypes.Int, 6);
             Assertions.AssertVariable(memory, "x", expected);
         }
         
@@ -161,7 +161,7 @@ public static class ClassesAndObjectsTests
                         x = z.y
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 9);
+            var expected = memory.Create(Memory.BsTypes.Int, 9);
             Assertions.AssertVariable(memory, "x", expected);
         }
         
@@ -179,12 +179,12 @@ public static class ClassesAndObjectsTests
             var superclass = new ClassVariable(
                 "asdf", new Dictionary<string, Variable>()
                 {
-                    { "i", memory.CreateBsType(Memory.BsTypes.Int, 1234) }
+                    { "i", memory.Create(Memory.BsTypes.Int, 1234) }
                 });
             var expected = new ClassVariable("qwer",
                 new Dictionary<string, Variable>()
                 {
-                    { "j", memory.CreateBsType(Memory.BsTypes.Int, 2345) }
+                    { "j", memory.Create(Memory.BsTypes.Int, 2345) }
                 }, [superclass]);
             Assertions.AssertVariable(memory, "qwer", expected);
         }
@@ -204,7 +204,7 @@ public static class ClassesAndObjectsTests
                         x = z.y
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 9);
+            var expected = memory.Create(Memory.BsTypes.Int, 9);
             Assertions.AssertVariable(memory, "x", expected);
         }
     }
@@ -227,7 +227,7 @@ public static class ClassesAndObjectsTests
                         x = z + y
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 10);
+            var expected = memory.Create(Memory.BsTypes.Int, 10);
             Assertions.AssertVariable(memory, "x", expected);
         }
         
@@ -245,7 +245,7 @@ public static class ClassesAndObjectsTests
                         x = -z
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, -5);
+            var expected = memory.Create(Memory.BsTypes.Int, -5);
             Assertions.AssertVariable(memory, "x", expected);
         }
         

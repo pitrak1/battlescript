@@ -13,7 +13,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 'asdf'";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.String, "asdf");
+            var expected = memory.Create(Memory.BsTypes.String, "asdf");
             Assertions.AssertVariable(memory, "x", expected);
         }
         
@@ -22,7 +22,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = \"asdf\"";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.String, "asdf");
+            var expected = memory.Create(Memory.BsTypes.String, "asdf");
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -32,7 +32,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 5.5";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Float, 5.5);
+            var expected = memory.Create(Memory.BsTypes.Float, 5.5);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -42,7 +42,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 5";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 5);
+            var expected = memory.Create(Memory.BsTypes.Int, 5);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -52,7 +52,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = True";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, 1);
+            var expected = memory.Create(Memory.BsTypes.Bool, 1);
             
             
             Assertions.AssertVariable(memory, "x", expected);
@@ -63,7 +63,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = []";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.List, new List<Variable>());
+            var expected = memory.Create(Memory.BsTypes.List, new List<Variable>());
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -73,7 +73,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = {}";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable([]));
+            var expected = memory.Create(Memory.BsTypes.Dictionary, new MappingVariable([]));
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -85,7 +85,7 @@ public static class VariablesAndOperatorsTests
             var memory = Runner.Run(input);
             var expected = new ClassVariable("asdf", new Dictionary<string, Variable>
             {
-                {"y", memory.CreateBsType(Memory.BsTypes.Int, 3)}
+                {"y", memory.Create(Memory.BsTypes.Int, 3)}
             });
             Assertions.AssertVariable(memory, "asdf", expected);
         }
@@ -97,7 +97,7 @@ public static class VariablesAndOperatorsTests
             var memory = Runner.Run(input);
             var classValues = new Dictionary<string, Variable>
             {
-                { "y", memory.CreateBsType(Memory.BsTypes.Int, 3) }
+                { "y", memory.Create(Memory.BsTypes.Int, 3) }
             };
             var expected = new ObjectVariable(classValues, new ClassVariable("asdf", classValues));
             
@@ -114,7 +114,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 6\ny = +x";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 6);
+            var expected = memory.Create(Memory.BsTypes.Int, 6);
             Assertions.AssertVariable(memory, "y", expected);
         }
 
@@ -123,7 +123,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 6\ny = -x";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, -6);
+            var expected = memory.Create(Memory.BsTypes.Int, -6);
             Assertions.AssertVariable(memory, "y", expected);
         }
     }
@@ -136,7 +136,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = []\ny = x\nz = x is y";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, true);
+            var expected = memory.Create(Memory.BsTypes.Bool, true);
             Assertions.AssertVariable(memory, "z", expected);
         }
         
@@ -145,7 +145,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = {}\ny = {}\nz = x is y";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var expected = memory.Create(Memory.BsTypes.Bool, false);
             
             Assertions.AssertVariable(memory, "z", expected);
         }
@@ -159,7 +159,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 'asd' in 'asdf'";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, true);
+            var expected = memory.Create(Memory.BsTypes.Bool, true);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -169,7 +169,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 'asdx' in 'asdf'";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var expected = memory.Create(Memory.BsTypes.Bool, false);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -186,7 +186,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 5 in [1, 2, 3, 4, 5]";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, true);
+            var expected = memory.Create(Memory.BsTypes.Bool, true);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -196,7 +196,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 6 in [1, 2, 3, 4, 5]";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var expected = memory.Create(Memory.BsTypes.Bool, false);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -206,7 +206,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 5 in {5: 4, 3: 2}";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, true);
+            var expected = memory.Create(Memory.BsTypes.Bool, true);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -216,7 +216,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 6 in {5: 4, 3: 2}";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var expected = memory.Create(Memory.BsTypes.Bool, false);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -237,7 +237,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 5\nx += 5";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 10);
+            var expected = memory.Create(Memory.BsTypes.Int, 10);
             
             
             Assertions.AssertVariable(memory, "x", expected);
@@ -248,7 +248,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 5\nx -= 5";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 0);
+            var expected = memory.Create(Memory.BsTypes.Int, 0);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -258,7 +258,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 5\nx *= 5";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 25);
+            var expected = memory.Create(Memory.BsTypes.Int, 25);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -268,7 +268,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 8\nx /= 5";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Float, 1.6);
+            var expected = memory.Create(Memory.BsTypes.Float, 1.6);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -278,7 +278,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 8\nx //= 5";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 1);
+            var expected = memory.Create(Memory.BsTypes.Int, 1);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -288,7 +288,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 9\nx %= 2";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 1);
+            var expected = memory.Create(Memory.BsTypes.Int, 1);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -298,7 +298,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 9\nx **= 2";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 81);
+            var expected = memory.Create(Memory.BsTypes.Int, 81);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -312,7 +312,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = (1 + 2) * 2";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 6);
+            var expected = memory.Create(Memory.BsTypes.Int, 6);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -322,7 +322,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 2 * (1 + 2)";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 6);
+            var expected = memory.Create(Memory.BsTypes.Int, 6);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -336,7 +336,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 2 ** (1 + 2)";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 8);
+            var expected = memory.Create(Memory.BsTypes.Int, 8);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -346,7 +346,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 4 * 2 ** 3";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 32);
+            var expected = memory.Create(Memory.BsTypes.Int, 32);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -356,7 +356,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 8 - 16 // 4";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 4);
+            var expected = memory.Create(Memory.BsTypes.Int, 4);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -366,7 +366,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 3 <= 8 - 7";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var expected = memory.Create(Memory.BsTypes.Bool, false);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -380,7 +380,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = -1";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, -1);
+            var expected = memory.Create(Memory.BsTypes.Int, -1);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -390,7 +390,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = -1.0";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Float, -1.0);
+            var expected = memory.Create(Memory.BsTypes.Float, -1.0);
             
             
             Assertions.AssertVariable(memory, "x", expected);
@@ -401,7 +401,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 12/3";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Float, 4.0);
+            var expected = memory.Create(Memory.BsTypes.Float, 4.0);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -411,7 +411,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 13.5//3.2";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 4);
+            var expected = memory.Create(Memory.BsTypes.Int, 4);
             
             
             Assertions.AssertVariable(memory, "x", expected);
@@ -422,7 +422,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 12 * 3";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 36);
+            var expected = memory.Create(Memory.BsTypes.Int, 36);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -432,7 +432,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 2.5 * 4.0";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Float, 10.0);
+            var expected = memory.Create(Memory.BsTypes.Float, 10.0);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -442,7 +442,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = 2.5 * 4";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Float, 10.0);
+            var expected = memory.Create(Memory.BsTypes.Float, 10.0);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -456,7 +456,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif []:\n\tx = True";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var expected = memory.Create(Memory.BsTypes.Bool, false);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -466,7 +466,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif [1]:\n\tx = True";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, true);
+            var expected = memory.Create(Memory.BsTypes.Bool, true);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -476,7 +476,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif {}:\n\tx = True";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var expected = memory.Create(Memory.BsTypes.Bool, false);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -486,7 +486,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif {'asdf': 1}:\n\tx = True";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, true);
+            var expected = memory.Create(Memory.BsTypes.Bool, true);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -496,7 +496,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif '':\n\tx = True";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var expected = memory.Create(Memory.BsTypes.Bool, false);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -506,7 +506,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif 'asdf':\n\tx = True";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, true);
+            var expected = memory.Create(Memory.BsTypes.Bool, true);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -516,7 +516,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif 0:\n\tx = True";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var expected = memory.Create(Memory.BsTypes.Bool, false);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -526,7 +526,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif 1:\n\tx = True";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, true);
+            var expected = memory.Create(Memory.BsTypes.Bool, true);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -536,7 +536,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif 0.0:\n\tx = True";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var expected = memory.Create(Memory.BsTypes.Bool, false);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -546,7 +546,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif 1.5:\n\tx = True";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, true);
+            var expected = memory.Create(Memory.BsTypes.Bool, true);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -556,7 +556,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif False:\n\tx = True";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var expected = memory.Create(Memory.BsTypes.Bool, false);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -566,7 +566,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif True:\n\tx = True";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, true);
+            var expected = memory.Create(Memory.BsTypes.Bool, true);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -576,7 +576,7 @@ public static class VariablesAndOperatorsTests
         {
             var input = "x = False\nif None:\n\tx = True";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var expected = memory.Create(Memory.BsTypes.Bool, false);
             
             Assertions.AssertVariable(memory, "x", expected);
         }

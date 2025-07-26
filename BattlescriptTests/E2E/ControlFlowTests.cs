@@ -13,7 +13,7 @@ public static class ControlFlowTests
         {
             var input = "x = 5\nif x == 5:\n\tx = 6";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 6);
+            var expected = memory.Create(Memory.BsTypes.Int, 6);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -23,7 +23,7 @@ public static class ControlFlowTests
         {
             var input = "x = 5\nif x == 6:\n\tx = 6";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 5);
+            var expected = memory.Create(Memory.BsTypes.Int, 5);
             Assertions.AssertVariable(memory, "x", expected);
         }
         
@@ -32,7 +32,7 @@ public static class ControlFlowTests
         {
             var input = "x = 5\nif x == 6:\n\tx = 6\nelse:\n\tx = 7";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 7);
+            var expected = memory.Create(Memory.BsTypes.Int, 7);
             Assertions.AssertVariable(memory, "x", expected);
         }
     
@@ -41,7 +41,7 @@ public static class ControlFlowTests
         {
             var input = "x = 5\nif x == 6:\n\tx = 6\nelif x < 8:\n\tx = 9\nelse:\n\tx = 7";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 9);
+            var expected = memory.Create(Memory.BsTypes.Int, 9);
             Assertions.AssertVariable(memory, "x", expected);
         }
         
@@ -50,7 +50,7 @@ public static class ControlFlowTests
         {
             var input = "x = 5\nif x == 6:\n\tx = 6\nelif x < 8:\n\tx = 9";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 9);
+            var expected = memory.Create(Memory.BsTypes.Int, 9);
             Assertions.AssertVariable(memory, "x", expected);
         }
         
@@ -59,7 +59,7 @@ public static class ControlFlowTests
         {
             var input = "x = 5\nif x < 6:\n\tx = 7\nif x >= 7:\n\tx = 9";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 9);
+            var expected = memory.Create(Memory.BsTypes.Int, 9);
             Assertions.AssertVariable(memory, "x", expected);
         }
     }
@@ -72,7 +72,7 @@ public static class ControlFlowTests
         {
             var input = "x = 5\nwhile x < 10:\n\tx += 1";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 10);
+            var expected = memory.Create(Memory.BsTypes.Int, 10);
             Assertions.AssertVariable(memory, "x", expected);
         }
         
@@ -81,7 +81,7 @@ public static class ControlFlowTests
         {
             var input = "x = 5\nwhile x == 6:\n\tx = 10";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 5);
+            var expected = memory.Create(Memory.BsTypes.Int, 5);
             Assertions.AssertVariable(memory, "x", expected);
         }
     }
@@ -94,7 +94,7 @@ public static class ControlFlowTests
         {
             var input = "x = 5\nfor y in range(3):\n\tx = x + y";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 8);
+            var expected = memory.Create(Memory.BsTypes.Int, 8);
             Assertions.AssertVariable(memory, "x", expected);
         }
         
@@ -103,7 +103,7 @@ public static class ControlFlowTests
         {
             var input = "x = 5\nfor y in [-1, 3, 2]:\n\tx = x + y";
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 9);
+            var expected = memory.Create(Memory.BsTypes.Int, 9);
             Assertions.AssertVariable(memory, "x", expected);
         }
     }
@@ -122,7 +122,7 @@ public static class ControlFlowTests
                             x = x + y
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 9);
+            var expected = memory.Create(Memory.BsTypes.Int, 9);
             Assertions.AssertVariable(memory, "x", expected);
         }
     
@@ -139,7 +139,7 @@ public static class ControlFlowTests
                             x = x + y
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 13);
+            var expected = memory.Create(Memory.BsTypes.Int, 13);
             Assertions.AssertVariable(memory, "x", expected);
         }
     }
@@ -158,7 +158,7 @@ public static class ControlFlowTests
                             x = x + y
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 6);
+            var expected = memory.Create(Memory.BsTypes.Int, 6);
             Assertions.AssertVariable(memory, "x", expected);
         }
     
@@ -175,7 +175,7 @@ public static class ControlFlowTests
                             x = x + y
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 6);
+            var expected = memory.Create(Memory.BsTypes.Int, 6);
             Assertions.AssertVariable(memory, "x", expected);
         }
     }
@@ -192,7 +192,7 @@ public static class ControlFlowTests
                             pass
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.CreateBsType(Memory.BsTypes.Int, 5);
+            var expected = memory.Create(Memory.BsTypes.Int, 5);
             Assertions.AssertVariable(memory, "x", expected);
         }
     }

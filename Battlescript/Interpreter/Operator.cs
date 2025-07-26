@@ -62,20 +62,20 @@ public static class Operator
         switch (operation)
         {
             case "or":
-                return memory.CreateBsType(Memory.BsTypes.Bool, GetOrValue());
+                return memory.Create(Memory.BsTypes.Bool, GetOrValue());
             case "and":
-                return memory.CreateBsType(Memory.BsTypes.Bool, GetAndValue());
+                return memory.Create(Memory.BsTypes.Bool, GetAndValue());
             case "not":
                 var rightNot = Truthiness.IsTruthy(memory, right!);
-                return memory.CreateBsType(Memory.BsTypes.Bool, !rightNot);
+                return memory.Create(Memory.BsTypes.Bool, !rightNot);
             case "is":
-                return memory.CreateBsType(Memory.BsTypes.Bool, ReferenceEquals(left, right));
+                return memory.Create(Memory.BsTypes.Bool, ReferenceEquals(left, right));
             case "is not":
-                return memory.CreateBsType(Memory.BsTypes.Bool, !ReferenceEquals(left, right));
+                return memory.Create(Memory.BsTypes.Bool, !ReferenceEquals(left, right));
             case "in":
-                return memory.CreateBsType(Memory.BsTypes.Bool, GetInValue());
+                return memory.Create(Memory.BsTypes.Bool, GetInValue());
             case "not in":
-                return memory.CreateBsType(Memory.BsTypes.Bool, !GetInValue());
+                return memory.Create(Memory.BsTypes.Bool, !GetInValue());
             default:
                 throw new Exception("Won't get here");
         }

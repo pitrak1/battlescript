@@ -49,11 +49,11 @@ public class NumericInstruction : Instruction
     {
         if (Value is double)
         {
-            return memory.CreateBsType(Memory.BsTypes.Float, Value);
+            return memory.Create(Memory.BsTypes.Float, Value);
         }
         else
         {
-            return memory.CreateBsType(Memory.BsTypes.Int, Value);
+            return memory.Create(Memory.BsTypes.Int, Value);
         }
     }
 }

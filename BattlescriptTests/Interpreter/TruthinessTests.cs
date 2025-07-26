@@ -119,7 +119,7 @@ public class TruthinessTests
         [Test]
         public void NonZeroIntReturnsTrue()
         {
-            var variable = _memory.CreateBsType(Memory.BsTypes.Int, 4);
+            var variable = _memory.Create(Memory.BsTypes.Int, 4);
             var result = Truthiness.IsTruthy(_memory, variable);
             Assert.IsTrue(result);
         }
@@ -127,7 +127,7 @@ public class TruthinessTests
         [Test]
         public void ZeroIntReturnsFalse()
         {
-            var variable = _memory.CreateBsType(Memory.BsTypes.Int, 0);
+            var variable = _memory.Create(Memory.BsTypes.Int, 0);
             var result = Truthiness.IsTruthy(_memory, variable);
             Assert.IsFalse(result);
         }
@@ -135,7 +135,7 @@ public class TruthinessTests
         [Test]
         public void NonZeroFloatReturnsTrue()
         {
-            var variable = _memory.CreateBsType(Memory.BsTypes.Float, 4.5);
+            var variable = _memory.Create(Memory.BsTypes.Float, 4.5);
             var result = Truthiness.IsTruthy(_memory, variable);
             Assert.IsTrue(result);
         }
@@ -143,7 +143,7 @@ public class TruthinessTests
         [Test]
         public void ZeroFloatReturnsFalse()
         {
-            var variable = _memory.CreateBsType(Memory.BsTypes.Float, 0.0);
+            var variable = _memory.Create(Memory.BsTypes.Float, 0.0);
             var result = Truthiness.IsTruthy(_memory, variable);
             Assert.IsFalse(result);
         }
@@ -151,7 +151,7 @@ public class TruthinessTests
         [Test]
         public void TrueBoolReturnsTrue()
         {
-            var variable = _memory.CreateBsType(Memory.BsTypes.Bool, true);
+            var variable = _memory.Create(Memory.BsTypes.Bool, true);
             var result = Truthiness.IsTruthy(_memory, variable);
             Assert.IsTrue(result);
         }
@@ -159,7 +159,7 @@ public class TruthinessTests
         [Test]
         public void FalseBoolReturnsFalse()
         {
-            var variable = _memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var variable = _memory.Create(Memory.BsTypes.Bool, false);
             var result = Truthiness.IsTruthy(_memory, variable);
             Assert.IsFalse(result);
         }
@@ -167,7 +167,7 @@ public class TruthinessTests
         [Test]
         public void NonEmptyListReturnsTrue()
         {
-            var variable = _memory.CreateBsType(Memory.BsTypes.List, new SequenceVariable(new List<Variable?>()
+            var variable = _memory.Create(Memory.BsTypes.List, new SequenceVariable(new List<Variable?>()
             {
                 new NumericVariable(1)
             }));
@@ -178,7 +178,7 @@ public class TruthinessTests
         [Test]
         public void EmptyListReturnsFalse()
         {
-            var variable = _memory.CreateBsType(Memory.BsTypes.List, new SequenceVariable(new List<Variable?>()));
+            var variable = _memory.Create(Memory.BsTypes.List, new SequenceVariable(new List<Variable?>()));
             var result = Truthiness.IsTruthy(_memory, variable);
             Assert.IsFalse(result);
         }

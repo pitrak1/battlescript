@@ -22,7 +22,7 @@ public class ConstantInstruction : Instruction
     {
         if (Value == "True" || Value == "False")
         {
-            return memory.CreateBsType(Memory.BsTypes.Bool, Value == "True");
+            return memory.Create(Memory.BsTypes.Bool, Value == "True");
         }
         else
         {

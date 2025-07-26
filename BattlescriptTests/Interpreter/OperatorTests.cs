@@ -22,9 +22,9 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory, 
                 "and", 
-                _memory.CreateBsType(Memory.BsTypes.Bool, true), 
-                _memory.CreateBsType(Memory.BsTypes.Bool, false));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, false);
+                _memory.Create(Memory.BsTypes.Bool, true), 
+                _memory.Create(Memory.BsTypes.Bool, false));
+            var expected = _memory.Create(Memory.BsTypes.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
@@ -34,9 +34,9 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory, 
                 "or", 
-                _memory.CreateBsType(Memory.BsTypes.Bool, true), 
-                _memory.CreateBsType(Memory.BsTypes.Bool, false));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, true);
+                _memory.Create(Memory.BsTypes.Bool, true), 
+                _memory.Create(Memory.BsTypes.Bool, false));
+            var expected = _memory.Create(Memory.BsTypes.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
@@ -47,21 +47,21 @@ public static class OperatorTests
                 _memory, 
                 "not", 
                 null, 
-                _memory.CreateBsType(Memory.BsTypes.Bool, false));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, true);
+                _memory.Create(Memory.BsTypes.Bool, false));
+            var expected = _memory.Create(Memory.BsTypes.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
 
         [Test]
         public void HandlesTrueIsOperations()
         {
-            var value = _memory.CreateBsType(Memory.BsTypes.Int, 5);
+            var value = _memory.Create(Memory.BsTypes.Int, 5);
             var result = Operator.Operate(
                 _memory, 
                 "is", 
                 value, 
                 value);
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, true);
+            var expected = _memory.Create(Memory.BsTypes.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
 
@@ -71,9 +71,9 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory, 
                 "is", 
-                _memory.CreateBsType(Memory.BsTypes.Int, 5), 
-                _memory.CreateBsType(Memory.BsTypes.Int, 5));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, false);
+                _memory.Create(Memory.BsTypes.Int, 5), 
+                _memory.Create(Memory.BsTypes.Int, 5));
+            var expected = _memory.Create(Memory.BsTypes.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
@@ -83,22 +83,22 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory, 
                 "is not", 
-                _memory.CreateBsType(Memory.BsTypes.Int, 5), 
-                _memory.CreateBsType(Memory.BsTypes.Int, 5));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, true);
+                _memory.Create(Memory.BsTypes.Int, 5), 
+                _memory.Create(Memory.BsTypes.Int, 5));
+            var expected = _memory.Create(Memory.BsTypes.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
 
         [Test]
         public void HandlesFalseIsNotOperations()
         {
-            var value = _memory.CreateBsType(Memory.BsTypes.Int, 5);
+            var value = _memory.Create(Memory.BsTypes.Int, 5);
             var result = Operator.Operate(
                 _memory, 
                 "is not", 
                 value, 
                 value);
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var expected = _memory.Create(Memory.BsTypes.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
@@ -108,9 +108,9 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory,
                 "in",
-                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("sd")),
-                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("asdf")));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, true);
+                _memory.Create(Memory.BsTypes.String, new StringVariable("sd")),
+                _memory.Create(Memory.BsTypes.String, new StringVariable("asdf")));
+            var expected = _memory.Create(Memory.BsTypes.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
@@ -120,9 +120,9 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory, 
                 "in", 
-                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("fa")),
-                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("asdf")));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, false);
+                _memory.Create(Memory.BsTypes.String, new StringVariable("fa")),
+                _memory.Create(Memory.BsTypes.String, new StringVariable("asdf")));
+            var expected = _memory.Create(Memory.BsTypes.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
@@ -132,9 +132,9 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory, 
                 "not in", 
-                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("fa")),
-                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("asdf")));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, true);
+                _memory.Create(Memory.BsTypes.String, new StringVariable("fa")),
+                _memory.Create(Memory.BsTypes.String, new StringVariable("asdf")));
+            var expected = _memory.Create(Memory.BsTypes.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
@@ -144,9 +144,9 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory, 
                 "not in", 
-                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("sd")),
-                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("asdf")));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, false);
+                _memory.Create(Memory.BsTypes.String, new StringVariable("sd")),
+                _memory.Create(Memory.BsTypes.String, new StringVariable("asdf")));
+            var expected = _memory.Create(Memory.BsTypes.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
@@ -157,11 +157,11 @@ public static class OperatorTests
                 _memory, 
                 "in", 
                 new NumericVariable(1), 
-                _memory.CreateBsType(Memory.BsTypes.List, new SequenceVariable([
+                _memory.Create(Memory.BsTypes.List, new SequenceVariable([
                     new StringVariable("asdf"),
                     new NumericVariable(1),
                     new NumericVariable(2)])));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, true);
+            var expected = _memory.Create(Memory.BsTypes.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
@@ -172,11 +172,11 @@ public static class OperatorTests
                 _memory, 
                 "in", 
                 new NumericVariable(3), 
-                _memory.CreateBsType(Memory.BsTypes.List, new SequenceVariable([
+                _memory.Create(Memory.BsTypes.List, new SequenceVariable([
                     new StringVariable("asdf"),
                     new NumericVariable(1),
                     new NumericVariable(2)])));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var expected = _memory.Create(Memory.BsTypes.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
@@ -187,11 +187,11 @@ public static class OperatorTests
                 _memory, 
                 "not in", 
                 new NumericVariable(3), 
-                _memory.CreateBsType(Memory.BsTypes.List, new SequenceVariable([
+                _memory.Create(Memory.BsTypes.List, new SequenceVariable([
                     new StringVariable("asdf"),
                     new NumericVariable(1),
                     new NumericVariable(2)])));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, true);
+            var expected = _memory.Create(Memory.BsTypes.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
@@ -202,11 +202,11 @@ public static class OperatorTests
                 _memory, 
                 "not in", 
                 new NumericVariable(1), 
-                _memory.CreateBsType(Memory.BsTypes.List, new SequenceVariable([
+                _memory.Create(Memory.BsTypes.List, new SequenceVariable([
                     new StringVariable("asdf"),
                     new NumericVariable(1),
                     new NumericVariable(2)])));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var expected = _memory.Create(Memory.BsTypes.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
@@ -216,13 +216,13 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory,
                 "in",
-                _memory.CreateBsType(Memory.BsTypes.Int, 1),
-                _memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
+                _memory.Create(Memory.BsTypes.Int, 1),
+                _memory.Create(Memory.BsTypes.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
                 {
                     { 1, new NumericVariable(1) },
                     { 2, new NumericVariable(2) }
                 })));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, true);
+            var expected = _memory.Create(Memory.BsTypes.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
@@ -232,13 +232,13 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory,
                 "in",
-                _memory.CreateBsType(Memory.BsTypes.Int, 3),
-                _memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
+                _memory.Create(Memory.BsTypes.Int, 3),
+                _memory.Create(Memory.BsTypes.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
                 {
                     { 1, new NumericVariable(1) },
                     { 2, new NumericVariable(2) }
                 })));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var expected = _memory.Create(Memory.BsTypes.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
@@ -248,13 +248,13 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory,
                 "in",
-                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("asdf")),
-                _memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
+                _memory.Create(Memory.BsTypes.String, new StringVariable("asdf")),
+                _memory.Create(Memory.BsTypes.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
                 {
                     { "asdf", new NumericVariable(1) },
                     { "qwer", new NumericVariable(2) }
                 })));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, true);
+            var expected = _memory.Create(Memory.BsTypes.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
@@ -264,13 +264,13 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory,
                 "in",
-                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("asdf")),
-                _memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
+                _memory.Create(Memory.BsTypes.String, new StringVariable("asdf")),
+                _memory.Create(Memory.BsTypes.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
                 {
                     { "qwer", new NumericVariable(1) },
                     { "zxcv", new NumericVariable(2) }
                 })));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var expected = _memory.Create(Memory.BsTypes.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
@@ -280,13 +280,13 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory,
                 "not in",
-                _memory.CreateBsType(Memory.BsTypes.Int, 3),
-                _memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
+                _memory.Create(Memory.BsTypes.Int, 3),
+                _memory.Create(Memory.BsTypes.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
                 {
                     { 1, new NumericVariable(1) },
                     { 2, new NumericVariable(2) }
                 })));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, true);
+            var expected = _memory.Create(Memory.BsTypes.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
@@ -296,13 +296,13 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory,
                 "not in",
-                _memory.CreateBsType(Memory.BsTypes.Int, 1),
-                _memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
+                _memory.Create(Memory.BsTypes.Int, 1),
+                _memory.Create(Memory.BsTypes.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
                 {
                     { 1, new NumericVariable(1) },
                     { 2, new NumericVariable(2) }
                 })));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var expected = _memory.Create(Memory.BsTypes.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
@@ -312,13 +312,13 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory,
                 "not in",
-                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("zxcv")),
-                _memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
+                _memory.Create(Memory.BsTypes.String, new StringVariable("zxcv")),
+                _memory.Create(Memory.BsTypes.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
                 {
                     { "asdf", new NumericVariable(1) },
                     { "qwer", new NumericVariable(2) }
                 })));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, true);
+            var expected = _memory.Create(Memory.BsTypes.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
@@ -328,13 +328,13 @@ public static class OperatorTests
             var result = Operator.Operate(
                 _memory,
                 "not in",
-                _memory.CreateBsType(Memory.BsTypes.String, new StringVariable("asdf")),
-                _memory.CreateBsType(Memory.BsTypes.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
+                _memory.Create(Memory.BsTypes.String, new StringVariable("asdf")),
+                _memory.Create(Memory.BsTypes.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
                 {
                     { "asdf", new NumericVariable(1) },
                     { "zxcv", new NumericVariable(2) }
                 })));
-            var expected = _memory.CreateBsType(Memory.BsTypes.Bool, false);
+            var expected = _memory.Create(Memory.BsTypes.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
     }
@@ -358,7 +358,7 @@ public static class OperatorTests
                 "+",
                 x,
                 new StringVariable("asdf"));
-            Assertions.AssertVariablesEqual(result, memory.CreateBsType(Memory.BsTypes.Int, 5));
+            Assertions.AssertVariablesEqual(result, memory.Create(Memory.BsTypes.Int, 5));
         }
         
         [Test]
@@ -377,7 +377,7 @@ public static class OperatorTests
                 "+",
                 new StringVariable("asdf"),
                 x);
-            Assertions.AssertVariablesEqual(result, memory.CreateBsType(Memory.BsTypes.Int, 5));
+            Assertions.AssertVariablesEqual(result, memory.Create(Memory.BsTypes.Int, 5));
         }
         
         [Test]
@@ -396,7 +396,7 @@ public static class OperatorTests
                 "-",
                 null,
                 x);
-            Assertions.AssertVariablesEqual(result, memory.CreateBsType(Memory.BsTypes.Int, 5));
+            Assertions.AssertVariablesEqual(result, memory.Create(Memory.BsTypes.Int, 5));
         }
     }
 
@@ -415,7 +415,7 @@ public static class OperatorTests
         public void ReturnsRightIfStandardAssignmentOperator()
         {
             var result = Operator.Assign(_memory, "=", null, new NumericInstruction(8));
-            Assertions.AssertVariablesEqual(result, _memory.CreateBsType(Memory.BsTypes.Int, 8));
+            Assertions.AssertVariablesEqual(result, _memory.Create(Memory.BsTypes.Int, 8));
         }
         
         [Test]
@@ -426,7 +426,7 @@ public static class OperatorTests
                 "+=", 
                 new NumericInstruction(8), 
                 new NumericInstruction(5));
-            Assertions.AssertVariablesEqual(result, _memory.CreateBsType(Memory.BsTypes.Int, 13));
+            Assertions.AssertVariablesEqual(result, _memory.Create(Memory.BsTypes.Int, 13));
         }
     }
 }

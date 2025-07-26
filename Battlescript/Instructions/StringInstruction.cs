@@ -20,6 +20,6 @@ public class StringInstruction : Instruction
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        return memory.CreateBsType(Memory.BsTypes.String, Value);
+        return memory.Create(Memory.BsTypes.String, Value);
     }
 }
