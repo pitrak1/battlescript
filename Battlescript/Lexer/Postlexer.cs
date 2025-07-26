@@ -5,6 +5,7 @@ public static class Postlexer
     public static void Run(List<Token> tokens)
     {
         JoinIsNotAndNotIn(tokens);
+        // CheckForParenthesesWithBuiltInFunctionCalls(tokens);
     }
 
     private static void JoinIsNotAndNotIn(List<Token> tokens)
@@ -33,4 +34,25 @@ public static class Postlexer
             i++;
         }
     }
+
+    // private static void CheckForParenthesesWithBuiltInFunctionCalls(List<Token> tokens)
+    // {
+    //     var i = 0;
+    //     while (i < tokens.Count)
+    //     {
+    //         if (tokens[i].Type == Consts.TokenTypes.BuiltIn)
+    //         {
+    //             if (i >= tokens.Count - 1 || TokenIsNotParenthesis(tokens[i + 1]))
+    //             {
+    //                 throw new InternalRaiseException(Memory.BsTypes.SyntaxError, $"Missing parentheses in call to '{tokens[i].Value}'");
+    //             }
+    //         }
+    //         i++;
+    //     }
+    //
+    //     bool TokenIsNotParenthesis(Token token)
+    //     {
+    //         return token.Type != Consts.TokenTypes.Separator || token.Value != "(";
+    //     }
+    // }
 }
