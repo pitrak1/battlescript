@@ -33,15 +33,10 @@ public class AssignmentInstruction : Instruction
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        if (Left is VariableInstruction variableInst)
+        if (Left is VariableInstruction left)
         {
-            var result = Operator.Assign(memory, Operation, Left, Right);
-            memory.SetVariable(variableInst, result);
-            return result;
+            Operator.Assign(memory, Operation, left, Right, this);
         }
-        else
-        {
-            throw new Exception("Cannot assign to anything but variable");
-        }
+        return null;
     }
 }

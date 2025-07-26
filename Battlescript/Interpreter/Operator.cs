@@ -2,201 +2,32 @@ namespace Battlescript;
 
 public static class Operator
 {
-    public static Variable Assign(Memory memory, string operation, Instruction? left, Instruction? right, Instruction? originalInstruction = null)
+    public static void Assign(Memory memory, string operation, VariableInstruction left, Instruction? right, Instruction? originalInstruction = null)
     {
-        // Assignment operations should return the value to be assigned. The calling function is actually responsible
-        // for assigning the value to the variable
         var rightVariable = right?.Interpret(memory);
         if (operation == "=")
         {
-            return rightVariable ?? new ConstantVariable();
+            memory.SetVariable(left, rightVariable!);
         }
         else
         {
-            var leftVariable = left?.Interpret(memory);
-            var operationWithEqualsRemoved = AssignmentOperatorToStandardOperatorMap[operation];
-            return ConductOperation(memory, operationWithEqualsRemoved, operation, leftVariable, rightVariable, originalInstruction);
-        }
-    }
-
-    private static readonly Dictionary<string, string> AssignmentOperatorToStandardOperatorMap = new()
-    {
-        {"+=", "+"},
-        {"-=", "-"},
-        {"*=", "*"},
-        {"/=", "/"},
-        {"//=", "//"},
-        {"%=", "%"},
-        {"**=", "**"},
-    };
-    
-    public static Variable Operate(Memory memory, string operation, Variable? left, Variable? right, Instruction? originalInstruction = null)
-    {
-        return ConductOperation(memory, operation, operation, left, right, originalInstruction);
-    }
-    
-    private static Variable ConductOperation(Memory memory, string operation, string originalOperation, Variable? left, Variable? right, Instruction? originalInstruction = null)
-    {
-        if (Consts.CommonOperators.Contains(operation))
-        {
-            return ConductCommonOperation(memory, operation, left, right, originalInstruction);
-        }
-        else if (left is ObjectVariable || right is ObjectVariable)
-        {
-            return ConductObjectOperation(memory, originalOperation, left, right, originalInstruction);
-        }
-        else
-        {
-            return ConductStandardOperation(memory, operation, left, right, originalInstruction);
-        }
-    }
-
-    private static Variable ConductCommonOperation(
-        Memory memory, 
-        string operation, 
-        Variable? left, 
-        Variable? right,
-        Instruction? originalInstruction = null)
-    {
-        // The operators handled here will be the same regardless of type or have complex type interactions
-        switch (operation)
-        {
-            case "or":
-                return memory.Create(Memory.BsTypes.Bool, GetOrValue());
-            case "and":
-                return memory.Create(Memory.BsTypes.Bool, GetAndValue());
-            case "not":
-                var rightNot = Truthiness.IsTruthy(memory, right!);
-                return memory.Create(Memory.BsTypes.Bool, !rightNot);
-            case "is":
-                return memory.Create(Memory.BsTypes.Bool, ReferenceEquals(left, right));
-            case "is not":
-                return memory.Create(Memory.BsTypes.Bool, !ReferenceEquals(left, right));
-            case "in":
-                return memory.Create(Memory.BsTypes.Bool, GetInValue());
-            case "not in":
-                return memory.Create(Memory.BsTypes.Bool, !GetInValue());
-            default:
-                throw new Exception("Won't get here");
-        }
-
-
-        bool GetOrValue()
-        {
-            if (Truthiness.IsTruthy(memory, left!))
+            var leftVariable = left.Interpret(memory);
+            var result = Operate(memory, operation, leftVariable, rightVariable, originalInstruction);
+            if (operation == "/=" && memory.Is(Memory.BsTypes.Int, result))
             {
-                return true;
+                var objectResult = result as ObjectVariable;
+                var doubleResult = (objectResult.Values["__value"] as NumericVariable).Value;
+                memory.SetVariable(left, memory.Create(Memory.BsTypes.Float, doubleResult));
+            } else if (operation == "//=" && memory.Is(Memory.BsTypes.Float, result))
+            {
+                var objectResult = result as ObjectVariable;
+                var intResult = (objectResult.Values["__value"] as NumericVariable).Value;
+                memory.SetVariable(left, memory.Create(Memory.BsTypes.Int, intResult));
             }
             else
             {
-                return Truthiness.IsTruthy(memory, right!);
+                memory.SetVariable(left, result);
             }
-        }
-
-        bool GetAndValue()
-        {
-            if (!Truthiness.IsTruthy(memory, left!))
-            {
-                return false;
-            }
-            else
-            {
-                return Truthiness.IsTruthy(memory, right!);
-            }
-        }
-        
-        bool GetInValue()
-        {
-            if (memory.Is(Memory.BsTypes.String, left) && memory.Is(Memory.BsTypes.String, right))
-            {
-                var leftString = memory.GetStringValue(left);
-                var rightString = memory.GetStringValue(right);
-                return rightString.Contains(leftString);
-            } else if (memory.Is(Memory.BsTypes.List, right))
-            {
-                var listValue = memory.GetListValue(right);
-                return listValue.Values.Any(x => x.Equals(left));
-            } else if (memory.Is(Memory.BsTypes.Dictionary, right) && memory.Is(Memory.BsTypes.Int, left))
-            {
-                var dictValue1 = memory.GetDictValue(right);
-                var intValue = memory.GetIntValue(left);
-                return dictValue1.IntValues.Any(x => x.Key.Equals(intValue));
-            } else if (memory.Is(Memory.BsTypes.Dictionary, right) && memory.Is(Memory.BsTypes.String, left))
-            {
-                var dictValue2 = memory.GetDictValue(right);
-                var stringValue = memory.GetStringValue(left);
-                return dictValue2.StringValues.Any(x => x.Key.Equals(stringValue));
-            }
-            else
-            {
-                throw new InterpreterInvalidOperationException(operation, left, right);
-            }
-        }
-    }
-    
-    private static Variable ConductObjectOperation(Memory memory, string operation, Variable? left, Variable? right, Instruction? originalInstruction = null)
-    {
-        var (leftOverride, rightOverride) = GetOverride();
-
-        // If left operand is an object and has an override, use that one.  Otherwise, if right operand is an object
-        // and has an override, use that one.
-        if (leftOverride is not null)
-        {
-            if (right is null)
-            {
-                return leftOverride.RunFunction(memory, new List<Variable>(), left as ObjectVariable, originalInstruction);
-            }
-            else
-            {
-                return leftOverride.RunFunction(memory, [right], left as ObjectVariable, originalInstruction);
-            }
-        } else if (rightOverride is not null)
-        {
-            if (left is null)
-            {
-                return rightOverride.RunFunction(memory, new List<Variable>(), right as ObjectVariable, originalInstruction);
-            }
-            else
-            {
-                return rightOverride.RunFunction(memory, [left], right as ObjectVariable, originalInstruction);
-            }
-        }
-        else
-        {
-            throw new InterpreterInvalidOperationException(operation, left, right);
-            
-        }
-
-        (FunctionVariable? Left, FunctionVariable? Right) GetOverride()
-        {
-            string overrideName;
-            if (left is null || right is null)
-            {
-                UnaryOperationToOverrideMap.TryGetValue(operation, out overrideName);
-            }
-            else
-            {
-                OperationToOverrideMap.TryGetValue(operation, out overrideName);
-            }
-            
-            if (overrideName is null)
-            {
-                throw new InterpreterInvalidOperationException(operation, left, right);
-            }
-            
-            FunctionVariable? leftFunc = null;
-            if (left is ObjectVariable leftObject)
-            {
-                leftFunc = leftObject.GetMember(memory, new MemberInstruction(overrideName)) as FunctionVariable;
-            }
-        
-            FunctionVariable? rightFunc = null;
-            if (right is ObjectVariable rightObject)
-            {
-                rightFunc = rightObject.GetMember(memory, new MemberInstruction(overrideName)) as FunctionVariable;
-            }
-            
-            return (leftFunc, rightFunc);
         }
     }
     
@@ -231,18 +62,178 @@ public static class Operator
         { "-", "__neg__" },
     };
     
-    private static Variable ConductStandardOperation(Memory memory, string operation, Variable? left, Variable? right, Instruction? originalInstruction = null)
+    public static Variable Operate(Memory memory, string operation, Variable? left, Variable? right, Instruction? originalInstruction = null)
     {
-        if (left is not null)
+        if (Consts.CommonOperators.Contains(operation))
         {
-            return left.Operate(memory, operation, right);
-        } else if (right is not null)
+            return ConductCommonOperation();
+        }
+        else if (left is ObjectVariable || right is ObjectVariable)
         {
-            return right.Operate(memory, operation, left, true);
+            return ConductObjectOperation();
         }
         else
         {
-            throw new InterpreterInvalidOperationException(operation, left, right);
+            return ConductStandardOperation();
+        }
+        
+        Variable ConductCommonOperation()
+        {
+            // The operators handled here will be the same regardless of type or have complex type interactions
+            switch (operation)
+            {
+                case "or":
+                    return memory.Create(Memory.BsTypes.Bool, GetOrValue());
+                case "and":
+                    return memory.Create(Memory.BsTypes.Bool, GetAndValue());
+                case "not":
+                    var rightNot = Truthiness.IsTruthy(memory, right!);
+                    return memory.Create(Memory.BsTypes.Bool, !rightNot);
+                case "is":
+                    return memory.Create(Memory.BsTypes.Bool, ReferenceEquals(left, right));
+                case "is not":
+                    return memory.Create(Memory.BsTypes.Bool, !ReferenceEquals(left, right));
+                case "in":
+                    return memory.Create(Memory.BsTypes.Bool, GetInValue());
+                case "not in":
+                    return memory.Create(Memory.BsTypes.Bool, !GetInValue());
+                default:
+                    throw new Exception("Won't get here");
+            }
+
+
+            bool GetOrValue()
+            {
+                if (Truthiness.IsTruthy(memory, left!))
+                {
+                    return true;
+                }
+                else
+                {
+                    return Truthiness.IsTruthy(memory, right!);
+                }
+            }
+
+            bool GetAndValue()
+            {
+                if (!Truthiness.IsTruthy(memory, left!))
+                {
+                    return false;
+                }
+                else
+                {
+                    return Truthiness.IsTruthy(memory, right!);
+                }
+            }
+            
+            bool GetInValue()
+            {
+                if (memory.Is(Memory.BsTypes.String, left) && memory.Is(Memory.BsTypes.String, right))
+                {
+                    var leftString = memory.GetStringValue(left);
+                    var rightString = memory.GetStringValue(right);
+                    return rightString.Contains(leftString);
+                } else if (memory.Is(Memory.BsTypes.List, right))
+                {
+                    var listValue = memory.GetListValue(right);
+                    return listValue.Values.Any(x => x.Equals(left));
+                } else if (memory.Is(Memory.BsTypes.Dictionary, right) && memory.Is(Memory.BsTypes.Int, left))
+                {
+                    var dictValue1 = memory.GetDictValue(right);
+                    var intValue = memory.GetIntValue(left);
+                    return dictValue1.IntValues.Any(x => x.Key.Equals(intValue));
+                } else if (memory.Is(Memory.BsTypes.Dictionary, right) && memory.Is(Memory.BsTypes.String, left))
+                {
+                    var dictValue2 = memory.GetDictValue(right);
+                    var stringValue = memory.GetStringValue(left);
+                    return dictValue2.StringValues.Any(x => x.Key.Equals(stringValue));
+                }
+                else
+                {
+                    throw new InterpreterInvalidOperationException(operation, left, right);
+                }
+            }
+        }
+        
+        Variable ConductObjectOperation()
+        {
+            var (leftOverride, rightOverride) = GetOverride();
+
+            // If left operand is an object and has an override, use that one.  Otherwise, if right operand is an object
+            // and has an override, use that one.
+            if (leftOverride is not null)
+            {
+                if (right is null)
+                {
+                    return leftOverride.RunFunction(memory, new List<Variable>(), left as ObjectVariable, originalInstruction);
+                }
+                else
+                {
+                    return leftOverride.RunFunction(memory, [right], left as ObjectVariable, originalInstruction);
+                }
+            } else if (rightOverride is not null)
+            {
+                if (left is null)
+                {
+                    return rightOverride.RunFunction(memory, new List<Variable>(), right as ObjectVariable, originalInstruction);
+                }
+                else
+                {
+                    return rightOverride.RunFunction(memory, [left], right as ObjectVariable, originalInstruction);
+                }
+            }
+            else
+            {
+                throw new InterpreterInvalidOperationException(operation, left, right);
+                
+            }
+
+            (FunctionVariable? Left, FunctionVariable? Right) GetOverride()
+            {
+                string overrideName;
+                if (left is null || right is null)
+                {
+                    UnaryOperationToOverrideMap.TryGetValue(operation, out overrideName);
+                }
+                else
+                {
+                    OperationToOverrideMap.TryGetValue(operation, out overrideName);
+                }
+                
+                if (overrideName is null)
+                {
+                    throw new InterpreterInvalidOperationException(operation, left, right);
+                }
+                
+                FunctionVariable? leftFunc = null;
+                if (left is ObjectVariable leftObject)
+                {
+                    leftFunc = leftObject.GetMember(memory, new MemberInstruction(overrideName)) as FunctionVariable;
+                }
+            
+                FunctionVariable? rightFunc = null;
+                if (right is ObjectVariable rightObject)
+                {
+                    rightFunc = rightObject.GetMember(memory, new MemberInstruction(overrideName)) as FunctionVariable;
+                }
+                
+                return (leftFunc, rightFunc);
+            }
+        }
+        
+        Variable ConductStandardOperation()
+        {
+            if (left is not null)
+            {
+                return left.Operate(memory, operation, right);
+            } else if (right is not null)
+            {
+                return right.Operate(memory, operation, left, true);
+            }
+            else
+            {
+                throw new InterpreterInvalidOperationException(operation, left, right);
+            }
         }
     }
 }

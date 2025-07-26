@@ -24,7 +24,7 @@ public class NumericVariable : Variable
         _value = value;
     }
     
-    public override Variable Operate(Memory memory, string operation, Variable? other, bool isInverted = false)
+    public override Variable? Operate(Memory memory, string operation, Variable? other, bool isInverted = false)
     {
         if (other is NumericVariable otherNumeric)
         {
@@ -83,6 +83,27 @@ public class NumericVariable : Variable
                         ? otherNumeric.Value <= _value
                         : _value <= otherNumeric.Value;
                     return new NumericVariable(leValue ? 1 : 0);
+                case "+=":
+                    _value += otherNumeric.Value;
+                    return new ConstantVariable();
+                case "-=":
+                    _value -= otherNumeric.Value;
+                    return new ConstantVariable();
+                case "*=":
+                    _value *= otherNumeric.Value;
+                    return new ConstantVariable();
+                case "/=":
+                    _value /= (double)otherNumeric.Value;
+                    return new ConstantVariable();
+                case "//=":
+                    _value = Math.Floor((double)_value / (double)otherNumeric.Value);
+                    return new ConstantVariable();
+                case "%=":
+                    _value %= otherNumeric.Value;
+                    return new ConstantVariable();
+                case "**=":
+                    _value = Math.Pow(_value, otherNumeric.Value);
+                    return new ConstantVariable();
                 default:
                     throw new InterpreterInvalidOperationException(operation, this, other);
             }

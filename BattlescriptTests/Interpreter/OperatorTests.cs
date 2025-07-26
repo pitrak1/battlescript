@@ -403,30 +403,24 @@ public static class OperatorTests
     [TestFixture]
     public class AssignmentOperations
     {
-        private Memory _memory;
-        
-        [SetUp]
-        public void SetUp()
+        [Test]
+        public void HandlesStandardAssignmentOperator()
         {
-            _memory = Runner.Run("");
+            var memory = Runner.Run("");
+            Operator.Assign(memory, "=", new VariableInstruction("x"), new NumericInstruction(8));
+            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Int, 8));
         }
         
         [Test]
-        public void ReturnsRightIfStandardAssignmentOperator()
+        public void HandlesNonStandardAssignmentOperator()
         {
-            var result = Operator.Assign(_memory, "=", null, new NumericInstruction(8));
-            Assertions.AssertVariablesEqual(result, _memory.Create(Memory.BsTypes.Int, 8));
-        }
-        
-        [Test]
-        public void ConductsOperationOfTruncatedOperatorIfNotStandardAssignmentOperator()
-        {
-            var result = Operator.Assign(
-                _memory, 
+            var memory = Runner.Run("x = 6");
+            Operator.Assign(
+                memory, 
                 "+=", 
-                new NumericInstruction(8), 
+                new VariableInstruction("x"), 
                 new NumericInstruction(5));
-            Assertions.AssertVariablesEqual(result, _memory.Create(Memory.BsTypes.Int, 13));
+            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Int, 11));
         }
     }
 }

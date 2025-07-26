@@ -1,11 +1,5 @@
-class float:
+class float(numeric):
     __value = __numeric__(0.0)
-
-    def __init__(self, value):
-        if isinstance(value, float):
-            self.__value = value.__value
-        else:
-            self.__value = value
 
     def __add__(self, other):
         return float(self.__value + other.__value)
@@ -34,41 +28,3 @@ class float:
     def __neg__(self):
         return float(-self.__value)
 
-    def __eq__(self, other):
-        return bool(self.__value == other.__value)
-
-    def __ne__(self, other):
-        return bool(self.__value != other.__value)
-
-    def __lt__(self, other):
-        return bool(self.__value < other.__value)
-
-    def __gt__(self, other):
-        return bool(self.__value > other.__value)
-
-    def __le__(self, other):
-        return bool(self.__value <= other.__value)
-
-    def __ge__(self, other):
-        return bool(self.__value >= other.__value)
-
-    def __iadd__(self, other):
-        return float(self.__value + other.__value)
-
-    def __isub__(self, other):
-        return float(self.__value - other.__value)
-
-    def __imul__(self, other):
-        return float(self.__value * other.__value)
-
-    def __itruediv__(self, other):
-        return float(self.__value / other.__value)
-
-    def __ifloordiv__(self, other):
-        return int(self.__value // other.__value)
-
-    def __imod__(self, other):
-        return float(self.__value % other.__value)
-
-    def __ipow__(self, other):
-        return float(self.__value ** other.__value)

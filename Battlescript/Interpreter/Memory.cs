@@ -14,10 +14,11 @@ public class Memory(List<MemoryScope>? scopes = null)
         List,
         Exception,
         Dictionary,
-        String
+        String,
+        Numeric
     }
     
-    public static readonly string[] BsTypeStrings = ["int", "float", "bool", "list", "Exception", "dict", "str"];
+    public static readonly string[] BsTypeStrings = ["numeric", "int", "float", "bool", "list", "Exception", "dict", "str"];
     
     private static readonly Dictionary<string, BsTypes> BsStringsToTypes = new() {
         {"int", BsTypes.Int},
@@ -26,19 +27,10 @@ public class Memory(List<MemoryScope>? scopes = null)
         {"list", BsTypes.List},
         {"Exception", BsTypes.Exception},
         {"dict", BsTypes.Dictionary},
-        {"str", BsTypes.String}
+        {"str", BsTypes.String},
+        {"numeric", BsTypes.Numeric}
     };
     
-    private static readonly Dictionary<BsTypes, string> BsTypesToStrings = new() {
-        {BsTypes.Int, "int"},
-        {BsTypes.Float, "float"},
-        {BsTypes.Bool, "bool"},
-        {BsTypes.List, "list"},
-        {BsTypes.Exception, "Exception"},
-        {BsTypes.Dictionary, "dict"},
-        {BsTypes.String, "str"}
-    };
-
     public Dictionary<BsTypes, ClassVariable> BsTypeReferences = [];
     
     public void PopulateBsTypeReferences()
