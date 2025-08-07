@@ -19,7 +19,11 @@ public class Lexer(string input, string? fileName = null)
             
             if (nextCharacter[0] == '\n')
             {
-                HandleNewline();
+                HandleNewline(true);
+            }
+            else if (nextCharacter[0] == '\t')
+            {
+                HandleNewline(false);
             }
             else if (nextCharacter[0] == ' ')
             {
@@ -100,25 +104,34 @@ public class Lexer(string input, string? fileName = null)
             }
         }
         
-        void HandleNewline()
+        void HandleNewline(bool includeNewline)
         {
+            var startingIndex = _index + 1;
+            if (!includeNewline)
+            {
+                startingIndex = _index;
+            }
+            
             // We are assuming indent sizes of 4 spaces or 1 tab
             var indent = LexerUtilities.GetNextCharactersInCollection(
                 input, 
-                _index + 1,
+                startingIndex,
                 Consts.Indentations,
                 CollectionType.Inclusive
             );
         
             var totalIndent = LexerUtilities.GetIndentValueFromIndentationString(indent);
-                
             // This is the number of characters in the indent plus the newline
-            _index += indent.Length + 1;
-            // We want to update these before we create the token because we want any errors to be associated to
-            // the indents on the second line, not the return on the first
-            _line++;
+            _index += indent.Length;
+            if (includeNewline)
+            {
+                _index++;
+                // We want to update these before we create the token because we want any errors to be associated to
+                // the indents on the second line, not the return on the first
+                _line++;
+                _lineContents = GetLineContents();
+            }
             _tokens.Add(new Token(Consts.TokenTypes.Newline, totalIndent.ToString(), _line, fileName, _lineContents));
-            _lineContents = GetLineContents();
         }
         
         void HandleNumber()

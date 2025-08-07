@@ -239,4 +239,17 @@ public static class Consts
         "__mapping__",
         "__string__",
     ];
+    
+    public static readonly string[] InstructionTypesExpectingIndent =
+    [
+        "FunctionInstruction",
+        "ClassInstruction",
+        "ElseInstruction",
+        "ExceptInstruction",
+        "FinallyInstruction",
+        "ForInstruction",
+        "TryInstruction",
+        "WhileInstruction",
+        "IfInstruction",
+    ];
 }

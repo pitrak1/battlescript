@@ -28,19 +28,28 @@ public class Parser
                 ParseInstructionAndAddToCurrentScope();
                 
                 var newIndentValue = int.Parse(token.Value);
+                var indentDiff = newIndentValue - currentIndentValue;
                 // If we are at the start of a code block
-                if (newIndentValue > currentIndentValue) {
+                if (indentDiff == 1)
+                {
+                    if (_scopes[^1].Count == 0 || !Consts.InstructionTypesExpectingIndent.Contains(_scopes[^1][^1].GetType().Name))
+                    {
+                        throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "unexpected indent");
+                    }
                     // Add the last instruction of the current scope to the stack of scopes so that new instructions
                     // within the block are added there
                     _scopes.Add(_scopes[^1][^1].Instructions);
                 }
                 // If we are at the end of a code block
-                else if (newIndentValue < currentIndentValue)
+                else if (indentDiff < 0)
                 {
                     // Pop off the last scope so that new instructions are instead added to the next
                     // largest containing scope
-                    var indentDiff = currentIndentValue - newIndentValue;
-                    _scopes.RemoveRange(_scopes.Count - indentDiff, indentDiff);
+                    _scopes.RemoveRange(_scopes.Count + indentDiff, -indentDiff);
+                }
+                else if (indentDiff > 1)
+                {
+                    throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "unindent does not match any outer indentation level");
                 }
                 
                 currentIndentValue = newIndentValue;

@@ -93,8 +93,13 @@ public static class LexerTests
         [Test]
         public void HandlesBuiltIns()
         {
-            var expected = new List<Token>() { new Token(Consts.TokenTypes.BuiltIn, "super") };
-            Assertions.AssertInputProducesLexerOutput("super", expected);
+            var expected = new List<Token>()
+            {
+                new Token(Consts.TokenTypes.BuiltIn, "super"), 
+                new Token(Consts.TokenTypes.Separator, "("), 
+                new Token(Consts.TokenTypes.Separator, ")")
+            };
+            Assertions.AssertInputProducesLexerOutput("super()", expected);
         }
     }
 

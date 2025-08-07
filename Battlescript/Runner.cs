@@ -46,7 +46,7 @@ public static class Runner
         return reader.ReadToEnd();
     }
 
-    private static void RunPartial(Memory memory, string input, string fileName)
+    public static void RunPartial(Memory memory, string input, string fileName)
     {
         var lexer = new Lexer(input, fileName);
         var lexerResult = lexer.Run();
