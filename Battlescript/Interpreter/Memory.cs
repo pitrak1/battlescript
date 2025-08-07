@@ -16,6 +16,7 @@ public class Memory(List<MemoryScope>? scopes = null)
         Dictionary,
         String,
         Numeric,
+        SyntaxError,
     }
     
     public static readonly string[] BsTypeStrings = [
@@ -26,7 +27,8 @@ public class Memory(List<MemoryScope>? scopes = null)
         "list", 
         "dict", 
         "str", 
-        "Exception"];
+        "Exception", 
+        "SyntaxError"];
     
     public static readonly Dictionary<string, BsTypes> BsStringsToTypes = new() {
         {"int", BsTypes.Int},
@@ -37,6 +39,7 @@ public class Memory(List<MemoryScope>? scopes = null)
         {"dict", BsTypes.Dictionary},
         {"str", BsTypes.String},
         {"numeric", BsTypes.Numeric},
+        {"SyntaxError", BsTypes.SyntaxError},
     };
     
     public static readonly Dictionary<BsTypes, string> BsTypesToStrings = new() {
@@ -48,17 +51,15 @@ public class Memory(List<MemoryScope>? scopes = null)
         {BsTypes.Dictionary, "dict"},
         {BsTypes.String, "str"},
         {BsTypes.Numeric, "numeric"},
+        {BsTypes.SyntaxError, "SyntaxError"},
     };
     
     public Dictionary<BsTypes, ClassVariable> BsTypeReferences = [];
     
-    public void PopulateBsTypeReferences()
+    public void PopulateBsTypeReference(string builtin)
     {
-        foreach (var builtin in BsTypeStrings)
-        {
-            var type = BsStringsToTypes[builtin];
-            BsTypeReferences[type] = GetVariable(builtin) as ClassVariable;
-        }
+        var type = BsStringsToTypes[builtin];
+        BsTypeReferences[type] = GetVariable(builtin) as ClassVariable;
     }
     
     public bool Is(BsTypes type, Variable variable)

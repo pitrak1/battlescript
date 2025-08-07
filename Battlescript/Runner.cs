@@ -9,9 +9,9 @@ public static class Runner
         foreach (var builtin in Memory.BsTypeStrings)
         {
             LoadBuiltin(memory, builtin);
+            memory.PopulateBsTypeReference(builtin);
         }
 
-        memory.PopulateBsTypeReferences();
         try
         {
             memory.AddScope(new MemoryScope("main"));
