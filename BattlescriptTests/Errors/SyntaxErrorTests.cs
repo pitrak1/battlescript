@@ -126,36 +126,26 @@ public class SyntaxErrorTests
         }
     }
     
-    // [TestFixture]
-    // public class InvalidKeywordUse
-    // {
-    //     [Test]
-    //     public void KeywordAsVariableName()
-    //     {
-    //         try
-    //         {
-    //             Runner.Run("if = 3");
-    //         }
-    //         catch (InternalRaiseException e)
-    //         {
-    //             // SyntaxError: invalid syntax
-    //         }
-    //     }
-    //
-    //     [Test]
-    //     public void KeywordUseInExpressions()
-    //     {
-    //         try
-    //         {
-    //             Runner.Run("3 + if");
-    //         }
-    //         catch (InternalRaiseException e)
-    //         {
-    //             // SyntaxError: invalid syntax
-    //         }
-    //     }
-    // }
-    //
+    [TestFixture]
+    public class InvalidKeywordUse
+    {
+        [Test]
+        public void KeywordAsVariableName()
+        {
+            var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("if = 3"));
+            Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
+            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        }
+    
+        [Test]
+        public void KeywordUseInExpressions()
+        {
+            var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("3 + if"));
+            Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
+            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        }
+    }
+    
     // [TestFixture]
     // public class ImproperCombinationOfStatements
     // {
