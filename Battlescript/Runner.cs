@@ -17,6 +17,11 @@ public static class Runner
             memory.AddScope(new MemoryScope("main"));
             RunPartial(memory, input, "main");
         }
+        catch (InternalReturnException e)
+        {
+            memory.PrintStacktrace();
+            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "'return' outside function");
+        }
         catch (Exception e)
         {
             memory.PrintStacktrace();

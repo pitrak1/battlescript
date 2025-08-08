@@ -146,36 +146,26 @@ public class SyntaxErrorTests
         }
     }
     
-    // [TestFixture]
-    // public class ImproperCombinationOfStatements
-    // {
-    //     [Test]
-    //     public void MultipleStatementsWithoutDelimiters()
-    //     {
-    //         try
-    //         {
-    //             Runner.Run("print('Hello, world') print('Goodbye, world')");
-    //         }
-    //         catch (InternalRaiseException e)
-    //         {
-    //             // SyntaxError: invalid syntax
-    //         }
-    //     }
-    //
-    //     [Test]
-    //     public void MisplacedReturnStatement()
-    //     {
-    //         try
-    //         {
-    //             Runner.Run("return 'Hello, world'");
-    //         }
-    //         catch (InternalRaiseException e)
-    //         {
-    //             // SyntaxError: 'return' outside function
-    //         }
-    //     }
-    // }
-    //
+    [TestFixture]
+    public class ImproperCombinationOfStatements
+    {
+        [Test]
+        public void MultipleStatementsWithoutDelimiters()
+        {
+            var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("print('Hello, world') print('Goodbye, world')"));
+            Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
+            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        }
+    
+        [Test]
+        public void MisplacedReturnStatement()
+        {
+            var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("return 'Hello, world'"));
+            Assert.That(ex.Message, Is.EqualTo("'return' outside function"));
+            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        }
+    }
+    
     // [TestFixture]
     // public class StringLiterals
     // {
