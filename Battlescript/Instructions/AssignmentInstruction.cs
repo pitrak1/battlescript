@@ -37,6 +37,14 @@ public class AssignmentInstruction : Instruction
         {
             Operator.Assign(memory, Operation, left, Right, this);
         }
+        else if (Left is ConstantInstruction or NumericInstruction or StringInstruction)
+        {
+            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "cannot assign to literal");
+        }
+        else if (Left is FunctionInstruction or LambdaInstruction or BuiltInInstruction)
+        {
+            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "cannot assign to function call");
+        }
         return null;
     }
 }

@@ -44,7 +44,7 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
         }
         else
         {
-            return Values[memberName];
+            return GetMemberDirectly(memory, member, objectContext);
         }
     }
     

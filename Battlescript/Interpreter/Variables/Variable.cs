@@ -9,9 +9,12 @@ public abstract class Variable
         ObjectVariable? objectContext = null)
     {
         var result = SetItemDirectly(memory, value, index, objectContext);
-        if (index.Next is not null)
+        if (index.Next is ArrayInstruction { Separator: "(" })
         {
-            result.SetItemDirectly(memory, value, index.Next as ArrayInstruction, objectContext);
+            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "cannot assign to function call");
+        } else if (index.Next is ArrayInstruction arrayInstruction)
+        {
+            result.SetItemDirectly(memory, value, arrayInstruction, objectContext);
         }
     }
 
@@ -27,7 +30,11 @@ public abstract class Variable
         ObjectVariable? objectContext = null)
     {
         var result = SetMemberDirectly(memory, value, member, objectContext);
-        if (member.Next is ArrayInstruction arrayInstruction)
+        if (member.Next is ArrayInstruction { Separator: "(" })
+        {
+            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "cannot assign to function call");
+        }
+        else if (member.Next is ArrayInstruction arrayInstruction)
         {
             result.SetItemDirectly(memory, value, arrayInstruction, objectContext);
         }

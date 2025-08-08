@@ -226,6 +226,10 @@ public class Memory(List<MemoryScope>? scopes = null)
                             valueVariable, 
                             memberInstruction);
                     }
+                    else if (variableInstruction.Next is ArrayInstruction { Separator: "(" })
+                    {
+                        throw new InternalRaiseException(BsTypes.SyntaxError, "cannot assign to function call");
+                    }
                     else
                     {
                         Scopes[i].Variables[variableInstruction.Name] = valueVariable;
