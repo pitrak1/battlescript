@@ -166,37 +166,18 @@ public class SyntaxErrorTests
         }
     }
     
-    // [TestFixture]
-    // public class StringLiterals
-    // {
-    //     [Test]
-    //     public void MissingClosingQuote()
-    //     {
-    //         try
-    //         {
-    //             Runner.Run("'Hello, world");
-    //         }
-    //         catch (InternalRaiseException e)
-    //         {
-    //             // SyntaxError: EOL while scanning string literal
-    //         }
-    //     }
-    //
-    //     [Test]
-    //     public void IncorrectlyNestedStrings()
-    //     {
-    //         // THIS PASSES IN PYTHON *shrug*
-    //         try
-    //         {
-    //             Runner.Run("This string is 'invalid");
-    //         }
-    //         catch (InternalRaiseException e)
-    //         {
-    //             // SyntaxError: EOL while scanning string literal
-    //         }
-    //     }
-    // }
-    //
+    [TestFixture]
+    public class StringLiterals
+    {
+        [Test]
+        public void MissingClosingQuote()
+        {
+            var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("'Hello, world"));
+            Assert.That(ex.Message, Is.EqualTo("EOL while scanning string literal"));
+            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        }
+    }
+    
     // [TestFixture]
     // public class FunctionDefinitions
     // {

@@ -150,13 +150,17 @@ public class Lexer(string input, string? fileName = null)
         void HandleString()
         {
             var startingQuoteCollection = new [] { input[_index] };
-            // Get all characters after the starting quote and until we find a matching quote
             var stringContents = LexerUtilities.GetNextCharactersInCollection(
-                input, 
-                _index + 1, 
-                startingQuoteCollection, 
+                input,
+                _index + 1,
+                startingQuoteCollection,
                 CollectionType.Exclusive
             );
+                
+            if (_index + stringContents.Length + 1 >= input.Length)
+            {
+                throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "EOL while scanning string literal");
+            }
             
             _tokens.Add(new Token(Consts.TokenTypes.String, stringContents, _line, fileName, _lineContents));
             _index += stringContents.Length + 2;
