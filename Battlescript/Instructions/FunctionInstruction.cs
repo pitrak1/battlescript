@@ -7,9 +7,24 @@ public class FunctionInstruction : Instruction
 
     public FunctionInstruction(List<Token> tokens) : base(tokens)
     {
+        if (tokens[^1].Value is not ":")
+        {
+            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "invalid syntax");
+        }
+
+        if (tokens[^2].Value is not ")" || tokens[2].Value is not "(")
+        {
+            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "invalid syntax");
+        }
+        
         var tokensInParens = tokens.GetRange(3, tokens.Count - 5);
         var parameters = InstructionUtilities.ParseEntriesBetweenDelimiters(tokensInParens, [","]);
         CheckThatDefaultArgumentsFollowRequiredArguments();
+
+        if (tokens[1].Type != Consts.TokenTypes.Identifier)
+        {
+            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "invalid syntax");
+        }
         
         Name = tokens[1].Value;
         Parameters = parameters!;

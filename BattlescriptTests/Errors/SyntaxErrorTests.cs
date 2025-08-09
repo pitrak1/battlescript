@@ -177,72 +177,43 @@ public class SyntaxErrorTests
             Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
         }
     }
+
+    [TestFixture]
+    public class FunctionDefinitions
+    {
+        [Test]
+        public void MissingColon()
+        {
+            var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("def my_function(x, y)"));
+            Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
+            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        }
+        
+        [Test]
+        public void NoIndentedBlock()
+        {
+            var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("def my_function(x, y):\nprint('Hello, world')"));
+            Assert.That(ex.Message, Is.EqualTo("expected an indented block"));
+            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        }
     
-    // [TestFixture]
-    // public class FunctionDefinitions
-    // {
-    //     [Test]
-    //     public void MissingColon()
-    //     {
-    //         try
-    //         {
-    //             Runner.Run("def my_function(x, y)");
-    //         }
-    //         catch (InternalRaiseException e)
-    //         {
-    //             // SyntaxError: invalid syntax
-    //         }
-    //     }
-    //     
-    //     [Test]
-    //     public void NoIndentedBlock()
-    //     {
-    //         try
-    //         {
-    //             Runner.Run("""
-    //                        def my_function(x, y):
-    //                        print('Hello, world')
-    //                        """);
-    //         }
-    //         catch (InternalRaiseException e)
-    //         {
-    //             // IndentationError: expected an indented block
-    //         }
-    //     }
-    //
-    //     [Test]
-    //     public void MissingParentheses()
-    //     {
-    //         try
-    //         {
-    //             Runner.Run("""
-    //                        def my_function:
-    //                         pass
-    //                        """);
-    //         }
-    //         catch (InternalRaiseException e)
-    //         {
-    //             // SyntaxError: invalid syntax
-    //         }
-    //     }
-    //     
-    //     [Test]
-    //     public void ReservedWordsInFunctionName()
-    //     {
-    //         try
-    //         {
-    //             Runner.Run("""
-    //                        def class():
-    //                         pass
-    //                        """);
-    //         }
-    //         catch (InternalRaiseException e)
-    //         {
-    //             // SyntaxError: invalid syntax
-    //         }
-    //     }
-    // }
-    //
+        [Test]
+        public void MissingParentheses()
+        {
+            var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("def my_function:\n\tpass"));
+            Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
+            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        }
+        
+        [Test]
+        public void ReservedWordsInFunctionName()
+        {
+            var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("def class():\n\tpass"));
+            Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
+            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        }
+    }
+    
     // [TestFixture]
     // public class Imports
     // {
