@@ -18,6 +18,7 @@ public class Memory(List<MemoryScope>? scopes = null)
         Numeric,
         SyntaxError,
         AssertionError,
+        ValueError,
     }
     
     public static readonly string[] BsTypeStrings = [
@@ -30,7 +31,8 @@ public class Memory(List<MemoryScope>? scopes = null)
         "str", 
         "Exception", 
         "SyntaxError",
-        "AssertionError"
+        "AssertionError",
+        "ValueError"
     ];
     
     public static readonly Dictionary<string, BsTypes> BsStringsToTypes = new() {
@@ -44,6 +46,7 @@ public class Memory(List<MemoryScope>? scopes = null)
         {"numeric", BsTypes.Numeric},
         {"SyntaxError", BsTypes.SyntaxError},
         {"AssertionError", BsTypes.AssertionError},
+        {"ValueError", BsTypes.ValueError}
     };
     
     public static readonly Dictionary<BsTypes, string> BsTypesToStrings = new() {
@@ -56,7 +59,8 @@ public class Memory(List<MemoryScope>? scopes = null)
         {BsTypes.String, "str"},
         {BsTypes.Numeric, "numeric"},
         {BsTypes.SyntaxError, "SyntaxError"},
-        {BsTypes.AssertionError, "AssertionError"}
+        {BsTypes.AssertionError, "AssertionError"},
+        {BsTypes.ValueError, "ValueError"}
     };
     
     public Dictionary<BsTypes, ClassVariable> BsTypeReferences = [];

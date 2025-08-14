@@ -15,7 +15,7 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
 
     public override Variable? SetItemDirectly(Memory memory, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
-        var indexVariable = index.Values.Select(x => x.Interpret(memory)).ToList();
+        var indexVariable = index.Values.Select(x => x?.Interpret(memory) ?? null).ToList();
 
         var setItemOverride = Class.GetMember(memory, new MemberInstruction("__setitem__"));
         if (setItemOverride is FunctionVariable functionVariable)

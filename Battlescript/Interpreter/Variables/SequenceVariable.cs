@@ -37,7 +37,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
             }
             else
             {
-                return GetRangeIndex(memory, indexSequence.Values);
+                return GetSlice(memory, indexSequence.Values);
             }
         } 
         else 
@@ -53,26 +53,25 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
     
     public void SetRangeIndex(Memory memory, SequenceVariable valueVariable, List<Variable> argVariable)
     {
-        var (start, stop, step) = GetRangeIndexValues(memory, argVariable);
-        
-        int index = start;
-        int valueIndex = 0;
-        if (step < 0)
+        var (start, stop, step) = GetSliceArgs(memory, argVariable);
+        var indices = GetSliceIndices(memory, argVariable);
+
+        if (step == 1)
         {
-            while (index > stop)
-            {
-                Values[index] = valueVariable.Values[valueIndex];
-                index += step;
-                valueIndex += 1;
-            }
+            var valuesBeforeSlice = Values.GetRange(0, start);
+            var valuesAfterSlice = Values.GetRange(stop, Values.Count - stop);
+            Values = valuesBeforeSlice.Concat(valueVariable.Values).Concat(valuesAfterSlice).ToList();
         }
         else
         {
-            while (index < stop)
+            if (indices.Count != valueVariable.Values.Count)
             {
-                Values[index] = valueVariable.Values[valueIndex];
-                index += step;
-                valueIndex += 1;
+                throw new InternalRaiseException(Memory.BsTypes.ValueError, $"attempt to assign sequence of size {valueVariable.Values.Count} to extended slice of size {indices.Count}");
+            }
+
+            for (var i = 0; i < indices.Count; i++)
+            {
+                Values[indices[i]] = valueVariable.Values[i];
             }
         }
     }
@@ -87,7 +86,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         // var indexInt = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "int", indexVariable);
         if (indexSequence.Values.Count > 1)
         {
-            return GetRangeIndex(memory, indexSequence.Values);
+            return GetSlice(memory, indexSequence.Values);
         }
         else
         {
@@ -96,17 +95,33 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         }
     }
     
-    public SequenceVariable GetRangeIndex(Memory memory, List<Variable> argVariable)
+    public SequenceVariable GetSlice(Memory memory, List<Variable> argVariable)
     {
-        var (start, stop, step) = GetRangeIndexValues(memory, argVariable);
-        
-        int index = start;
+        var indices = GetSliceIndices(memory, argVariable);
         SequenceVariable result = new SequenceVariable();
-        if (step < 0)
+        foreach (var index in indices)
+        {
+            result.Values.Add(Values[index]);
+        }
+
+        return result;
+    }
+
+    public List<int> GetSliceIndices(Memory memory, List<Variable> argVariable)
+    {
+        var (start, stop, step) = GetSliceArgs(memory, argVariable);
+
+        var index = start;
+        List<int> indices = [];
+        if (step == 0)
+        {
+            throw new InternalRaiseException(Memory.BsTypes.ValueError, "slice step cannot be zero");
+        }
+        else if (step < 0)
         {
             while (index > stop)
             {
-                result.Values.Add(Values[index]);
+                indices.Add(index);
                 index += step;
             }
         }
@@ -114,15 +129,15 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         {
             while (index < stop)
             {
-                result.Values.Add(Values[index]);
+                indices.Add(index);
                 index += step;
             }
         }
 
-        return result;
+        return indices;
     }
 
-    public (int start, int stop, int step) GetRangeIndexValues(Memory memory, List<Variable> argVariable)
+    public (int start, int stop, int step) GetSliceArgs(Memory memory, List<Variable?> argVariable)
     {
         int start = 0;
         int stop = Values.Count;
@@ -132,7 +147,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         {
             if (argVariable[2] is not null && argVariable[2] is not ConstantVariable { Value: Consts.Constants.None} )
             {
-                step = memory.GetIntValue(argVariable[2]);
+                step = memory.GetIntValue(argVariable[2]!);
                 
                 if (step < 0)
                 {
@@ -146,7 +161,12 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         {
             if (argVariable[1] is not null && argVariable[1] is not ConstantVariable { Value: Consts.Constants.None})
             {
-                stop = memory.GetIntValue(argVariable[1]) % Values.Count;
+                var rawInt = memory.GetIntValue(argVariable[1]!);
+                stop = Math.Clamp(rawInt, -Values.Count, Values.Count);
+                if (stop < 0)
+                {
+                    stop += Values.Count;
+                }
             }
         }
         
@@ -154,7 +174,12 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         {
             if (argVariable[0] is not null && argVariable[0] is not ConstantVariable { Value: Consts.Constants.None})
             {
-                start = memory.GetIntValue(argVariable[0]) % Values.Count;
+                var rawInt = memory.GetIntValue(argVariable[0]!);
+                start = Math.Clamp(rawInt, -Values.Count, Values.Count);
+                if (start < 0)
+                {
+                    start += Values.Count;
+                }
             }
         }
         
