@@ -60,6 +60,8 @@ public static class InstructionFactory
                     return new ExceptInstruction(tokens);
                 case "finally":
                     return new FinallyInstruction(tokens);
+                case "assert":
+                    return new AssertInstruction(tokens);
                 default:
                     throw new ParserUnexpectedTokenException(tokens[0]);
             }
