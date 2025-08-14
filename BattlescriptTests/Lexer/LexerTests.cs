@@ -187,6 +187,27 @@ public static class LexerTests
             Assertions.AssertInputProducesLexerOutput("= #asdfadsf", expected);
         }
     }
+
+    [TestFixture]
+    public class EscapedCharacters
+    {
+        [Test]
+        public void IgnoresEscapedReturns()
+        {
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.Numeric, "1234"), new Token(Consts.TokenTypes.Numeric, "2345") };
+            Assertions.AssertInputProducesLexerOutput("""
+                                                      1234\
+                                                      2345
+                                                      """, expected);
+        }
+        
+        [Test]
+        public void IncludesEscapedCharactersInStrings()
+        {
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.String, """asdf\'asdf""") };
+            Assertions.AssertInputProducesLexerOutput("""'asdf\'asdf'""", expected);
+        }
+    }
     
     [TestFixture]
     public class NewLine

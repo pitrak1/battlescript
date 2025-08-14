@@ -25,6 +25,10 @@ public class Lexer(string input, string? fileName = null)
             {
                 HandleNewline(false);
             }
+            else if (nextCharacter[0] == '\\' && nextNextCharacter[0] == '\n')
+            {
+                _index += 2;
+            }
             else if (nextCharacter[0] == ' ')
             {
                 _index++;
@@ -154,7 +158,8 @@ public class Lexer(string input, string? fileName = null)
                 input,
                 _index + 1,
                 startingQuoteCollection,
-                CollectionType.Exclusive
+                CollectionType.Exclusive,
+                true
             );
                 
             if (_index + stringContents.Length + 1 >= input.Length)

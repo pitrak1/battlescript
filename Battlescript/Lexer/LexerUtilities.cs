@@ -10,15 +10,20 @@ public enum CollectionType
 
 public static class LexerUtilities
 {
-    public static string GetNextCharactersInCollection(string input, int index, char[] collection, CollectionType type)
+    public static string GetNextCharactersInCollection(string input, int index, char[] collection, CollectionType type, bool escapeCharacters = false)
     {
         var result = "";
         while (index < input.Length)
         {
             var current = input[index];
+            if (escapeCharacters && current == '\\')
+            {
+                result += input.Substring(index, 2);
+                index += 2;
+            }
             // If collection type is Exclusive and the current character is in the collection or if
             // collection type is Inclusive and the current character is not in the collection
-            if (collection.Contains(current) == (type == CollectionType.Exclusive))
+            else if (collection.Contains(current) == (type == CollectionType.Exclusive))
             {
                 break;
             }
