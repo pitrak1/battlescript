@@ -8,6 +8,12 @@ public class LambdaInstruction : Instruction
     {
         var colonIndex = InstructionUtilities.GetTokenIndex(tokens, [":"]);
 
+        // Missing colon or missing expression or missing arguments
+        if (colonIndex == -1 || colonIndex == tokens.Count - 1 || colonIndex == 1)
+        {
+            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "invalid syntax");
+        }
+
         var parametersTokens = tokens.GetRange(1, colonIndex - 1);
         var parameters = InstructionUtilities.ParseEntriesBetweenDelimiters(parametersTokens, [","]);
 

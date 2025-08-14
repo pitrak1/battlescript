@@ -77,7 +77,8 @@ public static class Postlexer
                 }
                 else
                 {
-                    throw new ParserUnexpectedClosingSeparatorException(currentToken);
+                    var message = "closing parenthesis '" + currentToken.Value + "' does not match opening parenthesis '" + separatorStack[^1] + "'";
+                    throw new InternalRaiseException(Memory.BsTypes.SyntaxError, message);
                 }
             }
         }

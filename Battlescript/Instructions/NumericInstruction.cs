@@ -23,7 +23,7 @@ public class NumericInstruction : Instruction
     {
         if (tokens.Count > 1)
         {
-            throw new ParserUnexpectedTokenException(tokens[1]);
+            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "invalid syntax");
         }
 
         if (tokens[0].Value.Contains('.'))

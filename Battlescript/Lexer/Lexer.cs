@@ -86,7 +86,7 @@ public class Lexer(string input, string? fileName = null)
             }
             else
             {
-                throw new LexerException(nextCharacter + nextNextCharacter + nextNextNextCharacter, _line, fileName);
+                throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "invalid syntax");
             }
         }
         

@@ -7,6 +7,11 @@ public class ClassInstruction : Instruction
 
     public ClassInstruction(List<Token> tokens) : base(tokens)
     {
+        if (tokens[^1].Value != ":")
+        {
+            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "invalid syntax");
+        }
+        
         List<Instruction> superClasses = [];
         
         // class name(): would be five tokens, so if it's more than 5, we know there are superclasses

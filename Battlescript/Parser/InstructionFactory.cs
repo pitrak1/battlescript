@@ -84,6 +84,10 @@ public static class InstructionFactory
         {
             return new MemberInstruction(tokens);
         }
+        else if (tokens[0].Value == Consts.Wildcard)
+        {
+            return new ConstantInstruction("*");
+        }
         else if (tokens[0].Type == Consts.TokenTypes.Separator)
         {
             return new ArrayInstruction(tokens);

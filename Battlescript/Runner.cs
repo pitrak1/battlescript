@@ -22,6 +22,11 @@ public static class Runner
             memory.PrintStacktrace();
             throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "'return' outside function");
         }
+        catch (InternalBreakException e)
+        {
+            memory.PrintStacktrace();
+            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "'break' outside loop");
+        }
         catch (Exception e)
         {
             memory.PrintStacktrace();

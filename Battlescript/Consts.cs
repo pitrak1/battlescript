@@ -38,6 +38,7 @@ public static class Consts
     public const string Period = ".";
     public const string Comma = ",";
     public const string Colon = ":";
+    public const string Wildcard = "*";
 
     public static readonly Dictionary<string, string> MatchingSeparatorsMap = new() {
         {"(", ")"},

@@ -9,19 +9,14 @@ public class ImportInstruction : Instruction
     
     public ImportInstruction(List<Token> tokens) : base(tokens)
     {
-        if (tokens[0].Value != "from")
-        {
-            throw new ParserMissingExpectedTokenException(tokens[0], "from");
-        }
-        
         if (tokens[1].Type != Consts.TokenTypes.String)
         {
-            throw new ParserMissingExpectedTokenException(tokens[1], "filePath");
+            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "expected file path to be a string");
         }
         
         if (tokens[2].Value != "import")
         {
-            throw new ParserMissingExpectedTokenException(tokens[2], "import");
+            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "expected 'import' keyword");
         }
 
         FilePath = tokens[1].Value;
@@ -43,13 +38,22 @@ public class ImportInstruction : Instruction
                 if (instruction is VariableInstruction variableInstruction)
                 {
                     ImportNames = [variableInstruction.Name];
-                } else if (instruction is ArrayInstruction arrayInstruction)
+                }
+                else if (instruction is ConstantInstruction)
+                {
+                    ImportNames = ["*"];
+                }
+                else if (instruction is ArrayInstruction arrayInstruction)
                 {
                     foreach (var value in arrayInstruction.Values)
                     {
                         if (value is VariableInstruction varInstruction)
                         {
                             ImportNames.Add(varInstruction.Name);
+                        }
+                        else if (value is ConstantInstruction)
+                        {
+                            ImportNames.Add("*");
                         }
                     }
                 }
