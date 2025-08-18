@@ -18,9 +18,13 @@ public static class InstructionFactory
         var operatorIndex = InstructionUtilities.GetOperatorIndex(tokens);
         
         var forIndex = -1;
-        if (tokens.Count > 2 && tokens[0].Value == "[")
+        if (tokens.Count > 2 && tokens[0].Value == "[" && tokens[^1].Value == "]")
         {
-            forIndex = InstructionUtilities.GetTokenIndex(tokens, ["for"]);
+            forIndex = InstructionUtilities.GetTokenIndex(tokens.GetRange(1, tokens.Count - 2), ["for"]);
+            if (forIndex != -1)
+            {
+                forIndex += 1;
+            }
         }
         
         if (assignmentIndex != -1)

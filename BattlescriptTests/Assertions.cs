@@ -39,6 +39,18 @@ public static class Assertions
         AssertInstructionListsEqual(parserResult, expected);
     }
     
+    public static void AssertInputsProduceSameParserOutput(string input, List<Instruction> expected)
+    {
+        var lexer = new Lexer(input);
+        var lexerResult = lexer.Run();
+        Postlexer.Run(lexerResult);
+        var parser = new Parser(lexerResult);
+        var parserResult = parser.Run();
+        Postparser.Run(parserResult);
+
+        AssertInstructionListsEqual(parserResult, expected);
+    }
+    
     public static void AssertInstructionListsEqual(List<Instruction?> listInput, List<Instruction?> listExpected)
     {
         Assert.That(listInput.Count, Is.EqualTo(listExpected.Count));

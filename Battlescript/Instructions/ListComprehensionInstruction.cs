@@ -2,17 +2,15 @@ namespace Battlescript;
 
 public class ListComprehensionInstruction : Instruction
 {
-    public Instruction Expr { get; private set; }
-    public Instruction LastInstruction { get; private set; }
-    
     public ListComprehensionInstruction(List<Token> tokens) : base(tokens)
     {
         var remainingTokens = tokens.GetRange(1, tokens.Count - 2);
         var currentForIndex = InstructionUtilities.GetTokenIndex(remainingTokens, ["for"]);
         
         var expressionTokens = remainingTokens.GetRange(0, currentForIndex);
-        Expr = InstructionFactory.Create(expressionTokens);
-        LastInstruction = this;
+        var expressionInstruction = InstructionFactory.Create(expressionTokens);
+        
+        Instruction lastInstruction = this;
         remainingTokens = remainingTokens.GetRange(currentForIndex, remainingTokens.Count - currentForIndex);
         
         while (remainingTokens.Count > 0)
@@ -33,8 +31,8 @@ public class ListComprehensionInstruction : Instruction
                 var currentList = InstructionFactory.Create(currentListTokens);
 
                 var forInst = new ForInstruction(currentVar, currentList);
-                LastInstruction.Instructions = [forInst];
-                LastInstruction = forInst;
+                lastInstruction.Instructions = [forInst];
+                lastInstruction = forInst;
             } 
             else if (remainingTokens[0].Value == "if")
             {
@@ -45,8 +43,8 @@ public class ListComprehensionInstruction : Instruction
                 var currentCondition = InstructionFactory.Create(currentConditionTokens);
 
                 var ifInst = new IfInstruction(currentCondition);
-                LastInstruction.Instructions = [ifInst];
-                LastInstruction = ifInst;
+                lastInstruction.Instructions = [ifInst];
+                lastInstruction = ifInst;
             }
             else
             {
@@ -60,11 +58,13 @@ public class ListComprehensionInstruction : Instruction
                 remainingTokens = remainingTokens.GetRange(nextIfOrForIndex, remainingTokens.Count - nextIfOrForIndex);
             }
         }
+        
+        Instructions.Insert(0, new AssignmentInstruction("=", new VariableInstruction("lstcmp"), new ArrayInstruction([], "[")));
+        lastInstruction.Instructions = [new VariableInstruction("lstcmp", new MemberInstruction("append", new ArrayInstruction([expressionInstruction], "(")))];
     }
 
-    public ListComprehensionInstruction(Instruction expression, List<Instruction>? instructions = null) : base([])
+    public ListComprehensionInstruction(List<Instruction> instructions) : base([])
     {
-        Expr = expression;
         Instructions = instructions ?? [];
     }
     
@@ -74,6 +74,11 @@ public class ListComprehensionInstruction : Instruction
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        return new ConstantVariable();
+        foreach (var inst in Instructions)
+        {
+            inst.Interpret(memory, instructionContext, objectContext, lexicalContext);
+        }
+        
+        return memory.GetVariable("lstcmp");
     }
 }
