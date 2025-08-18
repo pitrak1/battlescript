@@ -24,7 +24,7 @@ public static class InstructionUtilities
                 separatorStack.Add(currentToken.Value);
             } else if (Consts.ClosingSeparators.Contains(currentToken.Value))
             {
-                if (DoesTokenMatchSeparator(currentToken, separatorStack[^1]))
+                if (separatorStack.Count > 0 && DoesTokenMatchSeparator(currentToken, separatorStack[^1]))
                 {
                     // If the separator matches the top of the stack, pop it off. If the stack is now empty, that means
                     // we just hit the closing separator of the entire expression, so we add the last entry and exit

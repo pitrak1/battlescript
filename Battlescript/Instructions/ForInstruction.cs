@@ -21,10 +21,11 @@ public class ForInstruction : Instruction
         Range = InstructionFactory.Create(tokens.GetRange(3, tokens.Count - 4));
     }
 
-    public ForInstruction(VariableInstruction blockVariable, Instruction range) : base([])
+    public ForInstruction(VariableInstruction blockVariable, Instruction range, List<Instruction>? instructions = null) : base([])
     {
         BlockVariable = blockVariable;
         Range = range;
+        Instructions = instructions ?? [];
     }
 
     public override Variable? Interpret(

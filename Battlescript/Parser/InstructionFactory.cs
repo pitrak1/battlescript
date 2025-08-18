@@ -16,10 +16,20 @@ public static class InstructionFactory
         var colonIndex = InstructionUtilities.GetTokenIndex(tokens, [":"]);
         var commaIndex = InstructionUtilities.GetTokenIndex(tokens, [","]);
         var operatorIndex = InstructionUtilities.GetOperatorIndex(tokens);
-
+        
+        var forIndex = -1;
+        if (tokens.Count > 2 && tokens[0].Value == "[")
+        {
+            forIndex = InstructionUtilities.GetTokenIndex(tokens, ["for"]);
+        }
+        
         if (assignmentIndex != -1)
         {
             return new AssignmentInstruction(tokens);
+        }
+        else if (tokens[0].Value == "[" && forIndex != -1)
+        {
+            return new ListComprehensionInstruction(tokens);
         }
         else if (tokens[0].Type == Consts.TokenTypes.Keyword)
         {
