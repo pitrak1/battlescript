@@ -67,4 +67,15 @@ public static class Runner
         var interpreter = new Interpreter(parserResult);
         interpreter.Run(memory);
     }
+
+    public static List<Instruction> Parse(string input)
+    {
+        var lexer = new Lexer(input);
+        var lexerResult = lexer.Run();
+        Postlexer.Run(lexerResult);
+        var parser = new Parser(lexerResult);
+        var parserResult = parser.Run();
+        Postparser.Run(parserResult);
+        return parserResult;
+    }
 }

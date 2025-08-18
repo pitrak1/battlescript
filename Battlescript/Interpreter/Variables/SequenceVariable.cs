@@ -13,7 +13,6 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
     
     public override Variable? SetItemDirectly(Memory memory, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
-        // This needs to be rewritten to support ranged assignments, look at list methods in python to see test cases
         var indexVariable = index.Values[0].Interpret(memory);
         var indexList = indexVariable as ObjectVariable;
         var indexSequence = indexList.Values["__value"] as SequenceVariable;

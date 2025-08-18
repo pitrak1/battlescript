@@ -25,4 +25,7 @@ class list:
     def __mul__(self, other):
         return list(self.__value * other.__value)
         return NotImplemented
+
+    def append(self, value):
+        self.__value[len(self.__value):] = value
         

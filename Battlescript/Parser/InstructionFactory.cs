@@ -20,8 +20,19 @@ public static class InstructionFactory
         var forIndex = -1;
         if (tokens.Count > 2 && tokens[0].Value == "[")
         {
-            forIndex = InstructionUtilities.GetTokenIndex(tokens, ["for"]);
+            forIndex = InstructionUtilities.GetTokenIndex(tokens.GetRange(1, tokens.Count - 2), ["for"]);
+            if (forIndex != -1)
+            {
+                forIndex += 1;
+            }
         }
+
+        // if (tokens[0].FileName is null)
+        // {
+        //     var tokensAsString = string.Join("", tokens.Select(t => t.Value));
+        //     Console.WriteLine(tokensAsString);
+        // }
+        // Console.WriteLine(tokens[0].FileName);
         
         if (assignmentIndex != -1)
         {
