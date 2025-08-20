@@ -46,6 +46,17 @@ public class PrincipleTypeInstruction : Instruction
             case "__mapping__":
                 return new MappingVariable();
             case "__string__":
+                if (Parameters.Count == 1)
+                {
+                    var parameter = Parameters[0].Interpret(memory, instructionContext, objectContext, lexicalContext);
+                    switch (parameter)
+                    {
+                        case StringVariable stringVariable:
+                            return stringVariable;
+                        case  NumericVariable numericVariable:
+                            return new StringVariable(numericVariable.Value.ToString());
+                    }
+                }
                 return new StringVariable();
         }
         return null;

@@ -5,10 +5,16 @@ class str:
         if isinstance(value, str):
             self.__value = value.__value
         else:
-            self.__value = value
+            self.__value = __string__(value)
 
     def __eq__(self, other):
         if isinstance(other, str):
             return self.__value == other.__value
         else:
             return False
+
+    def __str__(self):
+        return self.__value
+
+    def __repr__(self):
+        return self.__value

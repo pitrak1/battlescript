@@ -13,7 +13,7 @@ public static class BuiltInInstructionTests
         {
             var expected = new BuiltInInstruction(
                 name: "super",
-                parameters: []
+                arguments: []
             );
             Assertions.AssertInputProducesParserOutput("super()", expected);
         }
@@ -23,7 +23,7 @@ public static class BuiltInInstructionTests
         {
             var expected = new BuiltInInstruction(
                 name: "super",
-                parameters: [new VariableInstruction("x"), new VariableInstruction("y")]
+                arguments: [new VariableInstruction("x"), new VariableInstruction("y")]
             );
             Assertions.AssertInputProducesParserOutput("super(x, y)", expected);
         }
@@ -33,7 +33,7 @@ public static class BuiltInInstructionTests
         {
             var expected = new BuiltInInstruction(
                 name: "super",
-                parameters: [new VariableInstruction("x"), new VariableInstruction("y")],
+                arguments: [new VariableInstruction("x"), new VariableInstruction("y")],
                 next: new MemberInstruction("asdf")
             );
             Assertions.AssertInputProducesParserOutput("super(x, y).asdf", expected);

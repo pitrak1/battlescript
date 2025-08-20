@@ -28,3 +28,4 @@ class float(numeric):
     def __neg__(self):
         return float(-self.__value)
 
+

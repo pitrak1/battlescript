@@ -161,7 +161,7 @@ public static class Assertions
         void CompareBuiltInInstructions(BuiltInInstruction inputInst, BuiltInInstruction expectedInst)
         {
             Assert.That(inputInst.Name, Is.EqualTo(expectedInst.Name));
-            AssertInstructionListsEqual(inputInst.Parameters!, expectedInst.Parameters!);
+            AssertInstructionListsEqual(inputInst.Arguments!, expectedInst.Arguments!);
         }
 
         void CompareClassInstructions(ClassInstruction inputInst, ClassInstruction expectedInst)
