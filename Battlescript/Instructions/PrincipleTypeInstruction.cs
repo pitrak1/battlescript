@@ -49,12 +49,25 @@ public class PrincipleTypeInstruction : Instruction
                 if (Parameters.Count == 1)
                 {
                     var parameter = Parameters[0].Interpret(memory, instructionContext, objectContext, lexicalContext);
-                    switch (parameter)
+                    if (parameter is StringVariable stringVariable)
                     {
-                        case StringVariable stringVariable:
-                            return stringVariable;
-                        case  NumericVariable numericVariable:
-                            return new StringVariable(numericVariable.Value.ToString());
+                        return stringVariable;
+                    }
+                    else if (parameter is NumericVariable numericVariable)
+                    {
+                        return new StringVariable(numericVariable.Value.ToString());
+                    }
+                    else if (memory.Is(Memory.BsTypes.String, parameter))
+                    {
+                        return new StringVariable(memory.GetStringValue(parameter));
+                    }
+                    else if (memory.Is(Memory.BsTypes.Int, parameter))
+                    {
+                        return new StringVariable(memory.GetIntValue(parameter).ToString());
+                    }
+                    else if (memory.Is(Memory.BsTypes.Float, parameter))
+                    {
+                        return new StringVariable(memory.GetFloatValue(parameter).ToString());
                     }
                 }
                 return new StringVariable();
