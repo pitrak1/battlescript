@@ -23,6 +23,11 @@ public class StringInstruction : Instruction
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        return memory.Create(Memory.BsTypes.String, Value);
+        var value = Value;
+        if (IsFormatted)
+        {
+            value = StringUtilities.GetFormattedStringValue(memory, value);
+        }
+        return memory.Create(Memory.BsTypes.String, value);
     }
 }

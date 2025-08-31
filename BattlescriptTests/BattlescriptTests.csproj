@@ -25,4 +25,8 @@
       <ProjectReference Include="..\Battlescript\Battlescript.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Instructions\BuiltIn\" />
+    </ItemGroup>
+
 </Project>

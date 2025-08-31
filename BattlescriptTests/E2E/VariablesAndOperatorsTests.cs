@@ -581,4 +581,38 @@ public static class VariablesAndOperatorsTests
             Assertions.AssertVariable(memory, "x", expected);
         }
     }
+
+    [TestFixture]
+    public class FormattedStrings
+    {
+        [Test]
+        public void SupportsBasicStrings()
+        {
+            var input = "x = f'asdf'";
+            var memory = Runner.Run(input);
+            var expected = memory.Create(Memory.BsTypes.String, "asdf");
+            
+            Assertions.AssertVariable(memory, "x", expected);
+        }
+        
+        [Test]
+        public void SupportsInsertedVariables()
+        {
+            var input = "y = 15\nx = f'asdf{y}'";
+            var memory = Runner.Run(input);
+            var expected = memory.Create(Memory.BsTypes.String, "asdf15");
+            
+            Assertions.AssertVariable(memory, "x", expected);
+        }
+        
+        [Test]
+        public void SupportsInsertedExpressions()
+        {
+            var input = "y = 15\nx = f'asdf{y + 6}'";
+            var memory = Runner.Run(input);
+            var expected = memory.Create(Memory.BsTypes.String, "asdf21");
+            
+            Assertions.AssertVariable(memory, "x", expected);
+        }
+    }
 }
