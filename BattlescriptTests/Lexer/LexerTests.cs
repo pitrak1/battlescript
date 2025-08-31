@@ -46,6 +46,20 @@ public static class LexerTests
             var expected = new List<Token>() { new Token(Consts.TokenTypes.String, "asdf") };
             Assertions.AssertInputProducesLexerOutput("'asdf'", expected);
         }
+
+        [Test]
+        public void HandlesFormattedStringsWithSingleQuotes()
+        {
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.FormattedString, "asdf") };
+            Assertions.AssertInputProducesLexerOutput("f'asdf'", expected);
+        }
+        
+        [Test]
+        public void HandlesFormattedStringsWithDoubleQuotes()
+        {
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.FormattedString, "asdf") };
+            Assertions.AssertInputProducesLexerOutput("f\"asdf\"", expected);
+        }
     }
 
     [TestFixture]

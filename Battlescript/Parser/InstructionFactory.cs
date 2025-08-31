@@ -112,7 +112,7 @@ public static class InstructionFactory
         {
             return new VariableInstruction(tokens);
         }
-        else if (tokens[0].Type == Consts.TokenTypes.String)
+        else if (tokens[0].Type == Consts.TokenTypes.String || tokens[0].Type == Consts.TokenTypes.FormattedString)
         {
             return new StringInstruction(tokens);
         }

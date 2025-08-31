@@ -7,6 +7,7 @@ public static class Postlexer
         JoinIsNotAndNotIn(tokens);
         CheckForParenthesesWithBuiltInFunctionCalls(tokens);
         CheckForMatchingSeparators(tokens);
+        CheckForFormattedStrings(tokens);
     }
 
     private static void JoinIsNotAndNotIn(List<Token> tokens)
@@ -86,6 +87,24 @@ public static class Postlexer
         if (separatorStack.Count != 0)
         {
             throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "unexpected EOF while parsing");
+        }
+    }
+
+    private static void CheckForFormattedStrings(List<Token> tokens)
+    {
+        var i = 0;
+        while (i < tokens.Count)
+        {
+            if (tokens[i].Type == Consts.TokenTypes.Identifier && tokens[i].Value == "f")
+            {
+                if (i < tokens.Count - 1 && tokens[i + 1].Type == Consts.TokenTypes.String)
+                {
+                    tokens[i + 1].Type = Consts.TokenTypes.FormattedString;
+                    tokens.RemoveAt(i);
+                    continue;
+                }
+            }
+            i++;
         }
     }
 }

@@ -231,6 +231,7 @@ public static class Consts
         Breakpoint,
         PrincipleType,
         Numeric,
+        FormattedString
     }
     
     public static readonly string[] PrincipleTypes =
