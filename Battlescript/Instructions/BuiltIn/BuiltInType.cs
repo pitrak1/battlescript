@@ -1,0 +1,34 @@
+namespace Battlescript.BuiltIn;
+
+public static class BuiltInType
+{
+    public static Variable Run(Memory memory, List<Instruction> arguments)
+    {
+        if (arguments.Count != 1)
+        {
+            throw new Exception("Bad arguments, clean this up later");
+        }
+        
+        var firstExpression = arguments[0].Interpret(memory);
+        switch (firstExpression)
+        {
+            case StringVariable:
+                return memory.Create(Memory.BsTypes.String, "<class '__string__'>");
+            case MappingVariable:
+                return memory.Create(Memory.BsTypes.String, "<class '__mapping__'>");
+            case NumericVariable:
+                return memory.Create(Memory.BsTypes.String, "<class '__numeric__'>");
+            case SequenceVariable:
+                return memory.Create(Memory.BsTypes.String, "<class '__sequence__'>");
+            case FunctionVariable:
+                return memory.Create(Memory.BsTypes.String, "<class 'function'>");
+            case ClassVariable:
+                return memory.Create(Memory.BsTypes.String, "<class 'type'>");
+            case ObjectVariable objectVariable:
+                var className = objectVariable.Class.Name;
+                return memory.Create(Memory.BsTypes.String, $"<class '{className}'>");
+            default:
+                throw new Exception("Bad arguments, clean this up later");
+        }
+    }
+}

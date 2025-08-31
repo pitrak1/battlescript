@@ -46,6 +46,8 @@ public class BuiltInInstruction : Instruction
             case "print":
                 BuiltInPrint.Run(memory, Arguments);
                 break;
+            case "type":
+                return BuiltInType.Run(memory, Arguments);
             case "len":
                 return BuiltInLen.Run(memory, Arguments);
         }
