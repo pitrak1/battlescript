@@ -18,6 +18,20 @@ public class RaiseInstruction : Instruction
         ClassVariable? lexicalContext = null)
     {
         var exception = Value?.Interpret(memory);
-        throw new InternalRaiseException(exception);
+        memory.CurrentStack.AddFrame(this);
+
+        var exceptionType = memory.IsException(exception);
+        if (exceptionType is Memory.BsTypes bsType)
+        {
+            throw new InternalRaiseException(bsType, memory.GetErrorMessage(exception));
+        }
+        else if (memory.Is(Memory.BsTypes.String, exception))
+        {
+            throw new InternalRaiseException(memory.GetStringValue(exception));
+        }
+        else
+        {
+            throw new InternalRaiseException("Unknown error, please panic");
+        }
     }
 }

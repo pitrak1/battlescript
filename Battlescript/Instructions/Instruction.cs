@@ -2,9 +2,8 @@ namespace Battlescript;
 
 public abstract class Instruction
 {
-    public int? Line { get; set; }
-    public string? FileName { get; set; }
-    public string? Expression { get; set; }
+    public int Line { get; set; }
+    public string Expression { get; set; }
     public List<Instruction> Instructions { get; set; }
     
     public Instruction? Next { get; set; }
@@ -14,7 +13,6 @@ public abstract class Instruction
         if (tokens.Count > 0)
         {
             Line = tokens[0].Line;
-            FileName = tokens[0].FileName;
             Expression = tokens[0].Expression;
         }
         Instructions = [];

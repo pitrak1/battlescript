@@ -2,9 +2,11 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class Memory(List<MemoryScope>? scopes = null)
+public class Memory(List<Dictionary<string, Variable>>? scopes = null)
 {
-    public List<MemoryScope> Scopes { get; } = scopes ?? [new MemoryScope(null)];
+    public List<Dictionary<string, Variable>> Scopes { get; } = scopes ?? [new Dictionary<string, Variable>()];
+
+    public Stack CurrentStack = new Stack();
 
     public enum BsTypes
     {
@@ -20,7 +22,10 @@ public class Memory(List<MemoryScope>? scopes = null)
         AssertionError,
         ValueError,
     }
-    
+
+    public static readonly BsTypes[] BsExceptions =
+        [BsTypes.Exception, BsTypes.SyntaxError, BsTypes.AssertionError, BsTypes.ValueError];
+
     public static readonly string[] BsTypeStrings = [
         "numeric", 
         "int", 
@@ -182,6 +187,32 @@ public class Memory(List<MemoryScope>? scopes = null)
         }
     }
     
+    public string GetErrorMessage(Variable variable)
+    {
+        if (IsException(variable) is not null && variable is ObjectVariable objectVariable)
+        {
+            var messageVariable = objectVariable.Values["message"] as ObjectVariable;
+            return GetStringValue(messageVariable);
+        }
+        else
+        {
+            throw new Exception("Variable is not an exception");
+        }
+    }
+
+    public BsTypes? IsException(Variable variable)
+    {
+        foreach (var exception in BsExceptions)
+        {
+            if (Is(exception, variable))
+            {
+                return exception;
+            }
+        }
+
+        return null;
+    }
+    
     public Variable? GetVariable(string name)
     {
         return GetVariable(new VariableInstruction(name));
@@ -191,9 +222,9 @@ public class Memory(List<MemoryScope>? scopes = null)
     {
         for (var i = Scopes.Count - 1; i >= 0; i--)
         {
-            if (Scopes[i].Variables.ContainsKey(variableInstruction.Name))
+            if (Scopes[i].ContainsKey(variableInstruction.Name))
             {
-                var foundVariable = Scopes[i].Variables[variableInstruction.Name];
+                var foundVariable = Scopes[i][variableInstruction.Name];
                 if (variableInstruction.Next is ArrayInstruction { Separator: "[" } squareBracketsInstruction)
                 {
                     return foundVariable.GetItem(this, squareBracketsInstruction);
@@ -219,18 +250,18 @@ public class Memory(List<MemoryScope>? scopes = null)
         {
             for (var i = Scopes.Count - 1; i >= 0; i--)
             {
-                if (Scopes[i].Variables.ContainsKey(variableInstruction.Name))
+                if (Scopes[i].ContainsKey(variableInstruction.Name))
                 {
                     if (variableInstruction.Next is ArrayInstruction { Separator: "[" } squareBracketsInstruction)
                     {
-                        Scopes[i].Variables[variableInstruction.Name].SetItem(
+                        Scopes[i][variableInstruction.Name].SetItem(
                             this, 
                             valueVariable, 
                             squareBracketsInstruction);
                     }
                     else if (variableInstruction.Next is MemberInstruction memberInstruction)
                     {
-                        Scopes[i].Variables[variableInstruction.Name].SetMember(
+                        Scopes[i][variableInstruction.Name].SetMember(
                             this, 
                             valueVariable, 
                             memberInstruction);
@@ -241,7 +272,7 @@ public class Memory(List<MemoryScope>? scopes = null)
                     }
                     else
                     {
-                        Scopes[i].Variables[variableInstruction.Name] = valueVariable;
+                        Scopes[i][variableInstruction.Name] = valueVariable;
                     }
 
                     return;
@@ -259,12 +290,12 @@ public class Memory(List<MemoryScope>? scopes = null)
         Scopes[^1].Add(variableInstruction.Name, valueVariable);
     }
     
-    public void AddScope(MemoryScope? scope = null)
+    public void AddScope(Dictionary<string, Variable>? scope = null)
     {
-        Scopes.Add(scope ?? new MemoryScope(null));
+        Scopes.Add(scope ?? new Dictionary<string, Variable>());
     }
 
-    public MemoryScope RemoveScope()
+    public Dictionary<string, Variable> RemoveScope()
     {
         var removedScope = Scopes[^1];
         Scopes.RemoveAt(Scopes.Count - 1);
@@ -276,16 +307,6 @@ public class Memory(List<MemoryScope>? scopes = null)
         for (var i = 0; i < count; i++)
         {
             RemoveScope();
-        }
-    }
-
-    public void PrintStacktrace()
-    {
-        Console.WriteLine("Traceback (most recent call last):");
-        for (var i = Scopes.Count - 1; i >= 1; i--)
-        {
-            Console.WriteLine($"\tFile {Scopes[i].FileName}, line {Scopes[i].Line}, in {Scopes[i].FunctionName ?? "<module>"}");
-            Console.WriteLine("\t" + Scopes[i].Expression);
         }
     }
 }

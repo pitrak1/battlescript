@@ -74,16 +74,19 @@ public class ImportInstruction : Instruction
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
+        var stackUpdates = memory.CurrentStack.AddFrame(this, FilePath, "<module>");
         var importedScope = Runner.RunFilePath(memory, FilePath);
+        memory.CurrentStack.PopFrame(stackUpdates);
+        
         foreach (var name in ImportNames)
         {
             if (name == "*")
             {
-                memory.SetVariable(new VariableInstruction(FileName), memory.Create(Memory.BsTypes.Dictionary, new MappingVariable(null, importedScope.Variables)));
+                memory.SetVariable(new VariableInstruction(FileName), memory.Create(Memory.BsTypes.Dictionary, new MappingVariable(null, importedScope)));
             }
-            else if (importedScope.Variables.ContainsKey(name))
+            else if (importedScope.ContainsKey(name))
             {
-                memory.SetVariable(new VariableInstruction(name), importedScope.Variables[name]);
+                memory.SetVariable(new VariableInstruction(name), importedScope[name]);
             }
             else
             {

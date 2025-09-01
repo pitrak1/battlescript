@@ -4,39 +4,28 @@ public static class Runner
 {
     public static Memory Run(string input)
     {
-        var memory = new Memory([new MemoryScope("builtin")]);
-        
+        var memory = new Memory();
+
         foreach (var builtin in Memory.BsTypeStrings)
         {
             LoadBuiltin(memory, builtin);
             memory.PopulateBsTypeReference(builtin);
         }
 
-        try
-        {
-            memory.AddScope(new MemoryScope("main"));
-            RunPartial(memory, input, "main");
-        }
-        catch (InternalReturnException e)
-        {
-            memory.PrintStacktrace();
-            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "'return' outside function");
-        }
-        catch (InternalBreakException e)
-        {
-            memory.PrintStacktrace();
-            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "'break' outside loop");
-        }
-        catch (Exception e)
-        {
-            memory.PrintStacktrace();
-            throw;
-        }
+        RunAsMain(memory, input);
         
         return memory;
     }
 
-    public static MemoryScope RunFilePath(Memory memory, string path)
+    public static void RunAsMain(Memory memory, string input)
+    {
+        memory.AddScope();
+        memory.CurrentStack.Files.Add("main");
+        memory.CurrentStack.Functions.Add("<module>");
+        RunPartial(memory, input, "main");
+    }
+
+    public static Dictionary<string, Variable> RunFilePath(Memory memory, string path)
     {
         var input = ReadFile(path);
         RunPartial(memory, input, path);
@@ -58,14 +47,34 @@ public static class Runner
 
     public static void RunPartial(Memory memory, string input, string fileName)
     {
-        var lexer = new Lexer(input, fileName);
-        var lexerResult = lexer.Run();
-        Postlexer.Run(lexerResult);
-        var parser = new Parser(lexerResult);
-        var parserResult = parser.Run();
-        Postparser.Run(parserResult);
+        var parserResult = Parse(input);
         var interpreter = new Interpreter(parserResult);
-        interpreter.Run(memory);
+        
+        try
+        {
+            interpreter.Run(memory);
+        }
+        catch (InternalReturnException e)
+        {
+            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "'return' outside function");
+        }
+        catch (InternalBreakException e)
+        {
+            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "'break' outside loop");
+        }
+        catch (InternalRaiseException e)
+        {
+            memory.CurrentStack.PrintStacktrace();
+            if (e.Type is not null)
+            {
+                Console.WriteLine(e.Type + ": " + e.Message);
+            }
+            else
+            {
+                Console.WriteLine(e.Message);
+            }
+            throw;
+        }
     }
 
     public static List<Instruction> Parse(string input)

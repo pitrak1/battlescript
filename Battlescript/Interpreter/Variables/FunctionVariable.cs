@@ -17,7 +17,7 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
     {
         if (inst is not null)
         {
-            var scope = new MemoryScope(inst.FileName, inst.Line, Name, inst.Expression);
+            var scope = new Dictionary<string, Variable>();
             memory.AddScope(scope);
         }
         else
@@ -35,7 +35,7 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
     {
         if (inst is not null)
         {
-            var scope = new MemoryScope(inst.FileName, inst.Line, Name, inst.Expression);
+            var scope = new Dictionary<string, Variable>();
             memory.AddScope(scope);
         }
         else

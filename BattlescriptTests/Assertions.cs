@@ -396,4 +396,18 @@ public static class Assertions
             }
         }
     }
+
+    public static void AssertStacktrace(
+        List<(string File, int Line, string Expression, string Function)> input,
+        List<(string File, int Line, string Expression, string Function)> expected)
+    {
+        Assert.That(input.Count, Is.EqualTo(expected.Count));
+        for (int i = 0; i < input.Count; i++)
+        {
+            Assert.That(input[i].File, Is.EqualTo(expected[i].File));
+            Assert.That(input[i].Line, Is.EqualTo(expected[i].Line));
+            Assert.That(input[i].Expression, Is.EqualTo(expected[i].Expression));
+            Assert.That(input[i].Function, Is.EqualTo(expected[i].Function));
+        }
+    }
 }
