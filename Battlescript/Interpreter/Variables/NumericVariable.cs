@@ -24,38 +24,38 @@ public class NumericVariable : Variable
         _value = value;
     }
     
-    public override Variable? Operate(Memory memory, string operation, Variable? other, bool isInverted = false)
+    public override Variable? Operate(Memory memory, string operation, Variable? other, bool isTransposed = false)
     {
         if (other is NumericVariable otherNumeric)
         {
             switch (operation)
             {
                 case "**":
-                    var powValue = isInverted
+                    var powValue = isTransposed
                         ? Math.Pow(otherNumeric.Value, _value)
                         : Math.Pow(_value, otherNumeric.Value);
                     return new NumericVariable(powValue);
                 case "*":
                     return new NumericVariable(_value * otherNumeric.Value);
                 case "/":
-                    var divValue = isInverted
+                    var divValue = isTransposed
                         ? (double)otherNumeric.Value / (double)_value
                         : (double)_value / (double)otherNumeric.Value;
                     return new NumericVariable(divValue);
                 case "//":
-                    var floorDivValue = isInverted
+                    var floorDivValue = isTransposed
                         ? Math.Floor((double)otherNumeric.Value / (double)_value)
                         : Math.Floor((double)_value / (double)otherNumeric.Value);
                     return new NumericVariable(floorDivValue);
                 case "%":
-                    var modValue = isInverted
+                    var modValue = isTransposed
                         ? otherNumeric.Value % _value
                         : _value % otherNumeric.Value;
                     return new NumericVariable(modValue);
                 case "+":
                     return new NumericVariable(_value + otherNumeric.Value);
                 case "-":
-                    var subValue = isInverted
+                    var subValue = isTransposed
                         ? otherNumeric.Value - _value
                         : _value - otherNumeric.Value;
                     return new NumericVariable(subValue);
@@ -64,22 +64,22 @@ public class NumericVariable : Variable
                 case "!=":
                     return new NumericVariable(Math.Abs(_value - otherNumeric.Value) > Consts.FloatingPointTolerance ? 1 : 0);
                 case ">":
-                    var gValue = isInverted
+                    var gValue = isTransposed
                         ? otherNumeric.Value > _value
                         : _value > otherNumeric.Value;
                     return new NumericVariable(gValue ? 1 : 0);
                 case ">=":
-                    var geValue = isInverted
+                    var geValue = isTransposed
                         ? otherNumeric.Value >= _value
                         : _value >= otherNumeric.Value;
                     return new NumericVariable(geValue ? 1 : 0);
                 case "<":
-                    var lValue = isInverted
+                    var lValue = isTransposed
                         ? otherNumeric.Value < _value
                         : _value < otherNumeric.Value;
                     return new NumericVariable(lValue ? 1 : 0);
                 case "<=":
-                    var leValue = isInverted
+                    var leValue = isTransposed
                         ? otherNumeric.Value <= _value
                         : _value <= otherNumeric.Value;
                     return new NumericVariable(leValue ? 1 : 0);

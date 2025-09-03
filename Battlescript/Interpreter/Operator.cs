@@ -64,9 +64,9 @@ public static class Operator
     
     public static Variable Operate(Memory memory, string operation, Variable? left, Variable? right, Instruction? originalInstruction = null)
     {
-        if (Consts.CommonOperators.Contains(operation))
+        if (Consts.BooleanOperators.Contains(operation))
         {
-            return ConductCommonOperation();
+            return ConductBooleanOperation();
         }
         else if (left is ObjectVariable || right is ObjectVariable)
         {
@@ -77,7 +77,7 @@ public static class Operator
             return ConductStandardOperation();
         }
         
-        Variable ConductCommonOperation()
+        Variable ConductBooleanOperation()
         {
             // The operators handled here will be the same regardless of type or have complex type interactions
             switch (operation)

@@ -177,7 +177,7 @@ public static class Consts
         "or"
     ];
     
-    public static readonly string[] CommonOperators = ["and", "or", "not", "is", "is not", "in", "not in"];
+    public static readonly string[] BooleanOperators = ["and", "or", "not", "is", "is not", "in", "not in"];
     
     public static readonly string[] NumericalOperators = [
         "**",

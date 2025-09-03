@@ -8,7 +8,7 @@ public class StringVariable : Variable, IEquatable<StringVariable>
         Value = value ?? "";
     }
 
-    public override Variable Operate(Memory memory, string operation, Variable? other, bool isInverted = false)
+    public override Variable Operate(Memory memory, string operation, Variable? other, bool isTransposed = false)
     {
         if (other is StringVariable otherString)
         {

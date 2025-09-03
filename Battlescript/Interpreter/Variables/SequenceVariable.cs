@@ -185,7 +185,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         return (start, stop, step);
     }
 
-    public override Variable Operate(Memory memory, string operation, Variable? other, bool isInverted = false)
+    public override Variable Operate(Memory memory, string operation, Variable? other, bool isTransposed = false)
     {
         if (other is NumericVariable otherNumeric)
         {
