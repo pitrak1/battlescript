@@ -165,21 +165,21 @@ public static class Operator
             {
                 if (right is null)
                 {
-                    return leftOverride.RunFunction(memory, new List<Variable>(), left as ObjectVariable, originalInstruction);
+                    return leftOverride.RunFunction(memory, new ArgumentSet([left]), originalInstruction);
                 }
                 else
                 {
-                    return leftOverride.RunFunction(memory, [right], left as ObjectVariable, originalInstruction);
+                    return leftOverride.RunFunction(memory, new ArgumentSet([left, right]), originalInstruction);
                 }
             } else if (rightOverride is not null)
             {
                 if (left is null)
                 {
-                    return rightOverride.RunFunction(memory, new List<Variable>(), right as ObjectVariable, originalInstruction);
+                    return rightOverride.RunFunction(memory, new ArgumentSet([right]), originalInstruction);
                 }
                 else
                 {
-                    return rightOverride.RunFunction(memory, [left], right as ObjectVariable, originalInstruction);
+                    return rightOverride.RunFunction(memory, new ArgumentSet([right, left]), originalInstruction);
                 }
             }
             else

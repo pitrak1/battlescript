@@ -43,7 +43,7 @@ public class ClassVariable : Variable, IEquatable<ClassVariable>
         var getItemFunction = GetMemberDirectly(memory, new MemberInstruction("__getitem__"));
         if (getItemFunction is FunctionVariable functionVariable && objectContext is not null)
         {
-            return functionVariable.RunFunction(memory, [indexVariable], objectContext);
+            return functionVariable.RunFunction(memory, new ArgumentSet([objectContext, indexVariable]));
         }
         else
         {

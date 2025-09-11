@@ -167,7 +167,7 @@ public class ArrayInstruction : Instruction
             if (instructionContext is FunctionVariable functionVariable)
             {
                 var stackUpdates = memory.CurrentStack.AddFrame(this, null, functionVariable.Name);
-                var returnValue = functionVariable.RunFunction(memory, Values!, objectContext, this);
+                var returnValue = functionVariable.RunFunction(memory, new ArgumentSet(memory, Values!, objectContext), this);
                 memory.CurrentStack.PopFrame(stackUpdates);
                 return returnValue;
             }
@@ -188,7 +188,7 @@ public class ArrayInstruction : Instruction
                 if (constructor is FunctionVariable constructorVariable)
                 {
                     var stackUpdates = memory.CurrentStack.AddFrame(this, null, "__init__");
-                    constructorVariable.RunFunction(memory, Values, objectVariable, this);
+                    constructorVariable.RunFunction(memory, new ArgumentSet(memory, Values!, objectVariable), this);
                     memory.CurrentStack.PopFrame(stackUpdates);
                 }
             }

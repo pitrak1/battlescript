@@ -2,7 +2,7 @@ namespace Battlescript;
 
 public class LambdaInstruction : Instruction
 {
-    public List<Instruction> Parameters { get; set; }
+    public ParameterSet Parameters { get; set; }
 
     public LambdaInstruction(List<Token> tokens) : base(tokens)
     {
@@ -20,13 +20,13 @@ public class LambdaInstruction : Instruction
         var expressionTokens = tokens.GetRange(colonIndex + 1, tokens.Count - colonIndex - 1);
         var instruction = new ReturnInstruction(InstructionFactory.Create(expressionTokens));
         
-        Parameters = parameters!;
+        Parameters = new ParameterSet(parameters!);
         Instructions = [instruction];
     }
 
-    public LambdaInstruction(List<Instruction>? parameters = null, List<Instruction>? instructions = null) : base([])
+    public LambdaInstruction(ParameterSet? parameters = null, List<Instruction>? instructions = null) : base([])
     {
-        Parameters = parameters ?? [];
+        Parameters = parameters ?? new ParameterSet();
         Instructions = instructions ?? [];
     }
 

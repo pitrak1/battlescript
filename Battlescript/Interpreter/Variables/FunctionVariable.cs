@@ -3,17 +3,17 @@ namespace Battlescript;
 public class FunctionVariable : Variable, IEquatable<FunctionVariable>
 {
     public string? Name { get; set; }
-    public List<Instruction> Parameters { get; set; }
+    public ParameterSet Parameters { get; set; }
     public List<Instruction> Instructions { get; set; }
 
-    public FunctionVariable(string? name, List<Instruction>? parameters, List<Instruction>? instructions)
+    public FunctionVariable(string? name, ParameterSet? parameters = null, List<Instruction>? instructions = null)
     {
         Name = name;
-        Parameters = parameters ?? [];
+        Parameters = parameters ?? new ParameterSet();
         Instructions = instructions ?? [];
     }
     
-    public Variable RunFunction(Memory memory, List<Variable> arguments, ObjectVariable? objectVariable = null, Instruction? inst = null)
+    public Variable RunFunction(Memory memory, ArgumentSet arguments, Instruction? inst = null)
     {
         if (inst is not null)
         {
@@ -25,25 +25,7 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
             memory.AddScope();
         }
         
-        ArgumentTransfer.RunAndApply(memory, arguments, Parameters, objectVariable);
-        var returnValue = RunInstructions(memory);
-        memory.RemoveScope();
-        return returnValue ?? new ConstantVariable();
-    }
-
-    public Variable RunFunction(Memory memory, List<Instruction> arguments, ObjectVariable? objectVariable = null, Instruction? inst = null)
-    {
-        if (inst is not null)
-        {
-            var scope = new Dictionary<string, Variable>();
-            memory.AddScope(scope);
-        }
-        else
-        {
-            memory.AddScope();
-        }
-        
-        ArgumentTransfer.RunAndApply(memory, arguments, Parameters, objectVariable);
+        arguments.ApplyToMemory(memory, Parameters);
         var returnValue = RunInstructions(memory);
         memory.RemoveScope();
         return returnValue ?? new ConstantVariable();
@@ -73,8 +55,14 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
         if (variable is null) return false;
         if (ReferenceEquals(this, variable)) return true;
         if (GetType() != variable.GetType()) return false;
+
+        if (!Parameters.Names.SequenceEqual(variable.Parameters.Names) ||
+            !Parameters.DefaultValues.SequenceEqual(variable.Parameters.DefaultValues))
+        {
+            return false;
+        }
         
-        return Parameters.SequenceEqual(variable.Parameters) && Instructions.SequenceEqual(variable.Instructions);
+        return Instructions.SequenceEqual(variable.Instructions);
     }
     
     public override int GetHashCode() => HashCode.Combine(Parameters, Instructions);

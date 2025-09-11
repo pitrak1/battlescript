@@ -17,7 +17,7 @@ public class FunctionsTests
                         """;
             var expected = new FunctionVariable(
                 "func",
-                [],
+                new ParameterSet(),
                 [
                     new AssignmentInstruction(
                         operation: "=",
@@ -37,7 +37,7 @@ public class FunctionsTests
                         """;
             var expected = new FunctionVariable(
                 "func",
-                [new VariableInstruction("asdf")],
+                new ParameterSet([new VariableInstruction("asdf")]),
                 [
                     new AssignmentInstruction(
                         operation: "=",
@@ -57,10 +57,10 @@ public class FunctionsTests
                         """;
             var expected = new FunctionVariable(
                 "func",
-                [
+                new ParameterSet([
                     new VariableInstruction("asdf"),
                     new VariableInstruction("qwer")
-                ],
+                ]),
                 [
                     new AssignmentInstruction(
                         operation: "=", 
@@ -186,7 +186,7 @@ public class FunctionsTests
                         def func(y = 5, z):
                             return y + z
                         """;
-            Assert.Throws<Exception>(() => Runner.Run(input));
+            Assert.Throws<InterpreterRequiredParamFollowsDefaultParamException>(() => Runner.Run(input));
         }
     }
     
@@ -275,7 +275,7 @@ public class FunctionsTests
                         """;
             var expected = new FunctionVariable(
                 null,
-                [new VariableInstruction("y")],
+                new ParameterSet([new VariableInstruction("y")]),
                 [new ReturnInstruction(new OperationInstruction("+", new VariableInstruction("y"), new NumericInstruction(5)))]);
             var memory = Runner.Run(input);
             Assertions.AssertVariable(memory, "x", expected);

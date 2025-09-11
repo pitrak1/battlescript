@@ -3,7 +3,7 @@ namespace Battlescript;
 public class FunctionInstruction : Instruction
 {
     public string Name { get; set; } 
-    public List<Instruction> Parameters { get; set; }
+    public ParameterSet Parameters { get; set; }
 
     public FunctionInstruction(List<Token> tokens) : base(tokens)
     {
@@ -19,7 +19,6 @@ public class FunctionInstruction : Instruction
         
         var tokensInParens = tokens.GetRange(3, tokens.Count - 5);
         var parameters = InstructionUtilities.ParseEntriesBetweenDelimiters(tokensInParens, [","]);
-        CheckThatDefaultArgumentsFollowRequiredArguments();
 
         if (tokens[1].Type != Consts.TokenTypes.Identifier)
         {
@@ -27,28 +26,13 @@ public class FunctionInstruction : Instruction
         }
         
         Name = tokens[1].Value;
-        Parameters = parameters!;
-
-        void CheckThatDefaultArgumentsFollowRequiredArguments()
-        {
-            var inDefaultArguments = false;
-            foreach (var parameter in parameters)
-            {
-                if (parameter is AssignmentInstruction)
-                {
-                    inDefaultArguments = true;
-                } else if (parameter is VariableInstruction && inDefaultArguments)
-                {
-                    throw new Exception("Required arguments have to be before default arguments, fix this later");
-                }
-            }
-        }
+        Parameters = new ParameterSet(parameters!);
     }
 
-    public FunctionInstruction(string name, List<Instruction>? parameters = null, List<Instruction>? instructions = null) : base([])
+    public FunctionInstruction(string name, ParameterSet? parameters = null, List<Instruction>? instructions = null) : base([])
     {
         Name = name;
-        Parameters = parameters ?? [];
+        Parameters = parameters ?? new ParameterSet();
         Instructions = instructions ?? [];
     }
 

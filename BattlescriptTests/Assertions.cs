@@ -192,7 +192,8 @@ public static class Assertions
         void CompareFunctionInstructions(FunctionInstruction inputInst, FunctionInstruction expectedInst)
         {
             Assert.That(inputInst.Name, Is.EqualTo(expectedInst.Name));
-            AssertInstructionListsEqual(inputInst.Parameters!, expectedInst.Parameters!);
+            Assert.That(inputInst.Parameters.Names, Is.EquivalentTo(expectedInst.Parameters.Names));
+            AssertInstructionDictionariesEqual(inputInst.Parameters.DefaultValues, expectedInst.Parameters.DefaultValues);
         }
         
         void CompareIfInstructions(IfInstruction inputInst, IfInstruction expectedInst)
@@ -208,7 +209,8 @@ public static class Assertions
 
         void CompareLambdaInstructions(LambdaInstruction inputInst, LambdaInstruction expectedInst)
         {
-            AssertInstructionListsEqual(inputInst.Parameters!, expectedInst.Parameters!);
+            Assert.That(inputInst.Parameters.Names, Is.EquivalentTo(expectedInst.Parameters.Names));
+            AssertInstructionDictionariesEqual(inputInst.Parameters.DefaultValues, expectedInst.Parameters.DefaultValues);
         }
 
         void CompareNumericInstructions(NumericInstruction inputInst, NumericInstruction expectedInst)
@@ -277,6 +279,34 @@ public static class Assertions
         }
     }
     
+    public static void AssertInstructionDictionariesEqual(Dictionary<string, Instruction?> input, Dictionary<string, Instruction?> expected)
+    {
+        Assert.That(input.Count, Is.EqualTo(expected.Count));
+        foreach (var (key, value) in input)
+        {
+            Assert.That(expected.ContainsKey(key));
+            AssertInstructionsEqual(expected[key], value);
+        }
+    }
+    
+    public static void AssertVariableDictionariesEqual(Dictionary<string, Variable?> input, Dictionary<string, Variable?> expected)
+    {
+        Assert.That(input.Count, Is.EqualTo(expected.Count));
+        foreach (var (key, value) in input)
+        {
+            Assert.That(expected.ContainsKey(key));
+
+            if (value is null)
+            {
+                Assert.That(expected[key], Is.Null);
+            }
+            else
+            {
+                AssertVariablesEqual(expected[key], value);
+            }
+        }
+    }
+    
     public static void AssertInputProducesParserOutput(string input, Instruction? expected)
     {
         var lexer = new Lexer(input);
@@ -292,6 +322,17 @@ public static class Assertions
         var variable = memory.GetVariable(name);
         AssertVariablesEqual(variable, expected);
     }
+
+    public static void AssertVariableListsEqual(List<Variable?> input, List<Variable> expected)
+    {
+        Assert.That(input.Count, Is.EqualTo(expected.Count));
+        for (var i = 0; i < input.Count; i++)
+        {
+            AssertVariablesEqual(input[i], expected[i]);
+        }
+    }
+    
+    
 
     public static void AssertVariablesEqual(Variable? input, Variable expected)
     {
@@ -353,24 +394,14 @@ public static class Assertions
 
         void CompareObjectVariables(ObjectVariable input, ObjectVariable expected)
         {
-            CompareVariableDictionaries(input.Values, expected.Values);
+            AssertVariableDictionariesEqual(input.Values, expected.Values);
             CompareClassVariables(input.Class, expected.Class);
         }
         
-        void CompareVariableDictionaries(Dictionary<string, Variable> input, Dictionary<string, Variable> expected)
-        {
-            Assert.That(input.Count, Is.EqualTo(expected.Count));
-            foreach (var (key, value) in input)
-            {
-                Assert.That(expected.ContainsKey(key));
-                AssertVariablesEqual(expected[key], value);
-            }
-        }
-
         void CompareClassVariables(ClassVariable input, ClassVariable expected)
         {
             Assert.That(input.Name, Is.EqualTo(expected.Name));
-            CompareVariableDictionaries(input.Values, expected.Values);
+            AssertVariableDictionariesEqual(input.Values, expected.Values);
             Assert.That(input.SuperClasses.Count, Is.EqualTo(expected.SuperClasses.Count));
             for (var i = 0; i < input.SuperClasses.Count; i++)
             {
@@ -380,13 +411,14 @@ public static class Assertions
 
         void CompareFunctionVariables(FunctionVariable input, FunctionVariable expected)
         {
-            AssertInstructionListsEqual(input.Parameters!, expected.Parameters!);
+            Assert.That(input.Parameters.Names, Is.EquivalentTo(expected.Parameters.Names));
+            AssertInstructionDictionariesEqual(input.Parameters.DefaultValues, expected.Parameters.DefaultValues);
             AssertInstructionListsEqual(input.Instructions!, expected.Instructions!);
         }
 
         void CompareMappingVariables(MappingVariable input, MappingVariable expected)
         {
-            CompareVariableDictionaries(input.StringValues, expected.StringValues);
+            AssertVariableDictionariesEqual(input.StringValues, expected.StringValues);
             
             Assert.That(input.IntValues.Count, Is.EqualTo(expected.IntValues.Count));
             foreach (var (key, value) in input.IntValues)

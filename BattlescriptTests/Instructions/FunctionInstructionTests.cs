@@ -22,7 +22,7 @@ public static class FunctionInstructionTests
         {
             var expected = new FunctionInstruction(
                 name: "func",
-                parameters: [new VariableInstruction("asdf")]
+                parameters: new ParameterSet([new VariableInstruction("asdf")])
             );
             Assertions.AssertInputProducesParserOutput("def func(asdf):", expected);
         }
@@ -33,10 +33,10 @@ public static class FunctionInstructionTests
             var expected = new FunctionInstruction(
                 name: "func",
                 parameters: 
-                [
+                new ParameterSet([
                     new VariableInstruction("asdf"),
                     new VariableInstruction("qwer")
-                ]
+                ])
             );
             Assertions.AssertInputProducesParserOutput("def func(asdf, qwer):", expected);
         }
@@ -47,10 +47,10 @@ public static class FunctionInstructionTests
             var expected = new FunctionInstruction(
                 name: "func",
                 parameters: 
-                [
+                new ParameterSet([
                     new VariableInstruction("asdf"),
                     new AssignmentInstruction("=", new VariableInstruction("qwer"), new NumericInstruction(1234))
-                ]
+                ])
             );
             Assertions.AssertInputProducesParserOutput("def func(asdf, qwer=1234):", expected);
         }
@@ -58,7 +58,7 @@ public static class FunctionInstructionTests
         [Test]
         public void ThrowsErrorIfDefaultArgumentIsBeforeRequiredArgument()
         {
-            Assert.Throws<Exception>(() => Assertions.AssertInputProducesParserOutput("def func(qwer=1234, asdf):", new NumericInstruction(1234)));
+            Assert.Throws<InterpreterRequiredParamFollowsDefaultParamException>(() => Assertions.AssertInputProducesParserOutput("def func(qwer=1234, asdf):", new NumericInstruction(1234)));
         }
     }
 
@@ -73,10 +73,10 @@ public static class FunctionInstructionTests
             var functionVariable = new FunctionVariable(
                 "func",
                 parameters: 
-                [
+                new ParameterSet([
                     new VariableInstruction("asdf"),
                     new VariableInstruction("qwer")
-                ],
+                ]),
                 instructions: [
                     new ReturnInstruction(
                         new OperationInstruction(

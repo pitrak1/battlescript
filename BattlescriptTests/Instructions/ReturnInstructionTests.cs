@@ -26,7 +26,7 @@ public static class ReturnInstructionTests
 
             var funcVariable = new FunctionVariable(
                 "func",
-                [new VariableInstruction("asdf")],
+                new ParameterSet([new VariableInstruction("asdf")]),
                 [
                     new ReturnInstruction(
                         new OperationInstruction(
