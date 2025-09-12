@@ -93,9 +93,4 @@ public abstract class Variable
     {
         throw new InterpreterInvalidIndexException(this);
     }
-    
-    public virtual Variable Operate(Memory memory, string operation, Variable? other, bool isTransposed = false)
-    {
-        throw new InterpreterInvalidIndexException(this);
-    }
 }

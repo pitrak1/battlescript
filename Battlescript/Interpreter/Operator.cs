@@ -72,10 +72,91 @@ public static class Operator
         {
             return ConductObjectOperation();
         }
+        else if (left is StringVariable || right is StringVariable)
+        {
+            return ConductStringOperation();
+        }
+        else if (left is NumericVariable leftNumeric && right is NumericVariable rightNumeric)
+        {
+            return ConductBinaryNumericOperation(leftNumeric, rightNumeric);
+        } else if (left is null && right is NumericVariable rightUnaryNumeric)
+        {
+            return ConductUnaryNumericOperation(rightUnaryNumeric);
+        }
+        else if (left is SequenceVariable leftSequence && right is SequenceVariable rightSequence)
+        {
+            return ConductBinarySequenceOperation(leftSequence, rightSequence);
+        }
+        else if (left is SequenceVariable leftSequence2 && right is NumericVariable rightNumeric2)
+        {
+            return ConductNumericSequenceOperation(leftSequence2, rightNumeric2);
+        }
+        else if (left is NumericVariable leftNumeric2 && right is SequenceVariable rightSequence2)
+        {
+            return ConductNumericSequenceOperation(rightSequence2, leftNumeric2);
+        }
         else
         {
-            return ConductStandardOperation();
+            throw new InterpreterInvalidOperationException(operation, left, right);
         }
+
+        Variable ConductBinarySequenceOperation(SequenceVariable leftSequence, SequenceVariable rightSequence)
+        {
+            switch (operation)
+            {
+                case "+":
+                    return new SequenceVariable(leftSequence.Values.Concat(rightSequence.Values).ToList());
+                case "==":
+                    return CompareSequences(leftSequence, rightSequence) ? new NumericVariable(1) : new NumericVariable(0);
+                default:
+                    throw new InterpreterInvalidOperationException(operation, left, right);
+            }
+            
+            bool CompareSequences(SequenceVariable sequence1, SequenceVariable sequence2)
+            {
+                if (sequence1.Values.Count != sequence2.Values.Count)
+                {
+                    return false;
+                }
+            
+                for (var i = 0; i < sequence1.Values.Count; i++)
+                {
+                    if (!sequence1.Values[i].Equals(sequence2.Values[i]))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        Variable ConductNumericSequenceOperation(SequenceVariable sequence, NumericVariable numeric)
+        {
+            switch (operation)
+            {
+                case "*":
+                    return MultiplySequence();
+                case "==":
+                    return new NumericVariable(0);
+                default:
+                    throw new InterpreterInvalidOperationException(operation, left, right);
+            }
+            
+            Variable MultiplySequence()
+            {
+                var values = new List<Variable>();
+                for (var i = 0; i < numeric.Value; i++)
+                {
+                    foreach (var value in sequence.Values)
+                    {
+                        values.Add(value);
+                    }
+                }
+                return new SequenceVariable(values);
+            }
+        }
+        
         
         Variable ConductBooleanOperation()
         {
@@ -221,18 +302,157 @@ public static class Operator
             }
         }
         
-        Variable ConductStandardOperation()
+        Variable ConductStringOperation()
         {
-            if (left is not null)
+            switch (operation)
             {
-                return left.Operate(memory, operation, right);
-            } else if (right is not null)
-            {
-                return right.Operate(memory, operation, left, true);
+                case "+":
+                    var leftString = ConvertToString(left);
+                    var rightString = ConvertToString(right);
+                    return new StringVariable(leftString + rightString);
+                case "==":
+                    if (left is StringVariable leftEqualsString && right is StringVariable rightEqualsString)
+                    {
+                        return memory.Create(Memory.BsTypes.Bool, leftEqualsString.Value == rightEqualsString.Value);
+                    }
+                    else
+                    {
+                        throw new InterpreterInvalidOperationException(operation, left, right);
+                    }
+                case "!=":
+                    if (left is StringVariable leftNotEqualsString && right is StringVariable rightNotEqualsString)
+                    {
+                        return memory.Create(Memory.BsTypes.Bool, leftNotEqualsString.Value == rightNotEqualsString.Value);
+                    }
+                    else
+                    {
+                        throw new InterpreterInvalidOperationException(operation, left, right);
+                    }
+                case "*":
+                    if (left is StringVariable leftStringVariable && right is NumericVariable rightNumericVariable)
+                    {
+                        return MultiplyString(leftStringVariable, rightNumericVariable);
+                    }
+                    else if (left is NumericVariable leftNumericVariable &&
+                             right is StringVariable rightStringVariable)
+                    {
+                        return MultiplyString(rightStringVariable, leftNumericVariable);
+                    }
+                    else
+                    {
+                        throw new InterpreterInvalidOperationException(operation, left, right);
+                    }
+                default:
+                    throw new InterpreterInvalidOperationException(operation, left, right);
             }
-            else
+            
+            
+            
+            string ConvertToString(Variable variable)
             {
-                throw new InterpreterInvalidOperationException(operation, left, right);
+                if (variable is StringVariable stringVariable)
+                {
+                    return stringVariable.Value;
+                }
+                else if (variable is NumericVariable numericVariable)
+                {
+                    return numericVariable.Value.ToString();
+                }
+                else
+                {
+                    throw new InterpreterInvalidOperationException(operation, left, right);
+                }
+            }
+
+            Variable MultiplyString(StringVariable stringVariable, NumericVariable numericVariable)
+            {
+                var stringValue = stringVariable.Value;
+                var numericValue = numericVariable.Value;
+                var result = "";
+                for (var i = 0; i < numericValue; i++)
+                {
+                    result += stringValue;
+                }
+                return new StringVariable(result);
+            }
+        }
+        
+        Variable ConductBinaryNumericOperation(NumericVariable leftNumeric, NumericVariable rightNumeric)
+        {
+            switch (operation)
+            {
+                case "**":
+                    return new NumericVariable(Math.Pow(leftNumeric.Value, rightNumeric.Value));
+                case "*":
+                    return new NumericVariable(leftNumeric.Value * rightNumeric.Value);
+                case "/":
+                    return new NumericVariable((double)leftNumeric.Value / (double)rightNumeric.Value);
+                case "//":
+                    return new NumericVariable(Math.Floor((double)leftNumeric.Value / (double)rightNumeric.Value));
+                case "%":
+                    return new NumericVariable(leftNumeric.Value % rightNumeric.Value);
+                case "+":
+                    return new NumericVariable(leftNumeric.Value + rightNumeric.Value);
+                case "-":
+                    return new NumericVariable(leftNumeric.Value - rightNumeric.Value);
+                case "==":
+                    return new NumericVariable(Math.Abs(leftNumeric.Value - rightNumeric.Value) <
+                                               Consts.FloatingPointTolerance
+                        ? 1
+                        : 0);
+                case "!=":
+                    return new NumericVariable(Math.Abs(leftNumeric.Value - rightNumeric.Value) >
+                                               Consts.FloatingPointTolerance
+                        ? 1
+                        : 0);
+                case ">":
+                    var gValue = leftNumeric.Value > rightNumeric.Value;
+                    return new NumericVariable(gValue ? 1 : 0);
+                case ">=":
+                    var geValue = leftNumeric.Value >= rightNumeric.Value;
+                    return new NumericVariable(geValue ? 1 : 0);
+                case "<":
+                    var lValue = leftNumeric.Value < rightNumeric.Value;
+                    return new NumericVariable(lValue ? 1 : 0);
+                case "<=":
+                    var leValue = leftNumeric.Value <= rightNumeric.Value;
+                    return new NumericVariable(leValue ? 1 : 0);
+                case "+=":
+                    leftNumeric.Value += rightNumeric.Value;
+                    return new ConstantVariable();
+                case "-=":
+                    leftNumeric.Value -= rightNumeric.Value;
+                    return new ConstantVariable();
+                case "*=":
+                    leftNumeric.Value *= rightNumeric.Value;
+                    return new ConstantVariable();
+                case "/=":
+                    leftNumeric.Value /= (double)rightNumeric.Value;
+                    return new ConstantVariable();
+                case "//=":
+                    leftNumeric.Value = Math.Floor((double)leftNumeric.Value / (double)rightNumeric.Value);
+                    return new ConstantVariable();
+                case "%=":
+                    leftNumeric.Value %= rightNumeric.Value;
+                    return new ConstantVariable();
+                case "**=":
+                    leftNumeric.Value = Math.Pow(leftNumeric.Value, rightNumeric.Value);
+                    return new ConstantVariable();
+                default:
+                    throw new InterpreterInvalidOperationException(operation, left, right);
+            }
+        }
+        
+        Variable ConductUnaryNumericOperation(NumericVariable numeric)
+        {
+            switch (operation)
+            {
+                case "-":
+                    return new NumericVariable(-numeric.Value);
+                case "+":
+                    return new NumericVariable(numeric.Value);
+                default:
+                    throw new InterpreterInvalidOperationException(operation, left, right);
             }
         }
     }

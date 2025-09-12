@@ -6,9 +6,7 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=1152fe90_002D8469_002D4773_002D933e_002D6f1da7e95f59/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;BattlescriptTests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Project Location="/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests" Presentation="&amp;lt;BattlescriptTests&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4bde3015_002D5f0f_002D4453_002D8bfc_002D64d7c0f1d0d0/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ArgumentSetTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;Project Location="/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests" Presentation="&amp;lt;BattlescriptTests&amp;gt;" /&gt;
-&lt;/SessionState&gt;</s:String>
+	
 	
 	
 	
@@ -30,6 +28,9 @@
   &lt;TestAncestor&gt;
     &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.Instructions.BuiltInTypeTests&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f3959162_002Dfd07_002D4813_002Db93d_002D1e206e54dbc7/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;BattlescriptTests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests" Presentation="&amp;lt;BattlescriptTests&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String>
 	
 	

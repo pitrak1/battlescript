@@ -423,4 +423,120 @@ public static class OperatorTests
             Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Int, 11));
         }
     }
+
+    [TestFixture]
+    public class NumericOperations
+    {
+        Memory _memory;
+        [SetUp]
+        public void SetUp()
+        {
+            _memory = Runner.Run("");
+        }
+        
+         [Test]
+         public void HandlesNumericOperators()
+         {
+             var result = Operator.Operate(_memory, "+", new NumericVariable(5), new NumericVariable(10));
+             Assertions.AssertVariablesEqual(result, new NumericVariable(15));
+         }
+         
+         [Test]
+         public void HandlesComparisonOperators()
+         {
+             var result = Operator.Operate(_memory, ">=", new NumericVariable(5), new NumericVariable(2));
+             Assertions.AssertVariablesEqual(result, new NumericVariable(1));
+         }
+         
+         [Test]
+         public void HandlesUnaryNumericOperators()
+         {
+             var result = Operator.Operate(_memory, "-", null, new NumericVariable(5));
+             Assertions.AssertVariablesEqual(result, new NumericVariable(-5));
+         }
+    }
+
+    [TestFixture]
+    public class SequenceOperations
+    {
+         private Memory _memory;
+         
+         [SetUp]
+         public void Setup()
+         {
+             _memory = Runner.Run("");
+         }
+         
+         [Test]
+         public void HandlesAdditionOperator()
+         {
+             var seq1 = new SequenceVariable([
+                 new NumericVariable(1), 
+                 new NumericVariable(2), 
+                 new NumericVariable(3)]);
+             var seq2 = new SequenceVariable([
+                 new NumericVariable(4),
+                 new NumericVariable(5),
+                 new NumericVariable(6)
+             ]);
+             var result = Operator.Operate(_memory, "+", seq1, seq2);
+             Assertions.AssertVariablesEqual(result, new SequenceVariable([
+                 new NumericVariable(1), 
+                 new NumericVariable(2), 
+                 new NumericVariable(3),
+                 new NumericVariable(4),
+                 new NumericVariable(5),
+                 new NumericVariable(6)]));
+         }
+         
+         [Test]
+         public void HandlesMultiplyOperator()
+         {
+             var seq = new SequenceVariable([
+                 new NumericVariable(1), 
+                 new NumericVariable(2), 
+                 new NumericVariable(3)]);
+             var result = Operator.Operate(_memory, "*", seq, new NumericVariable(3));
+             Assertions.AssertVariablesEqual(result, new SequenceVariable([
+                 new NumericVariable(1), 
+                 new NumericVariable(2), 
+                 new NumericVariable(3),
+                 new NumericVariable(1), 
+                 new NumericVariable(2), 
+                 new NumericVariable(3),
+                 new NumericVariable(1),
+                 new NumericVariable(2),
+                 new NumericVariable(3)]));
+         }
+         
+         [Test]
+         public void HandlesTrueEqualityOperator()
+         {
+             var seq1 = new SequenceVariable([
+                 new NumericVariable(1), 
+                 new NumericVariable(2), 
+                 new NumericVariable(3)]);
+             var seq2 = new SequenceVariable([
+                 new NumericVariable(1), 
+                 new NumericVariable(2), 
+                 new NumericVariable(3)]);
+             var result = Operator.Operate(_memory, "==", seq1, seq2);
+             Assertions.AssertVariablesEqual(result, new NumericVariable(1));
+         }
+         
+         [Test]
+         public void HandlesFalseEqualityOperator()
+         {
+             var seq1 = new SequenceVariable([
+                 new NumericVariable(1), 
+                 new NumericVariable(2), 
+                 new NumericVariable(3)]);
+             var seq2 = new SequenceVariable([
+                 new NumericVariable(1), 
+                 new NumericVariable(2), 
+                 new NumericVariable(4)]);
+             var result = Operator.Operate(_memory, "==", seq1, seq2);
+             Assertions.AssertVariablesEqual(result, new NumericVariable(0));
+         }
+    }
 }
