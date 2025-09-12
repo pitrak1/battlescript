@@ -539,4 +539,60 @@ public static class OperatorTests
              Assertions.AssertVariablesEqual(result, new NumericVariable(0));
          }
     }
+    
+    [TestFixture]
+    public class StringOperations
+    {
+         private Memory _memory;
+         
+         [SetUp]
+         public void Setup()
+         {
+             _memory = Runner.Run("");
+         }
+         
+         [Test]
+         public void HandlesAdditionOperator()
+         {
+             var string1 = new StringVariable("asdf");
+             var string2 = new StringVariable("qwer");
+             var result = Operator.Operate(_memory, "+", string1, string2);
+             Assertions.AssertVariablesEqual(result, new StringVariable("asdfqwer"));
+         }
+         
+         [Test]
+         public void HandlesMultiplyOperator()
+         {
+             var string1 = new StringVariable("asdf");
+             var result = Operator.Operate(_memory, "*", string1, new NumericVariable(3));
+             Assertions.AssertVariablesEqual(result, new StringVariable("asdfasdfasdf"));
+         }
+         
+         [Test]
+         public void HandlesTrueEqualityOperator()
+         {
+             var string1 = new StringVariable("asdf");
+             var string2 = new StringVariable("asdf");
+             var result = Operator.Operate(_memory, "==", string1, string2);
+             Assertions.AssertVariablesEqual(result, new NumericVariable(1));
+         }
+         
+         [Test]
+         public void HandlesFalseEqualityOperator()
+         {
+             var string1 = new StringVariable("asdf");
+             var string2 = new StringVariable("qwer");
+             var result = Operator.Operate(_memory, "==", string1, string2);
+             Assertions.AssertVariablesEqual(result, new NumericVariable(0));
+         }
+
+         [Test]
+         public void ConvertsNumericToStringForAddition()
+         {
+             var string1 = new StringVariable("asdf");
+             var numeric = new NumericVariable(6);
+             var result = Operator.Operate(_memory, "+", string1, numeric);
+             Assertions.AssertVariablesEqual(result, new StringVariable("asdf6"));
+         }
+    }
 }

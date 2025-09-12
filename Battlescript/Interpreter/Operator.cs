@@ -313,7 +313,7 @@ public static class Operator
                 case "==":
                     if (left is StringVariable leftEqualsString && right is StringVariable rightEqualsString)
                     {
-                        return memory.Create(Memory.BsTypes.Bool, leftEqualsString.Value == rightEqualsString.Value);
+                        return new NumericVariable(leftEqualsString.Value == rightEqualsString.Value ? 1 : 0);
                     }
                     else
                     {
@@ -322,7 +322,7 @@ public static class Operator
                 case "!=":
                     if (left is StringVariable leftNotEqualsString && right is StringVariable rightNotEqualsString)
                     {
-                        return memory.Create(Memory.BsTypes.Bool, leftNotEqualsString.Value == rightNotEqualsString.Value);
+                        return new NumericVariable(leftNotEqualsString.Value != rightNotEqualsString.Value ? 0 : 1);
                     }
                     else
                     {
