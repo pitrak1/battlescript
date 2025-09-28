@@ -60,4 +60,47 @@ public class FloatTests
                                 """);
         Assertions.AssertVariable(memory, "a", new NumericVariable(15));
     }
+    
+    public class Conversions
+    {
+        [Test]
+        public void InternalString()
+        {
+            var memory = Runner.Run("""
+                                    x = __string__("1.45")
+                                    y = float(x)
+                                    """);
+            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Float, new NumericVariable(1.45)));
+        }
+
+        [Test]
+        public void String()
+        {
+            var memory = Runner.Run("""
+                                    x = "1.69"
+                                    y = float(x)
+                                    """);
+            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Float, new NumericVariable(1.69)));
+        }
+        
+        [Test]
+        public void InternalNumeric()
+        {
+            var memory = Runner.Run("""
+                                    x = __numeric__(1.45)
+                                    y = float(x)
+                                    """);
+            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Float, new NumericVariable(1.45)));
+        }
+        
+        [Test]
+        public void Int()
+        {
+            var memory = Runner.Run("""
+                                    x = 5
+                                    y = float(x)
+                                    """);
+            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Float, new NumericVariable(5.0)));
+        }
+    }
 }

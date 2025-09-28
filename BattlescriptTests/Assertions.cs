@@ -375,7 +375,17 @@ public static class Assertions
         
         void CompareNumericVariables(NumericVariable input, NumericVariable expected)
         {
-            Assert.That(input.Value, Is.EqualTo(expected.Value));
+            if (input.Value is int)
+            {
+                Assert.That(input.Value, Is.EqualTo(expected.Value));;
+            } else if (input.Value is double)
+            {
+                Assert.That(input.Value, Is.InRange(expected.Value - Consts.FloatingPointTolerance, expected.Value + Consts.FloatingPointTolerance));
+            }
+            else
+            {
+                throw new Exception("Expected an int or float for numeric variable, got " + input.Value + " of type " + input.Value.GetType().Name);
+            }
         }
 
         void CompareSequenceVariables(SequenceVariable input, SequenceVariable expected)

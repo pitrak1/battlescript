@@ -1,6 +1,12 @@
 class int(numeric):
     __value = __numeric__(0)
 
+    def __init__(self, value):
+        if isinstance(value, int):
+            self.__value = value.__value
+        else:
+            self.__value = __numeric__(value, True)
+
     def __add__(self, other):
         if isinstance(other, float):
             return float(self.__value + other.__value)
