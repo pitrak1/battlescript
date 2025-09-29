@@ -62,6 +62,38 @@ public static class ControlFlowTests
             var expected = memory.Create(Memory.BsTypes.Int, 9);
             Assertions.AssertVariable(memory, "x", expected);
         }
+
+        [Test]
+        public void SupportsFalsyValuesAsExpressions()
+        {
+            var input = """
+                        x = ""
+                        y = 4
+                        if x:
+                            y = 5
+                        else:
+                            y = 6
+                        """;
+            var memory = Runner.Run(input);
+            var expected = memory.Create(Memory.BsTypes.Int, 6);
+            Assertions.AssertVariable(memory, "y", expected);
+        }
+        
+        [Test]
+        public void SupportsTruthyValuesAsExpressions()
+        {
+            var input = """
+                        x = 1234
+                        y = 4
+                        if x:
+                            y = 5
+                        else:
+                            y = 6
+                        """;
+            var memory = Runner.Run(input);
+            var expected = memory.Create(Memory.BsTypes.Int, 5);
+            Assertions.AssertVariable(memory, "y", expected);
+        }
     }
     
     [TestFixture]

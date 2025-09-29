@@ -1,4 +1,11 @@
 class bool(int):
+    def __init__(self, value):
+        self.__value = __numeric__(0)
+        if value:
+            self.__value = __numeric__(1)
+        else:
+            self.__value = __numeric__(0)
+
     def __str__(self):
         if self.__value:
             return "True"

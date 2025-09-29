@@ -27,9 +27,11 @@ public static class Postparser
     {
         for (var i = 0; i < instructions.Count; i++)
         {
+            Instruction currentInstruction = instructions[i];
+            
             if (instructions[i] is IfInstruction)
             {
-                Instruction currentInstruction = instructions[i];
+                
                 while (i + 1 < instructions.Count && instructions[i + 1] is ElseInstruction elseInstruction)
                 {
                     if (currentInstruction is IfInstruction ifInstruction)
@@ -44,6 +46,8 @@ public static class Postparser
                     instructions.RemoveAt(i + 1);
                 }
             }
+            
+            JoinIfElse(currentInstruction.Instructions);
         }
     }
     
