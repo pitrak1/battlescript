@@ -20,12 +20,15 @@ public static class BuiltInLen
         }
         else if (firstExpression is ObjectVariable objectVariable)
         {
-            if (memory.Is(Memory.BsTypes.List, objectVariable))
+            var lenFunc = objectVariable.GetMember(memory, new MemberInstruction("__len__"));
+            if (lenFunc is FunctionVariable funcVariable)
             {
-                var value = objectVariable.Values["__value"] as SequenceVariable;
-                return memory.Create(Memory.BsTypes.Int, value.Values.Count);
+                return funcVariable.RunFunction(memory, new ArgumentSet([objectVariable]));
             }
-            throw new Exception("Bad arguments, clean this up later");
+            else
+            {
+                throw new Exception("Bad arguments, clean this up later");
+            }
         }
         else
         {

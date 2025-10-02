@@ -13,6 +13,9 @@ class str:
         else:
             return False
 
+    def __len__(self):
+        return len(self.__value)
+
     def __str__(self):
         return self.__value
 
