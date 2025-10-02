@@ -182,5 +182,21 @@ public class TruthinessTests
             var result = Truthiness.IsTruthy(_memory, variable);
             Assert.IsFalse(result);
         }
+        
+        [Test]
+        public void NonEmptyStringReturnsTrue()
+        {
+            var variable = _memory.Create(Memory.BsTypes.String, new StringVariable("Hello"));
+            var result = Truthiness.IsTruthy(_memory, variable);
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void EmptyStringReturnsFalse()
+        {
+            var variable = _memory.Create(Memory.BsTypes.String, new StringVariable(""));
+            var result = Truthiness.IsTruthy(_memory, variable);
+            Assert.IsFalse(result);
+        }
     }
 }

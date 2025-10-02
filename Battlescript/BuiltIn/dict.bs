@@ -14,4 +14,7 @@ class dict:
     def __setitem__(self, key, value):
         self.__value[key] = value
 
+    def __bool__(self):
+        return 0 < len(self.__value)
+
     

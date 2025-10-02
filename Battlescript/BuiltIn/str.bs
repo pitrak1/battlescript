@@ -16,6 +16,9 @@ class str:
     def __len__(self):
         return len(self.__value)
 
+    def __bool__(self):
+        return 0 < len(self.__value)
+
     def __str__(self):
         return self.__value
 

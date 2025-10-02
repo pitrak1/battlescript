@@ -44,6 +44,10 @@ public static class StringUtilities
         {
             return constantVariable.Value.ToString();
         }
+        else if (variable is NumericVariable numericVariable)
+        {
+            return numericVariable.Value.ToString();
+        }
         else
         {
             throw new Exception("Bad arguments, clean this up later");

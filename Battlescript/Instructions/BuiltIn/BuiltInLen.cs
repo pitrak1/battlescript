@@ -18,6 +18,11 @@ public static class BuiltInLen
         {
             return memory.Create(Memory.BsTypes.Int, sequenceVariable.Values.Count);
         }
+        else if (firstExpression is MappingVariable mappingVariable)
+        {
+            return memory.Create(Memory.BsTypes.Int,
+                mappingVariable.IntValues.Count + mappingVariable.StringValues.Count > 0);
+        }
         else if (firstExpression is ObjectVariable objectVariable)
         {
             var lenFunc = objectVariable.GetMember(memory, new MemberInstruction("__len__"));
