@@ -22,9 +22,7 @@
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=a4cdf9f3_002Db5bd_002D440a_002Dba0f_002D9dc956481eab/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Conversions" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.BuiltIn.BoolTests+Conversions&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+  &lt;Project Location="/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests" Presentation="&amp;lt;BattlescriptTests&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String>
 	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b0b3402a_002D64f4_002D4080_002D8a3d_002D93c928baba8d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Stacktrace" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;

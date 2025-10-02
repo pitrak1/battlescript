@@ -43,7 +43,7 @@ public class ArgumentSet
         var variableDictionary = GetVariableDictionary(memory, parameters);
         foreach (var (name, value) in variableDictionary)
         {
-            memory.SetVariable(new VariableInstruction(name), value);
+            memory.AddVariableToLastScope(new VariableInstruction(name), value);
         }
     }
 
