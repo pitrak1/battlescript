@@ -84,10 +84,6 @@ public static class InstructionFactory
         {
             return new PrincipleTypeInstruction(tokens);
         }
-        else if (tokens[0].Type == Consts.TokenTypes.BuiltIn)
-        {
-            return new BuiltInInstruction(tokens);
-        }
         else if (commaIndex != -1 || colonIndex != -1)
         {
             return new ArrayInstruction(tokens);
@@ -123,6 +119,10 @@ public static class InstructionFactory
         else if (tokens[0].Type == Consts.TokenTypes.Numeric)
         {
             return new NumericInstruction(tokens);
+        }
+        else if (tokens[0].Type == Consts.TokenTypes.BuiltIn)
+        {
+            return new BuiltInInstruction(tokens);
         }
         else
         {
