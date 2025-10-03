@@ -53,9 +53,21 @@ public static class Operator
         {"//=", "__ifloordiv__"},
         {"%=", "__imod__"},
         {"**=", "__ipow__"},
-        
     };
-
+    
+    private static readonly Dictionary<string, string> ReversedOperationToOverrideMap = new()
+    {
+        {"-", "__rsub__"},
+        {"/", "__rtruediv__"},
+        {"//", "__rfloordiv__"},
+        {"%", "__rmod__"},
+        {"**", "__rpow__"},
+        {"<", "__rlt__"},
+        {"<=", "__rle__"},
+        {">", "__rgt__"},
+        {">=", "__rge__"},
+    };
+    
     private static readonly Dictionary<string, string> UnaryOperationToOverrideMap = new()
     {
         { "+", "__pos__" },
@@ -260,7 +272,7 @@ public static class Operator
                 }
                 else
                 {
-                    return rightOverride.RunFunction(memory, new ArgumentSet([right, left]), originalInstruction);
+                    return rightOverride.RunFunction(memory, new ArgumentSet([left, right]), originalInstruction);
                 }
             }
             else
@@ -271,30 +283,49 @@ public static class Operator
 
             (FunctionVariable? Left, FunctionVariable? Right) GetOverride()
             {
-                string overrideName;
-                if (left is null || right is null)
-                {
-                    UnaryOperationToOverrideMap.TryGetValue(operation, out overrideName);
-                }
-                else
-                {
-                    OperationToOverrideMap.TryGetValue(operation, out overrideName);
-                }
-                
-                if (overrideName is null)
-                {
-                    throw new InterpreterInvalidOperationException(operation, left, right);
-                }
-                
                 FunctionVariable? leftFunc = null;
                 if (left is ObjectVariable leftObject)
                 {
+                    string overrideName;
+                    if (right is null)
+                    {
+                        UnaryOperationToOverrideMap.TryGetValue(operation, out overrideName);
+                    }
+                    else
+                    {
+                        OperationToOverrideMap.TryGetValue(operation, out overrideName);
+                    }
+                    
+                    if (overrideName is null)
+                    {
+                        throw new InterpreterInvalidOperationException(operation, left, right);
+                    }
+                    
                     leftFunc = leftObject.GetMember(memory, new MemberInstruction(overrideName)) as FunctionVariable;
                 }
             
                 FunctionVariable? rightFunc = null;
                 if (right is ObjectVariable rightObject)
                 {
+                    string overrideName;
+                    if (left is null)
+                    {
+                        UnaryOperationToOverrideMap.TryGetValue(operation, out overrideName);
+                    }
+                    else if (ReversedOperationToOverrideMap.Keys.Contains(operation))
+                    {
+                        ReversedOperationToOverrideMap.TryGetValue(operation, out overrideName);
+                    } 
+                    else
+                    {
+                        OperationToOverrideMap.TryGetValue(operation, out overrideName);
+                    }
+                    
+                    if (overrideName is null)
+                    {
+                        throw new InterpreterInvalidOperationException(operation, left, right);
+                    }
+                    
                     rightFunc = rightObject.GetMember(memory, new MemberInstruction(overrideName)) as FunctionVariable;
                 }
                 

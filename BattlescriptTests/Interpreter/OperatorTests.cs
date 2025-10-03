@@ -398,6 +398,28 @@ public static class OperatorTests
                 x);
             Assertions.AssertVariablesEqual(result, memory.Create(Memory.BsTypes.Int, 5));
         }
+        
+        [Test]
+        public void UsesReversedMethodIfNonCommutativeOperatorAndRightHasOverride()
+        {
+            var memory = Runner.Run("""
+                                    class asdf:
+                                        def __sub__(self, other):
+                                            return 5
+                                            
+                                        def __rsub__(self, other):
+                                            return 10
+                                            
+                                    x = asdf()
+                                    """);
+            var x = memory.GetVariable("x");
+            var result = Operator.Operate(
+                memory,
+                "-",
+                new StringVariable("asdf"),
+                x);
+            Assertions.AssertVariablesEqual(result, memory.Create(Memory.BsTypes.Int, 10));
+        }
     }
 
     [TestFixture]
