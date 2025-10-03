@@ -21,40 +21,39 @@ public class ImportInstruction : Instruction
 
         FilePath = tokens[1].Value;
         FileName = Path.GetFileNameWithoutExtension(FilePath);
-        InitializeImportNames();
-        return;
-
-        void InitializeImportNames()
-        { 
-            if (tokens.Count == 4 && tokens[3].Value == "*")
+        InitializeImportNames(tokens);
+    }
+    
+    private void InitializeImportNames(List<Token> tokens)
+    { 
+        if (tokens.Count == 4 && tokens[3].Value == "*")
+        {
+            ImportNames = ["*"];
+        }
+        else
+        {
+            var importNamesTokens = tokens.GetRange(3, tokens.Count - 3);
+            var instruction = InstructionFactory.Create(importNamesTokens);
+            
+            if (instruction is VariableInstruction variableInstruction)
+            {
+                ImportNames = [variableInstruction.Name];
+            }
+            else if (instruction is ConstantInstruction)
             {
                 ImportNames = ["*"];
             }
-            else
+            else if (instruction is ArrayInstruction arrayInstruction)
             {
-                var importNamesTokens = tokens.GetRange(3, tokens.Count - 3);
-                var instruction = InstructionFactory.Create(importNamesTokens);
-            
-                if (instruction is VariableInstruction variableInstruction)
+                foreach (var value in arrayInstruction.Values)
                 {
-                    ImportNames = [variableInstruction.Name];
-                }
-                else if (instruction is ConstantInstruction)
-                {
-                    ImportNames = ["*"];
-                }
-                else if (instruction is ArrayInstruction arrayInstruction)
-                {
-                    foreach (var value in arrayInstruction.Values)
+                    if (value is VariableInstruction varInstruction)
                     {
-                        if (value is VariableInstruction varInstruction)
-                        {
-                            ImportNames.Add(varInstruction.Name);
-                        }
-                        else if (value is ConstantInstruction)
-                        {
-                            ImportNames.Add("*");
-                        }
+                        ImportNames.Add(varInstruction.Name);
+                    }
+                    else if (value is ConstantInstruction)
+                    {
+                        ImportNames.Add("*");
                     }
                 }
             }

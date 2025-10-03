@@ -35,7 +35,7 @@ public class ElseInstruction : Instruction
             var condition = Condition.Interpret(memory);
             if (Truthiness.IsTruthy(memory, condition))
             {
-                CreateScopeAndRunInstructions();
+                CreateScopeAndRunInstructions(memory);
 
             } else if (Next is not null)
             {
@@ -44,26 +44,26 @@ public class ElseInstruction : Instruction
         }
         else
         {
-            CreateScopeAndRunInstructions();
+            CreateScopeAndRunInstructions(memory);
         }
         
         return new ConstantVariable();
-
-        void CreateScopeAndRunInstructions()
-        {
-            try {
-                memory.AddScope();
-                foreach (var inst in Instructions)
-                {
-                    inst.Interpret(memory);
-                }
-                memory.RemoveScope();
-            }
-            catch (InternalReturnException e)
+    }
+    
+    private void CreateScopeAndRunInstructions(Memory memory)
+    {
+        try {
+            memory.AddScope();
+            foreach (var inst in Instructions)
             {
-                memory.RemoveScope();
-                throw;
+                inst.Interpret(memory);
             }
+            memory.RemoveScope();
+        }
+        catch (InternalReturnException e)
+        {
+            memory.RemoveScope();
+            throw;
         }
     }
 }

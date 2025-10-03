@@ -95,128 +95,129 @@ public class Lexer(string input, string? fileName = null)
         }
         
         return _tokens;
-
-        string GetLineContents()
+    }
+    
+    
+    private string GetLineContents()
+    {
+        if (input.IndexOf('\n', _index) != -1)
         {
-            if (input.IndexOf('\n', _index) != -1)
-            {
-                return input.Substring(_index, input.IndexOf('\n', _index) - _index);
-            }
-            else
-            {
-                return input.Substring(_index);
-            }
+            return input.Substring(_index, input.IndexOf('\n', _index) - _index);
+        }
+        else
+        {
+            return input.Substring(_index);
+        }
+    }
+    
+    private void HandleNewline(bool includeNewline)
+    {
+        var startingIndex = _index + 1;
+        if (!includeNewline)
+        {
+            startingIndex = _index;
         }
         
-        void HandleNewline(bool includeNewline)
+        // We are assuming indent sizes of 4 spaces or 1 tab
+        var indent = LexerUtilities.GetNextCharactersInCollection(
+            input, 
+            startingIndex,
+            Consts.Indentations,
+            CollectionType.Inclusive
+        );
+    
+        var totalIndent = LexerUtilities.GetIndentValueFromIndentationString(indent);
+        // This is the number of characters in the indent plus the newline
+        _index += indent.Length;
+        if (includeNewline)
         {
-            var startingIndex = _index + 1;
-            if (!includeNewline)
-            {
-                startingIndex = _index;
-            }
-            
-            // We are assuming indent sizes of 4 spaces or 1 tab
-            var indent = LexerUtilities.GetNextCharactersInCollection(
-                input, 
-                startingIndex,
-                Consts.Indentations,
-                CollectionType.Inclusive
-            );
-        
-            var totalIndent = LexerUtilities.GetIndentValueFromIndentationString(indent);
-            // This is the number of characters in the indent plus the newline
-            _index += indent.Length;
-            if (includeNewline)
-            {
-                _index++;
-                // We want to update these before we create the token because we want any errors to be associated to
-                // the indents on the second line, not the return on the first
-                _line++;
-                _lineContents = GetLineContents();
-            }
-            _tokens.Add(new Token(Consts.TokenTypes.Newline, totalIndent.ToString(), _line, fileName, _lineContents));
+            _index++;
+            // We want to update these before we create the token because we want any errors to be associated to
+            // the indents on the second line, not the return on the first
+            _line++;
+            _lineContents = GetLineContents();
         }
-        
-        void HandleNumber()
-        {
-            var numberCharacters = LexerUtilities.GetNextCharactersInCollection(
-                input, 
-                _index, 
-                Consts.NumberCharacters, 
-                CollectionType.Inclusive
-            );
+        _tokens.Add(new Token(Consts.TokenTypes.Newline, totalIndent.ToString(), _line, fileName, _lineContents));
+    }
+    
+    private void HandleNumber()
+    {
+        var numberCharacters = LexerUtilities.GetNextCharactersInCollection(
+            input, 
+            _index, 
+            Consts.NumberCharacters, 
+            CollectionType.Inclusive
+        );
 
-            _tokens.Add(new Token(Consts.TokenTypes.Numeric, numberCharacters, _line, fileName, _lineContents));
-            _index += numberCharacters.Length;
-        }
+        _tokens.Add(new Token(Consts.TokenTypes.Numeric, numberCharacters, _line, fileName, _lineContents));
+        _index += numberCharacters.Length;
+    }
 
-        void HandleString()
+    private void HandleString()
+    {
+        var startingQuoteCollection = new [] { input[_index] };
+        var stringContents = LexerUtilities.GetNextCharactersInCollection(
+            input,
+            _index + 1,
+            startingQuoteCollection,
+            CollectionType.Exclusive,
+            true
+        );
+            
+        if (_index + stringContents.Length + 1 >= input.Length)
         {
-            var startingQuoteCollection = new [] { input[_index] };
-            var stringContents = LexerUtilities.GetNextCharactersInCollection(
-                input,
-                _index + 1,
-                startingQuoteCollection,
-                CollectionType.Exclusive,
-                true
-            );
-                
-            if (_index + stringContents.Length + 1 >= input.Length)
-            {
-                throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "EOL while scanning string literal");
-            }
-            
-            _tokens.Add(new Token(Consts.TokenTypes.String, stringContents, _line, fileName, _lineContents));
-            _index += stringContents.Length + 2;
-        }
-
-        void HandleWord()
-        {
-            var word = LexerUtilities.GetNextCharactersInCollection(
-                input, 
-                _index, 
-                Consts.WordCharacters, 
-                CollectionType.Inclusive
-            );
-            
-            var type = Consts.TokenTypes.Identifier;
-            if (Consts.Keywords.Contains(word))
-            {
-                type = Consts.TokenTypes.Keyword;
-            }
-            else if (Consts.ConstantStrings.Contains(word))
-            {
-                type = Consts.TokenTypes.Constant;
-            }
-            else if (Consts.Operators.Contains(word))
-            {
-                type = Consts.TokenTypes.Operator;
-            }
-            else if (Consts.BuiltInFunctions.Contains(word))
-            {
-                type = Consts.TokenTypes.BuiltIn;
-            }
-            else if (Consts.PrincipleTypes.Contains(word))
-            {
-                type = Consts.TokenTypes.PrincipleType;
-            }
-            
-            _tokens.Add(new Token(type, word, _line, fileName, _lineContents));
-            _index += word.Length;
+            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "EOL while scanning string literal");
         }
         
-        void HandleComment()
+        _tokens.Add(new Token(Consts.TokenTypes.String, stringContents, _line, fileName, _lineContents));
+        _index += stringContents.Length + 2;
+    }
+
+    private void HandleWord()
+    {
+        var word = LexerUtilities.GetNextCharactersInCollection(
+            input, 
+            _index, 
+            Consts.WordCharacters, 
+            CollectionType.Inclusive
+        );
+        
+        var type = Consts.TokenTypes.Identifier;
+        if (Consts.Keywords.Contains(word))
         {
-            // Get all next characters up until the newline
-            var comment = LexerUtilities.GetNextCharactersInCollection(
-                input, 
-                _index,
-                ['\n'], 
-                CollectionType.Exclusive
-            );
-            _index += comment.Length;
+            type = Consts.TokenTypes.Keyword;
         }
+        else if (Consts.ConstantStrings.Contains(word))
+        {
+            type = Consts.TokenTypes.Constant;
+        }
+        else if (Consts.Operators.Contains(word))
+        {
+            type = Consts.TokenTypes.Operator;
+        }
+        else if (Consts.BuiltInFunctions.Contains(word))
+        {
+            type = Consts.TokenTypes.BuiltIn;
+        }
+        else if (Consts.PrincipleTypes.Contains(word))
+        {
+            type = Consts.TokenTypes.PrincipleType;
+        }
+        
+        _tokens.Add(new Token(type, word, _line, fileName, _lineContents));
+        _index += word.Length;
+    }
+    
+    private void HandleComment()
+    {
+        // Get all next characters up until the newline
+        var comment = LexerUtilities.GetNextCharactersInCollection(
+            input, 
+            _index,
+            ['\n'], 
+            CollectionType.Exclusive
+        );
+        _index += comment.Length;
     }
     
 }

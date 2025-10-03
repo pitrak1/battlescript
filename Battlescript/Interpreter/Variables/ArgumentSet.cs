@@ -84,34 +84,35 @@ public class ArgumentSet
         }
 
         return CheckAllArgumentsPresent(variableDictionary);
-        
-        Dictionary<int, Variable> GetPositionalArgumentsAsDictionary()
+    }
+    
+    
+    private Dictionary<int, Variable> GetPositionalArgumentsAsDictionary()
+    {
+        var result = new Dictionary<int, Variable>();
+            
+        for (var i = 0; i < Positionals.Count; i++)
         {
-            var result = new Dictionary<int, Variable>();
-            
-            for (var i = 0; i < Positionals.Count; i++)
-            {
-                result.Add(i, Positionals[i]);
-            }
-            
-            return result;
+            result.Add(i, Positionals[i]);
         }
+            
+        return result;
+    }
 
-        Dictionary<string, Variable> CheckAllArgumentsPresent(Dictionary<string, Variable?> variableDictionary)
+    private Dictionary<string, Variable> CheckAllArgumentsPresent(Dictionary<string, Variable?> variableDictionary)
+    {
+        var result = new Dictionary<string, Variable>();
+        foreach (var (name, value) in variableDictionary)
         {
-            var result = new Dictionary<string, Variable>();
-            foreach (var (name, value) in variableDictionary)
+            if (value is Variable valueVariable)
             {
-                if (value is Variable valueVariable)
-                {
-                    result.Add(name, valueVariable);
-                }
-                else
-                {
-                    throw new InterpreterMissingRequiredArgumentException(name);
-                }
+                result.Add(name, valueVariable);
             }
-            return result;
+            else
+            {
+                throw new InterpreterMissingRequiredArgumentException(name);
+            }
         }
+        return result;
     }
 }
