@@ -15,25 +15,36 @@ public static class Postlexer
         var i = 0;
         while (i < tokens.Count)
         {
-            if (tokens[i].Type == Consts.TokenTypes.Operator && tokens[i].Value == "not")
+            if (IsCurrentTokenNotKeyword() && IsPreviousTokenIsKeyword())
             {
-                if (i > 0 && 
-                    tokens[i - 1].Type == Consts.TokenTypes.Operator && 
-                    tokens[i - 1].Value == "is")
-                {
-                    tokens[i - 1].Value = "is not";
-                    tokens.RemoveAt(i);
-                    continue;
-                } else if (i < tokens.Count - 1 &&
-                           tokens[i + 1].Type == Consts.TokenTypes.Operator &&
-                           tokens[i + 1].Value == "in")
-                {
-                    tokens[i + 1].Value = "not in";
-                    tokens.RemoveAt(i);
-                    continue;
-                }
+                tokens[i - 1].Value = "is not";
+                tokens.RemoveAt(i);
             }
-            i++;
+            else if (IsCurrentTokenNotKeyword() && IsNextTokenInKeyword())
+            {
+                tokens[i + 1].Value = "not in";
+                tokens.RemoveAt(i);
+            }
+            else
+            {
+                i++;
+            }
+        }
+        return;
+
+        bool IsCurrentTokenNotKeyword()
+        {
+            return tokens[i] is { Type: Consts.TokenTypes.Operator, Value: "not" };
+        }
+
+        bool IsPreviousTokenIsKeyword()
+        {
+            return i > 0 && tokens[i - 1] is { Type: Consts.TokenTypes.Operator, Value: "is" };
+        }
+
+        bool IsNextTokenInKeyword()
+        {
+            return i < tokens.Count - 1 && tokens[i + 1] is { Type: Consts.TokenTypes.Operator, Value: "in" };
         }
     }
 
@@ -42,19 +53,23 @@ public static class Postlexer
         var i = 0;
         while (i < tokens.Count)
         {
-            if (tokens[i].Type == Consts.TokenTypes.BuiltIn)
+            if (IsBuiltInToken() && IsNextTokenNotCloseParens())
             {
-                if (i >= tokens.Count - 1 || TokenIsNotParenthesis(tokens[i + 1]))
-                {
-                    throw new InternalRaiseException(Memory.BsTypes.SyntaxError, $"Missing parentheses in call to '{tokens[i].Value}'");
-                }
+                throw new InternalRaiseException(
+                    Memory.BsTypes.SyntaxError, 
+                    $"Missing parentheses in call to '{tokens[i].Value}'");
             }
             i++;
         }
-    
-        bool TokenIsNotParenthesis(Token token)
+
+        bool IsBuiltInToken()
         {
-            return token.Type != Consts.TokenTypes.Separator || token.Value != "(";
+            return tokens[i] is { Type: Consts.TokenTypes.BuiltIn };
+        }
+    
+        bool IsNextTokenNotCloseParens()
+        {
+            return i >= tokens.Count - 1 || tokens[i + 1] is not { Type: Consts.TokenTypes.Separator, Value: "(" };
         }
     }
 
@@ -62,23 +77,20 @@ public static class Postlexer
     {
         List<string> separatorStack = [];
     
-        for (var i = 0; i < tokens.Count; i++)
+        foreach (var token in tokens)
         {
-            var currentToken = tokens[i];
-            if (Consts.OpeningSeparators.Contains(currentToken.Value))
+            if (IsOpeningSeparator(token))
             {
-                separatorStack.Add(currentToken.Value);
-            } else if (Consts.ClosingSeparators.Contains(currentToken.Value))
+                separatorStack.Add(token.Value);
+            } else if (IsClosingSeparator(token))
             {
-                if (Consts.MatchingSeparatorsMap[currentToken.Value] == separatorStack[^1])
+                if (MatchesPreviousOpeningSeparator(token))
                 {
-                    // If the separator matches the top of the stack, pop it off. If the stack is now empty, that means
-                    // we just hit the closing separator of the entire expression, so we add the last entry and exit
                     separatorStack.RemoveAt(separatorStack.Count - 1);
                 }
                 else
                 {
-                    var message = "closing parenthesis '" + currentToken.Value + "' does not match opening parenthesis '" + separatorStack[^1] + "'";
+                    var message = "closing parenthesis '" + token.Value + "' does not match opening parenthesis '" + separatorStack[^1] + "'";
                     throw new InternalRaiseException(Memory.BsTypes.SyntaxError, message);
                 }
             }
@@ -88,6 +100,23 @@ public static class Postlexer
         {
             throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "unexpected EOF while parsing");
         }
+
+        return;
+        
+        bool IsOpeningSeparator(Token t)
+        {
+            return Consts.OpeningSeparators.Contains(t.Value);
+        }
+            
+        bool IsClosingSeparator(Token t)
+        {
+            return Consts.ClosingSeparators.Contains(t.Value);
+        }
+
+        bool MatchesPreviousOpeningSeparator(Token t)
+        {
+            return Consts.MatchingSeparatorsMap[t.Value] == separatorStack[^1];
+        }
     }
 
     private static void CheckForFormattedStrings(List<Token> tokens)
@@ -95,16 +124,27 @@ public static class Postlexer
         var i = 0;
         while (i < tokens.Count)
         {
-            if (tokens[i].Type == Consts.TokenTypes.Identifier && tokens[i].Value == "f")
+            if (IsCurrentTokenFormattedStringIdentifier() && IsNextTokenString())
             {
-                if (i < tokens.Count - 1 && tokens[i + 1].Type == Consts.TokenTypes.String)
-                {
-                    tokens[i + 1].Type = Consts.TokenTypes.FormattedString;
-                    tokens.RemoveAt(i);
-                    continue;
-                }
+                tokens[i + 1].Type = Consts.TokenTypes.FormattedString;
+                tokens.RemoveAt(i);
             }
-            i++;
+            else
+            {
+                i++;
+            }
+        }
+
+        return;
+
+        bool IsCurrentTokenFormattedStringIdentifier()
+        {
+            return tokens[i] is { Type: Consts.TokenTypes.Identifier, Value: "f" };
+        }
+
+        bool IsNextTokenString()
+        {
+            return i < tokens.Count - 1 && tokens[i + 1].Type == Consts.TokenTypes.String;
         }
     }
 }

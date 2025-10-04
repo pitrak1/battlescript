@@ -4,13 +4,13 @@ public class Lexer(string input, string? fileName = null)
 {
     private int _index;
     private int _line = 1;
-    private string _lineContents = "";
-
+    private string _expressionForStacktrace = "";
+    
     private readonly List<Token> _tokens = [];
 
     public List<Token> Run()
     {
-        _lineContents = GetLineContents();
+        _expressionForStacktrace = GetLineContents();
         
         while (_index < input.Length)
         {
@@ -19,13 +19,9 @@ public class Lexer(string input, string? fileName = null)
             
             if (nextCharacter[0] == '\n')
             {
-                HandleNewline(true);
+                HandleReturn();
             }
-            else if (nextCharacter[0] == '\t')
-            {
-                HandleNewline(false);
-            }
-            else if (nextCharacter[0] == '\\' && nextNextCharacter[0] == '\n')
+            else if (IsLineSplitWithBackslash(nextCharacter, nextNextCharacter))
             {
                 _index += 2;
             }
@@ -33,11 +29,7 @@ public class Lexer(string input, string? fileName = null)
             {
                 _index++;
             } 
-            else if (nextCharacter[0] == '.' && Consts.Digits.Contains(nextNextCharacter[0]))
-            {
-                HandleNumber();
-            }
-            else if (Consts.Digits.Contains(nextCharacter[0]))
+            else if (IsNumber(nextCharacter, nextNextCharacter))
             {
                 HandleNumber();
             }
@@ -47,46 +39,30 @@ public class Lexer(string input, string? fileName = null)
             }
             else if (Consts.Separators.Contains(nextCharacter[0]))
             {
-                _tokens.Add(new Token(Consts.TokenTypes.Separator, nextCharacter, _line, fileName, _lineContents));
+                _tokens.Add(new Token(
+                    Consts.TokenTypes.Separator, 
+                    nextCharacter, 
+                    _line, 
+                    fileName, 
+                    _expressionForStacktrace
+                ));
                 _index++;
             }
             else if (Consts.StartingWordCharacters.Contains(nextCharacter[0]))
             {
                 HandleWord();
             }
-            else if (Consts.Operators.Contains(nextCharacter + nextNextCharacter + nextNextNextCharacter))
+            else if (IsOperatorOrAssignment(nextCharacter, nextNextCharacter, nextNextNextCharacter))
             {
-                _tokens.Add(new Token(Consts.TokenTypes.Operator, nextCharacter + nextNextCharacter + nextNextNextCharacter, _line, fileName, _lineContents));
-                _index += 3;
-            }
-            else if (Consts.Assignments.Contains(nextCharacter + nextNextCharacter + nextNextNextCharacter))
-            {
-                _tokens.Add(new Token(Consts.TokenTypes.Assignment, nextCharacter + nextNextCharacter + nextNextNextCharacter, _line, fileName, _lineContents));
-                _index += 3;
-            }
-            else if (Consts.Operators.Contains(nextCharacter + nextNextCharacter))
-            {
-                _tokens.Add(new Token(Consts.TokenTypes.Operator, nextCharacter + nextNextCharacter, _line, fileName, _lineContents));
-                _index += 2;
-            }
-            else if (Consts.Assignments.Contains(nextCharacter + nextNextCharacter))
-            {
-                _tokens.Add(new Token(Consts.TokenTypes.Assignment, nextCharacter + nextNextCharacter, _line, fileName, _lineContents));
-                _index += 2;
-            }
-            else if (Consts.Operators.Contains(nextCharacter))
-            {
-                _tokens.Add(new Token(Consts.TokenTypes.Operator, nextCharacter, _line, fileName, _lineContents));
-                _index++;
-            }
-            else if (Consts.Assignments.Contains(nextCharacter))
-            {
-                _tokens.Add(new Token(Consts.TokenTypes.Assignment, nextCharacter, _line, fileName, _lineContents));
-                _index++;
+                HandleOperatorOrAssignment(nextCharacter, nextNextCharacter, nextNextNextCharacter);
             }
             else if (nextCharacter[0] == '#')
             {
                 HandleComment();
+            }
+            else if (nextCharacter[0] == '\t')
+            {
+                throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "unexpected indent");
             }
             else
             {
@@ -95,8 +71,29 @@ public class Lexer(string input, string? fileName = null)
         }
         
         return _tokens;
+        
+        bool IsLineSplitWithBackslash(string nextCharacter, string nextNextCharacter)
+        {
+            return nextCharacter[0] == '\\' && nextNextCharacter[0] == '\n';
+        }
+
+        bool IsNumber(string nextCharacter, string nextNextCharacter)
+        {
+            var isNumberStartingWithDecimalPoint = nextCharacter[0] == '.' && Consts.Digits.Contains(nextNextCharacter[0]);
+            var isNumberStartingWithDigit = Consts.Digits.Contains(nextCharacter[0]);
+            return isNumberStartingWithDecimalPoint || isNumberStartingWithDigit;
+        }
+        
+        bool IsOperatorOrAssignment(string nextCharacter, string nextNextCharacter, string nextNextNextCharacter)
+        {
+            return Consts.Operators.Contains(nextCharacter + nextNextCharacter + nextNextNextCharacter) || 
+                   Consts.Assignments.Contains(nextCharacter + nextNextCharacter + nextNextNextCharacter) ||
+                   Consts.Operators.Contains(nextCharacter + nextNextCharacter) ||
+                   Consts.Assignments.Contains(nextCharacter + nextNextCharacter) ||
+                   Consts.Operators.Contains(nextCharacter) ||
+                   Consts.Assignments.Contains(nextCharacter);
+        }
     }
-    
     
     private string GetLineContents()
     {
@@ -110,34 +107,34 @@ public class Lexer(string input, string? fileName = null)
         }
     }
     
-    private void HandleNewline(bool includeNewline)
+    private void HandleReturn()
     {
         var startingIndex = _index + 1;
-        if (!includeNewline)
-        {
-            startingIndex = _index;
-        }
         
         // We are assuming indent sizes of 4 spaces or 1 tab
-        var indent = LexerUtilities.GetNextCharactersInCollection(
+        var indentString = LexerUtilities.GetNextCharactersInCollection(
             input, 
             startingIndex,
             Consts.Indentations,
             CollectionType.Inclusive
         );
     
-        var totalIndent = LexerUtilities.GetIndentValueFromIndentationString(indent);
-        // This is the number of characters in the indent plus the newline
-        _index += indent.Length;
-        if (includeNewline)
-        {
-            _index++;
-            // We want to update these before we create the token because we want any errors to be associated to
-            // the indents on the second line, not the return on the first
-            _line++;
-            _lineContents = GetLineContents();
-        }
-        _tokens.Add(new Token(Consts.TokenTypes.Newline, totalIndent.ToString(), _line, fileName, _lineContents));
+        // This is <# of tabs> + floor(<# of spaces>/4)
+        var indentValue = LexerUtilities.GetIndentValueFromIndentationString(indentString);
+        
+        _index += indentString.Length + 1;
+        // We want to update these before we create the token because we want any errors to be associated to
+        // the indents on the second line, not the return on the first
+        _line++;
+        _expressionForStacktrace = GetLineContents();
+        
+        _tokens.Add(new Token(
+            Consts.TokenTypes.Newline, 
+            indentValue.ToString(), 
+            _line, 
+            fileName, 
+            _expressionForStacktrace
+        ));
     }
     
     private void HandleNumber()
@@ -149,7 +146,13 @@ public class Lexer(string input, string? fileName = null)
             CollectionType.Inclusive
         );
 
-        _tokens.Add(new Token(Consts.TokenTypes.Numeric, numberCharacters, _line, fileName, _lineContents));
+        _tokens.Add(new Token(
+            Consts.TokenTypes.Numeric, 
+            numberCharacters, 
+            _line, 
+            fileName, 
+            _expressionForStacktrace
+        ));
         _index += numberCharacters.Length;
     }
 
@@ -169,7 +172,7 @@ public class Lexer(string input, string? fileName = null)
             throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "EOL while scanning string literal");
         }
         
-        _tokens.Add(new Token(Consts.TokenTypes.String, stringContents, _line, fileName, _lineContents));
+        _tokens.Add(new Token(Consts.TokenTypes.String, stringContents, _line, fileName, _expressionForStacktrace));
         _index += stringContents.Length + 2;
     }
 
@@ -204,8 +207,78 @@ public class Lexer(string input, string? fileName = null)
             type = Consts.TokenTypes.PrincipleType;
         }
         
-        _tokens.Add(new Token(type, word, _line, fileName, _lineContents));
+        _tokens.Add(new Token(type, word, _line, fileName, _expressionForStacktrace));
         _index += word.Length;
+    }
+
+    private void HandleOperatorOrAssignment(string nextCharacter, string nextNextCharacter, string nextNextNextCharacter)
+    {
+        if (Consts.Operators.Contains(nextCharacter + nextNextCharacter + nextNextNextCharacter))
+        {
+            _tokens.Add(new Token(
+                Consts.TokenTypes.Operator,
+                nextCharacter + nextNextCharacter + nextNextNextCharacter,
+                _line,
+                fileName,
+                _expressionForStacktrace
+            ));
+            _index += 3;
+        }
+        else if (Consts.Assignments.Contains(nextCharacter + nextNextCharacter + nextNextNextCharacter))
+        {
+            _tokens.Add(new Token(
+                Consts.TokenTypes.Assignment,
+                nextCharacter + nextNextCharacter + nextNextNextCharacter,
+                _line,
+                fileName,
+                _expressionForStacktrace
+            ));
+            _index += 3;
+        }
+        else if (Consts.Operators.Contains(nextCharacter + nextNextCharacter))
+        {
+            _tokens.Add(new Token(
+                Consts.TokenTypes.Operator,
+                nextCharacter + nextNextCharacter,
+                _line,
+                fileName,
+                _expressionForStacktrace
+            ));
+            _index += 2;
+        }
+        else if (Consts.Assignments.Contains(nextCharacter + nextNextCharacter))
+        {
+            _tokens.Add(new Token(
+                Consts.TokenTypes.Assignment,
+                nextCharacter + nextNextCharacter,
+                _line,
+                fileName,
+                _expressionForStacktrace
+            ));
+            _index += 2;
+        }
+        else if (Consts.Operators.Contains(nextCharacter))
+        {
+            _tokens.Add(new Token(
+                Consts.TokenTypes.Operator,
+                nextCharacter,
+                _line,
+                fileName,
+                _expressionForStacktrace
+            ));
+            _index++;
+        }
+        else if (Consts.Assignments.Contains(nextCharacter))
+        {
+            _tokens.Add(new Token(
+                Consts.TokenTypes.Assignment,
+                nextCharacter,
+                _line,
+                fileName,
+                _expressionForStacktrace
+            ));
+            _index++;
+        }
     }
     
     private void HandleComment()
