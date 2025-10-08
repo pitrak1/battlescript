@@ -218,8 +218,8 @@ public static class LexerTests
         [Test]
         public void IncludesEscapedCharactersInStrings()
         {
-            var expected = new List<Token>() { new Token(Consts.TokenTypes.String, """asdf\'asdf""") };
-            Assertions.AssertInputProducesLexerOutput("""'asdf\'asdf'""", expected);
+            var expected = new List<Token>() { new Token(Consts.TokenTypes.String, @"asdf'asdf") };
+            Assertions.AssertInputProducesLexerOutput(@"'asdf\'asdf'", expected);
         }
     }
     

@@ -11,7 +11,7 @@ public static class LexerUtilitiesTests
         [Test]
         public void SimpleInclusiveSearch()
         {
-            var result = LexerUtilities.GetNextCharactersInCollection(
+            var (length, result) = LexerUtilities.GetNextCharactersInCollection(
                 "asdf.",
                 0,
                 Consts.Letters,
@@ -23,7 +23,7 @@ public static class LexerUtilitiesTests
         [Test]
         public void SimpleExclusiveSearch()
         {
-            var result = LexerUtilities.GetNextCharactersInCollection(
+            var (length, result) = LexerUtilities.GetNextCharactersInCollection(
                 "asdf.",
                 0,
                 Consts.Separators,
@@ -36,7 +36,7 @@ public static class LexerUtilitiesTests
         [Test]
         public void RespectsIndex()
         {
-            var result = LexerUtilities.GetNextCharactersInCollection(
+            var (length, result) = LexerUtilities.GetNextCharactersInCollection(
                 "asdf.",
                 2,
                 Consts.Letters,
@@ -44,6 +44,34 @@ public static class LexerUtilitiesTests
             );
 
             Assert.That(result, Is.EqualTo("df"));
+        }
+
+        [Test]
+        public void HandlesEscapedCharactersIfEnabled()
+        {
+            var (length, result) = LexerUtilities.GetNextCharactersInCollection(
+                @"as\.df.",
+                0,
+                Consts.Letters,
+                CollectionType.Inclusive,
+                true
+            );
+
+            Assert.That(result, Is.EqualTo("as.df"));
+        }
+        
+        [Test]
+        public void DoesNotHandlesEscapedCharactersIfNotEnabled()
+        {
+            var (length, result) = LexerUtilities.GetNextCharactersInCollection(
+                @"as\.df.",
+                0,
+                Consts.Letters,
+                CollectionType.Inclusive,
+                false
+            );
+
+            Assert.That(result, Is.EqualTo("as"));
         }
     }
     

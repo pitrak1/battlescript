@@ -10,31 +10,51 @@ public enum CollectionType
 
 public static class LexerUtilities
 {
-    public static string GetNextCharactersInCollection(string input, int index, char[] collection, CollectionType type, bool escapeCharacters = false)
+    public static (int Length, string Result) GetNextCharactersInCollection(
+        string input, 
+        int index, 
+        char[] collection, 
+        CollectionType type, 
+        bool escapeCharacters = false)
     {
+        var startingIndex = index;
         var result = "";
         while (index < input.Length)
         {
-            var current = input[index];
-            if (escapeCharacters && current == '\\')
+            if (EscapeCharacterFound(input[index]))
             {
-                result += input.Substring(index, 2);
-                index += 2;
+                AddEscapedCharacter();
             }
-            // If collection type is Exclusive and the current character is in the collection or if
-            // collection type is Inclusive and the current character is not in the collection
-            else if (collection.Contains(current) == (type == CollectionType.Exclusive))
+            else if (BreakingCharacterFound(input[index]))
             {
                 break;
             }
             else
             {
-                result += current.ToString();
+                result += input[index].ToString();
                 index++;
             }
         }
 
-        return result;
+        return (index - startingIndex, result);
+
+        bool EscapeCharacterFound(char current)
+        {
+            return escapeCharacters && current == '\\';
+        }
+
+        void AddEscapedCharacter()
+        {
+            result += input[index + 1].ToString();
+            index += 2;
+        }
+
+        bool BreakingCharacterFound(char current)
+        {
+            // If collection type is Exclusive and the current character is in the collection or if
+            // collection type is Inclusive and the current character is not in the collection
+            return collection.Contains(current) == (type == CollectionType.Exclusive);
+        }
     }
 
     public static int GetIndentValueFromIndentationString(string indentations)

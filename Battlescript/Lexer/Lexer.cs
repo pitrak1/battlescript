@@ -112,7 +112,7 @@ public class Lexer(string input, string? fileName = null)
         var startingIndex = _index + 1;
         
         // We are assuming indent sizes of 4 spaces or 1 tab
-        var indentString = LexerUtilities.GetNextCharactersInCollection(
+        var (indentLength, indentString) = LexerUtilities.GetNextCharactersInCollection(
             input, 
             startingIndex,
             Consts.Indentations,
@@ -139,7 +139,7 @@ public class Lexer(string input, string? fileName = null)
     
     private void HandleNumber()
     {
-        var numberCharacters = LexerUtilities.GetNextCharactersInCollection(
+        var (numberLength, numberCharacters) = LexerUtilities.GetNextCharactersInCollection(
             input, 
             _index, 
             Consts.NumberCharacters, 
@@ -159,7 +159,7 @@ public class Lexer(string input, string? fileName = null)
     private void HandleString()
     {
         var startingQuoteCollection = new [] { input[_index] };
-        var stringContents = LexerUtilities.GetNextCharactersInCollection(
+        var (stringLength, stringContents) = LexerUtilities.GetNextCharactersInCollection(
             input,
             _index + 1,
             startingQuoteCollection,
@@ -167,18 +167,18 @@ public class Lexer(string input, string? fileName = null)
             true
         );
             
-        if (_index + stringContents.Length + 1 >= input.Length)
+        if (_index + stringLength + 1 >= input.Length)
         {
             throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "EOL while scanning string literal");
         }
         
         _tokens.Add(new Token(Consts.TokenTypes.String, stringContents, _line, fileName, _expressionForStacktrace));
-        _index += stringContents.Length + 2;
+        _index += stringLength + 2;
     }
 
     private void HandleWord()
     {
-        var word = LexerUtilities.GetNextCharactersInCollection(
+        var (length, word) = LexerUtilities.GetNextCharactersInCollection(
             input, 
             _index, 
             Consts.WordCharacters, 
