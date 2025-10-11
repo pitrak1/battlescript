@@ -6,12 +6,12 @@ namespace BattlescriptTests.LexerTests;
 public static class LexerUtilitiesTests
 {
     [TestFixture]
-    public class GetNextCharactersInCollection
+    public class GetNextCharactersInCollectionIncludingEscapes
     {
         [Test]
         public void SimpleInclusiveSearch()
         {
-            var (length, result) = LexerUtilities.GetNextCharactersInCollection(
+            var (length, result) = LexerUtilities.GetNextCharactersInCollectionIncludingEscapes(
                 "asdf.",
                 0,
                 Consts.Letters,
@@ -23,7 +23,7 @@ public static class LexerUtilitiesTests
         [Test]
         public void SimpleExclusiveSearch()
         {
-            var (length, result) = LexerUtilities.GetNextCharactersInCollection(
+            var (length, result) = LexerUtilities.GetNextCharactersInCollectionIncludingEscapes(
                 "asdf.",
                 0,
                 Consts.Separators,
@@ -36,7 +36,7 @@ public static class LexerUtilitiesTests
         [Test]
         public void RespectsIndex()
         {
-            var (length, result) = LexerUtilities.GetNextCharactersInCollection(
+            var (length, result) = LexerUtilities.GetNextCharactersInCollectionIncludingEscapes(
                 "asdf.",
                 2,
                 Consts.Letters,
@@ -47,28 +47,82 @@ public static class LexerUtilitiesTests
         }
 
         [Test]
-        public void HandlesEscapedCharactersIfEnabled()
+        public void HandlesEscapedCharacters()
         {
-            var (length, result) = LexerUtilities.GetNextCharactersInCollection(
+            var (length, result) = LexerUtilities.GetNextCharactersInCollectionIncludingEscapes(
                 @"as\.df.",
                 0,
                 Consts.Letters,
-                CollectionType.Inclusive,
-                true
+                CollectionType.Inclusive
             );
 
             Assert.That(result, Is.EqualTo("as.df"));
         }
         
         [Test]
-        public void DoesNotHandlesEscapedCharactersIfNotEnabled()
+        public void LengthIsNumberOfCharactersIncludingSlashes()
         {
-            var (length, result) = LexerUtilities.GetNextCharactersInCollection(
+            var (length, result) = LexerUtilities.GetNextCharactersInCollectionIncludingEscapes(
+                @"as\.df\.\'",
+                0,
+                Consts.Letters,
+                CollectionType.Inclusive
+            );
+
+            Assert.That(result, Is.EqualTo("as.df.'"));
+            Assert.That(length, Is.EqualTo(10));
+        }
+    }
+    
+    [TestFixture]
+    public class GetNextCharactersInCollection
+    {
+        [Test]
+        public void SimpleInclusiveSearch()
+        {
+            var result = LexerUtilities.GetNextCharactersInCollection(
+                "asdf.",
+                0,
+                Consts.Letters,
+                CollectionType.Inclusive
+            );
+            Assert.That(result, Is.EqualTo("asdf"));
+        }
+        
+        [Test]
+        public void SimpleExclusiveSearch()
+        {
+            var result = LexerUtilities.GetNextCharactersInCollection(
+                "asdf.",
+                0,
+                Consts.Separators,
+                CollectionType.Exclusive
+            );
+
+            Assert.That(result, Is.EqualTo("asdf"));
+        }
+        
+        [Test]
+        public void RespectsIndex()
+        {
+            var result = LexerUtilities.GetNextCharactersInCollection(
+                "asdf.",
+                2,
+                Consts.Letters,
+                CollectionType.Inclusive
+            );
+
+            Assert.That(result, Is.EqualTo("df"));
+        }
+
+        [Test]
+        public void DoesNotHandleEscapedCharacters()
+        {
+            var result = LexerUtilities.GetNextCharactersInCollection(
                 @"as\.df.",
                 0,
                 Consts.Letters,
-                CollectionType.Inclusive,
-                false
+                CollectionType.Inclusive
             );
 
             Assert.That(result, Is.EqualTo("as"));

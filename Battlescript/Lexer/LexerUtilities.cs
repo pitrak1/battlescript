@@ -10,12 +10,42 @@ public enum CollectionType
 
 public static class LexerUtilities
 {
-    public static (int Length, string Result) GetNextCharactersInCollection(
+    public static string GetNextCharactersInCollection(
         string input, 
         int index, 
         char[] collection, 
-        CollectionType type, 
-        bool escapeCharacters = false)
+        CollectionType type)
+    {
+        var startingIndex = index;
+        var result = "";
+        while (index < input.Length)
+        {
+            if (BreakingCharacterFound(input[index]))
+            {
+                break;
+            }
+            else
+            {
+                result += input[index].ToString();
+                index++;
+            }
+        }
+
+        return result;
+
+        bool BreakingCharacterFound(char current)
+        {
+            // If collection type is Exclusive and the current character is in the collection or if
+            // collection type is Inclusive and the current character is not in the collection
+            return collection.Contains(current) == (type == CollectionType.Exclusive);
+        }
+    }
+    
+    public static (int Length, string Result) GetNextCharactersInCollectionIncludingEscapes(
+        string input, 
+        int index, 
+        char[] collection, 
+        CollectionType type)
     {
         var startingIndex = index;
         var result = "";
@@ -40,7 +70,7 @@ public static class LexerUtilities
 
         bool EscapeCharacterFound(char current)
         {
-            return escapeCharacters && current == '\\';
+            return current == '\\';
         }
 
         void AddEscapedCharacter()
@@ -56,6 +86,8 @@ public static class LexerUtilities
             return collection.Contains(current) == (type == CollectionType.Exclusive);
         }
     }
+    
+    
 
     public static int GetIndentValueFromIndentationString(string indentations)
     {

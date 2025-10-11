@@ -112,7 +112,7 @@ public class Lexer(string input, string? fileName = null)
         var startingIndex = _index + 1;
         
         // We are assuming indent sizes of 4 spaces or 1 tab
-        var (indentLength, indentString) = LexerUtilities.GetNextCharactersInCollection(
+        var indentString = LexerUtilities.GetNextCharactersInCollection(
             input, 
             startingIndex,
             Consts.Indentations,
@@ -139,7 +139,7 @@ public class Lexer(string input, string? fileName = null)
     
     private void HandleNumber()
     {
-        var (numberLength, numberCharacters) = LexerUtilities.GetNextCharactersInCollection(
+        var numberCharacters = LexerUtilities.GetNextCharactersInCollection(
             input, 
             _index, 
             Consts.NumberCharacters, 
@@ -159,12 +159,11 @@ public class Lexer(string input, string? fileName = null)
     private void HandleString()
     {
         var startingQuoteCollection = new [] { input[_index] };
-        var (stringLength, stringContents) = LexerUtilities.GetNextCharactersInCollection(
+        var (stringLength, stringContents) = LexerUtilities.GetNextCharactersInCollectionIncludingEscapes(
             input,
             _index + 1,
             startingQuoteCollection,
-            CollectionType.Exclusive,
-            true
+            CollectionType.Exclusive
         );
             
         if (_index + stringLength + 1 >= input.Length)
@@ -178,7 +177,7 @@ public class Lexer(string input, string? fileName = null)
 
     private void HandleWord()
     {
-        var (length, word) = LexerUtilities.GetNextCharactersInCollection(
+        var word = LexerUtilities.GetNextCharactersInCollection(
             input, 
             _index, 
             Consts.WordCharacters, 
