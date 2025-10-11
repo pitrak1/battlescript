@@ -17,21 +17,11 @@ public static class InstructionFactory
         var commaIndex = InstructionUtilities.GetTokenIndex(tokens, [","]);
         var operatorIndex = InstructionUtilities.GetOperatorIndex(tokens);
         
-        var forIndex = -1;
-        if (tokens.Count > 2 && tokens[0].Value == "[" && tokens[^1].Value == "]")
-        {
-            forIndex = InstructionUtilities.GetTokenIndex(tokens.GetRange(1, tokens.Count - 2), ["for"]);
-            if (forIndex != -1)
-            {
-                forIndex += 1;
-            }
-        }
-        
         if (assignmentIndex != -1)
         {
             return new AssignmentInstruction(tokens);
         }
-        else if (tokens[0].Value == "[" && forIndex != -1)
+        else if (IsListComprehension(tokens))
         {
             return new ListComprehensionInstruction(tokens);
         }
@@ -128,5 +118,17 @@ public static class InstructionFactory
         {
             throw new ParserUnexpectedTokenException(tokens[0]);
         }
+    }
+    
+    private static bool IsListComprehension(List<Token> tokens)
+    {
+        // This effectively checks if the list of tokens is wrapped in square brackets and a "for" exists inside
+        if (tokens.Count > 2 && tokens[0].Value == "[" && tokens[^1].Value == "]")
+        {
+            var forIndex = InstructionUtilities.GetTokenIndex(tokens.GetRange(1, tokens.Count - 2), ["for"]);
+            return forIndex != -1;
+        }
+
+        return false;
     }
 }

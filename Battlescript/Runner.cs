@@ -87,4 +87,12 @@ public static class Runner
         Postparser.Run(parserResult);
         return parserResult;
     }
+    
+    public static List<Token> Tokenize(string input)
+    {
+        var lexer = new Lexer(input);
+        var lexerResult = lexer.Run();
+        Postlexer.Run(lexerResult);
+        return lexerResult;
+    }
 }
