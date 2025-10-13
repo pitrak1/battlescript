@@ -14,14 +14,26 @@ class numeric:
     def __lt__(self, other):
         return bool(self.__value < other.__value)
 
+    def __rlt__(self, other):
+        return bool(other.__value < self.__value)
+
     def __gt__(self, other):
         return bool(self.__value > other.__value)
+
+    def __rgt__(self, other):
+        return bool(other.__value > self.__value)
 
     def __le__(self, other):
         return bool(self.__value <= other.__value)
 
+    def __rle__(self, other):
+        return bool(other.__value <= self.__value)
+
     def __ge__(self, other):
         return bool(self.__value >= other.__value)
+
+    def __rge__(self, other):
+        return bool(other.__value >= self.__value)
 
     def __iadd__(self, other):
         if isinstance(other, numeric):

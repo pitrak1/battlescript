@@ -19,6 +19,12 @@ class int(numeric):
         else:
             return int(self.__value - other.__value)
 
+    def __rsub__(self, other):
+        if isinstance(other, float):
+            return float(other.__value - self.__value)
+        else:
+            return int(other.__value - self.__value)
+
     def __mul__(self, other):
         if isinstance(other, float):
             return float(self.__value * other.__value)
@@ -28,8 +34,14 @@ class int(numeric):
     def __truediv__(self, other):
         return float(self.__value / other.__value)
 
+    def __rtruediv__(self, other):
+        return float(other.__value / self.__value)
+
     def __floordiv__(self, other):
         return int(self.__value // other.__value)
+
+    def __rfloordiv__(self, other):
+        return int(other.__value // self.__value)
 
     def __mod__(self, other):
         if isinstance(other, float):
@@ -37,18 +49,27 @@ class int(numeric):
         else:
             return int(self.__value % other.__value)
 
+    def __rmod__(self, other):
+        if isinstance(other, float):
+            return float(other.__value % self.__value)
+        else:
+            return int(other.__value % self.__value)
+
     def __pow__(self, other):
         if isinstance(other, float):
             return float(self.__value ** other.__value)
         else:
             return int(self.__value ** other.__value)
 
+    def __rpow__(self, other):
+        if isinstance(other, float):
+            return float(other.__value ** self.__value)
+        else:
+            return int(other.__value ** self.__value)
+
     def __pos__(self):
         return int(self.__value)
 
     def __neg__(self):
         return int(-self.__value)
-
-    def __str__(self):
-        return str(self.__value)
 

@@ -150,7 +150,7 @@ public static class Consts
 
     public static readonly string[] Operators = [
         "**",
-        "~",
+        "~", // NOT SUPPORTED IN V1
         "*",
         "/",
         "//",
