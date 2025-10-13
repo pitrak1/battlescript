@@ -10,6 +10,8 @@ class int(numeric):
     def __add__(self, other):
         if isinstance(other, float):
             return float(self.__value + other.__value)
+        elif isinstance(other, str):
+            return str(self.__value + other.__value)
         else:
             return int(self.__value + other.__value)
 
@@ -28,6 +30,8 @@ class int(numeric):
     def __mul__(self, other):
         if isinstance(other, float):
             return float(self.__value * other.__value)
+        elif isinstance(other, str):
+            return str(self.__value * other.__value)
         else:
             return int(self.__value * other.__value)
 

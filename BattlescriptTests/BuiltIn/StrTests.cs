@@ -6,6 +6,77 @@ namespace BattlescriptTests.BuiltIn;
 public class StrTests
 {
     [TestFixture]
+    public class Operators
+    {
+        [Test]
+        public void Equality()
+        {
+            var memory = Runner.Run("""
+                                    a = "asdf" == "asdf"
+                                    b = "asdf" == "qwer"
+                                    """);
+            Assertions.AssertVariable(memory, "a", memory.Create(Memory.BsTypes.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(memory, "b", memory.Create(Memory.BsTypes.Bool, new NumericVariable(0)));
+        }
+
+        [Test]
+        public void Inequality()
+        {
+            var memory = Runner.Run("""
+                                    a = "asdf" != "asdf"
+                                    b = "asdf" != "qwer"
+                                    """);
+            Assertions.AssertVariable(memory, "a", memory.Create(Memory.BsTypes.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(memory, "b", memory.Create(Memory.BsTypes.Bool, new NumericVariable(1)));
+        }
+
+        [Test]
+        public void Add()
+        {
+            var memory = Runner.Run("x = 'asdf' + 'qwer'");
+            Assertions.AssertVariable(memory, "x",
+                memory.Create(Memory.BsTypes.String, new StringVariable("asdfqwer")));
+        }
+
+        [Test]
+        public void Multiply()
+        {
+            var memory = Runner.Run("""
+                                    x = 'asdf' * 2
+                                    y = 3 * 'asdf'
+                                    """);
+            Assertions.AssertVariable(memory, "x",
+                memory.Create(Memory.BsTypes.String, new StringVariable("asdfasdf")));
+            Assertions.AssertVariable(memory, "y",
+                memory.Create(Memory.BsTypes.String, new StringVariable("asdfasdfasdf")));
+        }
+    }
+
+    [TestFixture]
+    public class Truthiness
+    {
+        [Test]
+        public void TrueIfNonEmpty()
+        {
+            var memory = Runner.Run("""
+                                    x = "asdf"
+                                    y = bool(x)
+                                    """);
+            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Bool, new NumericVariable(1)));
+        }
+        
+        [Test]
+        public void FalseIfEmpty()
+        {
+            var memory = Runner.Run("""
+                                    x = ""
+                                    y = bool(x)
+                                    """);
+            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Bool, new NumericVariable(0)));
+        }
+    }
+
+    [TestFixture]
     public class Conversions
     {
         [Test]

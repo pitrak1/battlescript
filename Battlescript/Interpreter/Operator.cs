@@ -354,7 +354,7 @@ public static class Operator
             case "!=":
                 if (left is StringVariable leftNotEqualsString && right is StringVariable rightNotEqualsString)
                 {
-                    return new NumericVariable(leftNotEqualsString.Value != rightNotEqualsString.Value ? 0 : 1);
+                    return new NumericVariable(leftNotEqualsString.Value != rightNotEqualsString.Value ? 1 : 0);
                 }
                 else
                 {
