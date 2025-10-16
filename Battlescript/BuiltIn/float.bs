@@ -28,3 +28,9 @@ class float(numeric):
     def __neg__(self):
         return float(-self.__value)
 
+    def __abs__(self):
+        if self < 0:
+            return float(-self)
+        else:
+            return float(self)
+

@@ -37,6 +37,8 @@ public class BuiltInInstruction : Instruction
     {
         switch (Name)
         {
+            case "abs":
+                return BuiltInAbs.Run(memory, Arguments);
             case "range":
                 return BuiltInRange.Run(memory, Arguments);
             case "isinstance":

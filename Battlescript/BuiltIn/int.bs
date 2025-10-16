@@ -77,3 +77,9 @@ class int(numeric):
     def __neg__(self):
         return int(-self.__value)
 
+    def __abs__(self):
+        if self < 0:
+            return int(-self)
+        else:
+            return int(self)
+
