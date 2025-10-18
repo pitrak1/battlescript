@@ -112,6 +112,20 @@ public class Memory(List<Dictionary<string, Variable>>? scopes = null)
         objectVariable.Values["__value"] = value;
         return objectVariable;
     }
+
+    public Variable CreateException(string type, string message)
+    {
+        var exceptionType = GetVariable(type);
+        if (exceptionType is ClassVariable classVariable)
+        {
+            var objectVariable = classVariable.CreateObject();
+            objectVariable.Values["message"] = Create(BsTypes.String, message);
+            return objectVariable;
+        }
+        else {
+            throw new Exception("Invalid exception type");
+        }
+    }
     
     public int GetIntValue(Variable variable)
     {

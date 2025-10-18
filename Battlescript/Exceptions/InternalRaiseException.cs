@@ -2,7 +2,7 @@ namespace Battlescript;
 
 public class InternalRaiseException : Exception
 {
-    public string Type { get; set; }
+    public string? Type { get; set; }
     
     public InternalRaiseException(string message) : base(message) {}
     
@@ -11,7 +11,7 @@ public class InternalRaiseException : Exception
         Type = Memory.BsTypesToStrings[type];
     }
 
-    public InternalRaiseException(string type, string message) : base(message)
+    public InternalRaiseException(string? type, string message) : base(message)
     {
         Type = type;
     }

@@ -51,18 +51,24 @@ public class TryInstruction : Instruction
             var isCaught = false;
             foreach (var except in Excepts)
             {
-                // This is better fixed after figuring out the stacktrace
-                // var exceptionType = except.Value?.Interpret(memory);
-                // if ((e.Value as ObjectVariable).IsInstance(exceptionType as ClassVariable) && !isCaught)
-                // {
-                //     isCaught = true;
-                //     memory.AddScope();
-                //     foreach (var inst in except.Instructions)
-                //     {
-                //         inst.Interpret(memory);
-                //     }
-                //     memory.RemoveScope();
-                // }
+                if (except.ExceptionType.Name == e.Type)
+                {
+                    isCaught = true;
+                    memory.AddScope();
+                    
+                    if (except.ExceptionVariable is not null)
+                    {
+                        var exceptionVariable = memory.CreateException(e.Type, e.Message);
+                        memory.AddVariableToLastScope(except.ExceptionVariable, exceptionVariable);
+                    }
+                    
+                    foreach (var inst in except.Instructions)
+                    {
+                        inst.Interpret(memory);
+                    }
+                    memory.RemoveScope();
+                    break;
+                }
             }
 
             if (!isCaught && Else is not null)

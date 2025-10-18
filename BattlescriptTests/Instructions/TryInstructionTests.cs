@@ -27,7 +27,7 @@ public static class TryInstructionTests
             var input = """
                         try:
                             x = 1
-                        except 1:
+                        except TypeError:
                             x = 2
                         """;
             var expected = new List<Instruction>() {new TryInstruction([
@@ -35,7 +35,7 @@ public static class TryInstructionTests
             ], new List<ExceptInstruction>()
             {
                 new ExceptInstruction(
-                    new NumericInstruction(1), 
+                    new VariableInstruction("TypeError"), 
                     [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(2))])
             })};
             Assertions.AssertInputProducesParserOutput(input, expected);
@@ -47,9 +47,9 @@ public static class TryInstructionTests
             var input = """
                         try:
                             x = 1
-                        except 1:
+                        except TypeError:
                             x = 2
-                        except 2:
+                        except AssertionError:
                             x = 3
                         """;
             var expected = new List<Instruction>() {new TryInstruction([
@@ -57,10 +57,10 @@ public static class TryInstructionTests
             ], new List<ExceptInstruction>()
             {
                 new ExceptInstruction(
-                    new NumericInstruction(1), 
+                    new VariableInstruction("TypeError"), 
                     [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(2))]),
                 new ExceptInstruction(
-                    new NumericInstruction(2), 
+                    new VariableInstruction("AssertionError"), 
                     [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(3))])
             })};
             Assertions.AssertInputProducesParserOutput(input, expected);
@@ -72,9 +72,9 @@ public static class TryInstructionTests
             var input = """
                         try:
                             x = 1
-                        except 1:
+                        except TypeError:
                             x = 2
-                        except 2:
+                        except AssertionError:
                             x = 3
                         else:
                             x = 4
@@ -84,10 +84,10 @@ public static class TryInstructionTests
             ], new List<ExceptInstruction>()
             {
                 new ExceptInstruction(
-                    new NumericInstruction(1), 
+                    new VariableInstruction("TypeError"), 
                     [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(2))]),
                 new ExceptInstruction(
-                    new NumericInstruction(2), 
+                    new VariableInstruction("AssertionError"), 
                     [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(3))])
             }, new ElseInstruction(null, null, new List<Instruction>() { new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(4))}))};
             Assertions.AssertInputProducesParserOutput(input, expected);
@@ -99,9 +99,9 @@ public static class TryInstructionTests
             var input = """
                         try:
                             x = 1
-                        except 1:
+                        except TypeError:
                             x = 2
-                        except 2:
+                        except AssertionError:
                             x = 3
                         else:
                             x = 4
@@ -113,10 +113,10 @@ public static class TryInstructionTests
             new List<ExceptInstruction>()
             {
                 new ExceptInstruction(
-                    new NumericInstruction(1), 
+                    new VariableInstruction("TypeError"), 
                     [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(2))]),
                 new ExceptInstruction(
-                    new NumericInstruction(2), 
+                    new VariableInstruction("AssertionError"), 
                     [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(3))])
             }, 
             new ElseInstruction(null, null, new List<Instruction>() { new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(4))}),
@@ -130,7 +130,7 @@ public static class TryInstructionTests
             var input = """
                         try:
                             x = 1
-                        except 1 as f:
+                        except TypeError as f:
                             x = 2
                         """;
             var expected = new List<Instruction>() {new TryInstruction([
@@ -138,7 +138,7 @@ public static class TryInstructionTests
             ], new List<ExceptInstruction>()
             {
                 new ExceptInstruction(
-                    new NumericInstruction(1), 
+                    new VariableInstruction("TypeError"), 
                     [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(2))],
                     new VariableInstruction("f"))
             })};

@@ -270,7 +270,8 @@ public static class Assertions
         
         void CompareExceptInstructions(ExceptInstruction inputInst, ExceptInstruction expectedInst)
         {
-            AssertInstructionsEqual(inputInst.Value, expectedInst.Value);
+            AssertInstructionsEqual(inputInst.ExceptionType, expectedInst.ExceptionType);
+            AssertInstructionsEqual(inputInst.ExceptionVariable, expectedInst.ExceptionVariable);
         }
         
         void CompareFinallyInstructions(FinallyInstruction inputInst, FinallyInstruction expectedInst)
