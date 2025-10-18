@@ -1,8 +1,34 @@
+using Battlescript;
+
 namespace BattlescriptTests.E2ETests;
 
 public class ErrorHandlingTests
 {
-    
+    [TestFixture]
+    public class Raise
+    {
+        [Test]
+        public void CanRaiseBuiltInException()
+        {
+            var input = "raise TypeError('asdf')";
+            var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run(input));
+            Assert.That(ex.Message, Is.EqualTo("asdf"));
+        }
+        
+        [Test]
+        public void CanRaiseCustomException()
+        {
+            var input = """
+                        class MyException(Exception):
+                            pass
+                            
+                        raise MyException('asdf')
+                        """;
+            var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run(input));
+            Assert.That(ex.Message, Is.EqualTo("asdf"));
+            Assert.That(ex.Type, Is.EqualTo("MyException"));
+        }
+    }
     // Will comment these out and fix when stacktrace stuff is tested
     // [TestFixture]
     // public class Interpret

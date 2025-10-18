@@ -9,7 +9,7 @@ public class ImproperUseOfKeywordsTests
     {
         var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("if = 3"));
         Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
-        Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
     }
     
     [Test]
@@ -17,7 +17,7 @@ public class ImproperUseOfKeywordsTests
     {
         var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("3 + if"));
         Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
-        Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
     }
     
     [Test]
@@ -25,7 +25,7 @@ public class ImproperUseOfKeywordsTests
     {
         var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("def class():\n\tpass"));
         Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
-        Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
     }
     
     [Test]
@@ -33,7 +33,7 @@ public class ImproperUseOfKeywordsTests
     {
         var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("return 'Hello, world'"));
         Assert.That(ex.Message, Is.EqualTo("'return' outside function"));
-        Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
     }
     
     [Test]
@@ -41,6 +41,6 @@ public class ImproperUseOfKeywordsTests
     {
         var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("break"));
         Assert.That(ex.Message, Is.EqualTo("'break' outside loop"));
-        Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
     }
 }

@@ -193,7 +193,7 @@ public class Memory(List<Dictionary<string, Variable>>? scopes = null)
     
     public string GetErrorMessage(Variable variable)
     {
-        if (IsException(variable) is not null && variable is ObjectVariable objectVariable)
+        if (IsException(variable) && variable is ObjectVariable objectVariable)
         {
             var messageVariable = objectVariable.Values["message"] as ObjectVariable;
             return GetStringValue(messageVariable);
@@ -204,17 +204,16 @@ public class Memory(List<Dictionary<string, Variable>>? scopes = null)
         }
     }
 
-    public BsTypes? IsException(Variable variable)
+    public bool IsException(Variable variable)
     {
-        foreach (var exception in BsExceptions)
+        if (variable is ObjectVariable objectVariable)
         {
-            if (Is(exception, variable))
-            {
-                return exception;
-            }
+            return objectVariable.IsInstance(BsTypeReferences[BsTypes.Exception]);
         }
-
-        return null;
+        else
+        {
+            return false;
+        }
     }
     
     public Variable? GetVariable(string name)

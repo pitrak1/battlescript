@@ -13,7 +13,7 @@ public class SyntaxErrorTests
         {
             var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("print('Hello, world') print('Goodbye, world')"));
             Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
-            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+            Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
         }
     }
     
@@ -25,7 +25,7 @@ public class SyntaxErrorTests
         {
             var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("'Hello, world"));
             Assert.That(ex.Message, Is.EqualTo("EOL while scanning string literal"));
-            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+            Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
         }
     }
 
@@ -37,7 +37,7 @@ public class SyntaxErrorTests
         {
             var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("def my_function:\n\tpass"));
             Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
-            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+            Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
         }
     }
     
@@ -49,7 +49,7 @@ public class SyntaxErrorTests
         {
             var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("123name = 3"));
             Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
-            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+            Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
         }
         
         [Test]
@@ -57,7 +57,7 @@ public class SyntaxErrorTests
         {
             var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("$variable = 3"));
             Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
-            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+            Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
         }
     }
     

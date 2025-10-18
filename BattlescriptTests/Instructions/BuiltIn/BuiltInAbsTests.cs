@@ -64,7 +64,7 @@ public class BuiltInAbsTests
         var input = "x = abs(4, 5)";
         var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run(input));
         Assert.That(ex.Message, Is.EqualTo("abs() takes exactly one argument (2 given)"));
-        Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.TypeError));
+        Assert.That(ex.Type, Is.EqualTo("TypeError"));
     }
     
     [Test]
@@ -73,6 +73,6 @@ public class BuiltInAbsTests
         var input = "x = abs('asdf')";
         var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run(input));
         Assert.That(ex.Message, Is.EqualTo("bad operand type for abs(): 'str'"));
-        Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.TypeError));
+        Assert.That(ex.Type, Is.EqualTo("TypeError"));
     }
 }

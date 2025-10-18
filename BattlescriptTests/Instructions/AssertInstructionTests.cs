@@ -23,7 +23,7 @@ public static class AssertInstructionTests
         public void ThrowsErrorIfConditionIsFalse()
         {
             var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("assert False"));
-            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.AssertionError));
+            Assert.That(ex.Type, Is.EqualTo("AssertionError"));
         }
         
         [Test]

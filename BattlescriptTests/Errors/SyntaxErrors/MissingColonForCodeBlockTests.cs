@@ -9,7 +9,7 @@ public class MissingColonForCodeBlockTests
     {
         var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("if True"));
         Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
-        Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
     }
     
     [Test]
@@ -17,7 +17,7 @@ public class MissingColonForCodeBlockTests
     {
         var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("for i in range(10)"));
         Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
-        Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
     }
     
     [Test]
@@ -25,7 +25,7 @@ public class MissingColonForCodeBlockTests
     {
         var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("while True"));
         Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
-        Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
     }
     
     [Test]
@@ -38,7 +38,7 @@ public class MissingColonForCodeBlockTests
                                                                             print('Goodbye, world')
                                                                         """));
         Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
-        Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
     }
     
     [Test]
@@ -49,7 +49,7 @@ public class MissingColonForCodeBlockTests
                                                                             pass
                                                                         """));
         Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
-        Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
     }
     
     [Test]
@@ -60,6 +60,6 @@ public class MissingColonForCodeBlockTests
                                                                             pass
                                                                         """));
         Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
-        Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+        Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
     }
 }

@@ -9,7 +9,7 @@ public class InvalidAssignmentsTests
         {
             var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("3 = x"));
             Assert.That(ex.Message, Is.EqualTo("cannot assign to literal"));
-            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+            Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
         }
     
         [Test]
@@ -17,7 +17,7 @@ public class InvalidAssignmentsTests
         {
             var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("print('asdf') = 3"));
             Assert.That(ex.Message, Is.EqualTo("cannot assign to function call"));
-            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+            Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
         }
         
         [Test]
@@ -30,7 +30,7 @@ public class InvalidAssignmentsTests
                                                                             func() = 3
                                                                             """));
             Assert.That(ex.Message, Is.EqualTo("cannot assign to function call"));
-            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+            Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
         }
         
         [Test]
@@ -44,7 +44,7 @@ public class InvalidAssignmentsTests
                                                                             x[0]() = 3
                                                                             """));
             Assert.That(ex.Message, Is.EqualTo("cannot assign to function call"));
-            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+            Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
         }
         
         [Test]
@@ -59,6 +59,6 @@ public class InvalidAssignmentsTests
                                                                             x.func() = 3
                                                                             """));
             Assert.That(ex.Message, Is.EqualTo("cannot assign to function call"));
-            Assert.That(ex.Type, Is.EqualTo(Memory.BsTypes.SyntaxError));
+            Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
         }
 }
