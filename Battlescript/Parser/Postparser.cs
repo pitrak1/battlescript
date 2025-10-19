@@ -4,8 +4,6 @@ public static class Postparser
 {
     public static void Run(List<Instruction> instructions)
     {
-        // NOTE that these functions need to be changed to be recursive.  Right now we're just checking
-        // for instruction types in the outermost scope
         CheckForLackOfIndents(instructions);
         JoinIfElse(instructions);
         JoinTryExceptElseFinally(instructions);
@@ -20,6 +18,8 @@ public static class Postparser
             {
                 throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "expected an indented block");
             }
+            
+            CheckForLackOfIndents(instructions[i].Instructions);
         }
     }
 
@@ -73,6 +73,8 @@ public static class Postparser
                     instructions.RemoveAt(i + 1);
                 }
             }
+            
+            JoinTryExceptElseFinally(instructions[i].Instructions);
         }
     }
 }

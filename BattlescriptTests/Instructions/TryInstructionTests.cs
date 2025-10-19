@@ -144,5 +144,36 @@ public static class TryInstructionTests
             })};
             Assertions.AssertInputProducesParserOutput(input, expected);
         }
+
+        [Test]
+        public void SupportsNestedTryExceptInTryBlock()
+        {
+            var input = """
+                        try:
+                            try:
+                                x = 1
+                            except AssertionError:
+                                x = 3
+                        except TypeError:
+                            x = 2
+                        """;
+            var innerTryInstruction = new TryInstruction([
+                new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(1))
+            ], new List<ExceptInstruction>()
+            {
+                new ExceptInstruction(
+                    new VariableInstruction("AssertionError"),
+                    [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(3))])
+            });
+            var expected = new List<Instruction>() {new TryInstruction([
+                innerTryInstruction
+            ], new List<ExceptInstruction>()
+            {
+                new ExceptInstruction(
+                    new VariableInstruction("TypeError"), 
+                    [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(2))])
+            })};
+            Assertions.AssertInputProducesParserOutput(input, expected);
+        }
     }
 }

@@ -29,12 +29,12 @@ public class TryInstruction : Instruction
     {
         try
         {
+            memory.AddScope();
             foreach (var inst in Instructions)
             {
-                memory.AddScope();
                 inst.Interpret(memory);
-                memory.RemoveScope();
             }
+            memory.RemoveScope();
             
             if (Finally is not null)
             {
