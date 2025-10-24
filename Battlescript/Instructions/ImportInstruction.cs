@@ -73,9 +73,9 @@ public class ImportInstruction : Instruction
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        var stackUpdates = memory.CurrentStack.AddFrame(this, FilePath, "<module>");
+        // var stackUpdates = memory.CurrentStack.AddFrame(this, FilePath, "<module>");
         var importedScope = Runner.RunFilePath(memory, FilePath);
-        memory.CurrentStack.PopFrame(stackUpdates);
+        // memory.CurrentStack.PopFrame(stackUpdates);
         
         foreach (var name in ImportNames)
         {

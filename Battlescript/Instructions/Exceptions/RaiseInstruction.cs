@@ -18,7 +18,7 @@ public class RaiseInstruction : Instruction
         ClassVariable? lexicalContext = null)
     {
         var exception = Value?.Interpret(memory);
-        memory.CurrentStack.AddFrame(this);
+        // memory.CurrentStack.AddFrame(this);
 
         if (memory.IsException(exception) && exception is ObjectVariable objectException)
         {

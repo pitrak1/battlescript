@@ -20,8 +20,8 @@ public static class Runner
     public static void RunAsMain(Memory memory, string input)
     {
         memory.AddScope();
-        memory.CurrentStack.Files.Add("main");
-        memory.CurrentStack.Functions.Add("<module>");
+        // memory.CurrentStack.Files.Add("main");
+        // memory.CurrentStack.Functions.Add("<module>");
         RunPartial(memory, input, "main");
     }
 
@@ -64,7 +64,7 @@ public static class Runner
         }
         catch (InternalRaiseException e)
         {
-            memory.CurrentStack.PrintStacktrace();
+            // memory.CurrentStack.PrintStacktrace();
             if (e.Type is not null)
             {
                 Console.WriteLine(e.Type + ": " + e.Message);

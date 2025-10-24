@@ -6,7 +6,7 @@ public class Memory(List<Dictionary<string, Variable>>? scopes = null)
 {
     public List<Dictionary<string, Variable>> Scopes { get; } = scopes ?? [new Dictionary<string, Variable>()];
 
-    public Stack CurrentStack = new Stack();
+    // public Stack CurrentStack = new Stack();
 
     public enum BsTypes
     {
