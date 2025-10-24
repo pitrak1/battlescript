@@ -41,8 +41,7 @@ public class ForInstruction : Instruction
             var values = (range.Values["__value"] as SequenceVariable).Values;
             for (var i = 0; i < values.Count; i++)
             {
-                memory.AddScope();
-                memory.AddVariableToLastScope(BlockVariable, values[i]);
+                memory.SetVariable(BlockVariable, values[i]);
 
                 try
                 {
@@ -57,11 +56,8 @@ public class ForInstruction : Instruction
                 }
                 catch (InternalBreakException)
                 {
-                    memory.RemoveScope();
                     break;
                 }
-
-                memory.RemoveScope();
             }
             return null;
         }

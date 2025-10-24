@@ -29,21 +29,17 @@ public class TryInstruction : Instruction
     {
         try
         {
-            memory.AddScope();
             foreach (var inst in Instructions)
             {
                 inst.Interpret(memory);
             }
-            memory.RemoveScope();
             
             if (Finally is not null)
             {
-                memory.AddScope();
                 foreach (var inst in Finally.Instructions)
                 {
                     inst.Interpret(memory);
                 }
-                memory.RemoveScope();
             }
         }
         catch (InternalRaiseException e)
@@ -54,7 +50,6 @@ public class TryInstruction : Instruction
                 if (except.ExceptionType.Name == e.Type)
                 {
                     isCaught = true;
-                    memory.AddScope();
                     
                     if (except.ExceptionVariable is not null)
                     {
@@ -66,29 +61,24 @@ public class TryInstruction : Instruction
                     {
                         inst.Interpret(memory);
                     }
-                    memory.RemoveScope();
                     break;
                 }
             }
 
             if (!isCaught && Else is not null)
             {
-                memory.AddScope();
                 foreach (var inst in Else.Instructions)
                 {
                     inst.Interpret(memory);
                 }
-                memory.RemoveScope();
             }
 
             if (Finally is not null)
             {
-                memory.AddScope();
                 foreach (var inst in Finally.Instructions)
                 {
                     inst.Interpret(memory);
                 }
-                memory.RemoveScope();
             }
 
             if (!isCaught && Else is null)

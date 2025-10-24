@@ -30,20 +30,9 @@ public class IfInstruction : Instruction
         var condition = Condition.Interpret(memory);
         if (Truthiness.IsTruthy(memory, condition))
         {
-            try
+            foreach (var inst in Instructions)
             {
-                memory.AddScope();
-                foreach (var inst in Instructions)
-                {
-                    inst.Interpret(memory);
-                }
-
-                memory.RemoveScope();
-            }
-            catch (InternalReturnException e)
-            {
-                memory.RemoveScope();
-                throw;
+                inst.Interpret(memory);
             }
         }
         else if (Next is not null)

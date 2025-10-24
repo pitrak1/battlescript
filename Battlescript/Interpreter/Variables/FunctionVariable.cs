@@ -15,16 +15,7 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
     
     public Variable RunFunction(Memory memory, ArgumentSet arguments, Instruction? inst = null)
     {
-        if (inst is not null)
-        {
-            var scope = new Dictionary<string, Variable>();
-            memory.AddScope(scope);
-        }
-        else
-        {
-            memory.AddScope();
-        }
-        
+        memory.AddScope();
         arguments.ApplyToMemory(memory, Parameters);
         var returnValue = RunInstructions(memory);
         memory.RemoveScope();

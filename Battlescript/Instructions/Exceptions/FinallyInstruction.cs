@@ -17,12 +17,10 @@ public class FinallyInstruction : Instruction
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        memory.AddScope();
         foreach (var inst in Instructions)
         {
             inst.Interpret(memory);
         }
-        memory.RemoveScope();
 
         return null;
     }

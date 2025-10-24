@@ -28,8 +28,6 @@ public class WhileInstruction : Instruction
         var condition = Condition.Interpret(memory);
         while (Truthiness.IsTruthy(memory, condition))
         {
-            memory.AddScope();
-
             try
             {
                 foreach (var inst in Instructions)
@@ -42,11 +40,9 @@ public class WhileInstruction : Instruction
             }
             catch (InternalBreakException)
             {
-                memory.RemoveScope();
                 break;
             }
 
-            memory.RemoveScope();
             condition = Condition.Interpret(memory);
         }
 
