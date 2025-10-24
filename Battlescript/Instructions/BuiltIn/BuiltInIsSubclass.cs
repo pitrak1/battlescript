@@ -14,7 +14,7 @@ public static class BuiltInIsSubclass
 
         if (firstExpression is ClassVariable firstVariable && secondExpression is ClassVariable secondVariable)
         {
-            return memory.Create(Memory.BsTypes.Bool, firstVariable.IsSubclass(secondVariable));
+            return BsTypes.Create(BsTypes.Types.Bool, firstVariable.IsSubclass(secondVariable));
         }
         else
         {

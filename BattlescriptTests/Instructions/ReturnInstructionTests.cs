@@ -35,7 +35,7 @@ public static class ReturnInstructionTests
                             new NumericInstruction(5)))
                 ]);
             Assertions.AssertVariable(memory, "func", funcVariable);
-            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Int, 9));
+            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 9));
         }
     }
 }

@@ -45,7 +45,7 @@ public static class ClassInstructionTests
             var memory = Runner.Run("class MyClass:\n\tx = 1");
             var expected = new ClassVariable("MyClass", new Dictionary<string, Variable>()
             {
-                { "x", memory.Create(Memory.BsTypes.Int, 1) }
+                { "x", BsTypes.Create(BsTypes.Types.Int, 1) }
             });
             Assertions.AssertVariable(memory, "MyClass", expected);
         }
@@ -63,12 +63,12 @@ public static class ClassInstructionTests
                                     """);
             var asdf = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
-                { "x", memory.Create(Memory.BsTypes.Int, 1) }
+                { "x", BsTypes.Create(BsTypes.Types.Int, 1) }
             });
 
             var qwer = new ClassVariable("qwer", new Dictionary<string, Variable>()
             {
-                { "y", memory.Create(Memory.BsTypes.Int, 2) }
+                { "y", BsTypes.Create(BsTypes.Types.Int, 2) }
             }, [asdf]);
 
             Assertions.AssertVariable(memory, "asdf", asdf);
@@ -92,17 +92,17 @@ public static class ClassInstructionTests
             
             var asdf = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
-                { "x", memory.Create(Memory.BsTypes.Int, 1) }
+                { "x", BsTypes.Create(BsTypes.Types.Int, 1) }
             });
 
             var qwer = new ClassVariable("qwer", new Dictionary<string, Variable>()
             {
-                { "y", memory.Create(Memory.BsTypes.Int, 2) }
+                { "y", BsTypes.Create(BsTypes.Types.Int, 2) }
             });
 
             var zxcv = new ClassVariable("zxcv", new Dictionary<string, Variable>()
             {
-                { "z", memory.Create(Memory.BsTypes.Int, 3) }
+                { "z", BsTypes.Create(BsTypes.Types.Int, 3) }
             }, [asdf, qwer]);
             
             Assertions.AssertVariable(memory, "asdf", asdf);

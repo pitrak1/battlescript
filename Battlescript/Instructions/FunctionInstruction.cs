@@ -9,12 +9,12 @@ public class FunctionInstruction : Instruction
     {
         if (tokens[^1].Value is not ":")
         {
-            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "invalid syntax");
+            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
         }
 
         if (tokens[^2].Value is not ")" || tokens[2].Value is not "(")
         {
-            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "invalid syntax");
+            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
         }
         
         var tokensInParens = tokens.GetRange(3, tokens.Count - 5);
@@ -22,7 +22,7 @@ public class FunctionInstruction : Instruction
 
         if (tokens[1].Type != Consts.TokenTypes.Identifier)
         {
-            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "invalid syntax");
+            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
         }
         
         Name = tokens[1].Value;

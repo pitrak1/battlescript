@@ -6,10 +6,10 @@ public static class Runner
     {
         var memory = new Memory();
 
-        foreach (var builtin in Memory.BsTypeStrings)
+        foreach (var builtin in BsTypes.TypeStrings)
         {
             LoadBuiltin(memory, builtin);
-            memory.PopulateBsTypeReference(builtin);
+            BsTypes.PopulateBsTypeReference(memory, builtin);
         }
 
         RunAsMain(memory, input);
@@ -56,11 +56,11 @@ public static class Runner
         }
         catch (InternalReturnException e)
         {
-            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "'return' outside function");
+            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "'return' outside function");
         }
         catch (InternalBreakException e)
         {
-            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "'break' outside loop");
+            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "'break' outside loop");
         }
         catch (InternalRaiseException e)
         {

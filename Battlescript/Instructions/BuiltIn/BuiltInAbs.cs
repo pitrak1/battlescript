@@ -8,7 +8,7 @@ public static class BuiltInAbs
     {
         if (arguments.Count != 1)
         {
-            throw new InternalRaiseException(Memory.BsTypes.TypeError,
+            throw new InternalRaiseException(BsTypes.Types.TypeError,
                 $"abs() takes exactly one argument ({arguments.Count} given)");
         }
 
@@ -23,13 +23,13 @@ public static class BuiltInAbs
             }
             else
             {
-                throw new InternalRaiseException(Memory.BsTypes.TypeError, $"bad operand type for abs(): '{objectVariable.Class.Name}'");
+                throw new InternalRaiseException(BsTypes.Types.TypeError, $"bad operand type for abs(): '{objectVariable.Class.Name}'");
             }
         }
         else
         {
             var objectValue = value as ObjectVariable;
-            throw new InternalRaiseException(Memory.BsTypes.TypeError, $"bad operand type for abs(): '{objectValue.Class.Name}'");
+            throw new InternalRaiseException(BsTypes.Types.TypeError, $"bad operand type for abs(): '{objectValue.Class.Name}'");
         }
     }
 }

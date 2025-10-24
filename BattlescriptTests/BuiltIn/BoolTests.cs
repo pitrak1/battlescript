@@ -34,7 +34,7 @@ public class BoolTests
                                     x = ""
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
         }
         
         [Test]
@@ -44,7 +44,7 @@ public class BoolTests
                                     x = "asdf"
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
         }
         
         [Test]
@@ -54,7 +54,7 @@ public class BoolTests
                                     x = 0
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
         }
         
         [Test]
@@ -64,7 +64,7 @@ public class BoolTests
                                     x = 1
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
         }
         
         [Test]
@@ -74,7 +74,7 @@ public class BoolTests
                                     x = 0.0
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
         }
         
         [Test]
@@ -84,7 +84,7 @@ public class BoolTests
                                     x = 1.5
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
         }
         
         [Test]
@@ -94,7 +94,7 @@ public class BoolTests
                                     x = False
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
         }
         
         [Test]
@@ -104,7 +104,7 @@ public class BoolTests
                                     x = True
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
         }
     }
 }

@@ -11,21 +11,21 @@ public static class BuiltInRange
         if (arguments.Count == 1)
         {
             var countExpression = arguments[0].Interpret(memory);
-            count = memory.GetIntValue(countExpression);
+            count = BsTypes.GetIntValue(countExpression);
         } else if (arguments.Count == 2)
         {
             var startingValueExpression = arguments[0].Interpret(memory);
             var countExpression = arguments[1].Interpret(memory);
-            startingValue = memory.GetIntValue(startingValueExpression);
-            count = memory.GetIntValue(countExpression);
+            startingValue = BsTypes.GetIntValue(startingValueExpression);
+            count = BsTypes.GetIntValue(countExpression);
         } else if (arguments.Count == 3)
         {
             var startingValueExpression = arguments[0].Interpret(memory);
             var countExpression = arguments[1].Interpret(memory);
             var stepExpression = arguments[2].Interpret(memory);
-            startingValue = memory.GetIntValue(startingValueExpression);
-            count = memory.GetIntValue(countExpression);
-            step = memory.GetIntValue(stepExpression);
+            startingValue = BsTypes.GetIntValue(startingValueExpression);
+            count = BsTypes.GetIntValue(countExpression);
+            step = BsTypes.GetIntValue(stepExpression);
         }
         else
         {
@@ -40,11 +40,11 @@ public static class BuiltInRange
             {
                 for (var i = startingValue; i < count; i += step)
                 {
-                    values.Add(memory.Create(Memory.BsTypes.Int, i));
+                    values.Add(BsTypes.Create(BsTypes.Types.Int, i));
                 }
             }
             
-            return memory.Create(Memory.BsTypes.List, values);
+            return BsTypes.Create(BsTypes.Types.List, values);
         }
         else
         {
@@ -52,10 +52,10 @@ public static class BuiltInRange
             {
                 for (var i = startingValue; i > count; i += step)
                 {
-                    values.Add(memory.Create(Memory.BsTypes.Int, i));
+                    values.Add(BsTypes.Create(BsTypes.Types.Int, i));
                 }
             }
-            return memory.Create(Memory.BsTypes.List, values);
+            return BsTypes.Create(BsTypes.Types.List, values);
         }
     }
 }

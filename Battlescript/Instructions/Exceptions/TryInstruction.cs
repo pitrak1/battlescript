@@ -53,7 +53,7 @@ public class TryInstruction : Instruction
                     
                     if (except.ExceptionVariable is not null)
                     {
-                        var exceptionVariable = memory.CreateException(e.Type, e.Message);
+                        var exceptionVariable = BsTypes.CreateException(memory, e.Type, e.Message);
                         memory.AddVariableToLastScope(except.ExceptionVariable, exceptionVariable);
                     }
                     

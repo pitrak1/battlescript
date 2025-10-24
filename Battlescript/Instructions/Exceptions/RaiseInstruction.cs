@@ -20,17 +20,17 @@ public class RaiseInstruction : Instruction
         var exception = Value?.Interpret(memory);
         // memory.CurrentStack.AddFrame(this);
 
-        if (memory.IsException(exception) && exception is ObjectVariable objectException)
+        if (BsTypes.IsException(exception) && exception is ObjectVariable objectException)
         {
-            var message = memory.GetErrorMessage(exception);
+            var message = BsTypes.GetErrorMessage(exception);
             var exceptionName = objectException.Class.Name;
-            if (Memory.BsTypeStrings.Contains(exceptionName))
+            if (BsTypes.TypeStrings.Contains(exceptionName))
             {
-                throw new InternalRaiseException(Memory.BsStringsToTypes[exceptionName], message);
+                throw new InternalRaiseException(BsTypes.StringsToTypes[exceptionName], message);
             }
             else
             {
-                throw new InternalRaiseException(exceptionName, memory.GetErrorMessage(exception));
+                throw new InternalRaiseException(exceptionName, BsTypes.GetErrorMessage(exception));
             }
         }
         else

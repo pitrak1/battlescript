@@ -16,7 +16,7 @@ public static class Postparser
             if (Consts.InstructionTypesExpectingIndent.Contains(instructions[i].GetType().Name) &&
                 instructions[i].Instructions.Count == 0)
             {
-                throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "expected an indented block");
+                throw new InternalRaiseException(BsTypes.Types.SyntaxError, "expected an indented block");
             }
             
             CheckForLackOfIndents(instructions[i].Instructions);

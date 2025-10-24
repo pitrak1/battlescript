@@ -11,7 +11,7 @@ public class BuiltInLenTests
         var memory = Runner.Run("""
                                 x = len("")
                                 """);
-        var expected = memory.Create(Memory.BsTypes.Int, 0);
+        var expected = BsTypes.Create(BsTypes.Types.Int, 0);
         Assertions.AssertVariable(memory, "x", expected);
     }
 
@@ -21,7 +21,7 @@ public class BuiltInLenTests
         var memory = Runner.Run("""
                                 x = len("asdf")
                                 """);
-        var expected = memory.Create(Memory.BsTypes.Int, 4);
+        var expected = BsTypes.Create(BsTypes.Types.Int, 4);
         Assertions.AssertVariable(memory, "x", expected);
     }
 
@@ -31,7 +31,7 @@ public class BuiltInLenTests
         var memory = Runner.Run("""
                                 x = len("asdf") + 1
                                 """);
-        var expected = memory.Create(Memory.BsTypes.Int, 5);
+        var expected = BsTypes.Create(BsTypes.Types.Int, 5);
         Assertions.AssertVariable(memory, "x", expected);
     }
     
@@ -41,7 +41,7 @@ public class BuiltInLenTests
         var memory = Runner.Run("""
                                 x = 1 + len("asdf")
                                 """);
-        var expected = memory.Create(Memory.BsTypes.Int, 5);
+        var expected = BsTypes.Create(BsTypes.Types.Int, 5);
         Assertions.AssertVariable(memory, "x", expected);
     }
 }

@@ -15,12 +15,12 @@ public static class BuiltInIsInstance
             switch (principleTypeInstruction.Value)
             {
                 case "__numeric__":
-                    return memory.Create(Memory.BsTypes.Bool,
+                    return BsTypes.Create(BsTypes.Types.Bool,
                         objectExpression is NumericVariable);
                 case "__sequence__":
-                    return memory.Create(Memory.BsTypes.Bool, objectExpression is SequenceVariable);
+                    return BsTypes.Create(BsTypes.Types.Bool, objectExpression is SequenceVariable);
                 default:
-                    return memory.Create(Memory.BsTypes.Bool, false);
+                    return BsTypes.Create(BsTypes.Types.Bool, false);
             }
         }
         else
@@ -29,11 +29,11 @@ public static class BuiltInIsInstance
         
             if (objectExpression is ObjectVariable objectVariable && classExpression is ClassVariable classVariable)
             {
-                return memory.Create(Memory.BsTypes.Bool, objectVariable.IsInstance(classVariable));
+                return BsTypes.Create(BsTypes.Types.Bool, objectVariable.IsInstance(classVariable));
             }
             else
             {
-                return memory.Create(Memory.BsTypes.Bool, false);
+                return BsTypes.Create(BsTypes.Types.Bool, false);
             }
         }
     }

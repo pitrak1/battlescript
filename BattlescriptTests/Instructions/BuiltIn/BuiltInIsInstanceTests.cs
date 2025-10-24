@@ -15,7 +15,7 @@ public class BuiltInIsInstanceTests
                                 x = asdf()
                                 y = isinstance(x, asdf)
                                 """);
-        var expected = memory.Create(Memory.BsTypes.Bool, true);
+        var expected = BsTypes.Create(BsTypes.Types.Bool, true);
         Assertions.AssertVariable(memory, "y", expected);
     }
     
@@ -32,7 +32,7 @@ public class BuiltInIsInstanceTests
                                 x = qwer()
                                 y = isinstance(x, asdf)
                                 """);
-        var expected = memory.Create(Memory.BsTypes.Bool, true);
+        var expected = BsTypes.Create(BsTypes.Types.Bool, true);
         Assertions.AssertVariable(memory, "y", expected);
     }
 
@@ -49,7 +49,7 @@ public class BuiltInIsInstanceTests
                                 x = qwer()
                                 y = isinstance(x, asdf)
                                 """);
-        var expected = memory.Create(Memory.BsTypes.Bool, false);
+        var expected = BsTypes.Create(BsTypes.Types.Bool, false);
         Assertions.AssertVariable(memory, "y", expected);
     }
 }

@@ -31,8 +31,8 @@ public class ArgumentSetTests
             var result = new ArgumentSet(memory, input);
             var expected = new List<Variable>()
             {
-                memory.Create(Memory.BsTypes.Int, 1234),
-                memory.Create(Memory.BsTypes.String, "asdf")
+                BsTypes.Create(BsTypes.Types.Int, 1234),
+                BsTypes.Create(BsTypes.Types.String, "asdf")
             };
             Assertions.AssertVariableListsEqual(result.Positionals, expected);
         }
@@ -49,8 +49,8 @@ public class ArgumentSetTests
             var result = new ArgumentSet(memory, input);
             var expected = new Dictionary<string, Variable>()
             {
-                {"asdf", memory.Create(Memory.BsTypes.Int, 1234)},
-                {"qwer", memory.Create(Memory.BsTypes.String, "asdf")}
+                {"asdf", BsTypes.Create(BsTypes.Types.Int, 1234)},
+                {"qwer", BsTypes.Create(BsTypes.Types.String, "asdf")}
             };
             Assertions.AssertVariableDictionariesEqual(result.Keywords, expected);
         }
@@ -65,10 +65,10 @@ public class ArgumentSetTests
                 new AssignmentInstruction("=", new VariableInstruction("qwer"), new StringInstruction("asdf"))
             };
             var result = new ArgumentSet(memory, input);
-            var expectedPositionals = new List<Variable>() { memory.Create(Memory.BsTypes.Int, 1234) };
+            var expectedPositionals = new List<Variable>() { BsTypes.Create(BsTypes.Types.Int, 1234) };
             var expectedKeywords = new Dictionary<string, Variable>()
             {
-                {"qwer", memory.Create(Memory.BsTypes.String, "asdf")}
+                {"qwer", BsTypes.Create(BsTypes.Types.String, "asdf")}
             };
             Assertions.AssertVariableListsEqual(result.Positionals, expectedPositionals);
             Assertions.AssertVariableDictionariesEqual(result.Keywords, expectedKeywords);
@@ -106,8 +106,8 @@ public class ArgumentSetTests
             var result = arguments.GetVariableDictionary(memory, parameters);
             var expected = new Dictionary<string, Variable>()
             {
-                { "asdf", memory.Create(Memory.BsTypes.Int, 1234) },
-                { "qwer", memory.Create(Memory.BsTypes.String, "asdf") }
+                { "asdf", BsTypes.Create(BsTypes.Types.Int, 1234) },
+                { "qwer", BsTypes.Create(BsTypes.Types.String, "asdf") }
             };
             Assertions.AssertVariableDictionariesEqual(result, expected);
         }
@@ -129,8 +129,8 @@ public class ArgumentSetTests
             var result = arguments.GetVariableDictionary(memory, parameters);
             var expected = new Dictionary<string, Variable>()
             {
-                { "asdf", memory.Create(Memory.BsTypes.Int, 1234) },
-                { "qwer", memory.Create(Memory.BsTypes.String, "asdf") }
+                { "asdf", BsTypes.Create(BsTypes.Types.Int, 1234) },
+                { "qwer", BsTypes.Create(BsTypes.Types.String, "asdf") }
             };
             Assertions.AssertVariableDictionariesEqual(result, expected);
         }
@@ -152,8 +152,8 @@ public class ArgumentSetTests
             var result = arguments.GetVariableDictionary(memory, parameters);
             var expected = new Dictionary<string, Variable>()
             {
-                { "asdf", memory.Create(Memory.BsTypes.Int, 1234) },
-                { "qwer", memory.Create(Memory.BsTypes.String, "asdf") }
+                { "asdf", BsTypes.Create(BsTypes.Types.Int, 1234) },
+                { "qwer", BsTypes.Create(BsTypes.Types.String, "asdf") }
             };
             Assertions.AssertVariableDictionariesEqual(result, expected);
         }
@@ -174,8 +174,8 @@ public class ArgumentSetTests
             var result = arguments.GetVariableDictionary(memory, parameters);
             var expected = new Dictionary<string, Variable>()
             {
-                { "asdf", memory.Create(Memory.BsTypes.Int, 1234) },
-                { "qwer", memory.Create(Memory.BsTypes.String, "asdf") }
+                { "asdf", BsTypes.Create(BsTypes.Types.Int, 1234) },
+                { "qwer", BsTypes.Create(BsTypes.Types.String, "asdf") }
             };
             Assertions.AssertVariableDictionariesEqual(result, expected);
         }
@@ -197,8 +197,8 @@ public class ArgumentSetTests
             var result = arguments.GetVariableDictionary(memory, parameters);
             var expected = new Dictionary<string, Variable>()
             {
-                { "asdf", memory.Create(Memory.BsTypes.Int, 1234) },
-                { "qwer", memory.Create(Memory.BsTypes.Int, 5678) }
+                { "asdf", BsTypes.Create(BsTypes.Types.Int, 1234) },
+                { "qwer", BsTypes.Create(BsTypes.Types.Int, 5678) }
             };
             Assertions.AssertVariableDictionariesEqual(result, expected);
         }

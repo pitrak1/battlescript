@@ -6,9 +6,9 @@ public class InternalRaiseException : Exception
     
     public InternalRaiseException(string message) : base(message) {}
     
-    public InternalRaiseException(Memory.BsTypes type, string message) : base(message)
+    public InternalRaiseException(BsTypes.Types type, string message) : base(message)
     {
-        Type = Memory.BsTypesToStrings[type];
+        Type = BsTypes.TypesToStrings[type];
     }
 
     public InternalRaiseException(string? type, string message) : base(message)

@@ -32,49 +32,49 @@ public class FloatTests
         public void Add()
         {
             var memory = Runner.Run("x = 5.0 + 3.0");
-            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Float, new NumericVariable(8)));
+            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(8)));
         }
     
         [Test]
         public void Subtract()
         {
             var memory = Runner.Run("x = 5.0 - 3.0");
-            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Float, new NumericVariable(2)));
+            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(2)));
         }
     
         [Test]
         public void Multiply()
         {
             var memory = Runner.Run("x = 5.0 * 3.0");
-            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Float, new NumericVariable(15)));
+            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(15)));
         }
         
         [Test]
         public void TrueDivide()
         {
             var memory = Runner.Run("x = 6.0 / 3.0");
-            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Float, new NumericVariable(2.0)));
+            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(2.0)));
         }
         
         [Test]
         public void FloorDivide()
         {
             var memory = Runner.Run("x = 9.0 // 2.0");
-            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Int, new NumericVariable(4)));
+            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(4)));
         }
         
         [Test]
         public void Modulo()
         {
             var memory = Runner.Run("x = 9.0 % 2.0");
-            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Float, new NumericVariable(1)));
+            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(1)));
         }
         
         [Test]
         public void Power()
         {
             var memory = Runner.Run("x = 2.0 ** 3.0");
-            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Float, new NumericVariable(8)));
+            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(8)));
         }
         
         [Test]
@@ -84,7 +84,7 @@ public class FloatTests
                                     x = 5.0
                                     y = -x
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Float, new NumericVariable(-5)));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(-5)));
         }
         
         [Test]
@@ -103,8 +103,8 @@ public class FloatTests
                                     a = 5.0 == 5.0
                                     b = 5.0 == 6.0
                                     """);
-            Assertions.AssertVariable(memory, "a", memory.Create(Memory.BsTypes.Bool, new NumericVariable(1)));
-            Assertions.AssertVariable(memory, "b", memory.Create(Memory.BsTypes.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(memory, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(memory, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
         }
         
         [Test]
@@ -114,8 +114,8 @@ public class FloatTests
                                     a = 5.0 != 5.0
                                     b = 5.0 != 6.0
                                     """);
-            Assertions.AssertVariable(memory, "a", memory.Create(Memory.BsTypes.Bool, new NumericVariable(0)));
-            Assertions.AssertVariable(memory, "b", memory.Create(Memory.BsTypes.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(memory, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(memory, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
         }
         
         [Test]
@@ -126,9 +126,9 @@ public class FloatTests
                                     b = 5.0 < 5.0
                                     c = 5.0 < 6.0
                                     """);
-            Assertions.AssertVariable(memory, "a", memory.Create(Memory.BsTypes.Bool, new NumericVariable(0)));
-            Assertions.AssertVariable(memory, "b", memory.Create(Memory.BsTypes.Bool, new NumericVariable(0)));
-            Assertions.AssertVariable(memory, "c", memory.Create(Memory.BsTypes.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(memory, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(memory, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(memory, "c", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
         }
 
         [Test]
@@ -139,9 +139,9 @@ public class FloatTests
                                     b = 5.0 <= 5.0
                                     c = 5.0 <= 6.0
                                     """);
-            Assertions.AssertVariable(memory, "a", memory.Create(Memory.BsTypes.Bool, new NumericVariable(0)));
-            Assertions.AssertVariable(memory, "b", memory.Create(Memory.BsTypes.Bool, new NumericVariable(1)));
-            Assertions.AssertVariable(memory, "c", memory.Create(Memory.BsTypes.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(memory, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(memory, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(memory, "c", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
         }
 
         [Test]
@@ -152,9 +152,9 @@ public class FloatTests
                                     b = 5.0 > 5.0
                                     c = 5.0 > 6.0
                                     """);
-            Assertions.AssertVariable(memory, "a", memory.Create(Memory.BsTypes.Bool, new NumericVariable(1)));
-            Assertions.AssertVariable(memory, "b", memory.Create(Memory.BsTypes.Bool, new NumericVariable(0)));
-            Assertions.AssertVariable(memory, "c", memory.Create(Memory.BsTypes.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(memory, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(memory, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(memory, "c", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
         }
         
         [Test]
@@ -165,9 +165,9 @@ public class FloatTests
                                     b = 5.0 >= 5.0
                                     c = 5.0 >= 6.0
                                     """);
-            Assertions.AssertVariable(memory, "a", memory.Create(Memory.BsTypes.Bool, new NumericVariable(1)));
-            Assertions.AssertVariable(memory, "b", memory.Create(Memory.BsTypes.Bool, new NumericVariable(1)));
-            Assertions.AssertVariable(memory, "c", memory.Create(Memory.BsTypes.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(memory, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(memory, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(memory, "c", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
         }
         
         [Test]
@@ -177,7 +177,7 @@ public class FloatTests
                                     x = 5.0
                                     x += 3.0
                                     """);
-            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Float, new NumericVariable(8)));
+            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(8)));
         }
         
         [Test]
@@ -187,7 +187,7 @@ public class FloatTests
                                     x = 5.0
                                     x -= 3.0
                                     """);
-            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Float, new NumericVariable(2)));
+            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(2)));
         }
         
         [Test]
@@ -197,7 +197,7 @@ public class FloatTests
                                     x = 5.0
                                     x *= 3.0
                                     """);
-            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Float, new NumericVariable(15)));
+            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(15)));
         }
         
         [Test]
@@ -207,7 +207,7 @@ public class FloatTests
                                     x = 6.0
                                     x /= 3.0
                                     """);
-            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Float, new NumericVariable(2.0)));
+            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(2.0)));
         }
         
         [Test]
@@ -217,7 +217,7 @@ public class FloatTests
                                     x = 9.0
                                     x //= 2.0
                                     """);
-            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Int, new NumericVariable(4)));
+            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(4)));
         }
         
         [Test]
@@ -227,7 +227,7 @@ public class FloatTests
                                     x = 9.0
                                     x %= 2.0
                                     """);
-            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Float, new NumericVariable(1)));
+            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(1)));
         }
         
         [Test]
@@ -237,7 +237,7 @@ public class FloatTests
                                     x = 2.0
                                     x **= 3.0
                                     """);
-            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Float, new NumericVariable(8)));
+            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(8)));
         }
     }
 
@@ -250,7 +250,7 @@ public class FloatTests
                                     x = 5.0
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
         }
         
         [Test]
@@ -260,7 +260,7 @@ public class FloatTests
                                     x = 0.0
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
         }
     }
     
@@ -273,7 +273,7 @@ public class FloatTests
                                     x = __string__("1.45")
                                     y = float(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Float, new NumericVariable(1.45)));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(1.45)));
         }
 
         [Test]
@@ -283,7 +283,7 @@ public class FloatTests
                                     x = "1.69"
                                     y = float(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Float, new NumericVariable(1.69)));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(1.69)));
         }
         
         [Test]
@@ -293,7 +293,7 @@ public class FloatTests
                                     x = __numeric__(1.45)
                                     y = float(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Float, new NumericVariable(1.45)));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(1.45)));
         }
         
         [Test]
@@ -303,7 +303,7 @@ public class FloatTests
                                     x = 5
                                     y = float(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Float, new NumericVariable(5.0)));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(5.0)));
         }
     }
 }

@@ -13,20 +13,20 @@ public static class BuiltInType
         switch (firstExpression)
         {
             case StringVariable:
-                return memory.Create(Memory.BsTypes.String, "<class '__string__'>");
+                return BsTypes.Create(BsTypes.Types.String, "<class '__string__'>");
             case MappingVariable:
-                return memory.Create(Memory.BsTypes.String, "<class '__mapping__'>");
+                return BsTypes.Create(BsTypes.Types.String, "<class '__mapping__'>");
             case NumericVariable:
-                return memory.Create(Memory.BsTypes.String, "<class '__numeric__'>");
+                return BsTypes.Create(BsTypes.Types.String, "<class '__numeric__'>");
             case SequenceVariable:
-                return memory.Create(Memory.BsTypes.String, "<class '__sequence__'>");
+                return BsTypes.Create(BsTypes.Types.String, "<class '__sequence__'>");
             case FunctionVariable:
-                return memory.Create(Memory.BsTypes.String, "<class 'function'>");
+                return BsTypes.Create(BsTypes.Types.String, "<class 'function'>");
             case ClassVariable:
-                return memory.Create(Memory.BsTypes.String, "<class 'type'>");
+                return BsTypes.Create(BsTypes.Types.String, "<class 'type'>");
             case ObjectVariable objectVariable:
                 var className = objectVariable.Class.Name;
-                return memory.Create(Memory.BsTypes.String, $"<class '{className}'>");
+                return BsTypes.Create(BsTypes.Types.String, $"<class '{className}'>");
             default:
                 throw new Exception("Bad arguments, clean this up later");
         }

@@ -23,7 +23,7 @@ public class NumericInstruction : Instruction
     {
         if (tokens.Count > 1)
         {
-            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "invalid syntax");
+            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
         }
 
         if (tokens[0].Value.Contains('.'))
@@ -49,11 +49,11 @@ public class NumericInstruction : Instruction
     {
         if (Value is double)
         {
-            return memory.Create(Memory.BsTypes.Float, Value);
+            return BsTypes.Create(BsTypes.Types.Float, Value);
         }
         else
         {
-            return memory.Create(Memory.BsTypes.Int, Value);
+            return BsTypes.Create(BsTypes.Types.Int, Value);
         }
     }
 }

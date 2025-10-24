@@ -36,8 +36,8 @@ public class ParameterSetTests
         var result = parameters.GetVariableDictionary(memory);
         var expected = new Dictionary<string, Variable?>()
         {
-            { "asdf", memory.Create(Memory.BsTypes.Int, 1234) },
-            { "qwer", memory.Create(Memory.BsTypes.Int, 5678) }
+            { "asdf", BsTypes.Create(BsTypes.Types.Int, 1234) },
+            { "qwer", BsTypes.Create(BsTypes.Types.Int, 5678) }
         };
         Assertions.AssertVariableDictionariesEqual(result, expected);
     }
@@ -56,7 +56,7 @@ public class ParameterSetTests
         var expected = new Dictionary<string, Variable?>()
         {
             { "asdf", null },
-            { "qwer", memory.Create(Memory.BsTypes.Int, 5678) }
+            { "qwer", BsTypes.Create(BsTypes.Types.Int, 5678) }
         };
         Assertions.AssertVariableDictionariesEqual(result, expected);
     }

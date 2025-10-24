@@ -11,7 +11,7 @@ public class BuiltInAbsTests
     {
         var input = "x = abs(5)";
         var memory = Runner.Run(input);
-        var expected = memory.Create(Memory.BsTypes.Int, new NumericVariable(5));
+        var expected = BsTypes.Create(BsTypes.Types.Int, new NumericVariable(5));
         Assertions.AssertVariable(memory, "x", expected);
     }
     
@@ -20,7 +20,7 @@ public class BuiltInAbsTests
     {
         var input = "x = abs(-5)";
         var memory = Runner.Run(input);
-        var expected = memory.Create(Memory.BsTypes.Int, new NumericVariable(5));
+        var expected = BsTypes.Create(BsTypes.Types.Int, new NumericVariable(5));
         Assertions.AssertVariable(memory, "x", expected);
     }
     
@@ -29,7 +29,7 @@ public class BuiltInAbsTests
     {
         var input = "x = abs(5.5)";
         var memory = Runner.Run(input);
-        var expected = memory.Create(Memory.BsTypes.Float, new NumericVariable(5.5));
+        var expected = BsTypes.Create(BsTypes.Types.Float, new NumericVariable(5.5));
         Assertions.AssertVariable(memory, "x", expected);
     }
     
@@ -38,7 +38,7 @@ public class BuiltInAbsTests
     {
         var input = "x = abs(-5.5)";
         var memory = Runner.Run(input);
-        var expected = memory.Create(Memory.BsTypes.Float, new NumericVariable(5.5));
+        var expected = BsTypes.Create(BsTypes.Types.Float, new NumericVariable(5.5));
         Assertions.AssertVariable(memory, "x", expected);
     }
 
@@ -54,7 +54,7 @@ public class BuiltInAbsTests
                     x = abs(z)
                     """;
         var memory = Runner.Run(input);
-        var expected = memory.Create(Memory.BsTypes.Int, new NumericVariable(5));
+        var expected = BsTypes.Create(BsTypes.Types.Int, new NumericVariable(5));
         Assertions.AssertVariable(memory, "x", expected);
     }
 

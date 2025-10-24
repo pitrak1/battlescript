@@ -168,7 +168,7 @@ public static class Assertions
         {
             Assert.That(inputInst.Name, Is.EqualTo(expectedInst.Name));
             
-            if (Memory.BsTypeStrings.Contains(inputInst.Name)) return;
+            if (BsTypes.TypeStrings.Contains(inputInst.Name)) return;
             
             AssertInstructionListsEqual(inputInst.Superclasses!, expectedInst.Superclasses!);
         }

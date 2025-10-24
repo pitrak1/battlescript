@@ -13,7 +13,7 @@ public static class ListsTests
         {
             var input = "x = [5, '5']\ny = x[1]";
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.String, "5");
+            var expected = BsTypes.Create(BsTypes.Types.String, "5");
             
             Assertions.AssertVariable(memory, "y", expected);
         }
@@ -23,12 +23,12 @@ public static class ListsTests
         {
             var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[1:4]";
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.List,
+            var expected = BsTypes.Create(BsTypes.Types.List,
                 new List<Variable>
                 {
-                    memory.Create(Memory.BsTypes.Int, 1),
-                    memory.Create(Memory.BsTypes.Int, 2),
-                    memory.Create(Memory.BsTypes.Int, 3),
+                    BsTypes.Create(BsTypes.Types.Int, 1),
+                    BsTypes.Create(BsTypes.Types.Int, 2),
+                    BsTypes.Create(BsTypes.Types.Int, 3),
                 }
             );
             Assertions.AssertVariable(memory, "y", expected);
@@ -39,11 +39,11 @@ public static class ListsTests
         {
             var input = "x = [5, '5']\nx[1] = 0";
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.List,
+            var expected = BsTypes.Create(BsTypes.Types.List,
                 new List<Variable>
                 {
-                    memory.Create(Memory.BsTypes.Int, 5),
-                    memory.Create(Memory.BsTypes.Int, 0),
+                    BsTypes.Create(BsTypes.Types.Int, 5),
+                    BsTypes.Create(BsTypes.Types.Int, 0),
                 }
             );
             
@@ -55,15 +55,15 @@ public static class ListsTests
         {
             var input = "x = [0, 1, 2, 3, 4, 5]\nx[1:3] = [6, 7]";
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.List,
+            var expected = BsTypes.Create(BsTypes.Types.List,
                 new List<Variable>
                 {
-                    memory.Create(Memory.BsTypes.Int, 0),
-                    memory.Create(Memory.BsTypes.Int, 6),
-                    memory.Create(Memory.BsTypes.Int, 7),
-                    memory.Create(Memory.BsTypes.Int, 3),
-                    memory.Create(Memory.BsTypes.Int, 4),
-                    memory.Create(Memory.BsTypes.Int, 5),
+                    BsTypes.Create(BsTypes.Types.Int, 0),
+                    BsTypes.Create(BsTypes.Types.Int, 6),
+                    BsTypes.Create(BsTypes.Types.Int, 7),
+                    BsTypes.Create(BsTypes.Types.Int, 3),
+                    BsTypes.Create(BsTypes.Types.Int, 4),
+                    BsTypes.Create(BsTypes.Types.Int, 5),
                 }
             );
             Assertions.AssertVariable(memory, "x", expected);
@@ -77,13 +77,13 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[:4]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 0),
-                        memory.Create(Memory.BsTypes.Int, 1),
-                        memory.Create(Memory.BsTypes.Int, 2),
-                        memory.Create(Memory.BsTypes.Int, 3),
+                        BsTypes.Create(BsTypes.Types.Int, 0),
+                        BsTypes.Create(BsTypes.Types.Int, 1),
+                        BsTypes.Create(BsTypes.Types.Int, 2),
+                        BsTypes.Create(BsTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(memory, "y", expected);
@@ -94,13 +94,13 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[2:]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 2),
-                        memory.Create(Memory.BsTypes.Int, 3),
-                        memory.Create(Memory.BsTypes.Int, 4),
-                        memory.Create(Memory.BsTypes.Int, 5),
+                        BsTypes.Create(BsTypes.Types.Int, 2),
+                        BsTypes.Create(BsTypes.Types.Int, 3),
+                        BsTypes.Create(BsTypes.Types.Int, 4),
+                        BsTypes.Create(BsTypes.Types.Int, 5),
                     }
                 );
                 Assertions.AssertVariable(memory, "y", expected);
@@ -111,12 +111,12 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2]\ny = x[:]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 0),
-                        memory.Create(Memory.BsTypes.Int, 1),
-                        memory.Create(Memory.BsTypes.Int, 2),
+                        BsTypes.Create(BsTypes.Types.Int, 0),
+                        BsTypes.Create(BsTypes.Types.Int, 1),
+                        BsTypes.Create(BsTypes.Types.Int, 2),
                     }
                 );
                 Assertions.AssertVariable(memory, "y", expected);
@@ -127,7 +127,7 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2]\ny = x[4:2]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>()
                 );
                 Assertions.AssertVariable(memory, "y", expected);
@@ -138,11 +138,11 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[-4:4]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 2),
-                        memory.Create(Memory.BsTypes.Int, 3),
+                        BsTypes.Create(BsTypes.Types.Int, 2),
+                        BsTypes.Create(BsTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(memory, "y", expected);
@@ -153,13 +153,13 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[1:-1]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 1),
-                        memory.Create(Memory.BsTypes.Int, 2),
-                        memory.Create(Memory.BsTypes.Int, 3),
-                        memory.Create(Memory.BsTypes.Int, 4),
+                        BsTypes.Create(BsTypes.Types.Int, 1),
+                        BsTypes.Create(BsTypes.Types.Int, 2),
+                        BsTypes.Create(BsTypes.Types.Int, 3),
+                        BsTypes.Create(BsTypes.Types.Int, 4),
                     }
                 );
                 Assertions.AssertVariable(memory, "y", expected);
@@ -170,12 +170,12 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[-5:-2]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 1),
-                        memory.Create(Memory.BsTypes.Int, 2),
-                        memory.Create(Memory.BsTypes.Int, 3),
+                        BsTypes.Create(BsTypes.Types.Int, 1),
+                        BsTypes.Create(BsTypes.Types.Int, 2),
+                        BsTypes.Create(BsTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(memory, "y", expected);
@@ -186,7 +186,7 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[-2:-5]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>()
                 );
                 Assertions.AssertVariable(memory, "y", expected);
@@ -197,14 +197,14 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[-8:-1]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 0),
-                        memory.Create(Memory.BsTypes.Int, 1),
-                        memory.Create(Memory.BsTypes.Int, 2),
-                        memory.Create(Memory.BsTypes.Int, 3),
-                        memory.Create(Memory.BsTypes.Int, 4),
+                        BsTypes.Create(BsTypes.Types.Int, 0),
+                        BsTypes.Create(BsTypes.Types.Int, 1),
+                        BsTypes.Create(BsTypes.Types.Int, 2),
+                        BsTypes.Create(BsTypes.Types.Int, 3),
+                        BsTypes.Create(BsTypes.Types.Int, 4),
                     }
                 );
                 Assertions.AssertVariable(memory, "y", expected);
@@ -215,7 +215,7 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[8:6]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>()
                 );
                 Assertions.AssertVariable(memory, "y", expected);
@@ -226,7 +226,7 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[0:-9]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>()
                 );
                 Assertions.AssertVariable(memory, "y", expected);
@@ -237,15 +237,15 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[0:9]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>()
                     {
-                        memory.Create(Memory.BsTypes.Int, 0),
-                        memory.Create(Memory.BsTypes.Int, 1),
-                        memory.Create(Memory.BsTypes.Int, 2),
-                        memory.Create(Memory.BsTypes.Int, 3),
-                        memory.Create(Memory.BsTypes.Int, 4),
-                        memory.Create(Memory.BsTypes.Int, 5),
+                        BsTypes.Create(BsTypes.Types.Int, 0),
+                        BsTypes.Create(BsTypes.Types.Int, 1),
+                        BsTypes.Create(BsTypes.Types.Int, 2),
+                        BsTypes.Create(BsTypes.Types.Int, 3),
+                        BsTypes.Create(BsTypes.Types.Int, 4),
+                        BsTypes.Create(BsTypes.Types.Int, 5),
                     }
                 );
                 Assertions.AssertVariable(memory, "y", expected);
@@ -260,11 +260,11 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[1:5:2]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 1),
-                        memory.Create(Memory.BsTypes.Int, 3),
+                        BsTypes.Create(BsTypes.Types.Int, 1),
+                        BsTypes.Create(BsTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(memory, "y", expected);
@@ -275,11 +275,11 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[5:1:-2]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 5),
-                        memory.Create(Memory.BsTypes.Int, 3),
+                        BsTypes.Create(BsTypes.Types.Int, 5),
+                        BsTypes.Create(BsTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(memory, "y", expected);
@@ -290,10 +290,10 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[1:5:8]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 1),
+                        BsTypes.Create(BsTypes.Types.Int, 1),
                     }
                 );
                 Assertions.AssertVariable(memory, "y", expected);
@@ -304,10 +304,10 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[5:1:-8]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 5),
+                        BsTypes.Create(BsTypes.Types.Int, 5),
                     }
                 );
                 Assertions.AssertVariable(memory, "y", expected);
@@ -322,15 +322,15 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[1:3] = [4, 5, 6, 7]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 0),
-                        memory.Create(Memory.BsTypes.Int, 4),
-                        memory.Create(Memory.BsTypes.Int, 5),
-                        memory.Create(Memory.BsTypes.Int, 6),
-                        memory.Create(Memory.BsTypes.Int, 7),
-                        memory.Create(Memory.BsTypes.Int, 3),
+                        BsTypes.Create(BsTypes.Types.Int, 0),
+                        BsTypes.Create(BsTypes.Types.Int, 4),
+                        BsTypes.Create(BsTypes.Types.Int, 5),
+                        BsTypes.Create(BsTypes.Types.Int, 6),
+                        BsTypes.Create(BsTypes.Types.Int, 7),
+                        BsTypes.Create(BsTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(memory, "x", expected);
@@ -341,12 +341,12 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[1:3] = [4]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 0),
-                        memory.Create(Memory.BsTypes.Int, 4),
-                        memory.Create(Memory.BsTypes.Int, 3),
+                        BsTypes.Create(BsTypes.Types.Int, 0),
+                        BsTypes.Create(BsTypes.Types.Int, 4),
+                        BsTypes.Create(BsTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(memory, "x", expected);
@@ -357,11 +357,11 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[1:3] = []";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 0),
-                        memory.Create(Memory.BsTypes.Int, 3),
+                        BsTypes.Create(BsTypes.Types.Int, 0),
+                        BsTypes.Create(BsTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(memory, "x", expected);
@@ -372,17 +372,17 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[2:2] = [4, 5, 6, 7]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 0),
-                        memory.Create(Memory.BsTypes.Int, 1),
-                        memory.Create(Memory.BsTypes.Int, 4),
-                        memory.Create(Memory.BsTypes.Int, 5),
-                        memory.Create(Memory.BsTypes.Int, 6),
-                        memory.Create(Memory.BsTypes.Int, 7),
-                        memory.Create(Memory.BsTypes.Int, 2),
-                        memory.Create(Memory.BsTypes.Int, 3),
+                        BsTypes.Create(BsTypes.Types.Int, 0),
+                        BsTypes.Create(BsTypes.Types.Int, 1),
+                        BsTypes.Create(BsTypes.Types.Int, 4),
+                        BsTypes.Create(BsTypes.Types.Int, 5),
+                        BsTypes.Create(BsTypes.Types.Int, 6),
+                        BsTypes.Create(BsTypes.Types.Int, 7),
+                        BsTypes.Create(BsTypes.Types.Int, 2),
+                        BsTypes.Create(BsTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(memory, "x", expected);
@@ -393,15 +393,15 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[-3:3] = [4, 5, 6, 7]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 0),
-                        memory.Create(Memory.BsTypes.Int, 4),
-                        memory.Create(Memory.BsTypes.Int, 5),
-                        memory.Create(Memory.BsTypes.Int, 6),
-                        memory.Create(Memory.BsTypes.Int, 7),
-                        memory.Create(Memory.BsTypes.Int, 3),
+                        BsTypes.Create(BsTypes.Types.Int, 0),
+                        BsTypes.Create(BsTypes.Types.Int, 4),
+                        BsTypes.Create(BsTypes.Types.Int, 5),
+                        BsTypes.Create(BsTypes.Types.Int, 6),
+                        BsTypes.Create(BsTypes.Types.Int, 7),
+                        BsTypes.Create(BsTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(memory, "x", expected);
@@ -412,15 +412,15 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[1:-1] = [4, 5, 6, 7]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 0),
-                        memory.Create(Memory.BsTypes.Int, 4),
-                        memory.Create(Memory.BsTypes.Int, 5),
-                        memory.Create(Memory.BsTypes.Int, 6),
-                        memory.Create(Memory.BsTypes.Int, 7),
-                        memory.Create(Memory.BsTypes.Int, 3),
+                        BsTypes.Create(BsTypes.Types.Int, 0),
+                        BsTypes.Create(BsTypes.Types.Int, 4),
+                        BsTypes.Create(BsTypes.Types.Int, 5),
+                        BsTypes.Create(BsTypes.Types.Int, 6),
+                        BsTypes.Create(BsTypes.Types.Int, 7),
+                        BsTypes.Create(BsTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(memory, "x", expected);
@@ -431,15 +431,15 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[-3:-1] = [4, 5, 6, 7]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 0),
-                        memory.Create(Memory.BsTypes.Int, 4),
-                        memory.Create(Memory.BsTypes.Int, 5),
-                        memory.Create(Memory.BsTypes.Int, 6),
-                        memory.Create(Memory.BsTypes.Int, 7),
-                        memory.Create(Memory.BsTypes.Int, 3),
+                        BsTypes.Create(BsTypes.Types.Int, 0),
+                        BsTypes.Create(BsTypes.Types.Int, 4),
+                        BsTypes.Create(BsTypes.Types.Int, 5),
+                        BsTypes.Create(BsTypes.Types.Int, 6),
+                        BsTypes.Create(BsTypes.Types.Int, 7),
+                        BsTypes.Create(BsTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(memory, "x", expected);
@@ -454,13 +454,13 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[::2] = [4, 5]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 4),
-                        memory.Create(Memory.BsTypes.Int, 1),
-                        memory.Create(Memory.BsTypes.Int, 5),
-                        memory.Create(Memory.BsTypes.Int, 3),
+                        BsTypes.Create(BsTypes.Types.Int, 4),
+                        BsTypes.Create(BsTypes.Types.Int, 1),
+                        BsTypes.Create(BsTypes.Types.Int, 5),
+                        BsTypes.Create(BsTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(memory, "x", expected);
@@ -471,13 +471,13 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[::-2] = [4, 5]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 0),
-                        memory.Create(Memory.BsTypes.Int, 5),
-                        memory.Create(Memory.BsTypes.Int, 2),
-                        memory.Create(Memory.BsTypes.Int, 4),
+                        BsTypes.Create(BsTypes.Types.Int, 0),
+                        BsTypes.Create(BsTypes.Types.Int, 5),
+                        BsTypes.Create(BsTypes.Types.Int, 2),
+                        BsTypes.Create(BsTypes.Types.Int, 4),
                     }
                 );
                 Assertions.AssertVariable(memory, "x", expected);
@@ -492,14 +492,14 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[4:] = [4]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 0),
-                        memory.Create(Memory.BsTypes.Int, 1),
-                        memory.Create(Memory.BsTypes.Int, 2),
-                        memory.Create(Memory.BsTypes.Int, 3),
-                        memory.Create(Memory.BsTypes.Int, 4),
+                        BsTypes.Create(BsTypes.Types.Int, 0),
+                        BsTypes.Create(BsTypes.Types.Int, 1),
+                        BsTypes.Create(BsTypes.Types.Int, 2),
+                        BsTypes.Create(BsTypes.Types.Int, 3),
+                        BsTypes.Create(BsTypes.Types.Int, 4),
                     }
                 );
                 Assertions.AssertVariable(memory, "x", expected);
@@ -510,15 +510,15 @@ public static class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[2:] = [4, 5, 6, 7]";
                 var memory = Runner.Run(input);
-                var expected = memory.Create(Memory.BsTypes.List,
+                var expected = BsTypes.Create(BsTypes.Types.List,
                     new List<Variable>
                     {
-                        memory.Create(Memory.BsTypes.Int, 0),
-                        memory.Create(Memory.BsTypes.Int, 1),
-                        memory.Create(Memory.BsTypes.Int, 4),
-                        memory.Create(Memory.BsTypes.Int, 5),
-                        memory.Create(Memory.BsTypes.Int, 6),
-                        memory.Create(Memory.BsTypes.Int, 7),
+                        BsTypes.Create(BsTypes.Types.Int, 0),
+                        BsTypes.Create(BsTypes.Types.Int, 1),
+                        BsTypes.Create(BsTypes.Types.Int, 4),
+                        BsTypes.Create(BsTypes.Types.Int, 5),
+                        BsTypes.Create(BsTypes.Types.Int, 6),
+                        BsTypes.Create(BsTypes.Types.Int, 7),
                     }
                 );
                 Assertions.AssertVariable(memory, "x", expected);
@@ -537,7 +537,7 @@ public static class ListsTests
                         x = 2 in y
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.Bool, true);
+            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -550,7 +550,7 @@ public static class ListsTests
                         x = 4 in y
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.Bool, false);
+            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -563,7 +563,7 @@ public static class ListsTests
                         x = 4 not in y
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.Bool, true);
+            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -576,7 +576,7 @@ public static class ListsTests
                         x = 2 not in y
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.Bool, false);
+            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -594,7 +594,7 @@ public static class ListsTests
                         x = y is z
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.Bool, true);
+            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -608,7 +608,7 @@ public static class ListsTests
                         x = y is z
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.Bool, false);
+            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -622,7 +622,7 @@ public static class ListsTests
                         x = y is not z
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.Bool, true);
+            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -636,7 +636,7 @@ public static class ListsTests
                         x = y is not z
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.Bool, false);
+            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
             
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -654,14 +654,14 @@ public static class ListsTests
                         x = y + z
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.List, new List<Variable>()
+            var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>()
             {
-                memory.Create(Memory.BsTypes.Int, 1),
-                memory.Create(Memory.BsTypes.Int, 2),
-                memory.Create(Memory.BsTypes.Int, 3),
-                memory.Create(Memory.BsTypes.Int, 4),
-                memory.Create(Memory.BsTypes.Int, 5),
-                memory.Create(Memory.BsTypes.Int, 6)
+                BsTypes.Create(BsTypes.Types.Int, 1),
+                BsTypes.Create(BsTypes.Types.Int, 2),
+                BsTypes.Create(BsTypes.Types.Int, 3),
+                BsTypes.Create(BsTypes.Types.Int, 4),
+                BsTypes.Create(BsTypes.Types.Int, 5),
+                BsTypes.Create(BsTypes.Types.Int, 6)
             });
             Assertions.AssertVariable(memory, "x", expected);
         }
@@ -674,17 +674,17 @@ public static class ListsTests
                         x = y * 3
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.List, new List<Variable>()
+            var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>()
             {
-                memory.Create(Memory.BsTypes.Int, 1),
-                memory.Create(Memory.BsTypes.Int, 2),
-                memory.Create(Memory.BsTypes.Int, 3),
-                memory.Create(Memory.BsTypes.Int, 1),
-                memory.Create(Memory.BsTypes.Int, 2),
-                memory.Create(Memory.BsTypes.Int, 3),
-                memory.Create(Memory.BsTypes.Int, 1),
-                memory.Create(Memory.BsTypes.Int, 2),
-                memory.Create(Memory.BsTypes.Int, 3),
+                BsTypes.Create(BsTypes.Types.Int, 1),
+                BsTypes.Create(BsTypes.Types.Int, 2),
+                BsTypes.Create(BsTypes.Types.Int, 3),
+                BsTypes.Create(BsTypes.Types.Int, 1),
+                BsTypes.Create(BsTypes.Types.Int, 2),
+                BsTypes.Create(BsTypes.Types.Int, 3),
+                BsTypes.Create(BsTypes.Types.Int, 1),
+                BsTypes.Create(BsTypes.Types.Int, 2),
+                BsTypes.Create(BsTypes.Types.Int, 3),
             });
             Assertions.AssertVariable(memory, "x", expected);
         }

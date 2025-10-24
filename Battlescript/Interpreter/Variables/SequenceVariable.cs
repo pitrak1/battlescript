@@ -24,7 +24,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
                 if (valueVariable is SequenceVariable sequenceVariable)
                 {
                     SetRangeIndex(memory, sequenceVariable, indexSequence.Values);
-                } else if (memory.Is(Memory.BsTypes.List, valueVariable))
+                } else if (BsTypes.Is(BsTypes.Types.List, valueVariable))
                 {
                     SetRangeIndex(memory, (valueVariable as ObjectVariable).Values["__value"] as SequenceVariable, indexSequence.Values);
                 }
@@ -41,7 +41,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         } 
         else 
         {
-            var indexInt = memory.GetIntValue(indexSequence.Values[0]);
+            var indexInt = BsTypes.GetIntValue(indexSequence.Values[0]);
             if (index.Next is null)
             {
                 Values[indexInt] = valueVariable;
@@ -65,7 +65,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         {
             if (indices.Count != valueVariable.Values.Count)
             {
-                throw new InternalRaiseException(Memory.BsTypes.ValueError, $"attempt to assign sequence of size {valueVariable.Values.Count} to extended slice of size {indices.Count}");
+                throw new InternalRaiseException(BsTypes.Types.ValueError, $"attempt to assign sequence of size {valueVariable.Values.Count} to extended slice of size {indices.Count}");
             }
 
             for (var i = 0; i < indices.Count; i++)
@@ -89,7 +89,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         }
         else
         {
-            var indexInt = memory.GetIntValue(indexSequence.Values[0]);
+            var indexInt = BsTypes.GetIntValue(indexSequence.Values[0]);
             return Values[indexInt];
         }
     }
@@ -114,7 +114,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         List<int> indices = [];
         if (step == 0)
         {
-            throw new InternalRaiseException(Memory.BsTypes.ValueError, "slice step cannot be zero");
+            throw new InternalRaiseException(BsTypes.Types.ValueError, "slice step cannot be zero");
         }
         else if (step < 0)
         {
@@ -146,7 +146,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         {
             if (argVariable[2] is not null && argVariable[2] is not ConstantVariable { Value: Consts.Constants.None} )
             {
-                step = memory.GetIntValue(argVariable[2]!);
+                step = BsTypes.GetIntValue(argVariable[2]!);
                 
                 if (step < 0)
                 {
@@ -160,7 +160,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         {
             if (argVariable[1] is not null && argVariable[1] is not ConstantVariable { Value: Consts.Constants.None})
             {
-                var rawInt = memory.GetIntValue(argVariable[1]!);
+                var rawInt = BsTypes.GetIntValue(argVariable[1]!);
                 stop = Math.Clamp(rawInt, -Values.Count, Values.Count);
                 if (stop < 0)
                 {
@@ -173,7 +173,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         {
             if (argVariable[0] is not null && argVariable[0] is not ConstantVariable { Value: Consts.Constants.None})
             {
-                var rawInt = memory.GetIntValue(argVariable[0]!);
+                var rawInt = BsTypes.GetIntValue(argVariable[0]!);
                 start = Math.Clamp(rawInt, -Values.Count, Values.Count);
                 if (start < 0)
                 {

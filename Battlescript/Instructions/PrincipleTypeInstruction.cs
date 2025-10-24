@@ -69,18 +69,18 @@ public class PrincipleTypeInstruction : Instruction
                     {
                         value = numericVariable.Value;
                     }
-                    else if (memory.Is(Memory.BsTypes.String, variableValue))
+                    else if (BsTypes.Is(BsTypes.Types.String, variableValue))
                     {
-                        var stringValue = memory.GetStringValue(variableValue);
+                        var stringValue = BsTypes.GetStringValue(variableValue);
                         value = stringValue.Contains(".") ? float.Parse(stringValue) : int.Parse(stringValue);
                     }
-                    else if (memory.Is(Memory.BsTypes.Int, variableValue))
+                    else if (BsTypes.Is(BsTypes.Types.Int, variableValue))
                     {
-                        value = memory.GetIntValue(variableValue);
+                        value = BsTypes.GetIntValue(variableValue);
                     }
-                    else if (memory.Is(Memory.BsTypes.Float, variableValue))
+                    else if (BsTypes.Is(BsTypes.Types.Float, variableValue))
                     {
-                        value = memory.GetFloatValue(variableValue);
+                        value = BsTypes.GetFloatValue(variableValue);
                     }
                 }
 
@@ -106,17 +106,17 @@ public class PrincipleTypeInstruction : Instruction
                     {
                         return new StringVariable(numericVariable.Value.ToString());
                     }
-                    else if (memory.Is(Memory.BsTypes.String, parameter))
+                    else if (BsTypes.Is(BsTypes.Types.String, parameter))
                     {
-                        return new StringVariable(memory.GetStringValue(parameter));
+                        return new StringVariable(BsTypes.GetStringValue(parameter));
                     }
-                    else if (memory.Is(Memory.BsTypes.Int, parameter))
+                    else if (BsTypes.Is(BsTypes.Types.Int, parameter))
                     {
-                        return new StringVariable(memory.GetIntValue(parameter).ToString());
+                        return new StringVariable(BsTypes.GetIntValue(parameter).ToString());
                     }
-                    else if (memory.Is(Memory.BsTypes.Float, parameter))
+                    else if (BsTypes.Is(BsTypes.Types.Float, parameter))
                     {
-                        return new StringVariable(memory.GetFloatValue(parameter).ToString());
+                        return new StringVariable(BsTypes.GetFloatValue(parameter).ToString());
                     }
                 }
                 return new StringVariable();

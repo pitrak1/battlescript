@@ -14,7 +14,7 @@ public class BuiltInIsSubclassTests
                                     
                                 y = issubclass(asdf, asdf)
                                 """);
-        var expected = memory.Create(Memory.BsTypes.Bool, true);
+        var expected = BsTypes.Create(BsTypes.Types.Bool, true);
         Assertions.AssertVariable(memory, "y", expected);
     }
     
@@ -30,7 +30,7 @@ public class BuiltInIsSubclassTests
                                     
                                 y = issubclass(qwer, asdf)
                                 """);
-        var expected = memory.Create(Memory.BsTypes.Bool, true);
+        var expected = BsTypes.Create(BsTypes.Types.Bool, true);
         Assertions.AssertVariable(memory, "y", expected);
     }
     
@@ -46,7 +46,7 @@ public class BuiltInIsSubclassTests
                                     
                                 y = issubclass(asdf, qwer)
                                 """);
-        var expected = memory.Create(Memory.BsTypes.Bool, false);
+        var expected = BsTypes.Create(BsTypes.Types.Bool, false);
         Assertions.AssertVariable(memory, "y", expected);
     }
 }

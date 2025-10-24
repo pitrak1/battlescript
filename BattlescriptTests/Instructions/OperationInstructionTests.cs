@@ -61,7 +61,7 @@ public static class OperationInstructionTests
         public void HandlesBinaryOperations()
         {
             var memory = Runner.Run("x = 5 + 6");
-            Assertions.AssertVariable(memory, "x", memory.Create(Memory.BsTypes.Int, 11));
+            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 11));
         }
     }
 }

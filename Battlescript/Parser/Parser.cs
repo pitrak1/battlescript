@@ -34,7 +34,7 @@ public class Parser
                 {
                     if (_scopes[^1].Count == 0 || !Consts.InstructionTypesExpectingIndent.Contains(_scopes[^1][^1].GetType().Name))
                     {
-                        throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "unexpected indent");
+                        throw new InternalRaiseException(BsTypes.Types.SyntaxError, "unexpected indent");
                     }
                     // Add the last instruction of the current scope to the stack of scopes so that new instructions
                     // within the block are added there
@@ -49,7 +49,7 @@ public class Parser
                 }
                 else if (indentDiff > 1)
                 {
-                    throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "unindent does not match any outer indentation level");
+                    throw new InternalRaiseException(BsTypes.Types.SyntaxError, "unindent does not match any outer indentation level");
                 }
                 
                 currentIndentValue = newIndentValue;

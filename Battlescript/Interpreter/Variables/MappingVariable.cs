@@ -50,12 +50,12 @@ public class MappingVariable : Variable, IEquatable<MappingVariable>
         var indexList = indexVariable as ObjectVariable;
         var indexSequence = indexList.Values["__value"] as SequenceVariable;
         
-        if (memory.Is(Memory.BsTypes.Int, indexSequence.Values[0]))
+        if (BsTypes.Is(BsTypes.Types.Int, indexSequence.Values[0]))
         {
-            return (memory.GetIntValue(indexSequence.Values[0]), null);
-        } else if (memory.Is(Memory.BsTypes.String, indexSequence.Values[0]))
+            return (BsTypes.GetIntValue(indexSequence.Values[0]), null);
+        } else if (BsTypes.Is(BsTypes.Types.String, indexSequence.Values[0]))
         {
-            return (null, memory.GetStringValue(indexSequence.Values[0]));
+            return (null, BsTypes.GetStringValue(indexSequence.Values[0]));
         }
         else
         {

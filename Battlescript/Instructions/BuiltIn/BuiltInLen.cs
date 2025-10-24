@@ -12,15 +12,15 @@ public static class BuiltInLen
         var firstExpression = arguments[0].Interpret(memory);
         if (firstExpression is StringVariable stringVariable)
         {
-            return memory.Create(Memory.BsTypes.Int, stringVariable.Value.Length);
+            return BsTypes.Create(BsTypes.Types.Int, stringVariable.Value.Length);
         }
         else if (firstExpression is SequenceVariable sequenceVariable)
         {
-            return memory.Create(Memory.BsTypes.Int, sequenceVariable.Values.Count);
+            return BsTypes.Create(BsTypes.Types.Int, sequenceVariable.Values.Count);
         }
         else if (firstExpression is MappingVariable mappingVariable)
         {
-            return memory.Create(Memory.BsTypes.Int,
+            return BsTypes.Create(BsTypes.Types.Int,
                 mappingVariable.IntValues.Count + mappingVariable.StringValues.Count > 0);
         }
         else if (firstExpression is ObjectVariable objectVariable)

@@ -10,11 +10,11 @@ public class Dictionaries
     {
         var input = "x = {'asdf': 5, 'qwer': '5'}";
         var memory = Runner.Run(input);
-        var expected = memory.Create(Memory.BsTypes.Dictionary, new MappingVariable(null, 
+        var expected = BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, 
             new Dictionary<string, Variable>()
             {
-                { "asdf", memory.Create(Memory.BsTypes.Int, 5)},
-                {"qwer", memory.Create(Memory.BsTypes.String, "5")}
+                { "asdf", BsTypes.Create(BsTypes.Types.Int, 5)},
+                {"qwer", BsTypes.Create(BsTypes.Types.String, "5")}
             }
         ));
         Assertions.AssertVariable(memory, "x", expected);
@@ -25,7 +25,7 @@ public class Dictionaries
     {
         var input = "x = {'asdf': 5, 'qwer': '5'}\ny = x['qwer']";
         var memory = Runner.Run(input);
-        var expected = memory.Create(Memory.BsTypes.String, "5");
+        var expected = BsTypes.Create(BsTypes.Types.String, "5");
         
         Assertions.AssertVariable(memory, "y", expected);
     }

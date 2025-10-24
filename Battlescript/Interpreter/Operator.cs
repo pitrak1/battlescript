@@ -13,16 +13,16 @@ public static class Operator
         {
             var leftVariable = left.Interpret(memory);
             var result = Operate(memory, operation, leftVariable, rightVariable, originalInstruction);
-            if (operation == "/=" && memory.Is(Memory.BsTypes.Int, result))
+            if (operation == "/=" && BsTypes.Is(BsTypes.Types.Int, result))
             {
                 var objectResult = result as ObjectVariable;
                 var doubleResult = (objectResult.Values["__value"] as NumericVariable).Value;
-                memory.SetVariable(left, memory.Create(Memory.BsTypes.Float, doubleResult));
-            } else if (operation == "//=" && memory.Is(Memory.BsTypes.Float, result))
+                memory.SetVariable(left, BsTypes.Create(BsTypes.Types.Float, doubleResult));
+            } else if (operation == "//=" && BsTypes.Is(BsTypes.Types.Float, result))
             {
                 var objectResult = result as ObjectVariable;
                 var intResult = (objectResult.Values["__value"] as NumericVariable).Value;
-                memory.SetVariable(left, memory.Create(Memory.BsTypes.Int, intResult));
+                memory.SetVariable(left, BsTypes.Create(BsTypes.Types.Int, intResult));
             }
             else
             {
@@ -177,20 +177,20 @@ public static class Operator
         switch (operation)
         {
             case "or":
-                return memory.Create(Memory.BsTypes.Bool, GetOrValue());
+                return BsTypes.Create(BsTypes.Types.Bool, GetOrValue());
             case "and":
-                return memory.Create(Memory.BsTypes.Bool, GetAndValue());
+                return BsTypes.Create(BsTypes.Types.Bool, GetAndValue());
             case "not":
                 var rightNot = Truthiness.IsTruthy(memory, right!);
-                return memory.Create(Memory.BsTypes.Bool, !rightNot);
+                return BsTypes.Create(BsTypes.Types.Bool, !rightNot);
             case "is":
-                return memory.Create(Memory.BsTypes.Bool, ReferenceEquals(left, right));
+                return BsTypes.Create(BsTypes.Types.Bool, ReferenceEquals(left, right));
             case "is not":
-                return memory.Create(Memory.BsTypes.Bool, !ReferenceEquals(left, right));
+                return BsTypes.Create(BsTypes.Types.Bool, !ReferenceEquals(left, right));
             case "in":
-                return memory.Create(Memory.BsTypes.Bool, GetInValue());
+                return BsTypes.Create(BsTypes.Types.Bool, GetInValue());
             case "not in":
-                return memory.Create(Memory.BsTypes.Bool, !GetInValue());
+                return BsTypes.Create(BsTypes.Types.Bool, !GetInValue());
             default:
                 throw new Exception("Won't get here");
         }
@@ -222,24 +222,24 @@ public static class Operator
         
         bool GetInValue()
         {
-            if (memory.Is(Memory.BsTypes.String, left) && memory.Is(Memory.BsTypes.String, right))
+            if (BsTypes.Is(BsTypes.Types.String, left) && BsTypes.Is(BsTypes.Types.String, right))
             {
-                var leftString = memory.GetStringValue(left);
-                var rightString = memory.GetStringValue(right);
+                var leftString = BsTypes.GetStringValue(left);
+                var rightString = BsTypes.GetStringValue(right);
                 return rightString.Contains(leftString);
-            } else if (memory.Is(Memory.BsTypes.List, right))
+            } else if (BsTypes.Is(BsTypes.Types.List, right))
             {
-                var listValue = memory.GetListValue(right);
+                var listValue = BsTypes.GetListValue(right);
                 return listValue.Values.Any(x => x.Equals(left));
-            } else if (memory.Is(Memory.BsTypes.Dictionary, right) && memory.Is(Memory.BsTypes.Int, left))
+            } else if (BsTypes.Is(BsTypes.Types.Dictionary, right) && BsTypes.Is(BsTypes.Types.Int, left))
             {
-                var dictValue1 = memory.GetDictValue(right);
-                var intValue = memory.GetIntValue(left);
+                var dictValue1 = BsTypes.GetDictValue(right);
+                var intValue = BsTypes.GetIntValue(left);
                 return dictValue1.IntValues.Any(x => x.Key.Equals(intValue));
-            } else if (memory.Is(Memory.BsTypes.Dictionary, right) && memory.Is(Memory.BsTypes.String, left))
+            } else if (BsTypes.Is(BsTypes.Types.Dictionary, right) && BsTypes.Is(BsTypes.Types.String, left))
             {
-                var dictValue2 = memory.GetDictValue(right);
-                var stringValue = memory.GetStringValue(left);
+                var dictValue2 = BsTypes.GetDictValue(right);
+                var stringValue = BsTypes.GetStringValue(left);
                 return dictValue2.StringValues.Any(x => x.Key.Equals(stringValue));
             }
             else

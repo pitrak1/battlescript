@@ -28,6 +28,6 @@ public class StringInstruction : Instruction
         {
             value = StringUtilities.GetFormattedStringValue(memory, value);
         }
-        return memory.Create(Memory.BsTypes.String, value);
+        return BsTypes.Create(BsTypes.Types.String, value);
     }
 }

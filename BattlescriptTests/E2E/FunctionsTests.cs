@@ -85,7 +85,7 @@ public class FunctionsTests
                         func()
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.Int, 5);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
             Assertions.AssertVariable(memory, "x", expected);
         }
         
@@ -99,7 +99,7 @@ public class FunctionsTests
                         func(2, 3)
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.Int, 5);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
             Assertions.AssertVariable(memory, "x", expected);
         }
     }
@@ -116,7 +116,7 @@ public class FunctionsTests
                         x = func()
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.Int, 15);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 15);
             Assertions.AssertVariable(memory, "x", expected);
         }
         
@@ -129,7 +129,7 @@ public class FunctionsTests
                         x = func(4, 8)
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.Int, 12);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 12);
             Assertions.AssertVariable(memory, "x", expected);
         }
         
@@ -145,7 +145,7 @@ public class FunctionsTests
                         func()
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.Int, 5);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
             Assertions.AssertVariable(memory, "x", expected);
         }
     }
@@ -162,7 +162,7 @@ public class FunctionsTests
                         x = func(6)
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.Int, 6);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 6);
             Assertions.AssertVariable(memory, "x", expected);
         }
         
@@ -175,7 +175,7 @@ public class FunctionsTests
                         x = func()
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.Int, 5);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
             Assertions.AssertVariable(memory, "x", expected);
         }
     
@@ -202,7 +202,7 @@ public class FunctionsTests
                         x = func(y = 6)
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.Int, 6);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 6);
             Assertions.AssertVariable(memory, "x", expected);
         }
         
@@ -215,7 +215,7 @@ public class FunctionsTests
                         x = func(4, y = 6)
                         """;
             var memory = Runner.Run(input);
-            var expected = memory.Create(Memory.BsTypes.Int, 10);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 10);
             Assertions.AssertVariable(memory, "x", expected);
         }
         

@@ -8,7 +8,7 @@ public class ElseInstruction : Instruction
     {
         if (tokens[^1].Value != ":")
         {
-            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "invalid syntax");
+            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
         }
 
         if (tokens[0].Value == "elif")

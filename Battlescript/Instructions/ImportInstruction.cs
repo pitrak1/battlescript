@@ -11,12 +11,12 @@ public class ImportInstruction : Instruction
     {
         if (tokens[1].Type != Consts.TokenTypes.String)
         {
-            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "expected file path to be a string");
+            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "expected file path to be a string");
         }
         
         if (tokens[2].Value != "import")
         {
-            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "expected 'import' keyword");
+            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "expected 'import' keyword");
         }
 
         FilePath = tokens[1].Value;
@@ -81,7 +81,7 @@ public class ImportInstruction : Instruction
         {
             if (name == "*")
             {
-                memory.SetVariable(new VariableInstruction(FileName), memory.Create(Memory.BsTypes.Dictionary, new MappingVariable(null, importedScope)));
+                memory.SetVariable(new VariableInstruction(FileName), BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, importedScope)));
             }
             else if (importedScope.ContainsKey(name))
             {

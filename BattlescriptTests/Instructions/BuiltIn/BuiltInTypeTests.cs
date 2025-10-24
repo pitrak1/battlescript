@@ -15,7 +15,7 @@ public class BuiltInTypeTests
                     x = type(y)
                     """;
         var memory = Runner.Run(input);
-        var expected = memory.Create(Memory.BsTypes.String, "<class 'function'>");
+        var expected = BsTypes.Create(BsTypes.Types.String, "<class 'function'>");
         Assertions.AssertVariable(memory, "x", expected);
     }
     
@@ -29,7 +29,7 @@ public class BuiltInTypeTests
                     x = type(y)
                     """;
         var memory = Runner.Run(input);
-        var expected = memory.Create(Memory.BsTypes.String, "<class 'type'>");
+        var expected = BsTypes.Create(BsTypes.Types.String, "<class 'type'>");
         Assertions.AssertVariable(memory, "x", expected);
     }
     
@@ -41,7 +41,7 @@ public class BuiltInTypeTests
                     x = type(y)
                     """;
         var memory = Runner.Run(input);
-        var expected = memory.Create(Memory.BsTypes.String, "<class '__string__'>");
+        var expected = BsTypes.Create(BsTypes.Types.String, "<class '__string__'>");
         Assertions.AssertVariable(memory, "x", expected);
     }
     
@@ -53,7 +53,7 @@ public class BuiltInTypeTests
                     x = type(y)
                     """;
         var memory = Runner.Run(input);
-        var expected = memory.Create(Memory.BsTypes.String, "<class 'int'>");
+        var expected = BsTypes.Create(BsTypes.Types.String, "<class 'int'>");
         Assertions.AssertVariable(memory, "x", expected);
     }
 
@@ -68,7 +68,7 @@ public class BuiltInTypeTests
                     x = type(z)
                     """;
         var memory = Runner.Run(input);
-        var expected = memory.Create(Memory.BsTypes.String, "<class 'y'>");
+        var expected = BsTypes.Create(BsTypes.Types.String, "<class 'y'>");
         Assertions.AssertVariable(memory, "x", expected);
     }
 }

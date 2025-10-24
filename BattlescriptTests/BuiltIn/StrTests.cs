@@ -15,8 +15,8 @@ public class StrTests
                                     a = "asdf" == "asdf"
                                     b = "asdf" == "qwer"
                                     """);
-            Assertions.AssertVariable(memory, "a", memory.Create(Memory.BsTypes.Bool, new NumericVariable(1)));
-            Assertions.AssertVariable(memory, "b", memory.Create(Memory.BsTypes.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(memory, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(memory, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
         }
 
         [Test]
@@ -26,8 +26,8 @@ public class StrTests
                                     a = "asdf" != "asdf"
                                     b = "asdf" != "qwer"
                                     """);
-            Assertions.AssertVariable(memory, "a", memory.Create(Memory.BsTypes.Bool, new NumericVariable(0)));
-            Assertions.AssertVariable(memory, "b", memory.Create(Memory.BsTypes.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(memory, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(memory, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
         }
 
         [Test]
@@ -35,7 +35,7 @@ public class StrTests
         {
             var memory = Runner.Run("x = 'asdf' + 'qwer'");
             Assertions.AssertVariable(memory, "x",
-                memory.Create(Memory.BsTypes.String, new StringVariable("asdfqwer")));
+                BsTypes.Create(BsTypes.Types.String, new StringVariable("asdfqwer")));
         }
 
         [Test]
@@ -46,9 +46,9 @@ public class StrTests
                                     y = 3 * 'asdf'
                                     """);
             Assertions.AssertVariable(memory, "x",
-                memory.Create(Memory.BsTypes.String, new StringVariable("asdfasdf")));
+                BsTypes.Create(BsTypes.Types.String, new StringVariable("asdfasdf")));
             Assertions.AssertVariable(memory, "y",
-                memory.Create(Memory.BsTypes.String, new StringVariable("asdfasdfasdf")));
+                BsTypes.Create(BsTypes.Types.String, new StringVariable("asdfasdfasdf")));
         }
     }
 
@@ -62,7 +62,7 @@ public class StrTests
                                     x = "asdf"
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
         }
         
         [Test]
@@ -72,7 +72,7 @@ public class StrTests
                                     x = ""
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
         }
     }
 
@@ -86,7 +86,7 @@ public class StrTests
                                     x = __string__("hello")
                                     y = str(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.String, new StringVariable("hello")));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("hello")));
         }
 
         [Test]
@@ -96,7 +96,7 @@ public class StrTests
                                     x = "hello"
                                     y = str(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.String, new StringVariable("hello")));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("hello")));
         }
         
         [Test]
@@ -106,7 +106,7 @@ public class StrTests
                                     x = __numeric__(1)
                                     y = str(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.String, new StringVariable("1")));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("1")));
         }
         
         [Test]
@@ -116,7 +116,7 @@ public class StrTests
                                     x = 1
                                     y = str(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.String, new StringVariable("1")));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("1")));
         }
         
         [Test]
@@ -126,7 +126,7 @@ public class StrTests
                                     x = 1.5
                                     y = str(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", memory.Create(Memory.BsTypes.String, new StringVariable("1.5")));
+            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("1.5")));
         }
     }
 }

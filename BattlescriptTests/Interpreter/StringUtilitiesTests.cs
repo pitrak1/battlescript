@@ -20,7 +20,7 @@ public class StringUtilitiesTests
         public void HandlesStrings()
         {
             var memory = Runner.Run("");
-            var input = memory.Create(Memory.BsTypes.String, new StringVariable("asdf"));
+            var input = BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf"));
             Assert.That(StringUtilities.GetVariableAsString(memory, input), Is.EqualTo("asdf"));
         }
         
@@ -28,7 +28,7 @@ public class StringUtilitiesTests
         public void HandlesInts()
         {
             var memory = Runner.Run("");
-            var input = memory.Create(Memory.BsTypes.Int, new NumericVariable(1));
+            var input = BsTypes.Create(BsTypes.Types.Int, new NumericVariable(1));
             Assert.That(StringUtilities.GetVariableAsString(memory, input), Is.EqualTo("1"));
         }
         
@@ -37,7 +37,7 @@ public class StringUtilitiesTests
         public void HandlesFloats()
         {
             var memory = Runner.Run("");
-            var input = memory.Create(Memory.BsTypes.Float, new NumericVariable(1.45));
+            var input = BsTypes.Create(BsTypes.Types.Float, new NumericVariable(1.45));
             Assert.That(StringUtilities.GetVariableAsString(memory, input), Is.EqualTo("1.45"));
         }
         
@@ -45,7 +45,7 @@ public class StringUtilitiesTests
         public void HandlesTrue()
         {
             var memory = Runner.Run("");
-            var input = memory.Create(Memory.BsTypes.Bool, new NumericVariable(1));
+            var input = BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1));
             Assert.That(StringUtilities.GetVariableAsString(memory, input), Is.EqualTo("True"));
         }
     
@@ -53,7 +53,7 @@ public class StringUtilitiesTests
         public void HandlesFalse()
         {
             var memory = Runner.Run("");
-            var input = memory.Create(Memory.BsTypes.Bool, new NumericVariable(0));
+            var input = BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0));
             Assert.That(StringUtilities.GetVariableAsString(memory, input), Is.EqualTo("False"));
         }
     }

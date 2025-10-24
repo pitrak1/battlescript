@@ -8,7 +8,7 @@ public class IfInstruction : Instruction
     {
         if (tokens[^1].Value != ":")
         {
-            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "invalid syntax");
+            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
         }
 
         Condition = InstructionFactory.Create(tokens.GetRange(1, tokens.Count - 2));

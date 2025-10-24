@@ -37,7 +37,7 @@ public abstract class Instruction
             Next = InstructionFactory.Create(tokens.GetRange(expectedTokenCount, tokens.Count - expectedTokenCount));
             if (Next is not ArrayInstruction && Next is not MemberInstruction)
             {
-                throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "invalid syntax");
+                throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
             }
         }
     }

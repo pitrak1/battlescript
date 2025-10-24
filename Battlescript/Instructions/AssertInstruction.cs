@@ -24,7 +24,7 @@ public class AssertInstruction : Instruction
         
         if (!Truthiness.IsTruthy(memory, condition))
         {
-            throw new InternalRaiseException(Memory.BsTypes.AssertionError, "");
+            throw new InternalRaiseException(BsTypes.Types.AssertionError, "");
         }
 
         return null;

@@ -62,11 +62,11 @@ public class Lexer(string input, string? fileName = null)
             }
             else if (nextCharacter[0] == '\t')
             {
-                throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "unexpected indent");
+                throw new InternalRaiseException(BsTypes.Types.SyntaxError, "unexpected indent");
             }
             else
             {
-                throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "invalid syntax");
+                throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
             }
         }
         
@@ -168,7 +168,7 @@ public class Lexer(string input, string? fileName = null)
             
         if (_index + stringLength + 1 >= input.Length)
         {
-            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "EOL while scanning string literal");
+            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "EOL while scanning string literal");
         }
         
         _tokens.Add(new Token(Consts.TokenTypes.String, stringContents, _line, fileName, _expressionForStacktrace));

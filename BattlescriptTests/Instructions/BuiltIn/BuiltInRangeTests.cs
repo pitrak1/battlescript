@@ -10,12 +10,12 @@ public class BuiltInRangeTests
     {
         var input = "x = range(5)";
         var memory = Runner.Run(input);
-        var expected = memory.Create(Memory.BsTypes.List, new List<Variable>() {
-            memory.Create(Memory.BsTypes.Int, 0),
-            memory.Create(Memory.BsTypes.Int, 1),
-            memory.Create(Memory.BsTypes.Int, 2),
-            memory.Create(Memory.BsTypes.Int, 3),
-            memory.Create(Memory.BsTypes.Int, 4),
+        var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>() {
+            BsTypes.Create(BsTypes.Types.Int, 0),
+            BsTypes.Create(BsTypes.Types.Int, 1),
+            BsTypes.Create(BsTypes.Types.Int, 2),
+            BsTypes.Create(BsTypes.Types.Int, 3),
+            BsTypes.Create(BsTypes.Types.Int, 4),
         });
         Assertions.AssertVariable(memory, "x", expected);
     }
@@ -25,10 +25,10 @@ public class BuiltInRangeTests
     {
         var input = "x = range(2, 5)";
         var memory = Runner.Run(input);
-        var expected = memory.Create(Memory.BsTypes.List, new List<Variable>() {
-            memory.Create(Memory.BsTypes.Int, 2),
-            memory.Create(Memory.BsTypes.Int, 3),
-            memory.Create(Memory.BsTypes.Int, 4),
+        var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>() {
+            BsTypes.Create(BsTypes.Types.Int, 2),
+            BsTypes.Create(BsTypes.Types.Int, 3),
+            BsTypes.Create(BsTypes.Types.Int, 4),
         });
         Assertions.AssertVariable(memory, "x", expected);
     }
@@ -38,11 +38,11 @@ public class BuiltInRangeTests
     {
         var input = "x = range(2, 10, 2)";
         var memory = Runner.Run(input);
-        var expected = memory.Create(Memory.BsTypes.List, new List<Variable>() {
-            memory.Create(Memory.BsTypes.Int, 2),
-            memory.Create(Memory.BsTypes.Int, 4),
-            memory.Create(Memory.BsTypes.Int, 6),
-            memory.Create(Memory.BsTypes.Int, 8),
+        var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>() {
+            BsTypes.Create(BsTypes.Types.Int, 2),
+            BsTypes.Create(BsTypes.Types.Int, 4),
+            BsTypes.Create(BsTypes.Types.Int, 6),
+            BsTypes.Create(BsTypes.Types.Int, 8),
         });
         Assertions.AssertVariable(memory, "x", expected);
     }
@@ -52,9 +52,9 @@ public class BuiltInRangeTests
     {
         var input = "x = range(2, 5, 2)";
         var memory = Runner.Run(input);
-        var expected = memory.Create(Memory.BsTypes.List, new List<Variable>() {
-            memory.Create(Memory.BsTypes.Int, 2),
-            memory.Create(Memory.BsTypes.Int, 4),
+        var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>() {
+            BsTypes.Create(BsTypes.Types.Int, 2),
+            BsTypes.Create(BsTypes.Types.Int, 4),
         });
         Assertions.AssertVariable(memory, "x", expected);
     }
@@ -64,11 +64,11 @@ public class BuiltInRangeTests
     {
         var input = "x = range(2, -5, -2)";
         var memory = Runner.Run(input);
-        var expected = memory.Create(Memory.BsTypes.List, new List<Variable>() {
-            memory.Create(Memory.BsTypes.Int, 2),
-            memory.Create(Memory.BsTypes.Int, 0),
-            memory.Create(Memory.BsTypes.Int, -2),
-            memory.Create(Memory.BsTypes.Int, -4),
+        var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>() {
+            BsTypes.Create(BsTypes.Types.Int, 2),
+            BsTypes.Create(BsTypes.Types.Int, 0),
+            BsTypes.Create(BsTypes.Types.Int, -2),
+            BsTypes.Create(BsTypes.Types.Int, -4),
         });
         Assertions.AssertVariable(memory, "x", expected);
     }
@@ -78,7 +78,7 @@ public class BuiltInRangeTests
     {
         var input = "x = range(2, -5, 2)";
         var memory = Runner.Run(input);
-        var expected = memory.Create(Memory.BsTypes.List, new List<Variable>());
+        var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>());
         
         Assertions.AssertVariable(memory, "x", expected);
     }

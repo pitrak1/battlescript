@@ -9,7 +9,7 @@ public class ClassInstruction : Instruction
     {
         if (tokens[^1].Value != ":")
         {
-            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "invalid syntax");
+            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
         }
         
         List<Instruction> superClasses = [];

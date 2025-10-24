@@ -9,7 +9,7 @@ public class ForInstruction : Instruction
     {
         if (tokens[^1].Value != ":")
         {
-            throw new InternalRaiseException(Memory.BsTypes.SyntaxError, "invalid syntax");
+            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
         }
 
         if (tokens[2].Value != "in")
@@ -36,7 +36,7 @@ public class ForInstruction : Instruction
     {
         var range = Range.Interpret(memory) as ObjectVariable;
 
-        if (memory.Is(Memory.BsTypes.List, range))
+        if (BsTypes.Is(BsTypes.Types.List, range))
         {
             var values = (range.Values["__value"] as SequenceVariable).Values;
             for (var i = 0; i < values.Count; i++)
