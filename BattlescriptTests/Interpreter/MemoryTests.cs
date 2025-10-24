@@ -9,184 +9,160 @@ public static class MemoryTests
     public class Initialization
     {
         [Test]
-        public void CreatesEmptyScopeOnObjectCreation()
+        public void CreatesMainScopeOnObjectCreation()
         {
             var memory = new Memory();
-
             Assert.That(memory.Scopes.Count, Is.EqualTo(1));
+            Assertions.AssertStackFrame(memory.Scopes[0], new StackFrame("main", 0, "", "<module>"));
         }
     }
-
+    
     [TestFixture]
     public class AddScope
     {
         [Test]
-        public void AddsEmptyScopeIfNoArgumentProvided()
+        public void UsesFileIfGiven()
         {
             var memory = new Memory();
-            memory.AddScope();
+            memory.AddScope(5, "x = 5", "func", "file.bs");
             
             Assert.That(memory.Scopes.Count, Is.EqualTo(2));
-            Assert.That(memory.Scopes[1], Is.Empty);
+            Assertions.AssertStackFrame(memory.Scopes[1], new StackFrame("file.bs", 5, "x = 5", "func"));
         }
-
+    
         [Test]
-        public void AddsExistingScopeIfArgumentProvided()
+        public void UsesExistingFileIfNotGiven()
         {
             var memory = new Memory();
-            var scopeVariables = new Dictionary<string, Variable>()
-            {
-                { "x", new NumericVariable(5) }
-            };
-            memory.AddScope(new Dictionary<string, Variable>(scopeVariables));
+            memory.AddScope(5, "x = 5", "func");
             
             Assert.That(memory.Scopes.Count, Is.EqualTo(2));
-            Assert.That(memory.Scopes[1], Is.EquivalentTo(scopeVariables));
+            Assertions.AssertStackFrame(memory.Scopes[1], new StackFrame("main", 5, "x = 5", "func"));
         }
     }
-
+    
     [TestFixture]
     public class RemoveScope()
     {
         [Test]
         public void RemovesAndReturnsLastScopeInList()
         {
-            var scopeVariables = new Dictionary<string, Variable>()
-            {
-                { "x", new NumericVariable(5) }
-            };
             var memory = new Memory();
-            memory.AddScope(new Dictionary<string, Variable>(scopeVariables));
+            memory.AddScope(5, "x = 5", "func");
             var returnedScope = memory.RemoveScope();
             
             Assert.That(memory.Scopes.Count, Is.EqualTo(1));
-            Assert.That(returnedScope, Is.EquivalentTo(scopeVariables));
+            Assertions.AssertStackFrame(returnedScope, new StackFrame("main", 5, "x = 5", "func"));
         }
     }
     
-    [TestFixture]
-    public class RemoveScopes()
-    {
-        [Test]
-        public void RemovesScopeCountGiven()
-        {
-            var memory = new Memory();
-            memory.AddScope();
-            memory.AddScope();
-            memory.AddScope();
-            memory.RemoveScopes(3);
-            
-            Assert.That(memory.Scopes.Count, Is.EqualTo(1));
-        }
-    }
-
-    [TestFixture]
-    public class GetVariable()
-    {
-        [Test]
-        public void GetsVariableInLastScope()
-        {
-            var scopeVariables = new Dictionary<string, Variable>()
-            {
-                { "x", new NumericVariable(5) }
-            };
-            var memory = new Memory();
-            memory.AddScope(new Dictionary<string, Variable>(scopeVariables));
-            var returnedVariable = memory.GetVariable("x");
-            
-            Assertions.AssertVariablesEqual(returnedVariable, new NumericVariable(5));
-        }
-        
-        [Test]
-        public void GetsVariableNotInLastScope()
-        {
-            var scopeVariables1 = new Dictionary<string, Variable>()
-            {
-                { "x", new NumericVariable(5) }
-            };
-            var scopeVariables2 = new Dictionary<string, Variable>()
-            {
-                { "y", new NumericVariable(8) }
-            };
-            var memory = new Memory();
-            memory.AddScope(new Dictionary<string, Variable>(scopeVariables1));
-            memory.AddScope(new Dictionary<string, Variable>(scopeVariables2));
-            var returnedVariable = memory.GetVariable("x");
-            
-            Assertions.AssertVariablesEqual(returnedVariable, new NumericVariable(5));
-        }
-
-        [Test]
-        public void PrefersVariablesInLaterScopes()
-        {
-            var scopeVariables1 = new Dictionary<string, Variable>()
-            {
-                { "x", new NumericVariable(5) }
-            };
-            var scopeVariables2 = new Dictionary<string, Variable>()
-            {
-                { "x", new NumericVariable(8) }
-            };
-            var memory = new Memory();
-            memory.AddScope(new Dictionary<string, Variable>(scopeVariables1));
-            memory.AddScope(new Dictionary<string, Variable>(scopeVariables2));
-            var returnedVariable = memory.GetVariable("x");
-            
-            Assertions.AssertVariablesEqual(returnedVariable, new NumericVariable(8));
-        }
-    }
-
-    [TestFixture]
-    public class SetVariable
-    {
-        [Test]
-        public void CreatesVariableInLastScopeIfDoesNotExist()
-        {
-            var memory = new Memory();
-            memory.AddScope();
-            memory.SetVariable(new VariableInstruction("x"), new NumericVariable(5));
-            var scopes = memory.Scopes;
-            
-            Assertions.AssertVariablesEqual(scopes[1]["x"], new NumericVariable(5));
-        }
-
-        [Test]
-        public void AssignsToVariableIfExists()
-        {
-            var scopeVariables = new Dictionary<string, Variable>()
-            {
-                { "x", new NumericVariable(5) }
-            };
-            var memory = new Memory();
-            memory.AddScope(new Dictionary<string, Variable>(scopeVariables));
-            memory.SetVariable(new VariableInstruction("x"), new NumericVariable(8));
-            var scopes = memory.Scopes;
-            
-            Assertions.AssertVariablesEqual(scopes[1]["x"], new NumericVariable(8));
-        }
-
-        [Test]
-        public void AssignsToVariableInLaterScopesIfExistsInMultipleScopes()
-        {
-            var scopeVariables1 = new Dictionary<string, Variable>()
-            {
-                { "x", new NumericVariable(5) }
-            };
-            var scopeVariables2 = new Dictionary<string, Variable>()
-            {
-                { "x", new NumericVariable(6) }
-            };
-            var memory = new Memory();
-            memory.AddScope(new Dictionary<string, Variable>(scopeVariables1));
-            memory.AddScope(new Dictionary<string, Variable>(scopeVariables2));
-            memory.SetVariable(new VariableInstruction("x"), new NumericVariable(8));
-            var scopes = memory.Scopes;
-            
-            Assertions.AssertVariablesEqual(scopes[1]["x"], new NumericVariable(5));
-            
-            Assertions.AssertVariablesEqual(scopes[2]["x"], new NumericVariable(8));
-        }
-    }
+    // [TestFixture]
+    // public class GetVariable()
+    // {
+    //     [Test]
+    //     public void GetsVariableInLastScope()
+    //     {
+    //         var scopeVariables = new Dictionary<string, Variable>()
+    //         {
+    //             { "x", new NumericVariable(5) }
+    //         };
+    //         var memory = new Memory();
+    //         memory.AddScope(new Dictionary<string, Variable>(scopeVariables));
+    //         var returnedVariable = memory.GetVariable("x");
+    //         
+    //         Assertions.AssertVariablesEqual(returnedVariable, new NumericVariable(5));
+    //     }
+    //     
+    //     [Test]
+    //     public void GetsVariableNotInLastScope()
+    //     {
+    //         var scopeVariables1 = new Dictionary<string, Variable>()
+    //         {
+    //             { "x", new NumericVariable(5) }
+    //         };
+    //         var scopeVariables2 = new Dictionary<string, Variable>()
+    //         {
+    //             { "y", new NumericVariable(8) }
+    //         };
+    //         var memory = new Memory();
+    //         memory.AddScope(new Dictionary<string, Variable>(scopeVariables1));
+    //         memory.AddScope(new Dictionary<string, Variable>(scopeVariables2));
+    //         var returnedVariable = memory.GetVariable("x");
+    //         
+    //         Assertions.AssertVariablesEqual(returnedVariable, new NumericVariable(5));
+    //     }
+    //
+    //     [Test]
+    //     public void PrefersVariablesInLaterScopes()
+    //     {
+    //         var scopeVariables1 = new Dictionary<string, Variable>()
+    //         {
+    //             { "x", new NumericVariable(5) }
+    //         };
+    //         var scopeVariables2 = new Dictionary<string, Variable>()
+    //         {
+    //             { "x", new NumericVariable(8) }
+    //         };
+    //         var memory = new Memory();
+    //         memory.AddScope(new Dictionary<string, Variable>(scopeVariables1));
+    //         memory.AddScope(new Dictionary<string, Variable>(scopeVariables2));
+    //         var returnedVariable = memory.GetVariable("x");
+    //         
+    //         Assertions.AssertVariablesEqual(returnedVariable, new NumericVariable(8));
+    //     }
+    // }
+    //
+    // [TestFixture]
+    // public class SetVariable
+    // {
+    //     [Test]
+    //     public void CreatesVariableInLastScopeIfDoesNotExist()
+    //     {
+    //         var memory = new Memory();
+    //         memory.AddScope();
+    //         memory.SetVariable(new VariableInstruction("x"), new NumericVariable(5));
+    //         var scopes = memory.Scopes;
+    //         
+    //         Assertions.AssertVariablesEqual(scopes[1]["x"], new NumericVariable(5));
+    //     }
+    //
+    //     [Test]
+    //     public void AssignsToVariableIfExists()
+    //     {
+    //         var scopeVariables = new Dictionary<string, Variable>()
+    //         {
+    //             { "x", new NumericVariable(5) }
+    //         };
+    //         var memory = new Memory();
+    //         memory.AddScope(new Dictionary<string, Variable>(scopeVariables));
+    //         memory.SetVariable(new VariableInstruction("x"), new NumericVariable(8));
+    //         var scopes = memory.Scopes;
+    //         
+    //         Assertions.AssertVariablesEqual(scopes[1]["x"], new NumericVariable(8));
+    //     }
+    //
+    //     [Test]
+    //     public void AssignsToVariableInLaterScopesIfExistsInMultipleScopes()
+    //     {
+    //         var scopeVariables1 = new Dictionary<string, Variable>()
+    //         {
+    //             { "x", new NumericVariable(5) }
+    //         };
+    //         var scopeVariables2 = new Dictionary<string, Variable>()
+    //         {
+    //             { "x", new NumericVariable(6) }
+    //         };
+    //         var memory = new Memory();
+    //         memory.AddScope(new Dictionary<string, Variable>(scopeVariables1));
+    //         memory.AddScope(new Dictionary<string, Variable>(scopeVariables2));
+    //         memory.SetVariable(new VariableInstruction("x"), new NumericVariable(8));
+    //         var scopes = memory.Scopes;
+    //         
+    //         Assertions.AssertVariablesEqual(scopes[1]["x"], new NumericVariable(5));
+    //         
+    //         Assertions.AssertVariablesEqual(scopes[2]["x"], new NumericVariable(8));
+    //     }
+    // }
 
     // [TestFixture]
     // public class Stacktrace

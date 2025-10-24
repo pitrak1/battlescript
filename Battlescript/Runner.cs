@@ -19,17 +19,16 @@ public static class Runner
 
     public static void RunAsMain(Memory memory, string input)
     {
-        memory.AddScope();
+        // memory.AddScope();
         // memory.CurrentStack.Files.Add("main");
         // memory.CurrentStack.Functions.Add("<module>");
         RunPartial(memory, input, "main");
     }
 
-    public static Dictionary<string, Variable> RunFilePath(Memory memory, string path)
+    public static void RunFilePath(Memory memory, string path)
     {
         var input = ReadFile(path);
         RunPartial(memory, input, path);
-        return memory.RemoveScope();
     }
 
     private static void LoadBuiltin(Memory memory, string builtinName)

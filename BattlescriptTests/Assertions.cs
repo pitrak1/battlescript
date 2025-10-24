@@ -453,4 +453,12 @@ public static class Assertions
             Assert.That(input[i].Function, Is.EqualTo(expected[i].Function));
         }
     }
+
+    public static void AssertStackFrame(StackFrame input, StackFrame expected)
+    {
+        Assert.That(input.File, Is.EqualTo(expected.File));
+        Assert.That(input.Line, Is.EqualTo(expected.Line));
+        Assert.That(input.Expression, Is.EqualTo(expected.Expression));
+        Assert.That(input.Function, Is.EqualTo(expected.Function));
+    }
 }
