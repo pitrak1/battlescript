@@ -22,7 +22,7 @@ public class AssertInstruction : Instruction
     {
         var condition = Condition.Interpret(memory);
         
-        if (!Truthiness.IsTruthy(memory, condition))
+        if (!Truthiness.IsTruthy(memory, condition, this))
         {
             throw new InternalRaiseException(BsTypes.Types.AssertionError, "");
         }

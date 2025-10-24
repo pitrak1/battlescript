@@ -28,7 +28,7 @@ public class IfInstruction : Instruction
         ClassVariable? lexicalContext = null)
     {
         var condition = Condition.Interpret(memory);
-        if (Truthiness.IsTruthy(memory, condition))
+        if (Truthiness.IsTruthy(memory, condition, this))
         {
             foreach (var inst in Instructions)
             {

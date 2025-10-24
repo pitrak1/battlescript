@@ -13,7 +13,7 @@ public static class MemoryTests
         {
             var memory = new Memory();
             Assert.That(memory.Scopes.Count, Is.EqualTo(1));
-            Assertions.AssertStackFrame(memory.Scopes[0], new StackFrame("main", 0, "", "<module>"));
+            Assertions.AssertStackFrame(memory.Scopes[0], new StackFrame("main", "<module>"));
         }
     }
     
@@ -21,13 +21,23 @@ public static class MemoryTests
     public class AddScope
     {
         [Test]
-        public void UsesFileIfGiven()
+        public void UpdatesPreviousScopeWithLineAndExpression()
         {
             var memory = new Memory();
             memory.AddScope(5, "x = 5", "func", "file.bs");
             
             Assert.That(memory.Scopes.Count, Is.EqualTo(2));
-            Assertions.AssertStackFrame(memory.Scopes[1], new StackFrame("file.bs", 5, "x = 5", "func"));
+            Assertions.AssertStackFrame(memory.Scopes[0], new StackFrame("main", 5, "x = 5", "<module>"));
+        }
+        
+        [Test]
+        public void CreatesNewScopeWithoutLineOrExpression()
+        {
+            var memory = new Memory();
+            memory.AddScope(5, "x = 5", "func", "file.bs");
+            
+            Assert.That(memory.Scopes.Count, Is.EqualTo(2));
+            Assertions.AssertStackFrame(memory.Scopes[1], new StackFrame("file.bs", "func"));
         }
     
         [Test]
@@ -37,7 +47,7 @@ public static class MemoryTests
             memory.AddScope(5, "x = 5", "func");
             
             Assert.That(memory.Scopes.Count, Is.EqualTo(2));
-            Assertions.AssertStackFrame(memory.Scopes[1], new StackFrame("main", 5, "x = 5", "func"));
+            Assertions.AssertStackFrame(memory.Scopes[1], new StackFrame("main", "func"));
         }
     }
     
@@ -52,7 +62,7 @@ public static class MemoryTests
             var returnedScope = memory.RemoveScope();
             
             Assert.That(memory.Scopes.Count, Is.EqualTo(1));
-            Assertions.AssertStackFrame(returnedScope, new StackFrame("main", 5, "x = 5", "func"));
+            Assertions.AssertStackFrame(returnedScope, new StackFrame("main", "func"));
         }
     }
     
@@ -164,151 +174,151 @@ public static class MemoryTests
     //     }
     // }
 
-    // [TestFixture]
-    // public class Stacktrace
-    // {
-    //     [Test]
-    //     public void RespectsFunctionNames()
-    //     {
-    //         var memory = Runner.Run("");
-    //         var input = """
-    //                     def z():
-    //                         raise SyntaxError("asdf")
-    //                     
-    //                     def x():
-    //                         z()
-    //                     
-    //                     y = x()
-    //                     """;
-    //         
-    //         bool caught = false;
-    //         try
-    //         {
-    //             Runner.RunAsMain(memory, input);
-    //         }
-    //         catch (InternalRaiseException e)
-    //         {
-    //             caught = true;
-    //             Assertions.AssertStacktrace(memory.CurrentStack.Frames, [
-    //                 ("main", 7, "y = x()", "<module>"),
-    //                 ("main", 5, "z()", "x"),
-    //                 ("main", 2, "raise SyntaxError(\"asdf\")", "z"),
-    //             ]);
-    //         }
-    //         
-    //         Assert.That(caught, Is.True);
-    //     }
-    //     
-    //     [Test]
-    //     public void RespectsClassConstructors()
-    //     {
-    //         var memory = Runner.Run("");
-    //         var input = """
-    //                     class x:
-    //                         def __init__(self):
-    //                             raise SyntaxError("asdf")
-    //                             
-    //                     y = x()
-    //                     """;
-    //         
-    //         bool caught = false;
-    //         try
-    //         {
-    //             Runner.RunAsMain(memory, input);
-    //         }
-    //         catch (InternalRaiseException e)
-    //         {
-    //             caught = true;
-    //             Assertions.AssertStacktrace(memory.CurrentStack.Frames, [
-    //                 ("main", 5, "y = x()", "<module>"),
-    //                 ("main", 3, "raise SyntaxError(\"asdf\")", "__init__"),
-    //             ]);
-    //         }
-    //         
-    //         Assert.That(caught, Is.True);
-    //     }
-    //     
-    //     [Test]
-    //     public void RespectsClassMethods()
-    //     {
-    //         var memory = Runner.Run("");
-    //         var input = """
-    //                     class x:
-    //                         def operate(self, y):
-    //                             raise SyntaxError("asdf")
-    //                             
-    //                     z = x()
-    //                     y = z.operate(5)
-    //                     """;
-    //         
-    //         bool caught = false;
-    //         try
-    //         {
-    //             Runner.RunAsMain(memory, input);
-    //         }
-    //         catch (InternalRaiseException e)
-    //         {
-    //             caught = true;
-    //             Assertions.AssertStacktrace(memory.CurrentStack.Frames, [
-    //                 ("main", 6, "y = z.operate(5)", "<module>"),
-    //                 ("main", 3, "raise SyntaxError(\"asdf\")", "operate"),
-    //             ]);
-    //         }
-    //         
-    //         Assert.That(caught, Is.True);
-    //     }
-    //     
-    //     [Test]
-    //     public void RespectsFileName()
-    //     {
-    //         var memory = Runner.Run("");
-    //         var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/stacktrace.bs";
-    //         var input = $"from '{filePath}' import x";
-    //         
-    //         bool caught = false;
-    //         try
-    //         {
-    //             Runner.RunAsMain(memory, input);
-    //         }
-    //         catch (InternalRaiseException e)
-    //         {
-    //             caught = true;
-    //             Assertions.AssertStacktrace(memory.CurrentStack.Frames, [
-    //                 ("main", 1, "from '/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/stacktrace.bs' import x", "<module>"),
-    //                 ("/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/stacktrace.bs", 5, "y = x()", "<module>"),
-    //                 ("/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/stacktrace.bs", 3, "raise SyntaxError(\"asdf\")", "__init__"),
-    //             ]);
-    //         }
-    //         
-    //         Assert.That(caught, Is.True);
-    //     }
-    //
-    //     [Test]
-    //     public void DoesNotIncludeLoopsAndConditionals()
-    //     {
-    //         var memory = Runner.Run("");
-    //         var input = """
-    //                     i = 0
-    //                     while i < 5:
-    //                         if i == 4:
-    //                             raise SyntaxError("asdf")
-    //                         i = i + 1
-    //                     """;
-    //         
-    //         bool caught = false;
-    //         try
-    //         {
-    //             Runner.RunAsMain(memory, input);
-    //         }
-    //         catch (InternalRaiseException e)
-    //         {
-    //             caught = true;
-    //             Assertions.AssertStacktrace(memory.CurrentStack.Frames, [
-    //                 ("main", 4, "raise SyntaxError(\"asdf\")", "<module>"),
-    //             ]);
-    //         }
-    //         
-    //         Assert.That(caught, Is.True);
-    //     }
-    // }
+    [TestFixture]
+    public class Stacktrace
+    {
+        [Test]
+        public void RespectsFunctionNames()
+        {
+            var memory = Runner.Run("");
+            var input = """
+                        def z():
+                            raise SyntaxError("asdf")
+                        
+                        def x():
+                            z()
+                        
+                        y = x()
+                        """;
+            
+            bool caught = false;
+            try
+            {
+                Runner.RunAsMain(memory, input);
+            }
+            catch (InternalRaiseException e)
+            {
+                caught = true;
+                Assertions.AssertStacktrace(memory.Scopes, [
+                    new StackFrame("main", 7, "y = x()", "<module>"),
+                    new StackFrame("main", 5, "z()", "x"),
+                    new StackFrame("main", 2, "raise SyntaxError(\"asdf\")", "z"),
+                ]);
+            }
+            
+            Assert.That(caught, Is.True);
+        }
+        
+        [Test]
+        public void RespectsClassConstructors()
+        {
+            var memory = Runner.Run("");
+            var input = """
+                        class x:
+                            def __init__(self):
+                                raise SyntaxError("asdf")
+                                
+                        y = x()
+                        """;
+            
+            bool caught = false;
+            try
+            {
+                Runner.RunAsMain(memory, input);
+            }
+            catch (InternalRaiseException e)
+            {
+                caught = true;
+                Assertions.AssertStacktrace(memory.Scopes, [
+                    new StackFrame("main", 5, "y = x()", "<module>"),
+                    new StackFrame("main", 3, "raise SyntaxError(\"asdf\")", "__init__"),
+                ]);
+            }
+            
+            Assert.That(caught, Is.True);
+        }
+        
+        [Test]
+        public void RespectsClassMethods()
+        {
+            var memory = Runner.Run("");
+            var input = """
+                        class x:
+                            def operate(self, y):
+                                raise SyntaxError("asdf")
+                                
+                        z = x()
+                        y = z.operate(5)
+                        """;
+            
+            bool caught = false;
+            try
+            {
+                Runner.RunAsMain(memory, input);
+            }
+            catch (InternalRaiseException e)
+            {
+                caught = true;
+                Assertions.AssertStacktrace(memory.Scopes, [
+                    new StackFrame("main", 6, "y = z.operate(5)", "<module>"),
+                    new StackFrame("main", 3, "raise SyntaxError(\"asdf\")", "operate"),
+                ]);
+            }
+            
+            Assert.That(caught, Is.True);
+        }
+        
+        [Test]
+        public void RespectsFileName()
+        {
+            var memory = Runner.Run("");
+            var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/stacktrace.bs";
+            var input = $"from '{filePath}' import x";
+            
+            bool caught = false;
+            try
+            {
+                Runner.RunAsMain(memory, input);
+            }
+            catch (InternalRaiseException e)
+            {
+                caught = true;
+                Assertions.AssertStacktrace(memory.Scopes, [
+                    new StackFrame("main", 1, "from '/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/stacktrace.bs' import x", "<module>"),
+                    new StackFrame("/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/stacktrace.bs", 5, "y = x()", "<module>"),
+                    new StackFrame("/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/stacktrace.bs", 3, "raise SyntaxError(\"asdf\")", "__init__"),
+                ]);
+            }
+            
+            Assert.That(caught, Is.True);
+        }
+        
+        [Test]
+        public void DoesNotIncludeLoopsAndConditionals()
+        {
+            var memory = Runner.Run("");
+            var input = """
+                        i = 0
+                        while i < 5:
+                            if i == 4:
+                                raise SyntaxError("asdf")
+                            i = i + 1
+                        """;
+            
+            bool caught = false;
+            try
+            {
+                Runner.RunAsMain(memory, input);
+            }
+            catch (InternalRaiseException e)
+            {
+                caught = true;
+                Assertions.AssertStacktrace(memory.Scopes, [
+                    new StackFrame("main", 4, "raise SyntaxError(\"asdf\")", "<module>"),
+                ]);
+            }
+            
+            Assert.That(caught, Is.True);
+        }
+    }
 }

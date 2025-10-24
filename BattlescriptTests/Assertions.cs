@@ -440,9 +440,7 @@ public static class Assertions
         }
     }
 
-    public static void AssertStacktrace(
-        List<(string File, int Line, string Expression, string Function)> input,
-        List<(string File, int Line, string Expression, string Function)> expected)
+    public static void AssertStacktrace(List<StackFrame> input, List<StackFrame> expected)
     {
         Assert.That(input.Count, Is.EqualTo(expected.Count));
         for (int i = 0; i < input.Count; i++)

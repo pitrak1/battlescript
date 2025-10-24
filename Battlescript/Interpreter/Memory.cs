@@ -6,7 +6,7 @@ public class Memory
 
     public Memory()
     {
-        Scopes = [new StackFrame("main", 0, "", "<module>")];
+        Scopes = [new StackFrame("main", "<module>")];
     }
     
     public Variable? GetVariable(string name)
@@ -86,10 +86,11 @@ public class Memory
         Scopes[^1].Values.Add(variableInstruction.Name, valueVariable);
     }
     
-    public void AddScope(int line, string expression, string function, string? file = null)
+    public void AddScope(int entryLine, string entryExpression, string function, string? file = null)
     {
+        Scopes[^1].UpdateLineAndExpression(entryLine, entryExpression);
         var fileValue = file ?? Scopes[^1].File;
-        Scopes.Add(new StackFrame(fileValue, line, expression, function));
+        Scopes.Add(new StackFrame(fileValue, function));
     }
 
     public StackFrame RemoveScope()

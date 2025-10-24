@@ -15,7 +15,9 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
     
     public Variable RunFunction(Memory memory, ArgumentSet arguments, Instruction? inst = null)
     {
-        memory.AddScope(0, "", Name);
+        var lineValue = inst?.Line ?? 0;
+        var expressionValue = inst?.Expression ?? "";
+        memory.AddScope(lineValue, expressionValue, Name);
         // memory.AddScope(inst.Line, inst.Expression, Name);
         arguments.ApplyToMemory(memory, Parameters);
         var returnValue = RunInstructions(memory);

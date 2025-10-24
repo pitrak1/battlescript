@@ -73,7 +73,7 @@ public class ImportInstruction : Instruction
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        memory.AddScope(Line, Expression, "<module>", FileName);
+        memory.AddScope(Line, Expression, "<module>", FilePath);
         Runner.RunFilePath(memory, FilePath);
         var importedScope = memory.RemoveScope();
         

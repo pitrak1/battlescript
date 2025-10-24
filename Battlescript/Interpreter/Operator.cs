@@ -78,7 +78,7 @@ public static class Operator
     {
         if (Consts.BooleanOperators.Contains(operation))
         {
-            return ConductBooleanOperation(memory, operation, left, right);
+            return ConductBooleanOperation(memory, operation, left, right, originalInstruction);
         }
         else if (left is ObjectVariable || right is ObjectVariable)
         {
@@ -171,7 +171,7 @@ public static class Operator
     }
         
         
-    private static Variable ConductBooleanOperation(Memory memory, string operation, Variable? left, Variable? right)
+    private static Variable ConductBooleanOperation(Memory memory, string operation, Variable? left, Variable? right, Instruction originalInstruction)
     {
         // The operators handled here will be the same regardless of type or have complex type interactions
         switch (operation)
@@ -181,7 +181,7 @@ public static class Operator
             case "and":
                 return BsTypes.Create(BsTypes.Types.Bool, GetAndValue());
             case "not":
-                var rightNot = Truthiness.IsTruthy(memory, right!);
+                var rightNot = Truthiness.IsTruthy(memory, right!, originalInstruction);
                 return BsTypes.Create(BsTypes.Types.Bool, !rightNot);
             case "is":
                 return BsTypes.Create(BsTypes.Types.Bool, ReferenceEquals(left, right));
@@ -198,25 +198,25 @@ public static class Operator
 
         bool GetOrValue()
         {
-            if (Truthiness.IsTruthy(memory, left!))
+            if (Truthiness.IsTruthy(memory, left!, originalInstruction))
             {
                 return true;
             }
             else
             {
-                return Truthiness.IsTruthy(memory, right!);
+                return Truthiness.IsTruthy(memory, right!, originalInstruction);
             }
         }
 
         bool GetAndValue()
         {
-            if (!Truthiness.IsTruthy(memory, left!))
+            if (!Truthiness.IsTruthy(memory, left!, originalInstruction))
             {
                 return false;
             }
             else
             {
-                return Truthiness.IsTruthy(memory, right!);
+                return Truthiness.IsTruthy(memory, right!, originalInstruction);
             }
         }
         
