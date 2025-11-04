@@ -318,9 +318,9 @@ public static class Assertions
         AssertInstructionsEqual(parserResult, expected);
     }
 
-    public static void AssertVariable(Memory memory, string name, Variable expected)
+    public static void AssertVariable(CallStack callStack, string name, Variable expected)
     {
-        var variable = memory.GetVariable(name);
+        var variable = callStack.GetVariable(name);
         AssertVariablesEqual(variable, expected);
     }
 

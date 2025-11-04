@@ -5,7 +5,7 @@ namespace Battlescript;
 
 public static class StringUtilities
 {
-    public static string GetVariableAsString(Memory memory, Variable variable)
+    public static string GetVariableAsString(CallStack callStack, Variable variable)
     {
         if (variable is StringVariable stringVariable)
         {
@@ -13,17 +13,17 @@ public static class StringUtilities
         }
         else if (variable is ObjectVariable objectVariable)
         {
-            var strFunc = objectVariable.GetMember(memory, new MemberInstruction("__str__"));
-            var reprFunc = objectVariable.GetMember(memory, new MemberInstruction("__repr__"));
+            var strFunc = objectVariable.GetMember(callStack, new MemberInstruction("__str__"));
+            var reprFunc = objectVariable.GetMember(callStack, new MemberInstruction("__repr__"));
             if (strFunc is FunctionVariable funcVariable)
             {
-                var strResult = funcVariable.RunFunction(memory, new ArgumentSet([objectVariable]));
-                return GetVariableAsString(memory, strResult);
+                var strResult = funcVariable.RunFunction(callStack, new ArgumentSet([objectVariable]));
+                return GetVariableAsString(callStack, strResult);
             }
             else if (reprFunc is FunctionVariable reprVariable)
             {
-                var reprResult = reprVariable.RunFunction(memory, new ArgumentSet([objectVariable]));
-                return GetVariableAsString(memory, reprResult);
+                var reprResult = reprVariable.RunFunction(callStack, new ArgumentSet([objectVariable]));
+                return GetVariableAsString(callStack, reprResult);
             }
             else
             {
@@ -54,7 +54,7 @@ public static class StringUtilities
         }
     }
 
-    public static string GetFormattedStringValue(Memory memory, string value)
+    public static string GetFormattedStringValue(CallStack callStack, string value)
     {
         List<string> result = [];
         var start = 0;
@@ -81,8 +81,8 @@ public static class StringUtilities
                 inBrackets = false;
                 var bracketValue = value.Substring(start, i - start);
                 var inst = Runner.Parse(bracketValue);
-                var variable = inst.First().Interpret(memory);
-                result.Add(GetVariableAsString(memory, variable));
+                var variable = inst.First().Interpret(callStack);
+                result.Add(GetVariableAsString(callStack, variable));
                 start = i + 1;
             }
         }

@@ -12,13 +12,13 @@ public class RaiseInstruction : Instruction
     }
     
     public override Variable? Interpret(
-        Memory memory, 
+        CallStack callStack, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        var exception = Value?.Interpret(memory);
-        // memory.CurrentStack.AddFrame(this);
+        var exception = Value?.Interpret(callStack);
+        // callStack.CurrentStack.AddFrame(this);
 
         if (BsTypes.IsException(exception) && exception is ObjectVariable objectException)
         {

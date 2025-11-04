@@ -22,22 +22,22 @@ public class IfInstruction : Instruction
     }
 
     public override Variable? Interpret(
-        Memory memory, 
+        CallStack callStack, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        var condition = Condition.Interpret(memory);
-        if (Truthiness.IsTruthy(memory, condition, this))
+        var condition = Condition.Interpret(callStack);
+        if (Truthiness.IsTruthy(callStack, condition, this))
         {
             foreach (var inst in Instructions)
             {
-                inst.Interpret(memory);
+                inst.Interpret(callStack);
             }
         }
         else if (Next is not null)
         {
-            Next.Interpret(memory, instructionContext, objectContext, lexicalContext);
+            Next.Interpret(callStack, instructionContext, objectContext, lexicalContext);
         }
 
         return null;

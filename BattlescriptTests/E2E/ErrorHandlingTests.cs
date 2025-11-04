@@ -475,7 +475,7 @@ public class ErrorHandlingTests
             public void RunsFinallyBlocks()
             {
                 // Introducing the outermost try/catch with else is just to be able to catch the error and check the
-                // memory state instead of only getting an exception in the test
+                // callStack state instead of only getting an exception in the test
                 var input = """
                             x = 5
                             y = 9

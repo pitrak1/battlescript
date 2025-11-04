@@ -30,7 +30,7 @@ public class BuiltInInstruction : Instruction
     }
     
     public override Variable? Interpret(
-        Memory memory, 
+        CallStack callStack, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
@@ -38,20 +38,20 @@ public class BuiltInInstruction : Instruction
         switch (Name)
         {
             case "abs":
-                return BuiltInAbs.Run(memory, Arguments);
+                return BuiltInAbs.Run(callStack, Arguments);
             case "range":
-                return BuiltInRange.Run(memory, Arguments);
+                return BuiltInRange.Run(callStack, Arguments);
             case "isinstance":
-                return BuiltInIsInstance.Run(memory, Arguments);
+                return BuiltInIsInstance.Run(callStack, Arguments);
             case "issubclass":
-                return BuiltInIsSubclass.Run(memory, Arguments);
+                return BuiltInIsSubclass.Run(callStack, Arguments);
             case "print":
-                BuiltInPrint.Run(memory, Arguments);
+                BuiltInPrint.Run(callStack, Arguments);
                 break;
             case "type":
-                return BuiltInType.Run(memory, Arguments);
+                return BuiltInType.Run(callStack, Arguments);
             case "len":
-                return BuiltInLen.Run(memory, Arguments);
+                return BuiltInLen.Run(callStack, Arguments);
         }
         // TODO
         return new ConstantVariable();

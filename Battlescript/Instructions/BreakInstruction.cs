@@ -3,7 +3,7 @@ namespace Battlescript;
 public class BreakInstruction() : Instruction([])
 {
     public override Variable? Interpret(
-        Memory memory, 
+        CallStack callStack, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)

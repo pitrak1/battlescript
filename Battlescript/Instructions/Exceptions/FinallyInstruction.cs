@@ -12,14 +12,14 @@ public class FinallyInstruction : Instruction
     }
     
     public override Variable? Interpret(
-        Memory memory, 
+        CallStack callStack, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
         foreach (var inst in Instructions)
         {
-            inst.Interpret(memory);
+            inst.Interpret(callStack);
         }
 
         return null;

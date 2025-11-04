@@ -14,22 +14,22 @@ public class SquareBracketsInstruction : ArrayInstruction
     }
 
     public override Variable? Interpret(
-        Memory memory, 
+        CallStack callStack, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
         if (instructionContext is not null)
         {
-            return instructionContext.GetItem(memory, this, objectContext);
+            return instructionContext.GetItem(callStack, this, objectContext);
         }
         else
         {
-            return InterpretListCreation(memory);
+            return InterpretListCreation(callStack);
         }
     }
     
-    private Variable InterpretListCreation(Memory memory)
+    private Variable InterpretListCreation(CallStack callStack)
     {
         var values = new List<Variable>();
         
@@ -37,7 +37,7 @@ public class SquareBracketsInstruction : ArrayInstruction
         {
             if (instructionValue is not null)
             {
-                values.Add(instructionValue.Interpret(memory));
+                values.Add(instructionValue.Interpret(callStack));
             }
             else
             {

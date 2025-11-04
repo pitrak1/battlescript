@@ -11,9 +11,9 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         Values = values ?? [];
     }
     
-    public override Variable? SetItemDirectly(Memory memory, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? SetItemDirectly(CallStack callStack, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
-        var indexVariable = index.Values[0].Interpret(memory);
+        var indexVariable = index.Values[0].Interpret(callStack);
         var indexList = indexVariable as ObjectVariable;
         var indexSequence = indexList.Values["__value"] as SequenceVariable;
 
@@ -23,10 +23,10 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
             {
                 if (valueVariable is SequenceVariable sequenceVariable)
                 {
-                    SetRangeIndex(memory, sequenceVariable, indexSequence.Values);
+                    SetRangeIndex(callStack, sequenceVariable, indexSequence.Values);
                 } else if (BsTypes.Is(BsTypes.Types.List, valueVariable))
                 {
-                    SetRangeIndex(memory, (valueVariable as ObjectVariable).Values["__value"] as SequenceVariable, indexSequence.Values);
+                    SetRangeIndex(callStack, (valueVariable as ObjectVariable).Values["__value"] as SequenceVariable, indexSequence.Values);
                 }
                 else
                 {
@@ -36,7 +36,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
             }
             else
             {
-                return GetSlice(memory, indexSequence.Values);
+                return GetSlice(callStack, indexSequence.Values);
             }
         } 
         else 
@@ -50,10 +50,10 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         }
     }
     
-    public void SetRangeIndex(Memory memory, SequenceVariable valueVariable, List<Variable> argVariable)
+    public void SetRangeIndex(CallStack callStack, SequenceVariable valueVariable, List<Variable> argVariable)
     {
-        var (start, stop, step) = GetSliceArgs(memory, argVariable);
-        var indices = GetSliceIndices(memory, argVariable);
+        var (start, stop, step) = GetSliceArgs(callStack, argVariable);
+        var indices = GetSliceIndices(callStack, argVariable);
 
         if (step == 1)
         {
@@ -75,17 +75,17 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         }
     }
     
-    public override Variable? GetItemDirectly(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? GetItemDirectly(CallStack callStack, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
-        var indexVariable = index.Values[0].Interpret(memory);
+        var indexVariable = index.Values[0].Interpret(callStack);
         // For single index, this is an int
         var indexList = indexVariable as ObjectVariable;
         var indexSequence = indexList.Values["__value"] as SequenceVariable;
         
-        // var indexInt = BuiltInTypeHelper.IsVariableBuiltInClass(memory, "int", indexVariable);
+        // var indexInt = BuiltInTypeHelper.IsVariableBuiltInClass(callStack, "int", indexVariable);
         if (indexSequence.Values.Count > 1)
         {
-            return GetSlice(memory, indexSequence.Values);
+            return GetSlice(callStack, indexSequence.Values);
         }
         else
         {
@@ -94,9 +94,9 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         }
     }
     
-    public SequenceVariable GetSlice(Memory memory, List<Variable> argVariable)
+    public SequenceVariable GetSlice(CallStack callStack, List<Variable> argVariable)
     {
-        var indices = GetSliceIndices(memory, argVariable);
+        var indices = GetSliceIndices(callStack, argVariable);
         SequenceVariable result = new SequenceVariable();
         foreach (var index in indices)
         {
@@ -106,9 +106,9 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         return result;
     }
 
-    public List<int> GetSliceIndices(Memory memory, List<Variable> argVariable)
+    public List<int> GetSliceIndices(CallStack callStack, List<Variable> argVariable)
     {
-        var (start, stop, step) = GetSliceArgs(memory, argVariable);
+        var (start, stop, step) = GetSliceArgs(callStack, argVariable);
 
         var index = start;
         List<int> indices = [];
@@ -136,7 +136,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         return indices;
     }
 
-    public (int start, int stop, int step) GetSliceArgs(Memory memory, List<Variable?> argVariable)
+    public (int start, int stop, int step) GetSliceArgs(CallStack callStack, List<Variable?> argVariable)
     {
         int start = 0;
         int stop = Values.Count;

@@ -1,10 +1,10 @@
 namespace Battlescript;
 
-public class Memory
+public class CallStack
 {
     public List<StackFrame> Scopes { get; set; }
 
-    public Memory()
+    public CallStack()
     {
         Scopes = [new StackFrame("main", "<module>")];
     }

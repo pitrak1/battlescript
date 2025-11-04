@@ -2,14 +2,14 @@ namespace Battlescript.BuiltIn;
 
 public static class BuiltInType
 {
-    public static Variable Run(Memory memory, List<Instruction> arguments)
+    public static Variable Run(CallStack callStack, List<Instruction> arguments)
     {
         if (arguments.Count != 1)
         {
             throw new Exception("Bad arguments, clean this up later");
         }
         
-        var firstExpression = arguments[0].Interpret(memory);
+        var firstExpression = arguments[0].Interpret(callStack);
         switch (firstExpression)
         {
             case StringVariable:

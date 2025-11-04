@@ -266,10 +266,10 @@ public static class ClassesAndObjectsTests
 //                           z += y
 //                           x = z.i
 //                           """;
-//               var memory = Runner.Run(input);
-//               var expected = BuiltInTypeHelper.Create(memory, BsTypes.Types.Int, 10);
-//               Assert.That(memory.Scopes[0], Contains.Key("x"));
-//               Assert.That(memory.Scopes[0]["x"], Is.EqualTo(expected));
+//               var callStack = Runner.Run(input);
+//               var expected = BuiltInTypeHelper.Create(callStack, BsTypes.Types.Int, 10);
+//               Assert.That(callStack.Scopes[0], Contains.Key("x"));
+//               Assert.That(callStack.Scopes[0]["x"], Is.EqualTo(expected));
 //           }
     }
 }

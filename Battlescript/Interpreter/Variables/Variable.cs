@@ -3,61 +3,61 @@ namespace Battlescript;
 public abstract class Variable
 {
     public void SetItem(
-        Memory memory, 
+        CallStack callStack, 
         Variable value, 
         ArrayInstruction index,
         ObjectVariable? objectContext = null)
     {
-        var result = SetItemDirectly(memory, value, index, objectContext);
+        var result = SetItemDirectly(callStack, value, index, objectContext);
         if (index.Next is ParenthesesInstruction)
         {
             throw new InternalRaiseException(BsTypes.Types.SyntaxError, "cannot assign to function call");
         } else if (index.Next is ArrayInstruction arrayInstruction)
         {
-            result.SetItemDirectly(memory, value, arrayInstruction, objectContext);
+            result.SetItemDirectly(callStack, value, arrayInstruction, objectContext);
         }
     }
 
-    public virtual Variable? SetItemDirectly(Memory memory, Variable value, ArrayInstruction index, ObjectVariable? objectContext = null)
+    public virtual Variable? SetItemDirectly(CallStack callStack, Variable value, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
         throw new InterpreterInvalidIndexException(this);
     }
     
     public void SetMember(
-        Memory memory, 
+        CallStack callStack, 
         Variable value, 
         MemberInstruction member,
         ObjectVariable? objectContext = null)
     {
-        var result = SetMemberDirectly(memory, value, member, objectContext);
+        var result = SetMemberDirectly(callStack, value, member, objectContext);
         if (member.Next is ParenthesesInstruction)
         {
             throw new InternalRaiseException(BsTypes.Types.SyntaxError, "cannot assign to function call");
         }
         else if (member.Next is ArrayInstruction arrayInstruction)
         {
-            result.SetItemDirectly(memory, value, arrayInstruction, objectContext);
+            result.SetItemDirectly(callStack, value, arrayInstruction, objectContext);
         }
         else if (member.Next is MemberInstruction memberInstruction)
         {
-            result.SetMemberDirectly(memory, value, memberInstruction, objectContext);
+            result.SetMemberDirectly(callStack, value, memberInstruction, objectContext);
         }
     }
 
-    public virtual Variable? SetMemberDirectly(Memory memory, Variable value, MemberInstruction member, ObjectVariable? objectContext = null)
+    public virtual Variable? SetMemberDirectly(CallStack callStack, Variable value, MemberInstruction member, ObjectVariable? objectContext = null)
     {
         throw new InterpreterInvalidIndexException(this);
     }
 
     public Variable? GetItem(
-        Memory memory,
+        CallStack callStack,
         ArrayInstruction index,
         ObjectVariable? objectContext = null)
     {
-        var result = GetItemDirectly(memory, index, objectContext);
+        var result = GetItemDirectly(callStack, index, objectContext);
         if (index.Next is not null)
         {
-            return index.Next.Interpret(memory, result, objectContext);
+            return index.Next.Interpret(callStack, result, objectContext);
         }
         else
         {
@@ -65,20 +65,20 @@ public abstract class Variable
         }
     }
     
-    public virtual Variable? GetItemDirectly(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
+    public virtual Variable? GetItemDirectly(CallStack callStack, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
         throw new InterpreterInvalidIndexException(this);
     }
     
     public Variable? GetMember(
-        Memory memory,
+        CallStack callStack,
         MemberInstruction member,
         ObjectVariable? objectContext = null)
     {
-        var result = GetMemberDirectly(memory, member, objectContext);
+        var result = GetMemberDirectly(callStack, member, objectContext);
         if (member.Next is not null)
         {
-            return member.Next.Interpret(memory, result, objectContext);
+            return member.Next.Interpret(callStack, result, objectContext);
         }
         else
         {
@@ -87,7 +87,7 @@ public abstract class Variable
     }
 
     public virtual Variable? GetMemberDirectly(
-        Memory memory,
+        CallStack callStack,
         MemberInstruction member,
         ObjectVariable? objectContext = null)
     {

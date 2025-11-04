@@ -2,31 +2,31 @@ namespace Battlescript;
 
 public static class Operator
 {
-    public static void Assign(Memory memory, string operation, VariableInstruction left, Instruction? right, Instruction? originalInstruction = null)
+    public static void Assign(CallStack callStack, string operation, VariableInstruction left, Instruction? right, Instruction? originalInstruction = null)
     {
-        var rightVariable = right?.Interpret(memory);
+        var rightVariable = right?.Interpret(callStack);
         if (operation == "=")
         {
-            memory.SetVariable(left, rightVariable!);
+            callStack.SetVariable(left, rightVariable!);
         }
         else
         {
-            var leftVariable = left.Interpret(memory);
-            var result = Operate(memory, operation, leftVariable, rightVariable, originalInstruction);
+            var leftVariable = left.Interpret(callStack);
+            var result = Operate(callStack, operation, leftVariable, rightVariable, originalInstruction);
             if (operation == "/=" && BsTypes.Is(BsTypes.Types.Int, result))
             {
                 var objectResult = result as ObjectVariable;
                 var doubleResult = (objectResult.Values["__value"] as NumericVariable).Value;
-                memory.SetVariable(left, BsTypes.Create(BsTypes.Types.Float, doubleResult));
+                callStack.SetVariable(left, BsTypes.Create(BsTypes.Types.Float, doubleResult));
             } else if (operation == "//=" && BsTypes.Is(BsTypes.Types.Float, result))
             {
                 var objectResult = result as ObjectVariable;
                 var intResult = (objectResult.Values["__value"] as NumericVariable).Value;
-                memory.SetVariable(left, BsTypes.Create(BsTypes.Types.Int, intResult));
+                callStack.SetVariable(left, BsTypes.Create(BsTypes.Types.Int, intResult));
             }
             else
             {
-                memory.SetVariable(left, result);
+                callStack.SetVariable(left, result);
             }
         }
     }
@@ -74,19 +74,19 @@ public static class Operator
         { "-", "__neg__" },
     };
     
-    public static Variable Operate(Memory memory, string operation, Variable? left, Variable? right, Instruction? originalInstruction = null)
+    public static Variable Operate(CallStack callStack, string operation, Variable? left, Variable? right, Instruction? originalInstruction = null)
     {
         if (Consts.BooleanOperators.Contains(operation))
         {
-            return ConductBooleanOperation(memory, operation, left, right, originalInstruction);
+            return ConductBooleanOperation(callStack, operation, left, right, originalInstruction);
         }
         else if (left is ObjectVariable || right is ObjectVariable)
         {
-            return ConductObjectOperation(memory, operation, left, right, originalInstruction);
+            return ConductObjectOperation(callStack, operation, left, right, originalInstruction);
         }
         else if (left is StringVariable || right is StringVariable)
         {
-            return ConductStringOperation(memory, operation, left, right);
+            return ConductStringOperation(callStack, operation, left, right);
         }
         else if (left is NumericVariable leftNumeric && right is NumericVariable rightNumeric)
         {
@@ -171,7 +171,7 @@ public static class Operator
     }
         
         
-    private static Variable ConductBooleanOperation(Memory memory, string operation, Variable? left, Variable? right, Instruction originalInstruction)
+    private static Variable ConductBooleanOperation(CallStack callStack, string operation, Variable? left, Variable? right, Instruction originalInstruction)
     {
         // The operators handled here will be the same regardless of type or have complex type interactions
         switch (operation)
@@ -181,7 +181,7 @@ public static class Operator
             case "and":
                 return BsTypes.Create(BsTypes.Types.Bool, GetAndValue());
             case "not":
-                var rightNot = Truthiness.IsTruthy(memory, right!, originalInstruction);
+                var rightNot = Truthiness.IsTruthy(callStack, right!, originalInstruction);
                 return BsTypes.Create(BsTypes.Types.Bool, !rightNot);
             case "is":
                 return BsTypes.Create(BsTypes.Types.Bool, ReferenceEquals(left, right));
@@ -198,25 +198,25 @@ public static class Operator
 
         bool GetOrValue()
         {
-            if (Truthiness.IsTruthy(memory, left!, originalInstruction))
+            if (Truthiness.IsTruthy(callStack, left!, originalInstruction))
             {
                 return true;
             }
             else
             {
-                return Truthiness.IsTruthy(memory, right!, originalInstruction);
+                return Truthiness.IsTruthy(callStack, right!, originalInstruction);
             }
         }
 
         bool GetAndValue()
         {
-            if (!Truthiness.IsTruthy(memory, left!, originalInstruction))
+            if (!Truthiness.IsTruthy(callStack, left!, originalInstruction))
             {
                 return false;
             }
             else
             {
-                return Truthiness.IsTruthy(memory, right!, originalInstruction);
+                return Truthiness.IsTruthy(callStack, right!, originalInstruction);
             }
         }
         
@@ -249,7 +249,7 @@ public static class Operator
         }
     }
         
-    private static Variable ConductObjectOperation(Memory memory, string operation, Variable? left, Variable? right, Instruction? originalInstruction = null)
+    private static Variable ConductObjectOperation(CallStack callStack, string operation, Variable? left, Variable? right, Instruction? originalInstruction = null)
     {
         var (leftOverride, rightOverride) = GetOverride();
 
@@ -259,21 +259,21 @@ public static class Operator
         {
             if (right is null)
             {
-                return leftOverride.RunFunction(memory, new ArgumentSet([left]), originalInstruction);
+                return leftOverride.RunFunction(callStack, new ArgumentSet([left]), originalInstruction);
             }
             else
             {
-                return leftOverride.RunFunction(memory, new ArgumentSet([left, right]), originalInstruction);
+                return leftOverride.RunFunction(callStack, new ArgumentSet([left, right]), originalInstruction);
             }
         } else if (rightOverride is not null)
         {
             if (left is null)
             {
-                return rightOverride.RunFunction(memory, new ArgumentSet([right]), originalInstruction);
+                return rightOverride.RunFunction(callStack, new ArgumentSet([right]), originalInstruction);
             }
             else
             {
-                return rightOverride.RunFunction(memory, new ArgumentSet([left, right]), originalInstruction);
+                return rightOverride.RunFunction(callStack, new ArgumentSet([left, right]), originalInstruction);
             }
         }
         else
@@ -302,7 +302,7 @@ public static class Operator
                     throw new InterpreterInvalidOperationException(operation, left, right);
                 }
                 
-                leftFunc = leftObject.GetMember(memory, new MemberInstruction(overrideName)) as FunctionVariable;
+                leftFunc = leftObject.GetMember(callStack, new MemberInstruction(overrideName)) as FunctionVariable;
             }
         
             FunctionVariable? rightFunc = null;
@@ -327,14 +327,14 @@ public static class Operator
                     throw new InterpreterInvalidOperationException(operation, left, right);
                 }
                 
-                rightFunc = rightObject.GetMember(memory, new MemberInstruction(overrideName)) as FunctionVariable;
+                rightFunc = rightObject.GetMember(callStack, new MemberInstruction(overrideName)) as FunctionVariable;
             }
             
             return (leftFunc, rightFunc);
         }
     }
         
-    private static Variable ConductStringOperation(Memory memory, string operation, Variable? left, Variable? right)
+    private static Variable ConductStringOperation(CallStack callStack, string operation, Variable? left, Variable? right)
     {
         switch (operation)
         {

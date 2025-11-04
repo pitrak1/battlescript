@@ -3,7 +3,7 @@ using Battlescript;
 namespace BattlescriptTests.InterpreterTests;
 
 [TestFixture]
-public static class MemoryTests
+public static class CallStackTests
 {
     [TestFixture]
     public class Initialization
@@ -11,7 +11,7 @@ public static class MemoryTests
         [Test]
         public void CreatesMainScopeOnObjectCreation()
         {
-            var memory = new Memory();
+            var memory = new CallStack();
             Assert.That(memory.Scopes.Count, Is.EqualTo(1));
             Assertions.AssertStackFrame(memory.Scopes[0], new StackFrame("main", "<module>"));
         }
@@ -23,7 +23,7 @@ public static class MemoryTests
         [Test]
         public void UpdatesPreviousScopeWithLineAndExpression()
         {
-            var memory = new Memory();
+            var memory = new CallStack();
             memory.AddScope(5, "x = 5", "func", "file.bs");
             
             Assert.That(memory.Scopes.Count, Is.EqualTo(2));
@@ -33,7 +33,7 @@ public static class MemoryTests
         [Test]
         public void CreatesNewScopeWithoutLineOrExpression()
         {
-            var memory = new Memory();
+            var memory = new CallStack();
             memory.AddScope(5, "x = 5", "func", "file.bs");
             
             Assert.That(memory.Scopes.Count, Is.EqualTo(2));
@@ -43,7 +43,7 @@ public static class MemoryTests
         [Test]
         public void UsesExistingFileIfNotGiven()
         {
-            var memory = new Memory();
+            var memory = new CallStack();
             memory.AddScope(5, "x = 5", "func");
             
             Assert.That(memory.Scopes.Count, Is.EqualTo(2));
@@ -57,7 +57,7 @@ public static class MemoryTests
         [Test]
         public void RemovesAndReturnsLastScopeInList()
         {
-            var memory = new Memory();
+            var memory = new CallStack();
             memory.AddScope(5, "x = 5", "func");
             var returnedScope = memory.RemoveScope();
             
@@ -76,9 +76,9 @@ public static class MemoryTests
     //         {
     //             { "x", new NumericVariable(5) }
     //         };
-    //         var memory = new Memory();
-    //         memory.AddScope(new Dictionary<string, Variable>(scopeVariables));
-    //         var returnedVariable = memory.GetVariable("x");
+    //         var callStack = new CallStack();
+    //         callStack.AddScope(new Dictionary<string, Variable>(scopeVariables));
+    //         var returnedVariable = callStack.GetVariable("x");
     //         
     //         Assertions.AssertVariablesEqual(returnedVariable, new NumericVariable(5));
     //     }
@@ -94,10 +94,10 @@ public static class MemoryTests
     //         {
     //             { "y", new NumericVariable(8) }
     //         };
-    //         var memory = new Memory();
-    //         memory.AddScope(new Dictionary<string, Variable>(scopeVariables1));
-    //         memory.AddScope(new Dictionary<string, Variable>(scopeVariables2));
-    //         var returnedVariable = memory.GetVariable("x");
+    //         var callStack = new CallStack();
+    //         callStack.AddScope(new Dictionary<string, Variable>(scopeVariables1));
+    //         callStack.AddScope(new Dictionary<string, Variable>(scopeVariables2));
+    //         var returnedVariable = callStack.GetVariable("x");
     //         
     //         Assertions.AssertVariablesEqual(returnedVariable, new NumericVariable(5));
     //     }
@@ -113,10 +113,10 @@ public static class MemoryTests
     //         {
     //             { "x", new NumericVariable(8) }
     //         };
-    //         var memory = new Memory();
-    //         memory.AddScope(new Dictionary<string, Variable>(scopeVariables1));
-    //         memory.AddScope(new Dictionary<string, Variable>(scopeVariables2));
-    //         var returnedVariable = memory.GetVariable("x");
+    //         var callStack = new CallStack();
+    //         callStack.AddScope(new Dictionary<string, Variable>(scopeVariables1));
+    //         callStack.AddScope(new Dictionary<string, Variable>(scopeVariables2));
+    //         var returnedVariable = callStack.GetVariable("x");
     //         
     //         Assertions.AssertVariablesEqual(returnedVariable, new NumericVariable(8));
     //     }
@@ -128,10 +128,10 @@ public static class MemoryTests
     //     [Test]
     //     public void CreatesVariableInLastScopeIfDoesNotExist()
     //     {
-    //         var memory = new Memory();
-    //         memory.AddScope();
-    //         memory.SetVariable(new VariableInstruction("x"), new NumericVariable(5));
-    //         var scopes = memory.Scopes;
+    //         var callStack = new CallStack();
+    //         callStack.AddScope();
+    //         callStack.SetVariable(new VariableInstruction("x"), new NumericVariable(5));
+    //         var scopes = callStack.Scopes;
     //         
     //         Assertions.AssertVariablesEqual(scopes[1]["x"], new NumericVariable(5));
     //     }
@@ -143,10 +143,10 @@ public static class MemoryTests
     //         {
     //             { "x", new NumericVariable(5) }
     //         };
-    //         var memory = new Memory();
-    //         memory.AddScope(new Dictionary<string, Variable>(scopeVariables));
-    //         memory.SetVariable(new VariableInstruction("x"), new NumericVariable(8));
-    //         var scopes = memory.Scopes;
+    //         var callStack = new CallStack();
+    //         callStack.AddScope(new Dictionary<string, Variable>(scopeVariables));
+    //         callStack.SetVariable(new VariableInstruction("x"), new NumericVariable(8));
+    //         var scopes = callStack.Scopes;
     //         
     //         Assertions.AssertVariablesEqual(scopes[1]["x"], new NumericVariable(8));
     //     }
@@ -162,11 +162,11 @@ public static class MemoryTests
     //         {
     //             { "x", new NumericVariable(6) }
     //         };
-    //         var memory = new Memory();
-    //         memory.AddScope(new Dictionary<string, Variable>(scopeVariables1));
-    //         memory.AddScope(new Dictionary<string, Variable>(scopeVariables2));
-    //         memory.SetVariable(new VariableInstruction("x"), new NumericVariable(8));
-    //         var scopes = memory.Scopes;
+    //         var callStack = new CallStack();
+    //         callStack.AddScope(new Dictionary<string, Variable>(scopeVariables1));
+    //         callStack.AddScope(new Dictionary<string, Variable>(scopeVariables2));
+    //         callStack.SetVariable(new VariableInstruction("x"), new NumericVariable(8));
+    //         var scopes = callStack.Scopes;
     //         
     //         Assertions.AssertVariablesEqual(scopes[1]["x"], new NumericVariable(5));
     //         

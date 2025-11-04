@@ -32,7 +32,7 @@ public class ClassInstruction : Instruction
     }
 
     public override Variable? Interpret(
-        Memory memory, 
+        CallStack callStack, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
@@ -42,7 +42,7 @@ public class ClassInstruction : Instruction
         {
             foreach (var superclassInstruction in Superclasses)
             {
-                var superclass = superclassInstruction.Interpret(memory);
+                var superclass = superclassInstruction.Interpret(callStack);
                 if (superclass is ClassVariable superclassVariable)
                 {
                     superclasses.Add(superclassVariable);
@@ -54,16 +54,16 @@ public class ClassInstruction : Instruction
             }
         }
         
-        memory.AddScope(Line, Expression, Name);
+        callStack.AddScope(Line, Expression, Name);
 
         foreach (var instruction in Instructions)
         {
-            instruction.Interpret(memory);
+            instruction.Interpret(callStack);
         }
 
-        var classScope = memory.RemoveScope();
+        var classScope = callStack.RemoveScope();
         var classVariable = new ClassVariable(Name, classScope.Values, superclasses);
-        memory.SetVariable(new VariableInstruction(Name), classVariable);
+        callStack.SetVariable(new VariableInstruction(Name), classVariable);
         return classVariable;
     }
 }

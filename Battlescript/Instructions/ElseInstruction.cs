@@ -25,31 +25,31 @@ public class ElseInstruction : Instruction
     }
 
     public override Variable? Interpret(
-        Memory memory, 
+        CallStack callStack, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
         if (Condition is not null)
         {
-            var condition = Condition.Interpret(memory);
-            if (Truthiness.IsTruthy(memory, condition, this))
+            var condition = Condition.Interpret(callStack);
+            if (Truthiness.IsTruthy(callStack, condition, this))
             {
                 foreach (var inst in Instructions)
                 {
-                    inst.Interpret(memory);
+                    inst.Interpret(callStack);
                 }
 
             } else if (Next is not null)
             {
-                return Next.Interpret(memory, instructionContext, objectContext, lexicalContext);
+                return Next.Interpret(callStack, instructionContext, objectContext, lexicalContext);
             }
         }
         else
         {
             foreach (var inst in Instructions)
             {
-                inst.Interpret(memory);
+                inst.Interpret(callStack);
             }
         }
         

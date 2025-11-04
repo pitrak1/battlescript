@@ -14,7 +14,7 @@ public class CurlyBracesInstruction : ArrayInstruction
     }
 
     public override Variable? Interpret(
-        Memory memory, 
+        CallStack callStack, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
@@ -29,12 +29,12 @@ public class CurlyBracesInstruction : ArrayInstruction
         {
             foreach (var dictValue in Values)
             {
-                InterpretAndAddKvp(memory, stringValues, intValues, dictValue!);
+                InterpretAndAddKvp(callStack, stringValues, intValues, dictValue!);
             }
         } 
         else if (Delimiter == Consts.Colon)
         {
-            InterpretAndAddKvp(memory, stringValues, intValues, this);
+            InterpretAndAddKvp(callStack, stringValues, intValues, this);
         } else if (Values.Count != 0)
         {
             throw new Exception("Badly formed dictionary");
@@ -43,11 +43,11 @@ public class CurlyBracesInstruction : ArrayInstruction
         return BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(intValues, stringValues));
     }
     
-    private void InterpretAndAddKvp(Memory memory, Dictionary<string, Variable> stringValues, Dictionary<int, Variable> intValues, Instruction? instruction)
+    private void InterpretAndAddKvp(CallStack callStack, Dictionary<string, Variable> stringValues, Dictionary<int, Variable> intValues, Instruction? instruction)
     {
         var kvp = IsValidKvp(instruction);
-        var value = kvp.Values[1]!.Interpret(memory); 
-        var indexValue = GetIndexValue(memory, kvp.Values[0]!);
+        var value = kvp.Values[1]!.Interpret(callStack); 
+        var indexValue = GetIndexValue(callStack, kvp.Values[0]!);
         if (indexValue.IntValue is not null)
         {
             intValues.Add(indexValue.IntValue.Value, value);
@@ -70,17 +70,17 @@ public class CurlyBracesInstruction : ArrayInstruction
         }
     }
         
-    private (int? IntValue, string? StringValue) GetIndexValue(Memory memory, Instruction index)
+    private (int? IntValue, string? StringValue) GetIndexValue(CallStack callStack, Instruction index)
     {
         Variable indexVariable;
         if (index is ArrayInstruction indexInst)
         {
-            var listVariable = indexInst.Values.Select(x => x.Interpret(memory)).ToList();
+            var listVariable = indexInst.Values.Select(x => x.Interpret(callStack)).ToList();
             indexVariable = listVariable[0]!;
         }
         else
         {
-            indexVariable = index.Interpret(memory);
+            indexVariable = index.Interpret(callStack);
         }
     
         if (BsTypes.Is(BsTypes.Types.Int, indexVariable))

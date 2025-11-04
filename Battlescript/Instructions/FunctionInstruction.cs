@@ -37,13 +37,13 @@ public class FunctionInstruction : Instruction
     }
 
     public override Variable? Interpret(
-        Memory memory, 
+        CallStack callStack, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
         var functionValue = new FunctionVariable(Name, Parameters, Instructions);
-        memory.SetVariable(new VariableInstruction(Name), functionValue);
+        callStack.SetVariable(new VariableInstruction(Name), functionValue);
         return functionValue;
     }
 }

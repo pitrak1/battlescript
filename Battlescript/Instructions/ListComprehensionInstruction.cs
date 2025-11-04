@@ -69,16 +69,16 @@ public class ListComprehensionInstruction : Instruction
     }
     
     public override Variable? Interpret(
-        Memory memory, 
+        CallStack callStack, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
         foreach (var inst in Instructions)
         {
-            inst.Interpret(memory, instructionContext, objectContext, lexicalContext);
+            inst.Interpret(callStack, instructionContext, objectContext, lexicalContext);
         }
         
-        return memory.GetVariable("lstcmp");
+        return callStack.GetVariable("lstcmp");
     }
 }

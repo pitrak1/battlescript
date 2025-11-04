@@ -2,7 +2,7 @@ namespace Battlescript;
 
 public static class Truthiness
 {
-    public static bool IsTruthy(Memory memory, Variable variable, Instruction? inst = null)
+    public static bool IsTruthy(CallStack callStack, Variable variable, Instruction? inst = null)
     {
         switch (variable)
         {
@@ -19,10 +19,10 @@ public static class Truthiness
             case FunctionVariable:
                 return true;
             case ObjectVariable objectVariable:
-                var boolFunc = objectVariable.GetMember(memory, new MemberInstruction("__bool__"));
+                var boolFunc = objectVariable.GetMember(callStack, new MemberInstruction("__bool__"));
                 if (boolFunc is FunctionVariable funcVariable)
                 {
-                    var result = funcVariable.RunFunction(memory, new ArgumentSet([objectVariable]), inst);
+                    var result = funcVariable.RunFunction(callStack, new ArgumentSet([objectVariable]), inst);
                     return BsTypes.Is(BsTypes.Types.Bool, result) && BsTypes.GetBoolValue(result);
                 }
                 else

@@ -13,15 +13,15 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
         Class = classVariable;
     }
 
-    public override Variable? SetItemDirectly(Memory memory, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? SetItemDirectly(CallStack callStack, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
-        var indexVariable = index.Values.Select(x => x?.Interpret(memory) ?? null).ToList();
+        var indexVariable = index.Values.Select(x => x?.Interpret(callStack) ?? null).ToList();
 
-        var setItemOverride = Class.GetMember(memory, new MemberInstruction("__setitem__"));
+        var setItemOverride = Class.GetMember(callStack, new MemberInstruction("__setitem__"));
         if (setItemOverride is FunctionVariable functionVariable)
         {
             var indexArgument = BsTypes.Create(BsTypes.Types.List, indexVariable);
-            return functionVariable.RunFunction(memory, new ArgumentSet([this, indexArgument, valueVariable]), index);
+            return functionVariable.RunFunction(callStack, new ArgumentSet([this, indexArgument, valueVariable]), index);
         }
         else
         {
@@ -30,7 +30,7 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
     }
 
     public override Variable? SetMemberDirectly(
-        Memory memory, 
+        CallStack callStack, 
         Variable valueVariable, 
         MemberInstruction member, 
         ObjectVariable? objectContext = null)
@@ -44,19 +44,19 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
         }
         else
         {
-            return GetMemberDirectly(memory, member, objectContext);
+            return GetMemberDirectly(callStack, member, objectContext);
         }
     }
     
-    public override Variable? GetItemDirectly(Memory memory, ArrayInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? GetItemDirectly(CallStack callStack, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
-        var indexVariables = index.Values.Select(x => x?.Interpret(memory) ?? null).ToList();
+        var indexVariables = index.Values.Select(x => x?.Interpret(callStack) ?? null).ToList();
         var indexList = BsTypes.Create(BsTypes.Types.List, indexVariables);
 
-        var getItemOverride = Class.GetMember(memory, new MemberInstruction("__getitem__"));
+        var getItemOverride = Class.GetMember(callStack, new MemberInstruction("__getitem__"));
         if (getItemOverride is FunctionVariable functionVariable)
         {
-            return functionVariable.RunFunction(memory, new ArgumentSet([this, indexList]), index);
+            return functionVariable.RunFunction(callStack, new ArgumentSet([this, indexList]), index);
         }
         else
         {
@@ -65,7 +65,7 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
     }
 
     public override Variable? GetMemberDirectly(
-        Memory memory, 
+        CallStack callStack, 
         MemberInstruction member,
         ObjectVariable? objectContext = null)
     {
@@ -76,7 +76,7 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
         }
         else
         {
-            return Class.GetMember(memory, new MemberInstruction(memberName), this);
+            return Class.GetMember(callStack, new MemberInstruction(memberName), this);
         }
     }
 

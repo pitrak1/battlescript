@@ -68,24 +68,24 @@ public class ImportInstruction : Instruction
     }
 
     public override Variable? Interpret(
-        Memory memory, 
+        CallStack callStack, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        memory.AddScope(Line, Expression, "<module>", FilePath);
-        Runner.RunFilePath(memory, FilePath);
-        var importedScope = memory.RemoveScope();
+        callStack.AddScope(Line, Expression, "<module>", FilePath);
+        Runner.RunFilePath(callStack, FilePath);
+        var importedScope = callStack.RemoveScope();
         
         foreach (var name in ImportNames)
         {
             if (name == "*")
             {
-                memory.SetVariable(new VariableInstruction(FileName), BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, importedScope.Values)));
+                callStack.SetVariable(new VariableInstruction(FileName), BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, importedScope.Values)));
             }
             else if (importedScope.Values.ContainsKey(name))
             {
-                memory.SetVariable(new VariableInstruction(name), importedScope.Values[name]);
+                callStack.SetVariable(new VariableInstruction(name), importedScope.Values[name]);
             }
             else
             {

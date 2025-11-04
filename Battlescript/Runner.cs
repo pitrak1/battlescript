@@ -2,9 +2,9 @@ namespace Battlescript;
 
 public static class Runner
 {
-    public static Memory Run(string input)
+    public static CallStack Run(string input)
     {
-        var memory = new Memory();
+        var memory = new CallStack();
 
         foreach (var builtin in BsTypes.TypeStrings)
         {
@@ -17,25 +17,25 @@ public static class Runner
         return memory;
     }
 
-    public static void RunAsMain(Memory memory, string input)
+    public static void RunAsMain(CallStack callStack, string input)
     {
-        // memory.AddScope();
-        // memory.CurrentStack.Files.Add("main");
-        // memory.CurrentStack.Functions.Add("<module>");
-        RunPartial(memory, input, "main");
+        // callStack.AddScope();
+        // callStack.CurrentStack.Files.Add("main");
+        // callStack.CurrentStack.Functions.Add("<module>");
+        RunPartial(callStack, input, "main");
     }
 
-    public static void RunFilePath(Memory memory, string path)
+    public static void RunFilePath(CallStack callStack, string path)
     {
         var input = ReadFile(path);
-        RunPartial(memory, input, path);
+        RunPartial(callStack, input, path);
     }
 
-    private static void LoadBuiltin(Memory memory, string builtinName)
+    private static void LoadBuiltin(CallStack callStack, string builtinName)
     {
         var fileName = $"/Users/nickpitrak/Desktop/Battlescript/Battlescript/BuiltIn/{builtinName}.bs";
         string text = ReadFile(fileName);
-        RunPartial(memory, text, fileName);
+        RunPartial(callStack, text, fileName);
     }
 
     private static string ReadFile(string path)
@@ -44,14 +44,14 @@ public static class Runner
         return reader.ReadToEnd();
     }
 
-    public static void RunPartial(Memory memory, string input, string fileName)
+    public static void RunPartial(CallStack callStack, string input, string fileName)
     {
         var parserResult = Parse(input);
         var interpreter = new Interpreter(parserResult);
         
         try
         {
-            interpreter.Run(memory);
+            interpreter.Run(callStack);
         }
         catch (InternalReturnException e)
         {
@@ -63,7 +63,7 @@ public static class Runner
         }
         catch (InternalRaiseException e)
         {
-            // memory.CurrentStack.PrintStacktrace();
+            // callStack.CurrentStack.PrintStacktrace();
             if (e.Type is not null)
             {
                 Console.WriteLine(e.Type + ": " + e.Message);

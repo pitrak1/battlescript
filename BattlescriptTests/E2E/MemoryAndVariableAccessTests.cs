@@ -17,9 +17,9 @@ public class MemoryAndVariableAccessTests
     //                     if True:
     //                         y = x + 3
     //                     """;
-    //         var memory = Runner.Run(input);
+    //         var callStack = Runner.Run(input);
     //         var expected = BsTypes.Create(BsTypes.Types.Int, 8);
-    //         Assertions.AssertVariable(memory, "y", expected);
+    //         Assertions.AssertVariable(callStack, "y", expected);
     //     }
     //
     //     [TestFixture]
@@ -34,9 +34,9 @@ public class MemoryAndVariableAccessTests
     //                             return x + 3
     //                         y = func()
     //                         """;
-    //             var memory = Runner.Run(input);
+    //             var callStack = Runner.Run(input);
     //             var expected = BsTypes.Create(BsTypes.Types.Int, 8);
-    //             Assertions.AssertVariable(memory, "y", expected);
+    //             Assertions.AssertVariable(callStack, "y", expected);
     //         }
     //     
     //         [Test]
@@ -49,9 +49,9 @@ public class MemoryAndVariableAccessTests
     //                             x = x + 3
     //                         func()
     //                         """;
-    //             var memory = Runner.Run(input);
+    //             var callStack = Runner.Run(input);
     //             var expected = BsTypes.Create(BsTypes.Types.Int, 5);
-    //             Assertions.AssertVariable(memory, "x", expected);
+    //             Assertions.AssertVariable(callStack, "x", expected);
     //         }
     //
     //         [Test]
@@ -65,9 +65,9 @@ public class MemoryAndVariableAccessTests
     //                             return inner()
     //                         x = outer()
     //                         """;
-    //             var memory = Runner.Run(input);
+    //             var callStack = Runner.Run(input);
     //             var expected = BsTypes.Create(BsTypes.Types.Int, 15);
-    //             Assertions.AssertVariable(memory, "x", expected);
+    //             Assertions.AssertVariable(callStack, "x", expected);
     //         }
     //         
     //         [Test]
@@ -82,9 +82,9 @@ public class MemoryAndVariableAccessTests
     //                             return a
     //                         x = outer()
     //                         """;
-    //             var memory = Runner.Run(input);
+    //             var callStack = Runner.Run(input);
     //             var expected = BsTypes.Create(BsTypes.Types.Int, 10);
-    //             Assertions.AssertVariable(memory, "x", expected);
+    //             Assertions.AssertVariable(callStack, "x", expected);
     //         }
     //     }
     //
@@ -101,9 +101,9 @@ public class MemoryAndVariableAccessTests
     //                         y = my_class()
     //                         z = y.z
     //                         """;
-    //             var memory = Runner.Run(input);
+    //             var callStack = Runner.Run(input);
     //             var expected = BsTypes.Create(BsTypes.Types.Int, 8);
-    //             Assertions.AssertVariable(memory, "z", expected);
+    //             Assertions.AssertVariable(callStack, "z", expected);
     //         }
     //     
     //         [Test]
@@ -116,9 +116,9 @@ public class MemoryAndVariableAccessTests
     //                             x = x + 3
     //                         y = my_class()
     //                         """;
-    //             var memory = Runner.Run(input);
+    //             var callStack = Runner.Run(input);
     //             var expected = BsTypes.Create(BsTypes.Types.Int, 5);
-    //             Assertions.AssertVariable(memory, "x", expected);
+    //             Assertions.AssertVariable(callStack, "x", expected);
     //         }
     //
     //         [Test]
@@ -133,9 +133,9 @@ public class MemoryAndVariableAccessTests
     //                             return obj.c
     //                         x = outer_func()
     //                         """;
-    //             var memory = Runner.Run(input);
+    //             var callStack = Runner.Run(input);
     //             var expected = BsTypes.Create(BsTypes.Types.Int, 25);
-    //             Assertions.AssertVariable(memory, "x", expected);
+    //             Assertions.AssertVariable(callStack, "x", expected);
     //         }
     //         
     //         [Test]
@@ -150,9 +150,9 @@ public class MemoryAndVariableAccessTests
     //                             return b
     //                         x = outer_func()
     //                         """;
-    //             var memory = Runner.Run(input);
+    //             var callStack = Runner.Run(input);
     //             var expected = BsTypes.Create(BsTypes.Types.Int, 20);
-    //             Assertions.AssertVariable(memory, "x", expected);
+    //             Assertions.AssertVariable(callStack, "x", expected);
     //         }
     //         
     //         [Test]
@@ -199,9 +199,9 @@ public class MemoryAndVariableAccessTests
     //                         x = 15
     //                     modify_global()
     //                     """;
-    //         var memory = Runner.Run(input);
+    //         var callStack = Runner.Run(input);
     //         var expected = BsTypes.Create(BsTypes.Types.Int, 15);
-    //         Assertions.AssertVariable(memory, "x", expected);
+    //         Assertions.AssertVariable(callStack, "x", expected);
     //     }
     //     
     //     [Test]
@@ -217,9 +217,9 @@ public class MemoryAndVariableAccessTests
     //                         inner_func()
     //                     outer_func2()
     //                     """;
-    //         var memory = Runner.Run(input);
+    //         var callStack = Runner.Run(input);
     //         var expected = BsTypes.Create(BsTypes.Types.Int, 25);
-    //         Assertions.AssertVariable(memory, "y", expected);
+    //         Assertions.AssertVariable(callStack, "y", expected);
     //     }
     //
     //     [Test]
@@ -232,9 +232,9 @@ public class MemoryAndVariableAccessTests
     //                         z = 45
     //                     obj = MyClass2()
     //                     """;
-    //         var memory = Runner.Run(input);
+    //         var callStack = Runner.Run(input);
     //         var expected = BsTypes.Create(BsTypes.Types.Int, 45);
-    //         Assertions.AssertVariable(memory, "z", expected);
+    //         Assertions.AssertVariable(callStack, "z", expected);
     //     }
     //     
     //     [Test]
@@ -249,9 +249,9 @@ public class MemoryAndVariableAccessTests
     //                             w = 75
     //                     obj = OuterClass2().InnerClass2()
     //                     """;
-    //         var memory = Runner.Run(input);
+    //         var callStack = Runner.Run(input);
     //         var expected = BsTypes.Create(BsTypes.Types.Int, 75);
-    //         Assertions.AssertVariable(memory, "w", expected);
+    //         Assertions.AssertVariable(callStack, "w", expected);
     //     }
     // }
     //
@@ -271,9 +271,9 @@ public class MemoryAndVariableAccessTests
     //                         return z
     //                     x = outer_func3()
     //                     """;
-    //         var memory = Runner.Run(input);
+    //         var callStack = Runner.Run(input);
     //         var expected = BsTypes.Create(BsTypes.Types.Int, 75);
-    //         Assertions.AssertVariable(memory, "x", expected);
+    //         Assertions.AssertVariable(callStack, "x", expected);
     //     }
     //     
     //     [Test]
@@ -293,9 +293,9 @@ public class MemoryAndVariableAccessTests
     //                         return a
     //                     x = outer_func4()
     //                     """;
-    //         var memory = Runner.Run(input);
+    //         var callStack = Runner.Run(input);
     //         var expected = BsTypes.Create(BsTypes.Types.Int, 150);
-    //         Assertions.AssertVariable(memory, "x", expected);
+    //         Assertions.AssertVariable(callStack, "x", expected);
     //     }
     //     
     //     [Test]
@@ -311,9 +311,9 @@ public class MemoryAndVariableAccessTests
     //                         return b
     //                     x = outer_func5()
     //                     """;
-    //         var memory = Runner.Run(input);
+    //         var callStack = Runner.Run(input);
     //         var expected = BsTypes.Create(BsTypes.Types.Int, 250);
-    //         Assertions.AssertVariable(memory, "x", expected);
+    //         Assertions.AssertVariable(callStack, "x", expected);
     //     }
     //     
     //     [Test]
@@ -330,9 +330,9 @@ public class MemoryAndVariableAccessTests
     //                         return b
     //                     x = outer_func5()
     //                     """;
-    //         var memory = Runner.Run(input);
+    //         var callStack = Runner.Run(input);
     //         var expected = BsTypes.Create(BsTypes.Types.Int, 250);
-    //         Assertions.AssertVariable(memory, "x", expected);
+    //         Assertions.AssertVariable(callStack, "x", expected);
     //     }
     //     
     //     [Test]
@@ -350,9 +350,9 @@ public class MemoryAndVariableAccessTests
     //                         return c
     //                     x = outer_func6()
     //                     """;
-    //         var memory = Runner.Run(input);
+    //         var callStack = Runner.Run(input);
     //         var expected = BsTypes.Create(BsTypes.Types.Int, 350);
-    //         Assertions.AssertVariable(memory, "x", expected);
+    //         Assertions.AssertVariable(callStack, "x", expected);
     //     }
     //     
     //     [Test]
@@ -371,9 +371,9 @@ public class MemoryAndVariableAccessTests
     //                         return c
     //                     x = outer_func6()
     //                     """;
-    //         var memory = Runner.Run(input);
+    //         var callStack = Runner.Run(input);
     //         var expected = BsTypes.Create(BsTypes.Types.Int, 350);
-    //         Assertions.AssertVariable(memory, "x", expected);
+    //         Assertions.AssertVariable(callStack, "x", expected);
     //     }
     // }
 }

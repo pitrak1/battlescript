@@ -25,7 +25,7 @@ public abstract class Instruction
     // - lexicalContext is used for keywords like `super` because we need to know in what class a method was actually
     // defined to find its superclass, the object is not enough
     public virtual Variable? Interpret(
-        Memory memory,
+        CallStack callStack,
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)

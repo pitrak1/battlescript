@@ -17,12 +17,12 @@ public class VariableInstruction : Instruction
     }
 
     public override Variable? Interpret(
-        Memory memory, 
+        CallStack callStack, 
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        var variable = memory.GetVariable(Name);
+        var variable = callStack.GetVariable(Name);
 
         if (Next is null)
         {
@@ -32,10 +32,10 @@ public class VariableInstruction : Instruction
         {
             if (variable is ObjectVariable objectVariable)
             {
-                return Next.Interpret(memory, variable, objectVariable);
+                return Next.Interpret(callStack, variable, objectVariable);
             }
             
-            return Next.Interpret(memory, variable);
+            return Next.Interpret(callStack, variable);
         }
     }
 }

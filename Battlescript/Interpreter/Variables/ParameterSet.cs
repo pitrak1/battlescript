@@ -30,7 +30,7 @@ public class ParameterSet
         }
     }
 
-    public Dictionary<string, Variable?> GetVariableDictionary(Memory memory)
+    public Dictionary<string, Variable?> GetVariableDictionary(CallStack callStack)
     {
         var parameterObject = new Dictionary<string, Variable?>();
 
@@ -38,7 +38,7 @@ public class ParameterSet
         {
             if (DefaultValues.ContainsKey(name))
             {
-                parameterObject.Add(name, DefaultValues[name].Interpret(memory));
+                parameterObject.Add(name, DefaultValues[name].Interpret(callStack));
             }
             else
             {
