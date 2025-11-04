@@ -60,8 +60,8 @@ public static class OperationInstructionTests
         [Test]
         public void HandlesBinaryOperations()
         {
-            var memory = Runner.Run("x = 5 + 6");
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 11));
+            var (callStack, closure) = Runner.Run("x = 5 + 6");
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 11));
         }
     }
 }

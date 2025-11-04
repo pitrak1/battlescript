@@ -20,19 +20,20 @@ public class WhileInstruction : Instruction
     }
 
     public override Variable? Interpret(
-        CallStack callStack, 
+        CallStack callStack,
+        Closure closure,
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        var condition = Condition.Interpret(callStack);
-        while (Truthiness.IsTruthy(callStack, condition, this))
+        var condition = Condition.Interpret(callStack, closure);
+        while (Truthiness.IsTruthy(callStack, closure, condition, this))
         {
             try
             {
                 foreach (var inst in Instructions)
                 {
-                    inst.Interpret(callStack);
+                    inst.Interpret(callStack, closure);
                 }
             }
             catch (InternalContinueException)
@@ -43,7 +44,7 @@ public class WhileInstruction : Instruction
                 break;
             }
 
-            condition = Condition.Interpret(callStack);
+            condition = Condition.Interpret(callStack, closure);
         }
 
         return null;

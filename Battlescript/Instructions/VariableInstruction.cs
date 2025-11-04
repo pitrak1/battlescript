@@ -17,12 +17,13 @@ public class VariableInstruction : Instruction
     }
 
     public override Variable? Interpret(
-        CallStack callStack, 
+        CallStack callStack,
+        Closure closure,
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        var variable = callStack.GetVariable(Name);
+        var variable = callStack.GetVariable(closure, Name);
 
         if (Next is null)
         {
@@ -32,10 +33,10 @@ public class VariableInstruction : Instruction
         {
             if (variable is ObjectVariable objectVariable)
             {
-                return Next.Interpret(callStack, variable, objectVariable);
+                return Next.Interpret(callStack, closure, variable, objectVariable);
             }
             
-            return Next.Interpret(callStack, variable);
+            return Next.Interpret(callStack, closure, variable);
         }
     }
 }

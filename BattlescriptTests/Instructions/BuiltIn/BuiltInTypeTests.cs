@@ -14,9 +14,9 @@ public class BuiltInTypeTests
                         
                     x = type(y)
                     """;
-        var memory = Runner.Run(input);
+        var (callStack, closure) = Runner.Run(input);
         var expected = BsTypes.Create(BsTypes.Types.String, "<class 'function'>");
-        Assertions.AssertVariable(memory, "x", expected);
+        Assertions.AssertVariable(callStack, closure, "x", expected);
     }
     
     [Test]
@@ -28,9 +28,9 @@ public class BuiltInTypeTests
                         
                     x = type(y)
                     """;
-        var memory = Runner.Run(input);
+        var (callStack, closure) = Runner.Run(input);
         var expected = BsTypes.Create(BsTypes.Types.String, "<class 'type'>");
-        Assertions.AssertVariable(memory, "x", expected);
+        Assertions.AssertVariable(callStack, closure, "x", expected);
     }
     
     [Test]
@@ -40,9 +40,9 @@ public class BuiltInTypeTests
                     y = __string__()
                     x = type(y)
                     """;
-        var memory = Runner.Run(input);
+        var (callStack, closure) = Runner.Run(input);
         var expected = BsTypes.Create(BsTypes.Types.String, "<class '__string__'>");
-        Assertions.AssertVariable(memory, "x", expected);
+        Assertions.AssertVariable(callStack, closure, "x", expected);
     }
     
     [Test]
@@ -52,9 +52,9 @@ public class BuiltInTypeTests
                     y = 5
                     x = type(y)
                     """;
-        var memory = Runner.Run(input);
+        var (callStack, closure) = Runner.Run(input);
         var expected = BsTypes.Create(BsTypes.Types.String, "<class 'int'>");
-        Assertions.AssertVariable(memory, "x", expected);
+        Assertions.AssertVariable(callStack, closure, "x", expected);
     }
 
     [Test]
@@ -67,8 +67,8 @@ public class BuiltInTypeTests
                     z = y()
                     x = type(z)
                     """;
-        var memory = Runner.Run(input);
+        var (callStack, closure) = Runner.Run(input);
         var expected = BsTypes.Create(BsTypes.Types.String, "<class 'y'>");
-        Assertions.AssertVariable(memory, "x", expected);
+        Assertions.AssertVariable(callStack, closure, "x", expected);
     }
 }

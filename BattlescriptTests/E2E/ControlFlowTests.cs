@@ -12,55 +12,55 @@ public static class ControlFlowTests
         public void HandlesTrueIfStatement()
         {
             var input = "x = 5\nif x == 5:\n\tx = 6";
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 6);
             
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
         [Test]
         public void HandlesFalseIfStatement()
         {
             var input = "x = 5\nif x == 6:\n\tx = 6";
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 5);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
         [Test]
         public void SupportsElseStatement()
         {
             var input = "x = 5\nif x == 6:\n\tx = 6\nelse:\n\tx = 7";
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 7);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     
         [Test]
         public void SupportsElifStatement()
         {
             var input = "x = 5\nif x == 6:\n\tx = 6\nelif x < 8:\n\tx = 9\nelse:\n\tx = 7";
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 9);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
         [Test]
         public void SupportsElifStatementWithoutElse()
         {
             var input = "x = 5\nif x == 6:\n\tx = 6\nelif x < 8:\n\tx = 9";
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 9);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
         [Test]
         public void SupportsConsecutiveIfStatements()
         {
             var input = "x = 5\nif x < 6:\n\tx = 7\nif x >= 7:\n\tx = 9";
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 9);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
 
         [Test]
@@ -74,9 +74,9 @@ public static class ControlFlowTests
                         else:
                             y = 6
                         """;
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 6);
-            Assertions.AssertVariable(memory, "y", expected);
+            Assertions.AssertVariable(callStack, closure, "y", expected);
         }
         
         [Test]
@@ -90,9 +90,9 @@ public static class ControlFlowTests
                         else:
                             y = 6
                         """;
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 5);
-            Assertions.AssertVariable(memory, "y", expected);
+            Assertions.AssertVariable(callStack, closure, "y", expected);
         }
     }
     
@@ -103,18 +103,18 @@ public static class ControlFlowTests
         public void HandlesTrueWhileStatement()
         {
             var input = "x = 5\nwhile x < 10:\n\tx += 1";
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 10);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
         [Test]
         public void HandlesFalseWhileStatement()
         {
             var input = "x = 5\nwhile x == 6:\n\tx = 10";
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 5);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }
     
@@ -125,18 +125,18 @@ public static class ControlFlowTests
         public void ForLoopUsingRange()
         {
             var input = "x = 5\nfor y in range(3):\n\tx = x + y";
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 8);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
         [Test]
         public void ForLoopUsingList()
         {
             var input = "x = 5\nfor y in [-1, 3, 2]:\n\tx = x + y";
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 9);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }
     
@@ -153,9 +153,9 @@ public static class ControlFlowTests
                                 continue
                             x = x + y
                         """;
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 9);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     
         [Test]
@@ -170,9 +170,9 @@ public static class ControlFlowTests
                                 continue
                             x = x + y
                         """;
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 13);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }
     
@@ -189,9 +189,9 @@ public static class ControlFlowTests
                                 break
                             x = x + y
                         """;
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 6);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     
         [Test]
@@ -206,9 +206,9 @@ public static class ControlFlowTests
                                 break
                             x = x + y
                         """;
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 6);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }
     
@@ -223,9 +223,9 @@ public static class ControlFlowTests
                         if x == 5:
                             pass
                         """;
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 5);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }
 }

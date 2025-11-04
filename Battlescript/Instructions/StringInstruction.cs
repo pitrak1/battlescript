@@ -18,7 +18,8 @@ public class StringInstruction : Instruction
     }
     
     public override Variable? Interpret(
-        CallStack callStack, 
+        CallStack callStack,
+        Closure closure,
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
@@ -26,7 +27,7 @@ public class StringInstruction : Instruction
         var value = Value;
         if (IsFormatted)
         {
-            value = StringUtilities.GetFormattedStringValue(callStack, value);
+            value = StringUtilities.GetFormattedStringValue(callStack, closure, value);
         }
         return BsTypes.Create(BsTypes.Types.String, value);
     }

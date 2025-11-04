@@ -13,25 +13,25 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
         Instructions = instructions ?? [];
     }
     
-    public Variable RunFunction(CallStack callStack, ArgumentSet arguments, Instruction? inst = null)
+    public Variable RunFunction(CallStack callStack, Closure closure, ArgumentSet arguments, Instruction? inst = null)
     {
         var lineValue = inst?.Line ?? 0;
         var expressionValue = inst?.Expression ?? "";
         callStack.AddScope(lineValue, expressionValue, Name);
         // callStack.AddScope(inst.Line, inst.Expression, Name);
-        arguments.ApplyToMemory(callStack, Parameters);
-        var returnValue = RunInstructions(callStack);
+        arguments.ApplyToMemory(callStack, closure, Parameters);
+        var returnValue = RunInstructions(callStack, closure);
         callStack.RemoveScope();
         return returnValue ?? new ConstantVariable();
     }
     
-    private Variable? RunInstructions(CallStack callStack)
+    private Variable? RunInstructions(CallStack callStack, Closure closure)
     {
         try
         {
             foreach (var inst in Instructions)
             {
-                inst.Interpret(callStack);
+                inst.Interpret(callStack, closure);
             }
         }
         catch (InternalReturnException e)

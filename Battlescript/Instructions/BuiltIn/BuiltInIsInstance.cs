@@ -2,14 +2,14 @@ namespace Battlescript.BuiltIn;
 
 public static class BuiltInIsInstance
 {
-    public static Variable Run(CallStack callStack, List<Instruction> arguments)
+    public static Variable Run(CallStack callStack, Closure closure, List<Instruction> arguments)
     {
         if (arguments.Count != 2)
         {
             throw new Exception("Bad arguments, clean this up later");
         }
         
-        var objectExpression = arguments[0].Interpret(callStack);
+        var objectExpression = arguments[0].Interpret(callStack, closure);
         if (arguments[1] is PrincipleTypeInstruction principleTypeInstruction)
         {
             switch (principleTypeInstruction.Value)
@@ -25,7 +25,7 @@ public static class BuiltInIsInstance
         }
         else
         {
-            var classExpression = arguments[1].Interpret(callStack);
+            var classExpression = arguments[1].Interpret(callStack, closure);
         
             if (objectExpression is ObjectVariable objectVariable && classExpression is ClassVariable classVariable)
             {

@@ -29,25 +29,26 @@ public class ForInstruction : Instruction
     }
 
     public override Variable? Interpret(
-        CallStack callStack, 
+        CallStack callStack,
+        Closure closure,
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        var range = Range.Interpret(callStack) as ObjectVariable;
+        var range = Range.Interpret(callStack, closure) as ObjectVariable;
 
         if (BsTypes.Is(BsTypes.Types.List, range))
         {
             var values = (range.Values["__value"] as SequenceVariable).Values;
             for (var i = 0; i < values.Count; i++)
             {
-                callStack.SetVariable(BlockVariable, values[i]);
+                callStack.SetVariable(closure, BlockVariable, values[i]);
 
                 try
                 {
                     foreach (var inst in Instructions)
                     {
-                        inst.Interpret(callStack);
+                        inst.Interpret(callStack, closure);
                     }
 
                 }

@@ -22,7 +22,8 @@ public class TryInstruction : Instruction
     }
     
     public override Variable? Interpret(
-        CallStack callStack, 
+        CallStack callStack,
+        Closure closure,
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
@@ -31,14 +32,14 @@ public class TryInstruction : Instruction
         {
             foreach (var inst in Instructions)
             {
-                inst.Interpret(callStack);
+                inst.Interpret(callStack, closure);
             }
             
             if (Finally is not null)
             {
                 foreach (var inst in Finally.Instructions)
                 {
-                    inst.Interpret(callStack);
+                    inst.Interpret(callStack, closure);
                 }
             }
         }
@@ -53,13 +54,13 @@ public class TryInstruction : Instruction
                     
                     if (except.ExceptionVariable is not null)
                     {
-                        var exceptionVariable = BsTypes.CreateException(callStack, e.Type, e.Message);
+                        var exceptionVariable = BsTypes.CreateException(callStack, closure, e.Type, e.Message);
                         callStack.AddVariableToLastScope(except.ExceptionVariable, exceptionVariable);
                     }
                     
                     foreach (var inst in except.Instructions)
                     {
-                        inst.Interpret(callStack);
+                        inst.Interpret(callStack, closure);
                     }
                     break;
                 }
@@ -69,7 +70,7 @@ public class TryInstruction : Instruction
             {
                 foreach (var inst in Else.Instructions)
                 {
-                    inst.Interpret(callStack);
+                    inst.Interpret(callStack, closure);
                 }
             }
 
@@ -77,7 +78,7 @@ public class TryInstruction : Instruction
             {
                 foreach (var inst in Finally.Instructions)
                 {
-                    inst.Interpret(callStack);
+                    inst.Interpret(callStack, closure);
                 }
             }
 

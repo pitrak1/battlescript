@@ -10,36 +10,36 @@ public class BuiltInAbsTests
     public void HandlesPositiveInts()
     {
         var input = "x = abs(5)";
-        var memory = Runner.Run(input);
+        var (callStack, closure) = Runner.Run(input);
         var expected = BsTypes.Create(BsTypes.Types.Int, new NumericVariable(5));
-        Assertions.AssertVariable(memory, "x", expected);
+        Assertions.AssertVariable(callStack, closure, "x", expected);
     }
     
     [Test]
     public void HandlesNegativeInts()
     {
         var input = "x = abs(-5)";
-        var memory = Runner.Run(input);
+        var (callStack, closure) = Runner.Run(input);
         var expected = BsTypes.Create(BsTypes.Types.Int, new NumericVariable(5));
-        Assertions.AssertVariable(memory, "x", expected);
+        Assertions.AssertVariable(callStack, closure, "x", expected);
     }
     
     [Test]
     public void HandlesPositiveFloats()
     {
         var input = "x = abs(5.5)";
-        var memory = Runner.Run(input);
+        var (callStack, closure) = Runner.Run(input);
         var expected = BsTypes.Create(BsTypes.Types.Float, new NumericVariable(5.5));
-        Assertions.AssertVariable(memory, "x", expected);
+        Assertions.AssertVariable(callStack, closure, "x", expected);
     }
     
     [Test]
     public void HandlesNegativeFloats()
     {
         var input = "x = abs(-5.5)";
-        var memory = Runner.Run(input);
+        var (callStack, closure) = Runner.Run(input);
         var expected = BsTypes.Create(BsTypes.Types.Float, new NumericVariable(5.5));
-        Assertions.AssertVariable(memory, "x", expected);
+        Assertions.AssertVariable(callStack, closure, "x", expected);
     }
 
     [Test]
@@ -53,9 +53,9 @@ public class BuiltInAbsTests
                     z = y()
                     x = abs(z)
                     """;
-        var memory = Runner.Run(input);
+        var (callStack, closure) = Runner.Run(input);
         var expected = BsTypes.Create(BsTypes.Types.Int, new NumericVariable(5));
-        Assertions.AssertVariable(memory, "x", expected);
+        Assertions.AssertVariable(callStack, closure, "x", expected);
     }
 
     [Test]

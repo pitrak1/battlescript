@@ -37,25 +37,25 @@ public static class AssignmentInstructionTests
         [Test]
         public void HandlesSimpleAssignments()
         {
-            var memory = Runner.Run("x = 6");
+            var (callStack, closure) = Runner.Run("x = 6");
             var expected = BsTypes.Create(BsTypes.Types.Int, 6);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
         [Test]
         public void HandlesAssignmentOperators()
         {
-            var memory = Runner.Run("x = 6\nx += 2");
+            var (callStack, closure) = Runner.Run("x = 6\nx += 2");
             var expected = BsTypes.Create(BsTypes.Types.Int, 8);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
 
         [Test]
         public void ReturnsAssignedVariable()
         {
-            var memory = Runner.Run("x = 6");
+            var (callStack, closure) = Runner.Run("x = 6");
             var expected = BsTypes.Create(BsTypes.Types.Int, 6);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }
 }

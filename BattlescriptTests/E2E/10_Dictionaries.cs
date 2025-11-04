@@ -9,7 +9,7 @@ public class Dictionaries
     public void SupportsDictionaryDefinition()
     {
         var input = "x = {'asdf': 5, 'qwer': '5'}";
-        var memory = Runner.Run(input);
+        var (callStack, closure) = Runner.Run(input);
         var expected = BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, 
             new Dictionary<string, Variable>()
             {
@@ -17,16 +17,16 @@ public class Dictionaries
                 {"qwer", BsTypes.Create(BsTypes.Types.String, "5")}
             }
         ));
-        Assertions.AssertVariable(memory, "x", expected);
+        Assertions.AssertVariable(callStack, closure, "x", expected);
     }
 
     [Test]
     public void SupportsDictionaryIndexing()
     {
         var input = "x = {'asdf': 5, 'qwer': '5'}\ny = x['qwer']";
-        var memory = Runner.Run(input);
+        var (callStack, closure) = Runner.Run(input);
         var expected = BsTypes.Create(BsTypes.Types.String, "5");
         
-        Assertions.AssertVariable(memory, "y", expected);
+        Assertions.AssertVariable(callStack, closure, "y", expected);
     }
 }

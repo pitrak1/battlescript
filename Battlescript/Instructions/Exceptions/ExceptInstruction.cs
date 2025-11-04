@@ -28,13 +28,4 @@ public class ExceptInstruction : Instruction
         Instructions = instructions;
         ExceptionVariable = exceptionVariable;
     }
-    
-    public override Variable? Interpret(
-        CallStack callStack, 
-        Variable? instructionContext = null,
-        ObjectVariable? objectContext = null,
-        ClassVariable? lexicalContext = null)
-    {
-        return null;
-    }
 }

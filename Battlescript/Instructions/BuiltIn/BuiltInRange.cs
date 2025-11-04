@@ -2,7 +2,7 @@ namespace Battlescript.BuiltIn;
 
 public static class BuiltInRange
 {
-    public static Variable Run(CallStack callStack, List<Instruction> arguments)
+    public static Variable Run(CallStack callStack, Closure closure, List<Instruction> arguments)
     {
         int startingValue = 0;
         int count = 0;
@@ -10,19 +10,19 @@ public static class BuiltInRange
 
         if (arguments.Count == 1)
         {
-            var countExpression = arguments[0].Interpret(callStack);
+            var countExpression = arguments[0].Interpret(callStack, closure);
             count = BsTypes.GetIntValue(countExpression);
         } else if (arguments.Count == 2)
         {
-            var startingValueExpression = arguments[0].Interpret(callStack);
-            var countExpression = arguments[1].Interpret(callStack);
+            var startingValueExpression = arguments[0].Interpret(callStack, closure);
+            var countExpression = arguments[1].Interpret(callStack, closure);
             startingValue = BsTypes.GetIntValue(startingValueExpression);
             count = BsTypes.GetIntValue(countExpression);
         } else if (arguments.Count == 3)
         {
-            var startingValueExpression = arguments[0].Interpret(callStack);
-            var countExpression = arguments[1].Interpret(callStack);
-            var stepExpression = arguments[2].Interpret(callStack);
+            var startingValueExpression = arguments[0].Interpret(callStack, closure);
+            var countExpression = arguments[1].Interpret(callStack, closure);
+            var stepExpression = arguments[2].Interpret(callStack, closure);
             startingValue = BsTypes.GetIntValue(startingValueExpression);
             count = BsTypes.GetIntValue(countExpression);
             step = BsTypes.GetIntValue(stepExpression);

@@ -40,7 +40,6 @@ public class ArrayInstruction : Instruction
 
     public ArrayInstruction(
         List<Instruction?> values, 
-        string? separator = null,
         string? delimiter = null,
         Instruction? next = null) : base([])
     {

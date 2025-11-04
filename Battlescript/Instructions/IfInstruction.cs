@@ -22,22 +22,23 @@ public class IfInstruction : Instruction
     }
 
     public override Variable? Interpret(
-        CallStack callStack, 
+        CallStack callStack,
+        Closure closure,
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        var condition = Condition.Interpret(callStack);
-        if (Truthiness.IsTruthy(callStack, condition, this))
+        var condition = Condition.Interpret(callStack, closure);
+        if (Truthiness.IsTruthy(callStack, closure, condition, this))
         {
             foreach (var inst in Instructions)
             {
-                inst.Interpret(callStack);
+                inst.Interpret(callStack, closure);
             }
         }
         else if (Next is not null)
         {
-            Next.Interpret(callStack, instructionContext, objectContext, lexicalContext);
+            Next.Interpret(callStack, closure, instructionContext, objectContext, lexicalContext);
         }
 
         return null;

@@ -9,12 +9,12 @@ public class CallStack
         Scopes = [new StackFrame("main", "<module>")];
     }
     
-    public Variable? GetVariable(string name)
+    public Variable? GetVariable(Closure closure, string name)
     {
-        return GetVariable(new VariableInstruction(name));
+        return GetVariable(closure, new VariableInstruction(name));
     }
 
-    public Variable? GetVariable(VariableInstruction variableInstruction)
+    public Variable? GetVariable(Closure closure, VariableInstruction variableInstruction)
     {
         for (var i = Scopes.Count - 1; i >= 0; i--)
         {
@@ -23,11 +23,11 @@ public class CallStack
                 var foundVariable = Scopes[i].Values[variableInstruction.Name];
                 if (variableInstruction.Next is SquareBracketsInstruction squareBracketsInstruction)
                 {
-                    return foundVariable.GetItem(this, squareBracketsInstruction);
+                    return foundVariable.GetItem(this, closure, squareBracketsInstruction);
                 }
                 else if (variableInstruction.Next is MemberInstruction memberInstruction)
                 {
-                    return foundVariable.GetMember(this, memberInstruction);
+                    return foundVariable.GetMember(this, closure, memberInstruction);
                 }
                 else
                 {
@@ -39,10 +39,10 @@ public class CallStack
         return null;
     }
     
-    public void SetVariable(VariableInstruction variableInstruction, Variable valueVariable)
+    public void SetVariable(Closure closure, VariableInstruction variableInstruction, Variable valueVariable)
     {
         // We need to pass in the full instruction here to handle assigning to indexes
-        if (GetVariable(variableInstruction.Name) is not null)
+        if (GetVariable(closure, variableInstruction.Name) is not null)
         {
             for (var i = Scopes.Count - 1; i >= 0; i--)
             {
@@ -52,6 +52,7 @@ public class CallStack
                     {
                         Scopes[i].Values[variableInstruction.Name].SetItem(
                             this, 
+                            closure, 
                             valueVariable, 
                             squareBracketsInstruction);
                     }
@@ -59,6 +60,7 @@ public class CallStack
                     {
                         Scopes[i].Values[variableInstruction.Name].SetMember(
                             this, 
+                            closure, 
                             valueVariable, 
                             memberInstruction);
                     }

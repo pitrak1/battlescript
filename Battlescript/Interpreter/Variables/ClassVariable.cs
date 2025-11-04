@@ -15,7 +15,7 @@ public class ClassVariable : Variable, IEquatable<ClassVariable>
         SuperClasses = superclasses ?? [];
     }
 
-    public override Variable? GetMemberDirectly(CallStack callStack, MemberInstruction member, ObjectVariable? objectContext = null)
+    public override Variable? GetMemberDirectly(CallStack callStack, Closure closure, MemberInstruction member, ObjectVariable? objectContext = null)
     {
         var memberName = member.Value;
         if (Values.ContainsKey(memberName))
@@ -26,7 +26,7 @@ public class ClassVariable : Variable, IEquatable<ClassVariable>
         {
             foreach (var superclass in SuperClasses)
             {
-                var result = superclass.GetMemberDirectly(callStack, member, objectContext);
+                var result = superclass.GetMemberDirectly(callStack, closure, member, objectContext);
                 if (result is not null)
                 {
                     return result;
@@ -36,14 +36,14 @@ public class ClassVariable : Variable, IEquatable<ClassVariable>
         }
     }
     
-    public override Variable? GetItemDirectly(CallStack callStack, ArrayInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? GetItemDirectly(CallStack callStack, Closure closure, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
-        var indexVariable = index.Values[0].Interpret(callStack);
+        var indexVariable = index.Values[0].Interpret(callStack, closure);
 
-        var getItemFunction = GetMemberDirectly(callStack, new MemberInstruction("__getitem__"));
+        var getItemFunction = GetMemberDirectly(callStack, closure, new MemberInstruction("__getitem__"));
         if (getItemFunction is FunctionVariable functionVariable && objectContext is not null)
         {
-            return functionVariable.RunFunction(callStack, new ArgumentSet([objectContext, indexVariable]));
+            return functionVariable.RunFunction(callStack, closure, new ArgumentSet([objectContext, indexVariable]));
         }
         else
         {

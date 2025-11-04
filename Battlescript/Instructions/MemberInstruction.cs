@@ -18,10 +18,11 @@ public class MemberInstruction : Instruction
 
     public override Variable? Interpret(
         CallStack callStack,
+        Closure closure,
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        return instructionContext.GetMember(callStack, this, objectContext);
+        return instructionContext.GetMember(callStack, closure, this, objectContext);
     }
 }

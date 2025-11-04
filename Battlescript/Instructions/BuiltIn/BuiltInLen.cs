@@ -2,14 +2,14 @@ namespace Battlescript.BuiltIn;
 
 public static class BuiltInLen
 {
-    public static Variable Run(CallStack callStack, List<Instruction> arguments)
+    public static Variable Run(CallStack callStack, Closure closure, List<Instruction> arguments)
     {
         if (arguments.Count != 1)
         {
             throw new Exception("Bad arguments, clean this up later");
         }
         
-        var firstExpression = arguments[0].Interpret(callStack);
+        var firstExpression = arguments[0].Interpret(callStack, closure);
         if (firstExpression is StringVariable stringVariable)
         {
             return BsTypes.Create(BsTypes.Types.Int, stringVariable.Value.Length);
@@ -25,10 +25,10 @@ public static class BuiltInLen
         }
         else if (firstExpression is ObjectVariable objectVariable)
         {
-            var lenFunc = objectVariable.GetMember(callStack, new MemberInstruction("__len__"));
+            var lenFunc = objectVariable.GetMember(callStack, closure, new MemberInstruction("__len__"));
             if (lenFunc is FunctionVariable funcVariable)
             {
-                return funcVariable.RunFunction(callStack, new ArgumentSet([objectVariable]));
+                return funcVariable.RunFunction(callStack, closure, new ArgumentSet([objectVariable]));
             }
             else
             {

@@ -8,7 +8,7 @@ public class BuiltInIsInstanceTests
     [Test]
     public void ReturnsTrueIfObjectIsDirectInstanceOfClass()
     {
-        var memory = Runner.Run("""
+        var (callStack, closure) = Runner.Run("""
                                 class asdf:
                                     i = 5
                                     
@@ -16,13 +16,13 @@ public class BuiltInIsInstanceTests
                                 y = isinstance(x, asdf)
                                 """);
         var expected = BsTypes.Create(BsTypes.Types.Bool, true);
-        Assertions.AssertVariable(memory, "y", expected);
+        Assertions.AssertVariable(callStack, closure, "y", expected);
     }
     
     [Test]
     public void ReturnsTrueIfObjectIsInheritedInstanceOfClass()
     {
-        var memory = Runner.Run("""
+        var (callStack, closure) = Runner.Run("""
                                 class asdf:
                                     i = 5
                                     
@@ -33,13 +33,13 @@ public class BuiltInIsInstanceTests
                                 y = isinstance(x, asdf)
                                 """);
         var expected = BsTypes.Create(BsTypes.Types.Bool, true);
-        Assertions.AssertVariable(memory, "y", expected);
+        Assertions.AssertVariable(callStack, closure, "y", expected);
     }
 
     [Test]
     public void ReturnsFalseIfObjectIsNotInstanceOfClass()
     {
-        var memory = Runner.Run("""
+        var (callStack, closure) = Runner.Run("""
                                 class asdf:
                                     i = 5
                                     
@@ -50,6 +50,6 @@ public class BuiltInIsInstanceTests
                                 y = isinstance(x, asdf)
                                 """);
         var expected = BsTypes.Create(BsTypes.Types.Bool, false);
-        Assertions.AssertVariable(memory, "y", expected);
+        Assertions.AssertVariable(callStack, closure, "y", expected);
     }
 }

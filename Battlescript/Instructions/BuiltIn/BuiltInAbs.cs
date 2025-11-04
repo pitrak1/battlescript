@@ -4,7 +4,7 @@ namespace Battlescript;
 
 public static class BuiltInAbs
 {
-    public static Variable Run(CallStack callStack, List<Instruction> arguments)
+    public static Variable Run(CallStack callStack, Closure closure, List<Instruction> arguments)
     {
         if (arguments.Count != 1)
         {
@@ -12,13 +12,13 @@ public static class BuiltInAbs
                 $"abs() takes exactly one argument ({arguments.Count} given)");
         }
 
-        var value = arguments[0].Interpret(callStack);
+        var value = arguments[0].Interpret(callStack, closure);
         if (value is ObjectVariable objectVariable)
         {
-            var absFunc = objectVariable.GetMember(callStack, new MemberInstruction("__abs__"));
+            var absFunc = objectVariable.GetMember(callStack, closure, new MemberInstruction("__abs__"));
             if (absFunc is FunctionVariable funcVariable)
             {
-                var asdsf = funcVariable.RunFunction(callStack, new ArgumentSet([value]));
+                var asdsf = funcVariable.RunFunction(callStack, closure, new ArgumentSet([value]));
                 return asdsf;
             }
             else

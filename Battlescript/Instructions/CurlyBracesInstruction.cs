@@ -12,9 +12,17 @@ public class CurlyBracesInstruction : ArrayInstruction
         InitializeValues(tokensInSeparators);
         ParseNext(tokens, closingSeparatorIndex + 1);
     }
+    
+    public CurlyBracesInstruction(
+        List<Instruction?> values, 
+        string? delimiter = null,
+        Instruction? next = null) : base(values, delimiter, next)
+    {
+    }
 
     public override Variable? Interpret(
-        CallStack callStack, 
+        CallStack callStack,
+        Closure closure,
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
@@ -29,12 +37,12 @@ public class CurlyBracesInstruction : ArrayInstruction
         {
             foreach (var dictValue in Values)
             {
-                InterpretAndAddKvp(callStack, stringValues, intValues, dictValue!);
+                InterpretAndAddKvp(callStack, closure, stringValues, intValues, dictValue!);
             }
         } 
         else if (Delimiter == Consts.Colon)
         {
-            InterpretAndAddKvp(callStack, stringValues, intValues, this);
+            InterpretAndAddKvp(callStack, closure, stringValues, intValues, this);
         } else if (Values.Count != 0)
         {
             throw new Exception("Badly formed dictionary");
@@ -43,11 +51,11 @@ public class CurlyBracesInstruction : ArrayInstruction
         return BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(intValues, stringValues));
     }
     
-    private void InterpretAndAddKvp(CallStack callStack, Dictionary<string, Variable> stringValues, Dictionary<int, Variable> intValues, Instruction? instruction)
+    private void InterpretAndAddKvp(CallStack callStack, Closure closure, Dictionary<string, Variable> stringValues, Dictionary<int, Variable> intValues, Instruction? instruction)
     {
         var kvp = IsValidKvp(instruction);
-        var value = kvp.Values[1]!.Interpret(callStack); 
-        var indexValue = GetIndexValue(callStack, kvp.Values[0]!);
+        var value = kvp.Values[1]!.Interpret(callStack, closure); 
+        var indexValue = GetIndexValue(callStack, closure, kvp.Values[0]!);
         if (indexValue.IntValue is not null)
         {
             intValues.Add(indexValue.IntValue.Value, value);
@@ -70,17 +78,17 @@ public class CurlyBracesInstruction : ArrayInstruction
         }
     }
         
-    private (int? IntValue, string? StringValue) GetIndexValue(CallStack callStack, Instruction index)
+    private (int? IntValue, string? StringValue) GetIndexValue(CallStack callStack, Closure closure, Instruction index)
     {
         Variable indexVariable;
         if (index is ArrayInstruction indexInst)
         {
-            var listVariable = indexInst.Values.Select(x => x.Interpret(callStack)).ToList();
+            var listVariable = indexInst.Values.Select(x => x.Interpret(callStack, closure)).ToList();
             indexVariable = listVariable[0]!;
         }
         else
         {
-            indexVariable = index.Interpret(callStack);
+            indexVariable = index.Interpret(callStack, closure);
         }
     
         if (BsTypes.Is(BsTypes.Types.Int, indexVariable))

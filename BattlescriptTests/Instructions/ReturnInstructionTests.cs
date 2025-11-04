@@ -22,7 +22,7 @@ public static class ReturnInstructionTests
         [Test]
         public void HandlesExpressions()
         {
-            var memory = Runner.Run("def func(asdf):\n\treturn asdf + 5\nx = func(4)");
+            var (callStack, closure) = Runner.Run("def func(asdf):\n\treturn asdf + 5\nx = func(4)");
 
             var funcVariable = new FunctionVariable(
                 "func",
@@ -34,8 +34,8 @@ public static class ReturnInstructionTests
                             new VariableInstruction("asdf"),
                             new NumericInstruction(5)))
                 ]);
-            Assertions.AssertVariable(memory, "func", funcVariable);
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 9));
+            Assertions.AssertVariable(callStack, closure, "func", funcVariable);
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 9));
         }
     }
 }

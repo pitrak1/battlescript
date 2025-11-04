@@ -13,9 +13,9 @@ public class MappingVariable : Variable, IEquatable<MappingVariable>
         StringValues = stringValues ?? new Dictionary<string, Variable>();
     }
     
-    public override Variable? SetItemDirectly(CallStack callStack, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? SetItemDirectly(CallStack callStack, Closure closure, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
-        var indexValue = GetIndexValue(callStack, index);
+        var indexValue = GetIndexValue(callStack, closure, index);
         if (indexValue.IntValue is not null)
         {
             var intValue = indexValue.IntValue.Value;
@@ -44,9 +44,9 @@ public class MappingVariable : Variable, IEquatable<MappingVariable>
         }
     }
 
-    private (int? IntValue, string? StringValue) GetIndexValue(CallStack callStack, ArrayInstruction index)
+    private (int? IntValue, string? StringValue) GetIndexValue(CallStack callStack, Closure closure, ArrayInstruction index)
     {
-        var indexVariable = index.Values[0].Interpret(callStack);
+        var indexVariable = index.Values[0].Interpret(callStack, closure);
         var indexList = indexVariable as ObjectVariable;
         var indexSequence = indexList.Values["__value"] as SequenceVariable;
         
@@ -63,9 +63,9 @@ public class MappingVariable : Variable, IEquatable<MappingVariable>
         }
     }
 
-    public override Variable? GetItemDirectly(CallStack callStack, ArrayInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? GetItemDirectly(CallStack callStack, Closure closure, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
-        var indexValue = GetIndexValue(callStack, index);
+        var indexValue = GetIndexValue(callStack, closure, index);
         if (indexValue.IntValue is not null)
         {
             var intValue = indexValue.IntValue.Value;

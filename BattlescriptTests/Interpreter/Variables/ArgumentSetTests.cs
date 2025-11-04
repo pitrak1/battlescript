@@ -22,13 +22,13 @@ public class ArgumentSetTests
         [Test]
         public void SupportsPositionalInstructionArguments()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var input = new List<Instruction>()
             {
                 new NumericInstruction(1234),
                 new StringInstruction("asdf")
             };
-            var result = new ArgumentSet(memory, input);
+            var result = new ArgumentSet(callStack, closure, input);
             var expected = new List<Variable>()
             {
                 BsTypes.Create(BsTypes.Types.Int, 1234),
@@ -40,13 +40,13 @@ public class ArgumentSetTests
         [Test]
         public void SupportsKeywordInstructionArguments()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var input = new List<Instruction>()
             {
                 new AssignmentInstruction("=", new VariableInstruction("asdf"), new NumericInstruction(1234)),
                 new AssignmentInstruction("=", new VariableInstruction("qwer"), new StringInstruction("asdf"))
             };
-            var result = new ArgumentSet(memory, input);
+            var result = new ArgumentSet(callStack, closure, input);
             var expected = new Dictionary<string, Variable>()
             {
                 {"asdf", BsTypes.Create(BsTypes.Types.Int, 1234)},
@@ -58,13 +58,13 @@ public class ArgumentSetTests
         [Test]
         public void SupportsMixedInstructionArguments()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var input = new List<Instruction>()
             {
                 new NumericInstruction(1234),
                 new AssignmentInstruction("=", new VariableInstruction("qwer"), new StringInstruction("asdf"))
             };
-            var result = new ArgumentSet(memory, input);
+            var result = new ArgumentSet(callStack, closure, input);
             var expectedPositionals = new List<Variable>() { BsTypes.Create(BsTypes.Types.Int, 1234) };
             var expectedKeywords = new Dictionary<string, Variable>()
             {
@@ -77,13 +77,13 @@ public class ArgumentSetTests
         [Test]
         public void ThrowsErrorIfKeywordArgsBeforePositionalArgs()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var input = new List<Instruction>()
             {
                 new AssignmentInstruction("=", new VariableInstruction("asdf"), new NumericInstruction(1234)),
                 new StringInstruction("asdf")
             };
-            Assert.Throws<InterpreterKeywordArgBeforePositionalArgException>(() => new ArgumentSet(memory, input));
+            Assert.Throws<InterpreterKeywordArgBeforePositionalArgException>(() => new ArgumentSet(callStack, closure, input));
         }
     }
     
@@ -92,8 +92,8 @@ public class ArgumentSetTests
         [Test]
         public void HandlesPositionalArguments()
         {
-            var memory = Runner.Run("");
-            var arguments = new ArgumentSet(memory, new List<Instruction>()
+            var (callStack, closure) = Runner.Run("");
+            var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
             {
                 new NumericInstruction(1234),
                 new StringInstruction("asdf")
@@ -103,7 +103,7 @@ public class ArgumentSetTests
                 new VariableInstruction("asdf"),
                 new VariableInstruction("qwer")
             });
-            var result = arguments.GetVariableDictionary(memory, parameters);
+            var result = arguments.GetVariableDictionary(callStack, closure, parameters);
             var expected = new Dictionary<string, Variable>()
             {
                 { "asdf", BsTypes.Create(BsTypes.Types.Int, 1234) },
@@ -115,8 +115,8 @@ public class ArgumentSetTests
         [Test]
         public void HandlesKeywordArguments()
         {
-            var memory = Runner.Run("");
-            var arguments = new ArgumentSet(memory, new List<Instruction>()
+            var (callStack, closure) = Runner.Run("");
+            var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
             {
                 new AssignmentInstruction("=", new VariableInstruction("asdf"), new NumericInstruction(1234)),
                 new AssignmentInstruction("=", new VariableInstruction("qwer"), new StringInstruction("asdf"))
@@ -126,7 +126,7 @@ public class ArgumentSetTests
                 new VariableInstruction("asdf"),
                 new VariableInstruction("qwer")
             });
-            var result = arguments.GetVariableDictionary(memory, parameters);
+            var result = arguments.GetVariableDictionary(callStack, closure, parameters);
             var expected = new Dictionary<string, Variable>()
             {
                 { "asdf", BsTypes.Create(BsTypes.Types.Int, 1234) },
@@ -138,8 +138,8 @@ public class ArgumentSetTests
         [Test]
         public void HandlesMixedArguments()
         {
-            var memory = Runner.Run("");
-            var arguments = new ArgumentSet(memory, new List<Instruction>()
+            var (callStack, closure) = Runner.Run("");
+            var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
             {
                 new NumericInstruction(1234),
                 new AssignmentInstruction("=", new VariableInstruction("qwer"), new StringInstruction("asdf"))
@@ -149,7 +149,7 @@ public class ArgumentSetTests
                 new VariableInstruction("asdf"),
                 new VariableInstruction("qwer")
             });
-            var result = arguments.GetVariableDictionary(memory, parameters);
+            var result = arguments.GetVariableDictionary(callStack, closure, parameters);
             var expected = new Dictionary<string, Variable>()
             {
                 { "asdf", BsTypes.Create(BsTypes.Types.Int, 1234) },
@@ -161,8 +161,8 @@ public class ArgumentSetTests
         [Test]
         public void RespectsDefaultValues()
         {
-            var memory = Runner.Run("");
-            var arguments = new ArgumentSet(memory, new List<Instruction>()
+            var (callStack, closure) = Runner.Run("");
+            var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
             {
                 new NumericInstruction(1234)
             });
@@ -171,7 +171,7 @@ public class ArgumentSetTests
                 new VariableInstruction("asdf"),
                 new AssignmentInstruction("=", new VariableInstruction("qwer"), new StringInstruction("asdf"))
             });
-            var result = arguments.GetVariableDictionary(memory, parameters);
+            var result = arguments.GetVariableDictionary(callStack, closure, parameters);
             var expected = new Dictionary<string, Variable>()
             {
                 { "asdf", BsTypes.Create(BsTypes.Types.Int, 1234) },
@@ -183,8 +183,8 @@ public class ArgumentSetTests
         [Test]
         public void PrioritizedGivenValuesOverDefaultValues()
         {
-            var memory = Runner.Run("");
-            var arguments = new ArgumentSet(memory, new List<Instruction>()
+            var (callStack, closure) = Runner.Run("");
+            var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
             {
                 new NumericInstruction(1234),
                 new NumericInstruction(5678)
@@ -194,7 +194,7 @@ public class ArgumentSetTests
                 new VariableInstruction("asdf"),
                 new AssignmentInstruction("=", new VariableInstruction("qwer"), new StringInstruction("asdf"))
             });
-            var result = arguments.GetVariableDictionary(memory, parameters);
+            var result = arguments.GetVariableDictionary(callStack, closure, parameters);
             var expected = new Dictionary<string, Variable>()
             {
                 { "asdf", BsTypes.Create(BsTypes.Types.Int, 1234) },
@@ -206,8 +206,8 @@ public class ArgumentSetTests
         [Test]
         public void ThrowsErrorIfTooManyArguments()
         {
-            var memory = Runner.Run("");
-            var arguments = new ArgumentSet(memory, new List<Instruction>()
+            var (callStack, closure) = Runner.Run("");
+            var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
             {
                 new NumericInstruction(1234),
                 new NumericInstruction(5678),
@@ -218,14 +218,14 @@ public class ArgumentSetTests
                 new VariableInstruction("asdf"),
                 new VariableInstruction("qwer")
             });
-            Assert.Throws<Exception>(() => arguments.GetVariableDictionary(memory, parameters));
+            Assert.Throws<Exception>(() => arguments.GetVariableDictionary(callStack, closure, parameters));
         }
         
         [Test]
         public void ThrowsErrorIfUnknownKeywordArgument()
         {
-            var memory = Runner.Run("");
-            var arguments = new ArgumentSet(memory, new List<Instruction>()
+            var (callStack, closure) = Runner.Run("");
+            var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
             {
                 new NumericInstruction(1234),
                 new AssignmentInstruction("=", new VariableInstruction("zxcv"), new StringInstruction("asdf"))
@@ -235,14 +235,14 @@ public class ArgumentSetTests
                 new VariableInstruction("asdf"),
                 new AssignmentInstruction("=", new VariableInstruction("qwer"), new StringInstruction("asdf"))
             });
-            Assert.Throws<Exception>(() => arguments.GetVariableDictionary(memory, parameters));
+            Assert.Throws<Exception>(() => arguments.GetVariableDictionary(callStack, closure, parameters));
         }
         
         [Test]
         public void ThrowsErrorIfNotAllParametersHaveValues()
         {
-            var memory = Runner.Run("");
-            var arguments = new ArgumentSet(memory, new List<Instruction>()
+            var (callStack, closure) = Runner.Run("");
+            var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
             {
                 new NumericInstruction(1234),
                 new AssignmentInstruction("=", new VariableInstruction("zxcv"), new StringInstruction("asdf"))
@@ -253,7 +253,7 @@ public class ArgumentSetTests
                 new VariableInstruction("qwer"),
                 new VariableInstruction("zxcv")
             });
-            Assert.Throws<InterpreterMissingRequiredArgumentException>(() => arguments.GetVariableDictionary(memory, parameters));
+            Assert.Throws<InterpreterMissingRequiredArgumentException>(() => arguments.GetVariableDictionary(callStack, closure, parameters));
         }
     }
 }

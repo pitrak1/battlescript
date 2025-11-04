@@ -28,7 +28,8 @@ public class PrincipleTypeInstruction : Instruction
     }
     
     public override Variable? Interpret(        
-        CallStack callStack, 
+        CallStack callStack,
+        Closure closure,
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
@@ -60,7 +61,7 @@ public class PrincipleTypeInstruction : Instruction
                 }
                 else if (Parameters[0] is VariableInstruction variableInstruction)
                 {
-                    var variableValue = callStack.GetVariable(variableInstruction);
+                    var variableValue = callStack.GetVariable(closure, variableInstruction);
                     if (variableValue is StringVariable stringVariable)
                     {
                         value = stringVariable.Value.Contains(".") ? float.Parse(stringVariable.Value) : int.Parse(stringVariable.Value);
@@ -97,7 +98,7 @@ public class PrincipleTypeInstruction : Instruction
             case "__string__":
                 if (Parameters.Count == 1)
                 {
-                    var parameter = Parameters[0].Interpret(callStack, instructionContext, objectContext, lexicalContext);
+                    var parameter = Parameters[0].Interpret(callStack, closure, instructionContext, objectContext, lexicalContext);
                     if (parameter is StringVariable stringVariable)
                     {
                         return stringVariable;

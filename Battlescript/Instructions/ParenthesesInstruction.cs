@@ -12,9 +12,17 @@ public class ParenthesesInstruction : ArrayInstruction
         InitializeValues(tokensInSeparators);
         ParseNext(tokens, closingSeparatorIndex + 1);
     }
+    
+    public ParenthesesInstruction(
+        List<Instruction?> values, 
+        string? delimiter = null,
+        Instruction? next = null) : base(values, delimiter, next)
+    {
+    }
 
     public override Variable? Interpret(
-        CallStack callStack, 
+        CallStack callStack,
+        Closure closure,
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
@@ -22,14 +30,14 @@ public class ParenthesesInstruction : ArrayInstruction
         if (instructionContext is FunctionVariable functionVariable)
         {
             // var stackUpdates = callStack.CurrentStack.AddFrame(this, null, functionVariable.Name);
-            var returnValue = functionVariable.RunFunction(callStack, new ArgumentSet(callStack, Values!, objectContext), this);
+            var returnValue = functionVariable.RunFunction(callStack, closure, new ArgumentSet(callStack, closure, Values!, objectContext), this);
             // callStack.CurrentStack.PopFrame(stackUpdates);
             return returnValue;
         }
         else if (instructionContext is ClassVariable classVariable)
         {
             var objectVariable = classVariable.CreateObject();
-            RunConstructor(callStack, objectVariable);
+            RunConstructor(callStack, closure, objectVariable);
             return objectVariable;
         }
         else
@@ -38,13 +46,13 @@ public class ParenthesesInstruction : ArrayInstruction
         }
     }
     
-    private void RunConstructor(CallStack callStack, ObjectVariable objectVariable)
+    private void RunConstructor(CallStack callStack, Closure closure, ObjectVariable objectVariable)
     {
-        var constructor = objectVariable.Class.GetMember(callStack, new MemberInstruction("__init__"));
+        var constructor = objectVariable.Class.GetMember(callStack, closure, new MemberInstruction("__init__"));
         if (constructor is FunctionVariable constructorVariable)
         {
             // var stackUpdates = callStack.CurrentStack.AddFrame(this, null, "__init__");
-            constructorVariable.RunFunction(callStack, new ArgumentSet(callStack, Values!, objectVariable), this);
+            constructorVariable.RunFunction(callStack, closure, new ArgumentSet(callStack, closure, Values!, objectVariable), this);
             // callStack.CurrentStack.PopFrame(stackUpdates);
         }
     }

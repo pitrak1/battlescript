@@ -24,8 +24,8 @@ public class FunctionsTests
                         left: new VariableInstruction("x"),
                         right: new NumericInstruction(5))
                 ]);
-            var memory = Runner.Run(input);
-            Assertions.AssertVariable(memory, "func", expected);
+            var (callStack, closure) = Runner.Run(input);
+            Assertions.AssertVariable(callStack, closure, "func", expected);
         }
     
         [Test]
@@ -44,8 +44,8 @@ public class FunctionsTests
                         left: new VariableInstruction("x"),
                         right: new VariableInstruction("asdf"))
                 ]);
-            var memory = Runner.Run(input);
-            Assertions.AssertVariable(memory, "func", expected);
+            var (callStack, closure) = Runner.Run(input);
+            Assertions.AssertVariable(callStack, closure, "func", expected);
         }
         
         [Test]
@@ -67,8 +67,8 @@ public class FunctionsTests
                         left: new VariableInstruction("x"),
                         right: new VariableInstruction("asdf"))
                 ]);
-            var memory = Runner.Run(input);
-            Assertions.AssertVariable(memory, "func", expected);
+            var (callStack, closure) = Runner.Run(input);
+            Assertions.AssertVariable(callStack, closure, "func", expected);
         }
     }
     
@@ -84,9 +84,9 @@ public class FunctionsTests
                             x = 5
                         func()
                         """;
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 5);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
         [Test]
@@ -98,9 +98,9 @@ public class FunctionsTests
                             x = y + z
                         func(2, 3)
                         """;
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 5);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }
     
@@ -115,9 +115,9 @@ public class FunctionsTests
                             return 15
                         x = func()
                         """;
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 15);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
         [Test]
@@ -128,9 +128,9 @@ public class FunctionsTests
                             return y + z
                         x = func(4, 8)
                         """;
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 12);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
         [Test]
@@ -144,9 +144,9 @@ public class FunctionsTests
                             x = 6
                         func()
                         """;
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 5);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }
     
@@ -161,9 +161,9 @@ public class FunctionsTests
                             return y
                         x = func(6)
                         """;
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 6);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
         [Test]
@@ -174,9 +174,9 @@ public class FunctionsTests
                             return y
                         x = func()
                         """;
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 5);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     
         [Test]
@@ -201,9 +201,9 @@ public class FunctionsTests
                             return y
                         x = func(y = 6)
                         """;
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 6);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
         [Test]
@@ -214,9 +214,9 @@ public class FunctionsTests
                             return x + y
                         x = func(4, y = 6)
                         """;
-            var memory = Runner.Run(input);
+            var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 10);
-            Assertions.AssertVariable(memory, "x", expected);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
         [Test]
@@ -277,8 +277,8 @@ public class FunctionsTests
                 null,
                 new ParameterSet([new VariableInstruction("y")]),
                 [new ReturnInstruction(new OperationInstruction("+", new VariableInstruction("y"), new NumericInstruction(5)))]);
-            var memory = Runner.Run(input);
-            Assertions.AssertVariable(memory, "x", expected);
+            var (callStack, closure) = Runner.Run(input);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }
 }

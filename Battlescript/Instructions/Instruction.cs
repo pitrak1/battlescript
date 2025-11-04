@@ -26,6 +26,7 @@ public abstract class Instruction
     // defined to find its superclass, the object is not enough
     public virtual Variable? Interpret(
         CallStack callStack,
+        Closure closure,
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)

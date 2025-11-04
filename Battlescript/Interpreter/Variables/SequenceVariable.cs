@@ -11,9 +11,9 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         Values = values ?? [];
     }
     
-    public override Variable? SetItemDirectly(CallStack callStack, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? SetItemDirectly(CallStack callStack, Closure closure, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
-        var indexVariable = index.Values[0].Interpret(callStack);
+        var indexVariable = index.Values[0].Interpret(callStack, closure);
         var indexList = indexVariable as ObjectVariable;
         var indexSequence = indexList.Values["__value"] as SequenceVariable;
 
@@ -75,9 +75,9 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         }
     }
     
-    public override Variable? GetItemDirectly(CallStack callStack, ArrayInstruction index, ObjectVariable? objectContext = null)
+    public override Variable? GetItemDirectly(CallStack callStack, Closure closure, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
-        var indexVariable = index.Values[0].Interpret(callStack);
+        var indexVariable = index.Values[0].Interpret(callStack, closure);
         // For single index, this is an int
         var indexList = indexVariable as ObjectVariable;
         var indexSequence = indexList.Values["__value"] as SequenceVariable;

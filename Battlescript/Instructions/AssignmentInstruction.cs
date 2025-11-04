@@ -28,14 +28,15 @@ public class AssignmentInstruction : Instruction
     }
 
     public override Variable? Interpret(
-        CallStack callStack, 
+        CallStack callStack,
+        Closure closure,
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
         if (Left is VariableInstruction left)
         {
-            Operator.Assign(callStack, Operation, left, Right, this);
+            Operator.Assign(callStack, closure, Operation, left, Right, this);
         }
         else if (Left is ConstantInstruction or NumericInstruction or StringInstruction)
         {

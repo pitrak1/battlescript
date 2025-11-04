@@ -30,30 +30,30 @@ public static class ImportInstructionTests
         public void HandlesImportingSimpleVariables()
         {
             var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
-            var memory = Runner.Run($"from '{filePath}' import x");
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 5));
+            var (callStack, closure) = Runner.Run($"from '{filePath}' import x");
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 5));
         }
         
         [Test]
         public void HandlesImportingListOfVariables()
         {
             var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
-            var memory = Runner.Run($"from '{filePath}' import x, y, z");
+            var (callStack, closure) = Runner.Run($"from '{filePath}' import x, y, z");
 
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 5));
-            Assertions.AssertVariable(memory, "y", 
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 5));
+            Assertions.AssertVariable(callStack, closure, "y", 
                 BsTypes.Create(BsTypes.Types.List, new List<Variable>() {
                         BsTypes.Create(BsTypes.Types.Int, 1), 
                         BsTypes.Create(BsTypes.Types.Int, 2), 
                         BsTypes.Create(BsTypes.Types.Int, 3)}));
-            Assertions.AssertVariable(memory, "z", BsTypes.Create(BsTypes.Types.String, "asdf"));
+            Assertions.AssertVariable(callStack, closure, "z", BsTypes.Create(BsTypes.Types.String, "asdf"));
         }
         
         [Test]
         public void HandlesImportingEntireModule()
         {
             var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
-            var memory = Runner.Run($"from '{filePath}' import *");
+            var (callStack, closure) = Runner.Run($"from '{filePath}' import *");
             var expected = BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
             {
                 { "x", BsTypes.Create(BsTypes.Types.Int, 5) },
@@ -65,7 +65,7 @@ public static class ImportInstructionTests
                 },
                 { "z", BsTypes.Create(BsTypes.Types.String, "asdf") }
             }));
-            Assertions.AssertVariable(memory, "import", expected);
+            Assertions.AssertVariable(callStack, closure, "import", expected);
         }
     }
     

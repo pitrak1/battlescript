@@ -68,7 +68,7 @@ public static class FunctionInstructionTests
         [Test]
         public void ReturnsNewFunctionVariable()
         {
-            var memory = Runner.Run("def func(asdf, qwer):\n\treturn asdf + qwer");
+            var (callStack, closure) = Runner.Run("def func(asdf, qwer):\n\treturn asdf + qwer");
             
             var functionVariable = new FunctionVariable(
                 "func",
@@ -85,7 +85,7 @@ public static class FunctionInstructionTests
                             new VariableInstruction("qwer")))
                 ]
             );
-            Assertions.AssertVariable(memory, "func", functionVariable);
+            Assertions.AssertVariable(callStack, closure, "func", functionVariable);
         }
         
     }

@@ -5,7 +5,7 @@ public class ArgumentSet
     public List<Variable> Positionals { get; set; } = [];
     public Dictionary<string, Variable> Keywords { get; set; } = [];
 
-    public ArgumentSet(CallStack callStack, List<Instruction> arguments, ObjectVariable? selfObject = null)
+    public ArgumentSet(CallStack callStack, Closure closure, List<Instruction> arguments, ObjectVariable? selfObject = null)
     {
         if (selfObject is not null)
         {
@@ -17,7 +17,7 @@ public class ArgumentSet
             if (argument is AssignmentInstruction assignmentInstruction)
             {
                 var keywordName = ((VariableInstruction)assignmentInstruction.Left).Name;
-                Keywords[keywordName] = assignmentInstruction.Right.Interpret(callStack);
+                Keywords[keywordName] = assignmentInstruction.Right.Interpret(callStack, closure);
             }
             else
             {
@@ -26,7 +26,7 @@ public class ArgumentSet
                     throw new InterpreterKeywordArgBeforePositionalArgException();
                 }
                 
-                var value = argument.Interpret(callStack);
+                var value = argument.Interpret(callStack, closure);
                 Positionals.Add(value);
             }
         }
@@ -38,18 +38,18 @@ public class ArgumentSet
         Positionals = arguments;
     }
 
-    public void ApplyToMemory(CallStack callStack, ParameterSet parameters)
+    public void ApplyToMemory(CallStack callStack, Closure closure, ParameterSet parameters)
     {
-        var variableDictionary = GetVariableDictionary(callStack, parameters);
+        var variableDictionary = GetVariableDictionary(callStack, closure, parameters);
         foreach (var (name, value) in variableDictionary)
         {
             callStack.AddVariableToLastScope(new VariableInstruction(name), value);
         }
     }
 
-    public Dictionary<string, Variable> GetVariableDictionary(CallStack callStack, ParameterSet parameters)
+    public Dictionary<string, Variable> GetVariableDictionary(CallStack callStack, Closure closure, ParameterSet parameters)
     {
-        var variableDictionary = parameters.GetVariableDictionary(callStack);
+        var variableDictionary = parameters.GetVariableDictionary(callStack, closure);
         
         var positionalArguments = GetPositionalArgumentsAsDictionary();
 

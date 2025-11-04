@@ -15,14 +15,15 @@ public class AssertInstruction : Instruction
     }
     
     public override Variable? Interpret(
-        CallStack callStack, 
+        CallStack callStack,
+        Closure closure,
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        var condition = Condition.Interpret(callStack);
+        var condition = Condition.Interpret(callStack, closure);
         
-        if (!Truthiness.IsTruthy(callStack, condition, this))
+        if (!Truthiness.IsTruthy(callStack, closure, condition, this))
         {
             throw new InternalRaiseException(BsTypes.Types.AssertionError, "");
         }

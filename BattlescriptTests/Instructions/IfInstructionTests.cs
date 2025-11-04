@@ -22,15 +22,15 @@ public static class IfInstructionTests
         [Test]
         public void RunsCodeIfConditionIsTrue()
         {
-            var memory = Runner.Run("x = 3\nif True:\n\tx = 5");
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 5));
+            var (callStack, closure) = Runner.Run("x = 3\nif True:\n\tx = 5");
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 5));
         }
         
         [Test]
         public void DoesNotRunCodeIfConditionIsFalse()
         {
-            var memory = Runner.Run("x = 3\nif False:\n\tx = 5");
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 3));
+            var (callStack, closure) = Runner.Run("x = 3\nif False:\n\tx = 5");
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 3));
         }
     }
 }

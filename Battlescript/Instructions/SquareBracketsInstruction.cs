@@ -12,24 +12,32 @@ public class SquareBracketsInstruction : ArrayInstruction
         InitializeValues(tokensInSeparators);
         ParseNext(tokens, closingSeparatorIndex + 1);
     }
+    
+    public SquareBracketsInstruction(
+        List<Instruction?> values, 
+        string? delimiter = null,
+        Instruction? next = null) : base(values, delimiter, next)
+    {
+    }
 
     public override Variable? Interpret(
-        CallStack callStack, 
+        CallStack callStack,
+        Closure closure,
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
         if (instructionContext is not null)
         {
-            return instructionContext.GetItem(callStack, this, objectContext);
+            return instructionContext.GetItem(callStack, closure, this, objectContext);
         }
         else
         {
-            return InterpretListCreation(callStack);
+            return InterpretListCreation(callStack, closure);
         }
     }
     
-    private Variable InterpretListCreation(CallStack callStack)
+    private Variable InterpretListCreation(CallStack callStack, Closure closure)
     {
         var values = new List<Variable>();
         
@@ -37,7 +45,7 @@ public class SquareBracketsInstruction : ArrayInstruction
         {
             if (instructionValue is not null)
             {
-                values.Add(instructionValue.Interpret(callStack));
+                values.Add(instructionValue.Interpret(callStack, closure));
             }
             else
             {

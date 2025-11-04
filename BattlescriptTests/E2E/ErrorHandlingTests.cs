@@ -45,8 +45,8 @@ public class ErrorHandlingTests
                         except TypeError:
                             x = 12
                         """;
-            var memory = Runner.Run(input);
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 12));
+            var (callStack, closure) = Runner.Run(input);
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 12));
         }
         
         [Test]
@@ -76,8 +76,8 @@ public class ErrorHandlingTests
                         except TypeError:
                             x = 12
                         """;
-            var memory = Runner.Run(input);
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 12));
+            var (callStack, closure) = Runner.Run(input);
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 12));
         }
         
         [Test]
@@ -92,8 +92,8 @@ public class ErrorHandlingTests
                         except Exception:
                             x = 12
                         """;
-            var memory = Runner.Run(input);
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 9));
+            var (callStack, closure) = Runner.Run(input);
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 9));
         }
         
         [Test]
@@ -106,8 +106,8 @@ public class ErrorHandlingTests
                         else:
                             x = 9
                         """;
-            var memory = Runner.Run(input);
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 9));
+            var (callStack, closure) = Runner.Run(input);
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 9));
         }
         
         [Test]
@@ -122,8 +122,8 @@ public class ErrorHandlingTests
                         else:
                             x = 9
                         """;
-            var memory = Runner.Run(input);
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 9));
+            var (callStack, closure) = Runner.Run(input);
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 9));
         }
     }
 
@@ -140,8 +140,8 @@ public class ErrorHandlingTests
                         except TypeError as e:
                             x = e.message
                         """;
-            var memory = Runner.Run(input);
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.String, "asdf"));
+            var (callStack, closure) = Runner.Run(input);
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.String, "asdf"));
         }
     }
 
@@ -161,9 +161,9 @@ public class ErrorHandlingTests
                         finally:
                             y = 6
                         """;
-            var memory = Runner.Run(input);
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 9));
-            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Int, 6));
+            var (callStack, closure) = Runner.Run(input);
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 9));
+            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Int, 6));
         }
         
         [Test]
@@ -179,9 +179,9 @@ public class ErrorHandlingTests
                         finally:
                             y = 6
                         """;
-            var memory = Runner.Run(input);
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 4));
-            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Int, 6));
+            var (callStack, closure) = Runner.Run(input);
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 4));
+            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Int, 6));
         }
     }
 
@@ -201,8 +201,8 @@ public class ErrorHandlingTests
                         except TypeError:
                             x = 4
                         """;
-            var memory = Runner.Run(input);
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 8));
+            var (callStack, closure) = Runner.Run(input);
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 8));
         }
         
         [Test]
@@ -218,8 +218,8 @@ public class ErrorHandlingTests
                         except TypeError:
                             x = 4
                         """;
-            var memory = Runner.Run(input);
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 4));
+            var (callStack, closure) = Runner.Run(input);
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 4));
         }
         
         [Test]
@@ -253,8 +253,8 @@ public class ErrorHandlingTests
                         except TypeError:
                             x = 4
                         """;
-            var memory = Runner.Run(input);
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 8));
+            var (callStack, closure) = Runner.Run(input);
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 8));
         }
         
         [Test]
@@ -270,8 +270,8 @@ public class ErrorHandlingTests
                         else:
                             x = 4
                         """;
-            var memory = Runner.Run(input);
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 4));
+            var (callStack, closure) = Runner.Run(input);
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 4));
         }
         
         [Test]
@@ -289,9 +289,9 @@ public class ErrorHandlingTests
                         except TypeError:
                             x = 4
                         """;
-            var memory = Runner.Run(input);
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 4));
-            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Int, 8));
+            var (callStack, closure) = Runner.Run(input);
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 4));
+            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Int, 8));
         }
         
         [Test]
@@ -340,10 +340,10 @@ public class ErrorHandlingTests
                             finally:
                                 z = 3
                             """;
-                var memory = Runner.Run(input);
-                Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 8));
-                Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Int, 9));
-                Assertions.AssertVariable(memory, "z", BsTypes.Create(BsTypes.Types.Int, 3));
+                var (callStack, closure) = Runner.Run(input);
+                Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 8));
+                Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Int, 9));
+                Assertions.AssertVariable(callStack, closure, "z", BsTypes.Create(BsTypes.Types.Int, 3));
             }
             
             [Test]
@@ -365,8 +365,8 @@ public class ErrorHandlingTests
                             finally:
                                 z = 3
                             """;
-                var memory = Runner.Run(input);
-                Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 9));
+                var (callStack, closure) = Runner.Run(input);
+                Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 9));
             }
             
             [Test]
@@ -388,8 +388,8 @@ public class ErrorHandlingTests
                             finally:
                                 x = 3
                             """;
-                var memory = Runner.Run(input);
-                Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 3));
+                var (callStack, closure) = Runner.Run(input);
+                Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 3));
             }
         }
         
@@ -415,10 +415,10 @@ public class ErrorHandlingTests
                             finally:
                                 z = 3
                             """;
-                var memory = Runner.Run(input);
-                Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 10));
-                Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Int, 9));
-                Assertions.AssertVariable(memory, "z", BsTypes.Create(BsTypes.Types.Int, 3));
+                var (callStack, closure) = Runner.Run(input);
+                Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 10));
+                Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Int, 9));
+                Assertions.AssertVariable(callStack, closure, "z", BsTypes.Create(BsTypes.Types.Int, 3));
             }
             
             [Test]
@@ -440,8 +440,8 @@ public class ErrorHandlingTests
                             finally:
                                 z = 3
                             """;
-                var memory = Runner.Run(input);
-                Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 10));
+                var (callStack, closure) = Runner.Run(input);
+                Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 10));
             }
             
             [Test]
@@ -463,8 +463,8 @@ public class ErrorHandlingTests
                             finally:
                                 x = 3
                             """;
-                var memory = Runner.Run(input);
-                Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 3));
+                var (callStack, closure) = Runner.Run(input);
+                Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 3));
             }
         }
         
@@ -495,9 +495,9 @@ public class ErrorHandlingTests
                             else:
                                 pass
                             """;
-                var memory = Runner.Run(input);
-                Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Int, 9));
-                Assertions.AssertVariable(memory, "z", BsTypes.Create(BsTypes.Types.Int, 3));
+                var (callStack, closure) = Runner.Run(input);
+                Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Int, 9));
+                Assertions.AssertVariable(callStack, closure, "z", BsTypes.Create(BsTypes.Types.Int, 3));
             }
             
             [Test]
@@ -522,8 +522,8 @@ public class ErrorHandlingTests
                             else:
                                 pass
                             """;
-                var memory = Runner.Run(input);
-                Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Int, 3));
+                var (callStack, closure) = Runner.Run(input);
+                Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Int, 3));
             }
         }
     }

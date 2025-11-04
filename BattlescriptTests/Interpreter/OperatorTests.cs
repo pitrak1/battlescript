@@ -11,9 +11,9 @@ public static class OperatorTests
         [Test]
         public void HandlesAndOperations()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory, 
+                callStack, closure, 
                 "and", 
                 BsTypes.Create(BsTypes.Types.Bool, true), 
                 BsTypes.Create(BsTypes.Types.Bool, false));
@@ -24,9 +24,9 @@ public static class OperatorTests
         [Test]
         public void HandlesOrOperations()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory, 
+                callStack, closure, 
                 "or", 
                 BsTypes.Create(BsTypes.Types.Bool, true), 
                 BsTypes.Create(BsTypes.Types.Bool, false));
@@ -37,9 +37,9 @@ public static class OperatorTests
         [Test]
         public void HandlesNotOperations()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory, 
+                callStack, closure, 
                 "not", 
                 null, 
                 BsTypes.Create(BsTypes.Types.Bool, false));
@@ -50,10 +50,10 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueIsOperations()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var value = BsTypes.Create(BsTypes.Types.Int, 5);
             var result = Operator.Operate(
-                memory, 
+                callStack, closure, 
                 "is", 
                 value, 
                 value);
@@ -64,9 +64,9 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseIsOperations()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory, 
+                callStack, closure, 
                 "is", 
                 BsTypes.Create(BsTypes.Types.Int, 5), 
                 BsTypes.Create(BsTypes.Types.Int, 5));
@@ -77,9 +77,9 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueIsNotOperations()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory, 
+                callStack, closure, 
                 "is not", 
                 BsTypes.Create(BsTypes.Types.Int, 5), 
                 BsTypes.Create(BsTypes.Types.Int, 5));
@@ -90,10 +90,10 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseIsNotOperations()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var value = BsTypes.Create(BsTypes.Types.Int, 5);
             var result = Operator.Operate(
-                memory, 
+                callStack, closure, 
                 "is not", 
                 value, 
                 value);
@@ -104,9 +104,9 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueInOperationWithString()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory,
+                callStack, closure,
                 "in",
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("sd")),
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")));
@@ -117,9 +117,9 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseInOperationWithString()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory, 
+                callStack, closure, 
                 "in", 
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("fa")),
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")));
@@ -130,9 +130,9 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueNotInOperationWithString()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory, 
+                callStack, closure, 
                 "not in", 
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("fa")),
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")));
@@ -143,9 +143,9 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseNotInOperationWithString()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory, 
+                callStack, closure, 
                 "not in", 
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("sd")),
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")));
@@ -156,9 +156,9 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueInOperationWithList()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory, 
+                callStack, closure, 
                 "in", 
                 new NumericVariable(1), 
                 BsTypes.Create(BsTypes.Types.List, new SequenceVariable([
@@ -172,9 +172,9 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseInOperationWithList()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory, 
+                callStack, closure, 
                 "in", 
                 new NumericVariable(3), 
                 BsTypes.Create(BsTypes.Types.List, new SequenceVariable([
@@ -188,9 +188,9 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueNotInOperationWithList()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory, 
+                callStack, closure, 
                 "not in", 
                 new NumericVariable(3), 
                 BsTypes.Create(BsTypes.Types.List, new SequenceVariable([
@@ -204,9 +204,9 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseNotInOperationWithList()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory, 
+                callStack, closure, 
                 "not in", 
                 new NumericVariable(1), 
                 BsTypes.Create(BsTypes.Types.List, new SequenceVariable([
@@ -220,9 +220,9 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueInOperationWithIntAndDictionary()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory,
+                callStack, closure,
                 "in",
                 BsTypes.Create(BsTypes.Types.Int, 1),
                 BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
@@ -237,9 +237,9 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseInOperationWithIntAndDictionary()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory,
+                callStack, closure,
                 "in",
                 BsTypes.Create(BsTypes.Types.Int, 3),
                 BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
@@ -254,9 +254,9 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueInOperationWithStringAndDictionary()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory,
+                callStack, closure,
                 "in",
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")),
                 BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
@@ -271,9 +271,9 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseInOperationWithStringAndDictionary()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory,
+                callStack, closure,
                 "in",
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")),
                 BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
@@ -288,9 +288,9 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueNotInOperationWithIntAndDictionary()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory,
+                callStack, closure,
                 "not in",
                 BsTypes.Create(BsTypes.Types.Int, 3),
                 BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
@@ -305,9 +305,9 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseNotInOperationWithIntAndDictionary()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory,
+                callStack, closure,
                 "not in",
                 BsTypes.Create(BsTypes.Types.Int, 1),
                 BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
@@ -322,9 +322,9 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueNotInOperationWithStringAndDictionary()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory,
+                callStack, closure,
                 "not in",
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("zxcv")),
                 BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
@@ -339,9 +339,9 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseNotInOperationWithStringAndDictionary()
         {
-            var memory = Runner.Run("");
+            var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                memory,
+                callStack, closure,
                 "not in",
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")),
                 BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
@@ -360,16 +360,16 @@ public static class OperatorTests
         [Test]
         public void HandlesObjectOperationsIfOverrideIsPresentOnLeftObject()
         {
-            var memory = Runner.Run("""
+            var (callStack, closure) = Runner.Run("""
                                     class asdf:
                                         def __add__(self, other):
                                             return 5
                                             
                                     x = asdf()
                                     """);
-            var x = memory.GetVariable("x");
+            var x = callStack.GetVariable(closure, "x");
             var result = Operator.Operate(
-                memory,
+                callStack, closure,
                 "+",
                 x,
                 new StringVariable("asdf"));
@@ -379,16 +379,16 @@ public static class OperatorTests
         [Test]
         public void HandlesObjectOperationsIfOverrideIsPresentOnRightObject()
         {
-            var memory = Runner.Run("""
+            var (callStack, closure) = Runner.Run("""
                                     class asdf:
                                         def __add__(self, other):
                                             return 5
                                             
                                     x = asdf()
                                     """);
-            var x = memory.GetVariable("x");
+            var x = callStack.GetVariable(closure, "x");
             var result = Operator.Operate(
-                memory,
+                callStack, closure,
                 "+",
                 new StringVariable("asdf"),
                 x);
@@ -398,16 +398,16 @@ public static class OperatorTests
         [Test]
         public void HandlesUnaryObjectOperationsIfOverrideIsPresent()
         {
-            var memory = Runner.Run("""
+            var (callStack, closure) = Runner.Run("""
                                     class asdf:
                                         def __neg__(self):
                                             return 5
                                             
                                     x = asdf()
                                     """);
-            var x = memory.GetVariable("x");
+            var x = callStack.GetVariable(closure, "x");
             var result = Operator.Operate(
-                memory,
+                callStack, closure,
                 "-",
                 null,
                 x);
@@ -417,7 +417,7 @@ public static class OperatorTests
         [Test]
         public void UsesReversedMethodIfNonCommutativeOperatorAndRightHasOverride()
         {
-            var memory = Runner.Run("""
+            var (callStack, closure) = Runner.Run("""
                                     class asdf:
                                         def __sub__(self, other):
                                             return 5
@@ -427,9 +427,10 @@ public static class OperatorTests
                                             
                                     x = asdf()
                                     """);
-            var x = memory.GetVariable("x");
+            var x = callStack.GetVariable(closure, "x");
             var result = Operator.Operate(
-                memory,
+                callStack, 
+                closure,
                 "-",
                 new StringVariable("asdf"),
                 x);
@@ -443,21 +444,21 @@ public static class OperatorTests
         [Test]
         public void HandlesStandardAssignmentOperator()
         {
-            var memory = Runner.Run("");
-            Operator.Assign(memory, "=", new VariableInstruction("x"), new NumericInstruction(8));
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 8));
+            var (callStack, closure) = Runner.Run("");
+            Operator.Assign(callStack, closure, "=", new VariableInstruction("x"), new NumericInstruction(8));
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 8));
         }
         
         [Test]
         public void HandlesNonStandardAssignmentOperator()
         {
-            var memory = Runner.Run("x = 6");
+            var (callStack, closure) = Runner.Run("x = 6");
             Operator.Assign(
-                memory, 
+                callStack, closure, 
                 "+=", 
                 new VariableInstruction("x"), 
                 new NumericInstruction(5));
-            Assertions.AssertVariable(memory, "x", BsTypes.Create(BsTypes.Types.Int, 11));
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 11));
         }
     }
 
@@ -467,24 +468,24 @@ public static class OperatorTests
          [Test]
          public void HandlesNumericOperators()
          {
-             var memory = Runner.Run("");
-             var result = Operator.Operate(memory, "+", new NumericVariable(5), new NumericVariable(10));
+             var (callStack, closure) = Runner.Run("");
+             var result = Operator.Operate(callStack, closure, "+", new NumericVariable(5), new NumericVariable(10));
              Assertions.AssertVariablesEqual(result, new NumericVariable(15));
          }
          
          [Test]
          public void HandlesComparisonOperators()
          {
-             var memory = Runner.Run("");
-             var result = Operator.Operate(memory, ">=", new NumericVariable(5), new NumericVariable(2));
+             var (callStack, closure) = Runner.Run("");
+             var result = Operator.Operate(callStack, closure, ">=", new NumericVariable(5), new NumericVariable(2));
              Assertions.AssertVariablesEqual(result, new NumericVariable(1));
          }
          
          [Test]
          public void HandlesUnaryNumericOperators()
          {
-             var memory = Runner.Run("");
-             var result = Operator.Operate(memory, "-", null, new NumericVariable(5));
+             var (callStack, closure) = Runner.Run("");
+             var result = Operator.Operate(callStack, closure, "-", null, new NumericVariable(5));
              Assertions.AssertVariablesEqual(result, new NumericVariable(-5));
          }
     }
@@ -495,7 +496,7 @@ public static class OperatorTests
          [Test]
          public void HandlesAdditionOperator()
          {
-             var memory = Runner.Run("");
+             var (callStack, closure) = Runner.Run("");
              var seq1 = new SequenceVariable([
                  new NumericVariable(1), 
                  new NumericVariable(2), 
@@ -505,7 +506,7 @@ public static class OperatorTests
                  new NumericVariable(5),
                  new NumericVariable(6)
              ]);
-             var result = Operator.Operate(memory, "+", seq1, seq2);
+             var result = Operator.Operate(callStack, closure, "+", seq1, seq2);
              Assertions.AssertVariablesEqual(result, new SequenceVariable([
                  new NumericVariable(1), 
                  new NumericVariable(2), 
@@ -518,12 +519,12 @@ public static class OperatorTests
          [Test]
          public void HandlesMultiplyOperator()
          {
-             var memory = Runner.Run("");
+             var (callStack, closure) = Runner.Run("");
              var seq = new SequenceVariable([
                  new NumericVariable(1), 
                  new NumericVariable(2), 
                  new NumericVariable(3)]);
-             var result = Operator.Operate(memory, "*", seq, new NumericVariable(3));
+             var result = Operator.Operate(callStack, closure, "*", seq, new NumericVariable(3));
              Assertions.AssertVariablesEqual(result, new SequenceVariable([
                  new NumericVariable(1), 
                  new NumericVariable(2), 
@@ -539,7 +540,7 @@ public static class OperatorTests
          [Test]
          public void HandlesTrueEqualityOperator()
          {
-             var memory = Runner.Run("");
+             var (callStack, closure) = Runner.Run("");
              var seq1 = new SequenceVariable([
                  new NumericVariable(1), 
                  new NumericVariable(2), 
@@ -548,14 +549,14 @@ public static class OperatorTests
                  new NumericVariable(1), 
                  new NumericVariable(2), 
                  new NumericVariable(3)]);
-             var result = Operator.Operate(memory, "==", seq1, seq2);
+             var result = Operator.Operate(callStack, closure, "==", seq1, seq2);
              Assertions.AssertVariablesEqual(result, new NumericVariable(1));
          }
          
          [Test]
          public void HandlesFalseEqualityOperator()
          {
-             var memory = Runner.Run("");
+             var (callStack, closure) = Runner.Run("");
              var seq1 = new SequenceVariable([
                  new NumericVariable(1), 
                  new NumericVariable(2), 
@@ -564,7 +565,7 @@ public static class OperatorTests
                  new NumericVariable(1), 
                  new NumericVariable(2), 
                  new NumericVariable(4)]);
-             var result = Operator.Operate(memory, "==", seq1, seq2);
+             var result = Operator.Operate(callStack, closure, "==", seq1, seq2);
              Assertions.AssertVariablesEqual(result, new NumericVariable(0));
          }
     }
@@ -575,49 +576,49 @@ public static class OperatorTests
          [Test]
          public void HandlesAdditionOperator()
          {
-             var memory = Runner.Run("");
+             var (callStack, closure) = Runner.Run("");
              var string1 = new StringVariable("asdf");
              var string2 = new StringVariable("qwer");
-             var result = Operator.Operate(memory, "+", string1, string2);
+             var result = Operator.Operate(callStack, closure, "+", string1, string2);
              Assertions.AssertVariablesEqual(result, new StringVariable("asdfqwer"));
          }
          
          [Test]
          public void HandlesMultiplyOperator()
          {
-             var memory = Runner.Run("");
+             var (callStack, closure) = Runner.Run("");
              var string1 = new StringVariable("asdf");
-             var result = Operator.Operate(memory, "*", string1, new NumericVariable(3));
+             var result = Operator.Operate(callStack, closure, "*", string1, new NumericVariable(3));
              Assertions.AssertVariablesEqual(result, new StringVariable("asdfasdfasdf"));
          }
          
          [Test]
          public void HandlesTrueEqualityOperator()
          {
-             var memory = Runner.Run("");
+             var (callStack, closure) = Runner.Run("");
              var string1 = new StringVariable("asdf");
              var string2 = new StringVariable("asdf");
-             var result = Operator.Operate(memory, "==", string1, string2);
+             var result = Operator.Operate(callStack, closure, "==", string1, string2);
              Assertions.AssertVariablesEqual(result, new NumericVariable(1));
          }
          
          [Test]
          public void HandlesFalseEqualityOperator()
          {
-             var memory = Runner.Run("");
+             var (callStack, closure) = Runner.Run("");
              var string1 = new StringVariable("asdf");
              var string2 = new StringVariable("qwer");
-             var result = Operator.Operate(memory, "==", string1, string2);
+             var result = Operator.Operate(callStack, closure, "==", string1, string2);
              Assertions.AssertVariablesEqual(result, new NumericVariable(0));
          }
 
          [Test]
          public void ConvertsNumericToStringForAddition()
          {
-             var memory = Runner.Run("");
+             var (callStack, closure) = Runner.Run("");
              var string1 = new StringVariable("asdf");
              var numeric = new NumericVariable(6);
-             var result = Operator.Operate(memory, "+", string1, numeric);
+             var result = Operator.Operate(callStack, closure, "+", string1, numeric);
              Assertions.AssertVariablesEqual(result, new StringVariable("asdf6"));
          }
     }

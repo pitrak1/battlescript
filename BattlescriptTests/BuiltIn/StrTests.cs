@@ -11,43 +11,43 @@ public class StrTests
         [Test]
         public void Equality()
         {
-            var memory = Runner.Run("""
+            var (callStack, closure) = Runner.Run("""
                                     a = "asdf" == "asdf"
                                     b = "asdf" == "qwer"
                                     """);
-            Assertions.AssertVariable(memory, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
-            Assertions.AssertVariable(memory, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(callStack, closure, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(callStack, closure, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
         }
 
         [Test]
         public void Inequality()
         {
-            var memory = Runner.Run("""
+            var (callStack, closure) = Runner.Run("""
                                     a = "asdf" != "asdf"
                                     b = "asdf" != "qwer"
                                     """);
-            Assertions.AssertVariable(memory, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
-            Assertions.AssertVariable(memory, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(callStack, closure, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(callStack, closure, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
         }
 
         [Test]
         public void Add()
         {
-            var memory = Runner.Run("x = 'asdf' + 'qwer'");
-            Assertions.AssertVariable(memory, "x",
+            var (callStack, closure) = Runner.Run("x = 'asdf' + 'qwer'");
+            Assertions.AssertVariable(callStack, closure, "x",
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("asdfqwer")));
         }
 
         [Test]
         public void Multiply()
         {
-            var memory = Runner.Run("""
+            var (callStack, closure) = Runner.Run("""
                                     x = 'asdf' * 2
                                     y = 3 * 'asdf'
                                     """);
-            Assertions.AssertVariable(memory, "x",
+            Assertions.AssertVariable(callStack, closure, "x",
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("asdfasdf")));
-            Assertions.AssertVariable(memory, "y",
+            Assertions.AssertVariable(callStack, closure, "y",
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("asdfasdfasdf")));
         }
     }
@@ -58,21 +58,21 @@ public class StrTests
         [Test]
         public void TrueIfNonEmpty()
         {
-            var memory = Runner.Run("""
+            var (callStack, closure) = Runner.Run("""
                                     x = "asdf"
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
         }
         
         [Test]
         public void FalseIfEmpty()
         {
-            var memory = Runner.Run("""
+            var (callStack, closure) = Runner.Run("""
                                     x = ""
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
         }
     }
 
@@ -82,51 +82,51 @@ public class StrTests
         [Test]
         public void InternalString()
         {
-            var memory = Runner.Run("""
+            var (callStack, closure) = Runner.Run("""
                                     x = __string__("hello")
                                     y = str(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("hello")));
+            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("hello")));
         }
 
         [Test]
         public void String()
         {
-            var memory = Runner.Run("""
+            var (callStack, closure) = Runner.Run("""
                                     x = "hello"
                                     y = str(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("hello")));
+            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("hello")));
         }
         
         [Test]
         public void InternalNumeric()
         {
-            var memory = Runner.Run("""
+            var (callStack, closure) = Runner.Run("""
                                     x = __numeric__(1)
                                     y = str(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("1")));
+            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("1")));
         }
         
         [Test]
         public void Int()
         {
-            var memory = Runner.Run("""
+            var (callStack, closure) = Runner.Run("""
                                     x = 1
                                     y = str(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("1")));
+            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("1")));
         }
         
         [Test]
         public void Float()
         {
-            var memory = Runner.Run("""
+            var (callStack, closure) = Runner.Run("""
                                     x = 1.5
                                     y = str(x)
                                     """);
-            Assertions.AssertVariable(memory, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("1.5")));
+            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("1.5")));
         }
     }
 }

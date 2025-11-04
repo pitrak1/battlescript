@@ -13,8 +13,8 @@ public class ParameterSetTests
             new VariableInstruction("asdf"), new VariableInstruction("qwer")
         };
         var parameters = new ParameterSet(parameterInstructions);
-        var memory = Runner.Run("");
-        var result = parameters.GetVariableDictionary(memory);
+        var (callStack, closure) = Runner.Run("");
+        var result = parameters.GetVariableDictionary(callStack, closure);
         var expected = new Dictionary<string, Variable?>()
         {
             { "asdf", null },
@@ -32,8 +32,8 @@ public class ParameterSetTests
             new AssignmentInstruction("=", new VariableInstruction("qwer"), new NumericInstruction(5678))
         };
         var parameters = new ParameterSet(parameterInstructions);
-        var memory = Runner.Run("");
-        var result = parameters.GetVariableDictionary(memory);
+        var (callStack, closure) = Runner.Run("");
+        var result = parameters.GetVariableDictionary(callStack, closure);
         var expected = new Dictionary<string, Variable?>()
         {
             { "asdf", BsTypes.Create(BsTypes.Types.Int, 1234) },
@@ -51,8 +51,8 @@ public class ParameterSetTests
             new AssignmentInstruction("=", new VariableInstruction("qwer"), new NumericInstruction(5678))
         };
         var parameters = new ParameterSet(parameterInstructions);
-        var memory = Runner.Run("");
-        var result = parameters.GetVariableDictionary(memory);
+        var (callStack, closure) = Runner.Run("");
+        var result = parameters.GetVariableDictionary(callStack, closure);
         var expected = new Dictionary<string, Variable?>()
         {
             { "asdf", null },

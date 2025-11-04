@@ -35,13 +35,14 @@ public class OperationInstruction : Instruction
     }
 
     public override Variable? Interpret(        
-        CallStack callStack, 
+        CallStack callStack,
+        Closure closure,
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        var left = Left?.Interpret(callStack);
-        var right = Right?.Interpret(callStack);
-        return Operator.Operate(callStack, Operation, left, right);
+        var left = Left?.Interpret(callStack, closure);
+        var right = Right?.Interpret(callStack, closure);
+        return Operator.Operate(callStack, closure, Operation, left, right);
     }
 }

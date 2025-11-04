@@ -42,18 +42,18 @@ public static class ClassInstructionTests
         [Test]
         public void HandlesBasicClassDefinition()
         {
-            var memory = Runner.Run("class MyClass:\n\tx = 1");
+            var (callStack, closure) = Runner.Run("class MyClass:\n\tx = 1");
             var expected = new ClassVariable("MyClass", new Dictionary<string, Variable>()
             {
                 { "x", BsTypes.Create(BsTypes.Types.Int, 1) }
             });
-            Assertions.AssertVariable(memory, "MyClass", expected);
+            Assertions.AssertVariable(callStack, closure, "MyClass", expected);
         }
         
         [Test]
         public void HandlesClassDefinitionWithInheritance()
         {
-            var memory = Runner.Run("""
+            var (callStack, closure) = Runner.Run("""
                                     class asdf():
                                         x = 1
 
@@ -71,14 +71,14 @@ public static class ClassInstructionTests
                 { "y", BsTypes.Create(BsTypes.Types.Int, 2) }
             }, [asdf]);
 
-            Assertions.AssertVariable(memory, "asdf", asdf);
-            Assertions.AssertVariable(memory, "qwer", qwer);
+            Assertions.AssertVariable(callStack, closure, "asdf", asdf);
+            Assertions.AssertVariable(callStack, closure, "qwer", qwer);
         }
         
         [Test]
         public void HandlesClassDefinitionWithMultipleInheritance()
         {
-            var memory = Runner.Run("""
+            var (callStack, closure) = Runner.Run("""
                                     class asdf:
                                         x = 1
 
@@ -105,9 +105,9 @@ public static class ClassInstructionTests
                 { "z", BsTypes.Create(BsTypes.Types.Int, 3) }
             }, [asdf, qwer]);
             
-            Assertions.AssertVariable(memory, "asdf", asdf);
-            Assertions.AssertVariable(memory, "qwer", qwer);
-            Assertions.AssertVariable(memory, "zxcv", zxcv);
+            Assertions.AssertVariable(callStack, closure, "asdf", asdf);
+            Assertions.AssertVariable(callStack, closure, "qwer", qwer);
+            Assertions.AssertVariable(callStack, closure, "zxcv", zxcv);
         }
     }
 }

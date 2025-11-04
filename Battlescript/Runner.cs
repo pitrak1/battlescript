@@ -2,40 +2,41 @@ namespace Battlescript;
 
 public static class Runner
 {
-    public static CallStack Run(string input)
+    public static (CallStack, Closure) Run(string input)
     {
-        var memory = new CallStack();
-
+        var callStack = new CallStack();
+        var closure = new Closure();
+        
         foreach (var builtin in BsTypes.TypeStrings)
         {
-            LoadBuiltin(memory, builtin);
-            BsTypes.PopulateBsTypeReference(memory, builtin);
+            LoadBuiltin(callStack, closure, builtin);
+            BsTypes.PopulateBsTypeReference(callStack, closure, builtin);
         }
 
-        RunAsMain(memory, input);
+        RunAsMain(callStack, closure, input);
         
-        return memory;
+        return (callStack, closure);
     }
 
-    public static void RunAsMain(CallStack callStack, string input)
+    public static void RunAsMain(CallStack callStack, Closure closure, string input)
     {
         // callStack.AddScope();
         // callStack.CurrentStack.Files.Add("main");
         // callStack.CurrentStack.Functions.Add("<module>");
-        RunPartial(callStack, input, "main");
+        RunPartial(callStack, closure,input, "main");
     }
 
-    public static void RunFilePath(CallStack callStack, string path)
+    public static void RunFilePath(CallStack callStack, Closure closure, string path)
     {
         var input = ReadFile(path);
-        RunPartial(callStack, input, path);
+        RunPartial(callStack, closure, input, path);
     }
 
-    private static void LoadBuiltin(CallStack callStack, string builtinName)
+    private static void LoadBuiltin(CallStack callStack, Closure closure, string builtinName)
     {
         var fileName = $"/Users/nickpitrak/Desktop/Battlescript/Battlescript/BuiltIn/{builtinName}.bs";
         string text = ReadFile(fileName);
-        RunPartial(callStack, text, fileName);
+        RunPartial(callStack, closure, text, fileName);
     }
 
     private static string ReadFile(string path)
@@ -44,14 +45,14 @@ public static class Runner
         return reader.ReadToEnd();
     }
 
-    public static void RunPartial(CallStack callStack, string input, string fileName)
+    public static void RunPartial(CallStack callStack, Closure closure, string input, string fileName)
     {
         var parserResult = Parse(input);
         var interpreter = new Interpreter(parserResult);
         
         try
         {
-            interpreter.Run(callStack);
+            interpreter.Run(callStack, closure);
         }
         catch (InternalReturnException e)
         {

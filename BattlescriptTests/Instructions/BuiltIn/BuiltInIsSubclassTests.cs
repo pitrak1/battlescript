@@ -8,20 +8,20 @@ public class BuiltInIsSubclassTests
     [Test]
     public void ReturnsTrueIfFirstClassIsEqualToSecondClass()
     {
-        var memory = Runner.Run("""
+        var (callStack, closure) = Runner.Run("""
                                 class asdf:
                                     i = 5
                                     
                                 y = issubclass(asdf, asdf)
                                 """);
         var expected = BsTypes.Create(BsTypes.Types.Bool, true);
-        Assertions.AssertVariable(memory, "y", expected);
+        Assertions.AssertVariable(callStack, closure, "y", expected);
     }
     
     [Test]
     public void ReturnsTrueIfFirstClassInheritsFromSecondClass()
     {
-        var memory = Runner.Run("""
+        var (callStack, closure) = Runner.Run("""
                                 class asdf:
                                     i = 5
                                     
@@ -31,13 +31,13 @@ public class BuiltInIsSubclassTests
                                 y = issubclass(qwer, asdf)
                                 """);
         var expected = BsTypes.Create(BsTypes.Types.Bool, true);
-        Assertions.AssertVariable(memory, "y", expected);
+        Assertions.AssertVariable(callStack, closure, "y", expected);
     }
     
     [Test]
     public void ReturnsFalseIfFirstClassDoesNotInheritFromSecondClass()
     {
-        var memory = Runner.Run("""
+        var (callStack, closure) = Runner.Run("""
                                 class asdf:
                                     i = 5
                                     
@@ -47,6 +47,6 @@ public class BuiltInIsSubclassTests
                                 y = issubclass(asdf, qwer)
                                 """);
         var expected = BsTypes.Create(BsTypes.Types.Bool, false);
-        Assertions.AssertVariable(memory, "y", expected);
+        Assertions.AssertVariable(callStack, closure, "y", expected);
     }
 }

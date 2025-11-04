@@ -42,7 +42,8 @@ public class NumericInstruction : Instruction
     }
     
     public override Variable? Interpret(        
-        CallStack callStack, 
+        CallStack callStack,
+        Closure closure,
         Variable? instructionContext = null,
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)

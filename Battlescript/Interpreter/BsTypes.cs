@@ -65,10 +65,10 @@ public static class BsTypes
     
     public static Dictionary<Types, ClassVariable> TypeReferences = [];
     
-    public static void PopulateBsTypeReference(CallStack callStack, string builtin)
+    public static void PopulateBsTypeReference(CallStack callStack, Closure closure, string builtin)
     {
         var type = StringsToTypes[builtin];
-        TypeReferences[type] = callStack.GetVariable(builtin) as ClassVariable;
+        TypeReferences[type] = callStack.GetVariable(closure, builtin) as ClassVariable;
     }
     
     public static bool Is(Types type, Variable variable)
@@ -104,9 +104,9 @@ public static class BsTypes
         return objectVariable;
     }
 
-    public static Variable CreateException(CallStack callStack, string type, string message)
+    public static Variable CreateException(CallStack callStack, Closure closure, string type, string message)
     {
-        var exceptionType = callStack.GetVariable(type);
+        var exceptionType = callStack.GetVariable(closure, type);
         if (exceptionType is ClassVariable classVariable)
         {
             var objectVariable = classVariable.CreateObject();
