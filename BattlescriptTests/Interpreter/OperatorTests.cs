@@ -464,16 +464,10 @@ public static class OperatorTests
     [TestFixture]
     public class NumericOperations
     {
-        Memory memory;
-        [SetUp]
-        public void SetUp()
-        {
-            memory = Runner.Run("");
-        }
-        
          [Test]
          public void HandlesNumericOperators()
          {
+             var memory = Runner.Run("");
              var result = Operator.Operate(memory, "+", new NumericVariable(5), new NumericVariable(10));
              Assertions.AssertVariablesEqual(result, new NumericVariable(15));
          }
@@ -481,6 +475,7 @@ public static class OperatorTests
          [Test]
          public void HandlesComparisonOperators()
          {
+             var memory = Runner.Run("");
              var result = Operator.Operate(memory, ">=", new NumericVariable(5), new NumericVariable(2));
              Assertions.AssertVariablesEqual(result, new NumericVariable(1));
          }
@@ -488,6 +483,7 @@ public static class OperatorTests
          [Test]
          public void HandlesUnaryNumericOperators()
          {
+             var memory = Runner.Run("");
              var result = Operator.Operate(memory, "-", null, new NumericVariable(5));
              Assertions.AssertVariablesEqual(result, new NumericVariable(-5));
          }
@@ -496,17 +492,10 @@ public static class OperatorTests
     [TestFixture]
     public class SequenceOperations
     {
-         private Memory memory;
-         
-         [SetUp]
-         public void Setup()
-         {
-             memory = Runner.Run("");
-         }
-         
          [Test]
          public void HandlesAdditionOperator()
          {
+             var memory = Runner.Run("");
              var seq1 = new SequenceVariable([
                  new NumericVariable(1), 
                  new NumericVariable(2), 
@@ -529,6 +518,7 @@ public static class OperatorTests
          [Test]
          public void HandlesMultiplyOperator()
          {
+             var memory = Runner.Run("");
              var seq = new SequenceVariable([
                  new NumericVariable(1), 
                  new NumericVariable(2), 
@@ -549,6 +539,7 @@ public static class OperatorTests
          [Test]
          public void HandlesTrueEqualityOperator()
          {
+             var memory = Runner.Run("");
              var seq1 = new SequenceVariable([
                  new NumericVariable(1), 
                  new NumericVariable(2), 
@@ -564,6 +555,7 @@ public static class OperatorTests
          [Test]
          public void HandlesFalseEqualityOperator()
          {
+             var memory = Runner.Run("");
              var seq1 = new SequenceVariable([
                  new NumericVariable(1), 
                  new NumericVariable(2), 
@@ -580,17 +572,10 @@ public static class OperatorTests
     [TestFixture]
     public class StringOperations
     {
-         private Memory memory;
-         
-         [SetUp]
-         public void Setup()
-         {
-             memory = Runner.Run("");
-         }
-         
          [Test]
          public void HandlesAdditionOperator()
          {
+             var memory = Runner.Run("");
              var string1 = new StringVariable("asdf");
              var string2 = new StringVariable("qwer");
              var result = Operator.Operate(memory, "+", string1, string2);
@@ -600,6 +585,7 @@ public static class OperatorTests
          [Test]
          public void HandlesMultiplyOperator()
          {
+             var memory = Runner.Run("");
              var string1 = new StringVariable("asdf");
              var result = Operator.Operate(memory, "*", string1, new NumericVariable(3));
              Assertions.AssertVariablesEqual(result, new StringVariable("asdfasdfasdf"));
@@ -608,6 +594,7 @@ public static class OperatorTests
          [Test]
          public void HandlesTrueEqualityOperator()
          {
+             var memory = Runner.Run("");
              var string1 = new StringVariable("asdf");
              var string2 = new StringVariable("asdf");
              var result = Operator.Operate(memory, "==", string1, string2);
@@ -617,6 +604,7 @@ public static class OperatorTests
          [Test]
          public void HandlesFalseEqualityOperator()
          {
+             var memory = Runner.Run("");
              var string1 = new StringVariable("asdf");
              var string2 = new StringVariable("qwer");
              var result = Operator.Operate(memory, "==", string1, string2);
@@ -626,6 +614,7 @@ public static class OperatorTests
          [Test]
          public void ConvertsNumericToStringForAddition()
          {
+             var memory = Runner.Run("");
              var string1 = new StringVariable("asdf");
              var numeric = new NumericVariable(6);
              var result = Operator.Operate(memory, "+", string1, numeric);
