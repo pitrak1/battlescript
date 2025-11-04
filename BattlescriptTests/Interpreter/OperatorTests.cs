@@ -8,19 +8,12 @@ public static class OperatorTests
     [TestFixture]
     public class CommonOperations
     {
-        private Memory _memory;
-        
-        [SetUp]
-        public void SetUp()
-        {
-            _memory = Runner.Run("");
-        }
-        
         [Test]
         public void HandlesAndOperations()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory, 
+                memory, 
                 "and", 
                 BsTypes.Create(BsTypes.Types.Bool, true), 
                 BsTypes.Create(BsTypes.Types.Bool, false));
@@ -31,8 +24,9 @@ public static class OperatorTests
         [Test]
         public void HandlesOrOperations()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory, 
+                memory, 
                 "or", 
                 BsTypes.Create(BsTypes.Types.Bool, true), 
                 BsTypes.Create(BsTypes.Types.Bool, false));
@@ -43,8 +37,9 @@ public static class OperatorTests
         [Test]
         public void HandlesNotOperations()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory, 
+                memory, 
                 "not", 
                 null, 
                 BsTypes.Create(BsTypes.Types.Bool, false));
@@ -55,9 +50,10 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueIsOperations()
         {
+            var memory = Runner.Run("");
             var value = BsTypes.Create(BsTypes.Types.Int, 5);
             var result = Operator.Operate(
-                _memory, 
+                memory, 
                 "is", 
                 value, 
                 value);
@@ -68,8 +64,9 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseIsOperations()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory, 
+                memory, 
                 "is", 
                 BsTypes.Create(BsTypes.Types.Int, 5), 
                 BsTypes.Create(BsTypes.Types.Int, 5));
@@ -80,8 +77,9 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueIsNotOperations()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory, 
+                memory, 
                 "is not", 
                 BsTypes.Create(BsTypes.Types.Int, 5), 
                 BsTypes.Create(BsTypes.Types.Int, 5));
@@ -92,9 +90,10 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseIsNotOperations()
         {
+            var memory = Runner.Run("");
             var value = BsTypes.Create(BsTypes.Types.Int, 5);
             var result = Operator.Operate(
-                _memory, 
+                memory, 
                 "is not", 
                 value, 
                 value);
@@ -105,8 +104,9 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueInOperationWithString()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory,
+                memory,
                 "in",
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("sd")),
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")));
@@ -117,8 +117,9 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseInOperationWithString()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory, 
+                memory, 
                 "in", 
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("fa")),
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")));
@@ -129,8 +130,9 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueNotInOperationWithString()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory, 
+                memory, 
                 "not in", 
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("fa")),
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")));
@@ -141,8 +143,9 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseNotInOperationWithString()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory, 
+                memory, 
                 "not in", 
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("sd")),
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")));
@@ -153,8 +156,9 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueInOperationWithList()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory, 
+                memory, 
                 "in", 
                 new NumericVariable(1), 
                 BsTypes.Create(BsTypes.Types.List, new SequenceVariable([
@@ -168,8 +172,9 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseInOperationWithList()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory, 
+                memory, 
                 "in", 
                 new NumericVariable(3), 
                 BsTypes.Create(BsTypes.Types.List, new SequenceVariable([
@@ -183,8 +188,9 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueNotInOperationWithList()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory, 
+                memory, 
                 "not in", 
                 new NumericVariable(3), 
                 BsTypes.Create(BsTypes.Types.List, new SequenceVariable([
@@ -198,8 +204,9 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseNotInOperationWithList()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory, 
+                memory, 
                 "not in", 
                 new NumericVariable(1), 
                 BsTypes.Create(BsTypes.Types.List, new SequenceVariable([
@@ -213,8 +220,9 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueInOperationWithIntAndDictionary()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory,
+                memory,
                 "in",
                 BsTypes.Create(BsTypes.Types.Int, 1),
                 BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
@@ -229,8 +237,9 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseInOperationWithIntAndDictionary()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory,
+                memory,
                 "in",
                 BsTypes.Create(BsTypes.Types.Int, 3),
                 BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
@@ -245,8 +254,9 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueInOperationWithStringAndDictionary()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory,
+                memory,
                 "in",
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")),
                 BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
@@ -261,8 +271,9 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseInOperationWithStringAndDictionary()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory,
+                memory,
                 "in",
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")),
                 BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
@@ -277,8 +288,9 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueNotInOperationWithIntAndDictionary()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory,
+                memory,
                 "not in",
                 BsTypes.Create(BsTypes.Types.Int, 3),
                 BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
@@ -293,8 +305,9 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseNotInOperationWithIntAndDictionary()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory,
+                memory,
                 "not in",
                 BsTypes.Create(BsTypes.Types.Int, 1),
                 BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
@@ -309,8 +322,9 @@ public static class OperatorTests
         [Test]
         public void HandlesTrueNotInOperationWithStringAndDictionary()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory,
+                memory,
                 "not in",
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("zxcv")),
                 BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
@@ -325,8 +339,9 @@ public static class OperatorTests
         [Test]
         public void HandlesFalseNotInOperationWithStringAndDictionary()
         {
+            var memory = Runner.Run("");
             var result = Operator.Operate(
-                _memory,
+                memory,
                 "not in",
                 BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")),
                 BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
@@ -449,31 +464,31 @@ public static class OperatorTests
     [TestFixture]
     public class NumericOperations
     {
-        Memory _memory;
+        Memory memory;
         [SetUp]
         public void SetUp()
         {
-            _memory = Runner.Run("");
+            memory = Runner.Run("");
         }
         
          [Test]
          public void HandlesNumericOperators()
          {
-             var result = Operator.Operate(_memory, "+", new NumericVariable(5), new NumericVariable(10));
+             var result = Operator.Operate(memory, "+", new NumericVariable(5), new NumericVariable(10));
              Assertions.AssertVariablesEqual(result, new NumericVariable(15));
          }
          
          [Test]
          public void HandlesComparisonOperators()
          {
-             var result = Operator.Operate(_memory, ">=", new NumericVariable(5), new NumericVariable(2));
+             var result = Operator.Operate(memory, ">=", new NumericVariable(5), new NumericVariable(2));
              Assertions.AssertVariablesEqual(result, new NumericVariable(1));
          }
          
          [Test]
          public void HandlesUnaryNumericOperators()
          {
-             var result = Operator.Operate(_memory, "-", null, new NumericVariable(5));
+             var result = Operator.Operate(memory, "-", null, new NumericVariable(5));
              Assertions.AssertVariablesEqual(result, new NumericVariable(-5));
          }
     }
@@ -481,12 +496,12 @@ public static class OperatorTests
     [TestFixture]
     public class SequenceOperations
     {
-         private Memory _memory;
+         private Memory memory;
          
          [SetUp]
          public void Setup()
          {
-             _memory = Runner.Run("");
+             memory = Runner.Run("");
          }
          
          [Test]
@@ -501,7 +516,7 @@ public static class OperatorTests
                  new NumericVariable(5),
                  new NumericVariable(6)
              ]);
-             var result = Operator.Operate(_memory, "+", seq1, seq2);
+             var result = Operator.Operate(memory, "+", seq1, seq2);
              Assertions.AssertVariablesEqual(result, new SequenceVariable([
                  new NumericVariable(1), 
                  new NumericVariable(2), 
@@ -518,7 +533,7 @@ public static class OperatorTests
                  new NumericVariable(1), 
                  new NumericVariable(2), 
                  new NumericVariable(3)]);
-             var result = Operator.Operate(_memory, "*", seq, new NumericVariable(3));
+             var result = Operator.Operate(memory, "*", seq, new NumericVariable(3));
              Assertions.AssertVariablesEqual(result, new SequenceVariable([
                  new NumericVariable(1), 
                  new NumericVariable(2), 
@@ -542,7 +557,7 @@ public static class OperatorTests
                  new NumericVariable(1), 
                  new NumericVariable(2), 
                  new NumericVariable(3)]);
-             var result = Operator.Operate(_memory, "==", seq1, seq2);
+             var result = Operator.Operate(memory, "==", seq1, seq2);
              Assertions.AssertVariablesEqual(result, new NumericVariable(1));
          }
          
@@ -557,7 +572,7 @@ public static class OperatorTests
                  new NumericVariable(1), 
                  new NumericVariable(2), 
                  new NumericVariable(4)]);
-             var result = Operator.Operate(_memory, "==", seq1, seq2);
+             var result = Operator.Operate(memory, "==", seq1, seq2);
              Assertions.AssertVariablesEqual(result, new NumericVariable(0));
          }
     }
@@ -565,12 +580,12 @@ public static class OperatorTests
     [TestFixture]
     public class StringOperations
     {
-         private Memory _memory;
+         private Memory memory;
          
          [SetUp]
          public void Setup()
          {
-             _memory = Runner.Run("");
+             memory = Runner.Run("");
          }
          
          [Test]
@@ -578,7 +593,7 @@ public static class OperatorTests
          {
              var string1 = new StringVariable("asdf");
              var string2 = new StringVariable("qwer");
-             var result = Operator.Operate(_memory, "+", string1, string2);
+             var result = Operator.Operate(memory, "+", string1, string2);
              Assertions.AssertVariablesEqual(result, new StringVariable("asdfqwer"));
          }
          
@@ -586,7 +601,7 @@ public static class OperatorTests
          public void HandlesMultiplyOperator()
          {
              var string1 = new StringVariable("asdf");
-             var result = Operator.Operate(_memory, "*", string1, new NumericVariable(3));
+             var result = Operator.Operate(memory, "*", string1, new NumericVariable(3));
              Assertions.AssertVariablesEqual(result, new StringVariable("asdfasdfasdf"));
          }
          
@@ -595,7 +610,7 @@ public static class OperatorTests
          {
              var string1 = new StringVariable("asdf");
              var string2 = new StringVariable("asdf");
-             var result = Operator.Operate(_memory, "==", string1, string2);
+             var result = Operator.Operate(memory, "==", string1, string2);
              Assertions.AssertVariablesEqual(result, new NumericVariable(1));
          }
          
@@ -604,7 +619,7 @@ public static class OperatorTests
          {
              var string1 = new StringVariable("asdf");
              var string2 = new StringVariable("qwer");
-             var result = Operator.Operate(_memory, "==", string1, string2);
+             var result = Operator.Operate(memory, "==", string1, string2);
              Assertions.AssertVariablesEqual(result, new NumericVariable(0));
          }
 
@@ -613,7 +628,7 @@ public static class OperatorTests
          {
              var string1 = new StringVariable("asdf");
              var numeric = new NumericVariable(6);
-             var result = Operator.Operate(_memory, "+", string1, numeric);
+             var result = Operator.Operate(memory, "+", string1, numeric);
              Assertions.AssertVariablesEqual(result, new StringVariable("asdf6"));
          }
     }
