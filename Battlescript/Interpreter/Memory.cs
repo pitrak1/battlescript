@@ -21,7 +21,7 @@ public class Memory
             if (Scopes[i].Values.ContainsKey(variableInstruction.Name))
             {
                 var foundVariable = Scopes[i].Values[variableInstruction.Name];
-                if (variableInstruction.Next is ArrayInstruction { Separator: "[" } squareBracketsInstruction)
+                if (variableInstruction.Next is SquareBracketsInstruction squareBracketsInstruction)
                 {
                     return foundVariable.GetItem(this, squareBracketsInstruction);
                 }
@@ -48,7 +48,7 @@ public class Memory
             {
                 if (Scopes[i].Values.ContainsKey(variableInstruction.Name))
                 {
-                    if (variableInstruction.Next is ArrayInstruction { Separator: "[" } squareBracketsInstruction)
+                    if (variableInstruction.Next is SquareBracketsInstruction squareBracketsInstruction)
                     {
                         Scopes[i].Values[variableInstruction.Name].SetItem(
                             this, 
@@ -62,7 +62,7 @@ public class Memory
                             valueVariable, 
                             memberInstruction);
                     }
-                    else if (variableInstruction.Next is ArrayInstruction { Separator: "(" })
+                    else if (variableInstruction.Next is ParenthesesInstruction)
                     {
                         throw new InternalRaiseException(BsTypes.Types.SyntaxError, "cannot assign to function call");
                     }

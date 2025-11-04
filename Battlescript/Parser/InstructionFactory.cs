@@ -76,7 +76,17 @@ public static class InstructionFactory
         }
         else if (commaIndex != -1 || colonIndex != -1)
         {
-            return new ArrayInstruction(tokens);
+            switch (tokens[0].Value)
+            {
+                case Consts.CurlyBraces:
+                    return new CurlyBracesInstruction(tokens);
+                case Consts.Parentheses:
+                    return new ParenthesesInstruction(tokens);
+                case Consts.SquareBrackets:
+                    return new SquareBracketsInstruction(tokens);
+                default:
+                    return new ArrayInstruction(tokens);
+            }
         }
         else if (operatorIndex != -1)
         {

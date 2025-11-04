@@ -146,8 +146,8 @@ public static class Assertions
         
         void CompareArrayInstructions(ArrayInstruction inputInst, ArrayInstruction expectedInst)
         {
+            Assert.That(inputInst.GetType(), Is.EqualTo(expectedInst.GetType()));
             AssertInstructionListsEqual(inputInst.Values, expectedInst.Values);
-            if (inputInst.Separator is not null) Assert.That(inputInst.Separator, Is.EqualTo(expectedInst.Separator));
             if (inputInst.Delimiter is not null) Assert.That(inputInst.Delimiter, Is.EqualTo(expectedInst.Delimiter));
         }
 
