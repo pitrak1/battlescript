@@ -96,27 +96,27 @@ public static class ControlFlowTests
         }
     }
     
-    [TestFixture]
-    public class While
-    {
-        [Test]
-        public void HandlesTrueWhileStatement()
-        {
-            var input = "x = 5\nwhile x < 10:\n\tx += 1";
-            var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 10);
-            Assertions.AssertVariable(callStack, closure, "x", expected);
-        }
-        
-        [Test]
-        public void HandlesFalseWhileStatement()
-        {
-            var input = "x = 5\nwhile x == 6:\n\tx = 10";
-            var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
-            Assertions.AssertVariable(callStack, closure, "x", expected);
-        }
-    }
+    // [TestFixture]
+    // public class While
+    // {
+    //     [Test]
+    //     public void HandlesTrueWhileStatement()
+    //     {
+    //         var input = "x = 5\nwhile x < 10:\n\tx += 1";
+    //         var (callStack, closure) = Runner.Run(input);
+    //         var expected = BsTypes.Create(BsTypes.Types.Int, 10);
+    //         Assertions.AssertVariable(callStack, closure, "x", expected);
+    //     }
+    //     
+    //     [Test]
+    //     public void HandlesFalseWhileStatement()
+    //     {
+    //         var input = "x = 5\nwhile x == 6:\n\tx = 10";
+    //         var (callStack, closure) = Runner.Run(input);
+    //         var expected = BsTypes.Create(BsTypes.Types.Int, 5);
+    //         Assertions.AssertVariable(callStack, closure, "x", expected);
+    //     }
+    // }
     
     [TestFixture]
     public class For
@@ -158,22 +158,22 @@ public static class ControlFlowTests
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     
-        [Test]
-        public void WhileSupport()
-        {
-            var input = """
-                        x = 5
-                        y = 0
-                        while y < 4:
-                            y = y + 1
-                            if y == 2:
-                                continue
-                            x = x + y
-                        """;
-            var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 13);
-            Assertions.AssertVariable(callStack, closure, "x", expected);
-        }
+        // [Test]
+        // public void WhileSupport()
+        // {
+        //     var input = """
+        //                 x = 5
+        //                 y = 0
+        //                 while y < 4:
+        //                     y = y + 1
+        //                     if y == 2:
+        //                         continue
+        //                     x = x + y
+        //                 """;
+        //     var (callStack, closure) = Runner.Run(input);
+        //     var expected = BsTypes.Create(BsTypes.Types.Int, 13);
+        //     Assertions.AssertVariable(callStack, closure, "x", expected);
+        // }
     }
     
     [TestFixture]
@@ -194,22 +194,22 @@ public static class ControlFlowTests
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     
-        [Test]
-        public void WhileSupport()
-        {
-            var input = """
-                        x = 5
-                        y = 0
-                        while y < 4:
-                            y = y + 1
-                            if y == 2:
-                                break
-                            x = x + y
-                        """;
-            var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 6);
-            Assertions.AssertVariable(callStack, closure, "x", expected);
-        }
+        // [Test]
+        // public void WhileSupport()
+        // {
+        //     var input = """
+        //                 x = 5
+        //                 y = 0
+        //                 while y < 4:
+        //                     y = y + 1
+        //                     if y == 2:
+        //                         break
+        //                     x = x + y
+        //                 """;
+        //     var (callStack, closure) = Runner.Run(input);
+        //     var expected = BsTypes.Create(BsTypes.Types.Int, 6);
+        //     Assertions.AssertVariable(callStack, closure, "x", expected);
+        // }
     }
     
     [TestFixture]

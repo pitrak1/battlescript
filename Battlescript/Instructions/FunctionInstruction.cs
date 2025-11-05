@@ -43,8 +43,8 @@ public class FunctionInstruction : Instruction
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        var functionValue = new FunctionVariable(Name, Parameters, Instructions);
-        callStack.SetVariable(closure, new VariableInstruction(Name), functionValue);
+        var functionValue = new FunctionVariable(Name, closure, Parameters, Instructions);
+        closure.SetVariable(callStack, new VariableInstruction(Name), functionValue);
         return functionValue;
     }
 }

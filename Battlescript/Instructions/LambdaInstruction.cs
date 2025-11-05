@@ -37,6 +37,6 @@ public class LambdaInstruction : Instruction
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        return new FunctionVariable(null, Parameters, Instructions);
+        return new FunctionVariable(null, closure, Parameters, Instructions);
     }
 }

@@ -15,8 +15,10 @@ public class FunctionsTests
                         def func():
                             x = 5
                         """;
+            var (callStack, closure) = Runner.Run(input);
             var expected = new FunctionVariable(
                 "func",
+                closure,
                 new ParameterSet(),
                 [
                     new AssignmentInstruction(
@@ -24,7 +26,6 @@ public class FunctionsTests
                         left: new VariableInstruction("x"),
                         right: new NumericInstruction(5))
                 ]);
-            var (callStack, closure) = Runner.Run(input);
             Assertions.AssertVariable(callStack, closure, "func", expected);
         }
     
@@ -35,8 +36,10 @@ public class FunctionsTests
                         def func(asdf):
                             x = asdf
                         """;
+            var (callStack, closure) = Runner.Run(input);
             var expected = new FunctionVariable(
                 "func",
+                closure,
                 new ParameterSet([new VariableInstruction("asdf")]),
                 [
                     new AssignmentInstruction(
@@ -44,7 +47,7 @@ public class FunctionsTests
                         left: new VariableInstruction("x"),
                         right: new VariableInstruction("asdf"))
                 ]);
-            var (callStack, closure) = Runner.Run(input);
+            
             Assertions.AssertVariable(callStack, closure, "func", expected);
         }
         
@@ -55,8 +58,10 @@ public class FunctionsTests
                         def func(asdf, qwer):
                             x = asdf
                         """;
+            var (callStack, closure) = Runner.Run(input);
             var expected = new FunctionVariable(
                 "func",
+                closure,
                 new ParameterSet([
                     new VariableInstruction("asdf"),
                     new VariableInstruction("qwer")
@@ -67,7 +72,6 @@ public class FunctionsTests
                         left: new VariableInstruction("x"),
                         right: new VariableInstruction("asdf"))
                 ]);
-            var (callStack, closure) = Runner.Run(input);
             Assertions.AssertVariable(callStack, closure, "func", expected);
         }
     }
@@ -81,8 +85,8 @@ public class FunctionsTests
             var input = """
                         x = 6
                         def func():
-                            x = 5
-                        func()
+                            return 5
+                        x = func()
                         """;
             var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 5);
@@ -95,8 +99,8 @@ public class FunctionsTests
             var input = """
                         x = 6
                         def func(y, z):
-                            x = y + z
-                        func(2, 3)
+                            return y + z
+                        x = func(2, 3)
                         """;
             var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 5);
@@ -139,10 +143,11 @@ public class FunctionsTests
             var input = """
                         x = 4
                         def func():
-                            x = 5
-                            return
-                            x = 6
-                        func()
+                            y = 5
+                            return y
+                            y = 6
+                            return y
+                        x = func()
                         """;
             var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 5);
@@ -273,11 +278,12 @@ public class FunctionsTests
             var input = """
                         x = lambda y: y + 5
                         """;
+            var (callStack, closure) = Runner.Run(input);
             var expected = new FunctionVariable(
                 null,
+                closure,
                 new ParameterSet([new VariableInstruction("y")]),
                 [new ReturnInstruction(new OperationInstruction("+", new VariableInstruction("y"), new NumericInstruction(5)))]);
-            var (callStack, closure) = Runner.Run(input);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }

@@ -50,7 +50,7 @@ public class TruthinessTests
         public void ClassVariableReturnsTrue()
         {
             var (callStack, closure) = Runner.Run("");
-            var variable = new ClassVariable("", null);
+            var variable = new ClassVariable("", null, closure);
             var result = Truthiness.IsTruthy(callStack, closure, variable);
             Assert.IsTrue(result);
         }
@@ -105,7 +105,7 @@ public class TruthinessTests
         public void NonBuiltinObjectVariableReturnsTrue()
         {
             var (callStack, closure) = Runner.Run("");
-            var variable = new ObjectVariable(null, new ClassVariable("", null));
+            var variable = new ObjectVariable(null, new ClassVariable("", null, closure));
             var result = Truthiness.IsTruthy(callStack, closure, variable);
             Assert.IsTrue(result);
         }

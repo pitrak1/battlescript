@@ -86,7 +86,7 @@ public static class VariablesAndOperatorsTests
             var expected = new ClassVariable("asdf", new Dictionary<string, Variable>
             {
                 {"y", BsTypes.Create(BsTypes.Types.Int, 3)}
-            });
+            }, closure);
             Assertions.AssertVariable(callStack, closure, "asdf", expected);
         }
         
@@ -99,7 +99,7 @@ public static class VariablesAndOperatorsTests
             {
                 { "y", BsTypes.Create(BsTypes.Types.Int, 3) }
             };
-            var expected = new ObjectVariable(classValues, new ClassVariable("asdf", classValues));
+            var expected = new ObjectVariable(classValues, new ClassVariable("asdf", classValues, closure));
             
             
             Assertions.AssertVariable(callStack, closure, "x", expected);

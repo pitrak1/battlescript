@@ -68,7 +68,7 @@ public static class BsTypes
     public static void PopulateBsTypeReference(CallStack callStack, Closure closure, string builtin)
     {
         var type = StringsToTypes[builtin];
-        TypeReferences[type] = callStack.GetVariable(closure, builtin) as ClassVariable;
+        TypeReferences[type] = closure.GetVariable(callStack, builtin) as ClassVariable;
     }
     
     public static bool Is(Types type, Variable variable)
@@ -106,7 +106,7 @@ public static class BsTypes
 
     public static Variable CreateException(CallStack callStack, Closure closure, string type, string message)
     {
-        var exceptionType = callStack.GetVariable(closure, type);
+        var exceptionType = closure.GetVariable(callStack, type);
         if (exceptionType is ClassVariable classVariable)
         {
             var objectVariable = classVariable.CreateObject();

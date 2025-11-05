@@ -367,7 +367,7 @@ public static class OperatorTests
                                             
                                     x = asdf()
                                     """);
-            var x = callStack.GetVariable(closure, "x");
+            var x = closure.GetVariable(callStack, "x");
             var result = Operator.Operate(
                 callStack, closure,
                 "+",
@@ -386,7 +386,7 @@ public static class OperatorTests
                                             
                                     x = asdf()
                                     """);
-            var x = callStack.GetVariable(closure, "x");
+            var x = closure.GetVariable(callStack, "x");
             var result = Operator.Operate(
                 callStack, closure,
                 "+",
@@ -405,7 +405,7 @@ public static class OperatorTests
                                             
                                     x = asdf()
                                     """);
-            var x = callStack.GetVariable(closure, "x");
+            var x = closure.GetVariable(callStack, "x");
             var result = Operator.Operate(
                 callStack, closure,
                 "-",
@@ -427,7 +427,7 @@ public static class OperatorTests
                                             
                                     x = asdf()
                                     """);
-            var x = callStack.GetVariable(closure, "x");
+            var x = closure.GetVariable(callStack, "x");
             var result = Operator.Operate(
                 callStack, 
                 closure,

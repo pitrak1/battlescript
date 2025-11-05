@@ -320,7 +320,7 @@ public static class Assertions
 
     public static void AssertVariable(CallStack callStack, Closure closure, string name, Variable expected)
     {
-        var variable = callStack.GetVariable(closure, name);
+        var variable = closure.GetVariable(callStack, name);
         AssertVariablesEqual(variable, expected);
     }
 

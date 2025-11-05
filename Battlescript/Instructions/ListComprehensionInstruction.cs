@@ -80,6 +80,6 @@ public class ListComprehensionInstruction : Instruction
             inst.Interpret(callStack, closure, instructionContext, objectContext, lexicalContext);
         }
         
-        return callStack.GetVariable(closure, "lstcmp");
+        return closure.GetVariable(callStack, "lstcmp");
     }
 }

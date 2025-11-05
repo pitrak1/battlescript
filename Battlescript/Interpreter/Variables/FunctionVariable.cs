@@ -5,10 +5,12 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
     public string? Name { get; set; }
     public ParameterSet Parameters { get; set; }
     public List<Instruction> Instructions { get; set; }
+    public Closure FunctionClosure { get; set; }
 
-    public FunctionVariable(string? name, ParameterSet? parameters = null, List<Instruction>? instructions = null)
+    public FunctionVariable(string? name, Closure closure, ParameterSet? parameters = null, List<Instruction>? instructions = null)
     {
         Name = name;
+        FunctionClosure = closure;
         Parameters = parameters ?? new ParameterSet();
         Instructions = instructions ?? [];
     }
@@ -18,9 +20,10 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
         var lineValue = inst?.Line ?? 0;
         var expressionValue = inst?.Expression ?? "";
         callStack.AddScope(lineValue, expressionValue, Name);
+        var newClosure = new Closure(closure);
         // callStack.AddScope(inst.Line, inst.Expression, Name);
-        arguments.ApplyToMemory(callStack, closure, Parameters);
-        var returnValue = RunInstructions(callStack, closure);
+        arguments.ApplyToMemory(callStack, newClosure, Parameters);
+        var returnValue = RunInstructions(callStack, newClosure);
         callStack.RemoveScope();
         return returnValue ?? new ConstantVariable();
     }

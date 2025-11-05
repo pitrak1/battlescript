@@ -20,23 +20,20 @@ public static class Runner
 
     public static void RunAsMain(CallStack callStack, Closure closure, string input)
     {
-        // callStack.AddScope();
-        // callStack.CurrentStack.Files.Add("main");
-        // callStack.CurrentStack.Functions.Add("<module>");
-        RunPartial(callStack, closure,input, "main");
+        RunPartial(callStack, closure, input);
     }
 
     public static void RunFilePath(CallStack callStack, Closure closure, string path)
     {
         var input = ReadFile(path);
-        RunPartial(callStack, closure, input, path);
+        RunPartial(callStack, closure, input);
     }
 
     private static void LoadBuiltin(CallStack callStack, Closure closure, string builtinName)
     {
         var fileName = $"/Users/nickpitrak/Desktop/Battlescript/Battlescript/BuiltIn/{builtinName}.bs";
         string text = ReadFile(fileName);
-        RunPartial(callStack, closure, text, fileName);
+        RunPartial(callStack, closure, text);
     }
 
     private static string ReadFile(string path)
@@ -45,7 +42,7 @@ public static class Runner
         return reader.ReadToEnd();
     }
 
-    public static void RunPartial(CallStack callStack, Closure closure, string input, string fileName)
+    public static void RunPartial(CallStack callStack, Closure closure, string input)
     {
         var parserResult = Parse(input);
         var interpreter = new Interpreter(parserResult);

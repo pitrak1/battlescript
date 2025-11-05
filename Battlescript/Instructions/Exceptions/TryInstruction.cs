@@ -55,7 +55,7 @@ public class TryInstruction : Instruction
                     if (except.ExceptionVariable is not null)
                     {
                         var exceptionVariable = BsTypes.CreateException(callStack, closure, e.Type, e.Message);
-                        callStack.AddVariableToLastScope(except.ExceptionVariable, exceptionVariable);
+                        closure.SetVariable(callStack, except.ExceptionVariable, exceptionVariable);
                     }
                     
                     foreach (var inst in except.Instructions)

@@ -7,11 +7,14 @@ public class ClassVariable : Variable, IEquatable<ClassVariable>
     public string Name { get; set; }
     public Dictionary<string, Variable> Values { get; set; }
     public List<ClassVariable> SuperClasses { get; set; }
+    
+    public Closure ClassClosure { get; set; }
 
-    public ClassVariable(string name, Dictionary<string, Variable>? values, List<ClassVariable>? superclasses = null)
+    public ClassVariable(string name, Dictionary<string, Variable>? values, Closure closure, List<ClassVariable>? superclasses = null)
     {
         Name = name;
         Values = values ?? [];
+        ClassClosure = closure;
         SuperClasses = superclasses ?? [];
     }
 

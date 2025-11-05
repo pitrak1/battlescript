@@ -18,7 +18,7 @@ public static class ClassesAndObjectsTests
                 new Dictionary<string, Variable>()
                 {
                     {"i", BsTypes.Create(BsTypes.Types.Int, 1234)}
-                });
+                }, closure);
             
             Assertions.AssertVariable(callStack, closure, "asdf", expected);
         }
@@ -34,7 +34,7 @@ public static class ClassesAndObjectsTests
             };
             var expected = new ObjectVariable(
                 values,
-                new ClassVariable("asdf", values));
+                new ClassVariable("asdf", values, closure));
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -54,7 +54,7 @@ public static class ClassesAndObjectsTests
             var classValues = new Dictionary<string, Variable>()
             {
                 { "i", BsTypes.Create(BsTypes.Types.Int, 1234) },
-                { "j", new FunctionVariable("j", new ParameterSet(), [new ReturnInstruction(new NumericInstruction(5))])}
+                { "j", new FunctionVariable("j", closure, new ParameterSet(), [new ReturnInstruction(new NumericInstruction(5))])}
             };
             var objectValues = new Dictionary<string, Variable>()
             {
@@ -63,7 +63,7 @@ public static class ClassesAndObjectsTests
             
             var expected = new ObjectVariable(
                 objectValues,
-                new ClassVariable("asdf", classValues));
+                new ClassVariable("asdf", classValues, closure));
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -87,7 +87,8 @@ public static class ClassesAndObjectsTests
                 new Dictionary<string, Variable>()
                 {
                     { "i", BsTypes.Create(BsTypes.Types.Int, 1234) }
-                }
+                },
+                closure
             );
             
             Assertions.AssertVariable(callStack, closure, "asdf", expected);
@@ -180,12 +181,12 @@ public static class ClassesAndObjectsTests
                 "asdf", new Dictionary<string, Variable>()
                 {
                     { "i", BsTypes.Create(BsTypes.Types.Int, 1234) }
-                });
+                }, closure);
             var expected = new ClassVariable("qwer",
                 new Dictionary<string, Variable>()
                 {
                     { "j", BsTypes.Create(BsTypes.Types.Int, 2345) }
-                }, [superclass]);
+                }, closure, [superclass]);
             Assertions.AssertVariable(callStack, closure, "qwer", expected);
         }
         

@@ -72,6 +72,7 @@ public static class FunctionInstructionTests
             
             var functionVariable = new FunctionVariable(
                 "func",
+                closure,
                 parameters: 
                 new ParameterSet([
                     new VariableInstruction("asdf"),

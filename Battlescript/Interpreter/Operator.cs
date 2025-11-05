@@ -7,7 +7,7 @@ public static class Operator
         var rightVariable = right?.Interpret(callStack, closure);
         if (operation == "=")
         {
-            callStack.SetVariable(closure, left, rightVariable!);
+            closure.SetVariable(callStack, left, rightVariable!);
         }
         else
         {
@@ -17,16 +17,16 @@ public static class Operator
             {
                 var objectResult = result as ObjectVariable;
                 var doubleResult = (objectResult.Values["__value"] as NumericVariable).Value;
-                callStack.SetVariable(closure, left, BsTypes.Create(BsTypes.Types.Float, doubleResult));
+                closure.SetVariable(callStack, left, BsTypes.Create(BsTypes.Types.Float, doubleResult));
             } else if (operation == "//=" && BsTypes.Is(BsTypes.Types.Float, result))
             {
                 var objectResult = result as ObjectVariable;
                 var intResult = (objectResult.Values["__value"] as NumericVariable).Value;
-                callStack.SetVariable(closure, left, BsTypes.Create(BsTypes.Types.Int, intResult));
+                closure.SetVariable(callStack, left, BsTypes.Create(BsTypes.Types.Int, intResult));
             }
             else
             {
-                callStack.SetVariable(closure, left, result);
+                closure.SetVariable(callStack, left, result);
             }
         }
     }

@@ -5,187 +5,186 @@ namespace BattlescriptTests.E2ETests;
 [TestFixture]
 public class MemoryAndVariableAccessTests
 {
-    // Commenting this out until I have closures sorted
-    // [TestFixture]
-    // public class Baseline
-    // {
-    //     [Test]
-    //     public void LoopsConditionalsEtcCanReadAndWriteOuterVariables()
-    //     {
-    //         var input = """
-    //                     x = 5
-    //                     if True:
-    //                         y = x + 3
-    //                     """;
-    //         var callStack = Runner.Run(input);
-    //         var expected = BsTypes.Create(BsTypes.Types.Int, 8);
-    //         Assertions.AssertVariable(callStack, "y", expected);
-    //     }
-    //
-    //     [TestFixture]
-    //     public class Functions
-    //     {
-    //         [Test]
-    //         public void FunctionsCanReadOuterVariables()
-    //         {
-    //             var input = """
-    //                         x = 5
-    //                         def func():
-    //                             return x + 3
-    //                         y = func()
-    //                         """;
-    //             var callStack = Runner.Run(input);
-    //             var expected = BsTypes.Create(BsTypes.Types.Int, 8);
-    //             Assertions.AssertVariable(callStack, "y", expected);
-    //         }
-    //     
-    //         [Test]
-    //         public void FunctionsCannotWriteOuterVariables()
-    //         {
-    //             // This is interpreted as creating a new "x" variable in the function's scope
-    //             var input = """
-    //                         x = 5
-    //                         def func():
-    //                             x = x + 3
-    //                         func()
-    //                         """;
-    //             var callStack = Runner.Run(input);
-    //             var expected = BsTypes.Create(BsTypes.Types.Int, 5);
-    //             Assertions.AssertVariable(callStack, "x", expected);
-    //         }
-    //
-    //         [Test]
-    //         public void NestedFunctionsCanReadOuterVariables()
-    //         {
-    //             var input = """
-    //                         def outer():
-    //                             a = 10
-    //                             def inner():
-    //                                 return a + 5
-    //                             return inner()
-    //                         x = outer()
-    //                         """;
-    //             var callStack = Runner.Run(input);
-    //             var expected = BsTypes.Create(BsTypes.Types.Int, 15);
-    //             Assertions.AssertVariable(callStack, "x", expected);
-    //         }
-    //         
-    //         [Test]
-    //         public void NestedFunctionsCannotWriteOuterVariables()
-    //         {
-    //             var input = """
-    //                         def outer():
-    //                             a = 10
-    //                             def inner():
-    //                                 a = a + 5
-    //                             inner()
-    //                             return a
-    //                         x = outer()
-    //                         """;
-    //             var callStack = Runner.Run(input);
-    //             var expected = BsTypes.Create(BsTypes.Types.Int, 10);
-    //             Assertions.AssertVariable(callStack, "x", expected);
-    //         }
-    //     }
-    //
-    //     [TestFixture]
-    //     public class Classes
-    //     {
-    //         [Test]
-    //         public void ClassesCanReadOuterVariables()
-    //         {
-    //             var input = """
-    //                         x = 5
-    //                         class my_class():
-    //                             z = x + 3
-    //                         y = my_class()
-    //                         z = y.z
-    //                         """;
-    //             var callStack = Runner.Run(input);
-    //             var expected = BsTypes.Create(BsTypes.Types.Int, 8);
-    //             Assertions.AssertVariable(callStack, "z", expected);
-    //         }
-    //     
-    //         [Test]
-    //         public void ClassesCannotWriteOuterVariables()
-    //         {
-    //             // This is interpreted as creating a new member "x" for the class
-    //             var input = """
-    //                         x = 5
-    //                         class my_class():
-    //                             x = x + 3
-    //                         y = my_class()
-    //                         """;
-    //             var callStack = Runner.Run(input);
-    //             var expected = BsTypes.Create(BsTypes.Types.Int, 5);
-    //             Assertions.AssertVariable(callStack, "x", expected);
-    //         }
-    //
-    //         [Test]
-    //         public void NestedClassesCanReadVariablesFromEnclosingFunctions()
-    //         {
-    //             var input = """
-    //                         def outer_func():
-    //                             b = 20
-    //                             class InnerClass:
-    //                                 c = b + 5
-    //                             obj = InnerClass()
-    //                             return obj.c
-    //                         x = outer_func()
-    //                         """;
-    //             var callStack = Runner.Run(input);
-    //             var expected = BsTypes.Create(BsTypes.Types.Int, 25);
-    //             Assertions.AssertVariable(callStack, "x", expected);
-    //         }
-    //         
-    //         [Test]
-    //         public void NestedClassesCannotWriteVariablesFromEnclosingFunctions()
-    //         {
-    //             var input = """
-    //                         def outer_func():
-    //                             b = 20
-    //                             class InnerClass:
-    //                                 b = b + 5
-    //                             obj = InnerClass()
-    //                             return b
-    //                         x = outer_func()
-    //                         """;
-    //             var callStack = Runner.Run(input);
-    //             var expected = BsTypes.Create(BsTypes.Types.Int, 20);
-    //             Assertions.AssertVariable(callStack, "x", expected);
-    //         }
-    //         
-    //         [Test]
-    //         public void NestedFunctionsCannotAccessVariablesFromEnclosingClasses()
-    //         {
-    //             var input = """
-    //                         class OuterClass:
-    //                             d = 30
-    //                             def method(self):
-    //                                 return d
-    //                         obj = OuterClass()
-    //                         obj.method()
-    //                         """;
-    //             var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run(input));
-    //             Assert.That(ex.Type, Is.EqualTo("NameError"));
-    //         }
-    //         
-    //         [Test]
-    //         public void NestedClassesCannotAccessVariablesFromEnclosingClasses()
-    //         {
-    //             var input = """
-    //                         class Outer:
-    //                             e = 40
-    //                             class Inner:
-    //                                 f = e + 10
-    //                         obj = Outer().Inner()
-    //                         """;
-    //             var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run(input));
-    //             Assert.That(ex.Type, Is.EqualTo("NameError"));
-    //         }
-    //     }
-    // }
-    //
+    [TestFixture]
+    public class Baseline
+    {
+        [Test]
+        public void LoopsConditionalsEtcCanReadAndWriteOuterVariables()
+        {
+            var input = """
+                        x = 5
+                        if True:
+                            y = x + 3
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 8);
+            Assertions.AssertVariable(callStack, closure, "y", expected);
+        }
+    
+        // [TestFixture]
+        // public class Functions
+        // {
+        //     [Test]
+        //     public void FunctionsCanReadOuterVariables()
+        //     {
+        //         var input = """
+        //                     x = 5
+        //                     def func():
+        //                         return x + 3
+        //                     y = func()
+        //                     """;
+        //         var callStack = Runner.Run(input);
+        //         var expected = BsTypes.Create(BsTypes.Types.Int, 8);
+        //         Assertions.AssertVariable(callStack, "y", expected);
+        //     }
+        //
+        //     [Test]
+        //     public void FunctionsCannotWriteOuterVariables()
+        //     {
+        //         // This is interpreted as creating a new "x" variable in the function's scope
+        //         var input = """
+        //                     x = 5
+        //                     def func():
+        //                         x = x + 3
+        //                     func()
+        //                     """;
+        //         var callStack = Runner.Run(input);
+        //         var expected = BsTypes.Create(BsTypes.Types.Int, 5);
+        //         Assertions.AssertVariable(callStack, "x", expected);
+        //     }
+        //
+        //     [Test]
+        //     public void NestedFunctionsCanReadOuterVariables()
+        //     {
+        //         var input = """
+        //                     def outer():
+        //                         a = 10
+        //                         def inner():
+        //                             return a + 5
+        //                         return inner()
+        //                     x = outer()
+        //                     """;
+        //         var callStack = Runner.Run(input);
+        //         var expected = BsTypes.Create(BsTypes.Types.Int, 15);
+        //         Assertions.AssertVariable(callStack, "x", expected);
+        //     }
+        //     
+        //     [Test]
+        //     public void NestedFunctionsCannotWriteOuterVariables()
+        //     {
+        //         var input = """
+        //                     def outer():
+        //                         a = 10
+        //                         def inner():
+        //                             a = a + 5
+        //                         inner()
+        //                         return a
+        //                     x = outer()
+        //                     """;
+        //         var callStack = Runner.Run(input);
+        //         var expected = BsTypes.Create(BsTypes.Types.Int, 10);
+        //         Assertions.AssertVariable(callStack, "x", expected);
+        //     }
+        // }
+        //
+        // [TestFixture]
+        // public class Classes
+        // {
+        //     [Test]
+        //     public void ClassesCanReadOuterVariables()
+        //     {
+        //         var input = """
+        //                     x = 5
+        //                     class my_class():
+        //                         z = x + 3
+        //                     y = my_class()
+        //                     z = y.z
+        //                     """;
+        //         var callStack = Runner.Run(input);
+        //         var expected = BsTypes.Create(BsTypes.Types.Int, 8);
+        //         Assertions.AssertVariable(callStack, "z", expected);
+        //     }
+        //
+        //     [Test]
+        //     public void ClassesCannotWriteOuterVariables()
+        //     {
+        //         // This is interpreted as creating a new member "x" for the class
+        //         var input = """
+        //                     x = 5
+        //                     class my_class():
+        //                         x = x + 3
+        //                     y = my_class()
+        //                     """;
+        //         var callStack = Runner.Run(input);
+        //         var expected = BsTypes.Create(BsTypes.Types.Int, 5);
+        //         Assertions.AssertVariable(callStack, "x", expected);
+        //     }
+        //
+        //     [Test]
+        //     public void NestedClassesCanReadVariablesFromEnclosingFunctions()
+        //     {
+        //         var input = """
+        //                     def outer_func():
+        //                         b = 20
+        //                         class InnerClass:
+        //                             c = b + 5
+        //                         obj = InnerClass()
+        //                         return obj.c
+        //                     x = outer_func()
+        //                     """;
+        //         var callStack = Runner.Run(input);
+        //         var expected = BsTypes.Create(BsTypes.Types.Int, 25);
+        //         Assertions.AssertVariable(callStack, "x", expected);
+        //     }
+        //     
+        //     [Test]
+        //     public void NestedClassesCannotWriteVariablesFromEnclosingFunctions()
+        //     {
+        //         var input = """
+        //                     def outer_func():
+        //                         b = 20
+        //                         class InnerClass:
+        //                             b = b + 5
+        //                         obj = InnerClass()
+        //                         return b
+        //                     x = outer_func()
+        //                     """;
+        //         var callStack = Runner.Run(input);
+        //         var expected = BsTypes.Create(BsTypes.Types.Int, 20);
+        //         Assertions.AssertVariable(callStack, "x", expected);
+        //     }
+        //     
+        //     [Test]
+        //     public void NestedFunctionsCannotAccessVariablesFromEnclosingClasses()
+        //     {
+        //         var input = """
+        //                     class OuterClass:
+        //                         d = 30
+        //                         def method(self):
+        //                             return d
+        //                     obj = OuterClass()
+        //                     obj.method()
+        //                     """;
+        //         var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run(input));
+        //         Assert.That(ex.Type, Is.EqualTo("NameError"));
+        //     }
+        //     
+        //     [Test]
+        //     public void NestedClassesCannotAccessVariablesFromEnclosingClasses()
+        //     {
+        //         var input = """
+        //                     class Outer:
+        //                         e = 40
+        //                         class Inner:
+        //                             f = e + 10
+        //                     obj = Outer().Inner()
+        //                     """;
+        //         var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run(input));
+        //         Assert.That(ex.Type, Is.EqualTo("NameError"));
+        //     }
+        // }
+    }
+    
     // [TestFixture]
     // public class GlobalKeyword
     // {

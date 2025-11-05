@@ -61,7 +61,7 @@ public class PrincipleTypeInstruction : Instruction
                 }
                 else if (Parameters[0] is VariableInstruction variableInstruction)
                 {
-                    var variableValue = callStack.GetVariable(closure, variableInstruction);
+                    var variableValue = closure.GetVariable(callStack, variableInstruction);
                     if (variableValue is StringVariable stringVariable)
                     {
                         value = stringVariable.Value.Contains(".") ? float.Parse(stringVariable.Value) : int.Parse(stringVariable.Value);

@@ -23,7 +23,7 @@ public class VariableInstruction : Instruction
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        var variable = callStack.GetVariable(closure, Name);
+        var variable = closure.GetVariable(callStack, Name);
 
         if (Next is null)
         {

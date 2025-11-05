@@ -42,7 +42,7 @@ public class ForInstruction : Instruction
             var values = (range.Values["__value"] as SequenceVariable).Values;
             for (var i = 0; i < values.Count; i++)
             {
-                callStack.SetVariable(closure, BlockVariable, values[i]);
+                closure.SetVariable(callStack, BlockVariable, values[i]);
 
                 try
                 {

@@ -75,18 +75,20 @@ public class ImportInstruction : Instruction
         ClassVariable? lexicalContext = null)
     {
         callStack.AddScope(Line, Expression, "<module>", FilePath);
-        Runner.RunFilePath(callStack, closure, FilePath);
-        var importedScope = callStack.RemoveScope();
+        var newClosure = new Closure(closure);
+        Runner.RunFilePath(callStack, newClosure, FilePath);
+        callStack.RemoveScope();
+        var importedScope = newClosure.GetLastScope();
         
         foreach (var name in ImportNames)
         {
             if (name == "*")
             {
-                callStack.SetVariable(closure, new VariableInstruction(FileName), BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, importedScope.Values)));
+                closure.SetVariable(callStack, new VariableInstruction(FileName), BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, importedScope)));
             }
-            else if (importedScope.Values.ContainsKey(name))
+            else if (importedScope.TryGetValue(name, out var value))
             {
-                callStack.SetVariable(closure, new VariableInstruction(name), importedScope.Values[name]);
+                closure.SetVariable(callStack, new VariableInstruction(name), value);
             }
             else
             {

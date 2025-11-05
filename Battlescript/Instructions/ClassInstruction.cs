@@ -56,15 +56,17 @@ public class ClassInstruction : Instruction
         }
         
         callStack.AddScope(Line, Expression, Name);
+        var newClosure = new Closure(closure);
 
         foreach (var instruction in Instructions)
         {
-            instruction.Interpret(callStack, closure);
+            instruction.Interpret(callStack, newClosure);
         }
 
-        var classScope = callStack.RemoveScope();
-        var classVariable = new ClassVariable(Name, classScope.Values, superclasses);
-        callStack.SetVariable(closure, new VariableInstruction(Name), classVariable);
+        callStack.RemoveScope();
+        var values = newClosure.GetLastScope();
+        var classVariable = new ClassVariable(Name, values, closure, superclasses);
+        closure.SetVariable(callStack, new VariableInstruction(Name), classVariable);
         return classVariable;
     }
 }
