@@ -7,10 +7,13 @@ public class CurlyBracesInstruction : ArrayInstruction
     public CurlyBracesInstruction(List<Token> tokens) : base([])
     {
         var closingSeparatorIndex = InstructionUtilities.GetTokenIndex(tokens, ["}"]);
-        var tokensInSeparators = tokens.GetRange(1, closingSeparatorIndex - 1);
-        InitializeDelimiter(tokensInSeparators);
-        InitializeValues(tokensInSeparators);
-        ParseNext(tokens, closingSeparatorIndex + 1);
+        if (tokens.Count > 2)
+        {
+            var tokensInSeparators = tokens.GetRange(1, closingSeparatorIndex - 1);
+            InitializeDelimiter(tokensInSeparators);
+            InitializeValues(tokensInSeparators);
+            ParseNext(tokens, closingSeparatorIndex + 1);
+        }
     }
     
     public CurlyBracesInstruction(

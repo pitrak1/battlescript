@@ -59,8 +59,8 @@ public class ListComprehensionInstruction : Instruction
             }
         }
         
-        Instructions.Insert(0, new AssignmentInstruction("=", new VariableInstruction("lstcmp"), new ArrayInstruction([], "[")));
-        lastInstruction.Instructions = [new VariableInstruction("lstcmp", new MemberInstruction("append", new ArrayInstruction([expressionInstruction], "(")))];
+        Instructions.Insert(0, new AssignmentInstruction("=", new VariableInstruction("lstcmp"), new SquareBracketsInstruction([])));
+        lastInstruction.Instructions = [new VariableInstruction("lstcmp", new MemberInstruction("append", new ParenthesesInstruction([expressionInstruction])))];
     }
 
     public ListComprehensionInstruction(List<Instruction> instructions) : base([])

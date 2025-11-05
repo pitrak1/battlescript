@@ -100,9 +100,17 @@ public static class InstructionFactory
         {
             return new ConstantInstruction("*");
         }
-        else if (tokens[0].Type == Consts.TokenTypes.Separator)
+        else if (tokens[0].Value == Consts.CurlyBraces)
         {
-            return new ArrayInstruction(tokens);
+            return new CurlyBracesInstruction(tokens);
+        }
+        else if (tokens[0].Value == Consts.Parentheses)
+        {
+            return new ParenthesesInstruction(tokens);
+        }
+        else if (tokens[0].Value == Consts.SquareBrackets)
+        {
+            return new SquareBracketsInstruction(tokens);
         }
         else if (tokens[0].Type == Consts.TokenTypes.Identifier)
         {
