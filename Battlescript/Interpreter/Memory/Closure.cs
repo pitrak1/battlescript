@@ -2,25 +2,22 @@ namespace Battlescript;
 
 public class Closure
 {
-    public List<Dictionary<string, Variable>> Scopes { get; set; }
+    public enum ClosureTypes { Function, Class }
+    public List<ClosureScope> Scopes { get; set; }
 
     public Closure()
     {
-        Scopes = [new Dictionary<string, Variable>()];
+        Scopes = [new ClosureScope()];
     }
 
-    public Closure(Closure closure)
+    public Closure(Closure closure, ClosureTypes type = ClosureTypes.Function)
     {
         Scopes = [];
         foreach (var scope in closure.Scopes)
         {
-            Scopes.Add(new Dictionary<string, Variable>());
-            foreach (var (key, value) in scope)
-            {
-                Scopes[^1].Add(key, value);
-            }
+            Scopes.Add(scope);
         }
-        Scopes.Add(new Dictionary<string, Variable>());
+        Scopes.Add(new ClosureScope(type));
     }
     
     public Variable? GetVariable(CallStack callStack, string name)
@@ -30,11 +27,16 @@ public class Closure
 
     public Variable? GetVariable(CallStack callStack, VariableInstruction variableInstruction)
     {
+        if (variableInstruction.Name == "a")
+        {
+            Console.WriteLine("a");
+        }
+        
         for (var i = Scopes.Count - 1; i >= 0; i--)
         {
-            if (Scopes[i].ContainsKey(variableInstruction.Name))
+            if (Scopes[i].Type == ClosureTypes.Function && Scopes[i].Values.ContainsKey(variableInstruction.Name))
             {
-                var foundVariable = Scopes[i][variableInstruction.Name];
+                var foundVariable = Scopes[i].Values[variableInstruction.Name];
                 if (variableInstruction.Next is SquareBracketsInstruction squareBracketsInstruction)
                 {
                     return foundVariable.GetItem(callStack, this, squareBracketsInstruction);
@@ -49,18 +51,18 @@ public class Closure
                 }
             }
         }
-    
-        return null;
+        
+        throw new InternalRaiseException(BsTypes.Types.NameError, $"name '{variableInstruction.Name}' is not defined");
     }
     
     public void SetVariable(CallStack callStack, VariableInstruction variableInstruction, Variable valueVariable)
     {
         // We need to pass in the full instruction here to handle assigning to indexes
-        if (Scopes[^1].ContainsKey(variableInstruction.Name))
+        if (Scopes[^1].Values.ContainsKey(variableInstruction.Name))
         {
             if (variableInstruction.Next is SquareBracketsInstruction squareBracketsInstruction)
             {
-                Scopes[^1][variableInstruction.Name].SetItem(
+                Scopes[^1].Values[variableInstruction.Name].SetItem(
                     callStack,
                     this, 
                     valueVariable, 
@@ -68,7 +70,7 @@ public class Closure
             }
             else if (variableInstruction.Next is MemberInstruction memberInstruction)
             {
-                Scopes[^1][variableInstruction.Name].SetMember(
+                Scopes[^1].Values[variableInstruction.Name].SetMember(
                     callStack,
                     this, 
                     valueVariable, 
@@ -80,17 +82,17 @@ public class Closure
             }
             else
             {
-                Scopes[^1][variableInstruction.Name] = valueVariable;
+                Scopes[^1].Values[variableInstruction.Name] = valueVariable;
             }
         }
         else
         {
-            Scopes[^1].Add(variableInstruction.Name, valueVariable);
+            Scopes[^1].Values.Add(variableInstruction.Name, valueVariable);
         }
     }
 
     public Dictionary<string, Variable> GetLastScope()
     {
-        return Scopes[^1];
+        return Scopes[^1].Values;
     }
 }

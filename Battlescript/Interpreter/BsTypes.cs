@@ -16,6 +16,7 @@ public static class BsTypes
         AssertionError,
         ValueError,
         TypeError,
+        NameError,
     }
 
     public static readonly string[] TypeStrings = [
@@ -30,7 +31,8 @@ public static class BsTypes
         "SyntaxError",
         "AssertionError",
         "ValueError",
-        "TypeError"
+        "TypeError",
+        "NameError",
     ];
     
     public static readonly Dictionary<string, Types> StringsToTypes = new() {
@@ -45,7 +47,8 @@ public static class BsTypes
         {"SyntaxError", Types.SyntaxError},
         {"AssertionError", Types.AssertionError},
         {"ValueError", Types.ValueError},
-        {"TypeError", Types.TypeError}
+        {"TypeError", Types.TypeError},
+        {"NameError", Types.NameError},
     };
     
     public static readonly Dictionary<Types, string> TypesToStrings = new() {
@@ -60,7 +63,8 @@ public static class BsTypes
         {Types.SyntaxError, "SyntaxError"},
         {Types.AssertionError, "AssertionError"},
         {Types.ValueError, "ValueError"},
-        {Types.TypeError, "TypeError"}
+        {Types.TypeError, "TypeError"},
+        {Types.NameError, "NameError"},
     };
     
     public static Dictionary<Types, ClassVariable> TypeReferences = [];

@@ -19,12 +19,12 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
     {
         var lineValue = inst?.Line ?? 0;
         var expressionValue = inst?.Expression ?? "";
-        callStack.AddScope(lineValue, expressionValue, Name);
-        var newClosure = new Closure(closure);
-        // callStack.AddScope(inst.Line, inst.Expression, Name);
+        callStack.AddFrame(lineValue, expressionValue, Name);
+        var newClosure = new Closure(FunctionClosure);
+        // callStack.AddFrame(inst.Line, inst.Expression, Name);
         arguments.ApplyToMemory(callStack, newClosure, Parameters);
         var returnValue = RunInstructions(callStack, newClosure);
-        callStack.RemoveScope();
+        callStack.RemoveFrame();
         return returnValue ?? new ConstantVariable();
     }
     

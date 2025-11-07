@@ -74,10 +74,10 @@ public class ImportInstruction : Instruction
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        callStack.AddScope(Line, Expression, "<module>", FilePath);
+        callStack.AddFrame(Line, Expression, "<module>", FilePath);
         var newClosure = new Closure(closure);
         Runner.RunFilePath(callStack, newClosure, FilePath);
-        callStack.RemoveScope();
+        callStack.RemoveFrame();
         var importedScope = newClosure.GetLastScope();
         
         foreach (var name in ImportNames)

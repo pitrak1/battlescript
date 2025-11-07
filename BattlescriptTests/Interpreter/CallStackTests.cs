@@ -18,13 +18,13 @@
 //     }
 //     
 //     [TestFixture]
-//     public class AddScope
+//     public class AddFrame
 //     {
 //         [Test]
 //         public void UpdatesPreviousScopeWithLineAndExpression()
 //         {
 //             var memory = new CallStack();
-//             memory.AddScope(5, "x = 5", "func", "file.bs");
+//             memory.AddFrame(5, "x = 5", "func", "file.bs");
 //             
 //             Assert.That(memory.Scopes.Count, Is.EqualTo(2));
 //             Assertions.AssertStackFrame(memory.Scopes[0], new StackFrame("main", 5, "x = 5", "<module>"));
@@ -34,7 +34,7 @@
 //         public void CreatesNewScopeWithoutLineOrExpression()
 //         {
 //             var memory = new CallStack();
-//             memory.AddScope(5, "x = 5", "func", "file.bs");
+//             memory.AddFrame(5, "x = 5", "func", "file.bs");
 //             
 //             Assert.That(memory.Scopes.Count, Is.EqualTo(2));
 //             Assertions.AssertStackFrame(memory.Scopes[1], new StackFrame("file.bs", "func"));
@@ -44,7 +44,7 @@
 //         public void UsesExistingFileIfNotGiven()
 //         {
 //             var memory = new CallStack();
-//             memory.AddScope(5, "x = 5", "func");
+//             memory.AddFrame(5, "x = 5", "func");
 //             
 //             Assert.That(memory.Scopes.Count, Is.EqualTo(2));
 //             Assertions.AssertStackFrame(memory.Scopes[1], new StackFrame("main", "func"));
@@ -52,14 +52,14 @@
 //     }
 //     
 //     [TestFixture]
-//     public class RemoveScope()
+//     public class RemoveFrame()
 //     {
 //         [Test]
 //         public void RemovesAndReturnsLastScopeInList()
 //         {
 //             var memory = new CallStack();
-//             memory.AddScope(5, "x = 5", "func");
-//             var returnedScope = memory.RemoveScope();
+//             memory.AddFrame(5, "x = 5", "func");
+//             var returnedScope = memory.RemoveFrame();
 //             
 //             Assert.That(memory.Scopes.Count, Is.EqualTo(1));
 //             Assertions.AssertStackFrame(returnedScope, new StackFrame("main", "func"));
@@ -77,7 +77,7 @@
 //     //             { "x", new NumericVariable(5) }
 //     //         };
 //     //         var callStack = new CallStack();
-//     //         callStack.AddScope(new Dictionary<string, Variable>(scopeVariables));
+//     //         callStack.AddFrame(new Dictionary<string, Variable>(scopeVariables));
 //     //         var returnedVariable = callStack.GetVariable("x");
 //     //         
 //     //         Assertions.AssertVariablesEqual(returnedVariable, new NumericVariable(5));
@@ -95,8 +95,8 @@
 //     //             { "y", new NumericVariable(8) }
 //     //         };
 //     //         var callStack = new CallStack();
-//     //         callStack.AddScope(new Dictionary<string, Variable>(scopeVariables1));
-//     //         callStack.AddScope(new Dictionary<string, Variable>(scopeVariables2));
+//     //         callStack.AddFrame(new Dictionary<string, Variable>(scopeVariables1));
+//     //         callStack.AddFrame(new Dictionary<string, Variable>(scopeVariables2));
 //     //         var returnedVariable = callStack.GetVariable("x");
 //     //         
 //     //         Assertions.AssertVariablesEqual(returnedVariable, new NumericVariable(5));
@@ -114,8 +114,8 @@
 //     //             { "x", new NumericVariable(8) }
 //     //         };
 //     //         var callStack = new CallStack();
-//     //         callStack.AddScope(new Dictionary<string, Variable>(scopeVariables1));
-//     //         callStack.AddScope(new Dictionary<string, Variable>(scopeVariables2));
+//     //         callStack.AddFrame(new Dictionary<string, Variable>(scopeVariables1));
+//     //         callStack.AddFrame(new Dictionary<string, Variable>(scopeVariables2));
 //     //         var returnedVariable = callStack.GetVariable("x");
 //     //         
 //     //         Assertions.AssertVariablesEqual(returnedVariable, new NumericVariable(8));
@@ -129,7 +129,7 @@
 //     //     public void CreatesVariableInLastScopeIfDoesNotExist()
 //     //     {
 //     //         var callStack = new CallStack();
-//     //         callStack.AddScope();
+//     //         callStack.AddFrame();
 //     //         callStack.SetVariable(new VariableInstruction("x"), new NumericVariable(5));
 //     //         var scopes = callStack.Scopes;
 //     //         
@@ -144,7 +144,7 @@
 //     //             { "x", new NumericVariable(5) }
 //     //         };
 //     //         var callStack = new CallStack();
-//     //         callStack.AddScope(new Dictionary<string, Variable>(scopeVariables));
+//     //         callStack.AddFrame(new Dictionary<string, Variable>(scopeVariables));
 //     //         callStack.SetVariable(new VariableInstruction("x"), new NumericVariable(8));
 //     //         var scopes = callStack.Scopes;
 //     //         
@@ -163,8 +163,8 @@
 //     //             { "x", new NumericVariable(6) }
 //     //         };
 //     //         var callStack = new CallStack();
-//     //         callStack.AddScope(new Dictionary<string, Variable>(scopeVariables1));
-//     //         callStack.AddScope(new Dictionary<string, Variable>(scopeVariables2));
+//     //         callStack.AddFrame(new Dictionary<string, Variable>(scopeVariables1));
+//     //         callStack.AddFrame(new Dictionary<string, Variable>(scopeVariables2));
 //     //         callStack.SetVariable(new VariableInstruction("x"), new NumericVariable(8));
 //     //         var scopes = callStack.Scopes;
 //     //         

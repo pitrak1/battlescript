@@ -55,15 +55,15 @@ public class ClassInstruction : Instruction
             }
         }
         
-        callStack.AddScope(Line, Expression, Name);
-        var newClosure = new Closure(closure);
+        callStack.AddFrame(Line, Expression, Name);
+        var newClosure = new Closure(closure, Closure.ClosureTypes.Class);
 
         foreach (var instruction in Instructions)
         {
             instruction.Interpret(callStack, newClosure);
         }
 
-        callStack.RemoveScope();
+        callStack.RemoveFrame();
         var values = newClosure.GetLastScope();
         var classVariable = new ClassVariable(Name, values, closure, superclasses);
         closure.SetVariable(callStack, new VariableInstruction(Name), classVariable);
