@@ -66,6 +66,10 @@ public static class InstructionFactory
                     return new FinallyInstruction(tokens);
                 case "assert":
                     return new AssertInstruction(tokens);
+                case "global":
+                    return new GlobalInstruction(tokens);
+                case "nonlocal":
+                    return new NonlocalInstruction(tokens);
                 default:
                     throw new ParserUnexpectedTokenException(tokens[0]);
             }

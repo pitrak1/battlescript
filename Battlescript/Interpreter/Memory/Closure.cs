@@ -27,11 +27,6 @@ public class Closure
 
     public Variable? GetVariable(CallStack callStack, VariableInstruction variableInstruction)
     {
-        if (variableInstruction.Name == "a")
-        {
-            Console.WriteLine("a");
-        }
-        
         for (var i = Scopes.Count - 1; i >= 0; i--)
         {
             if (Scopes[i].Type == ClosureTypes.Function && Scopes[i].Values.ContainsKey(variableInstruction.Name))
@@ -60,30 +55,22 @@ public class Closure
         // We need to pass in the full instruction here to handle assigning to indexes
         if (Scopes[^1].Values.ContainsKey(variableInstruction.Name))
         {
-            if (variableInstruction.Next is SquareBracketsInstruction squareBracketsInstruction)
+            SetVariableInScope(callStack, this, variableInstruction, valueVariable, Scopes[^1]);
+        }
+        else if (Scopes[^1].Nonlocals.Contains(variableInstruction.Name))
+        {
+            for (var i = Scopes.Count - 2; i >= 0; i--)
             {
-                Scopes[^1].Values[variableInstruction.Name].SetItem(
-                    callStack,
-                    this, 
-                    valueVariable, 
-                    squareBracketsInstruction);
+                if (Scopes[i].Values.ContainsKey(variableInstruction.Name))
+                {
+                    SetVariableInScope(callStack, this, variableInstruction, valueVariable, Scopes[i]);;
+                    break;
+                }
             }
-            else if (variableInstruction.Next is MemberInstruction memberInstruction)
-            {
-                Scopes[^1].Values[variableInstruction.Name].SetMember(
-                    callStack,
-                    this, 
-                    valueVariable, 
-                    memberInstruction);
-            }
-            else if (variableInstruction.Next is ParenthesesInstruction)
-            {
-                throw new InternalRaiseException(BsTypes.Types.SyntaxError, "cannot assign to function call");
-            }
-            else
-            {
-                Scopes[^1].Values[variableInstruction.Name] = valueVariable;
-            }
+        }
+        else if (Scopes[^1].Globals.Contains(variableInstruction.Name))
+        {
+            SetVariableInScope(callStack, this, variableInstruction, valueVariable, Scopes[0]);
         }
         else
         {
@@ -91,8 +78,61 @@ public class Closure
         }
     }
 
+    private void SetVariableInScope(
+        CallStack callStack, 
+        Closure closure, 
+        VariableInstruction variableInstruction,
+        Variable valueVariable,
+        ClosureScope scope)
+    {
+        if (variableInstruction.Next is SquareBracketsInstruction squareBracketsInstruction)
+        {
+            scope.Values[variableInstruction.Name].SetItem(
+                callStack,
+                closure, 
+                valueVariable, 
+                squareBracketsInstruction);
+        }
+        else if (variableInstruction.Next is MemberInstruction memberInstruction)
+        {
+            scope.Values[variableInstruction.Name].SetMember(
+                callStack,
+                closure, 
+                valueVariable, 
+                memberInstruction);
+        }
+        else if (variableInstruction.Next is ParenthesesInstruction)
+        {
+            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "cannot assign to function call");
+        }
+        else
+        {
+            scope.Values[variableInstruction.Name] = valueVariable;
+        }
+    }
+
     public Dictionary<string, Variable> GetLastScope()
     {
         return Scopes[^1].Values;
+    }
+
+    public void CreateGlobalReference(string name)
+    {
+        if (Scopes[0].Values.ContainsKey(name))
+        {
+            Scopes[^1].Globals.Add(name);
+        }
+    }
+
+    public void CreateNonlocalReference(string name)
+    {
+        for (var i = Scopes.Count - 2; i >= 0; i--)
+        {
+            if (Scopes[i].Values.ContainsKey(name))
+            {
+                Scopes[^1].Nonlocals.Add(name);
+                break;
+            }
+        }
     }
 }

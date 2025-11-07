@@ -5,7 +5,6 @@ namespace BattlescriptTests.E2ETests;
 [TestFixture]
 public class MemoryAndVariableAccessTests
 {
-    [TestFixture]
     public class Baseline
     {
         [Test]
@@ -242,194 +241,198 @@ public class MemoryAndVariableAccessTests
         }
     }
     
-    // [TestFixture]
-    // public class GlobalKeyword
-    // {
-    //     [Test]
-    //     public void AllowsAccessInsideFunctions()
-    //     {
-    //         var input = """
-    //                     x = 5
-    //                     def modify_global():
-    //                         global x
-    //                         x = 15
-    //                     modify_global()
-    //                     """;
-    //         var (callStack, closure) = Runner.Run(input);
-    //         var expected = BsTypes.Create(BsTypes.Types.Int, 15);
-    //         Assertions.AssertVariable(callStack, closure, "x", expected);
-    //     }
-    //     
-    //     [Test]
-    //     public void AllowsAccessInsideNestedFunctions()
-    //     {
-    //         var input = """
-    //                     y = 10
-    //                     def outer_func2():
-    //                         y = 5
-    //                         def inner_func():
-    //                             global y
-    //                             y = 25
-    //                         inner_func()
-    //                     outer_func2()
-    //                     """;
-    //         var (callStack, closure) = Runner.Run(input);
-    //         var expected = BsTypes.Create(BsTypes.Types.Int, 25);
-    //         Assertions.AssertVariable(callStack, closure, "y", expected);
-    //     }
-    //
-    //     [Test]
-    //     public void AllowsAccessInsideClasses()
-    //     {
-    //         var input = """
-    //                     z = 30
-    //                     class MyClass2:
-    //                         global z
-    //                         z = 45
-    //                     obj = MyClass2()
-    //                     """;
-    //         var (callStack, closure) = Runner.Run(input);
-    //         var expected = BsTypes.Create(BsTypes.Types.Int, 45);
-    //         Assertions.AssertVariable(callStack, closure, "z", expected);
-    //     }
-    //     
-    //     [Test]
-    //     public void AllowsAccessInsideNestedClasses()
-    //     {
-    //         var input = """
-    //                     w = 60
-    //                     class OuterClass2():
-    //                         w = 30
-    //                         class InnerClass2:
-    //                             global w
-    //                             w = 75
-    //                     obj = OuterClass2().InnerClass2()
-    //                     """;
-    //         var (callStack, closure) = Runner.Run(input);
-    //         var expected = BsTypes.Create(BsTypes.Types.Int, 75);
-    //         Assertions.AssertVariable(callStack, closure, "w", expected);
-    //     }
-    // }
-    //
-    // [TestFixture]
-    // public class NonlocalKeyword
-    // {
-    //     [Test]
-    //     public void AllowsAccessToEnclosingFunctionVariablesInFunctions()
-    //     {
-    //         var input = """
-    //                     def outer_func3():
-    //                         z = 50
-    //                         def inner_func():
-    //                             nonlocal z
-    //                             z = 75
-    //                         inner_func()
-    //                         return z
-    //                     x = outer_func3()
-    //                     """;
-    //         var (callStack, closure) = Runner.Run(input);
-    //         var expected = BsTypes.Create(BsTypes.Types.Int, 75);
-    //         Assertions.AssertVariable(callStack, closure, "x", expected);
-    //     }
-    //     
-    //     [Test]
-    //     public void DoesNotAllowAccessToMultipleLevelsInFunctions()
-    //     {
-    //         var input = """
-    //                     def outer_func4():
-    //                         a = 100
-    //                     
-    //                         def middle_func():
-    //                             def inner_func():
-    //                                 nonlocal a  
-    //                                 a = 150
-    //                     
-    //                             inner_func()
-    //                             assert(a == 150)
-    //                         return a
-    //                     x = outer_func4()
-    //                     """;
-    //         var (callStack, closure) = Runner.Run(input);
-    //         var expected = BsTypes.Create(BsTypes.Types.Int, 150);
-    //         Assertions.AssertVariable(callStack, closure, "x", expected);
-    //     }
-    //     
-    //     [Test]
-    //     public void AllowsAccessToEnclosingFunctionVariablesInClasses()
-    //     {
-    //         var input = """
-    //                     def outer_func5():
-    //                         b = 200
-    //                         class InnerClass3:
-    //                             nonlocal b
-    //                             b = 250
-    //                         obj = InnerClass3()
-    //                         return b
-    //                     x = outer_func5()
-    //                     """;
-    //         var (callStack, closure) = Runner.Run(input);
-    //         var expected = BsTypes.Create(BsTypes.Types.Int, 250);
-    //         Assertions.AssertVariable(callStack, closure, "x", expected);
-    //     }
-    //     
-    //     [Test]
-    //     public void IgnoresClassesWhenConsideringMultipleLevels()
-    //     {
-    //         var input = """
-    //                     def outer_func5():
-    //                         b = 200
-    //                         class InnerClass3:
-    //                             class InnerInnerClass:
-    //                                 nonlocal b
-    //                                 b = 250
-    //                         obj = InnerClass3().InnerInnerClass()
-    //                         return b
-    //                     x = outer_func5()
-    //                     """;
-    //         var (callStack, closure) = Runner.Run(input);
-    //         var expected = BsTypes.Create(BsTypes.Types.Int, 250);
-    //         Assertions.AssertVariable(callStack, closure, "x", expected);
-    //     }
-    //     
-    //     [Test]
-    //     public void AllowsClassMethodsToAccessEnclosingFunctionVariables()
-    //     {
-    //         var input = """
-    //                     def outer_func6():
-    //                         c = 300
-    //                         class InnerClass4:
-    //                             def method(self):
-    //                                 nonlocal c 
-    //                                 c = 350
-    //                         obj = InnerClass4()
-    //                         obj.method()
-    //                         return c
-    //                     x = outer_func6()
-    //                     """;
-    //         var (callStack, closure) = Runner.Run(input);
-    //         var expected = BsTypes.Create(BsTypes.Types.Int, 350);
-    //         Assertions.AssertVariable(callStack, closure, "x", expected);
-    //     }
-    //     
-    //     [Test]
-    //     public void IgnoresClassesWhenConsideringMultipleLevelsForClassMethods()
-    //     {
-    //         var input = """
-    //                     def outer_func6():
-    //                         c = 300
-    //                         class InnerClass4:
-    //                             class InnerInnerClass:
-    //                                 def method(self):
-    //                                     nonlocal c 
-    //                                     c = 350
-    //                         obj = InnerClass4().InnerInnerClass()
-    //                         obj.method()
-    //                         return c
-    //                     x = outer_func6()
-    //                     """;
-    //         var (callStack, closure) = Runner.Run(input);
-    //         var expected = BsTypes.Create(BsTypes.Types.Int, 350);
-    //         Assertions.AssertVariable(callStack, closure, "x", expected);
-    //     }
-    // }
+    public class GlobalKeyword
+    {
+        [Test]
+        public void AllowsAccessInsideFunctions()
+        {
+            var input = """
+                        x = 5
+                        def modify_global():
+                            global x
+                            x = 15
+                        modify_global()
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 15);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
+        }
+        
+        [Test]
+        public void AllowsAccessInsideNestedFunctions()
+        {
+            var input = """
+                        y = 10
+                        def outer_func2():
+                            y = 5
+                            def inner_func():
+                                global y
+                                y = 25
+                            inner_func()
+                        outer_func2()
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 25);
+            Assertions.AssertVariable(callStack, closure, "y", expected);
+        }
+        
+        [Test]
+        public void AllowsAccessInsideClasses()
+        {
+            var input = """
+                        z = 30
+                        class MyClass2:
+                            global z
+                            z = 45
+                        obj = MyClass2()
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 45);
+            Assertions.AssertVariable(callStack, closure, "z", expected);
+        }
+        
+        [Test]
+        public void AllowsAccessInsideNestedClasses()
+        {
+            var input = """
+                        w = 60
+                        class OuterClass2():
+                            w = 30
+                            class InnerClass2:
+                                global w
+                                w = 75
+                        obj = OuterClass2().InnerClass2()
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 75);
+            Assertions.AssertVariable(callStack, closure, "w", expected);
+        }
+    }
+    
+    [TestFixture]
+    public class NonlocalKeyword
+    {
+        [Test]
+        public void AllowsAccessToEnclosingFunctionVariablesInFunctions()
+        {
+            var input = """
+                        def outer_func3():
+                            z = 50
+                            def inner_func():
+                                nonlocal z
+                                z = 75
+                            inner_func()
+                            return z
+                        x = outer_func3()
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 75);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
+        }
+        
+        [Test]
+        public void AllowsAccessToMultipleLevelsInFunctions()
+        {
+            var input = """
+                        def outer_func4():
+                            a = 100
+                            
+                            def middle_func():
+                                
+                                def inner_func():
+                                    nonlocal a
+                                    a = 150
+                                    
+                                inner_func()
+                            middle_func()
+                            return a
+                        x = outer_func4()
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 150);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
+        }
+        
+        [Test]
+        public void AllowsAccessToEnclosingFunctionVariablesInClasses()
+        {
+            var input = """
+                        def outer_func5():
+                            b = 200
+                            class InnerClass3:
+                                nonlocal b
+                                b = 250
+                            obj = InnerClass3()
+                            return b
+                        x = outer_func5()
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 250);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
+        }
+        
+        [Test]
+        public void IgnoresClassesWhenConsideringMultipleLevels()
+        {
+            var input = """
+                        def outer_func5():
+                            b = 200
+                            class InnerClass3:
+                                class InnerInnerClass:
+                                    nonlocal b
+                                    b = 250
+                            obj = InnerClass3().InnerInnerClass()
+                            return b
+                        x = outer_func5()
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 250);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
+        }
+        
+        [Test]
+        public void AllowsClassMethodsToAccessEnclosingFunctionVariables()
+        {
+            var input = """
+                        def outer_func6():
+                            c = 300
+                            class InnerClass4:
+                                def method(self):
+                                    nonlocal c 
+                                    c = 350
+                            obj = InnerClass4()
+                            obj.method()
+                            return c
+                        x = outer_func6()
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 350);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
+        }
+        
+        [Test]
+        public void IgnoresClassesWhenConsideringMultipleLevelsForClassMethods()
+        {
+            var input = """
+                        def outer_func6():
+                            c = 300
+                            
+                            class InnerClass4:
+                            
+                                class InnerInnerClass:
+                                
+                                    def method(self):
+                                        nonlocal c 
+                                        c = 350
+                                        
+                            obj = InnerClass4.InnerInnerClass()
+                            obj.method()
+                            return c
+                        x = outer_func6()
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 350);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
+        }
+    }
 }
