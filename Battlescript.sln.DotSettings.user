@@ -8,6 +8,7 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ad017b13_002Df351_002D4722_002Da8ea_002D10ee88ba5019/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="NonlocalKeyword" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.E2ETests.MemoryAndVariableAccessTests+NonlocalKeyword&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::D828B451-A5D4-460B-94ED-048730099A1D::net8.0::BattlescriptTests.E2ETests.FunctionsTests.Testststts&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	
