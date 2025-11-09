@@ -1,7 +1,11 @@
 # Battlescript: A Python-like Interpreter for Use in Godot/Unity
 
-## Features
-### Variables and Operators
+Battlescript is a Python-like language interpreter that is simple input/output in C#.  When given a string, it can produce whatever output you would like, whether that be some value in Battlescript's memory, a value to be returned, or a change in the game state through Battlescript's customizable interface layer.  This means it can easily be plugged into any Godot or Unity3D project, allowing you to build out how the player enters code and receives output in your game without worrying about interpreting the code itself.
+
+### Explore the features
+
+1. [Variable Types](https://github.com/pitrak1/battlescript/blob/main/BattlescriptTests/E2E/VariableTypes/VariableTypes.md)
+2. [Operators](https://github.com/pitrak1/battlescript/blob/main/BattlescriptTests/E2E/Operators/Operators.md)
 
 8 base variable types: integer, float, string, boolean, list, dictionary, class, object
 

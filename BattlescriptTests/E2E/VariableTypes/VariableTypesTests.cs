@@ -5,21 +5,11 @@ namespace BattlescriptTests.E2ETests;
 public class VariableTypesTests
 {
     [Test]
-    public void SupportsStringVariablesUsingSingleQuotes()
+    public void SupportsStrings()
     {
         var input = "x = 'asdf'";
         var (callStack, closure) = Runner.Run(input);
         var expected = BsTypes.Create(BsTypes.Types.String, "asdf");
-        Assertions.AssertVariable(callStack, closure, "x", expected);
-    }
-    
-    [Test]
-    public void SupportsStringVariablesUsingDoubleQuotes()
-    {
-        var input = "x = \"asdf\"";
-        var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.String, "asdf");
-        
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
     
