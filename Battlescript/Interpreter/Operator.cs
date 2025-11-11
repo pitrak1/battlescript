@@ -121,6 +121,8 @@ public static class Operator
                 return new SequenceVariable(leftSequence.Values.Concat(rightSequence.Values).ToList());
             case "==":
                 return CompareSequences(leftSequence, rightSequence) ? new NumericVariable(1) : new NumericVariable(0);
+            case "!=":
+                return CompareSequences(leftSequence, rightSequence) ? new NumericVariable(0) : new NumericVariable(1);
             default:
                 throw new InterpreterInvalidOperationException(operation, leftSequence, rightSequence);
         }

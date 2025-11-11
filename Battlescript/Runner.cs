@@ -12,6 +12,8 @@ public static class Runner
             LoadBuiltin(callStack, closure, builtin);
             BsTypes.PopulateBsTypeReference(callStack, closure, builtin);
         }
+        
+        BsTypes.PopulateBsTypeConstants(callStack, closure);
 
         RunAsMain(callStack, closure, input);
         

@@ -21,11 +21,19 @@ class str:
     def __radd__(self, other):
         return str(other.__value + self.__value)
 
+    def __iadd__(self, other):
+        self.__value = self.__value + other.__value
+        return self
+
     def __mul__(self, other):
         return str(self.__value * other.__value)
 
     def __rmul__(self, other):
         return str(other.__value * self.__value)
+
+    def __imul__(self, other):
+        self.__value = self.__value * other.__value
+        return self
 
     def __len__(self):
         return len(self.__value)

@@ -18,7 +18,7 @@ public static class BsTypes
         TypeError,
         NameError,
     }
-
+    
     public static readonly string[] TypeStrings = [
         "numeric", 
         "int", 
@@ -68,11 +68,20 @@ public static class BsTypes
     };
     
     public static Dictionary<Types, ClassVariable> TypeReferences = [];
+
+    public static Variable True;
+    public static Variable False;
     
     public static void PopulateBsTypeReference(CallStack callStack, Closure closure, string builtin)
     {
         var type = StringsToTypes[builtin];
         TypeReferences[type] = closure.GetVariable(callStack, builtin) as ClassVariable;
+    }
+
+    public static void PopulateBsTypeConstants(CallStack callStack, Closure closure)
+    {
+        True = Create(Types.Bool, new NumericVariable(1));
+        False = Create(Types.Bool, new NumericVariable(0));
     }
     
     public static bool Is(Types type, Variable variable)

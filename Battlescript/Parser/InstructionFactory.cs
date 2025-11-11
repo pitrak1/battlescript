@@ -145,10 +145,14 @@ public static class InstructionFactory
     private static bool IsListComprehension(List<Token> tokens)
     {
         // This effectively checks if the list of tokens is wrapped in square brackets and a "for" exists inside
-        if (tokens.Count > 2 && tokens[0].Value == "[" && tokens[^1].Value == "]")
+        if (tokens.Count > 2)
         {
-            var forIndex = InstructionUtilities.GetTokenIndex(tokens.GetRange(1, tokens.Count - 2), ["for"]);
-            return forIndex != -1;
+            var closingBracketIndex = InstructionUtilities.GetTokenIndex(tokens, ["]"]);
+            if (closingBracketIndex != -1)
+            {
+                var forIndex = InstructionUtilities.GetTokenIndex(tokens.GetRange(1, closingBracketIndex - 1), ["for"]);
+                return forIndex != -1;
+            }
         }
 
         return false;

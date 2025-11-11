@@ -22,8 +22,21 @@ class list:
             return list(self.__value + other.__value)
         return NotImplemented
 
+    def __iadd__(self, other):
+        if isinstance(other, list):
+            self.__value = self.__value + other.__value
+            return self
+        return NotImplemented
+
     def __mul__(self, other):
-        return list(self.__value * other.__value)
+        if isinstance(other, int):
+            return list(self.__value * other.__value)
+        return NotImplemented
+
+    def __imul__(self, other):
+        if isinstance(other, int):
+            self.__value = self.__value * other.__value
+            return self
         return NotImplemented
 
     def append(self, value):
@@ -31,4 +44,10 @@ class list:
 
     def __bool__(self):
         return 0 < len(self.__value)
+
+    def __eq__(self, other):
+        return bool(self.__value == other.__value)
+
+    def __ne__(self, other):
+        return bool(self.__value != other.__value)
         

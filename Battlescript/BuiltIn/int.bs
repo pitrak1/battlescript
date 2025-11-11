@@ -32,6 +32,8 @@ class int(numeric):
             return float(self.__value * other.__value)
         elif isinstance(other, str):
             return str(self.__value * other.__value)
+        elif isinstance(other, list):
+            return list(self.__value * other.__value)
         else:
             return int(self.__value * other.__value)
 

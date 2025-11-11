@@ -317,7 +317,7 @@ public static class Assertions
         
         AssertInstructionsEqual(parserResult, expected);
     }
-
+    
     public static void AssertVariable(CallStack callStack, Closure closure, string name, Variable expected)
     {
         var variable = closure.GetVariable(callStack, name);
