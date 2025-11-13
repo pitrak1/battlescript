@@ -86,7 +86,7 @@ public static class InstructionUtilities
             var currentToken = tokens[i];
             if (currentToken.Type == Consts.TokenTypes.Operator && separatorStack.Count == 0)
             {
-                lowest = UpdateOperatorPriorityAndIndexForOperator(lowest, currentToken.Value, i);
+                lowest = UpdateOperatorPriorityAndIndexForOperator(tokens, lowest, currentToken.Value, i);
             }
             else if (Consts.ClosingSeparators.Contains(currentToken.Value))
             {
@@ -101,7 +101,7 @@ public static class InstructionUtilities
                     
                     if (currentToken.Type == Consts.TokenTypes.Operator && separatorStack.Count == 0)
                     {
-                        lowest = UpdateOperatorPriorityAndIndexForOperator(lowest, currentToken.Value, i);
+                        lowest = UpdateOperatorPriorityAndIndexForOperator(tokens, lowest, currentToken.Value, i);
                     }
                 }
                 else
@@ -114,12 +114,55 @@ public static class InstructionUtilities
         return lowest.Index;
     }
 
+    private static bool IsUnaryOperator(List<Token> tokens, int index)
+    {
+        // Binary operators will separate two operands which can be:
+        // 1. a literal string, numeric, bool, whatever
+        // 2. a variable
+        // 3. an index (ending in ])
+        // 4. a function call (ending in ))
+        
+        // If it's ANYTHING else, it's a unary operator
+        
+        var currentToken = tokens[index];
+        if (currentToken.Value != "+" && currentToken.Value != "-")
+        {
+            return false;
+        }
+
+        if (index > 0)
+        {
+            var previousToken = tokens[index - 1];
+            var binaryTypes = new List<Consts.TokenTypes>() {
+                Consts.TokenTypes.String,
+                Consts.TokenTypes.Numeric,
+                Consts.TokenTypes.FormattedString,
+                Consts.TokenTypes.Constant,
+                Consts.TokenTypes.Identifier,
+            };
+            var binaryValues = new List<string>() { "]", ")" };
+            if (binaryTypes.Contains(previousToken.Type) || 
+                binaryValues.Contains(previousToken.Value))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private static (int Priority, int Index) UpdateOperatorPriorityAndIndexForOperator(
+        List<Token> tokens,
         (int Priority, int Index) current,
         string operatorString,
         int index)
     {
-        var priority = Array.FindIndex(Consts.Operators, e => e == operatorString);
+        if (IsUnaryOperator(tokens, index))
+        {
+            operatorString += "1";
+        }
+        
+        var priority = Array.FindIndex(Consts.OperatorPriority, e => e == operatorString);
         return (priority != -1 && priority > current.Priority) ? (priority, index) : current;
     }
     

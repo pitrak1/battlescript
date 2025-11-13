@@ -177,6 +177,31 @@ public static class Consts
         "or"
     ];
     
+    public static readonly string[] OperatorPriority = [
+        "**",
+        "+1",
+        "-1",
+        "*",
+        "/",
+        "//",
+        "%",
+        "+",
+        "-",
+        "==",
+        "!=",
+        ">",
+        ">=",
+        "<",
+        "<=",
+        "is",
+        "is not",
+        "in",
+        "not in",
+        "not",
+        "and",
+        "or"
+    ];
+    
     public static readonly string[] BooleanOperators = ["and", "or", "not", "is", "is not", "in", "not in"];
     
     public static readonly string[] NumericalOperators = [
