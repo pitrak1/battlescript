@@ -6,6 +6,7 @@ Battlescript is a Python-like language interpreter that is simple input/output i
 
 1. [Variable Types](https://github.com/pitrak1/battlescript/blob/main/BattlescriptTests/E2E/VariableTypes/VariableTypes.md)
 2. [Operators](https://github.com/pitrak1/battlescript/blob/main/BattlescriptTests/E2E/Operators/Operators.md)
+3. [Loops and Conditionals](https://github.com/pitrak1/battlescript/blob/main/BattlescriptTests/E2E/LoopsAndConditionals/LoopsAndConditionals.md)
 
 8 base variable types: integer, float, string, boolean, list, dictionary, class, object
 
