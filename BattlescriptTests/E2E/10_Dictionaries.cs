@@ -3,7 +3,7 @@ using Battlescript;
 namespace BattlescriptTests.E2ETests;
 
 [TestFixture]
-public class Dictionaries
+public class DictionariesOld
 {
     [Test]
     public void SupportsDictionaryDefinition()

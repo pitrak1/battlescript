@@ -3,7 +3,7 @@ using Battlescript;
 namespace BattlescriptTests.E2ETests;
 
 [TestFixture]
-public static class ListsTests
+public static class ListsTestsOld
 {
     [TestFixture]
     public class Indexing

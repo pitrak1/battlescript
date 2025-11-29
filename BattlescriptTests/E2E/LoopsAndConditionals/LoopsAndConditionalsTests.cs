@@ -1,6 +1,6 @@
 using Battlescript;
 
-namespace BattlescriptTests.E2ETests;
+namespace BattlescriptTests.E2ETests.LoopsAndConditionals;
 
 public class LoopsAndConditionalsTests
 {

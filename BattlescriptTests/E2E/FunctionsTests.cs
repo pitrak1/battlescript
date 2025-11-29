@@ -3,7 +3,7 @@ using Battlescript;
 namespace BattlescriptTests.E2ETests;
 
 [TestFixture]
-public class FunctionsTests
+public class FunctionsTestsOld
 {
     [TestFixture]
     public class BasicFunctionDefinitions
