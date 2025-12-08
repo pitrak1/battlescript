@@ -14,6 +14,7 @@ public class CurlyBracesInstruction : ArrayInstruction
             InitializeValues(tokensInSeparators);
             ParseNext(tokens, closingSeparatorIndex + 1);
         }
+        Initialize(tokens);
     }
     
     public CurlyBracesInstruction(

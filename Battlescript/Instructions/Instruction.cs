@@ -10,6 +10,11 @@ public abstract class Instruction
 
     public Instruction(List<Token> tokens)
     {
+        Initialize(tokens);
+    }
+
+    protected void Initialize(List<Token> tokens)
+    {
         if (tokens.Count > 0)
         {
             Line = tokens[0].Line;

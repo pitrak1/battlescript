@@ -14,7 +14,10 @@ public class CallStack
         Frames[^1].UpdateLineAndExpression(entryLine, entryExpression);
         var fileValue = file ?? Frames[^1].File;
         Frames.Add(new StackFrame(fileValue, function));
-        PrintStacktrace();
+        if (fileValue is null)
+        {
+            PrintStacktrace();
+        }
     }
 
     public StackFrame RemoveFrame()
@@ -27,9 +30,9 @@ public class CallStack
     public void PrintStacktrace()
     {
         Console.WriteLine("Stacktrace:");
-        for (var i = Frames.Count - 1; i >= 0; i--)
+        for (var i = 0; i < Frames.Count; i++)
         {
-            Console.WriteLine($"File {Frames[i].File}, Function {Frames[i].Function}, Line {Frames[i].Line}, Expression {Frames[i].Expression}");
+            Console.WriteLine($"File {Frames[i].File}, Function {Frames[i].Function}, Line {Frames[i].Line}, Expression \"{Frames[i].Expression}\"");
         }
         Console.WriteLine();
     }

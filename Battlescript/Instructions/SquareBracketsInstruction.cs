@@ -14,6 +14,7 @@ public class SquareBracketsInstruction : ArrayInstruction
             InitializeValues(tokensInSeparators);
             ParseNext(tokens, closingSeparatorIndex + 1);
         }
+        Initialize(tokens);
     }
     
     public SquareBracketsInstruction(

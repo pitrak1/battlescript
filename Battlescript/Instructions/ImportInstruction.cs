@@ -60,11 +60,13 @@ public class ImportInstruction : Instruction
         }
     }
 
-    public ImportInstruction(string filePath, List<string> importNames) : base([])
+    public ImportInstruction(string filePath, List<string> importNames, int? line = null, string? expression = null) : base([])
     {
         FilePath = filePath;
         FileName = Path.GetFileNameWithoutExtension(FilePath);
         ImportNames = importNames;
+        Line = line ?? 0;
+        Expression = expression ?? "";
     }
 
     public override Variable? Interpret(

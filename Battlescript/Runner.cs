@@ -2,19 +2,13 @@ namespace Battlescript;
 
 public static class Runner
 {
-    public static (CallStack, Closure) Run(string input)
+    public static (CallStack, Closure) Run(string input, CallStack? initCallStack = null, Closure? initClosure = null)
     {
-        var callStack = new CallStack();
-        var closure = new Closure();
+        var callStack = initCallStack ?? new CallStack();
+        var closure = initClosure ?? new Closure();
         
-        foreach (var builtin in BsTypes.TypeStrings)
-        {
-            LoadBuiltin(callStack, closure, builtin);
-            BsTypes.PopulateBsTypeReference(callStack, closure, builtin);
-        }
+        LoadBuiltIns(callStack, closure);
         
-        BsTypes.PopulateBsTypeConstants(callStack, closure);
-
         RunAsMain(callStack, closure, input);
         
         return (callStack, closure);
@@ -31,11 +25,22 @@ public static class Runner
         RunPartial(callStack, closure, input);
     }
 
-    private static void LoadBuiltin(CallStack callStack, Closure closure, string builtinName)
+    private static void LoadBuiltIns(CallStack callStack, Closure closure)
     {
-        var fileName = $"/Users/nickpitrak/Desktop/Battlescript/Battlescript/BuiltIn/{builtinName}.bs";
-        string text = ReadFile(fileName);
-        RunPartial(callStack, closure, text);
+        for (int i = 0; i < BsTypes.TypeStrings.Length; i++)
+        {
+            var builtInName = BsTypes.TypeStrings[i];
+            var fileName = $"/Users/nickpitrak/Desktop/Battlescript/Battlescript/BuiltIn/{builtInName}.bs";
+            var expression = $"import {builtInName} from \"{fileName}\"";
+            var importInstruction = new ImportInstruction(fileName, [builtInName], i, expression);
+            
+            var interpreter = new Interpreter([importInstruction]);
+            interpreter.Run(callStack, closure);
+            BsTypes.PopulateBsTypeReference(callStack, closure, builtInName);
+        }
+
+        BsTypes.PopulateBsTypeConstants(callStack, closure);
+
     }
 
     private static string ReadFile(string path)
@@ -63,7 +68,7 @@ public static class Runner
         }
         catch (InternalRaiseException e)
         {
-            // callStack.CurrentStack.PrintStacktrace();
+            callStack.PrintStacktrace();
             if (e.Type is not null)
             {
                 Console.WriteLine(e.Type + ": " + e.Message);
