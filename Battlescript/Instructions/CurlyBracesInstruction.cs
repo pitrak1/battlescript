@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Newtonsoft.Json.Linq;
 
 namespace Battlescript;
 
@@ -20,7 +21,9 @@ public class CurlyBracesInstruction : ArrayInstruction
     public CurlyBracesInstruction(
         List<Instruction?> values, 
         string? delimiter = null,
-        Instruction? next = null) : base(values, delimiter, next)
+        Instruction? next = null, 
+        int? line = null, 
+        string? expression = null) : base(values, delimiter, next, line, expression)
     {
     }
 

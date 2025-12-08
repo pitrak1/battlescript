@@ -22,7 +22,12 @@ public class BuiltInInstruction : Instruction
         Name = tokens[0].Value;
     }
     
-    public BuiltInInstruction(string name, List<Instruction>? arguments = null, Instruction? next = null) : base([])
+    public BuiltInInstruction(
+        string name, 
+        List<Instruction>? arguments = null, 
+        Instruction? next = null, 
+        int? line = null, 
+        string? expression = null) : base(line, expression)
     {
         Name = name;
         Arguments = arguments ?? [];

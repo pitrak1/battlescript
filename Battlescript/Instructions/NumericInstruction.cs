@@ -36,7 +36,7 @@ public class NumericInstruction : Instruction
         }
     }
 
-    public NumericInstruction(dynamic value) : base([])
+    public NumericInstruction(dynamic value, int? line = null, string? expression = null) : base(line, expression)
     {
         _value = value;
     }

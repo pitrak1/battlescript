@@ -25,7 +25,11 @@ public class ClassInstruction : Instruction
         Superclasses = superClasses;
     }
 
-    public ClassInstruction(string name, List<Instruction>? superclasses = null) : base([])
+    public ClassInstruction(
+        string name, 
+        List<Instruction>? superclasses = null, 
+        int? line = null, 
+        string? expression = null) : base(line, expression)
     {
         Name = name;
         Superclasses = superclasses ?? [];

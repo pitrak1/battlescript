@@ -9,7 +9,10 @@ public class AssertInstruction : Instruction
         Condition = InstructionFactory.Create(tokens.GetRange(1, tokens.Count - 1));
     }
 
-    public AssertInstruction(Instruction condition) : base([])
+    public AssertInstruction(
+        Instruction condition, 
+        int? line = null, 
+        string? expression = null) : base(line, expression)
     {
         Condition = condition;
     }

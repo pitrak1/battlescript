@@ -17,7 +17,12 @@ public class ElseInstruction : Instruction
         }
     }
 
-    public ElseInstruction(Instruction? condition, Instruction? next, List<Instruction>? instructions = null) : base([])
+    public ElseInstruction(
+        Instruction? condition, 
+        Instruction? next, 
+        List<Instruction>? instructions = null, 
+        int? line = null, 
+        string? expression = null) : base(line, expression)
     {
         Condition = condition;
         Next = next;

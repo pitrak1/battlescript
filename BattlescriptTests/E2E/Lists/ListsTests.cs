@@ -692,63 +692,72 @@ public class ListsTests
     [TestFixture]
     public class ListComprehensions
     {
-        // [Test]
-        // public void BasicForLoops()
-        // {
-        //     var input = """
-        //                 z = [1, 2, 3, 4]
-        //                 y = [x * 2 for x in z]
-        //                 """;
-        //     var (callStack, closure) = Runner.Run(input);
-        //     var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>()
-        //     {
-        //         BsTypes.Create(BsTypes.Types.Int, 2),
-        //         BsTypes.Create(BsTypes.Types.Int, 4),
-        //         BsTypes.Create(BsTypes.Types.Int, 6),
-        //         BsTypes.Create(BsTypes.Types.Int, 8),
-        //     });
-        //     Assertions.AssertVariable(callStack, closure, "y", expected);
-        // }
-        //
-        // [Test]
-        // public void HandlesForWithIf()
-        // {
-        //     var loopInstructions = Runner.Parse("""
-        //                                         lstcmp = []
-        //                                         for x in y:
-        //                                             if x == 3:
-        //                                                 lstcmp.append(x * 2)
-        //                                         """);
-        //     var compInstructions = Runner.Parse("[x * 2 for x in y if x == 3]");
-        //     Assertions.AssertInstructionListsEqual(loopInstructions, compInstructions.First().Instructions);
-        // }
-        //
-        // [Test]
-        // public void HandlesMultipleFors()
-        // {
-        //     var loopInstructions = Runner.Parse("""
-        //                                         lstcmp = []
-        //                                         for x in y:
-        //                                             for y in z:
-        //                                                 lstcmp.append(x * 2)
-        //                                         """);
-        //     var compInstructions = Runner.Parse("[x * 2 for x in y for y in z]");
-        //     Assertions.AssertInstructionListsEqual(loopInstructions, compInstructions.First().Instructions);
-        // }
-        //
-        // [Test]
-        // public void HandlesMultipleForsAndIfs()
-        // {
-        //     var loopInstructions = Runner.Parse("""
-        //                                         lstcmp = []
-        //                                         for x in y:
-        //                                             if x == 3:
-        //                                                 for y in z:
-        //                                                     if y == 3:
-        //                                                         lstcmp.append(x * 2)
-        //                                         """);
-        //     var compInstructions = Runner.Parse("[x * 2 for x in y if x == 3 for y in z if y == 3]");
-        //     Assertions.AssertInstructionListsEqual(loopInstructions, compInstructions.First().Instructions);
-        // }
+        [Test]
+        public void BasicForLoops()
+        {
+            var input = """
+                        z = [1, 2, 3, 4]
+                        y = [x * 2 for x in z]
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>()
+            {
+                BsTypes.Create(BsTypes.Types.Int, 2),
+                BsTypes.Create(BsTypes.Types.Int, 4),
+                BsTypes.Create(BsTypes.Types.Int, 6),
+                BsTypes.Create(BsTypes.Types.Int, 8),
+            });
+            Assertions.AssertVariable(callStack, closure, "y", expected);
+        }
+        
+        [Test]
+        public void HandlesForWithIf()
+        {
+            var input = """
+                        z = [1, 2, 3, 4]
+                        y = [x * 2 for x in z if x == 3]
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>()
+            {
+                BsTypes.Create(BsTypes.Types.Int, 6),
+            });
+            Assertions.AssertVariable(callStack, closure, "y", expected);
+        }
+        
+        [Test]
+        public void HandlesMultipleFors()
+        {
+            var input = """
+                        a = [1, 2]
+                        b = [4, 8]
+                        z = [x + y for x in a for y in b]
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>()
+            {
+                BsTypes.Create(BsTypes.Types.Int, 5), // 1 + 4
+                BsTypes.Create(BsTypes.Types.Int, 9), // 1 + 8
+                BsTypes.Create(BsTypes.Types.Int, 6), // 2 + 4
+                BsTypes.Create(BsTypes.Types.Int, 10), // 2 + 8
+            });
+            Assertions.AssertVariable(callStack, closure, "z", expected);
+        }
+        
+        [Test]
+        public void HandlesMultipleForsAndIfs()
+        {
+            var input = """
+                        a = [1, 2]
+                        b = [4, 8]
+                        z = [x + y for x in a if x == 2 for y in b if y == 4]
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>()
+            {
+                BsTypes.Create(BsTypes.Types.Int, 6), // 2 + 4
+            });
+            Assertions.AssertVariable(callStack, closure, "z", expected);
+        }
     }
 }

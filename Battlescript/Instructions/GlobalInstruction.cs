@@ -11,7 +11,7 @@ public class GlobalInstruction : Instruction
         Name = tokens[1].Value;
     }
 
-    public GlobalInstruction(string name) : base([])
+    public GlobalInstruction(string name, int? line = null, string? expression = null) : base(line, expression)
     {
         Name = name;
     }

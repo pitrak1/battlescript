@@ -37,8 +37,8 @@ public class ListComprehensionInstruction : Instruction
             }
         }
         
-        Instructions.Insert(0, new AssignmentInstruction("=", new VariableInstruction("lstcmp"), new SquareBracketsInstruction([])));
-        lastInstruction.Instructions = [new VariableInstruction("lstcmp", new MemberInstruction("append", new ParenthesesInstruction([expressionInstruction])))];
+        Instructions.Insert(0, new AssignmentInstruction("=", new VariableInstruction("lstcmp"), new SquareBracketsInstruction([]), Line, Expression));
+        lastInstruction.Instructions = [new VariableInstruction("lstcmp", new MemberInstruction("append", new ParenthesesInstruction([expressionInstruction], null, null, Line, Expression), Line, Expression), Line, Expression)];
         return;
         
         List<Token> GetTokensInsideSquareBrackets(List<Token> t)
@@ -108,7 +108,10 @@ public class ListComprehensionInstruction : Instruction
         return index;
     }
     
-    public ListComprehensionInstruction(List<Instruction> instructions) : base([])
+    public ListComprehensionInstruction(
+        List<Instruction> instructions, 
+        int? line = null, 
+        string? expression = null) : base(line, expression)
     {
         Instructions = instructions ?? [];
     }

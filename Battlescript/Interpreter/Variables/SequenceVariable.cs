@@ -13,20 +13,22 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
     
     public override Variable? SetItemDirectly(CallStack callStack, Closure closure, Variable valueVariable, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
-        var indexVariable = index.Values[0].Interpret(callStack, closure);
-        var indexList = indexVariable as ObjectVariable;
-        var indexSequence = indexList.Values["__value"] as SequenceVariable;
+        // Unfortunately, the way this is structured is that the index here will be a list of lists, first separated by 
+        // commas then by colons.  Because we don't expect any commas, we need to only take the first index and convert
+        // to an array of Variables.
+        var indexValuesList = index.Values[0].Interpret(callStack, closure) as ObjectVariable;
+        var indexValuesSequence = BsTypes.GetListValue(indexValuesList);
 
-        if (indexSequence.Values.Count > 1)
+        if (indexValuesSequence.Values.Count > 1)
         {
             if (index.Next is null)
             {
                 if (valueVariable is SequenceVariable sequenceVariable)
                 {
-                    SetRangeIndex(callStack, sequenceVariable, indexSequence.Values);
+                    SetRangeIndex(callStack, sequenceVariable, indexValuesSequence.Values);
                 } else if (BsTypes.Is(BsTypes.Types.List, valueVariable))
                 {
-                    SetRangeIndex(callStack, (valueVariable as ObjectVariable).Values["__value"] as SequenceVariable, indexSequence.Values);
+                    SetRangeIndex(callStack, (valueVariable as ObjectVariable).Values["__value"] as SequenceVariable, indexValuesSequence.Values);
                 }
                 else
                 {
@@ -36,12 +38,12 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
             }
             else
             {
-                return GetSlice(callStack, indexSequence.Values);
+                return GetSlice(callStack, indexValuesSequence.Values);
             }
         } 
         else 
         {
-            var indexInt = BsTypes.GetIntValue(indexSequence.Values[0]);
+            var indexInt = BsTypes.GetIntValue(indexValuesSequence.Values[0]);
             if (index.Next is null)
             {
                 Values[indexInt] = valueVariable;

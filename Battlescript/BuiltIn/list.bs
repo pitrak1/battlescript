@@ -40,7 +40,8 @@ class list:
         return NotImplemented
 
     def append(self, value):
-        self.__value[len(self.__value):] = value
+        length = len(self.__value)
+        self[length:] = [value]
 
     def __bool__(self):
         return 0 < len(self.__value)

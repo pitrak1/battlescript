@@ -79,6 +79,12 @@ public static class Runner
             }
             throw;
         }
+        catch (Exception e)
+        {
+            callStack.PrintStacktrace();
+            Console.WriteLine(e.Message);
+            throw;
+        }
     }
 
     public static List<Instruction> Parse(string input)

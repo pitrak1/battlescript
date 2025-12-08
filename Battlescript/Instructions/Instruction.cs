@@ -23,6 +23,13 @@ public abstract class Instruction
         Instructions = [];
     }
 
+    public Instruction(int? line = null, string? expression = null)
+    {
+        Line = line ?? 0;
+        Expression = expression ?? "";
+        Instructions = [];
+    }
+
     // These three context are used for three distinct things:
     // - instructionContext is used for ongoing interpretations of a single instruction, i.e. a parens instruction
     // needs to know whether it's calling a function or class to be interpreted

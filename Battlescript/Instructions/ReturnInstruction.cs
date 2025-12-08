@@ -14,7 +14,10 @@ public class ReturnInstruction : Instruction
         }
     }
 
-    public ReturnInstruction(Instruction? value) : base([])
+    public ReturnInstruction(
+        Instruction? value, 
+        int? line = null, 
+        string? expression = null) : base(line, expression)
     {
         Value = value;
     }

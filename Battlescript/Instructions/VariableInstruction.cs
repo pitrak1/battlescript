@@ -10,7 +10,11 @@ public class VariableInstruction : Instruction
         ParseNext(tokens, 1);
     }
 
-    public VariableInstruction(string name, Instruction? next = null) : base([])
+    public VariableInstruction(
+        string name, 
+        Instruction? next = null, 
+        int? line = null, 
+        string? expression = null) : base(line, expression)
     {
         Name = name;
         Next = next;

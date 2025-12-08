@@ -11,7 +11,7 @@ public class NonlocalInstruction : Instruction
         Name = tokens[1].Value;
     }
 
-    public NonlocalInstruction(string name) : base([])
+    public NonlocalInstruction(string name, int? line = null, string? expression = null) : base(line, expression)
     {
         Name = name;
     }

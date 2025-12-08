@@ -22,7 +22,7 @@ public class PrincipleTypeInstruction : Instruction
         Value = tokens[0].Value;
     }
 
-    public PrincipleTypeInstruction(string value) : base([])
+    public PrincipleTypeInstruction(string value, int? line = null, string? expression = null) : base(line, expression)
     {
         Value = value;
     }

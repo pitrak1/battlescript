@@ -29,7 +29,12 @@ public class FunctionInstruction : Instruction
         Parameters = new ParameterSet(parameters!);
     }
 
-    public FunctionInstruction(string name, ParameterSet? parameters = null, List<Instruction>? instructions = null) : base([])
+    public FunctionInstruction(
+        string name, 
+        ParameterSet? parameters = null, 
+        List<Instruction>? instructions = null, 
+        int? line = null, 
+        string? expression = null) : base(line, expression)
     {
         Name = name;
         Parameters = parameters ?? new ParameterSet();

@@ -11,7 +11,11 @@ public class StringInstruction : Instruction
         IsFormatted = tokens[0].Type == Consts.TokenTypes.FormattedString;
     }
 
-    public StringInstruction(string value, bool isFormatted = false) : base([])
+    public StringInstruction(
+        string value, 
+        bool isFormatted = false, 
+        int? line = null, 
+        string? expression = null) : base(line, expression)
     {
         Value = value;
         IsFormatted = isFormatted;

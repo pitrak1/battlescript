@@ -27,7 +27,12 @@ public class OperationInstruction : Instruction
         }
     }
 
-    public OperationInstruction(string operation, Instruction? left = null, Instruction? right = null) : base([])
+    public OperationInstruction(
+        string operation, 
+        Instruction? left = null, 
+        Instruction? right = null, 
+        int? line = null, 
+        string? expression = null) : base(line, expression)
     {
         Operation = operation;
         Left = left;

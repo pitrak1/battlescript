@@ -20,7 +20,12 @@ public class AssignmentInstruction : Instruction
         Right = operands.Right!;
     }
 
-    public AssignmentInstruction(string operation, Instruction left, Instruction right) : base([])
+    public AssignmentInstruction(
+        string operation, 
+        Instruction left, 
+        Instruction right, 
+        int? line = null, 
+        string? expression = null) : base(line, expression)
     {
         Operation = operation;
         Left = left;

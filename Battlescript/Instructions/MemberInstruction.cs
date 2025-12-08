@@ -10,7 +10,11 @@ public class MemberInstruction : Instruction
         ParseNext(tokens, 2);
     }
 
-    public MemberInstruction(string value, Instruction? next = null) : base([])
+    public MemberInstruction(
+        string value, 
+        Instruction? next = null, 
+        int? line = null, 
+        string? expression = null) : base(line, expression)
     {
         Value = value;
         Next = next;

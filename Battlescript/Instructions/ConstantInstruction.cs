@@ -9,7 +9,7 @@ public class ConstantInstruction : Instruction
         Value = tokens[0].Value;
     }
 
-    public ConstantInstruction(string value) : base([])
+    public ConstantInstruction(string value, int? line = null, string? expression = null) : base(line, expression)
     {
         Value = value;
     }

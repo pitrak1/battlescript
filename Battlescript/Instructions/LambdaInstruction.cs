@@ -24,7 +24,11 @@ public class LambdaInstruction : Instruction
         Instructions = [instruction];
     }
 
-    public LambdaInstruction(ParameterSet? parameters = null, List<Instruction>? instructions = null) : base([])
+    public LambdaInstruction(
+        ParameterSet? parameters = null, 
+        List<Instruction>? instructions = null, 
+        int? line = null, 
+        string? expression = null) : base(line, expression)
     {
         Parameters = parameters ?? new ParameterSet();
         Instructions = instructions ?? [];

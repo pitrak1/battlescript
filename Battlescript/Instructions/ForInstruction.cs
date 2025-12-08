@@ -21,7 +21,12 @@ public class ForInstruction : Instruction
         Range = InstructionFactory.Create(tokens.GetRange(3, tokens.Count - 4));
     }
 
-    public ForInstruction(VariableInstruction blockVariable, Instruction range, List<Instruction>? instructions = null) : base([])
+    public ForInstruction(
+        VariableInstruction blockVariable, 
+        Instruction range, 
+        List<Instruction>? instructions = null, 
+        int? line = null, 
+        string? expression = null) : base(line, expression)
     {
         BlockVariable = blockVariable;
         Range = range;

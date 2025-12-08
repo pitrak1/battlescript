@@ -14,7 +14,12 @@ public class IfInstruction : Instruction
         Condition = InstructionFactory.Create(tokens.GetRange(1, tokens.Count - 2));
     }
 
-    public IfInstruction(Instruction condition, Instruction? next = null, List<Instruction>? instructions = null) : base([])
+    public IfInstruction(
+        Instruction condition, 
+        Instruction? next = null, 
+        List<Instruction>? instructions = null, 
+        int? line = null, 
+        string? expression = null) : base(line, expression)
     {
         Condition = condition;
         Next = next;

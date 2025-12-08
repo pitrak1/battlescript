@@ -14,7 +14,10 @@ public class WhileInstruction : Instruction
         Condition = InstructionFactory.Create(tokens.GetRange(1, tokens.Count - 2));
     }
 
-    public WhileInstruction(Instruction condition) : base([])
+    public WhileInstruction(
+        Instruction condition, 
+        int? line = null, 
+        string? expression = null) : base(line, expression)
     {
         Condition = condition;
     }

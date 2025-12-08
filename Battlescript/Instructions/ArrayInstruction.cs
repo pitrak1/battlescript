@@ -41,7 +41,9 @@ public class ArrayInstruction : Instruction
     public ArrayInstruction(
         List<Instruction?> values, 
         string? delimiter = null,
-        Instruction? next = null) : base([])
+        Instruction? next = null,
+        int? line = null, 
+        string? expression = null) : base(line, expression)
     {
         Values = values;
         Next = next;
