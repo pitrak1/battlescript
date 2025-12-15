@@ -52,8 +52,8 @@ public static class Consts
         "None",
         "as",
         "assert",
-        "async",
-        "await",
+        "async", // NOT SUPPORTED IN V1
+        "await", // NOT SUPPORTED IN V1
         "break",
         "class",
         "continue",
@@ -77,32 +77,32 @@ public static class Consts
         "try",
         "while",
         "with",
-        "yield",
+        "yield", // NOT SUPPORTED IN V1
     ];
 
     public static readonly string[] BuiltInFunctions =
     [
         "abs",
-        "aiter",
+        "aiter", // NOT SUPPORTED IN V1
         "all",
-        "anext",
+        "anext", // NOT SUPPORTED IN V1
         "any",
-        "ascii",
-        "bin",
+        "ascii", 
+        "bin", // NOT SUPPORTED IN V1
         "breakpoint",
-        "bytearray",
-        "bytes",
+        "bytearray", // NOT SUPPORTED IN V1
+        "bytes", // NOT SUPPORTED IN V1
         "callable",
-        "chr",
+        "chr", // NOT SUPPORTED IN V1
         "classmethod",
-        "compile",
-        "complex",
+        "compile", // NOT SUPPORTED IN V1
+        "complex", // NOT SUPPORTED IN V1
         "delattr",
         "dir",
         "divmod",
         "enumerate",
-        "eval",
-        "exec",
+        "eval", // NOT SUPPORTED IN V1
+        "exec", // NOT SUPPORTED IN V1
         "filter",
         "format",
         "frozenset",
@@ -110,8 +110,8 @@ public static class Consts
         "globals",
         "hasattr",
         "hash",
-        "help",
-        "hex",
+        "help", // NOT SUPPORTED IN V1
+        "hex", // NOT SUPPORTED IN V1
         "id",
         "input",
         "isinstance",
@@ -124,10 +124,10 @@ public static class Consts
         "memoryview",
         "min",
         "next",
-        "object",
-        "oct",
-        "open",
-        "ord",
+        "object", // NOT SUPPORTED IN V1
+        "oct", // NOT SUPPORTED IN V1
+        "open", // NOT SUPPORTED IN V1
+        "ord", // NOT SUPPORTED IN V1
         "pow",
         "print",
         "property",
@@ -135,14 +135,14 @@ public static class Consts
         "repr",
         "reversed",
         "round",
-        "set",
+        "set", // Can do, but might be post v1
         "setattr",
         "slice",
         "sorted",
         "staticmethod",
         "sum",
         "super",
-        "tuple",
+        "tuple", // Can do, but might be post v1
         "type",
         "vars",
         "zip"

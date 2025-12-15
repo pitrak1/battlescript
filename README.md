@@ -17,9 +17,11 @@ Battlescript is a Python-like language interpreter that is simple input/output i
 ### To Be Implemented Before V1
 
 - Implied multiplication with parentheses `5(4 + 3)`
-- All keywords except `async`/`await`/`yield`
-- All builtins
+- All keywords (These are listed in [Consts.cs](https://github.com/pitrak1/battlescript/blob/main/Battlescript/Consts.cs) with skips noted)
+- All builtins (These are listed in [Consts.cs](https://github.com/pitrak1/battlescript/blob/main/Battlescript/Consts.cs) with skips noted)
 - [All list methods](https://docs.python.org/3/tutorial/datastructures.html#more-on-lists)
+- [All dict methods](https://docs.python.org/3/tutorial/datastructures.html#dictionaries)
+- Decorators
 
 ### Post V1
 
