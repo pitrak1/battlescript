@@ -37,5 +37,6 @@ Battlescript is a Python-like language interpreter that is simple input/output i
 
 
 ### TODO
-- Make all non-python protected words begin with `__btl`
+- Make all non-python protected words begin with `__btl`, rename PrincipleTypes to ConversionTypes
+- may be able to remove interpreter contexts
 - Start going down the list of list methods

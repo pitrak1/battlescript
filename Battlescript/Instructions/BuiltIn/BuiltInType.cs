@@ -13,13 +13,13 @@ public static class BuiltInType
         switch (firstExpression)
         {
             case StringVariable:
-                return BsTypes.Create(BsTypes.Types.String, "<class '__string__'>");
+                return BsTypes.Create(BsTypes.Types.String, "<class '__btl_string__'>");
             case MappingVariable:
-                return BsTypes.Create(BsTypes.Types.String, "<class '__mapping__'>");
+                return BsTypes.Create(BsTypes.Types.String, "<class '__btl_mapping__'>");
             case NumericVariable:
-                return BsTypes.Create(BsTypes.Types.String, "<class '__numeric__'>");
+                return BsTypes.Create(BsTypes.Types.String, "<class '__btl_numeric__'>");
             case SequenceVariable:
-                return BsTypes.Create(BsTypes.Types.String, "<class '__sequence__'>");
+                return BsTypes.Create(BsTypes.Types.String, "<class '__btl_sequence__'>");
             case FunctionVariable:
                 return BsTypes.Create(BsTypes.Types.String, "<class 'function'>");
             case ClassVariable:

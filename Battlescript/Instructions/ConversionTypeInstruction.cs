@@ -1,11 +1,11 @@
 namespace Battlescript;
 
-public class PrincipleTypeInstruction : Instruction
+public class ConversionTypeInstruction : Instruction
 {
     public string Value { get; set; }
     public List<Instruction> Parameters { get; set; }
 
-    public PrincipleTypeInstruction(List<Token> tokens) : base(tokens)
+    public ConversionTypeInstruction(List<Token> tokens) : base(tokens)
     {
         if (tokens.Count > 1)
         {
@@ -22,7 +22,7 @@ public class PrincipleTypeInstruction : Instruction
         Value = tokens[0].Value;
     }
 
-    public PrincipleTypeInstruction(string value, int? line = null, string? expression = null) : base(line, expression)
+    public ConversionTypeInstruction(string value, int? line = null, string? expression = null) : base(line, expression)
     {
         Value = value;
     }
@@ -36,7 +36,7 @@ public class PrincipleTypeInstruction : Instruction
     {
         switch (Value)
         {
-            case "__numeric__":
+            case "__btl_numeric__":
                 if (Parameters.Count == 0)
                 {
                     return new NumericVariable(0);
@@ -44,7 +44,7 @@ public class PrincipleTypeInstruction : Instruction
                 
                 if (Parameters.Count > 2)
                 {
-                    throw new Exception("Too many parameters for __numeric__");
+                    throw new Exception("Too many parameters for __btl_numeric__");
                 }
 
                 // This is kind of a hacky workaround.  I'll have to give this one some thought
@@ -91,11 +91,11 @@ public class PrincipleTypeInstruction : Instruction
                 }
                 
                 return new NumericVariable(value);
-            case "__sequence__":
+            case "__btl_sequence__":
                 return new SequenceVariable();
-            case "__mapping__":
+            case "__btl_mapping__":
                 return new MappingVariable();
-            case "__string__":
+            case "__btl_string__":
                 if (Parameters.Count == 1)
                 {
                     var parameter = Parameters[0].Interpret(callStack, closure, instructionContext, objectContext, lexicalContext);

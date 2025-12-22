@@ -113,8 +113,8 @@ public static class Assertions
             case OperationInstruction operationInstruction:
                 CompareOperationInstructions(operationInstruction, expected as OperationInstruction);
                 return;
-            case PrincipleTypeInstruction principleTypeInstruction:
-                ComparePrincipleTypeInstructions(principleTypeInstruction, expected as PrincipleTypeInstruction);
+            case ConversionTypeInstruction conversionTypeInstruction:
+                CompareConversionTypeInstructions(conversionTypeInstruction, expected as ConversionTypeInstruction);
                 return;
             case ReturnInstruction returnInstruction:
                 CompareReturnInstructions(returnInstruction, expected as ReturnInstruction);
@@ -225,7 +225,7 @@ public static class Assertions
             AssertInstructionsEqual(inputInst.Right, expectedInst.Right);
         }
 
-        void ComparePrincipleTypeInstructions(PrincipleTypeInstruction inputInst, PrincipleTypeInstruction expectedInst)
+        void CompareConversionTypeInstructions(ConversionTypeInstruction inputInst, ConversionTypeInstruction expectedInst)
         {
             Assert.That(inputInst.Value, Is.EqualTo(expectedInst.Value));
             AssertInstructionListsEqual(inputInst.Parameters!, expectedInst.Parameters!);

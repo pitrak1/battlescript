@@ -254,17 +254,17 @@ public static class Consts
         Assignment,
         BuiltIn,
         Breakpoint,
-        PrincipleType,
+        ConversionType,
         Numeric,
         FormattedString
     }
     
-    public static readonly string[] PrincipleTypes =
+    public static readonly string[] ConversionTypes =
     [
-        "__numeric__",
-        "__sequence__",
-        "__mapping__",
-        "__string__",
+        "__btl_numeric__",
+        "__btl_sequence__",
+        "__btl_mapping__",
+        "__btl_string__",
     ];
     
     public static readonly string[] InstructionTypesExpectingIndent =

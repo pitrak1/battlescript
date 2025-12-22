@@ -48,7 +48,7 @@ public class MappingVariable : Variable, IEquatable<MappingVariable>
     {
         var indexVariable = index.Values[0].Interpret(callStack, closure);
         var indexList = indexVariable as ObjectVariable;
-        var indexSequence = indexList.Values["__value"] as SequenceVariable;
+        var indexSequence = indexList.Values["__btl_value"] as SequenceVariable;
         
         if (BsTypes.Is(BsTypes.Types.Int, indexSequence.Values[0]))
         {

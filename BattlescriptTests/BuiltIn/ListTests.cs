@@ -10,7 +10,7 @@ public class ListTests
     {
         var (callStack, closure) = Runner.Run("""
                                 x = []
-                                y = x.__value
+                                y = x.__btl_value
                                 """);
         Assertions.AssertVariable(callStack, closure, "y", new SequenceVariable());
     }
@@ -20,7 +20,7 @@ public class ListTests
     {
         var (callStack, closure) = Runner.Run("""
                                 x = [1, 2, 3]
-                                y = x.__value
+                                y = x.__btl_value
                                 """);
         Assertions.AssertVariable(callStack, closure, "y", new SequenceVariable([
             BsTypes.Create(BsTypes.Types.Int, 1),

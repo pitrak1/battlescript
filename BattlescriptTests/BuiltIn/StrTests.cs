@@ -83,7 +83,7 @@ public class StrTests
         public void InternalString()
         {
             var (callStack, closure) = Runner.Run("""
-                                    x = __string__("hello")
+                                    x = __btl_string__("hello")
                                     y = str(x)
                                     """);
             Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("hello")));
@@ -103,7 +103,7 @@ public class StrTests
         public void InternalNumeric()
         {
             var (callStack, closure) = Runner.Run("""
-                                    x = __numeric__(1)
+                                    x = __btl_numeric__(1)
                                     y = str(x)
                                     """);
             Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("1")));

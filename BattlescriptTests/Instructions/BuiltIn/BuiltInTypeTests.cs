@@ -34,14 +34,14 @@ public class BuiltInTypeTests
     }
     
     [Test]
-    public void HandlesInternalVariables()
+    public void HandlesConversionVariables()
     {
         var input = """
-                    y = __string__()
+                    y = __btl_string__()
                     x = type(y)
                     """;
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.String, "<class '__string__'>");
+        var expected = BsTypes.Create(BsTypes.Types.String, "<class '__btl_string__'>");
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
     

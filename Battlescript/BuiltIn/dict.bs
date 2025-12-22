@@ -1,19 +1,17 @@
 class dict:
-    __value = __mapping__()
+    __btl_value = __btl_mapping__()
 
     def __init__(self, value):
         if isinstance(value, dict):
-            self.__value = value.__value
+            self.__btl_value = value.__btl_value
         else:
-            self.__value = value
+            self.__btl_value = value
 
     def __getitem__(self, key):
-        return self.__value[key]
+        return self.__btl_value[key]
 
     def __setitem__(self, key, value):
-        self.__value[key] = value
+        self.__btl_value[key] = value
 
     def __bool__(self):
-        return 0 < len(self.__value)
-
-    
+        return 0 < len(self.__btl_value)

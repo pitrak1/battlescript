@@ -1,32 +1,32 @@
 class float(numeric):
-    __value = __numeric__(0.0)
+    __btl_value = __btl_numeric__(0.0)
 
     def __add__(self, other):
-        return float(self.__value + other.__value)
+        return float(self.__btl_value + other.__btl_value)
 
     def __sub__(self, other):
-        return float(self.__value - other.__value)
+        return float(self.__btl_value - other.__btl_value)
 
     def __mul__(self, other):
-        return float(self.__value * other.__value)
+        return float(self.__btl_value * other.__btl_value)
 
     def __truediv__(self, other):
-        return float(self.__value / other.__value)
+        return float(self.__btl_value / other.__btl_value)
 
     def __floordiv__(self, other):
-        return int(self.__value // other.__value)
+        return int(self.__btl_value // other.__btl_value)
 
     def __mod__(self, other):
-        return float(self.__value % other.__value)
+        return float(self.__btl_value % other.__btl_value)
 
     def __pow__(self, other):
-        return float(self.__value ** other.__value)
+        return float(self.__btl_value ** other.__btl_value)
 
     def __pos__(self):
-        return float(self.__value)
+        return float(self.__btl_value)
 
     def __neg__(self):
-        return float(-self.__value)
+        return float(-self.__btl_value)
 
     def __abs__(self):
         if self < 0:

@@ -44,7 +44,7 @@ public class ForInstruction : Instruction
 
         if (BsTypes.Is(BsTypes.Types.List, range))
         {
-            var values = (range.Values["__value"] as SequenceVariable).Values;
+            var values = (range.Values["__btl_value"] as SequenceVariable).Values;
             for (var i = 0; i < values.Count; i++)
             {
                 closure.SetVariable(callStack, BlockVariable, values[i]);

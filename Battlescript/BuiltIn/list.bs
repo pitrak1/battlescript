@@ -1,54 +1,53 @@
 class list:
-    __value = __sequence__()
+    __btl_value = __btl_sequence__()
 
     def __init__(self, value):
         if isinstance(value, list):
-            self.__value = value.__value
+            self.__btl_value = value.__btl_value
         else:
-            self.__value = value
+            self.__btl_value = value
 
     def __getitem__(self, key):
-        result = self.__value[key]
-        if isinstance(result, __sequence__):
+        result = self.__btl_value[key]
+        if isinstance(result, __btl_sequence__):
             return list(result)
         else:
             return result
 
     def __setitem__(self, key, value):
-        self.__value[key] = value
+        self.__btl_value[key] = value
 
     def __add__(self, other):
         if isinstance(other, list):
-            return list(self.__value + other.__value)
+            return list(self.__btl_value + other.__btl_value)
         return NotImplemented
 
     def __iadd__(self, other):
         if isinstance(other, list):
-            self.__value = self.__value + other.__value
+            self.__btl_value = self.__btl_value + other.__btl_value
             return self
         return NotImplemented
 
     def __mul__(self, other):
         if isinstance(other, int):
-            return list(self.__value * other.__value)
+            return list(self.__btl_value * other.__btl_value)
         return NotImplemented
 
     def __imul__(self, other):
         if isinstance(other, int):
-            self.__value = self.__value * other.__value
+            self.__btl_value = self.__btl_value * other.__btl_value
             return self
         return NotImplemented
 
     def append(self, value):
-        length = len(self.__value)
+        length = len(self.__btl_value)
         self[length:] = [value]
 
     def __bool__(self):
-        return 0 < len(self.__value)
+        return 0 < len(self.__btl_value)
 
     def __eq__(self, other):
-        return bool(self.__value == other.__value)
+        return bool(self.__btl_value == other.__btl_value)
 
     def __ne__(self, other):
-        return bool(self.__value != other.__value)
-        
+        return bool(self.__btl_value != other.__btl_value)

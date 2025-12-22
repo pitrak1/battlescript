@@ -201,9 +201,9 @@ public class Lexer(string input, string? fileName = null)
         {
             type = Consts.TokenTypes.BuiltIn;
         }
-        else if (Consts.PrincipleTypes.Contains(word))
+        else if (Consts.ConversionTypes.Contains(word))
         {
-            type = Consts.TokenTypes.PrincipleType;
+            type = Consts.TokenTypes.ConversionType;
         }
         
         _tokens.Add(new Token(type, word, _line, fileName, _expressionForStacktrace));

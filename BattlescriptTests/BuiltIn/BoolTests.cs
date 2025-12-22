@@ -10,7 +10,7 @@ public class BoolTests
     {
         var (callStack, closure) = Runner.Run("""
                                 x = True
-                                y = x.__value
+                                y = x.__btl_value
                                 """);
         Assertions.AssertVariable(callStack, closure, "y", new NumericVariable(1));
     }
@@ -20,7 +20,7 @@ public class BoolTests
     {
         var (callStack, closure) = Runner.Run("""
                                 x = False
-                                y = x.__value
+                                y = x.__btl_value
                                 """);
         Assertions.AssertVariable(callStack, closure, "y", new NumericVariable(0));
     }

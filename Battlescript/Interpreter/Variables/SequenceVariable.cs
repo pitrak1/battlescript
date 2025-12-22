@@ -28,7 +28,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
                     SetRangeIndex(callStack, sequenceVariable, indexValuesSequence.Values);
                 } else if (BsTypes.Is(BsTypes.Types.List, valueVariable))
                 {
-                    SetRangeIndex(callStack, (valueVariable as ObjectVariable).Values["__value"] as SequenceVariable, indexValuesSequence.Values);
+                    SetRangeIndex(callStack, (valueVariable as ObjectVariable).Values["__btl_value"] as SequenceVariable, indexValuesSequence.Values);
                 }
                 else
                 {
@@ -82,7 +82,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         var indexVariable = index.Values[0].Interpret(callStack, closure);
         // For single index, this is an int
         var indexList = indexVariable as ObjectVariable;
-        var indexSequence = indexList.Values["__value"] as SequenceVariable;
+        var indexSequence = indexList.Values["__btl_value"] as SequenceVariable;
         
         // var indexInt = BuiltInTypeHelper.IsVariableBuiltInClass(callStack, "int", indexVariable);
         if (indexSequence.Values.Count > 1)

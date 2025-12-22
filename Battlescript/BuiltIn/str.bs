@@ -1,48 +1,48 @@
 class str:
-    __value = __string__()
+    __btl_value = __btl_string__()
 
     def __init__(self, value):
         print('got here')
         print(value)
         if isinstance(value, str):
-            self.__value = value.__value
+            self.__btl_value = value.__btl_value
         else:
-            self.__value = __string__(value)
+            self.__btl_value = __btl_string__(value)
 
     def __eq__(self, other):
-        return bool(self.__value == other.__value)
+        return bool(self.__btl_value == other.__btl_value)
 
     def __ne__(self, other):
-        return bool(self.__value != other.__value)
+        return bool(self.__btl_value != other.__btl_value)
 
     def __add__(self, other):
-        return str(self.__value + other.__value)
+        return str(self.__btl_value + other.__btl_value)
 
     def __radd__(self, other):
-        return str(other.__value + self.__value)
+        return str(other.__btl_value + self.__btl_value)
 
     def __iadd__(self, other):
-        self.__value = self.__value + other.__value
+        self.__btl_value = self.__btl_value + other.__btl_value
         return self
 
     def __mul__(self, other):
-        return str(self.__value * other.__value)
+        return str(self.__btl_value * other.__btl_value)
 
     def __rmul__(self, other):
-        return str(other.__value * self.__value)
+        return str(other.__btl_value * self.__btl_value)
 
     def __imul__(self, other):
-        self.__value = self.__value * other.__value
+        self.__btl_value = self.__btl_value * other.__btl_value
         return self
 
     def __len__(self):
-        return len(self.__value)
+        return len(self.__btl_value)
 
     def __bool__(self):
-        return 0 < len(self.__value)
+        return 0 < len(self.__btl_value)
 
     def __str__(self):
-        return self.__value
+        return self.__btl_value
 
     def __repr__(self):
-        return self.__value
+        return self.__btl_value

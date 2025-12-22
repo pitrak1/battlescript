@@ -16,12 +16,12 @@ public static class Operator
             if (operation == "/=" && BsTypes.Is(BsTypes.Types.Int, result))
             {
                 var objectResult = result as ObjectVariable;
-                var doubleResult = (objectResult.Values["__value"] as NumericVariable).Value;
+                var doubleResult = (objectResult.Values["__btl_value"] as NumericVariable).Value;
                 closure.SetVariable(callStack, left, BsTypes.Create(BsTypes.Types.Float, doubleResult));
             } else if (operation == "//=" && BsTypes.Is(BsTypes.Types.Float, result))
             {
                 var objectResult = result as ObjectVariable;
-                var intResult = (objectResult.Values["__value"] as NumericVariable).Value;
+                var intResult = (objectResult.Values["__btl_value"] as NumericVariable).Value;
                 closure.SetVariable(callStack, left, BsTypes.Create(BsTypes.Types.Int, intResult));
             }
             else

@@ -1,80 +1,80 @@
 class numeric:
     def __init__(self, value):
         if isinstance(value, numeric):
-            self.__value = value.__value
+            self.__btl_value = value.__btl_value
         else:
-            self.__value = __numeric__(value)
+            self.__btl_value = __btl_numeric__(value)
 
     def __eq__(self, other):
-        return bool(self.__value == other.__value)
+        return bool(self.__btl_value == other.__btl_value)
 
     def __ne__(self, other):
-        return bool(self.__value != other.__value)
+        return bool(self.__btl_value != other.__btl_value)
 
     def __lt__(self, other):
-        return bool(self.__value < other.__value)
+        return bool(self.__btl_value < other.__btl_value)
 
     def __rlt__(self, other):
-        return bool(other.__value < self.__value)
+        return bool(other.__btl_value < self.__btl_value)
 
     def __gt__(self, other):
-        return bool(self.__value > other.__value)
+        return bool(self.__btl_value > other.__btl_value)
 
     def __rgt__(self, other):
-        return bool(other.__value > self.__value)
+        return bool(other.__btl_value > self.__btl_value)
 
     def __le__(self, other):
-        return bool(self.__value <= other.__value)
+        return bool(self.__btl_value <= other.__btl_value)
 
     def __rle__(self, other):
-        return bool(other.__value <= self.__value)
+        return bool(other.__btl_value <= self.__btl_value)
 
     def __ge__(self, other):
-        return bool(self.__value >= other.__value)
+        return bool(self.__btl_value >= other.__btl_value)
 
     def __rge__(self, other):
-        return bool(other.__value >= self.__value)
+        return bool(other.__btl_value >= self.__btl_value)
 
     def __iadd__(self, other):
         if isinstance(other, numeric):
-            self.__value = self.__value + other.__value
+            self.__btl_value = self.__btl_value + other.__btl_value
         return self
 
     def __isub__(self, other):
         if isinstance(other, numeric):
-            self.__value = self.__value - other.__value
+            self.__btl_value = self.__btl_value - other.__btl_value
         return self
 
     def __imul__(self, other):
         if isinstance(other, numeric):
-            self.__value = self.__value * other.__value
+            self.__btl_value = self.__btl_value * other.__btl_value
         return self
 
     def __itruediv__(self, other):
         if isinstance(other, numeric):
-            self.__value = self.__value / other.__value
+            self.__btl_value = self.__btl_value / other.__btl_value
         return self
 
     def __ifloordiv__(self, other):
         if isinstance(other, numeric):
-            self.__value = self.__value // other.__value
+            self.__btl_value = self.__btl_value // other.__btl_value
         return self
 
     def __imod__(self, other):
         if isinstance(other, numeric):
-            self.__value = self.__value % other.__value
+            self.__btl_value = self.__btl_value % other.__btl_value
         return self
 
     def __ipow__(self, other):
         if isinstance(other, numeric):
-            self.__value = self.__value ** other.__value
+            self.__btl_value = self.__btl_value ** other.__btl_value
         return self
 
     def __str__(self):
-        return str(self.__value)
+        return str(self.__btl_value)
 
     def __repr__(self):
-        return str(self.__value)
+        return str(self.__btl_value)
 
     def __bool__(self):
         return self != 0

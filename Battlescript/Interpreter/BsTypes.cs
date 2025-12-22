@@ -103,23 +103,23 @@ public static class BsTypes
 
         if (value is int || value is double)
         {
-            objectVariable.Values["__value"] = new NumericVariable(value);
+            objectVariable.Values["__btl_value"] = new NumericVariable(value);
             return objectVariable;
         } else if (value is bool)
         {
-            objectVariable.Values["__value"] = new NumericVariable(value ? 1 : 0);
+            objectVariable.Values["__btl_value"] = new NumericVariable(value ? 1 : 0);
             return objectVariable;
         } else if (value is List<Variable>)
         {
-            objectVariable.Values["__value"] = new SequenceVariable(value);
+            objectVariable.Values["__btl_value"] = new SequenceVariable(value);
             return objectVariable;
         } else if (value is string)
         {
-            objectVariable.Values["__value"] = new StringVariable(value);
+            objectVariable.Values["__btl_value"] = new StringVariable(value);
             return objectVariable;
         }
         
-        objectVariable.Values["__value"] = value;
+        objectVariable.Values["__btl_value"] = value;
         return objectVariable;
     }
 
@@ -141,7 +141,7 @@ public static class BsTypes
     {
         if (Is(Types.Int, variable) && variable is ObjectVariable objectVariable)
         {
-            var valueVariable = objectVariable.Values["__value"];
+            var valueVariable = objectVariable.Values["__btl_value"];
             return ((NumericVariable)valueVariable).Value;
         }
         else
@@ -154,7 +154,7 @@ public static class BsTypes
     {
         if (Is(Types.Float, variable) && variable is ObjectVariable objectVariable)
         {
-            var valueVariable = objectVariable.Values["__value"];
+            var valueVariable = objectVariable.Values["__btl_value"];
             return ((NumericVariable)valueVariable).Value;
         }
         else
@@ -167,7 +167,7 @@ public static class BsTypes
     {
         if (Is(Types.Bool, variable) && variable is ObjectVariable objectVariable)
         {
-            var valueVariable = objectVariable.Values["__value"];
+            var valueVariable = objectVariable.Values["__btl_value"];
             return ((NumericVariable)valueVariable).Value != 0;
         }
         else
@@ -180,7 +180,7 @@ public static class BsTypes
     {
         if (Is(Types.List, variable) && variable is ObjectVariable objectVariable)
         {
-            var valueVariable = objectVariable.Values["__value"] as SequenceVariable;
+            var valueVariable = objectVariable.Values["__btl_value"] as SequenceVariable;
             return valueVariable!;
         }
         else
@@ -193,7 +193,7 @@ public static class BsTypes
     {
         if (Is(Types.Dictionary, variable) && variable is ObjectVariable objectVariable)
         {
-            var valueVariable = objectVariable.Values["__value"] as MappingVariable;
+            var valueVariable = objectVariable.Values["__btl_value"] as MappingVariable;
             return valueVariable!;
         }
         else
@@ -206,7 +206,7 @@ public static class BsTypes
     {
         if (Is(Types.String, variable) && variable is ObjectVariable objectVariable)
         {
-            var valueVariable = objectVariable.Values["__value"] as StringVariable;
+            var valueVariable = objectVariable.Values["__btl_value"] as StringVariable;
             return valueVariable!.Value;
         }
         else

@@ -10,14 +10,14 @@ public static class BuiltInIsInstance
         }
         
         var objectExpression = arguments[0].Interpret(callStack, closure);
-        if (arguments[1] is PrincipleTypeInstruction principleTypeInstruction)
+        if (arguments[1] is ConversionTypeInstruction conversionTypeInstruction)
         {
-            switch (principleTypeInstruction.Value)
+            switch (conversionTypeInstruction.Value)
             {
-                case "__numeric__":
+                case "__btl_numeric__":
                     return BsTypes.Create(BsTypes.Types.Bool,
                         objectExpression is NumericVariable);
-                case "__sequence__":
+                case "__btl_sequence__":
                     return BsTypes.Create(BsTypes.Types.Bool, objectExpression is SequenceVariable);
                 default:
                     return BsTypes.Create(BsTypes.Types.Bool, false);

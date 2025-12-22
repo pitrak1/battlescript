@@ -10,7 +10,7 @@ public class FloatTests
     {
         var (callStack, closure) = Runner.Run("""
                                 x = 0.0
-                                y = x.__value
+                                y = x.__btl_value
                                 """);
         Assertions.AssertVariable(callStack, closure, "y", new NumericVariable(0));
     }
@@ -20,7 +20,7 @@ public class FloatTests
     {
         var (callStack, closure) = Runner.Run("""
                                 x = 5.0
-                                y = x.__value
+                                y = x.__btl_value
                                 """);
         Assertions.AssertVariable(callStack, closure, "y", new NumericVariable(5));
     }
@@ -270,7 +270,7 @@ public class FloatTests
         public void InternalString()
         {
             var (callStack, closure) = Runner.Run("""
-                                    x = __string__("1.45")
+                                    x = __btl_string__("1.45")
                                     y = float(x)
                                     """);
             Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(1.45)));
@@ -290,7 +290,7 @@ public class FloatTests
         public void InternalNumeric()
         {
             var (callStack, closure) = Runner.Run("""
-                                    x = __numeric__(1.45)
+                                    x = __btl_numeric__(1.45)
                                     y = float(x)
                                     """);
             Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(1.45)));

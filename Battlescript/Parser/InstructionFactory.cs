@@ -74,9 +74,9 @@ public static class InstructionFactory
                     throw new ParserUnexpectedTokenException(tokens[0]);
             }
         }
-        else if (tokens[0].Type == Consts.TokenTypes.PrincipleType)
+        else if (tokens[0].Type == Consts.TokenTypes.ConversionType)
         {
-            return new PrincipleTypeInstruction(tokens);
+            return new ConversionTypeInstruction(tokens);
         }
         else if (commaIndex != -1 || colonIndex != -1)
         {
