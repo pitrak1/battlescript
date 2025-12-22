@@ -6,7 +6,7 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
     public ParameterSet Parameters { get; set; }
     public List<Instruction> Instructions { get; set; }
     public Closure FunctionClosure { get; set; }
-
+    
     public FunctionVariable(string? name, Closure closure, ParameterSet? parameters = null, List<Instruction>? instructions = null)
     {
         Name = name;
@@ -20,8 +20,7 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
         var lineValue = inst?.Line ?? 0;
         var expressionValue = inst?.Expression ?? "";
         callStack.AddFrame(lineValue, expressionValue, Name);
-        var newClosure = new Closure(FunctionClosure);
-        // callStack.AddFrame(inst.Line, inst.Expression, Name);
+        var newClosure = new Closure(FunctionClosure, this);
         arguments.ApplyToMemory(callStack, newClosure, Parameters);
         var returnValue = RunInstructions(callStack, newClosure);
         callStack.RemoveFrame();

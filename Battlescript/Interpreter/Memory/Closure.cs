@@ -1,23 +1,22 @@
 namespace Battlescript;
 
 public class Closure
-{
-    public enum ClosureTypes { Function, Class }
+{ 
     public List<ClosureScope> Scopes { get; set; }
-
+    
     public Closure()
     {
         Scopes = [new ClosureScope()];
     }
 
-    public Closure(Closure closure, ClosureTypes type = ClosureTypes.Function)
+    public Closure(Closure closure, Variable? owner = null)
     {
         Scopes = [];
         foreach (var scope in closure.Scopes)
         {
             Scopes.Add(scope);
         }
-        Scopes.Add(new ClosureScope(type));
+        Scopes.Add(new ClosureScope(owner));
     }
     
     public Variable? GetVariable(CallStack callStack, string name)
@@ -29,7 +28,7 @@ public class Closure
     {
         for (var i = Scopes.Count - 1; i >= 0; i--)
         {
-            if (Scopes[i].Type == ClosureTypes.Function && Scopes[i].Values.ContainsKey(variableInstruction.Name))
+            if (Scopes[i].IsFunctionScope() && Scopes[i].Values.ContainsKey(variableInstruction.Name))
             {
                 var foundVariable = Scopes[i].Values[variableInstruction.Name];
                 if (variableInstruction.Next is SquareBracketsInstruction squareBracketsInstruction)
@@ -109,11 +108,6 @@ public class Closure
         {
             scope.Values[variableInstruction.Name] = valueVariable;
         }
-    }
-
-    public Dictionary<string, Variable> GetLastScope()
-    {
-        return Scopes[^1].Values;
     }
 
     public void CreateGlobalReference(string name)

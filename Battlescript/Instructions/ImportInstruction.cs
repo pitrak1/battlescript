@@ -78,7 +78,7 @@ public class ImportInstruction : Instruction
         var newClosure = new Closure(closure);
         Runner.RunFilePath(callStack, newClosure, FilePath);
         callStack.RemoveFrame();
-        var importedScope = newClosure.GetLastScope();
+        var importedScope = newClosure.Scopes[^1].Values.ToDictionary();
         
         foreach (var name in ImportNames)
         {

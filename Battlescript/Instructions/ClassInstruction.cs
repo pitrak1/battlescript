@@ -60,7 +60,8 @@ public class ClassInstruction : Instruction
         }
         
         callStack.AddFrame(Line, Expression, Name);
-        var newClosure = new Closure(closure, Closure.ClosureTypes.Class);
+        var classVariable = new ClassVariable(Name, [], closure, superclasses);
+        var newClosure = new Closure(closure, classVariable);
 
         foreach (var instruction in Instructions)
         {
@@ -68,8 +69,8 @@ public class ClassInstruction : Instruction
         }
 
         callStack.RemoveFrame();
-        var values = newClosure.GetLastScope();
-        var classVariable = new ClassVariable(Name, values, closure, superclasses);
+        var values = newClosure.Scopes[^1].Values.ToDictionary();
+        classVariable.Values = values;
         closure.SetVariable(callStack, new VariableInstruction(Name), classVariable);
         return classVariable;
     }
