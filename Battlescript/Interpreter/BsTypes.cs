@@ -17,6 +17,7 @@ public static class BsTypes
         ValueError,
         TypeError,
         NameError,
+        NoneType,
     }
     
     public static readonly string[] TypeStrings = [
@@ -33,6 +34,7 @@ public static class BsTypes
         "ValueError",
         "TypeError",
         "NameError",
+        "NoneType",
     ];
     
     public static readonly Dictionary<string, Types> StringsToTypes = new() {
@@ -49,6 +51,7 @@ public static class BsTypes
         {"ValueError", Types.ValueError},
         {"TypeError", Types.TypeError},
         {"NameError", Types.NameError},
+        {"NoneType", Types.NoneType},
     };
     
     public static readonly Dictionary<Types, string> TypesToStrings = new() {
@@ -65,12 +68,14 @@ public static class BsTypes
         {Types.ValueError, "ValueError"},
         {Types.TypeError, "TypeError"},
         {Types.NameError, "NameError"},
+        {Types.NoneType, "NoneType"},
     };
     
     public static Dictionary<Types, ClassVariable> TypeReferences = [];
 
     public static Variable True;
     public static Variable False;
+    public static Variable None;
     
     public static void PopulateBsTypeReference(CallStack callStack, Closure closure, string builtin)
     {
@@ -82,6 +87,7 @@ public static class BsTypes
     {
         True = Create(Types.Bool, new NumericVariable(1));
         False = Create(Types.Bool, new NumericVariable(0));
+        None = Create(Types.NoneType, new ConstantVariable());
     }
     
     public static bool Is(Types type, Variable variable)

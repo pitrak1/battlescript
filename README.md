@@ -33,3 +33,9 @@ Battlescript is a Python-like language interpreter that is simple input/output i
 - `/` and `*` for defining position-only and keyword-only arguments in function definitions
 - support for documentation strings and `__doc__`
 - annotations of function headers and `__annotations__`
+
+
+
+### TODO
+- Make all non-python protected words begin with `__btl`
+- Start going down the list of list methods

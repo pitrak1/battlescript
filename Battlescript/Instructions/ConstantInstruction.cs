@@ -21,13 +21,14 @@ public class ConstantInstruction : Instruction
         ObjectVariable? objectContext = null,
         ClassVariable? lexicalContext = null)
     {
-        if (Value == "True" || Value == "False")
+        switch (Value)
         {
-            return BsTypes.Create(BsTypes.Types.Bool, Value == "True");
-        }
-        else
-        {
-            return new ConstantVariable();
+            case "True":
+                return BsTypes.True;
+            case "False":
+                return BsTypes.False;
+            default:
+                return BsTypes.None;
         }
     }
 }
