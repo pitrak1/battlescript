@@ -60,7 +60,7 @@ public abstract class Variable
         var result = GetItemDirectly(callStack, closure, index, objectContext);
         if (index.Next is not null)
         {
-            return index.Next.Interpret(callStack, closure, result, objectContext);
+            return index.Next.Interpret(callStack, closure, result);
         }
         else
         {
@@ -82,7 +82,7 @@ public abstract class Variable
         var result = GetMemberDirectly(callStack, closure, member, objectContext);
         if (member.Next is not null)
         {
-            return member.Next.Interpret(callStack, closure, result, objectContext);
+            return member.Next.Interpret(callStack, closure, result);
         }
         else
         {

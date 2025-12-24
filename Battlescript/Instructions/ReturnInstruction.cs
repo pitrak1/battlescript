@@ -22,12 +22,9 @@ public class ReturnInstruction : Instruction
         Value = value;
     }
 
-    public override Variable? Interpret(
-        CallStack callStack,
+    public override Variable? Interpret(CallStack callStack,
         Closure closure,
-        Variable? instructionContext = null,
-        ObjectVariable? objectContext = null,
-        ClassVariable? lexicalContext = null)
+        Variable? instructionContext = null)
     {
         var returnValue = Value?.Interpret(callStack, closure);
         throw new InternalReturnException(returnValue);

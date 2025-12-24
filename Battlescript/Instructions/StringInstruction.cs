@@ -21,12 +21,9 @@ public class StringInstruction : Instruction
         IsFormatted = isFormatted;
     }
     
-    public override Variable? Interpret(
-        CallStack callStack,
+    public override Variable? Interpret(CallStack callStack,
         Closure closure,
-        Variable? instructionContext = null,
-        ObjectVariable? objectContext = null,
-        ClassVariable? lexicalContext = null)
+        Variable? instructionContext = null)
     {
         var value = Value;
         if (IsFormatted)

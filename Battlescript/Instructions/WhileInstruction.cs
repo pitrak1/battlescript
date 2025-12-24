@@ -22,12 +22,9 @@ public class WhileInstruction : Instruction
         Condition = condition;
     }
 
-    public override Variable? Interpret(
-        CallStack callStack,
+    public override Variable? Interpret(CallStack callStack,
         Closure closure,
-        Variable? instructionContext = null,
-        ObjectVariable? objectContext = null,
-        ClassVariable? lexicalContext = null)
+        Variable? instructionContext = null)
     {
         var condition = Condition.Interpret(callStack, closure);
         while (Truthiness.IsTruthy(callStack, closure, condition, this))

@@ -35,12 +35,9 @@ public class ClassInstruction : Instruction
         Superclasses = superclasses ?? [];
     }
 
-    public override Variable? Interpret(
-        CallStack callStack,
+    public override Variable? Interpret(CallStack callStack,
         Closure closure,
-        Variable? instructionContext = null,
-        ObjectVariable? objectContext = null,
-        ClassVariable? lexicalContext = null)
+        Variable? instructionContext = null)
     {
         List<ClassVariable> superclasses = new List<ClassVariable>();
         if (Superclasses.Count > 0)

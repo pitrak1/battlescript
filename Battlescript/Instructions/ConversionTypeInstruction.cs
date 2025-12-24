@@ -27,12 +27,9 @@ public class ConversionTypeInstruction : Instruction
         Value = value;
     }
     
-    public override Variable? Interpret(        
-        CallStack callStack,
+    public override Variable? Interpret(CallStack callStack,
         Closure closure,
-        Variable? instructionContext = null,
-        ObjectVariable? objectContext = null,
-        ClassVariable? lexicalContext = null)
+        Variable? instructionContext = null)
     {
         switch (Value)
         {
@@ -98,7 +95,7 @@ public class ConversionTypeInstruction : Instruction
             case "__btl_string__":
                 if (Parameters.Count == 1)
                 {
-                    var parameter = Parameters[0].Interpret(callStack, closure, instructionContext, objectContext, lexicalContext);
+                    var parameter = Parameters[0].Interpret(callStack, closure, instructionContext);
                     if (parameter is StringVariable stringVariable)
                     {
                         return stringVariable;

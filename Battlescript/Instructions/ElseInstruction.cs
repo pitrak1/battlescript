@@ -29,12 +29,9 @@ public class ElseInstruction : Instruction
         Instructions = instructions ?? [];
     }
 
-    public override Variable? Interpret(
-        CallStack callStack,
+    public override Variable? Interpret(CallStack callStack,
         Closure closure,
-        Variable? instructionContext = null,
-        ObjectVariable? objectContext = null,
-        ClassVariable? lexicalContext = null)
+        Variable? instructionContext = null)
     {
         if (Condition is not null)
         {
@@ -48,7 +45,7 @@ public class ElseInstruction : Instruction
 
             } else if (Next is not null)
             {
-                return Next.Interpret(callStack, closure, instructionContext, objectContext, lexicalContext);
+                return Next.Interpret(callStack, closure, instructionContext);
             }
         }
         else

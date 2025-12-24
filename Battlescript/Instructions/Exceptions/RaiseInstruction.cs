@@ -11,12 +11,9 @@ public class RaiseInstruction : Instruction
         Value = InstructionFactory.Create(tokens.GetRange(1, tokens.Count - 1));
     }
     
-    public override Variable? Interpret(
-        CallStack callStack,
+    public override Variable? Interpret(CallStack callStack,
         Closure closure,
-        Variable? instructionContext = null,
-        ObjectVariable? objectContext = null,
-        ClassVariable? lexicalContext = null)
+        Variable? instructionContext = null)
     {
         var exception = Value?.Interpret(callStack, closure);
         // callStack.CurrentStack.AddFrame(this);

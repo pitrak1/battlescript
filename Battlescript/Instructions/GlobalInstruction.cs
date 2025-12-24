@@ -16,12 +16,9 @@ public class GlobalInstruction : Instruction
         Name = name;
     }
 
-    public override Variable? Interpret(
-        CallStack callStack,
+    public override Variable? Interpret(CallStack callStack,
         Closure closure,
-        Variable? instructionContext = null,
-        ObjectVariable? objectContext = null,
-        ClassVariable? lexicalContext = null)
+        Variable? instructionContext = null)
     {
         closure.CreateGlobalReference(Name);
         return null;

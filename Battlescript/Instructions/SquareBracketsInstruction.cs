@@ -26,16 +26,13 @@ public class SquareBracketsInstruction : ArrayInstruction
     {
     }
 
-    public override Variable? Interpret(
-        CallStack callStack,
+    public override Variable? Interpret(CallStack callStack,
         Closure closure,
-        Variable? instructionContext = null,
-        ObjectVariable? objectContext = null,
-        ClassVariable? lexicalContext = null)
+        Variable? instructionContext = null)
     {
         if (instructionContext is not null)
         {
-            return instructionContext.GetItem(callStack, closure, this, objectContext);
+            return instructionContext.GetItem(callStack, closure, this, instructionContext as ObjectVariable);
         }
         else
         {

@@ -26,12 +26,9 @@ public class ParenthesesInstruction : ArrayInstruction
     {
     }
 
-    public override Variable? Interpret(
-        CallStack callStack,
+    public override Variable? Interpret(CallStack callStack,
         Closure closure,
-        Variable? instructionContext = null,
-        ObjectVariable? objectContext = null,
-        ClassVariable? lexicalContext = null)
+        Variable? instructionContext = null)
     {
         if (instructionContext is FunctionVariable functionVariable)
         {

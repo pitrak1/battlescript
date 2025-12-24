@@ -26,12 +26,9 @@ public class IfInstruction : Instruction
         Instructions = instructions ?? [];
     }
 
-    public override Variable? Interpret(
-        CallStack callStack,
+    public override Variable? Interpret(CallStack callStack,
         Closure closure,
-        Variable? instructionContext = null,
-        ObjectVariable? objectContext = null,
-        ClassVariable? lexicalContext = null)
+        Variable? instructionContext = null)
     {
         var condition = Condition.Interpret(callStack, closure);
         if (Truthiness.IsTruthy(callStack, closure, condition, this))
@@ -43,7 +40,7 @@ public class IfInstruction : Instruction
         }
         else if (Next is not null)
         {
-            Next.Interpret(callStack, closure, instructionContext, objectContext, lexicalContext);
+            Next.Interpret(callStack, closure, instructionContext);
         }
 
         return null;

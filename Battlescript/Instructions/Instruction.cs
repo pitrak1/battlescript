@@ -39,9 +39,7 @@ public abstract class Instruction
     public virtual Variable? Interpret(
         CallStack callStack,
         Closure closure,
-        Variable? instructionContext = null,
-        ObjectVariable? objectContext = null,
-        ClassVariable? lexicalContext = null)
+        Variable? instructionContext = null)
     {
         throw new Exception($"Instructions of type {GetType().Name} are not meant to be interpreted directly");
     }

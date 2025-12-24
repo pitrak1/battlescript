@@ -34,12 +34,9 @@ public class BuiltInInstruction : Instruction
         Next = next;
     }
     
-    public override Variable? Interpret(
-        CallStack callStack,
+    public override Variable? Interpret(CallStack callStack,
         Closure closure,
-        Variable? instructionContext = null,
-        ObjectVariable? objectContext = null,
-        ClassVariable? lexicalContext = null)
+        Variable? instructionContext = null)
     {
         switch (Name)
         {

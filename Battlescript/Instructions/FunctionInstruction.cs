@@ -41,12 +41,9 @@ public class FunctionInstruction : Instruction
         Instructions = instructions ?? [];
     }
 
-    public override Variable? Interpret(
-        CallStack callStack,
+    public override Variable? Interpret(CallStack callStack,
         Closure closure,
-        Variable? instructionContext = null,
-        ObjectVariable? objectContext = null,
-        ClassVariable? lexicalContext = null)
+        Variable? instructionContext = null)
     {
         var functionValue = new FunctionVariable(Name, closure, Parameters, Instructions);
         closure.SetVariable(callStack, new VariableInstruction(Name), functionValue);
