@@ -17,12 +17,12 @@ public static class StringUtilities
             var reprFunc = objectVariable.GetMember(callStack, closure, new MemberInstruction("__repr__"));
             if (strFunc is FunctionVariable funcVariable)
             {
-                var strResult = funcVariable.RunFunction(callStack, closure, new ArgumentSet([objectVariable]));
+                var strResult = funcVariable.RunFunction(callStack, closure, new ArgumentSet([]));
                 return GetVariableAsString(callStack, closure, strResult);
             }
             else if (reprFunc is FunctionVariable reprVariable)
             {
-                var reprResult = reprVariable.RunFunction(callStack, closure, new ArgumentSet([objectVariable]));
+                var reprResult = reprVariable.RunFunction(callStack, closure, new ArgumentSet([]));
                 return GetVariableAsString(callStack, closure, reprResult);
             }
             else

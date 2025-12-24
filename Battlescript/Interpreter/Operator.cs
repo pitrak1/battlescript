@@ -261,21 +261,21 @@ public static class Operator
         {
             if (right is null)
             {
-                return leftOverride.RunFunction(callStack, closure, new ArgumentSet([left]), originalInstruction);
+                return leftOverride.RunFunction(callStack, closure, new ArgumentSet([]), originalInstruction);
             }
             else
             {
-                return leftOverride.RunFunction(callStack, closure, new ArgumentSet([left, right]), originalInstruction);
+                return leftOverride.RunFunction(callStack, closure, new ArgumentSet([right]), originalInstruction);
             }
         } else if (rightOverride is not null)
         {
             if (left is null)
             {
-                return rightOverride.RunFunction(callStack, closure, new ArgumentSet([right]), originalInstruction);
+                return rightOverride.RunFunction(callStack, closure, new ArgumentSet([]), originalInstruction);
             }
             else
             {
-                return rightOverride.RunFunction(callStack, closure, new ArgumentSet([left, right]), originalInstruction);
+                return rightOverride.RunFunction(callStack, closure, new ArgumentSet([left]), originalInstruction);
             }
         }
         else

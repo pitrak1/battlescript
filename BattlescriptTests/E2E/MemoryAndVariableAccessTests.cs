@@ -238,6 +238,32 @@ public class MemoryAndVariableAccessTests
                 Assertions.AssertVariable(callStack, closure, "x", expectedX);
                 Assertions.AssertVariable(callStack, closure, "y", expectedY);
             }
+            
+            [Test]
+            public void CreatesClosuresWithSelf()
+            {
+                var input = """
+                            class MyClass():
+                                def __init__(self, value):
+                                    self.y = value
+                            
+                                def my_method(self, x):
+                                    return x * self.y
+                            
+                            a = MyClass(5)
+                            b = MyClass(10)
+                            method1 = a.my_method
+                            method2 = b.my_method
+
+                            x = method1(2)
+                            y = method2(2)
+                            """;
+                var (callStack, closure) = Runner.Run(input);
+                var expectedX = BsTypes.Create(BsTypes.Types.Int, 10);
+                var expectedY = BsTypes.Create(BsTypes.Types.Int, 20);
+                Assertions.AssertVariable(callStack, closure, "x", expectedX);
+                Assertions.AssertVariable(callStack, closure, "y", expectedY);
+            }
         }
     }
     

@@ -35,31 +35,21 @@ public class ParenthesesInstruction : ArrayInstruction
     {
         if (instructionContext is FunctionVariable functionVariable)
         {
-            // var stackUpdates = callStack.CurrentStack.AddFrame(this, null, functionVariable.Name);
-            var returnValue = functionVariable.RunFunction(callStack, closure, new ArgumentSet(callStack, closure, Values!, objectContext), this);
-            // callStack.CurrentStack.PopFrame(stackUpdates);
-            return returnValue;
+            return functionVariable.RunFunction(callStack, closure, new ArgumentSet(callStack, closure, Values!), this);
         }
         else if (instructionContext is ClassVariable classVariable)
         {
             var objectVariable = classVariable.CreateObject();
-            RunConstructor(callStack, closure, objectVariable);
+            var constructor = objectVariable.GetMember(callStack, closure, new MemberInstruction("__init__"));
+            if (constructor is FunctionVariable constructorVariable)
+            {
+                constructorVariable.RunFunction(callStack, closure, new ArgumentSet(callStack, closure, Values!), this);
+            }
             return objectVariable;
         }
         else
         {
             throw new Exception("Parens must follow a function or class");
-        }
-    }
-    
-    private void RunConstructor(CallStack callStack, Closure closure, ObjectVariable objectVariable)
-    {
-        var constructor = objectVariable.Class.GetMember(callStack, closure, new MemberInstruction("__init__"));
-        if (constructor is FunctionVariable constructorVariable)
-        {
-            // var stackUpdates = callStack.CurrentStack.AddFrame(this, null, "__init__");
-            constructorVariable.RunFunction(callStack, closure, new ArgumentSet(callStack, closure, Values!, objectVariable), this);
-            // callStack.CurrentStack.PopFrame(stackUpdates);
         }
     }
 }

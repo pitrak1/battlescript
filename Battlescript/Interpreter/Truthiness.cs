@@ -22,7 +22,7 @@ public static class Truthiness
                 var boolFunc = objectVariable.GetMember(callStack, closure, new MemberInstruction("__bool__"));
                 if (boolFunc is FunctionVariable funcVariable)
                 {
-                    var result = funcVariable.RunFunction(callStack, closure, new ArgumentSet([objectVariable]), inst);
+                    var result = funcVariable.RunFunction(callStack, closure, new ArgumentSet([]), inst);
                     return BsTypes.Is(BsTypes.Types.Bool, result) && BsTypes.GetBoolValue(result);
                 }
                 else

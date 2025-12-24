@@ -37,5 +37,5 @@ Battlescript is a Python-like language interpreter that is simple input/output i
 
 
 ### TODO
-- may be able to remove interpreter contexts
+- may be able to remove interpreter contexts (Update: we cannot remove interpreter contexts.  In order to do so, we would need to associate a function variable as defined in a class with a particular instance of that class.  This could possibly be done by creating some kind of a "method wrapper' object htat just contains a function and an object variable, but probably isn't worth it.)
 - Start going down the list of list methods

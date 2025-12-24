@@ -23,7 +23,14 @@ public class ClassVariable : Variable, IEquatable<ClassVariable>
         var memberName = member.Value;
         if (Values.ContainsKey(memberName))
         {
-            return Values[memberName];
+            if (Values[memberName] is FunctionVariable functionVariable)
+            {
+                return new ObjectMethodPair(objectContext, functionVariable);
+            }
+            else
+            {
+                return Values[memberName];
+            }
         }
         else
         {
@@ -32,7 +39,14 @@ public class ClassVariable : Variable, IEquatable<ClassVariable>
                 var result = superclass.GetMemberDirectly(callStack, closure, member, objectContext);
                 if (result is not null)
                 {
-                    return result;
+                    if (result is FunctionVariable functionVariable)
+                    {
+                        return new ObjectMethodPair(objectContext, functionVariable);
+                    }
+                    else
+                    {
+                        return result;
+                    }
                 }
             }
             return null;
@@ -46,7 +60,7 @@ public class ClassVariable : Variable, IEquatable<ClassVariable>
         var getItemFunction = GetMemberDirectly(callStack, closure, new MemberInstruction("__getitem__"));
         if (getItemFunction is FunctionVariable functionVariable && objectContext is not null)
         {
-            return functionVariable.RunFunction(callStack, closure, new ArgumentSet([objectContext, indexVariable]));
+            return functionVariable.RunFunction(callStack, closure, new ArgumentSet([indexVariable]));
         }
         else
         {

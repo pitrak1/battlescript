@@ -28,7 +28,7 @@ public static class BuiltInLen
             var lenFunc = objectVariable.GetMember(callStack, closure, new MemberInstruction("__len__"));
             if (lenFunc is FunctionVariable funcVariable)
             {
-                return funcVariable.RunFunction(callStack, closure, new ArgumentSet([objectVariable]));
+                return funcVariable.RunFunction(callStack, closure, new ArgumentSet([]));
             }
             else
             {

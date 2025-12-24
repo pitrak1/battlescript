@@ -18,7 +18,7 @@ public static class BuiltInAbs
             var absFunc = objectVariable.GetMember(callStack, closure, new MemberInstruction("__abs__"));
             if (absFunc is FunctionVariable funcVariable)
             {
-                var asdsf = funcVariable.RunFunction(callStack, closure, new ArgumentSet([value]));
+                var asdsf = funcVariable.RunFunction(callStack, closure, new ArgumentSet([]));
                 return asdsf;
             }
             else

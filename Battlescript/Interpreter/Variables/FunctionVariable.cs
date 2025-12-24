@@ -15,7 +15,9 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
         Instructions = instructions ?? [];
     }
     
-    public Variable RunFunction(CallStack callStack, Closure closure, ArgumentSet arguments, Instruction? inst = null)
+    public FunctionVariable(FunctionVariable other) : this(other.Name, other.FunctionClosure, other.Parameters, other.Instructions) { }
+    
+    public virtual Variable RunFunction(CallStack callStack, Closure closure, ArgumentSet arguments, Instruction? inst = null)
     {
         var lineValue = inst?.Line ?? 0;
         var expressionValue = inst?.Expression ?? "";
@@ -27,7 +29,7 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
         return returnValue ?? new ConstantVariable();
     }
     
-    private Variable? RunInstructions(CallStack callStack, Closure closure)
+    protected Variable? RunInstructions(CallStack callStack, Closure closure)
     {
         try
         {

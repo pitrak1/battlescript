@@ -17,11 +17,11 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
     {
         var indexVariable = index.Values.Select(x => x?.Interpret(callStack, closure) ?? null).ToList();
 
-        var setItemOverride = Class.GetMember(callStack, closure, new MemberInstruction("__setitem__"));
+        var setItemOverride = GetMember(callStack, closure, new MemberInstruction("__setitem__"));
         if (setItemOverride is FunctionVariable functionVariable)
         {
             var indexArgument = BsTypes.Create(BsTypes.Types.List, indexVariable);
-            return functionVariable.RunFunction(callStack, closure, new ArgumentSet([this, indexArgument, valueVariable]), index);
+            return functionVariable.RunFunction(callStack, closure, new ArgumentSet([indexArgument, valueVariable]), index);
         }
         else
         {
@@ -54,10 +54,10 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
         var indexVariables = index.Values.Select(x => x?.Interpret(callStack, closure) ?? null).ToList();
         var indexList = BsTypes.Create(BsTypes.Types.List, indexVariables);
 
-        var getItemOverride = Class.GetMember(callStack, closure, new MemberInstruction("__getitem__"));
+        var getItemOverride = GetMember(callStack, closure, new MemberInstruction("__getitem__"));
         if (getItemOverride is FunctionVariable functionVariable)
         {
-            return functionVariable.RunFunction(callStack, closure, new ArgumentSet([this, indexList]), index);
+            return functionVariable.RunFunction(callStack, closure, new ArgumentSet([indexList]), index);
         }
         else
         {
@@ -73,8 +73,16 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
     {
         var memberName = member.Value;
         if (Values.ContainsKey(memberName))
-        { 
-            return Values[memberName];
+        {
+            if (Values[memberName] is FunctionVariable functionVariable)
+            {
+                return new ObjectMethodPair(this, functionVariable);
+            }
+            else
+            {
+                return Values[memberName];
+            }
+            
         }
         else
         {
