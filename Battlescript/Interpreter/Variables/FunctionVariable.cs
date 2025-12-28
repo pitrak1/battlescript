@@ -23,7 +23,7 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
         var expressionValue = inst?.Expression ?? "";
         callStack.AddFrame(lineValue, expressionValue, Name);
         var newClosure = new Closure(FunctionClosure, this);
-        arguments.ApplyToMemory(callStack, newClosure, Parameters);
+        ArgumentTransfer.Execute(callStack, newClosure, arguments, Parameters);
         var returnValue = RunInstructions(callStack, newClosure);
         callStack.RemoveFrame();
         return returnValue ?? new ConstantVariable();
