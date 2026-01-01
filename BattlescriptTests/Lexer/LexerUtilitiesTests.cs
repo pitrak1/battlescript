@@ -26,7 +26,7 @@ public static class LexerUtilitiesTests
             var (length, result) = LexerUtilities.GetNextCharactersInCollectionIncludingEscapes(
                 "asdf.",
                 0,
-                Consts.Separators,
+                ['.'],
                 CollectionType.Exclusive
             );
 
@@ -95,7 +95,7 @@ public static class LexerUtilitiesTests
             var result = LexerUtilities.GetNextCharactersInCollection(
                 "asdf.",
                 0,
-                Consts.Separators,
+                ['.'],
                 CollectionType.Exclusive
             );
 

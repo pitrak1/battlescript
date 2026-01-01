@@ -10,27 +10,25 @@ public static class InstructionUtilities
         List<Consts.TokenTypes>? types = null
     )
     {
-        List<string> separatorStack = [];
+        List<string> bracketStack = [];
         
         for (var i = 0; i < tokens.Count; i++)
         {
             var currentToken = tokens[i];
-            if (IsTokenInValuesOrTypes(values, types, currentToken) && separatorStack.Count == 0)
+            if (IsTokenInValuesOrTypes(values, types, currentToken) && bracketStack.Count == 0)
             {
                 return i;
             }
-            else if (Consts.OpeningSeparators.Contains(currentToken.Value))
+            else if (Consts.OpeningBrackets.Contains(currentToken.Value))
             {
-                separatorStack.Add(currentToken.Value);
-            } else if (Consts.ClosingSeparators.Contains(currentToken.Value))
+                bracketStack.Add(currentToken.Value);
+            } else if (Consts.ClosingBrackets.Contains(currentToken.Value))
             {
-                if (separatorStack.Count > 0 && DoesTokenMatchSeparator(currentToken, separatorStack[^1]))
+                if (bracketStack.Count > 0 && DoesTokenMatchPreviousOpeningBracket(currentToken, bracketStack[^1]))
                 {
-                    // If the separator matches the top of the stack, pop it off. If the stack is now empty, that means
-                    // we just hit the closing separator of the entire expression, so we add the last entry and exit
-                    separatorStack.RemoveAt(separatorStack.Count - 1);
+                    bracketStack.RemoveAt(bracketStack.Count - 1);
                     
-                    if (IsTokenInValuesOrTypes(values, types, currentToken) && separatorStack.Count == 0)
+                    if (IsTokenInValuesOrTypes(values, types, currentToken) && bracketStack.Count == 0)
                     {
                         return i;
                     }
@@ -55,9 +53,9 @@ public static class InstructionUtilities
         return collection is not null && collection.Contains(token);
     }
 
-    private static bool DoesTokenMatchSeparator(Token token, string separator)
+    private static bool DoesTokenMatchPreviousOpeningBracket(Token token, string bracket)
     {
-        return Consts.MatchingSeparatorsMap[token.Value] == separator;
+        return Consts.MatchingBracketsMap[token.Value] == bracket;
     }
 
     public static int GetOperatorIndex(List<Token> tokens)
@@ -79,27 +77,27 @@ public static class InstructionUtilities
         
         (int Priority, int Index) lowest = (-1, -1);
         
-        List<string> separatorStack = [];
+        List<string> bracketStack = [];
         
         for (var i = tokens.Count - 1; i >= 0; i--)
         {
             var currentToken = tokens[i];
-            if (currentToken.Type == Consts.TokenTypes.Operator && separatorStack.Count == 0)
+            if (currentToken.Type == Consts.TokenTypes.Operator && bracketStack.Count == 0)
             {
                 lowest = UpdateOperatorPriorityAndIndexForOperator(tokens, lowest, currentToken.Value, i);
             }
-            else if (Consts.ClosingSeparators.Contains(currentToken.Value))
+            else if (Consts.ClosingBrackets.Contains(currentToken.Value))
             {
-                separatorStack.Add(currentToken.Value);
-            } else if (Consts.OpeningSeparators.Contains(currentToken.Value))
+                bracketStack.Add(currentToken.Value);
+            } else if (Consts.OpeningBrackets.Contains(currentToken.Value))
             {
-                if (DoesTokenMatchSeparator(currentToken, separatorStack[^1]))
+                if (DoesTokenMatchPreviousOpeningBracket(currentToken, bracketStack[^1]))
                 {
                     // If the separator matches the top of the stack, pop it off. If the stack is now empty, that means
                     // we just hit the closing separator of the entire expression, so we add the last entry and exit
-                    separatorStack.RemoveAt(separatorStack.Count - 1);
+                    bracketStack.RemoveAt(bracketStack.Count - 1);
                     
-                    if (currentToken.Type == Consts.TokenTypes.Operator && separatorStack.Count == 0)
+                    if (currentToken.Type == Consts.TokenTypes.Operator && bracketStack.Count == 0)
                     {
                         lowest = UpdateOperatorPriorityAndIndexForOperator(tokens, lowest, currentToken.Value, i);
                     }
@@ -184,7 +182,7 @@ public static class InstructionUtilities
         // Early return for no tokens present
         if (tokens.Count == 0) return [];
         
-        var results = GroupTokensWithSeparators(tokens, delimiters);
+        var results = GroupTokensWithBrackets(tokens, delimiters);
         
         List<Instruction?> values = [];
         foreach (var entry in results)
@@ -195,27 +193,27 @@ public static class InstructionUtilities
         return values;
     }
     
-    private static List<List<Token>> GroupTokensWithSeparators(
+    private static List<List<Token>> GroupTokensWithBrackets(
         List<Token> tokens, 
         List<string> delimiters)
     {
-        List<string> separatorStack = [];
+        List<string> bracketStack = [];
         List<List<Token>> entries = [];
         List<Token> currentTokenSet = [];
 
 
         foreach (var token in tokens)
         {
-            if (Consts.OpeningSeparators.Contains(token.Value))
+            if (Consts.OpeningBrackets.Contains(token.Value))
             {
-                separatorStack.Add(token.Value);
+                bracketStack.Add(token.Value);
                 currentTokenSet.Add(token);
             }
-            else if (Consts.ClosingSeparators.Contains(token.Value))
+            else if (Consts.ClosingBrackets.Contains(token.Value))
             {
-                if (DoesTokenMatchSeparator(token, separatorStack[^1]))
+                if (DoesTokenMatchPreviousOpeningBracket(token, bracketStack[^1]))
                 {
-                    separatorStack.RemoveAt(separatorStack.Count - 1);
+                    bracketStack.RemoveAt(bracketStack.Count - 1);
                     currentTokenSet.Add(token);
                 }
                 else
@@ -223,7 +221,7 @@ public static class InstructionUtilities
                     throw new ParserUnexpectedClosingSeparatorException(token);
                 }
             }
-            else if (separatorStack.Count == 0 && delimiters.Contains(token.Value))
+            else if (bracketStack.Count == 0 && delimiters.Contains(token.Value))
             {
                 entries.Add(currentTokenSet);
                 currentTokenSet = [];
@@ -236,13 +234,27 @@ public static class InstructionUtilities
         
         entries.Add(currentTokenSet);
 
-        if (separatorStack.Count == 0)
+        if (bracketStack.Count == 0)
         {
             return entries;
         }
         else
         {
             throw new ParserMatchingSeparatorNotFoundException(tokens[0]);
+        }
+    }
+
+    public static List<Token> GetGroupedTokensAtStart(List<Token> tokens)
+    {
+        if (Consts.OpeningBrackets.Contains(tokens[0].Value))
+        {
+            var closingBracket = Consts.MatchingBracketsMap[tokens[0].Value];
+            var closingBracketIndex = GetTokenIndex(tokens, [closingBracket]);
+            return tokens.GetRange(1, closingBracketIndex - 1);
+        }
+        else
+        {
+            return [];
         }
     }
 }

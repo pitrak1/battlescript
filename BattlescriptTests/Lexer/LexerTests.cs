@@ -3,7 +3,7 @@ using Battlescript;
 namespace BattlescriptTests.LexerTests;
 
 [TestFixture]
-public static class LexerTests
+public class LexerTests
 {
     [TestFixture]
     public class Numerics
@@ -62,15 +62,25 @@ public static class LexerTests
         }
     }
 
-    [TestFixture]
-    public class Separators
+    [Test]
+    public void HandlesBrackets()
     {
-        [Test]
-        public void HandlesSeparators()
-        {
-            var expected = new List<Token>() { new Token(Consts.TokenTypes.Separator, ",") };
-            Assertions.AssertInputProducesLexerOutput(",", expected);
-        }
+        var expected = new List<Token>() { new Token(Consts.TokenTypes.Bracket, "["), new Token(Consts.TokenTypes.Bracket, "]") };
+        Assertions.AssertInputProducesLexerOutput("[]", expected);
+    }
+    
+    [Test]
+    public void HandlesDelimiters()
+    {
+        var expected = new List<Token>() { new Token(Consts.TokenTypes.Delimiter, ":") };
+        Assertions.AssertInputProducesLexerOutput(":", expected);
+    }
+    
+    [Test]
+    public void HandlesPeriods()
+    {
+        var expected = new List<Token>() { new Token(Consts.TokenTypes.Period, ".") };
+        Assertions.AssertInputProducesLexerOutput(".", expected);
     }
 
     [TestFixture]
@@ -110,8 +120,8 @@ public static class LexerTests
             var expected = new List<Token>()
             {
                 new Token(Consts.TokenTypes.BuiltIn, "super"), 
-                new Token(Consts.TokenTypes.Separator, "("), 
-                new Token(Consts.TokenTypes.Separator, ")")
+                new Token(Consts.TokenTypes.Bracket, "("), 
+                new Token(Consts.TokenTypes.Bracket, ")")
             };
             Assertions.AssertInputProducesLexerOutput("super()", expected);
         }

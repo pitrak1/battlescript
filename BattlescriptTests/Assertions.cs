@@ -148,7 +148,8 @@ public static class Assertions
         {
             Assert.That(inputInst.GetType(), Is.EqualTo(expectedInst.GetType()));
             AssertInstructionListsEqual(inputInst.Values, expectedInst.Values);
-            if (inputInst.Delimiter is not null) Assert.That(inputInst.Delimiter, Is.EqualTo(expectedInst.Delimiter));
+            Assert.That(inputInst.Bracket, Is.EqualTo(expectedInst.Bracket));
+            Assert.That(inputInst.Delimiter, Is.EqualTo(expectedInst.Delimiter));
         }
 
         void CompareAssignmentInstructions(AssignmentInstruction inputInst, AssignmentInstruction expectedInst)

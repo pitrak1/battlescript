@@ -37,8 +37,30 @@ public class ListComprehensionInstruction : Instruction
             }
         }
         
-        Instructions.Insert(0, new AssignmentInstruction("=", new VariableInstruction("lstcmp"), new SquareBracketsInstruction([]), Line, Expression));
-        lastInstruction.Instructions = [new VariableInstruction("lstcmp", new MemberInstruction("append", new ParenthesesInstruction([expressionInstruction], null, null, Line, Expression), Line, Expression), Line, Expression)];
+        Instructions.Insert(
+            0, 
+            new AssignmentInstruction(
+                "=", 
+                new VariableInstruction("lstcmp"), 
+                new ArrayInstruction([], ArrayInstruction.BracketTypes.SquareBrackets), 
+                Line, 
+                Expression));
+        lastInstruction.Instructions = [
+            new VariableInstruction(
+                "lstcmp", 
+                new MemberInstruction(
+                    "append", 
+                    new ArrayInstruction(
+                        [expressionInstruction], 
+                        ArrayInstruction.BracketTypes.Parentheses, 
+                        null, 
+                        null, 
+                        Line, 
+                        Expression), 
+                    Line, 
+                    Expression), 
+                Line, 
+                Expression)];
         return;
         
         List<Token> GetTokensInsideSquareBrackets(List<Token> t)

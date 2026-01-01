@@ -80,17 +80,7 @@ public static class InstructionFactory
         }
         else if (commaIndex != -1 || colonIndex != -1)
         {
-            switch (tokens[0].Value)
-            {
-                case Consts.CurlyBraces:
-                    return new CurlyBracesInstruction(tokens);
-                case Consts.Parentheses:
-                    return new ParenthesesInstruction(tokens);
-                case Consts.SquareBrackets:
-                    return new SquareBracketsInstruction(tokens);
-                default:
-                    return new ArrayInstruction(tokens);
-            }
+            return new ArrayInstruction(tokens);
         }
         else if (operatorIndex != -1)
         {
@@ -104,17 +94,9 @@ public static class InstructionFactory
         {
             return new ConstantInstruction("*");
         }
-        else if (tokens[0].Value == Consts.CurlyBraces)
+        else if (tokens[0].Type == Consts.TokenTypes.Bracket)
         {
-            return new CurlyBracesInstruction(tokens);
-        }
-        else if (tokens[0].Value == Consts.Parentheses)
-        {
-            return new ParenthesesInstruction(tokens);
-        }
-        else if (tokens[0].Value == Consts.SquareBrackets)
-        {
-            return new SquareBracketsInstruction(tokens);
+            return new ArrayInstruction(tokens);
         }
         else if (tokens[0].Type == Consts.TokenTypes.Identifier)
         {

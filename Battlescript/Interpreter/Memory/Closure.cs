@@ -31,7 +31,7 @@ public class Closure
             if (Scopes[i].IsFunctionScope() && Scopes[i].Values.ContainsKey(variableInstruction.Name))
             {
                 var foundVariable = Scopes[i].Values[variableInstruction.Name];
-                if (variableInstruction.Next is SquareBracketsInstruction squareBracketsInstruction)
+                if (variableInstruction.Next is ArrayInstruction { Bracket: ArrayInstruction.BracketTypes.SquareBrackets } squareBracketsInstruction)
                 {
                     return foundVariable.GetItem(callStack, this, squareBracketsInstruction);
                 }
@@ -84,7 +84,7 @@ public class Closure
         Variable valueVariable,
         ClosureScope scope)
     {
-        if (variableInstruction.Next is SquareBracketsInstruction squareBracketsInstruction)
+        if (variableInstruction.Next is ArrayInstruction { Bracket: ArrayInstruction.BracketTypes.SquareBrackets } squareBracketsInstruction)
         {
             scope.Values[variableInstruction.Name].SetItem(
                 callStack,
@@ -100,7 +100,7 @@ public class Closure
                 valueVariable, 
                 memberInstruction);
         }
-        else if (variableInstruction.Next is ParenthesesInstruction)
+        else if (variableInstruction.Next is ArrayInstruction { Bracket: ArrayInstruction.BracketTypes.Parentheses })
         {
             throw new InternalRaiseException(BsTypes.Types.SyntaxError, "cannot assign to function call");
         }

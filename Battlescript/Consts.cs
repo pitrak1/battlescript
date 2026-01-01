@@ -28,9 +28,11 @@ public static class Consts
     ];
     public static readonly char[] Indentations = [' ', '\t'];
     public static readonly char[] Quotes = ['\'', '"'];
-    public static readonly char[] Separators = ['(', ')', '{', '}', ',', '[', ']', ':', '.'];
-    public static readonly string[] OpeningSeparators = ["(", "{", "["];
-    public static readonly string[] ClosingSeparators = [")", "}", "]"];
+
+    public static readonly char[] Delimiters = [',', ':'];
+    public static readonly char[] Brackets = ['(', ')', '{', '}', '[', ']'];
+    public static readonly string[] OpeningBrackets = ["(", "{", "["];
+    public static readonly string[] ClosingBrackets = [")", "}", "]"];
     
     public const string SquareBrackets = "[";
     public const string CurlyBraces = "{";
@@ -40,7 +42,7 @@ public static class Consts
     public const string Colon = ":";
     public const string Wildcard = "*";
 
-    public static readonly Dictionary<string, string> MatchingSeparatorsMap = new() {
+    public static readonly Dictionary<string, string> MatchingBracketsMap = new() {
         {"(", ")"},
         {"{", "}"},
         {"[", "]"},
@@ -249,7 +251,9 @@ public static class Consts
         Keyword,
         Newline,
         Identifier,
-        Separator,
+        Bracket,
+        Delimiter,
+        Period,
         Operator,
         Assignment,
         BuiltIn,

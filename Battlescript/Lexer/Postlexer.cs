@@ -6,7 +6,7 @@ public static class Postlexer
     {
         JoinIsNotAndNotIn(tokens);
         CheckForParenthesesWithBuiltInFunctionCalls(tokens);
-        CheckForMatchingSeparators(tokens);
+        CheckForMatchingBrackets(tokens);
         CheckForFormattedStrings(tokens);
     }
 
@@ -69,53 +69,47 @@ public static class Postlexer
     
         bool IsNextTokenNotCloseParens()
         {
-            return i >= tokens.Count - 1 || tokens[i + 1] is not { Type: Consts.TokenTypes.Separator, Value: "(" };
+            return i >= tokens.Count - 1 || tokens[i + 1] is not { Type: Consts.TokenTypes.Bracket, Value: "(" };
         }
     }
 
-    private static void CheckForMatchingSeparators(List<Token> tokens)
+    private static void CheckForMatchingBrackets(List<Token> tokens)
     {
-        List<string> separatorStack = [];
+        List<string> bracketStack = [];
     
         foreach (var token in tokens)
         {
-            if (IsOpeningSeparator(token))
+            if (Consts.OpeningBrackets.Contains(token.Value))
             {
-                separatorStack.Add(token.Value);
-            } else if (IsClosingSeparator(token))
+                bracketStack.Add(token.Value);
+            } else if (Consts.ClosingBrackets.Contains(token.Value))
             {
-                if (MatchesPreviousOpeningSeparator(token))
+                if (bracketStack.Count == 0)
                 {
-                    separatorStack.RemoveAt(separatorStack.Count - 1);
+                    var message = "closing parenthesis '" + token.Value + "' has no matching opening parenthesis";
+                    throw new InternalRaiseException(BsTypes.Types.SyntaxError, message);
+                } else if (MatchesPreviousOpeningBracket(token))
+                {
+                    bracketStack.RemoveAt(bracketStack.Count - 1);
                 }
                 else
                 {
-                    var message = "closing parenthesis '" + token.Value + "' does not match opening parenthesis '" + separatorStack[^1] + "'";
+                    var message = "closing parenthesis '" + token.Value + "' does not match opening parenthesis '" + bracketStack[^1] + "'";
                     throw new InternalRaiseException(BsTypes.Types.SyntaxError, message);
                 }
             }
         }
 
-        if (separatorStack.Count != 0)
+        if (bracketStack.Count != 0)
         {
             throw new InternalRaiseException(BsTypes.Types.SyntaxError, "unexpected EOF while parsing");
         }
 
         return;
         
-        bool IsOpeningSeparator(Token t)
+        bool MatchesPreviousOpeningBracket(Token t)
         {
-            return Consts.OpeningSeparators.Contains(t.Value);
-        }
-            
-        bool IsClosingSeparator(Token t)
-        {
-            return Consts.ClosingSeparators.Contains(t.Value);
-        }
-
-        bool MatchesPreviousOpeningSeparator(Token t)
-        {
-            return Consts.MatchingSeparatorsMap[t.Value] == separatorStack[^1];
+            return Consts.MatchingBracketsMap[t.Value] == bracketStack[^1];
         }
     }
 

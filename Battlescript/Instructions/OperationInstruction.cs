@@ -16,12 +16,12 @@ public class OperationInstruction : Instruction
         Left = result.Left;
         Right = result.Right;
                 
-        if (result.Left is ParenthesesInstruction left)
+        if (result.Left is ArrayInstruction { Bracket: ArrayInstruction.BracketTypes.Parentheses } left)
         {
             Left = left.Values[0];
         }
 
-        if (result.Right is ParenthesesInstruction right)
+        if (result.Right is ArrayInstruction { Bracket: ArrayInstruction.BracketTypes.Parentheses } right)
         {
             Right = right.Values[0];
         }

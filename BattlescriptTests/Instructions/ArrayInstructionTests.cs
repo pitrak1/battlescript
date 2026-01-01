@@ -13,26 +13,28 @@ public static class ArrayInstructionTests
         {
             var expected = new ArrayInstruction(
                 [new VariableInstruction("asdf"), new VariableInstruction("qwer")],
-                delimiter: Consts.Comma);
+                delimiter: ArrayInstruction.DelimiterTypes.Comma);
             Assertions.AssertInputProducesParserOutput("asdf, qwer", expected);
         }
         
         [Test]
         public void HandlesArrayWithSeparators()
         {
-            var expected = new SquareBracketsInstruction(
+            var expected = new ArrayInstruction(
                 [new VariableInstruction("asdf"), new VariableInstruction("qwer")],
-                Consts.Comma);
+                ArrayInstruction.BracketTypes.SquareBrackets,
+                ArrayInstruction.DelimiterTypes.Comma);
             Assertions.AssertInputProducesParserOutput("[asdf, qwer]", expected);
         }
         
         [Test]
         public void HandlesArrayWithSeparatorsAndNext()
         {
-            var expected = new CurlyBracesInstruction(
+            var expected = new ArrayInstruction(
                 [new VariableInstruction("asdf"), new VariableInstruction("qwer")],
-                Consts.Comma,
-                new ParenthesesInstruction([])
+                ArrayInstruction.BracketTypes.CurlyBraces,
+                ArrayInstruction.DelimiterTypes.Comma,
+                new ArrayInstruction([], ArrayInstruction.BracketTypes.Parentheses)
             );
             Assertions.AssertInputProducesParserOutput("{asdf, qwer}()", expected);
         }
@@ -40,12 +42,13 @@ public static class ArrayInstructionTests
         [Test]
         public void PrioritizesCommasOverColons()
         {
-            var expected = new CurlyBracesInstruction(
+            var expected = new ArrayInstruction(
                 [
-                    new ArrayInstruction([new VariableInstruction("asdf"), new NumericInstruction(3)], delimiter: ":"),
-                    new ArrayInstruction([new VariableInstruction("qwer"), new NumericInstruction(4)], delimiter: ":"),
+                    new ArrayInstruction([new VariableInstruction("asdf"), new NumericInstruction(3)], delimiter: ArrayInstruction.DelimiterTypes.Colon),
+                    new ArrayInstruction([new VariableInstruction("qwer"), new NumericInstruction(4)], delimiter: ArrayInstruction.DelimiterTypes.Colon),
                 ],
-                delimiter: ","
+                ArrayInstruction.BracketTypes.CurlyBraces,
+                delimiter: ArrayInstruction.DelimiterTypes.Comma
             );
             Assertions.AssertInputProducesParserOutput("{asdf: 3, qwer: 4}", expected);
         }

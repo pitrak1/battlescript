@@ -37,10 +37,32 @@ public class Lexer(string input, string? fileName = null)
             {
                 HandleString();
             }
-            else if (Consts.Separators.Contains(nextCharacter[0]))
+            else if (Consts.Brackets.Contains(nextCharacter[0]))
             {
                 _tokens.Add(new Token(
-                    Consts.TokenTypes.Separator, 
+                    Consts.TokenTypes.Bracket, 
+                    nextCharacter, 
+                    _line, 
+                    fileName, 
+                    _expressionForStacktrace
+                ));
+                _index++;
+            }
+            else if (Consts.Delimiters.Contains(nextCharacter[0]))
+            {
+                _tokens.Add(new Token(
+                    Consts.TokenTypes.Delimiter, 
+                    nextCharacter, 
+                    _line, 
+                    fileName, 
+                    _expressionForStacktrace
+                ));
+                _index++;
+            }
+            else if (nextCharacter[0] == '.')
+            {
+                _tokens.Add(new Token(
+                    Consts.TokenTypes.Period, 
                     nextCharacter, 
                     _line, 
                     fileName, 
@@ -79,6 +101,11 @@ public class Lexer(string input, string? fileName = null)
 
         bool IsNumber(string nextCharacter, string nextNextCharacter)
         {
+            if (nextCharacter[0] == '.' && nextNextCharacter == "")
+            {
+                return false;
+            }
+
             var isNumberStartingWithDecimalPoint = nextCharacter[0] == '.' && Consts.Digits.Contains(nextNextCharacter[0]);
             var isNumberStartingWithDigit = Consts.Digits.Contains(nextCharacter[0]);
             return isNumberStartingWithDecimalPoint || isNumberStartingWithDigit;
