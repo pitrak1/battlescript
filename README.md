@@ -37,6 +37,6 @@ Battlescript is a Python-like language interpreter that is simple input/output i
 
 
 ### TODO
-- may be able to remove interpreter contexts (Update: we cannot remove interpreter contexts.  In order to do so, we would need to associate a function variable as defined in a class with a particular instance of that class.  This could possibly be done by creating some kind of a "method wrapper' object htat just contains a function and an object variable, but probably isn't worth it.)
-- add clarity to the array variable types, make sure it's obvious whether it's a list or KVPs
+- consider making a new Token field.  For newline, we store the indent value as a string.  That's kind of weird, but introducing a whole new class and field for just that one use case feels like overkill.
 - Start going down the list of list methods
+

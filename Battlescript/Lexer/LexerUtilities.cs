@@ -10,50 +10,21 @@ public enum CollectionType
 
 public static class LexerUtilities
 {
-    public static string GetNextCharactersInCollection(
+    public static (int Length, string Result) GetNextCharactersInCollection(
         string input, 
         int index, 
         char[] collection, 
-        CollectionType type)
+        CollectionType type = CollectionType.Inclusive,
+        bool includeEscapes = false)
     {
         var startingIndex = index;
         var result = "";
         while (index < input.Length)
         {
-            if (BreakingCharacterFound(input[index]))
+            if (includeEscapes && input[index] == '\\')
             {
-                break;
-            }
-            else
-            {
-                result += input[index].ToString();
-                index++;
-            }
-        }
-
-        return result;
-
-        bool BreakingCharacterFound(char current)
-        {
-            // If collection type is Exclusive and the current character is in the collection or if
-            // collection type is Inclusive and the current character is not in the collection
-            return collection.Contains(current) == (type == CollectionType.Exclusive);
-        }
-    }
-    
-    public static (int Length, string Result) GetNextCharactersInCollectionIncludingEscapes(
-        string input, 
-        int index, 
-        char[] collection, 
-        CollectionType type)
-    {
-        var startingIndex = index;
-        var result = "";
-        while (index < input.Length)
-        {
-            if (EscapeCharacterFound(input[index]))
-            {
-                AddEscapedCharacter();
+                result += input[index + 1].ToString();
+                index += 2;
             }
             else if (BreakingCharacterFound(input[index]))
             {
@@ -67,18 +38,7 @@ public static class LexerUtilities
         }
 
         return (index - startingIndex, result);
-
-        bool EscapeCharacterFound(char current)
-        {
-            return current == '\\';
-        }
-
-        void AddEscapedCharacter()
-        {
-            result += input[index + 1].ToString();
-            index += 2;
-        }
-
+        
         bool BreakingCharacterFound(char current)
         {
             // If collection type is Exclusive and the current character is in the collection or if
@@ -86,13 +46,30 @@ public static class LexerUtilities
             return collection.Contains(current) == (type == CollectionType.Exclusive);
         }
     }
-    
-    
 
-    public static int GetIndentValueFromIndentationString(string indentations)
+    public static (int Length, string Result) GetStringWithEscapes(string input, int index)
     {
+        // This is searching for a quote character matching the character at index
+        var result = GetNextCharactersInCollection(input, index + 1, [input[index]], CollectionType.Exclusive, true);
+        
+        if (index + result.Length + 1 >= input.Length)
+        {
+            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "EOL while scanning string literal");
+        }
+
+        return result;
+    }
+    
+    public static (int Length, string Result) GetIndentValue(string input, int index)
+    {
+        var indentString = GetNextCharactersInCollection(
+            input, 
+            index,
+            Consts.Indentations
+        );
+        
         var totalSpaces = 0;
-        foreach (var indentChar in indentations)
+        foreach (var indentChar in indentString.Result)
         {
             switch (indentChar)
             {
@@ -104,16 +81,7 @@ public static class LexerUtilities
                     break;
             }
         }
-        return  (int)MathF.Floor(totalSpaces / 4f);
-    }
-    
-    public static (string, string, string) GetNextThreeCharacters(string input, int index)
-    {
-        var remainingCharacters = input.Length - index;
-        var nextCharacter = remainingCharacters >= 1 ? input[index].ToString() : "";
-        var nextNextCharacter = remainingCharacters >= 2 ? input[index + 1].ToString() : "";
-        var nextNextNextCharacter = remainingCharacters >= 3 ? input[index + 2].ToString() : "";
-
-        return (nextNextNextCharacter, nextNextCharacter, nextCharacter);
+        var result =  ((int)MathF.Floor(totalSpaces / 4f)).ToString();
+        return (indentString.Length, result);
     }
 }
