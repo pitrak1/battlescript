@@ -11,15 +11,14 @@ public static class Postparser
 
     private static void CheckForLackOfIndents(List<Instruction> instructions)
     {
-        for (var i = 0; i < instructions.Count; i++)
+        foreach (var t in instructions)
         {
-            if (Consts.InstructionTypesExpectingIndent.Contains(instructions[i].GetType().Name) &&
-                instructions[i].Instructions.Count == 0)
+            if (Parser.IsInstructionExpectingIndent(t) && t.Instructions.Count == 0)
             {
                 throw new InternalRaiseException(BsTypes.Types.SyntaxError, "expected an indented block");
             }
             
-            CheckForLackOfIndents(instructions[i].Instructions);
+            CheckForLackOfIndents(t.Instructions);
         }
     }
 
@@ -31,23 +30,31 @@ public static class Postparser
             
             if (instructions[i] is IfInstruction)
             {
-                
-                while (i + 1 < instructions.Count && instructions[i + 1] is ElseInstruction elseInstruction)
+                var nextInstruction = GetElseInstructionIfPresent(i + 1);
+                while (nextInstruction is not null)
                 {
-                    if (currentInstruction is IfInstruction ifInstruction)
-                    {
-                        ifInstruction.Next = elseInstruction;
-                    } else
-                    {
-                        ((ElseInstruction)currentInstruction).Next = elseInstruction;
-                    }
-
-                    currentInstruction = elseInstruction;
+                    // Add else instruction to the end of the chain of else's on the initial if instruction and
+                    // then remove it from the starting instruction list
+                    currentInstruction.Next = nextInstruction;
+                    currentInstruction = nextInstruction;
                     instructions.RemoveAt(i + 1);
+                    nextInstruction = GetElseInstructionIfPresent(i + 1);
                 }
             }
             
             JoinIfElse(currentInstruction.Instructions);
+        }
+
+        return;
+
+        ElseInstruction? GetElseInstructionIfPresent(int index)
+        {
+            if (index < instructions.Count && instructions[index] is ElseInstruction elseInstruction)
+            {
+                return elseInstruction;
+            }
+
+            return null;
         }
     }
     
@@ -57,24 +64,31 @@ public static class Postparser
         {
             if (instructions[i] is TryInstruction tryInstruction)
             {
-                while (i + 1 < instructions.Count && instructions[i + 1] is ExceptInstruction or ElseInstruction or FinallyInstruction)
+                while (IsInstructionExceptElseOrFinally(i + 1))
                 {
-                    if (instructions[i + 1] is ExceptInstruction exceptInstruction)
+                    switch (instructions[i + 1])
                     {
-                        tryInstruction.Excepts.Add(exceptInstruction);
-                    } else if (instructions[i + 1] is ElseInstruction elseInstruction)
-                    {
-                        tryInstruction.Else = elseInstruction;
-                    } else if (instructions[i + 1] is FinallyInstruction finallyInstruction)
-                    {
-                        tryInstruction.Finally = finallyInstruction;
+                        case ExceptInstruction exceptInstruction:
+                            tryInstruction.Excepts.Add(exceptInstruction);
+                            break;
+                        case ElseInstruction elseInstruction:
+                            tryInstruction.Else = elseInstruction;
+                            break;
+                        case FinallyInstruction finallyInstruction:
+                            tryInstruction.Finally = finallyInstruction;
+                            break;
                     }
-                    
+
                     instructions.RemoveAt(i + 1);
                 }
             }
             
             JoinTryExceptElseFinally(instructions[i].Instructions);
+        }
+        
+        bool IsInstructionExceptElseOrFinally(int index)
+        {
+            return index < instructions.Count && instructions[index] is ExceptInstruction or ElseInstruction or FinallyInstruction;
         }
     }
 }

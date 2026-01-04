@@ -18,8 +18,8 @@ public class ElseInstruction : Instruction
     }
 
     public ElseInstruction(
-        Instruction? condition, 
-        Instruction? next, 
+        Instruction? condition = null, 
+        Instruction? next = null, 
         List<Instruction>? instructions = null, 
         int? line = null, 
         string? expression = null) : base(line, expression)

@@ -5,119 +5,250 @@ namespace BattlescriptTests.ParserTests;
 [TestFixture]
 public class ParserTests
 {
-    [Test]
-    public void HandlesSingleInstruction()
+    [TestFixture]
+    public class GenericNesting
     {
-        var expected = new List<Instruction>
+        [Test]
+        public void HandlesSingleInstruction()
         {
-            new AssignmentInstruction(
-                operation: "=", 
-                left: new VariableInstruction("x"),
-                right: new NumericInstruction(5)
-            )
-        };
-        Assertions.AssertInputProducesParserOutput("x = 5", expected);
+            var expected = new List<Instruction>
+            {
+                new AssignmentInstruction(
+                    operation: "=", 
+                    left: new VariableInstruction("x"),
+                    right: new NumericInstruction(5)
+                )
+            };
+            Assertions.AssertInputProducesParserOutput("x = 5", expected);
+        }
+
+        [Test]
+        public void HandlesConditionalInstructionBlocks()
+        {
+            var input = """
+                        if 5 < 6:
+                            x = 5
+                        """;
+            var expected = new List<Instruction>
+            {
+                new IfInstruction(
+                    condition: new OperationInstruction(
+                       operation: "<",
+                       left: new NumericInstruction(5), 
+                       right: new NumericInstruction(6)
+                    ), 
+                    instructions: [
+                        new AssignmentInstruction(
+                            operation: "=",
+                            left: new VariableInstruction("x"),
+                            right: new NumericInstruction(5)
+                        )
+                    ]
+                )
+            };
+            
+            Assertions.AssertInputProducesParserOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesInstructionsBeforeConditionalInstructionBlock()
+        {
+            var input = """
+                        y = 7
+                        if 5 < 6:
+                            x = 5
+                        """;
+            var expected = new List<Instruction>
+            {
+                new AssignmentInstruction(
+                    operation: "=",
+                    left: new VariableInstruction("y"),
+                    right: new NumericInstruction(7)
+                ),
+                new IfInstruction(
+                    condition: new OperationInstruction(
+                        operation: "<",
+                        left: new NumericInstruction(5), 
+                        right: new NumericInstruction(6)
+                    ), 
+                    instructions: [
+                        new AssignmentInstruction(
+                            operation: "=",
+                            left: new VariableInstruction("x"),
+                            right: new NumericInstruction(5)
+                        )
+                    ]
+                )
+            };
+            
+            Assertions.AssertInputProducesParserOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesInstructionsAfterConditionalInstructionBlock()
+        {
+            var input = """
+                        if 5 < 6:
+                            x = 5
+                        y = 7
+                        """;
+            var expected = new List<Instruction>
+            {
+                new IfInstruction(
+                    condition: new OperationInstruction(
+                        operation: "<",
+                        left: new NumericInstruction(5), 
+                        right: new NumericInstruction(6)
+                    ),
+                    instructions: [
+                        new AssignmentInstruction(
+                            operation: "=",
+                            left: new VariableInstruction("x"),
+                            right: new NumericInstruction(5)
+                        )
+                    ]
+                ),
+                new AssignmentInstruction(
+                    operation: "=",
+                    left: new VariableInstruction("y"),
+                    right: new NumericInstruction(7)
+                )
+            };
+            
+            Assertions.AssertInputProducesParserOutput(input, expected);
+        }
+        
+        [Test]
+        public void HandlesMultipleLevelReductions()
+        {
+            var input = """
+                        if 5 < 6:
+                            if 5 < 6:
+                                x = 6
+                        y = 7
+                        """;
+            var expected = new List<Instruction>
+            {
+                new IfInstruction(
+                    condition: new OperationInstruction(
+                        operation: "<",
+                        left: new NumericInstruction(5), 
+                        right: new NumericInstruction(6)
+                    ),
+                    instructions: [
+                        new IfInstruction(
+                            condition: new OperationInstruction(
+                                operation: "<",
+                                left: new NumericInstruction(5), 
+                                right: new NumericInstruction(6)
+                            ),
+                            instructions: [
+                                new AssignmentInstruction(
+                                    operation: "=",
+                                    left: new VariableInstruction("x"),
+                                    right: new NumericInstruction(6)
+                                )
+                            ]
+                        )
+                    ]
+                ),
+                new AssignmentInstruction(
+                    operation: "=",
+                    left: new VariableInstruction("y"),
+                    right: new NumericInstruction(7)
+                )
+            };
+            
+            Assertions.AssertInputProducesParserOutput(input, expected);
+        }
     }
 
-    [Test]
-    public void HandlesConditionalInstructionBlocks()
+    [TestFixture]
+    public class MissingIndents
     {
-        var expected = new List<Instruction>
+        [Test]
+        public void DetectsMissingIndents()
         {
-            new IfInstruction(
-                condition: new OperationInstruction(
-                   operation: "<",
-                   left: new NumericInstruction(5), 
-                   right: new NumericInstruction(6)
-                ), 
-                instructions: [
-                    new AssignmentInstruction(
-                        operation: "=",
-                        left: new VariableInstruction("x"),
-                        right: new NumericInstruction(5)
-                    )
-                ]
-            )
-        };
-        
-        Assertions.AssertInputProducesParserOutput("if 5 < 6:\n\tx = 5", expected);
+            var input = """
+                        if 5 < 6:
+                        x = 5
+                        """;
+            Assert.Throws<InternalRaiseException>(() => { Runner.Parse(input); });
+        }
     }
-    
-    [Test]
-    public void HandlesInstructionsBeforeConditionalInstructionBlock()
+
+    [TestFixture]
+    public class IfElse
     {
-        var expected = new List<Instruction>
+        [Test]
+        public void JoinsIfAndElseInstructions()
         {
-            new AssignmentInstruction(
-                operation: "=",
-                left: new VariableInstruction("y"),
-                right: new NumericInstruction(7)
-            ),
-            new IfInstruction(
-                condition: new OperationInstruction(
-                    operation: "<",
-                    left: new NumericInstruction(5), 
-                    right: new NumericInstruction(6)
-                ), 
-                instructions: [
-                    new AssignmentInstruction(
-                        operation: "=",
-                        left: new VariableInstruction("x"),
-                        right: new NumericInstruction(5)
+            var input = """
+                        if 5 < 6:
+                            x = 5
+                        else:
+                            x = 7
+                        """;
+            var expected = new List<Instruction>
+            {
+                new IfInstruction(
+                    condition: new OperationInstruction(
+                        operation: "<",
+                        left: new NumericInstruction(5), 
+                        right: new NumericInstruction(6)
+                    ),
+                    instructions: [
+                        new AssignmentInstruction(
+                            operation: "=",
+                            left: new VariableInstruction("x"),
+                            right: new NumericInstruction(5)
+                        )
+                    ],
+                    next: new ElseInstruction(
+                        instructions: [
+                            new AssignmentInstruction(
+                                operation: "=",
+                                left: new VariableInstruction("x"),
+                                right: new NumericInstruction(7)
+                            )
+                        ]
                     )
-                ]
-            )
-        };
+                )
+            };
+            Assertions.AssertInputProducesParserOutput(input, expected);
+        }
         
-        Assertions.AssertInputProducesParserOutput("y = 7\nif 5 < 6:\n\tx = 5", expected);
-    }
-    
-    [Test]
-    public void HandlesInstructionsAfterConditionalInstructionBlock()
-    {
-        var expected = new List<Instruction>
+        [Test]
+        public void JoinsElifsInstructions()
         {
-            new IfInstruction(
-                condition: new OperationInstruction(
-                    operation: "<",
-                    left: new NumericInstruction(5), 
-                    right: new NumericInstruction(6)
-                ),
-                instructions: [
-                    new AssignmentInstruction(
-                        operation: "=",
-                        left: new VariableInstruction("x"),
-                        right: new NumericInstruction(5)
-                    )
-                ]
-            ),
-            new AssignmentInstruction(
-                operation: "=",
-                left: new VariableInstruction("y"),
-                right: new NumericInstruction(7)
-            )
-        };
-        
-        Assertions.AssertInputProducesParserOutput("if 5 < 6:\n\tx = 5\ny = 7", expected);
-    }
-    
-    [Test]
-    public void HandlesMultipleLevelReductions()
-    {
-        var expected = new List<Instruction>
-        {
-            new IfInstruction(
-                condition: new OperationInstruction(
-                    operation: "<",
-                    left: new NumericInstruction(5), 
-                    right: new NumericInstruction(6)
-                ),
-                instructions: [
-                    new IfInstruction(
+            var input = """
+                        if 5 < 6:
+                            x = 5
+                        elif 6 < 7:
+                            x = 6
+                        else:
+                            x = 7
+                        """;
+            var expected = new List<Instruction>
+            {
+                new IfInstruction(
+                    condition: new OperationInstruction(
+                        operation: "<",
+                        left: new NumericInstruction(5), 
+                        right: new NumericInstruction(6)
+                    ),
+                    instructions: [
+                        new AssignmentInstruction(
+                            operation: "=",
+                            left: new VariableInstruction("x"),
+                            right: new NumericInstruction(5)
+                        )
+                    ],
+                    next: new ElseInstruction(
                         condition: new OperationInstruction(
                             operation: "<",
-                            left: new NumericInstruction(5), 
-                            right: new NumericInstruction(6)
+                            left: new NumericInstruction(6), 
+                            right: new NumericInstruction(7)
                         ),
                         instructions: [
                             new AssignmentInstruction(
@@ -125,17 +256,262 @@ public class ParserTests
                                 left: new VariableInstruction("x"),
                                 right: new NumericInstruction(6)
                             )
+                        ],
+                        next: new ElseInstruction(
+                            instructions: [
+                                new AssignmentInstruction(
+                                    operation: "=",
+                                    left: new VariableInstruction("x"),
+                                    right: new NumericInstruction(7)
+                                )
+                            ]
+                        )
+                    )
+                )
+            };
+            Assertions.AssertInputProducesParserOutput(input, expected);
+        }
+    }
+    
+    [TestFixture]
+    public class TryExceptElseFinally
+    {
+        [Test]
+        public void JoinsTryAndExceptInstructions()
+        {
+            var input = """
+                        try:
+                            x = 5
+                        except TypeError:
+                            x = 6
+                        """;
+            var expected = new List<Instruction>
+            {
+                new TryInstruction(
+                    instructions: [
+                        new AssignmentInstruction(
+                            operation: "=",
+                            left: new VariableInstruction("x"),
+                            right: new NumericInstruction(5)
+                        )
+                    ],
+                    excepts: [
+                        new ExceptInstruction(
+                            exceptionType: new VariableInstruction("TypeError"),
+                            instructions: [
+                                new AssignmentInstruction(
+                                    operation: "=",
+                                    left: new VariableInstruction("x"),
+                                    right: new NumericInstruction(6)
+                                )
+                            ]
+                        )
+                    ]
+                )
+            };
+            Assertions.AssertInputProducesParserOutput(input, expected);
+        }
+        
+        [Test]
+        public void SupportsExceptVariable()
+        {
+            var input = """
+                        try:
+                            x = 5
+                        except TypeError as y:
+                            x = 6
+                        """;
+            var expected = new List<Instruction>
+            {
+                new TryInstruction(
+                    instructions: [
+                        new AssignmentInstruction(
+                            operation: "=",
+                            left: new VariableInstruction("x"),
+                            right: new NumericInstruction(5)
+                        )
+                    ],
+                    excepts: [
+                        new ExceptInstruction(
+                            exceptionType: new VariableInstruction("TypeError"),
+                            exceptionVariable: new VariableInstruction("y"),
+                            instructions: [
+                                new AssignmentInstruction(
+                                    operation: "=",
+                                    left: new VariableInstruction("x"),
+                                    right: new NumericInstruction(6)
+                                )
+                            ]
+                        )
+                    ]
+                )
+            };
+            Assertions.AssertInputProducesParserOutput(input, expected);
+        }
+        
+        [Test]
+        public void SupportsSeveralExcepts()
+        {
+            var input = """
+                        try:
+                            x = 5
+                        except TypeError:
+                            x = 6
+                        except ValueError:
+                            x = 7
+                        except AssertionError:
+                            x = 8
+                        """;
+            var expected = new List<Instruction>
+            {
+                new TryInstruction(
+                    instructions: [
+                        new AssignmentInstruction(
+                            operation: "=",
+                            left: new VariableInstruction("x"),
+                            right: new NumericInstruction(5)
+                        )
+                    ],
+                    excepts: [
+                        new ExceptInstruction(
+                            exceptionType: new VariableInstruction("TypeError"),
+                            instructions: [
+                                new AssignmentInstruction(
+                                    operation: "=",
+                                    left: new VariableInstruction("x"),
+                                    right: new NumericInstruction(6)
+                                )
+                            ]
+                        ),
+                        new ExceptInstruction(
+                            exceptionType: new VariableInstruction("ValueError"),
+                            instructions: [
+                                new AssignmentInstruction(
+                                    operation: "=",
+                                    left: new VariableInstruction("x"),
+                                    right: new NumericInstruction(7)
+                                )
+                            ]
+                        ),
+                        new ExceptInstruction(
+                            exceptionType: new VariableInstruction("AssertionError"),
+                            instructions: [
+                                new AssignmentInstruction(
+                                    operation: "=",
+                                    left: new VariableInstruction("x"),
+                                    right: new NumericInstruction(8)
+                                )
+                            ]
+                        )
+                    ]
+                )
+            };
+            Assertions.AssertInputProducesParserOutput(input, expected);
+        }
+        
+        [Test]
+        public void SupportsElseBlock()
+        {
+            var input = """
+                        try:
+                            x = 5
+                        except TypeError:
+                            x = 6
+                        else:
+                            x = 7
+                        """;
+            var expected = new List<Instruction>
+            {
+                new TryInstruction(
+                    instructions: [
+                        new AssignmentInstruction(
+                            operation: "=",
+                            left: new VariableInstruction("x"),
+                            right: new NumericInstruction(5)
+                        )
+                    ],
+                    excepts: [
+                        new ExceptInstruction(
+                            exceptionType: new VariableInstruction("TypeError"),
+                            instructions: [
+                                new AssignmentInstruction(
+                                    operation: "=",
+                                    left: new VariableInstruction("x"),
+                                    right: new NumericInstruction(6)
+                                )
+                            ]
+                        )
+                    ],
+                    elseInstruction: new ElseInstruction(
+                        instructions: [
+                            new AssignmentInstruction(
+                                operation: "=",
+                                left: new VariableInstruction("x"),
+                                right: new NumericInstruction(7)
+                            )
+                        ]        
+                    )
+                )
+            };
+            Assertions.AssertInputProducesParserOutput(input, expected);
+        }
+        
+        [Test]
+        public void SupportsFinallyBlock()
+        {
+            var input = """
+                        try:
+                            x = 5
+                        except TypeError:
+                            x = 6
+                        else:
+                            x = 7
+                        finally:
+                            x = 8
+                        """;
+            var expected = new List<Instruction>
+            {
+                new TryInstruction(
+                    instructions: [
+                        new AssignmentInstruction(
+                            operation: "=",
+                            left: new VariableInstruction("x"),
+                            right: new NumericInstruction(5)
+                        )
+                    ],
+                    excepts: [
+                        new ExceptInstruction(
+                            exceptionType: new VariableInstruction("TypeError"),
+                            instructions: [
+                                new AssignmentInstruction(
+                                    operation: "=",
+                                    left: new VariableInstruction("x"),
+                                    right: new NumericInstruction(6)
+                                )
+                            ]
+                        )
+                    ],
+                    elseInstruction: new ElseInstruction(
+                        instructions: [
+                            new AssignmentInstruction(
+                                operation: "=",
+                                left: new VariableInstruction("x"),
+                                right: new NumericInstruction(7)
+                            )
+                        ]        
+                    ),
+                    finallyInstruction: new FinallyInstruction(
+                        instructions: [
+                            new AssignmentInstruction(
+                                operation: "=",
+                                left: new VariableInstruction("x"),
+                                right: new NumericInstruction(8)
+                            )
                         ]
                     )
-                ]
-            ),
-            new AssignmentInstruction(
-                operation: "=",
-                left: new VariableInstruction("y"),
-                right: new NumericInstruction(7)
-            )
-        };
-        
-        Assertions.AssertInputProducesParserOutput("if 5 < 6:\n\tif 5 < 6:\n\t\tx = 6\ny = 7", expected);
+                )
+            };
+            Assertions.AssertInputProducesParserOutput(input, expected);
+        }
     }
 }
