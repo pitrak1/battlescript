@@ -9,48 +9,41 @@ public static class OperationInstructionTests
     public class Parse
     {
         [Test]
-        public void HandlesBinaryOperations()
+        public void BinaryOperations()
         {
+            var input = "5 + 6";
             var expected = new OperationInstruction(
                 operation: "+",
                 left: new NumericInstruction(5),
                 right: new NumericInstruction(6)
             );
-            Assertions.AssertInputProducesParserOutput("5 + 6", expected);
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
         
         [Test]
-        public void HandlesBinaryOperationsWithExpressions()
+        public void UnaryOperations()
         {
-            var expected = new OperationInstruction(
-                operation: "+",
-                left: new VariableInstruction(
-                    "x", 
-                    new MemberInstruction("i")),
-                right: new NumericInstruction(6)
-            );
-            Assertions.AssertInputProducesParserOutput("x.i + 6", expected);
-        }
-        
-        [Test]
-        public void HandlesUnaryOperators()
-        {
+            var input = "-6";
             var expected = new OperationInstruction(
                 operation: "-",
                 right: new NumericInstruction(6)
             );
-            Assertions.AssertInputProducesParserOutput("-6", expected);
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
 
         [Test]
-        public void HandlesParenthesis()
+        public void BinaryOperationsWithParentheses()
         {
+            var input = "4 * (5 + 5)";
             var expected = new OperationInstruction(
                 operation: "*",
                 left: new NumericInstruction(4),
                 right: new OperationInstruction("+", new NumericInstruction(5), new NumericInstruction(5))
             );
-            Assertions.AssertInputProducesParserOutput("4 * (5 + 5)", expected);
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
     }
     

@@ -9,10 +9,12 @@ public static class WhileInstructionTests
     public class Parse
     {
         [Test]
-        public void ProperlyParsesCondition()
+        public void ParsesCondition()
         {
+            var input = "while True:";
             var expected = new WhileInstruction(new ConstantInstruction("True"));
-            Assertions.AssertInputProducesParserOutput("while True:", expected);
+            var result = Runner.Parse(input, false);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
     }
 }

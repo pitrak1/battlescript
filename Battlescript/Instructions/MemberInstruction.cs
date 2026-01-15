@@ -26,4 +26,21 @@ public class MemberInstruction : Instruction
     {
         return instructionContext.GetMember(callStack, closure, this, instructionContext as ObjectVariable);
     }
+    
+    // All the code below is to override equality
+    public override bool Equals(object? obj) => Equals(obj as MemberInstruction);
+    public bool Equals(MemberInstruction? inst)
+    {
+        if (inst is null) return false;
+        if (ReferenceEquals(this, inst)) return true;
+        if (GetType() != inst.GetType()) return false;
+        
+        return Value == inst.Value && Equals(Next, inst.Next);
+    }
+    
+    public override int GetHashCode()
+    {
+        var nextHash = Next?.GetHashCode() * 21 ?? 33;
+        return Value.GetHashCode() * 93 + nextHash;
+    }
 }

@@ -9,7 +9,7 @@ public static class ReturnInstructionTests
     public class Parse
     {
         [Test]
-        public void HandlesSimpleValue()
+        public void ReturnValue()
         {
             var expected = new ReturnInstruction(new NumericInstruction(4));
             Assertions.AssertInputProducesParserOutput("return 4", expected);

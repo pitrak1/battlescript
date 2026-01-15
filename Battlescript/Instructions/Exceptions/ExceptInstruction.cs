@@ -9,19 +9,14 @@ public class ExceptInstruction : Instruction
 
     public ExceptInstruction(List<Token> tokens) : base(tokens)
     {
-        var asIndex = InstructionUtilities.GetTokenIndex(tokens, ["as"]);
-        if (asIndex == -1)
+        ExceptionType = new VariableInstruction(tokens[1].Value);
+        
+        if (tokens.Count > 3)
         {
-            // Want to ignore except keyword at start and colon at end
-            ExceptionType = InstructionFactory.Create(tokens.GetRange(1, tokens.Count - 2)) as VariableInstruction;
-        }
-        else
-        {
-            ExceptionType = InstructionFactory.Create(tokens.GetRange(1, asIndex - 1)) as VariableInstruction;
-            ExceptionVariable = InstructionFactory.Create(tokens.GetRange(asIndex + 1, tokens.Count - asIndex - 2)) as VariableInstruction;
+            ExceptionVariable = new VariableInstruction(tokens[3].Value);
         }
     }
-    
+
     public ExceptInstruction(VariableInstruction exceptionType, List<Instruction> instructions, VariableInstruction? exceptionVariable = null) : base([])
     {
         ExceptionType = exceptionType;

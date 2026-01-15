@@ -9,30 +9,36 @@ public static class ClassInstructionTests
     public class Parse
     {
         [Test]
-        public void HandlesBasicClassDefinition()
+        public void BasicDefinition()
         {
+            var input = "class MyClass:";
             var expected = new ClassInstruction("MyClass");
-            Assertions.AssertInputProducesParserOutput("class MyClass:", expected);
+            var result = Runner.Parse(input, false);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
 
         [Test]
-        public void HandlesClassDefinitionWithInheritance()
+        public void DefinitionWithInheritance()
         {
+            var input = "class MyClass(asdf):";
             var expected = new ClassInstruction(
                 "MyClass",
                 [new VariableInstruction("asdf")]
             );
-            Assertions.AssertInputProducesParserOutput("class MyClass(asdf):", expected);
+            var result = Runner.Parse(input, false);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
         
         [Test]
-        public void HandlesClassDefinitionWithMultipleInheritance()
+        public void DefinitionWithMultipleInheritance()
         {
+            var input = "class MyClass(asdf, qwer):";
             var expected = new ClassInstruction(
                 "MyClass",
                 [new VariableInstruction("asdf"), new VariableInstruction("qwer")]
             );
-            Assertions.AssertInputProducesParserOutput("class MyClass(asdf, qwer):", expected);
+            var result = Runner.Parse(input, false);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
     }
 

@@ -9,7 +9,7 @@ public static class ListComprehensionInstructionTests
     public class Parse
     {
         [Test]
-        public void ParsesForLoops()
+        public void ForLoop()
         {
             var loopInstructions = Runner.Parse("""
                                                 lstcmp = []
@@ -17,11 +17,11 @@ public static class ListComprehensionInstructionTests
                                                     lstcmp.append(x * 2)
                                                 """);
             var compInstructions = Runner.Parse("[x * 2 for x in y]");
-            Assertions.AssertInstructionListsEqual(loopInstructions, compInstructions.First().Instructions);
+            Assert.That(loopInstructions, Is.EquivalentTo(compInstructions.First().Instructions));
         }
         
         [Test]
-        public void HandlesForWithIf()
+        public void ForAndIf()
         {
             var loopInstructions = Runner.Parse("""
                                                 lstcmp = []
@@ -30,11 +30,11 @@ public static class ListComprehensionInstructionTests
                                                         lstcmp.append(x * 2)
                                                 """);
             var compInstructions = Runner.Parse("[x * 2 for x in y if x == 3]");
-            Assertions.AssertInstructionListsEqual(loopInstructions, compInstructions.First().Instructions);
+            Assert.That(loopInstructions, Is.EquivalentTo(compInstructions.First().Instructions));
         }
         
         [Test]
-        public void HandlesMultipleFors()
+        public void MultipleFors()
         {
             var loopInstructions = Runner.Parse("""
                                                 lstcmp = []
@@ -43,11 +43,11 @@ public static class ListComprehensionInstructionTests
                                                         lstcmp.append(x * 2)
                                                 """);
             var compInstructions = Runner.Parse("[x * 2 for x in y for y in z]");
-            Assertions.AssertInstructionListsEqual(loopInstructions, compInstructions.First().Instructions);
+            Assert.That(loopInstructions, Is.EquivalentTo(compInstructions.First().Instructions));
         }
         
         [Test]
-        public void HandlesMultipleForsAndIfs()
+        public void MultipleForsAndIfs()
         {
             var loopInstructions = Runner.Parse("""
                                                 lstcmp = []
@@ -58,7 +58,7 @@ public static class ListComprehensionInstructionTests
                                                                 lstcmp.append(x * 2)
                                                 """);
             var compInstructions = Runner.Parse("[x * 2 for x in y if x == 3 for y in z if y == 3]");
-            Assertions.AssertInstructionListsEqual(loopInstructions, compInstructions.First().Instructions);
+            Assert.That(loopInstructions, Is.EquivalentTo(compInstructions.First().Instructions));
         }
     }
 }

@@ -7,6 +7,15 @@ public class FunctionInstruction : Instruction
 
     public FunctionInstruction(List<Token> tokens) : base(tokens)
     {
+        CheckTokenValidity(tokens);
+        var tokensInParens = tokens.GetRange(3, tokens.Count - 5);
+        var parameters = InstructionUtilities.ParseEntriesBetweenDelimiters(tokensInParens, [","]);
+        Name = tokens[1].Value;
+        Parameters = new ParameterSet(parameters!);
+    }
+
+    private void CheckTokenValidity(List<Token> tokens)
+    {
         if (tokens[^1].Value is not ":")
         {
             throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
@@ -17,16 +26,10 @@ public class FunctionInstruction : Instruction
             throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
         }
         
-        var tokensInParens = tokens.GetRange(3, tokens.Count - 5);
-        var parameters = InstructionUtilities.ParseEntriesBetweenDelimiters(tokensInParens, [","]);
-
         if (tokens[1].Type != Consts.TokenTypes.Identifier)
         {
             throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
         }
-        
-        Name = tokens[1].Value;
-        Parameters = new ParameterSet(parameters!);
     }
 
     public FunctionInstruction(
@@ -48,5 +51,30 @@ public class FunctionInstruction : Instruction
         var functionValue = new FunctionVariable(Name, closure, Parameters, Instructions);
         closure.SetVariable(callStack, new VariableInstruction(Name), functionValue);
         return functionValue;
+    }
+    
+    // All the code below is to override equality
+    public override bool Equals(object? obj) => Equals(obj as FunctionInstruction);
+    public bool Equals(FunctionInstruction? inst)
+    {
+        if (inst is null) return false;
+        if (ReferenceEquals(this, inst)) return true;
+        if (GetType() != inst.GetType()) return false;
+        
+        var instructionsEqual = Instructions.SequenceEqual(inst.Instructions);
+        return instructionsEqual && Name == inst.Name && Parameters.Equals(inst.Parameters);
+    }
+    
+    public override int GetHashCode()
+    {
+        int hash = 79;
+        
+        for (int i = 0; i < Instructions.Count; i++)
+        {
+            hash += Instructions[i].GetHashCode() * 22 * (i + 1);
+        }
+
+        hash += Name.GetHashCode() * 96 + Parameters.GetHashCode() * 54;
+        return hash;
     }
 }

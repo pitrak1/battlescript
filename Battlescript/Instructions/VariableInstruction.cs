@@ -40,4 +40,20 @@ public class VariableInstruction : Instruction
             return Next.Interpret(callStack, closure, variable);
         }
     }
+    
+    // All the code below is to override equality
+    public override bool Equals(object? obj) => Equals(obj as VariableInstruction);
+    public bool Equals(VariableInstruction? inst)
+    {
+        if (inst is null) return false;
+        if (ReferenceEquals(this, inst)) return true;
+        if (GetType() != inst.GetType()) return false;
+        
+        return Name == inst.Name;
+    }
+    
+    public override int GetHashCode()
+    {
+        return Name.GetHashCode() * 10;
+    }
 }

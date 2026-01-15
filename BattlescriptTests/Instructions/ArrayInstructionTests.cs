@@ -9,48 +9,55 @@ public static class ArrayInstructionTests
     public class Parse
     {
         [Test]
-        public void HandlesArrayWithoutSeparators()
+        public void WithoutBrackets()
         {
+            var input = "asdf, qwer";
             var expected = new ArrayInstruction(
-                [new VariableInstruction("asdf"), new VariableInstruction("qwer")],
+                values: [new VariableInstruction("asdf"), new VariableInstruction("qwer")],
                 delimiter: ArrayInstruction.DelimiterTypes.Comma);
-            Assertions.AssertInputProducesParserOutput("asdf, qwer", expected);
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
         
         [Test]
-        public void HandlesArrayWithSeparators()
+        public void WithoutDelimiters()
         {
+            var input = "[asdf]";
             var expected = new ArrayInstruction(
-                [new VariableInstruction("asdf"), new VariableInstruction("qwer")],
-                ArrayInstruction.BracketTypes.SquareBrackets,
-                ArrayInstruction.DelimiterTypes.Comma);
-            Assertions.AssertInputProducesParserOutput("[asdf, qwer]", expected);
+                values: [new VariableInstruction("asdf")],
+                bracket: ArrayInstruction.BracketTypes.SquareBrackets);
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
         
         [Test]
-        public void HandlesArrayWithSeparatorsAndNext()
+        public void WithBracketsDelimitersAndNext()
         {
+            var input = "[asdf, qwer]()";
             var expected = new ArrayInstruction(
-                [new VariableInstruction("asdf"), new VariableInstruction("qwer")],
-                ArrayInstruction.BracketTypes.CurlyBraces,
-                ArrayInstruction.DelimiterTypes.Comma,
-                new ArrayInstruction([], ArrayInstruction.BracketTypes.Parentheses)
+                values: [new VariableInstruction("asdf"), new VariableInstruction("qwer")],
+                bracket: ArrayInstruction.BracketTypes.SquareBrackets,
+                delimiter: ArrayInstruction.DelimiterTypes.Comma,
+                next: new ArrayInstruction([], ArrayInstruction.BracketTypes.Parentheses)
             );
-            Assertions.AssertInputProducesParserOutput("{asdf, qwer}()", expected);
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
         
         [Test]
         public void PrioritizesCommasOverColons()
         {
+            var input = "{asdf: 3, qwer: 4}";
             var expected = new ArrayInstruction(
-                [
+                values: [
                     new ArrayInstruction([new VariableInstruction("asdf"), new NumericInstruction(3)], delimiter: ArrayInstruction.DelimiterTypes.Colon),
                     new ArrayInstruction([new VariableInstruction("qwer"), new NumericInstruction(4)], delimiter: ArrayInstruction.DelimiterTypes.Colon),
                 ],
-                ArrayInstruction.BracketTypes.CurlyBraces,
+                bracket: ArrayInstruction.BracketTypes.CurlyBraces,
                 delimiter: ArrayInstruction.DelimiterTypes.Comma
             );
-            Assertions.AssertInputProducesParserOutput("{asdf: 3, qwer: 4}", expected);
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
     }
 
@@ -58,7 +65,7 @@ public static class ArrayInstructionTests
     public class InterpretCurlyBraces
     {
         [Test]
-        public void HandlesDictionaryWithMultipleValues()
+        public void MultipleValues()
         {
             var (callStack, closure) = Runner.Run("x = {'asdf': 3, 'qwer': 4}");
             var expected = BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
@@ -70,7 +77,7 @@ public static class ArrayInstructionTests
         }
         
         [Test]
-        public void HandlesDictionaryWithSingleValue()
+        public void SingleValue()
         {
             var (callStack, closure) = Runner.Run("x = {'asdf': 3}");
             var expected = BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
@@ -81,7 +88,7 @@ public static class ArrayInstructionTests
         }
         
         [Test]
-        public void HandlesDictionaryWithStringKey()
+        public void StringKey()
         {
             var (callStack, closure) = Runner.Run("x = {'asdf': 3}");
             var expected = BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
@@ -92,7 +99,7 @@ public static class ArrayInstructionTests
         }
         
         [Test]
-        public void HandlesDictionaryWithIntegerKey()
+        public void IntegerKey()
         {
             var (callStack, closure) = Runner.Run("x = {4: 3}");
             var expected = BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()

@@ -28,4 +28,20 @@ public class ConstantInstruction : Instruction
                 return BsTypes.None;
         }
     }
+    
+    // All the code below is to override equality
+    public override bool Equals(object? obj) => Equals(obj as ConstantInstruction);
+    public bool Equals(ConstantInstruction? inst)
+    {
+        if (inst is null) return false;
+        if (ReferenceEquals(this, inst)) return true;
+        if (GetType() != inst.GetType()) return false;
+        
+        return Value == inst.Value;
+    }
+    
+    public override int GetHashCode()
+    {
+        return Value.GetHashCode() * 93;
+    }
 }

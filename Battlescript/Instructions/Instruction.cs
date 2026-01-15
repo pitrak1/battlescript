@@ -29,13 +29,7 @@ public abstract class Instruction
         Expression = expression ?? "";
         Instructions = [];
     }
-
-    // These three context are used for three distinct things:
-    // - instructionContext is used for ongoing interpretations of a single instruction, i.e. a parens instruction
-    // needs to know whether it's calling a function or class to be interpreted
-    // - objectContext is used for class methods because the first argument to a method will always be `self`
-    // - lexicalContext is used for keywords like `super` because we need to know in what class a method was actually
-    // defined to find its superclass, the object is not enough
+    
     public virtual Variable? Interpret(
         CallStack callStack,
         Closure closure,
@@ -49,6 +43,8 @@ public abstract class Instruction
         if (tokens.Count > expectedTokenCount)
         {
             Next = InstructionFactory.Create(tokens.GetRange(expectedTokenCount, tokens.Count - expectedTokenCount));
+            
+            // Next can only be a function call (), an index [], or a member .
             if (Next is not ArrayInstruction && Next is not MemberInstruction)
             {
                 throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");

@@ -6,12 +6,16 @@ public class IfInstruction : Instruction
 
     public IfInstruction(List<Token> tokens) : base(tokens)
     {
+        CheckTokenValidity(tokens);
+        Condition = InstructionFactory.Create(tokens.GetRange(1, tokens.Count - 2));
+    }
+
+    private void CheckTokenValidity(List<Token> tokens)
+    {
         if (tokens[^1].Value != ":")
         {
             throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
         }
-
-        Condition = InstructionFactory.Create(tokens.GetRange(1, tokens.Count - 2));
     }
 
     public IfInstruction(
@@ -44,5 +48,31 @@ public class IfInstruction : Instruction
         }
 
         return null;
+    }
+    
+    // All the code below is to override equality
+    public override bool Equals(object? obj) => Equals(obj as IfInstruction);
+    public bool Equals(IfInstruction? inst)
+    {
+        if (inst is null) return false;
+        if (ReferenceEquals(this, inst)) return true;
+        if (GetType() != inst.GetType()) return false;
+        
+        var instructionsEqual = Instructions.SequenceEqual(inst.Instructions);
+        return instructionsEqual && Condition.Equals(inst.Condition) && Equals(Next, inst.Next);
+    }
+    
+    public override int GetHashCode()
+    {
+        int hash = 71;
+
+        for (int i = 0; i < Instructions.Count; i++)
+        {
+            hash += Instructions[i].GetHashCode() * 17 * (i + 1);
+        }
+
+        var nextHash = Next?.GetHashCode() * 71 ?? 78;
+        hash += Condition.GetHashCode() * 62 + nextHash;
+        return hash;
     }
 }

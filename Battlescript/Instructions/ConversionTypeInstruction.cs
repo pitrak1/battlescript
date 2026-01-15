@@ -3,28 +3,42 @@ namespace Battlescript;
 public class ConversionTypeInstruction : Instruction
 {
     public string Value { get; set; }
-    public List<Instruction> Parameters { get; set; }
+    public List<Instruction> Parameters { get; set; } = [];
 
     public ConversionTypeInstruction(List<Token> tokens) : base(tokens)
     {
-        if (tokens.Count > 1)
-        {
-            var endOfArgumentsIndex = InstructionUtilities.GetTokenIndex(tokens, [")"]);
-            var argumentTokens = tokens.GetRange(2, endOfArgumentsIndex - 2);
-            Parameters = InstructionUtilities.ParseEntriesBetweenDelimiters(argumentTokens, [","])!;
-        
-            if (tokens.Count > endOfArgumentsIndex + 1)
-            {
-                throw new ParserUnexpectedTokenException(tokens[endOfArgumentsIndex + 1]);
-            }
-        }
-        
+        ParseArguments(tokens);
         Value = tokens[0].Value;
     }
 
-    public ConversionTypeInstruction(string value, int? line = null, string? expression = null) : base(line, expression)
+    private void ParseArguments(List<Token> tokens)
+    {
+        if (tokens.Count > 1)
+        {
+            var tokensAfterTypeName = tokens.GetRange(1, tokens.Count - 1);
+            var argumentTokens = InstructionUtilities.GetGroupedTokensAtStart(tokensAfterTypeName);
+            Parameters = InstructionUtilities.ParseEntriesBetweenDelimiters(argumentTokens, [","])!;
+            VerifyNoTokensAfterArguments(tokensAfterTypeName, argumentTokens.Count);
+        }
+    }
+
+    private void VerifyNoTokensAfterArguments(List<Token> tokens, int argumentTokensCount)
+    {
+        // argument tokens + the two parentheses + the type name
+        if (tokens.Count > argumentTokensCount + 3)
+        {
+            throw new ParserUnexpectedTokenException(tokens[argumentTokensCount + 3]);
+        }
+    }
+
+    public ConversionTypeInstruction(
+        string value, 
+        List<Instruction>? parameters = null, 
+        int? line = null, 
+        string? expression = null) : base(line, expression)
     {
         Value = value;
+        Parameters = parameters ?? [];
     }
     
     public override Variable? Interpret(CallStack callStack,
@@ -120,5 +134,30 @@ public class ConversionTypeInstruction : Instruction
                 return new StringVariable();
         }
         return null;
+    }
+    
+    // All the code below is to override equality
+    public override bool Equals(object? obj) => Equals(obj as ConversionTypeInstruction);
+    public bool Equals(ConversionTypeInstruction? inst)
+    {
+        if (inst is null) return false;
+        if (ReferenceEquals(this, inst)) return true;
+        if (GetType() != inst.GetType()) return false;
+        
+        var parametersEqual = Parameters.SequenceEqual(inst.Parameters);
+        return parametersEqual && Value == inst.Value;
+    }
+    
+    public override int GetHashCode()
+    {
+        int hash = 77;
+
+        for (int i = 0; i < Parameters.Count; i++)
+        {
+            hash += Parameters[i].GetHashCode() * 83 * (i + 1);
+        }
+
+        hash += Value.GetHashCode() * 91;
+        return hash;
     }
 }

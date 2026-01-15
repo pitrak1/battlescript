@@ -32,4 +32,20 @@ public class StringInstruction : Instruction
         }
         return BsTypes.Create(BsTypes.Types.String, value);
     }
+    
+    // All the code below is to override equality
+    public override bool Equals(object? obj) => Equals(obj as StringInstruction);
+    public bool Equals(StringInstruction? inst)
+    {
+        if (inst is null) return false;
+        if (ReferenceEquals(this, inst)) return true;
+        if (GetType() != inst.GetType()) return false;
+        
+        return Value == inst.Value && IsFormatted == inst.IsFormatted;
+    }
+    
+    public override int GetHashCode()
+    {
+        return Value.GetHashCode() * 81 + IsFormatted.GetHashCode() * 21;
+    }
 }

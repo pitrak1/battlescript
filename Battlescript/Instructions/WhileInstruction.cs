@@ -6,12 +6,17 @@ public class WhileInstruction : Instruction
 
     public WhileInstruction(List<Token> tokens) : base(tokens)
     {
+        CheckTokenValidity(tokens);
+        var conditionTokens = tokens.GetRange(1, tokens.Count - 2);
+        Condition = InstructionFactory.Create(conditionTokens)!;
+    }
+
+    private void CheckTokenValidity(List<Token> tokens)
+    {
         if (tokens[^1].Value != ":")
         {
             throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
         }
-    
-        Condition = InstructionFactory.Create(tokens.GetRange(1, tokens.Count - 2));
     }
 
     public WhileInstruction(
@@ -48,5 +53,30 @@ public class WhileInstruction : Instruction
         }
 
         return null;
+    }
+    
+    // All the code below is to override equality
+    public override bool Equals(object? obj) => Equals(obj as WhileInstruction);
+    public bool Equals(WhileInstruction? inst)
+    {
+        if (inst is null) return false;
+        if (ReferenceEquals(this, inst)) return true;
+        if (GetType() != inst.GetType()) return false;
+        
+        var instructionsEqual = Instructions.SequenceEqual(inst.Instructions);
+        return instructionsEqual && Condition.Equals(inst.Condition);
+    }
+    
+    public override int GetHashCode()
+    {
+        int hash = 26;
+
+        for (int i = 0; i < Instructions.Count; i++)
+        {
+            hash += Instructions[i].GetHashCode() * 20 * (i + 1);
+        }
+
+        hash += Condition.GetHashCode() * 53;
+        return hash;
     }
 }

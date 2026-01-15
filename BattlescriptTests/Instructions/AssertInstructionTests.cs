@@ -11,8 +11,10 @@ public static class AssertInstructionTests
         [Test]
         public void ParsesCondition()
         {
+            var input = "assert True";
             var expected = new AssertInstruction(new ConstantInstruction("True"));
-            Assertions.AssertInputProducesParserOutput("assert True", expected);
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
     }
 

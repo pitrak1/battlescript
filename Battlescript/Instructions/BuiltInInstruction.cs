@@ -11,14 +11,10 @@ public class BuiltInInstruction : Instruction
     
     public BuiltInInstruction(List<Token> tokens) : base(tokens)
     {
-        var endOfArgumentsIndex = InstructionUtilities.GetTokenIndex(tokens, [")"]);
-        var argumentTokens = tokens.GetRange(2, endOfArgumentsIndex - 2);
-        
-        
+        var tokensAfterBuiltInName = tokens.GetRange(1, tokens.Count - 1);
+        var argumentTokens = InstructionUtilities.GetGroupedTokensAtStart(tokensAfterBuiltInName);
         Arguments = InstructionUtilities.ParseEntriesBetweenDelimiters(argumentTokens, [","])!;
-        
-        ParseNext(tokens, endOfArgumentsIndex + 1);
-        
+        ParseNext(tokens, argumentTokens.Count + 3);
         Name = tokens[0].Value;
     }
     
@@ -60,4 +56,29 @@ public class BuiltInInstruction : Instruction
         return new ConstantVariable();
     }
     
+    // All the code below is to override equality
+    public override bool Equals(object? obj) => Equals(obj as BuiltInInstruction);
+    public bool Equals(BuiltInInstruction? inst)
+    {
+        if (inst is null) return false;
+        if (ReferenceEquals(this, inst)) return true;
+        if (GetType() != inst.GetType()) return false;
+        
+        var argumentsEqual = Arguments.SequenceEqual(inst.Arguments);
+        return argumentsEqual && Name == inst.Name && Equals(Next, inst.Next);
+    }
+    
+    public override int GetHashCode()
+    {
+        int hash = 39;
+
+        for (int i = 0; i < Arguments.Count; i++)
+        {
+            hash += Arguments[i].GetHashCode() * 65 * (i + 1);
+        }
+
+        var nextHash = Next?.GetHashCode() * 17 ?? 99;
+        hash += Name.GetHashCode() * 62 + nextHash;
+        return hash;
+    }
 }

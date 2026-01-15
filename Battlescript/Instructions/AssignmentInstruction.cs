@@ -50,4 +50,20 @@ public class AssignmentInstruction : Instruction
         }
         return null;
     }
+    
+    // All the code below is to override equality
+    public override bool Equals(object? obj) => Equals(obj as AssignmentInstruction);
+    public bool Equals(AssignmentInstruction? inst)
+    {
+        if (inst is null) return false;
+        if (ReferenceEquals(this, inst)) return true;
+        if (GetType() != inst.GetType()) return false;
+        
+        return Operation == inst.Operation && Left.Equals(inst.Left) && Right.Equals(inst.Right);
+    }
+    
+    public override int GetHashCode()
+    {
+        return 38 + Operation.GetHashCode() * 3 + Left.GetHashCode() * 7 + Right.GetHashCode() * 11;
+    }
 }

@@ -54,4 +54,20 @@ public class NumericInstruction : Instruction
             return BsTypes.Create(BsTypes.Types.Int, Value);
         }
     }
+    
+    // All the code below is to override equality
+    public override bool Equals(object? obj) => Equals(obj as NumericInstruction);
+    public bool Equals(NumericInstruction? inst)
+    {
+        if (inst is null) return false;
+        if (ReferenceEquals(this, inst)) return true;
+        if (GetType() != inst.GetType()) return false;
+        
+        return Value.Equals(inst.Value);
+    }
+    
+    public override int GetHashCode()
+    {
+        return Value.GetHashCode() * 70;
+    }
 }

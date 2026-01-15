@@ -9,10 +9,12 @@ public static class IfInstructionTests
     public class Parse
     {
         [Test]
-        public void ProperlyParsesCondition()
+        public void ParsesCondition()
         {
+            var input = "if True:";
             var expected = new IfInstruction(new ConstantInstruction("True"));
-            Assertions.AssertInputProducesParserOutput("if True:", expected);
+            var result = Runner.Parse(input, false);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
     }
 

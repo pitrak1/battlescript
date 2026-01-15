@@ -9,17 +9,31 @@ public static class ImportInstructionTests
     public class Parse
     {
         [Test]
-        public void HandlesImportingListsOfVariables()
+        public void SingleVariable()
+        {
+            var expected = new ImportInstruction("/test/x.bs", ["x"]);
+            Assertions.AssertInputProducesParserOutput("from '/test/x.bs' import x", expected);
+        }
+        
+        [Test]
+        public void ListsOfVariables()
         {
             var expected = new ImportInstruction("/test/x.bs", ["x", "y", "z"]);
             Assertions.AssertInputProducesParserOutput("from '/test/x.bs' import x, y, z", expected);
         }
 
         [Test]
-        public void HandlesImportingEntireModule()
+        public void Module()
         {
             var expected = new ImportInstruction("/test/x.bs", ["*"]);
             Assertions.AssertInputProducesParserOutput("from '/test/x.bs' import *", expected);
+        }
+
+        [Test]
+        public void ModuleInList()
+        {
+            var expected = new ImportInstruction("/test/x.bs", ["x", "y", "*"]);
+            Assertions.AssertInputProducesParserOutput("from '/test/x.bs' import x, y, *", expected);
         }
     }
 

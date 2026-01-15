@@ -23,4 +23,20 @@ public class GlobalInstruction : Instruction
         closure.CreateGlobalReference(Name);
         return null;
     }
+    
+    // All the code below is to override equality
+    public override bool Equals(object? obj) => Equals(obj as GlobalInstruction);
+    public bool Equals(GlobalInstruction? inst)
+    {
+        if (inst is null) return false;
+        if (ReferenceEquals(this, inst)) return true;
+        if (GetType() != inst.GetType()) return false;
+        
+        return Name == inst.Name;
+    }
+    
+    public override int GetHashCode()
+    {
+        return Name.GetHashCode() * 25;
+    }
 }

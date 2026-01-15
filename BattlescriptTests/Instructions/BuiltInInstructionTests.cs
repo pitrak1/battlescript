@@ -9,34 +9,40 @@ public static class BuiltInInstructionTests
     public class Parse
     {
         [Test]
-        public void HandlesNoArguments()
+        public void NoArguments()
         {
+            var input = "super()";
             var expected = new BuiltInInstruction(
                 name: "super",
                 arguments: []
             );
-            Assertions.AssertInputProducesParserOutput("super()", expected);
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
         
         [Test]
-        public void HandlesArguments()
+        public void Arguments()
         {
+            var input = "super(x, y)";
             var expected = new BuiltInInstruction(
                 name: "super",
                 arguments: [new VariableInstruction("x"), new VariableInstruction("y")]
             );
-            Assertions.AssertInputProducesParserOutput("super(x, y)", expected);
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
         
         [Test]
         public void HandlesTokensAfterArguments()
         {
+            var input = "super(x, y).asdf";
             var expected = new BuiltInInstruction(
                 name: "super",
                 arguments: [new VariableInstruction("x"), new VariableInstruction("y")],
                 next: new MemberInstruction("asdf")
             );
-            Assertions.AssertInputProducesParserOutput("super(x, y).asdf", expected);
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
     }
 }

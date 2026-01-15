@@ -8,4 +8,20 @@ public class BreakInstruction() : Instruction([])
     {
         throw new InternalBreakException();
     }
+    
+    // All the code below is to override equality
+    public override bool Equals(object? obj) => Equals(obj as BreakInstruction);
+    public bool Equals(BreakInstruction? inst)
+    {
+        if (inst is null) return false;
+        if (ReferenceEquals(this, inst)) return true;
+        if (GetType() != inst.GetType()) return false;
+
+        return true;
+    }
+    
+    public override int GetHashCode()
+    {
+        return 87;
+    }
 }

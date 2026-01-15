@@ -5,8 +5,8 @@ public class AssertInstruction : Instruction
     public Instruction Condition { get; set; }
     public AssertInstruction(List<Token> tokens) : base(tokens)
     {
-        // Want to ignore assert keyword at start
-        Condition = InstructionFactory.Create(tokens.GetRange(1, tokens.Count - 1));
+        var tokensAfterAssertKeyword = tokens.GetRange(1, tokens.Count - 1);
+        Condition = InstructionFactory.Create(tokensAfterAssertKeyword)!;
     }
 
     public AssertInstruction(
@@ -23,11 +23,27 @@ public class AssertInstruction : Instruction
     {
         var condition = Condition.Interpret(callStack, closure);
         
-        if (!Truthiness.IsTruthy(callStack, closure, condition, this))
+        if (!Truthiness.IsTruthy(callStack, closure, condition!, this))
         {
             throw new InternalRaiseException(BsTypes.Types.AssertionError, "");
         }
 
         return null;
+    }
+    
+    // All the code below is to override equality
+    public override bool Equals(object? obj) => Equals(obj as AssertInstruction);
+    public bool Equals(AssertInstruction? inst)
+    {
+        if (inst is null) return false;
+        if (ReferenceEquals(this, inst)) return true;
+        if (GetType() != inst.GetType()) return false;
+        
+        return Condition.Equals(inst.Condition);
+    }
+    
+    public override int GetHashCode()
+    {
+        return 93 * Condition.GetHashCode();
     }
 }

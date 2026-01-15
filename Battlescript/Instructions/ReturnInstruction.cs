@@ -29,4 +29,20 @@ public class ReturnInstruction : Instruction
         var returnValue = Value?.Interpret(callStack, closure);
         throw new InternalReturnException(returnValue);
     }
+    
+    // All the code below is to override equality
+    public override bool Equals(object? obj) => Equals(obj as ReturnInstruction);
+    public bool Equals(ReturnInstruction? inst)
+    {
+        if (inst is null) return false;
+        if (ReferenceEquals(this, inst)) return true;
+        if (GetType() != inst.GetType()) return false;
+        
+        return Equals(Value, inst.Value);
+    }
+    
+    public override int GetHashCode()
+    {
+        return Value?.GetHashCode() * 81 ?? 36;
+    }
 }

@@ -13,17 +13,19 @@ public class OperationInstruction : Instruction
         var result = InstructionUtilities.ParseLeftAndRightAroundIndex(tokens, operatorIndex);
 
         Operation = operatorToken.Value;
-        Left = result.Left;
-        Right = result.Right;
-                
-        if (result.Left is ArrayInstruction { Bracket: ArrayInstruction.BracketTypes.Parentheses } left)
-        {
-            Left = left.Values[0];
-        }
+        Left = GetValueWithOrWithoutParens(result.Left);
+        Right = GetValueWithOrWithoutParens(result.Right);
+    }
 
-        if (result.Right is ArrayInstruction { Bracket: ArrayInstruction.BracketTypes.Parentheses } right)
+    private Instruction? GetValueWithOrWithoutParens(Instruction? inst)
+    {
+        if (inst is ArrayInstruction { Bracket: ArrayInstruction.BracketTypes.Parentheses } array)
         {
-            Right = right.Values[0];
+            return array.Values[0];
+        }
+        else
+        {
+            return inst;
         }
     }
 
@@ -46,5 +48,24 @@ public class OperationInstruction : Instruction
         var left = Left?.Interpret(callStack, closure);
         var right = Right?.Interpret(callStack, closure);
         return Operator.Operate(callStack, closure, Operation, left, right);
+    }
+    
+    // All the code below is to override equality
+    public override bool Equals(object? obj) => Equals(obj as OperationInstruction);
+    public bool Equals(OperationInstruction? inst)
+    {
+        if (inst is null) return false;
+        if (ReferenceEquals(this, inst)) return true;
+        if (GetType() != inst.GetType()) return false;
+        
+        return Operation == inst.Operation && Equals(Left, inst.Left) && Equals(Right, inst.Right);
+    }
+    
+    public override int GetHashCode()
+    {
+        var operationHash = Operation?.GetHashCode() * 3 ?? 98;
+        var leftHash = Left?.GetHashCode() * 7 ?? 41; 
+        var rightHash = Right?.GetHashCode() * 11 ?? 17;
+       return operationHash + leftHash + rightHash;
     }
 }

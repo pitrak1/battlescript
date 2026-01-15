@@ -9,27 +9,21 @@ public static class FunctionInstructionTests
     public class Parse
     {
         [Test]
-        public void HandlesSimpleDefinition()
+        public void OneArgument()
         {
-            var expected = new FunctionInstruction(
-                name: "func"
-            );
-            Assertions.AssertInputProducesParserOutput("def func():", expected);
-        }
-        
-        [Test]
-        public void HandlesDefinitionWithArgument()
-        {
+            var input = "def func(asdf):";
             var expected = new FunctionInstruction(
                 name: "func",
                 parameters: new ParameterSet([new VariableInstruction("asdf")])
             );
-            Assertions.AssertInputProducesParserOutput("def func(asdf):", expected);
+            var result = Runner.Parse(input, false);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
         
         [Test]
-        public void HandlesDefinitionWithMultipleArguments()
+        public void MultipleArguments()
         {
+            var input = "def func(asdf, qwer):";
             var expected = new FunctionInstruction(
                 name: "func",
                 parameters: 
@@ -38,12 +32,14 @@ public static class FunctionInstructionTests
                     new VariableInstruction("qwer")
                 ])
             );
-            Assertions.AssertInputProducesParserOutput("def func(asdf, qwer):", expected);
+            var result = Runner.Parse(input, false);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
         
         [Test]
-        public void HandlesDefinitionWithDefaultArguments()
+        public void DefaultArguments()
         {
+            var input = "def func(asdf, qwer=1234):";
             var expected = new FunctionInstruction(
                 name: "func",
                 parameters: 
@@ -52,7 +48,8 @@ public static class FunctionInstructionTests
                     new AssignmentInstruction("=", new VariableInstruction("qwer"), new NumericInstruction(1234))
                 ])
             );
-            Assertions.AssertInputProducesParserOutput("def func(asdf, qwer=1234):", expected);
+            var result = Runner.Parse(input, false);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
         
         [Test]

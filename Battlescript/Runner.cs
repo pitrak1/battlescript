@@ -87,14 +87,14 @@ public static class Runner
         }
     }
 
-    public static List<Instruction> Parse(string input)
+    public static List<Instruction> Parse(string input, bool runPostParser = true)
     {
         var lexer = new Lexer(input);
         var lexerResult = lexer.Run();
         Postlexer.Run(lexerResult);
         var parser = new Parser(lexerResult);
         var parserResult = parser.Run();
-        Postparser.Run(parserResult);
+        if (runPostParser) Postparser.Run(parserResult);
         return parserResult;
     }
     

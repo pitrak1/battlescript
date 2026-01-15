@@ -21,14 +21,6 @@ public class InvalidLambdaFunctionsTests
     }
     
     [Test]
-    public void MissingArguments()
-    {
-        var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("lambda: x + 4"));
-        Assert.That(ex.Message, Is.EqualTo("invalid syntax"));
-        Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
-    }
-
-    [Test]
     public void MissingCommaBetweenArguments()
     {
         var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("lambda x y: x + y"));

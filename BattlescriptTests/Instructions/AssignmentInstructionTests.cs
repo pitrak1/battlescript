@@ -9,25 +9,29 @@ public static class AssignmentInstructionTests
     public class Parse
     {
         [Test]
-        public void HandlesSimpleAssignments()
+        public void Value()
         {
+            var input = "x = 6";
             var expected = new AssignmentInstruction(
                 operation: "=",
                 left: new VariableInstruction("x"),
                 right: new NumericInstruction(6)
             );
-            Assertions.AssertInputProducesParserOutput("x = 6", expected);
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
         
         [Test]
-        public void HandlesExpressionAssignments()
+        public void Expression()
         {
+            var input = "x = 6 + 5";
             var expected = new AssignmentInstruction(
                 operation: "=",
                 left: new VariableInstruction("x"),
                 right: new OperationInstruction("+", new NumericInstruction(6), new NumericInstruction(5))
             );
-            Assertions.AssertInputProducesParserOutput("x = 6 + 5", expected);
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
     }
     

@@ -4,7 +4,7 @@ public class ArrayInstruction : Instruction
 {
     public enum BracketTypes { CurlyBraces, SquareBrackets, Parentheses, None }
     public BracketTypes Bracket { get; private set; } = BracketTypes.None;
-    private Dictionary<string, BracketTypes> StringToBracketTypesMapping = new Dictionary<string, BracketTypes>()
+    private readonly Dictionary<string, BracketTypes> _stringToBracketTypesMapping = new Dictionary<string, BracketTypes>()
     {
         { "{", BracketTypes.CurlyBraces },
         { "[", BracketTypes.SquareBrackets },
@@ -14,7 +14,7 @@ public class ArrayInstruction : Instruction
     
     public enum DelimiterTypes { Comma, Colon, None }
     public DelimiterTypes Delimiter { get; private set; } = DelimiterTypes.None;
-    private Dictionary<DelimiterTypes, string> DelimiterTypesToStringMapping = new Dictionary<DelimiterTypes, string>()
+    private readonly Dictionary<DelimiterTypes, string> _delimiterTypesToStringMapping = new Dictionary<DelimiterTypes, string>()
     {
         { DelimiterTypes.Comma, "," },
         { DelimiterTypes.Colon, ":"}
@@ -26,7 +26,7 @@ public class ArrayInstruction : Instruction
     {
         if (Consts.OpeningBrackets.Contains(tokens[0].Value))
         {
-            Bracket = StringToBracketTypesMapping[tokens[0].Value];
+            Bracket = _stringToBracketTypesMapping[tokens[0].Value];
             var tokensWithinBrackets = InstructionUtilities.GetGroupedTokensAtStart(tokens);
             InitializeDelimiter(tokensWithinBrackets);
             InitializeValues(tokensWithinBrackets);
@@ -58,7 +58,8 @@ public class ArrayInstruction : Instruction
     {
         if (Delimiter != DelimiterTypes.None)
         {
-            Values = InstructionUtilities.ParseEntriesBetweenDelimiters(tokens, [DelimiterTypesToStringMapping[Delimiter]]);
+            var delimiterString = _delimiterTypesToStringMapping[Delimiter];
+            Values = InstructionUtilities.ParseEntriesBetweenDelimiters(tokens, [delimiterString]);
         }
         else if (tokens.Count > 0)
         {
@@ -234,5 +235,31 @@ public class ArrayInstruction : Instruction
         }
 
         return BsTypes.Create(BsTypes.Types.List, values);
+    }
+    
+    // All the code below is to override equality
+    public override bool Equals(object? obj) => Equals(obj as ArrayInstruction);
+    public bool Equals(ArrayInstruction? inst)
+    {
+        if (inst is null) return false;
+        if (ReferenceEquals(this, inst)) return true;
+        if (GetType() != inst.GetType()) return false;
+        
+        var valuesEqual = Values.SequenceEqual(inst.Values);
+        return valuesEqual && Bracket == inst.Bracket && Delimiter == inst.Delimiter && Equals(Next, inst.Next);
+    }
+    
+    public override int GetHashCode()
+    {
+        int hash = 93;
+
+        for (int i = 0; i < Values.Count; i++)
+        {
+            hash += Values[i]?.GetHashCode() * 17 * (i + 1) ?? 47 * (i + 1);
+        }
+
+        var nextHash = Next?.GetHashCode() * 29 ?? 40;
+        hash += (int)Bracket * 19 + (int)Delimiter * 23 + nextHash;
+        return hash;
     }
 }

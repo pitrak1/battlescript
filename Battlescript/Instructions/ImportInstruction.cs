@@ -9,6 +9,14 @@ public class ImportInstruction : Instruction
     
     public ImportInstruction(List<Token> tokens) : base(tokens)
     {
+        CheckTokenValidity(tokens);
+        FilePath = tokens[1].Value;
+        FileName = Path.GetFileNameWithoutExtension(FilePath);
+        InitializeImportNames(tokens);
+    }
+
+    private void CheckTokenValidity(List<Token> tokens)
+    {
         if (tokens[1].Type != Consts.TokenTypes.String)
         {
             throw new InternalRaiseException(BsTypes.Types.SyntaxError, "expected file path to be a string");
@@ -18,15 +26,11 @@ public class ImportInstruction : Instruction
         {
             throw new InternalRaiseException(BsTypes.Types.SyntaxError, "expected 'import' keyword");
         }
-
-        FilePath = tokens[1].Value;
-        FileName = Path.GetFileNameWithoutExtension(FilePath);
-        InitializeImportNames(tokens);
     }
     
     private void InitializeImportNames(List<Token> tokens)
     { 
-        if (tokens.Count == 4 && tokens[3].Value == "*")
+        if (IsModuleExport(tokens))
         {
             ImportNames = ["*"];
         }
@@ -39,25 +43,36 @@ public class ImportInstruction : Instruction
             {
                 ImportNames = [variableInstruction.Name];
             }
-            else if (instruction is ConstantInstruction)
-            {
-                ImportNames = ["*"];
-            }
             else if (instruction is ArrayInstruction arrayInstruction)
             {
-                foreach (var value in arrayInstruction.Values)
-                {
-                    if (value is VariableInstruction varInstruction)
-                    {
-                        ImportNames.Add(varInstruction.Name);
-                    }
-                    else if (value is ConstantInstruction)
-                    {
-                        ImportNames.Add("*");
-                    }
-                }
+                ImportNames = ParseImportNamesAsStrings(arrayInstruction);
             }
         }
+    }
+
+    private List<string> ParseImportNamesAsStrings(ArrayInstruction imports)
+    {
+        List<string> importNames = [];
+        
+        foreach (var value in imports.Values)
+        {
+            if (value is VariableInstruction varInstruction)
+            {
+                importNames.Add(varInstruction.Name);
+            }
+            // I don't love that this asterisk is an operation instruction, but it seems harmless
+            else if (value is OperationInstruction)
+            {
+                importNames.Add("*");
+            }
+        }
+        
+        return importNames;
+    }
+
+    private bool IsModuleExport(List<Token> tokens)
+    {
+        return tokens.Count == 4 && tokens[3].Value == "*";
     }
 
     public ImportInstruction(string filePath, List<string> importNames, int? line = null, string? expression = null) : base(line, expression)
@@ -94,5 +109,30 @@ public class ImportInstruction : Instruction
         }
 
         return null;
+    }
+    
+    // All the code below is to override equality
+    public override bool Equals(object? obj) => Equals(obj as ImportInstruction);
+    public bool Equals(ImportInstruction? inst)
+    {
+        if (inst is null) return false;
+        if (ReferenceEquals(this, inst)) return true;
+        if (GetType() != inst.GetType()) return false;
+        
+        var importNamesEqual = ImportNames.SequenceEqual(inst.ImportNames);
+        return importNamesEqual && FilePath == inst.FilePath && FileName == inst.FileName;
+    }
+    
+    public override int GetHashCode()
+    {
+        int hash = 73;
+
+        for (int i = 0; i < ImportNames.Count; i++)
+        {
+            hash += ImportNames[i].GetHashCode() * 68 * (i + 1);
+        }
+
+        hash += FilePath.GetHashCode() * 43 + FileName.GetHashCode() * 6;
+        return hash;
     }
 }
