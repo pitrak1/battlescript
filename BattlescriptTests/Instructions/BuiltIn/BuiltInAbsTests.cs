@@ -7,7 +7,7 @@ namespace BattlescriptTests.Instructions;
 public class BuiltInAbsTests
 {
     [Test]
-    public void HandlesPositiveInts()
+    public void PositiveInts()
     {
         var input = "x = abs(5)";
         var (callStack, closure) = Runner.Run(input);
@@ -16,7 +16,7 @@ public class BuiltInAbsTests
     }
     
     [Test]
-    public void HandlesNegativeInts()
+    public void NegativeInts()
     {
         var input = "x = abs(-5)";
         var (callStack, closure) = Runner.Run(input);
@@ -25,7 +25,7 @@ public class BuiltInAbsTests
     }
     
     [Test]
-    public void HandlesPositiveFloats()
+    public void PositiveFloats()
     {
         var input = "x = abs(5.5)";
         var (callStack, closure) = Runner.Run(input);
@@ -34,7 +34,7 @@ public class BuiltInAbsTests
     }
     
     [Test]
-    public void HandlesNegativeFloats()
+    public void NegativeFloats()
     {
         var input = "x = abs(-5.5)";
         var (callStack, closure) = Runner.Run(input);
@@ -43,7 +43,7 @@ public class BuiltInAbsTests
     }
 
     [Test]
-    public void HandlesClassMethodOverriding()
+    public void ClassMethodOverriding()
     {
         var input = """
                     class y:

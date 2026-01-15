@@ -4,10 +4,7 @@ public static class BuiltInIsInstance
 {
     public static Variable Run(CallStack callStack, Closure closure, List<Instruction> arguments)
     {
-        if (arguments.Count != 2)
-        {
-            throw new Exception("Bad arguments, clean this up later");
-        }
+        CheckArguments(arguments);
         
         var objectExpression = arguments[0].Interpret(callStack, closure);
         if (arguments[1] is ConversionTypeInstruction conversionTypeInstruction)
@@ -35,6 +32,14 @@ public static class BuiltInIsInstance
             {
                 return BsTypes.Create(BsTypes.Types.Bool, false);
             }
+        }
+    }
+
+    private static void CheckArguments(List<Instruction> arguments)
+    {
+        if (arguments.Count != 2)
+        {
+            throw new Exception("Bad arguments, clean this up later");
         }
     }
 }

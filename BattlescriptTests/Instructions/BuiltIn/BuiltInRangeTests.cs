@@ -6,7 +6,7 @@ namespace BattlescriptTests.Instructions;
 public class BuiltInRangeTests
 {
     [Test]
-    public void HandlesSingleArgument()
+    public void SingleArgument()
     {
         var input = "x = range(5)";
         var (callStack, closure) = Runner.Run(input);
@@ -21,7 +21,7 @@ public class BuiltInRangeTests
     }
     
     [Test]
-    public void HandlesTwoArguments()
+    public void TwoArguments()
     {
         var input = "x = range(2, 5)";
         var (callStack, closure) = Runner.Run(input);
@@ -34,7 +34,7 @@ public class BuiltInRangeTests
     }
     
     [Test]
-    public void HandlesThreeArguments()
+    public void ThreeArguments()
     {
         var input = "x = range(2, 10, 2)";
         var (callStack, closure) = Runner.Run(input);
@@ -48,7 +48,7 @@ public class BuiltInRangeTests
     }
     
     [Test]
-    public void HandlesCountNotMatchingStep()
+    public void CountNotMatchingStep()
     {
         var input = "x = range(2, 5, 2)";
         var (callStack, closure) = Runner.Run(input);
@@ -60,7 +60,7 @@ public class BuiltInRangeTests
     }
     
     [Test]
-    public void HandlesDecreasingRange()
+    public void DecreasingRange()
     {
         var input = "x = range(2, -5, -2)";
         var (callStack, closure) = Runner.Run(input);

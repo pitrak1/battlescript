@@ -4,13 +4,10 @@ public static class BuiltInType
 {
     public static Variable Run(CallStack callStack, Closure closure, List<Instruction> arguments)
     {
-        if (arguments.Count != 1)
-        {
-            throw new Exception("Bad arguments, clean this up later");
-        }
+        CheckArguments(arguments);
         
-        var firstExpression = arguments[0].Interpret(callStack, closure);
-        switch (firstExpression)
+        var value = arguments[0].Interpret(callStack, closure);
+        switch (value)
         {
             case StringVariable:
                 return BsTypes.Create(BsTypes.Types.String, "<class '__btl_string__'>");
@@ -25,10 +22,17 @@ public static class BuiltInType
             case ClassVariable:
                 return BsTypes.Create(BsTypes.Types.String, "<class 'type'>");
             case ObjectVariable objectVariable:
-                var className = objectVariable.Class.Name;
-                return BsTypes.Create(BsTypes.Types.String, $"<class '{className}'>");
+                return BsTypes.Create(BsTypes.Types.String, $"<class '{objectVariable.Class.Name}'>");
             default:
                 throw new Exception("Bad arguments, clean this up later");
+        }
+    }
+
+    private static void CheckArguments(List<Instruction> arguments)
+    {
+        if (arguments.Count != 1)
+        {
+            throw new Exception("Bad arguments, clean this up later");
         }
     }
 }

@@ -4,10 +4,7 @@ public static class BuiltInIsSubclass
 {
     public static Variable Run(CallStack callStack, Closure closure, List<Instruction> arguments)
     {
-        if (arguments.Count != 2)
-        {
-            throw new Exception("Bad arguments, clean this up later");
-        }
+        CheckArguments(arguments);
         
         var firstExpression = arguments[0].Interpret(callStack, closure);
         var secondExpression = arguments[1].Interpret(callStack, closure);
@@ -17,6 +14,14 @@ public static class BuiltInIsSubclass
             return BsTypes.Create(BsTypes.Types.Bool, firstVariable.IsSubclass(secondVariable));
         }
         else
+        {
+            throw new Exception("Bad arguments, clean this up later");
+        }
+    }
+
+    private static void CheckArguments(List<Instruction> arguments)
+    {
+        if (arguments.Count != 2)
         {
             throw new Exception("Bad arguments, clean this up later");
         }

@@ -6,7 +6,7 @@ namespace BattlescriptTests.Instructions;
 public class BuiltInTypeTests
 {
     [Test]
-    public void HandlesFunctions()
+    public void Functions()
     {
         var input = """
                     def y():
@@ -20,7 +20,7 @@ public class BuiltInTypeTests
     }
     
     [Test]
-    public void HandlesClasses()
+    public void Classes()
     {
         var input = """
                     class y():
@@ -34,7 +34,7 @@ public class BuiltInTypeTests
     }
     
     [Test]
-    public void HandlesConversionVariables()
+    public void TransitionTypeVariables()
     {
         var input = """
                     y = __btl_string__()
@@ -46,7 +46,7 @@ public class BuiltInTypeTests
     }
     
     [Test]
-    public void HandlesBuiltInVariables()
+    public void BuiltInVariables()
     {
         var input = """
                     y = 5
@@ -58,7 +58,7 @@ public class BuiltInTypeTests
     }
 
     [Test]
-    public void HandlesObjectVariables()
+    public void ObjectVariables()
     {
         var input = """
                     class y:

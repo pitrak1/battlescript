@@ -4,11 +4,7 @@ public static class BuiltInLen
 {
     public static Variable Run(CallStack callStack, Closure closure, List<Instruction> arguments)
     {
-        if (arguments.Count != 1)
-        {
-            throw new Exception("Bad arguments, clean this up later");
-        }
-        
+        CheckArguments(arguments);
         var firstExpression = arguments[0].Interpret(callStack, closure);
         if (firstExpression is StringVariable stringVariable)
         {
@@ -36,6 +32,14 @@ public static class BuiltInLen
             }
         }
         else
+        {
+            throw new Exception("Bad arguments, clean this up later");
+        }
+    }
+
+    private static void CheckArguments(List<Instruction> arguments)
+    {
+        if (arguments.Count != 1)
         {
             throw new Exception("Bad arguments, clean this up later");
         }
