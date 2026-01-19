@@ -27,11 +27,8 @@ public static class BuiltInIsInstance
             if (objectExpression is ObjectVariable objectVariable && classExpression is ClassVariable classVariable)
             {
                 return BsTypes.Create(BsTypes.Types.Bool, objectVariable.IsInstance(classVariable));
-            }
-            else
-            {
-                return BsTypes.Create(BsTypes.Types.Bool, false);
-            }
+            } 
+            return BsTypes.Create(BsTypes.Types.Bool, false);
         }
     }
 

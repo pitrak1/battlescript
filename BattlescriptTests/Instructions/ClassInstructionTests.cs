@@ -46,7 +46,7 @@ public static class ClassInstructionTests
     public class Interpret
     {
         [Test]
-        public void HandlesBasicClassDefinition()
+        public void BasicDefinition()
         {
             var (callStack, closure) = Runner.Run("class MyClass:\n\tx = 1");
             var expected = new ClassVariable("MyClass", new Dictionary<string, Variable>()
@@ -57,7 +57,7 @@ public static class ClassInstructionTests
         }
         
         [Test]
-        public void HandlesClassDefinitionWithInheritance()
+        public void DefinitionWithInheritance()
         {
             var (callStack, closure) = Runner.Run("""
                                     class asdf():
@@ -82,7 +82,7 @@ public static class ClassInstructionTests
         }
         
         [Test]
-        public void HandlesClassDefinitionWithMultipleInheritance()
+        public void DefinitionWithMultipleInheritance()
         {
             var (callStack, closure) = Runner.Run("""
                                     class asdf:

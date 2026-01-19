@@ -59,16 +59,5 @@ public class LambdaInstruction : Instruction
         return instructionsEqual && Parameters.Equals(inst.Parameters);
     }
     
-    public override int GetHashCode()
-    {
-        int hash = 25;
-
-        for (int i = 0; i < Instructions.Count; i++)
-        {
-            hash += Instructions[i].GetHashCode() * 20 * (i + 1);
-        }
-
-        hash += Parameters.GetHashCode() * 99;
-        return hash;
-    }
+    public override int GetHashCode() => HashCode.Combine(Instructions, Parameters);
 }

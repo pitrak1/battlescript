@@ -66,8 +66,5 @@ public class NumericInstruction : Instruction
         return Value.Equals(inst.Value);
     }
     
-    public override int GetHashCode()
-    {
-        return Value.GetHashCode() * 70;
-    }
+    public override int GetHashCode() => Value.GetHashCode() * 70;
 }

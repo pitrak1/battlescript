@@ -83,15 +83,10 @@ public class Parser
         return _instructions;
     }
 
-    private bool IsLastScopeEmpty()
-    {
-        return _scopes[^1].Count == 0;
-    }
+    private bool IsLastScopeEmpty() => _scopes[^1].Count == 0;
 
-    public static bool IsInstructionExpectingIndent(Instruction instruction)
-    {
-        return InstructionTypesExpectingIndent.Contains(instruction.GetType().Name);
-    }
+    public static bool IsInstructionExpectingIndent(Instruction instruction) =>
+        InstructionTypesExpectingIndent.Contains(instruction.GetType().Name);
 
     private void CloseCodeBlocks(int count)
     {

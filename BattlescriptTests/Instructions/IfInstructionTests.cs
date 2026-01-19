@@ -24,15 +24,95 @@ public static class IfInstructionTests
         [Test]
         public void RunsCodeIfConditionIsTrue()
         {
-            var (callStack, closure) = Runner.Run("x = 3\nif True:\n\tx = 5");
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 5));
+            var input = """
+                        x = 3
+                        if True:
+                            x = 5
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
         [Test]
         public void DoesNotRunCodeIfConditionIsFalse()
         {
-            var (callStack, closure) = Runner.Run("x = 3\nif False:\n\tx = 5");
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 3));
+            var input = """
+                        x = 3
+                        if False:
+                            x = 5
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 3);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
+        }
+
+        [Test]
+        public void RunsElseCodeIfConditionIsFalse()
+        {
+            var input = """
+                        x = 3
+                        if False:
+                            x = 5
+                        else:
+                            x = 7
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 7);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
+        }
+
+        [Test]
+        public void RunsElifCodeIfConditionIsTrue()
+        {
+            var input = """
+                        x = 3
+                        if False:
+                            x = 5
+                        elif True:
+                            x = 6
+                        else:
+                            x = 7
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 6);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
+        }
+        
+        [Test]
+        public void DoesNotRunElifCodeIfConditionIsFalse()
+        {
+            var input = """
+                        x = 3
+                        if False:
+                            x = 5
+                        elif False:
+                            x = 6
+                        else:
+                            x = 7
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 7);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
+        }
+        
+        [Test]
+        public void RunsFirstTrueElifCode()
+        {
+            var input = """
+                        x = 3
+                        if False:
+                            x = 5
+                        elif True:
+                            x = 6
+                        elif True:
+                            x = 7
+                        else:
+                            x = 8
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.Int, 6);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }
 }

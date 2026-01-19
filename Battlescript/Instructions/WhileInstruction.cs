@@ -67,16 +67,5 @@ public class WhileInstruction : Instruction
         return instructionsEqual && Condition.Equals(inst.Condition);
     }
     
-    public override int GetHashCode()
-    {
-        int hash = 26;
-
-        for (int i = 0; i < Instructions.Count; i++)
-        {
-            hash += Instructions[i].GetHashCode() * 20 * (i + 1);
-        }
-
-        hash += Condition.GetHashCode() * 53;
-        return hash;
-    }
+    public override int GetHashCode() => HashCode.Combine(Instructions, Condition);
 }

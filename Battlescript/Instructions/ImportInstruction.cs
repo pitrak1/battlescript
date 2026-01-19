@@ -86,17 +86,14 @@ public class ImportInstruction : Instruction
         Closure closure,
         Variable? instructionContext = null)
     {
-        callStack.AddFrame(Line, Expression, "<module>", FilePath);
-        var newClosure = new Closure(closure);
-        Runner.RunFilePath(callStack, newClosure, FilePath);
-        callStack.RemoveFrame();
-        var importedScope = newClosure.Scopes[^1].Values.ToDictionary();
+        var importedScope = InterpretFileInNewClosureScope(callStack, closure);
         
+        var starImportConversionType = new MappingVariable(null, importedScope);
         foreach (var name in ImportNames)
         {
             if (name == "*")
             {
-                closure.SetVariable(callStack, new VariableInstruction(FileName), BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, importedScope)));
+                closure.SetVariable(callStack, new VariableInstruction(FileName), BsTypes.Create(BsTypes.Types.Dictionary, starImportConversionType));
             }
             else if (importedScope.TryGetValue(name, out var value))
             {
@@ -109,6 +106,15 @@ public class ImportInstruction : Instruction
         }
 
         return null;
+    }
+
+    private Dictionary<string, Variable> InterpretFileInNewClosureScope(CallStack callStack, Closure closure)
+    {
+        callStack.AddFrame(Line, Expression, "<module>", FilePath);
+        var newClosure = new Closure(closure);
+        Runner.RunFilePath(callStack, newClosure, FilePath);
+        callStack.RemoveFrame();
+        return newClosure.Scopes[^1].Values.ToDictionary();
     }
     
     // All the code below is to override equality
@@ -123,16 +129,5 @@ public class ImportInstruction : Instruction
         return importNamesEqual && FilePath == inst.FilePath && FileName == inst.FileName;
     }
     
-    public override int GetHashCode()
-    {
-        int hash = 73;
-
-        for (int i = 0; i < ImportNames.Count; i++)
-        {
-            hash += ImportNames[i].GetHashCode() * 68 * (i + 1);
-        }
-
-        hash += FilePath.GetHashCode() * 43 + FileName.GetHashCode() * 6;
-        return hash;
-    }
+    public override int GetHashCode() => HashCode.Combine(ImportNames, FilePath, FileName);
 }

@@ -68,17 +68,5 @@ public class BuiltInInstruction : Instruction
         return argumentsEqual && Name == inst.Name && Equals(Next, inst.Next);
     }
     
-    public override int GetHashCode()
-    {
-        int hash = 39;
-
-        for (int i = 0; i < Arguments.Count; i++)
-        {
-            hash += Arguments[i].GetHashCode() * 65 * (i + 1);
-        }
-
-        var nextHash = Next?.GetHashCode() * 17 ?? 99;
-        hash += Name.GetHashCode() * 62 + nextHash;
-        return hash;
-    }
+    public override int GetHashCode() => HashCode.Combine(Arguments, Name, Next);
 }

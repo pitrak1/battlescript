@@ -40,8 +40,5 @@ public class ConstantInstruction : Instruction
         return Value == inst.Value;
     }
     
-    public override int GetHashCode()
-    {
-        return Value.GetHashCode() * 93;
-    }
+    public override int GetHashCode() => Value.GetHashCode() * 93;
 }

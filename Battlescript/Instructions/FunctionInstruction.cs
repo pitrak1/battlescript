@@ -65,16 +65,5 @@ public class FunctionInstruction : Instruction
         return instructionsEqual && Name == inst.Name && Parameters.Equals(inst.Parameters);
     }
     
-    public override int GetHashCode()
-    {
-        int hash = 79;
-        
-        for (int i = 0; i < Instructions.Count; i++)
-        {
-            hash += Instructions[i].GetHashCode() * 22 * (i + 1);
-        }
-
-        hash += Name.GetHashCode() * 96 + Parameters.GetHashCode() * 54;
-        return hash;
-    }
+    public override int GetHashCode() => HashCode.Combine(Instructions, Name, Parameters);
 }

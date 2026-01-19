@@ -38,9 +38,5 @@ public class MemberInstruction : Instruction
         return Value == inst.Value && Equals(Next, inst.Next);
     }
     
-    public override int GetHashCode()
-    {
-        var nextHash = Next?.GetHashCode() * 21 ?? 33;
-        return Value.GetHashCode() * 93 + nextHash;
-    }
+    public override int GetHashCode() => HashCode.Combine(Value, Next);
 }

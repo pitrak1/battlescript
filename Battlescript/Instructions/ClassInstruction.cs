@@ -49,37 +49,43 @@ public class ClassInstruction : Instruction
         Closure closure,
         Variable? instructionContext = null)
     {
-        List<ClassVariable> superclasses = new List<ClassVariable>();
-        if (Superclasses.Count > 0)
-        {
-            foreach (var superclassInstruction in Superclasses)
-            {
-                var superclass = superclassInstruction.Interpret(callStack, closure);
-                if (superclass is ClassVariable superclassVariable)
-                {
-                    superclasses.Add(superclassVariable);
-                }
-                else
-                {
-                    throw new Exception($"Superclass {superclass} is not a class");
-                }
-            }
-        }
+        List<ClassVariable> superclasses = InterpretSuperclasses(callStack, closure);
         
-        callStack.AddFrame(Line, Expression, Name);
         var classVariable = new ClassVariable(Name, [], closure, superclasses);
-        var newClosure = new Closure(closure, classVariable);
+        classVariable.Values = InterpretClassInstructionsInNewClosureScope(callStack, closure, classVariable);
+        closure.SetVariable(callStack, new VariableInstruction(Name), classVariable);
+        return classVariable;
+    }
 
+    private List<ClassVariable> InterpretSuperclasses(CallStack callStack, Closure closure)
+    {
+        return Superclasses.Select(superclassInstruction =>
+        {
+            var superclassVariable = superclassInstruction.Interpret(callStack, closure);
+            if (superclassVariable is ClassVariable classVariable)
+            {
+                return classVariable;
+            }
+            else
+            {
+                throw new Exception($"Superclass {superclassVariable} is not a class");
+            }
+        }).ToList();
+    }
+
+    private Dictionary<string, Variable> InterpretClassInstructionsInNewClosureScope(
+        CallStack callStack, Closure closure, ClassVariable classVariable)
+    {
+        callStack.AddFrame(Line, Expression, Name);
+        var newClosure = new Closure(closure, classVariable);
+        
         foreach (var instruction in Instructions)
         {
             instruction.Interpret(callStack, newClosure);
         }
-
+        
         callStack.RemoveFrame();
-        var values = newClosure.Scopes[^1].Values.ToDictionary();
-        classVariable.Values = values;
-        closure.SetVariable(callStack, new VariableInstruction(Name), classVariable);
-        return classVariable;
+        return newClosure.Scopes[^1].Values.ToDictionary();
     }
     
     // All the code below is to override equality
@@ -95,21 +101,5 @@ public class ClassInstruction : Instruction
         return Name == inst.Name && superclassesEqual && instructionsEqual;
     }
     
-    public override int GetHashCode()
-    {
-        int hash = 17;
-
-        for (int i = 0; i < Superclasses.Count; i++)
-        {
-            hash += Superclasses[i].GetHashCode() * 73 * (i + 1);
-        }
-        
-        for (int i = 0; i < Instructions.Count; i++)
-        {
-            hash += Instructions[i].GetHashCode() * 40 * (i + 1);
-        }
-
-        hash += Name.GetHashCode() * 37;
-        return hash;
-    }
+    public override int GetHashCode() => HashCode.Combine(Superclasses, Instructions, Name);
 }

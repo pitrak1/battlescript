@@ -35,8 +35,5 @@ public class NonlocalInstruction : Instruction
         return Name == inst.Name;
     }
     
-    public override int GetHashCode()
-    {
-        return Name.GetHashCode() * 90;
-    }
+    public override int GetHashCode() => Name.GetHashCode() * 90;
 }

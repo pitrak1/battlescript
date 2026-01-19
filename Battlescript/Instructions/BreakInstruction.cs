@@ -20,8 +20,5 @@ public class BreakInstruction() : Instruction([])
         return true;
     }
     
-    public override int GetHashCode()
-    {
-        return 87;
-    }
+    public override int GetHashCode() => 87;
 }

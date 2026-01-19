@@ -62,8 +62,5 @@ public class AssignmentInstruction : Instruction
         return Operation == inst.Operation && Left.Equals(inst.Left) && Right.Equals(inst.Right);
     }
     
-    public override int GetHashCode()
-    {
-        return 38 + Operation.GetHashCode() * 3 + Left.GetHashCode() * 7 + Right.GetHashCode() * 11;
-    }
+    public override int GetHashCode() => HashCode.Combine(Operation, Left, Right);
 }

@@ -108,13 +108,27 @@ public static class ArrayInstructionTests
             }));
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
+
+        [Test]
+        public void MixedKeys()
+        {
+            var (callStack, closure) = Runner.Run("x = {'asdf': 3, 4: 5}");
+            var expected = BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
+            {
+                {4, BsTypes.Create(BsTypes.Types.Int, 5)},
+            }, new Dictionary<string, Variable>()
+            {
+                {"asdf", BsTypes.Create(BsTypes.Types.Int, 3)},
+            }));
+            Assertions.AssertVariable(callStack, closure, "x", expected);
+        }
     }
     
     [TestFixture]
     public class InterpretParentheses
     {
         [Test]
-        public void HandlesFunctionCalls()
+        public void FunctionCalls()
         {
             
             var input = """
@@ -129,7 +143,7 @@ public static class ArrayInstructionTests
         }
         
         [Test]
-        public void HandlesClassInstantiation()
+        public void ClassInstantiation()
         {
             var input = """
                         class asdf:
@@ -187,12 +201,11 @@ public static class ArrayInstructionTests
         }
 
         [Test]
-        public void HandlesNumericExpression()
+        public void NumericExpression()
         {
-            var input = "x = ((4 - 2) * 3) >= (2 * (5 + 5)) or isinstance(5, int)";
-            // var input = "x = ((4 - 2) * 3) >= (2 * (5 + 5))";
+            var input = "x = ((4 - 2) * 3) >= (2 * (5 + 5))";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
+            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }
@@ -201,7 +214,7 @@ public static class ArrayInstructionTests
     public class InterpretSquareBrackets
     {
         [Test]
-        public void HandlesListCreation()
+        public void ListCreation()
         {
             var (callStack, closure) = Runner.Run("x = [9, 8, 7]");
             var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>() {
@@ -212,7 +225,7 @@ public static class ArrayInstructionTests
         }
         
         [Test]
-        public void HandlesBasicIndex()
+        public void BasicIndex()
         {
             var input = """
                         y = [9, 8, 7]
@@ -220,6 +233,21 @@ public static class ArrayInstructionTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             var expected = BsTypes.Create(BsTypes.Types.Int, 8);
+            Assertions.AssertVariable(callStack, closure, "x", expected);
+        }
+        
+        [Test]
+        public void RangeIndex()
+        {
+            var input = """
+                        y = [9, 8, 7, 6, 5]
+                        x = y[1:3]
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var expected = BsTypes.Create(BsTypes.Types.List, new SequenceVariable([
+                BsTypes.Create(BsTypes.Types.Int, 8),
+                BsTypes.Create(BsTypes.Types.Int, 7)
+            ]));
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }

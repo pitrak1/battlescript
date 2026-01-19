@@ -29,16 +29,8 @@ public class VariableInstruction : Instruction
         if (Next is null)
         {
             return variable;
-        }
-        else
-        {
-            if (variable is ObjectVariable objectVariable)
-            {
-                return Next.Interpret(callStack, closure, variable);
-            }
-            
-            return Next.Interpret(callStack, closure, variable);
-        }
+        } 
+        return Next.Interpret(callStack, closure, variable);
     }
     
     // All the code below is to override equality
@@ -52,8 +44,5 @@ public class VariableInstruction : Instruction
         return Name == inst.Name;
     }
     
-    public override int GetHashCode()
-    {
-        return Name.GetHashCode() * 10;
-    }
+    public override int GetHashCode() => Name.GetHashCode() * 10;
 }

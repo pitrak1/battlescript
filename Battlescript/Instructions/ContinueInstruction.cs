@@ -20,8 +20,5 @@ public class ContinueInstruction() : Instruction([])
         return true;
     }
     
-    public override int GetHashCode()
-    {
-        return 66;
-    }
+    public override int GetHashCode() => 66;
 }

@@ -7,7 +7,7 @@ public class ArgumentTransferTests
     public class GetVariableDictionary
     {
         [Test]
-        public void HandlesPositionalArguments()
+        public void PositionalArguments()
         {
             var (callStack, closure) = Runner.Run("");
             var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
@@ -30,7 +30,7 @@ public class ArgumentTransferTests
         }
         
         [Test]
-        public void HandlesKeywordArguments()
+        public void KeywordArguments()
         {
             var (callStack, closure) = Runner.Run("");
             var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
@@ -53,7 +53,7 @@ public class ArgumentTransferTests
         }
         
         [Test]
-        public void HandlesMixedArguments()
+        public void MixedArguments()
         {
             var (callStack, closure) = Runner.Run("");
             var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()

@@ -102,83 +102,44 @@ public class ArrayInstruction : Instruction
         Closure closure,
         Variable? instructionContext = null)
     {
-        var stringValues = new Dictionary<string, Variable>();
-        var intValues = new Dictionary<int, Variable>();
+        var values = new MappingVariable();
     
-        // Dictionaries will be an ArrayInstruction with colon delimiters and two values within an ArrayInstruction
-        // of comma delimiters if there are multiple entries. Dictionaries will be an ArrayInstruction of colon
-        // delimiters with two values if there is only one entry.
+        // A comma delimiter here means we have multiple kvps
         if (Delimiter == DelimiterTypes.Comma)
         {
-            foreach (var dictValue in Values)
-            {
-                InterpretAndAddKvp(callStack, closure, stringValues, intValues, dictValue!);
-            }
+            Values.ForEach(value => InterpretAndAddKvp(callStack, closure, values, value!));
         } 
-        else if (Delimiter == DelimiterTypes.Colon)
+        else
         {
-            InterpretAndAddKvp(callStack, closure, stringValues, intValues, this);
-        } else if (Values.Count != 0)
-        {
-            throw new Exception("Badly formed dictionary");
+            InterpretAndAddKvp(callStack, closure, values, this);
         }
     
-        return BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(intValues, stringValues));
+        return BsTypes.Create(BsTypes.Types.Dictionary, values);
     }
     
-    private void InterpretAndAddKvp(CallStack callStack, Closure closure, Dictionary<string, Variable> stringValues, Dictionary<int, Variable> intValues, Instruction? instruction)
+    private void InterpretAndAddKvp(CallStack callStack, Closure closure, MappingVariable values, Instruction? instruction)
     {
-        var kvp = IsValidKvp(instruction);
-        var value = kvp.Values[1]!.Interpret(callStack, closure); 
-        var indexValue = GetIndexValue(callStack, closure, kvp.Values[0]!);
-        if (indexValue.IntValue is not null)
+        if (Values.Count == 0) return;
+        if (!IsValidKvp(instruction)) throw new Exception("Invalid dictionary kv pair");
+        var kvp = instruction as ArrayInstruction;
+        
+        var value = kvp!.Values[1]!.Interpret(callStack, closure);
+        var key = kvp.Values[0]!.Interpret(callStack, closure);
+        if (BsTypes.Is(BsTypes.Types.Int, key!))
         {
-            intValues.Add(indexValue.IntValue.Value, value);
+            values.IntValues.Add(BsTypes.GetIntValue(key!), value!);
         }
         else
         {
-            stringValues.Add(indexValue.StringValue!, value);
+            values.StringValues.Add(BsTypes.GetStringValue(key!), value!);
         }
     }
 
-    private ArrayInstruction IsValidKvp(Instruction? instruction)
+    private bool IsValidKvp(Instruction? instruction)
     {
-        if (instruction is ArrayInstruction { Delimiter: DelimiterTypes.Colon, Values: [not null, not null] } kvpInstruction)
-        {
-            return kvpInstruction;
-        }
-        else
-        {
-            throw new Exception("Badly formed dictionary");
-        }
+        return instruction is ArrayInstruction { Delimiter: DelimiterTypes.Colon, Values: [not null, not null] };
     }
         
-    private (int? IntValue, string? StringValue) GetIndexValue(CallStack callStack, Closure closure, Instruction index)
-    {
-        Variable indexVariable;
-        if (index is ArrayInstruction indexInst)
-        {
-            var listVariable = indexInst.Values.Select(x => x.Interpret(callStack, closure)).ToList();
-            indexVariable = listVariable[0]!;
-        }
-        else
-        {
-            indexVariable = index.Interpret(callStack, closure);
-        }
-    
-        if (BsTypes.Is(BsTypes.Types.Int, indexVariable))
-        {
-            return (BsTypes.GetIntValue(indexVariable), null);
-        } else if (BsTypes.Is(BsTypes.Types.String, indexVariable))
-        {
-            return (null, BsTypes.GetStringValue(indexVariable));
-        }
-        else
-        {
-            throw new Exception("Invlaid dictionary index, must be int or string");
-        }
-    }
-    
     private Variable? InterpretParentheses(CallStack callStack,
         Closure closure,
         Variable? instructionContext = null)
@@ -190,11 +151,7 @@ public class ArrayInstruction : Instruction
         else if (instructionContext is ClassVariable classVariable)
         {
             var objectVariable = classVariable.CreateObject();
-            var constructor = objectVariable.GetMember(callStack, closure, new MemberInstruction("__init__"));
-            if (constructor is FunctionVariable constructorVariable)
-            {
-                constructorVariable.RunFunction(callStack, closure, new ArgumentSet(callStack, closure, Values!), this);
-            }
+            objectVariable.RunConstructor(callStack, closure, new ArgumentSet(callStack, closure, Values!), this);
             return objectVariable;
         }
         else
@@ -207,6 +164,7 @@ public class ArrayInstruction : Instruction
         Closure closure,
         Variable? instructionContext = null)
     {
+        // If square brackets follow something, it's an index.  Otherwise, it's list creation
         if (instructionContext is not null)
         {
             return instructionContext.GetItem(callStack, closure, this, instructionContext as ObjectVariable);
@@ -219,22 +177,13 @@ public class ArrayInstruction : Instruction
     
     private Variable InterpretListCreation(CallStack callStack, Closure closure)
     {
-        var values = new List<Variable>();
-        
-        foreach (var instructionValue in Values)
+        var interpretedValues = Values.Select(value =>
         {
-            if (instructionValue is not null)
-            {
-                values.Add(instructionValue.Interpret(callStack, closure));
-            }
-            else
-            {
-                throw new Exception("Poorly formed list initialization");
-            }
-            
-        }
-
-        return BsTypes.Create(BsTypes.Types.List, values);
+            if (value is null) throw new Exception("Poorly formed list initialization");
+            return value.Interpret(callStack, closure);
+        });
+        
+        return BsTypes.Create(BsTypes.Types.List, interpretedValues.ToList());
     }
     
     // All the code below is to override equality
@@ -249,17 +198,5 @@ public class ArrayInstruction : Instruction
         return valuesEqual && Bracket == inst.Bracket && Delimiter == inst.Delimiter && Equals(Next, inst.Next);
     }
     
-    public override int GetHashCode()
-    {
-        int hash = 93;
-
-        for (int i = 0; i < Values.Count; i++)
-        {
-            hash += Values[i]?.GetHashCode() * 17 * (i + 1) ?? 47 * (i + 1);
-        }
-
-        var nextHash = Next?.GetHashCode() * 29 ?? 40;
-        hash += (int)Bracket * 19 + (int)Delimiter * 23 + nextHash;
-        return hash;
-    }
+    public override int GetHashCode() => HashCode.Combine(Values, Bracket, Delimiter, Next);
 }

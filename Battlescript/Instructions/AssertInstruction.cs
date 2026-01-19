@@ -42,8 +42,5 @@ public class AssertInstruction : Instruction
         return Condition.Equals(inst.Condition);
     }
     
-    public override int GetHashCode()
-    {
-        return 93 * Condition.GetHashCode();
-    }
+    public override int GetHashCode() => 93 * Condition.GetHashCode();
 }

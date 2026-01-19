@@ -234,9 +234,6 @@ public static class BsTypes
         {
             return objectVariable.IsInstance(TypeReferences[Types.Exception]);
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 }

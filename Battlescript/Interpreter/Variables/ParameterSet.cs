@@ -63,22 +63,5 @@ public class ParameterSet
         return namesEqual && defaultValuesEqual;
     }
     
-    public override int GetHashCode()
-    {
-        int hash = 25;
-
-        for (int i = 0; i < Names.Count; i++)
-        {
-            hash += Names[i].GetHashCode() * 20 * (i + 1);
-        }
-
-        for (int i = 0; i < DefaultValues.Keys.Count; i++)
-        {
-            var key = DefaultValues.Keys.ElementAt(i);
-            var value = DefaultValues[key];
-            hash += key.GetHashCode() * 30 * (i + 1) + value.GetHashCode() * 40;
-        }
-
-        return hash;
-    }
+    public override int GetHashCode() => HashCode.Combine(Names, DefaultValues);
 }

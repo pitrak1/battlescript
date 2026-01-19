@@ -41,7 +41,7 @@ public static class ImportInstructionTests
     public class Interpret
     {
         [Test]
-        public void HandlesImportingSimpleVariables()
+        public void ImportsSingleVariable()
         {
             var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
             var (callStack, closure) = Runner.Run($"from '{filePath}' import x");
@@ -49,7 +49,7 @@ public static class ImportInstructionTests
         }
         
         [Test]
-        public void HandlesImportingListOfVariables()
+        public void ImportsMultipleVariables()
         {
             var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
             var (callStack, closure) = Runner.Run($"from '{filePath}' import x, y, z");
@@ -64,7 +64,7 @@ public static class ImportInstructionTests
         }
         
         [Test]
-        public void HandlesImportingEntireModule()
+        public void ImportsModule()
         {
             var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
             var (callStack, closure) = Runner.Run($"from '{filePath}' import *");
@@ -80,6 +80,33 @@ public static class ImportInstructionTests
                 { "z", BsTypes.Create(BsTypes.Types.String, "asdf") }
             }));
             Assertions.AssertVariable(callStack, closure, "import", expected);
+        }
+        
+        [Test]
+        public void ImportsMultipleVariablesAndModule()
+        {
+            var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
+            var (callStack, closure) = Runner.Run($"from '{filePath}' import x, y, z, *");
+            var expected = BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
+            {
+                { "x", BsTypes.Create(BsTypes.Types.Int, 5) },
+                {
+                    "y", BsTypes.Create(BsTypes.Types.List, new List<Variable>() {
+                        BsTypes.Create(BsTypes.Types.Int, 1), 
+                        BsTypes.Create(BsTypes.Types.Int, 2), 
+                        BsTypes.Create(BsTypes.Types.Int, 3)})
+                },
+                { "z", BsTypes.Create(BsTypes.Types.String, "asdf") }
+            }));
+            
+            Assertions.AssertVariable(callStack, closure, "import", expected);
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 5));
+            Assertions.AssertVariable(callStack, closure, "y", 
+                BsTypes.Create(BsTypes.Types.List, new List<Variable>() {
+                    BsTypes.Create(BsTypes.Types.Int, 1), 
+                    BsTypes.Create(BsTypes.Types.Int, 2), 
+                    BsTypes.Create(BsTypes.Types.Int, 3)}));
+            Assertions.AssertVariable(callStack, closure, "z", BsTypes.Create(BsTypes.Types.String, "asdf"));
         }
     }
     

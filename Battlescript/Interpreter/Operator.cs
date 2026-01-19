@@ -8,27 +8,36 @@ public static class Operator
         if (operation == "=")
         {
             closure.SetVariable(callStack, left, rightVariable!);
+            return;
+        }
+
+        var leftVariable = left.Interpret(callStack, closure);
+        var result = Operate(callStack, closure, operation, leftVariable, rightVariable, originalInstruction);
+        if (operation == "/=" && BsTypes.Is(BsTypes.Types.Int, result))
+        {
+            closure.SetVariable(callStack, left, ConvertToBsFloat(result));
+        } else if (operation == "//=" && BsTypes.Is(BsTypes.Types.Float, result))
+        {
+            closure.SetVariable(callStack, left, ConvertToBsInt(result));
         }
         else
         {
-            var leftVariable = left.Interpret(callStack, closure);
-            var result = Operate(callStack, closure, operation, leftVariable, rightVariable, originalInstruction);
-            if (operation == "/=" && BsTypes.Is(BsTypes.Types.Int, result))
-            {
-                var objectResult = result as ObjectVariable;
-                var doubleResult = (objectResult.Values["__btl_value"] as NumericVariable).Value;
-                closure.SetVariable(callStack, left, BsTypes.Create(BsTypes.Types.Float, doubleResult));
-            } else if (operation == "//=" && BsTypes.Is(BsTypes.Types.Float, result))
-            {
-                var objectResult = result as ObjectVariable;
-                var intResult = (objectResult.Values["__btl_value"] as NumericVariable).Value;
-                closure.SetVariable(callStack, left, BsTypes.Create(BsTypes.Types.Int, intResult));
-            }
-            else
-            {
-                closure.SetVariable(callStack, left, result);
-            }
+            closure.SetVariable(callStack, left, result);
         }
+    }
+
+    private static ObjectVariable ConvertToBsFloat(Variable variable)
+    {
+        var objectResult = variable as ObjectVariable;
+        var doubleResult = (objectResult.Values["__btl_value"] as NumericVariable).Value;
+        return BsTypes.Create(BsTypes.Types.Float, doubleResult);
+    }
+
+    private static ObjectVariable ConvertToBsInt(Variable variable)
+    {
+        var objectResult = variable as ObjectVariable;
+        var intResult = (objectResult.Values["__btl_value"] as NumericVariable).Value;
+        return BsTypes.Create(BsTypes.Types.Int, intResult);
     }
     
     private static readonly Dictionary<string, string> OperationToOverrideMap = new()
@@ -171,88 +180,77 @@ public static class Operator
             return new SequenceVariable(values);
         }
     }
-        
-        
-    private static Variable ConductBooleanOperation(CallStack callStack, Closure closure, string operation, Variable? left, Variable? right, Instruction originalInstruction)
+
+
+    private static Variable ConductBooleanOperation(CallStack callStack, Closure closure, string operation,
+        Variable? left, Variable? right, Instruction originalInstruction)
     {
-        // The operators handled here will be the same regardless of type or have complex type interactions
+        var leftTruthiness = Truthiness.IsTruthy(callStack, closure, left!, originalInstruction);
+        var rightTruthiness = Truthiness.IsTruthy(callStack, closure, right!, originalInstruction);
+
         switch (operation)
         {
             case "or":
-                return BsTypes.Create(BsTypes.Types.Bool, GetOrValue());
+                return BsTypes.Create(BsTypes.Types.Bool, leftTruthiness || rightTruthiness);
             case "and":
-                return BsTypes.Create(BsTypes.Types.Bool, GetAndValue());
+                return BsTypes.Create(BsTypes.Types.Bool, leftTruthiness && rightTruthiness);
             case "not":
-                var rightNot = Truthiness.IsTruthy(callStack, closure, right!, originalInstruction);
-                return BsTypes.Create(BsTypes.Types.Bool, !rightNot);
+                return BsTypes.Create(BsTypes.Types.Bool, !rightTruthiness);
             case "is":
                 return BsTypes.Create(BsTypes.Types.Bool, ReferenceEquals(left, right));
             case "is not":
                 return BsTypes.Create(BsTypes.Types.Bool, !ReferenceEquals(left, right));
             case "in":
-                return BsTypes.Create(BsTypes.Types.Bool, GetInValue());
+                return BsTypes.Create(BsTypes.Types.Bool, ConductInOperation(operation, left, right));
             case "not in":
-                return BsTypes.Create(BsTypes.Types.Bool, !GetInValue());
+                return BsTypes.Create(BsTypes.Types.Bool, !ConductInOperation(operation, left, right));
             default:
                 throw new Exception("Won't get here");
         }
+    }
 
-
-        bool GetOrValue()
+    private static bool ConductInOperation(string operation, Variable? left, Variable? right)
+    {
+        if (BsTypes.Is(BsTypes.Types.String, left) && BsTypes.Is(BsTypes.Types.String, right))
         {
-            if (Truthiness.IsTruthy(callStack, closure, left!, originalInstruction))
-            {
-                return true;
-            }
-            else
-            {
-                return Truthiness.IsTruthy(callStack, closure, right!, originalInstruction);
-            }
-        }
-
-        bool GetAndValue()
+            return BsTypes.GetStringValue(right).Contains(BsTypes.GetStringValue(left));
+        } else if (BsTypes.Is(BsTypes.Types.List, right))
         {
-            if (!Truthiness.IsTruthy(callStack, closure, left!, originalInstruction))
-            {
-                return false;
-            }
-            else
-            {
-                return Truthiness.IsTruthy(callStack, closure, right!, originalInstruction);
-            }
-        }
-        
-        bool GetInValue()
+            var listValue = BsTypes.GetListValue(right);
+            return listValue.Values.Any(x => x.Equals(left));
+        } else if (IsValidDictionaryInExpression(left, right))
         {
-            if (BsTypes.Is(BsTypes.Types.String, left) && BsTypes.Is(BsTypes.Types.String, right))
+            var dictValue = BsTypes.GetDictValue(right);
+            if (BsTypes.Is(BsTypes.Types.Int, left))
             {
-                var leftString = BsTypes.GetStringValue(left);
-                var rightString = BsTypes.GetStringValue(right);
-                return rightString.Contains(leftString);
-            } else if (BsTypes.Is(BsTypes.Types.List, right))
-            {
-                var listValue = BsTypes.GetListValue(right);
-                return listValue.Values.Any(x => x.Equals(left));
-            } else if (BsTypes.Is(BsTypes.Types.Dictionary, right) && BsTypes.Is(BsTypes.Types.Int, left))
-            {
-                var dictValue1 = BsTypes.GetDictValue(right);
                 var intValue = BsTypes.GetIntValue(left);
-                return dictValue1.IntValues.Any(x => x.Key.Equals(intValue));
-            } else if (BsTypes.Is(BsTypes.Types.Dictionary, right) && BsTypes.Is(BsTypes.Types.String, left))
-            {
-                var dictValue2 = BsTypes.GetDictValue(right);
-                var stringValue = BsTypes.GetStringValue(left);
-                return dictValue2.StringValues.Any(x => x.Key.Equals(stringValue));
+                return dictValue.IntValues.Any(x => x.Key.Equals(intValue));
             }
             else
             {
-                throw new InterpreterInvalidOperationException(operation, left, right);
+                var stringValue = BsTypes.GetStringValue(left);
+                return dictValue.StringValues.Any(x => x.Key.Equals(stringValue));
             }
+        }
+        else
+        {
+            throw new InterpreterInvalidOperationException(operation, left, right);
         }
     }
-        
+
+    private static bool IsValidDictionaryInExpression(Variable? left, Variable? right)
+    {
+        var isLeftStringOrInt = BsTypes.Is(BsTypes.Types.String, left) || BsTypes.Is(BsTypes.Types.Int, left);
+        return BsTypes.Is(BsTypes.Types.Dictionary, right) && isLeftStringOrInt;
+    }
+
+    private static FunctionVariable? GetOperationOverrideFromObject(CallStack callStack, Closure closure,
+        string overrideName, ObjectVariable objectVariable) => objectVariable.GetMember(callStack, closure, new MemberInstruction(overrideName)) as FunctionVariable;
+    
     private static Variable ConductObjectOperation(CallStack callStack, Closure closure, string operation, Variable? left, Variable? right, Instruction? originalInstruction = null)
     {
+        
+        
         var (leftOverride, rightOverride) = GetOverride();
 
         // If left operand is an object and has an override, use that one.  Otherwise, if right operand is an object

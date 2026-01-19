@@ -101,6 +101,15 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
             return Class.IsSubclass(classVariable);
         }
     }
+
+    public void RunConstructor(CallStack callStack, Closure closure, ArgumentSet arguments, Instruction inst)
+    {
+        var constructor = GetMember(callStack, closure, new MemberInstruction("__init__"));
+        if (constructor is FunctionVariable functionVariable)
+        {
+            functionVariable.RunFunction(callStack, closure, arguments, inst);
+        }
+    }
     
     // All the code below is to override equality
     public override bool Equals(object obj) => Equals(obj as ObjectVariable);
@@ -114,16 +123,5 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
         return valuesEqual && Class.Equals(variable.Class);
     }
     
-    public override int GetHashCode()
-    {
-        int hash = 17;
-        foreach (var kvp in Values.OrderBy(kvp => kvp.Key))
-        {
-            hash = hash * 23 + kvp.Key.GetHashCode();
-            hash = hash * 23 + kvp.Value.GetHashCode();
-        }
-        
-        hash = hash * 23 + Class.GetHashCode();
-        return hash;
-    }
+    public override int GetHashCode() => HashCode.Combine(Values, Class);
 }

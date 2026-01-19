@@ -2,11 +2,13 @@ namespace Battlescript;
 
 public static class Truthiness
 {
-    public static bool IsTruthy(CallStack callStack, Closure closure, Variable variable, Instruction? inst = null)
+    public static bool IsTruthy(CallStack callStack, Closure closure, Variable? variable, Instruction? inst = null)
     {
         switch (variable)
         {
-            case ConstantVariable constantVariable:
+            case null:
+                return false;
+            case ConstantVariable:
                 return false;
             case NumericVariable numVariable:
                 return numVariable.Value != 0;
@@ -25,10 +27,7 @@ public static class Truthiness
                     var result = funcVariable.RunFunction(callStack, closure, new ArgumentSet([]), inst);
                     return BsTypes.Is(BsTypes.Types.Bool, result) && BsTypes.GetBoolValue(result);
                 }
-                else
-                {
-                    return true;
-                }
+                return true;
             default:
                 throw new Exception("Won't get here");
         }

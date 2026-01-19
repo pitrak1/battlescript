@@ -43,35 +43,32 @@ public class ForInstruction : Instruction
     {
         var range = Range.Interpret(callStack, closure) as ObjectVariable;
 
-        if (BsTypes.Is(BsTypes.Types.List, range))
-        {
-            var values = (range.Values["__btl_value"] as SequenceVariable).Values;
-            for (var i = 0; i < values.Count; i++)
-            {
-                closure.SetVariable(callStack, BlockVariable, values[i]);
-
-                try
-                {
-                    foreach (var inst in Instructions)
-                    {
-                        inst.Interpret(callStack, closure);
-                    }
-
-                }
-                catch (InternalContinueException)
-                {
-                }
-                catch (InternalBreakException)
-                {
-                    break;
-                }
-            }
-            return null;
-        }
-        else
+        if (!BsTypes.Is(BsTypes.Types.List, range!))
         {
             throw new Exception("Invalid iterator for loop, fix this later");
         }
+        
+        var values = BsTypes.GetListValue(range!).Values;
+        foreach (var t in values)
+        {
+            closure.SetVariable(callStack, BlockVariable, t!);
+
+            try
+            {
+                foreach (var inst in Instructions)
+                {
+                    inst.Interpret(callStack, closure);
+                }
+            }
+            catch (InternalContinueException)
+            {
+            }
+            catch (InternalBreakException)
+            {
+                break;
+            }
+        }
+        return null;
     }
 
     // All the code below is to override equality
@@ -89,17 +86,5 @@ public class ForInstruction : Instruction
                Equals(Next, inst.Next);
     }
     
-    public override int GetHashCode()
-    {
-        int hash = 40;
-
-        for (int i = 0; i < Instructions.Count; i++)
-        {
-            hash += Instructions[i].GetHashCode() * 22 * (i + 1);
-        }
-
-        var nextHash = Next?.GetHashCode() * 4 ?? 49;
-        hash += BlockVariable.GetHashCode() * 39 + Range.GetHashCode() * 28 + nextHash;
-        return hash;
-    }
+    public override int GetHashCode() => HashCode.Combine(Instructions, BlockVariable, Range, Next);
 }

@@ -58,11 +58,11 @@ public static class Runner
         {
             interpreter.Run(callStack, closure);
         }
-        catch (InternalReturnException e)
+        catch (InternalReturnException)
         {
             throw new InternalRaiseException(BsTypes.Types.SyntaxError, "'return' outside function");
         }
-        catch (InternalBreakException e)
+        catch (InternalBreakException)
         {
             throw new InternalRaiseException(BsTypes.Types.SyntaxError, "'break' outside loop");
         }
@@ -71,7 +71,7 @@ public static class Runner
             callStack.PrintStacktrace();
             if (e.Type is not null)
             {
-                Console.WriteLine(e.Type + ": " + e.Message);
+                Console.WriteLine($"{e.Type}: {e.Message}");
             }
             else
             {

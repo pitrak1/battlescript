@@ -39,7 +39,7 @@ public static class AssignmentInstructionTests
     public class Interpret
     {
         [Test]
-        public void HandlesSimpleAssignments()
+        public void SimpleAssignments()
         {
             var (callStack, closure) = Runner.Run("x = 6");
             var expected = BsTypes.Create(BsTypes.Types.Int, 6);
@@ -47,18 +47,10 @@ public static class AssignmentInstructionTests
         }
         
         [Test]
-        public void HandlesAssignmentOperators()
+        public void AssignmentOperators()
         {
             var (callStack, closure) = Runner.Run("x = 6\nx += 2");
             var expected = BsTypes.Create(BsTypes.Types.Int, 8);
-            Assertions.AssertVariable(callStack, closure, "x", expected);
-        }
-
-        [Test]
-        public void ReturnsAssignedVariable()
-        {
-            var (callStack, closure) = Runner.Run("x = 6");
-            var expected = BsTypes.Create(BsTypes.Types.Int, 6);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }

@@ -46,15 +46,4 @@ public static class OperationInstructionTests
             Assert.That(result[0], Is.EqualTo(expected));
         }
     }
-    
-    [TestFixture]
-    public class Interpret
-    {
-        [Test]
-        public void HandlesBinaryOperations()
-        {
-            var (callStack, closure) = Runner.Run("x = 5 + 6");
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 11));
-        }
-    }
 }

@@ -125,7 +125,7 @@ public class Lexer(string input, string? fileName = null)
         
         if (nextCharacters.Length >= 2)
         {
-            var firstTwoCharacters = nextCharacters.Substring(0, 2);
+            var firstTwoCharacters = nextCharacters[..2];
             if (Consts.Operators.Contains(firstTwoCharacters) || Consts.Assignments.Contains(firstTwoCharacters))
             {
                 return firstTwoCharacters;
@@ -144,10 +144,8 @@ public class Lexer(string input, string? fileName = null)
         return null;
     }
     
-    private bool IsBackslashFollowedByReturn(string nextCharacters)
-    {
-        return nextCharacters.Length >= 2 && nextCharacters.Substring(0, 2) == "\\\n";
-    }
+    private bool IsBackslashFollowedByReturn(string nextCharacters) =>
+        nextCharacters.Length >= 2 && nextCharacters[..2] == "\\\n";
     
     private bool IsNumber(string nextCharacters)
     {
@@ -160,11 +158,11 @@ public class Lexer(string input, string? fileName = null)
     {
         if (input.IndexOf('\n', _index) != -1)
         {
-            return input.Substring(_index, input.IndexOf('\n', _index) - _index);
+            return input[_index..input.IndexOf('\n', _index)];
         }
         else
         {
-            return input.Substring(_index);
+            return input[_index..];
         }
     }
     

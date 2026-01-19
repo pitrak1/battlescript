@@ -35,8 +35,5 @@ public class GlobalInstruction : Instruction
         return Name == inst.Name;
     }
     
-    public override int GetHashCode()
-    {
-        return Name.GetHashCode() * 25;
-    }
+    public override int GetHashCode() => Name.GetHashCode() * 25;
 }

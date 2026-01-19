@@ -48,92 +48,119 @@ public class ConversionTypeInstruction : Instruction
         switch (Value)
         {
             case "__btl_numeric__":
-                if (Parameters.Count == 0)
-                {
-                    return new NumericVariable(0);
-                }
-                
-                if (Parameters.Count > 2)
-                {
-                    throw new Exception("Too many parameters for __btl_numeric__");
-                }
-
-                // This is kind of a hacky workaround.  I'll have to give this one some thought
-                bool shouldTruncate = Parameters.Count == 2;
-
-                dynamic value = 0;
-                if (Parameters[0] is NumericInstruction numInstruction)
-                {
-                    value = numInstruction.Value;
-                }
-                else if (Parameters[0] is StringInstruction stringInstruction)
-                {
-                    value = stringInstruction.Value.Contains(".") ? float.Parse(stringInstruction.Value) : int.Parse(stringInstruction.Value);
-                }
-                else if (Parameters[0] is VariableInstruction variableInstruction)
-                {
-                    var variableValue = closure.GetVariable(callStack, variableInstruction);
-                    if (variableValue is StringVariable stringVariable)
-                    {
-                        value = stringVariable.Value.Contains(".") ? float.Parse(stringVariable.Value) : int.Parse(stringVariable.Value);
-                    }
-                    else if (variableValue is NumericVariable numericVariable)
-                    {
-                        value = numericVariable.Value;
-                    }
-                    else if (BsTypes.Is(BsTypes.Types.String, variableValue))
-                    {
-                        var stringValue = BsTypes.GetStringValue(variableValue);
-                        value = stringValue.Contains(".") ? float.Parse(stringValue) : int.Parse(stringValue);
-                    }
-                    else if (BsTypes.Is(BsTypes.Types.Int, variableValue))
-                    {
-                        value = BsTypes.GetIntValue(variableValue);
-                    }
-                    else if (BsTypes.Is(BsTypes.Types.Float, variableValue))
-                    {
-                        value = BsTypes.GetFloatValue(variableValue);
-                    }
-                }
-
-                if (shouldTruncate && value is double)
-                {
-                    value = (int)Math.Floor(value);
-                }
-                
-                return new NumericVariable(value);
+                return InterpretNumeric(callStack, closure, instructionContext);
             case "__btl_sequence__":
                 return new SequenceVariable();
             case "__btl_mapping__":
                 return new MappingVariable();
             case "__btl_string__":
-                if (Parameters.Count == 1)
-                {
-                    var parameter = Parameters[0].Interpret(callStack, closure, instructionContext);
-                    if (parameter is StringVariable stringVariable)
-                    {
-                        return stringVariable;
-                    }
-                    else if (parameter is NumericVariable numericVariable)
-                    {
-                        return new StringVariable(numericVariable.Value.ToString());
-                    }
-                    else if (BsTypes.Is(BsTypes.Types.String, parameter))
-                    {
-                        return new StringVariable(BsTypes.GetStringValue(parameter));
-                    }
-                    else if (BsTypes.Is(BsTypes.Types.Int, parameter))
-                    {
-                        return new StringVariable(BsTypes.GetIntValue(parameter).ToString());
-                    }
-                    else if (BsTypes.Is(BsTypes.Types.Float, parameter))
-                    {
-                        return new StringVariable(BsTypes.GetFloatValue(parameter).ToString());
-                    }
-                }
-                return new StringVariable();
+                return InterpretString(callStack, closure, instructionContext);
         }
         return null;
+    }
+
+    private Variable InterpretString(CallStack callStack, Closure closure, Variable? instructionContext = null)
+    {
+        if (Parameters.Count > 0)
+        {
+            var parameter = Parameters[0].Interpret(callStack, closure, instructionContext);
+            if (parameter is StringVariable stringVariable)
+            {
+                return stringVariable;
+            }
+            else if (parameter is NumericVariable numericVariable)
+            {
+                return new StringVariable(numericVariable.Value.ToString());
+            }
+            else if (BsTypes.Is(BsTypes.Types.String, parameter))
+            {
+                return new StringVariable(BsTypes.GetStringValue(parameter));
+            }
+            else if (BsTypes.Is(BsTypes.Types.Int, parameter))
+            {
+                return new StringVariable(BsTypes.GetIntValue(parameter).ToString());
+            }
+            else if (BsTypes.Is(BsTypes.Types.Float, parameter))
+            {
+                return new StringVariable(BsTypes.GetFloatValue(parameter).ToString());
+            }
+        }
+        return new StringVariable();
+    }
+
+    private Variable InterpretNumeric(CallStack callStack, Closure closure, Variable? instructionContext = null)
+    {
+        if (Parameters.Count == 0)
+        {
+            return new NumericVariable(0);
+        }
+        
+        // The reason we have to check instructions instead of interpreting and checking the variables
+        // is that conversion types are used in the built-in types, so interpreting a number will not
+        // work if we haven't defined int or float
+        dynamic value = GetValueFromInstruction(closure, callStack, Parameters[0]);
+        
+        // Because we want to be able to truncate to an integer, we pass a second argument of True
+        if (Parameters.Count == 2 && value is double)
+        {
+            value = (int)Math.Floor(value);
+        }
+        
+        return new NumericVariable(value);
+    }
+
+    private dynamic GetValueFromInstruction(Closure closure, CallStack callStack, Instruction instruction)
+    {
+        if (instruction is NumericInstruction numInstruction)
+        {
+            return numInstruction.Value;
+        }
+        else if (instruction is StringInstruction stringInstruction)
+        {
+            return ConvertStringToIntOrDouble(stringInstruction.Value);
+        }
+        else if (instruction is VariableInstruction variableInstruction)
+        {
+            var variableValue = closure.GetVariable(callStack, variableInstruction);
+            return GetValueFromVariable(variableValue);
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    private dynamic GetValueFromVariable(Variable? variable)
+    {
+        if (variable is StringVariable stringVariable)
+        {
+            return ConvertStringToIntOrDouble(stringVariable.Value);
+        }
+        else if (variable is NumericVariable numericVariable)
+        {
+            return numericVariable.Value;
+        }
+        else if (BsTypes.Is(BsTypes.Types.String, variable!))
+        {
+            return ConvertStringToIntOrDouble(BsTypes.GetStringValue(variable!));
+        }
+        else if (BsTypes.Is(BsTypes.Types.Int, variable!))
+        {
+            return BsTypes.GetIntValue(variable!);
+        }
+        else if (BsTypes.Is(BsTypes.Types.Float, variable!))
+        {
+            return BsTypes.GetFloatValue(variable!);
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    private dynamic ConvertStringToIntOrDouble(string value)
+    {
+        return value.Contains(".") ? double.Parse(value) : int.Parse(value);
     }
     
     // All the code below is to override equality
@@ -148,16 +175,5 @@ public class ConversionTypeInstruction : Instruction
         return parametersEqual && Value == inst.Value;
     }
     
-    public override int GetHashCode()
-    {
-        int hash = 77;
-
-        for (int i = 0; i < Parameters.Count; i++)
-        {
-            hash += Parameters[i].GetHashCode() * 83 * (i + 1);
-        }
-
-        hash += Value.GetHashCode() * 91;
-        return hash;
-    }
+    public override int GetHashCode() => HashCode.Combine(Parameters, Value);
 }

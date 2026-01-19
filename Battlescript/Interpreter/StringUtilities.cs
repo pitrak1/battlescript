@@ -89,7 +89,7 @@ public static class StringUtilities
 
         if (start < value.Length)
         {
-            result.Add(value.Substring(start));
+            result.Add(value[start..]);
         }
 
         if (inBrackets)

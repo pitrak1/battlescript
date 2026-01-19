@@ -44,8 +44,5 @@ public class StringInstruction : Instruction
         return Value == inst.Value && IsFormatted == inst.IsFormatted;
     }
     
-    public override int GetHashCode()
-    {
-        return Value.GetHashCode() * 81 + IsFormatted.GetHashCode() * 21;
-    }
+    public override int GetHashCode() => HashCode.Combine(Value, IsFormatted);
 }

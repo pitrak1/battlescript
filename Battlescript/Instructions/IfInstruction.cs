@@ -62,17 +62,5 @@ public class IfInstruction : Instruction
         return instructionsEqual && Condition.Equals(inst.Condition) && Equals(Next, inst.Next);
     }
     
-    public override int GetHashCode()
-    {
-        int hash = 71;
-
-        for (int i = 0; i < Instructions.Count; i++)
-        {
-            hash += Instructions[i].GetHashCode() * 17 * (i + 1);
-        }
-
-        var nextHash = Next?.GetHashCode() * 71 ?? 78;
-        hash += Condition.GetHashCode() * 62 + nextHash;
-        return hash;
-    }
+    public override int GetHashCode() => HashCode.Combine(Instructions, Condition, Next);
 }

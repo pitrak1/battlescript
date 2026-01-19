@@ -41,8 +41,5 @@ public class ReturnInstruction : Instruction
         return Equals(Value, inst.Value);
     }
     
-    public override int GetHashCode()
-    {
-        return Value?.GetHashCode() * 81 ?? 36;
-    }
+    public override int GetHashCode() => Value?.GetHashCode() * 81 ?? 36;
 }
