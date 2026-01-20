@@ -135,7 +135,7 @@ public class ArgumentTransferTests
                 new VariableInstruction("asdf"),
                 new VariableInstruction("qwer")
             });
-            Assert.Throws<Exception>(() => ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters));
+            Assert.Throws<InterpreterUnknownPositionalArgumentException>(() => ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters));
         }
 
         [Test]
@@ -152,7 +152,7 @@ public class ArgumentTransferTests
                 new VariableInstruction("asdf"),
                 new AssignmentInstruction("=", new VariableInstruction("qwer"), new StringInstruction("asdf"))
             });
-            Assert.Throws<Exception>(() => ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters));
+            Assert.Throws<InterpreterUnknownKeywordArgumentException>(() => ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters));
         }
 
         [Test]

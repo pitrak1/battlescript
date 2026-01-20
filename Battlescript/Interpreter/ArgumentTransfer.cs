@@ -5,7 +5,7 @@ public static class ArgumentTransfer
     public static void Execute(CallStack callStack, Closure closure, ArgumentSet arguments, ParameterSet parameters)
     {
         var variableTransferDictionary = GetVariableTransferDictionary(callStack, closure, arguments, parameters);
-        
+
         foreach (var (name, value) in variableTransferDictionary)
         {
             closure.SetVariable(callStack, new VariableInstruction(name: name), value);
@@ -15,49 +15,53 @@ public static class ArgumentTransfer
     public static Dictionary<string, Variable> GetVariableTransferDictionary(
         CallStack callStack,
         Closure closure,
-        ArgumentSet arguments, 
+        ArgumentSet arguments,
         ParameterSet parameters)
     {
-        var parameterDictionary = parameters.GetVariableDictionary(callStack, closure);
-        var positionalArgumentDictionary = arguments.GetPositionalArgumentsAsDictionary();
+        var result = new Dictionary<string, Variable>();
+        var usedKeywords = new HashSet<string>();
 
         for (var i = 0; i < parameters.Names.Count; i++)
         {
             var parameterName = parameters.Names[i];
-            var argumentIsProvidedByPosition = positionalArgumentDictionary.ContainsKey(i);
-            var argumentIsProvidedByKeyword = arguments.Keywords.ContainsKey(parameterName);
-            var parameterHasDefaultValue = parameters.DefaultValues.ContainsKey(parameterName);
-            
-            if (argumentIsProvidedByPosition && argumentIsProvidedByKeyword)
+            var hasPositionalArg = i < arguments.Positionals.Count;
+            var hasKeywordArg = arguments.Keywords.ContainsKey(parameterName);
+            var hasDefaultValue = parameters.DefaultValues.ContainsKey(parameterName);
+
+            if (hasPositionalArg && hasKeywordArg)
             {
                 throw new InterpreterMultipleArgumentsForParameterException(parameterName);
-            }
-            else if (argumentIsProvidedByPosition)
+            } else if (hasPositionalArg)
             {
-                parameterDictionary[parameterName] = positionalArgumentDictionary[i];
-                positionalArgumentDictionary.Remove(i);
+                result[parameterName] = arguments.Positionals[i];
             }
-            else if (argumentIsProvidedByKeyword)
+            else if (hasKeywordArg)
             {
-                parameterDictionary[parameterName] = arguments.Keywords[parameterName];
-                arguments.Keywords.Remove(parameterName);
+                result[parameterName] = arguments.Keywords[parameterName];
+                usedKeywords.Add(parameterName);
             }
-            else if (!parameterHasDefaultValue)
+            else if (hasDefaultValue)
+            {
+                result[parameterName] = parameters.DefaultValues[parameterName].Interpret(callStack, closure);
+            }
+            else
             {
                 throw new InterpreterMissingRequiredArgumentException(parameterName);
             }
         }
-        
-        if (positionalArgumentDictionary.Count > 0)
+
+        var extraPositionalCount = arguments.Positionals.Count - parameters.Names.Count;
+        if (extraPositionalCount > 0)
         {
-            throw new Exception("unknown positional arguments at " + positionalArgumentDictionary.Keys.ToList());
+            throw new InterpreterUnknownPositionalArgumentException(extraPositionalCount);
         }
-        
-        if (arguments.Keywords.Count > 0)
+
+        var unusedKeywords = arguments.Keywords.Keys.Except(usedKeywords).ToList();
+        if (unusedKeywords.Count > 0)
         {
-            throw new Exception("unknown keyword arguments at " + arguments.Keywords.Keys.ToList());
+            throw new InterpreterUnknownKeywordArgumentException(unusedKeywords);
         }
-        
-        return parameterDictionary;
+
+        return result;
     }
 }

@@ -254,9 +254,9 @@ public class FunctionsTestsOld
                             return x + y
                         x = func(4, 5, 6)
                         """;
-            Assert.Throws<Exception>(() => Runner.Run(input));
+            Assert.Throws<InterpreterUnknownPositionalArgumentException>(() => Runner.Run(input));
         }
-        
+
         [Test]
         public void ThrowsErrorIfExtraKeywordArgument()
         {
@@ -265,7 +265,7 @@ public class FunctionsTestsOld
                             return x + y
                         x = func(x = 4, y = 5, z = 6)
                         """;
-            Assert.Throws<Exception>(() => Runner.Run(input));
+            Assert.Throws<InterpreterUnknownKeywordArgumentException>(() => Runner.Run(input));
         }
     }
     
