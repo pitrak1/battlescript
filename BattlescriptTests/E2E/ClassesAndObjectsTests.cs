@@ -20,7 +20,7 @@ public static class ClassesAndObjectsTests
                     {"i", BtlTypes.Create(BtlTypes.Types.Int, 1234)}
                 }, closure);
             
-            Assertions.AssertVariable(callStack, closure, "asdf", expected);
+            Assert.That(closure.GetVariable(callStack, "asdf"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -36,7 +36,7 @@ public static class ClassesAndObjectsTests
                 values,
                 new ClassVariable("asdf", values, closure));
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -65,7 +65,7 @@ public static class ClassesAndObjectsTests
                 objectValues,
                 new ClassVariable("asdf", classValues, closure));
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -75,7 +75,7 @@ public static class ClassesAndObjectsTests
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 1234);
             
-            Assertions.AssertVariable(callStack, closure, "y", expected);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -91,7 +91,7 @@ public static class ClassesAndObjectsTests
                 closure
             );
             
-            Assertions.AssertVariable(callStack, closure, "asdf", expected);
+            Assert.That(closure.GetVariable(callStack, "asdf"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -110,7 +110,7 @@ public static class ClassesAndObjectsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 2345);
-            Assertions.AssertVariable(callStack, closure, "y", expected);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
         }
     }
     
@@ -129,7 +129,7 @@ public static class ClassesAndObjectsTests
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -146,7 +146,7 @@ public static class ClassesAndObjectsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 6);
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -163,7 +163,7 @@ public static class ClassesAndObjectsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 9);
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         
@@ -187,7 +187,7 @@ public static class ClassesAndObjectsTests
                 {
                     { "j", BtlTypes.Create(BtlTypes.Types.Int, 2345) }
                 }, closure, [superclass]);
-            Assertions.AssertVariable(callStack, closure, "qwer", expected);
+            Assert.That(closure.GetVariable(callStack, "qwer"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -206,7 +206,7 @@ public static class ClassesAndObjectsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 9);
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
     }
 
@@ -229,7 +229,7 @@ public static class ClassesAndObjectsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 10);
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -247,7 +247,7 @@ public static class ClassesAndObjectsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, -5);
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         // Definitely need to take a closer look here.  We may have to do some wonky stuff to make this work right

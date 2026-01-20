@@ -1,8 +1,8 @@
 namespace Battlescript;
 
-public class VariableInstruction : Instruction
+public class VariableInstruction : Instruction, IEquatable<VariableInstruction>
 {
-    public string Name { get; set; } 
+    public string Name { get; set; }
 
     public VariableInstruction(List<Token> tokens) : base(tokens)
     {
@@ -11,9 +11,9 @@ public class VariableInstruction : Instruction
     }
 
     public VariableInstruction(
-        string name, 
-        Instruction? next = null, 
-        int? line = null, 
+        string name,
+        Instruction? next = null,
+        int? line = null,
         string? expression = null) : base(line, expression)
     {
         Name = name;
@@ -29,20 +29,23 @@ public class VariableInstruction : Instruction
         if (Next is null)
         {
             return variable;
-        } 
+        }
         return Next.Interpret(callStack, closure, variable);
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object? obj) => Equals(obj as VariableInstruction);
-    public bool Equals(VariableInstruction? inst)
-    {
-        if (inst is null) return false;
-        if (ReferenceEquals(this, inst)) return true;
-        if (GetType() != inst.GetType()) return false;
-        
-        return Name == inst.Name;
-    }
-    
-    public override int GetHashCode() => Name.GetHashCode() * 10;
+
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is VariableInstruction inst && Equals(inst);
+
+    public bool Equals(VariableInstruction? other) =>
+        other is not null && Name == other.Name;
+
+    public override int GetHashCode() => Name.GetHashCode();
+
+    public static bool operator ==(VariableInstruction? left, VariableInstruction? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(VariableInstruction? left, VariableInstruction? right) => !(left == right);
+
+    #endregion
 }

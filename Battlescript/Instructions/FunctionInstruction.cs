@@ -1,8 +1,8 @@
 namespace Battlescript;
 
-public class FunctionInstruction : Instruction
+public class FunctionInstruction : Instruction, IEquatable<FunctionInstruction>
 {
-    public string Name { get; set; } 
+    public string Name { get; set; }
     public ParameterSet Parameters { get; set; }
 
     public FunctionInstruction(List<Token> tokens) : base(tokens)
@@ -53,17 +53,22 @@ public class FunctionInstruction : Instruction
         return functionValue;
     }
     
-    // All the code below is to override equality
-    public override bool Equals(object? obj) => Equals(obj as FunctionInstruction);
-    public bool Equals(FunctionInstruction? inst)
-    {
-        if (inst is null) return false;
-        if (ReferenceEquals(this, inst)) return true;
-        if (GetType() != inst.GetType()) return false;
-        
-        var instructionsEqual = Instructions.SequenceEqual(inst.Instructions);
-        return instructionsEqual && Name == inst.Name && Parameters.Equals(inst.Parameters);
-    }
-    
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is FunctionInstruction inst && Equals(inst);
+
+    public bool Equals(FunctionInstruction? other) =>
+        other is not null &&
+        Instructions.SequenceEqual(other.Instructions) &&
+        Name == other.Name &&
+        Equals(Parameters, other.Parameters);
+
     public override int GetHashCode() => HashCode.Combine(Instructions, Name, Parameters);
+
+    public static bool operator ==(FunctionInstruction? left, FunctionInstruction? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(FunctionInstruction? left, FunctionInstruction? right) => !(left == right);
+
+    #endregion
 }

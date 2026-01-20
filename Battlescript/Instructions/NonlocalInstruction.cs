@@ -1,10 +1,8 @@
-using System.Diagnostics;
-
 namespace Battlescript;
 
-public class NonlocalInstruction : Instruction
+public class NonlocalInstruction : Instruction, IEquatable<NonlocalInstruction>
 {
-    public string Name { get; set; } 
+    public string Name { get; set; }
 
     public NonlocalInstruction(List<Token> tokens) : base(tokens)
     {
@@ -23,17 +21,20 @@ public class NonlocalInstruction : Instruction
         closure.CreateNonlocalReference(Name);
         return null;
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object? obj) => Equals(obj as NonlocalInstruction);
-    public bool Equals(NonlocalInstruction? inst)
-    {
-        if (inst is null) return false;
-        if (ReferenceEquals(this, inst)) return true;
-        if (GetType() != inst.GetType()) return false;
-        
-        return Name == inst.Name;
-    }
-    
-    public override int GetHashCode() => Name.GetHashCode() * 90;
+
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is NonlocalInstruction inst && Equals(inst);
+
+    public bool Equals(NonlocalInstruction? other) =>
+        other is not null && Name == other.Name;
+
+    public override int GetHashCode() => Name.GetHashCode();
+
+    public static bool operator ==(NonlocalInstruction? left, NonlocalInstruction? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(NonlocalInstruction? left, NonlocalInstruction? right) => !(left == right);
+
+    #endregion
 }

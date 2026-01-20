@@ -78,18 +78,23 @@ public class MappingVariable : Variable, IEquatable<MappingVariable>
         }
     }
     
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as MappingVariable);
-    public bool Equals(MappingVariable? variable)
-    {
-        if (variable is null) return false;
-        if (ReferenceEquals(this, variable)) return true;
-        if (GetType() != variable.GetType()) return false;
-        
-        var intEqual = IntValues.OrderBy(kvp => kvp.Key).SequenceEqual(variable.IntValues.OrderBy(kvp => kvp.Key));
-        var stringEqual = StringValues.OrderBy(kvp => kvp.Key).SequenceEqual(variable.StringValues.OrderBy(kvp => kvp.Key));
-        return intEqual && stringEqual;
-    }
-    
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is MappingVariable variable && Equals(variable);
+
+    public bool Equals(MappingVariable? other) =>
+        other is not null &&
+        IntValues.OrderBy(kvp => kvp.Key).SequenceEqual(other.IntValues.OrderBy(kvp => kvp.Key)) &&
+        StringValues.OrderBy(kvp => kvp.Key).SequenceEqual(other.StringValues.OrderBy(kvp => kvp.Key));
+
+    public override bool Equals(Variable? other) => other is MappingVariable variable && Equals(variable);
+
     public override int GetHashCode() => HashCode.Combine(IntValues, StringValues);
+
+    public static bool operator ==(MappingVariable? left, MappingVariable? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(MappingVariable? left, MappingVariable? right) => !(left == right);
+
+    #endregion
 }

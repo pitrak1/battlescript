@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class ArrayInstruction : Instruction
+public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
 {
     public enum BracketTypes { CurlyBraces, SquareBrackets, Parentheses, None }
     public BracketTypes Bracket { get; private set; } = BracketTypes.None;
@@ -186,17 +186,23 @@ public class ArrayInstruction : Instruction
         return BtlTypes.Create(BtlTypes.Types.List, interpretedValues.ToList());
     }
     
-    // All the code below is to override equality
-    public override bool Equals(object? obj) => Equals(obj as ArrayInstruction);
-    public bool Equals(ArrayInstruction? inst)
-    {
-        if (inst is null) return false;
-        if (ReferenceEquals(this, inst)) return true;
-        if (GetType() != inst.GetType()) return false;
-        
-        var valuesEqual = Values.SequenceEqual(inst.Values);
-        return valuesEqual && Bracket == inst.Bracket && Delimiter == inst.Delimiter && Equals(Next, inst.Next);
-    }
-    
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is ArrayInstruction inst && Equals(inst);
+
+    public bool Equals(ArrayInstruction? other) =>
+        other is not null &&
+        Values.SequenceEqual(other.Values) &&
+        Bracket == other.Bracket &&
+        Delimiter == other.Delimiter &&
+        Equals(Next, other.Next);
+
     public override int GetHashCode() => HashCode.Combine(Values, Bracket, Delimiter, Next);
+
+    public static bool operator ==(ArrayInstruction? left, ArrayInstruction? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ArrayInstruction? left, ArrayInstruction? right) => !(left == right);
+
+    #endregion
 }

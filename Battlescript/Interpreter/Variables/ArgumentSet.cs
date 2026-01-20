@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class ArgumentSet
+public class ArgumentSet : IEquatable<ArgumentSet>
 {
     public List<Variable> Positionals { get; set; } = [];
     public Dictionary<string, Variable> Keywords { get; set; } = [];
@@ -25,7 +25,7 @@ public class ArgumentSet
                 {
                     throw new InterpreterKeywordArgBeforePositionalArgException();
                 }
-                
+
                 var value = argument.Interpret(callStack, closure);
                 Positionals.Add(value);
             }
@@ -37,16 +37,34 @@ public class ArgumentSet
         // If we're given a list of variables instead of instructions, just treat them as positional arguments
         Positionals = arguments;
     }
-    
+
     public Dictionary<int, Variable> GetPositionalArgumentsAsDictionary()
     {
         var result = new Dictionary<int, Variable>();
-            
+
         for (var i = 0; i < Positionals.Count; i++)
         {
             result.Add(i, Positionals[i]);
         }
-            
+
         return result;
     }
+
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is ArgumentSet other && Equals(other);
+
+    public bool Equals(ArgumentSet? other) =>
+        other is not null &&
+        Positionals.SequenceEqual(other.Positionals) &&
+        Keywords.OrderBy(kvp => kvp.Key).SequenceEqual(other.Keywords.OrderBy(kvp => kvp.Key));
+
+    public override int GetHashCode() => HashCode.Combine(Positionals, Keywords);
+
+    public static bool operator ==(ArgumentSet? left, ArgumentSet? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ArgumentSet? left, ArgumentSet? right) => !(left == right);
+
+    #endregion
 }

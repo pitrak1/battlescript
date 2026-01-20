@@ -3,17 +3,22 @@ namespace Battlescript;
 public class ConstantVariable : Variable, IEquatable<ConstantVariable>
 {
     public Consts.Constants Value { get; set; } = Consts.Constants.None;
-    
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as ConstantVariable);
-    public bool Equals(ConstantVariable? variable)
-    {
-        if (variable is null) return false;
-        if (ReferenceEquals(this, variable)) return true;
-        if (GetType() != variable.GetType()) return false;
-        
-        return Value == variable.Value;
-    }
-    
+
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is ConstantVariable variable && Equals(variable);
+
+    public bool Equals(ConstantVariable? other) =>
+        other is not null && Value == other.Value;
+
+    public override bool Equals(Variable? other) => other is ConstantVariable variable && Equals(variable);
+
     public override int GetHashCode() => HashCode.Combine(Value);
+
+    public static bool operator ==(ConstantVariable? left, ConstantVariable? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ConstantVariable? left, ConstantVariable? right) => !(left == right);
+
+    #endregion
 }

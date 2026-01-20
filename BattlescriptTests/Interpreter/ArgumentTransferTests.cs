@@ -26,9 +26,9 @@ public class ArgumentTransferTests
                 { "asdf", BtlTypes.Create(BtlTypes.Types.Int, 1234) },
                 { "qwer", BtlTypes.Create(BtlTypes.Types.String, "asdf") }
             };
-            Assertions.AssertVariableDictionariesEqual(result, expected);
+            Assert.That(result, Is.EquivalentTo(expected));
         }
-        
+
         [Test]
         public void KeywordArguments()
         {
@@ -49,9 +49,9 @@ public class ArgumentTransferTests
                 { "asdf", BtlTypes.Create(BtlTypes.Types.Int, 1234) },
                 { "qwer", BtlTypes.Create(BtlTypes.Types.String, "asdf") }
             };
-            Assertions.AssertVariableDictionariesEqual(result, expected);
+            Assert.That(result, Is.EquivalentTo(expected));
         }
-        
+
         [Test]
         public void MixedArguments()
         {
@@ -72,9 +72,9 @@ public class ArgumentTransferTests
                 { "asdf", BtlTypes.Create(BtlTypes.Types.Int, 1234) },
                 { "qwer", BtlTypes.Create(BtlTypes.Types.String, "asdf") }
             };
-            Assertions.AssertVariableDictionariesEqual(result, expected);
+            Assert.That(result, Is.EquivalentTo(expected));
         }
-        
+
         [Test]
         public void RespectsDefaultValues()
         {
@@ -94,9 +94,9 @@ public class ArgumentTransferTests
                 { "asdf", BtlTypes.Create(BtlTypes.Types.Int, 1234) },
                 { "qwer", BtlTypes.Create(BtlTypes.Types.String, "asdf") }
             };
-            Assertions.AssertVariableDictionariesEqual(result, expected);
+            Assert.That(result, Is.EquivalentTo(expected));
         }
-        
+
         [Test]
         public void PrioritizedGivenValuesOverDefaultValues()
         {
@@ -117,9 +117,9 @@ public class ArgumentTransferTests
                 { "asdf", BtlTypes.Create(BtlTypes.Types.Int, 1234) },
                 { "qwer", BtlTypes.Create(BtlTypes.Types.Int, 5678) }
             };
-            Assertions.AssertVariableDictionariesEqual(result, expected);
+            Assert.That(result, Is.EquivalentTo(expected));
         }
-        
+
         [Test]
         public void ThrowsErrorIfTooManyArguments()
         {
@@ -137,7 +137,7 @@ public class ArgumentTransferTests
             });
             Assert.Throws<Exception>(() => ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters));
         }
-        
+
         [Test]
         public void ThrowsErrorIfUnknownKeywordArgument()
         {
@@ -154,7 +154,7 @@ public class ArgumentTransferTests
             });
             Assert.Throws<Exception>(() => ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters));
         }
-        
+
         [Test]
         public void ThrowsErrorIfNotAllParametersHaveValues()
         {

@@ -12,7 +12,8 @@ public static class ReturnInstructionTests
         public void ReturnValue()
         {
             var expected = new ReturnInstruction(new NumericInstruction(4));
-            Assertions.AssertInputProducesParserOutput("return 4", expected);
+            var result = Runner.Parse("return 4");
+            Assert.That(result[0], Is.EqualTo(expected));
         }
     }
 
@@ -35,8 +36,8 @@ public static class ReturnInstructionTests
                             new VariableInstruction("asdf"),
                             new NumericInstruction(5)))
                 ]);
-            Assertions.AssertVariable(callStack, closure, "func", funcVariable);
-            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, 9));
+            Assert.That(closure.GetVariable(callStack, "func"), Is.EqualTo(funcVariable));
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 9)));
         }
     }
 }

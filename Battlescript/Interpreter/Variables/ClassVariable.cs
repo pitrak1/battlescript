@@ -111,18 +111,24 @@ public class ClassVariable : Variable, IEquatable<ClassVariable>
         return false;
     }
     
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as ClassVariable);
-    public bool Equals(ClassVariable? variable)
-    {
-        if (variable is null) return false;
-        if (ReferenceEquals(this, variable)) return true;
-        if (GetType() != variable.GetType()) return false;
-        if (Name != variable.Name) return false;
-        
-        var valuesEqual = Values.OrderBy(kvp => kvp.Key).SequenceEqual(variable.Values.OrderBy(kvp => kvp.Key));
-        return SuperClasses.SequenceEqual(variable.SuperClasses) && valuesEqual;
-    }
-    
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is ClassVariable variable && Equals(variable);
+
+    public bool Equals(ClassVariable? other) =>
+        other is not null &&
+        Name == other.Name &&
+        Values.OrderBy(kvp => kvp.Key).SequenceEqual(other.Values.OrderBy(kvp => kvp.Key)) &&
+        SuperClasses.SequenceEqual(other.SuperClasses);
+
+    public override bool Equals(Variable? other) => other is ClassVariable variable && Equals(variable);
+
     public override int GetHashCode() => HashCode.Combine(Name, Values, SuperClasses);
+
+    public static bool operator ==(ClassVariable? left, ClassVariable? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ClassVariable? left, ClassVariable? right) => !(left == right);
+
+    #endregion
 }

@@ -111,17 +111,23 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
         }
     }
     
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as ObjectVariable);
-    public bool Equals(ObjectVariable? variable)
-    {
-        if (variable is null) return false;
-        if (ReferenceEquals(this, variable)) return true;
-        if (GetType() != variable.GetType()) return false;
-        
-        var valuesEqual = Values.OrderBy(kvp => kvp.Key).SequenceEqual(variable.Values.OrderBy(kvp => kvp.Key));
-        return valuesEqual && Class.Equals(variable.Class);
-    }
-    
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is ObjectVariable variable && Equals(variable);
+
+    public bool Equals(ObjectVariable? other) =>
+        other is not null &&
+        Values.OrderBy(kvp => kvp.Key).SequenceEqual(other.Values.OrderBy(kvp => kvp.Key)) &&
+        Equals(Class, other.Class);
+
+    public override bool Equals(Variable? other) => other is ObjectVariable variable && Equals(variable);
+
     public override int GetHashCode() => HashCode.Combine(Values, Class);
+
+    public static bool operator ==(ObjectVariable? left, ObjectVariable? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ObjectVariable? left, ObjectVariable? right) => !(left == right);
+
+    #endregion
 }

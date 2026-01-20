@@ -46,22 +46,23 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
         return new ConstantVariable();
     }
     
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as FunctionVariable);
-    public bool Equals(FunctionVariable? variable)
-    {
-        if (variable is null) return false;
-        if (ReferenceEquals(this, variable)) return true;
-        if (GetType() != variable.GetType()) return false;
+    #region Equality
 
-        if (!Parameters.Names.SequenceEqual(variable.Parameters.Names) ||
-            !Parameters.DefaultValues.SequenceEqual(variable.Parameters.DefaultValues))
-        {
-            return false;
-        }
-        
-        return Instructions.SequenceEqual(variable.Instructions);
-    }
-    
+    public override bool Equals(object? obj) => obj is FunctionVariable variable && Equals(variable);
+
+    public bool Equals(FunctionVariable? other) =>
+        other is not null &&
+        Equals(Parameters, other.Parameters) &&
+        Instructions.SequenceEqual(other.Instructions);
+
+    public override bool Equals(Variable? other) => other is FunctionVariable variable && Equals(variable);
+
     public override int GetHashCode() => HashCode.Combine(Parameters, Instructions);
+
+    public static bool operator ==(FunctionVariable? left, FunctionVariable? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(FunctionVariable? left, FunctionVariable? right) => !(left == right);
+
+    #endregion
 }

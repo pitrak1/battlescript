@@ -16,9 +16,9 @@ public class ArgumentSetTests
                 new StringVariable("asdf")
             };
             var result = new ArgumentSet(expected);
-            Assertions.AssertVariableListsEqual(result.Positionals, expected);
+            Assert.That(result.Positionals, Is.EquivalentTo(expected));
         }
-        
+
         [Test]
         public void SupportsPositionalInstructionArguments()
         {
@@ -34,9 +34,9 @@ public class ArgumentSetTests
                 BtlTypes.Create(BtlTypes.Types.Int, 1234),
                 BtlTypes.Create(BtlTypes.Types.String, "asdf")
             };
-            Assertions.AssertVariableListsEqual(result.Positionals, expected);
+            Assert.That(result.Positionals, Is.EquivalentTo(expected));
         }
-        
+
         [Test]
         public void SupportsKeywordInstructionArguments()
         {
@@ -52,9 +52,9 @@ public class ArgumentSetTests
                 {"asdf", BtlTypes.Create(BtlTypes.Types.Int, 1234)},
                 {"qwer", BtlTypes.Create(BtlTypes.Types.String, "asdf")}
             };
-            Assertions.AssertVariableDictionariesEqual(result.Keywords, expected);
+            Assert.That(result.Keywords, Is.EquivalentTo(expected));
         }
-        
+
         [Test]
         public void SupportsMixedInstructionArguments()
         {
@@ -70,8 +70,8 @@ public class ArgumentSetTests
             {
                 {"qwer", BtlTypes.Create(BtlTypes.Types.String, "asdf")}
             };
-            Assertions.AssertVariableListsEqual(result.Positionals, expectedPositionals);
-            Assertions.AssertVariableDictionariesEqual(result.Keywords, expectedKeywords);
+            Assert.That(result.Positionals, Is.EquivalentTo(expectedPositionals));
+            Assert.That(result.Keywords, Is.EquivalentTo(expectedKeywords));
         }
 
         [Test]
@@ -86,6 +86,6 @@ public class ArgumentSetTests
             Assert.Throws<InterpreterKeywordArgBeforePositionalArgException>(() => new ArgumentSet(callStack, closure, input));
         }
     }
-    
-    
+
+
 }

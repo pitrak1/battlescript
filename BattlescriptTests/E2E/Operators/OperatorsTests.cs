@@ -18,10 +18,10 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "a", BtlTypes.True);
-            Assertions.AssertVariable(callStack, closure, "b", BtlTypes.False);
-            Assertions.AssertVariable(callStack, closure, "c", BtlTypes.False);
-            Assertions.AssertVariable(callStack, closure, "d", BtlTypes.False);
+            Assert.That(closure.GetVariable(callStack, "a"), Is.EqualTo(BtlTypes.True));
+            Assert.That(closure.GetVariable(callStack, "b"), Is.EqualTo(BtlTypes.False));
+            Assert.That(closure.GetVariable(callStack, "c"), Is.EqualTo(BtlTypes.False));
+            Assert.That(closure.GetVariable(callStack, "d"), Is.EqualTo(BtlTypes.False));
         }
         
         [Test]
@@ -35,10 +35,10 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "a", BtlTypes.True);
-            Assertions.AssertVariable(callStack, closure, "b", BtlTypes.True);
-            Assertions.AssertVariable(callStack, closure, "c", BtlTypes.True);
-            Assertions.AssertVariable(callStack, closure, "d", BtlTypes.False);
+            Assert.That(closure.GetVariable(callStack, "a"), Is.EqualTo(BtlTypes.True));
+            Assert.That(closure.GetVariable(callStack, "b"), Is.EqualTo(BtlTypes.True));
+            Assert.That(closure.GetVariable(callStack, "c"), Is.EqualTo(BtlTypes.True));
+            Assert.That(closure.GetVariable(callStack, "d"), Is.EqualTo(BtlTypes.False));
         }
         
         [Test]
@@ -50,8 +50,8 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "a", BtlTypes.True);
-            Assertions.AssertVariable(callStack, closure, "b", BtlTypes.False);
+            Assert.That(closure.GetVariable(callStack, "a"), Is.EqualTo(BtlTypes.True));
+            Assert.That(closure.GetVariable(callStack, "b"), Is.EqualTo(BtlTypes.False));
         }
     }
 
@@ -74,8 +74,8 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "d", BtlTypes.False);
-            Assertions.AssertVariable(callStack, closure, "e", BtlTypes.True);
+            Assert.That(closure.GetVariable(callStack, "d"), Is.EqualTo(BtlTypes.False));
+            Assert.That(closure.GetVariable(callStack, "e"), Is.EqualTo(BtlTypes.True));
         }
         
         [Test]
@@ -94,8 +94,8 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "d", BtlTypes.True);
-            Assertions.AssertVariable(callStack, closure, "e", BtlTypes.False);
+            Assert.That(closure.GetVariable(callStack, "d"), Is.EqualTo(BtlTypes.True));
+            Assert.That(closure.GetVariable(callStack, "e"), Is.EqualTo(BtlTypes.False));
         }
     }
 
@@ -109,7 +109,7 @@ public class OperatorsTests
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 8);
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -119,7 +119,7 @@ public class OperatorsTests
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 6);
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -129,7 +129,7 @@ public class OperatorsTests
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Float, 0.4);
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
 
         [Test]
@@ -139,7 +139,7 @@ public class OperatorsTests
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 1);
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -149,7 +149,7 @@ public class OperatorsTests
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 2);
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -159,7 +159,7 @@ public class OperatorsTests
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 12);
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -169,7 +169,7 @@ public class OperatorsTests
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 2);
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
     }
 
@@ -183,7 +183,7 @@ public class OperatorsTests
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -193,7 +193,7 @@ public class OperatorsTests
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, -5);
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
     }
 
@@ -209,8 +209,8 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
-            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.False);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.True));
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.False));
         }
         
         [Test]
@@ -222,8 +222,8 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.False);
-            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.True);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.False));
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.True));
         }
         
         [Test]
@@ -236,9 +236,9 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
-            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.False);
-            Assertions.AssertVariable(callStack, closure, "z", BtlTypes.False);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.True));
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.False));
+            Assert.That(closure.GetVariable(callStack, "z"), Is.EqualTo(BtlTypes.False));
         }
         
         [Test]
@@ -251,9 +251,9 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
-            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.True);
-            Assertions.AssertVariable(callStack, closure, "z", BtlTypes.False);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.True));
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.True));
+            Assert.That(closure.GetVariable(callStack, "z"), Is.EqualTo(BtlTypes.False));
         }
         
         [Test]
@@ -266,9 +266,9 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.False);
-            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.False);
-            Assertions.AssertVariable(callStack, closure, "z", BtlTypes.True);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.False));
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.False));
+            Assert.That(closure.GetVariable(callStack, "z"), Is.EqualTo(BtlTypes.True));
         }
         
         [Test]
@@ -281,9 +281,9 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.False);
-            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.True);
-            Assertions.AssertVariable(callStack, closure, "z", BtlTypes.True);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.False));
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.True));
+            Assert.That(closure.GetVariable(callStack, "z"), Is.EqualTo(BtlTypes.True));
         }
     }
 
@@ -297,7 +297,7 @@ public class OperatorsTests
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -307,7 +307,7 @@ public class OperatorsTests
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 10);
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -317,7 +317,7 @@ public class OperatorsTests
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 0);
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -327,7 +327,7 @@ public class OperatorsTests
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 25);
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -337,7 +337,7 @@ public class OperatorsTests
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Float, 2.5);
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -347,7 +347,7 @@ public class OperatorsTests
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 2);
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -357,7 +357,7 @@ public class OperatorsTests
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 1);
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -367,7 +367,7 @@ public class OperatorsTests
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 25);
             
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
     }
 }

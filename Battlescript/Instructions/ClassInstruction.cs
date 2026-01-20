@@ -1,8 +1,8 @@
 namespace Battlescript;
 
-public class ClassInstruction : Instruction
+public class ClassInstruction : Instruction, IEquatable<ClassInstruction>
 {
-    public string Name { get; set; } 
+    public string Name { get; set; }
     public List<Instruction> Superclasses { get; set; }
 
     public ClassInstruction(List<Token> tokens) : base(tokens)
@@ -88,18 +88,22 @@ public class ClassInstruction : Instruction
         return newClosure.Scopes[^1].Values.ToDictionary();
     }
     
-    // All the code below is to override equality
-    public override bool Equals(object? obj) => Equals(obj as ClassInstruction);
-    public bool Equals(ClassInstruction? inst)
-    {
-        if (inst is null) return false;
-        if (ReferenceEquals(this, inst)) return true;
-        if (GetType() != inst.GetType()) return false;
-        
-        var superclassesEqual = Superclasses.SequenceEqual(inst.Superclasses);
-        var instructionsEqual = Instructions.SequenceEqual(inst.Instructions);
-        return Name == inst.Name && superclassesEqual && instructionsEqual;
-    }
-    
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is ClassInstruction inst && Equals(inst);
+
+    public bool Equals(ClassInstruction? other) =>
+        other is not null &&
+        Name == other.Name &&
+        Superclasses.SequenceEqual(other.Superclasses) &&
+        Instructions.SequenceEqual(other.Instructions);
+
     public override int GetHashCode() => HashCode.Combine(Superclasses, Instructions, Name);
+
+    public static bool operator ==(ClassInstruction? left, ClassInstruction? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ClassInstruction? left, ClassInstruction? right) => !(left == right);
+
+    #endregion
 }

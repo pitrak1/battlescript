@@ -1,8 +1,8 @@
 namespace Battlescript;
 
-public class AssignmentInstruction : Instruction
+public class AssignmentInstruction : Instruction, IEquatable<AssignmentInstruction>
 {
-    public string Operation { get; set; } 
+    public string Operation { get; set; }
     public Instruction Left { get; set; }
     public Instruction Right { get; set; }
 
@@ -51,16 +51,19 @@ public class AssignmentInstruction : Instruction
         return null;
     }
     
-    // All the code below is to override equality
-    public override bool Equals(object? obj) => Equals(obj as AssignmentInstruction);
-    public bool Equals(AssignmentInstruction? inst)
-    {
-        if (inst is null) return false;
-        if (ReferenceEquals(this, inst)) return true;
-        if (GetType() != inst.GetType()) return false;
-        
-        return Operation == inst.Operation && Left.Equals(inst.Left) && Right.Equals(inst.Right);
-    }
-    
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is AssignmentInstruction inst && Equals(inst);
+
+    public bool Equals(AssignmentInstruction? other) =>
+        other is not null && Operation == other.Operation && Equals(Left, other.Left) && Equals(Right, other.Right);
+
     public override int GetHashCode() => HashCode.Combine(Operation, Left, Right);
+
+    public static bool operator ==(AssignmentInstruction? left, AssignmentInstruction? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(AssignmentInstruction? left, AssignmentInstruction? right) => !(left == right);
+
+    #endregion
 }

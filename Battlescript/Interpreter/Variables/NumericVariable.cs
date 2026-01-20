@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class NumericVariable : Variable
+public class NumericVariable : Variable, IEquatable<NumericVariable>
 {
     private dynamic _value;
     public dynamic Value
@@ -23,17 +23,22 @@ public class NumericVariable : Variable
     {
         _value = value;
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as NumericVariable);
-    public bool Equals(NumericVariable? variable)
-    {
-        if (variable is null) return false;
-        if (ReferenceEquals(this, variable)) return true;
-        if (GetType() != variable.GetType()) return false;
-        
-        return Value == variable.Value;
-    }
-    
+
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is NumericVariable variable && Equals(variable);
+
+    public bool Equals(NumericVariable? other) =>
+        other is not null && Value == other.Value;
+
+    public override bool Equals(Variable? other) => other is NumericVariable variable && Equals(variable);
+
     public override int GetHashCode() => HashCode.Combine(Value);
+
+    public static bool operator ==(NumericVariable? left, NumericVariable? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(NumericVariable? left, NumericVariable? right) => !(left == right);
+
+    #endregion
 }

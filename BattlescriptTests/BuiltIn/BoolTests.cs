@@ -12,9 +12,9 @@ public class BoolTests
                                 x = True
                                 y = x.__btl_value
                                 """);
-        Assertions.AssertVariable(callStack, closure, "y", new NumericVariable(1));
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(new NumericVariable(1)));
     }
-    
+
     [Test]
     public void FalseIsNumericZero()
     {
@@ -22,9 +22,9 @@ public class BoolTests
                                 x = False
                                 y = x.__btl_value
                                 """);
-        Assertions.AssertVariable(callStack, closure, "y", new NumericVariable(0));
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(new NumericVariable(0)));
     }
-    
+
     public class Conversions
     {
         [Test]
@@ -34,9 +34,9 @@ public class BoolTests
                                     x = ""
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0)));
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0))));
         }
-        
+
         [Test]
         public void NonEmptyStringsAreTrue()
         {
@@ -44,9 +44,9 @@ public class BoolTests
                                     x = "asdf"
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1)));
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1))));
         }
-        
+
         [Test]
         public void ZeroIntIsFalse()
         {
@@ -54,9 +54,9 @@ public class BoolTests
                                     x = 0
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0)));
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0))));
         }
-        
+
         [Test]
         public void NonZeroIntIsTrue()
         {
@@ -64,9 +64,9 @@ public class BoolTests
                                     x = 1
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1)));
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1))));
         }
-        
+
         [Test]
         public void ZeroFloatIsFalse()
         {
@@ -74,9 +74,9 @@ public class BoolTests
                                     x = 0.0
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0)));
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0))));
         }
-        
+
         [Test]
         public void NonZeroFloatIsTrue()
         {
@@ -84,9 +84,9 @@ public class BoolTests
                                     x = 1.5
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1)));
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1))));
         }
-        
+
         [Test]
         public void FalseIsFalse()
         {
@@ -94,9 +94,9 @@ public class BoolTests
                                     x = False
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0)));
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0))));
         }
-        
+
         [Test]
         public void TrueIsTrue()
         {
@@ -104,7 +104,7 @@ public class BoolTests
                                     x = True
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1)));
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1))));
         }
     }
 }

@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class ParameterSet
+public class ParameterSet : IEquatable<ParameterSet>
 {
     public List<string> Names { get; set; } = [];
     public Dictionary<string, Instruction> DefaultValues { get; set; } = [];
@@ -8,7 +8,7 @@ public class ParameterSet
     public ParameterSet(List<Instruction>? paramInstructions = null)
     {
         paramInstructions ??= [];
-        
+
         var inDefaultArguments = false;
         foreach (var inst in paramInstructions)
         {
@@ -18,13 +18,14 @@ public class ParameterSet
                 Names.Add(name);
                 DefaultValues.Add(name, assignmentInstruction.Right);
                 inDefaultArguments = true;
-            } else if (inst is VariableInstruction variableInstruction)
+            }
+            else if (inst is VariableInstruction variableInstruction)
             {
                 if (inDefaultArguments)
                 {
                     throw new InterpreterRequiredParamFollowsDefaultParamException();
                 }
-                
+
                 Names.Add(variableInstruction.Name);
             }
         }
@@ -45,23 +46,25 @@ public class ParameterSet
                 parameterObject.Add(name, null);
             }
         }
-        
+
         return parameterObject;
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object? obj) => Equals(obj as ParameterSet);
-    public bool Equals(ParameterSet? other)
-    {
-        if (other is null) return false;
-        if (ReferenceEquals(this, other)) return true;
-        if (GetType() != other.GetType()) return false;
-        
-        var namesEqual = Names.SequenceEqual(other.Names);
-        var defaultValuesEqual = DefaultValues.OrderBy(kvp => kvp.Key).SequenceEqual(other.DefaultValues.OrderBy(kvp => kvp.Key));
-        
-        return namesEqual && defaultValuesEqual;
-    }
-    
+
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is ParameterSet other && Equals(other);
+
+    public bool Equals(ParameterSet? other) =>
+        other is not null &&
+        Names.SequenceEqual(other.Names) &&
+        DefaultValues.OrderBy(kvp => kvp.Key).SequenceEqual(other.DefaultValues.OrderBy(kvp => kvp.Key));
+
     public override int GetHashCode() => HashCode.Combine(Names, DefaultValues);
+
+    public static bool operator ==(ParameterSet? left, ParameterSet? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ParameterSet? left, ParameterSet? right) => !(left == right);
+
+    #endregion
 }

@@ -18,7 +18,7 @@ public static class OperatorTests
                 BtlTypes.Create(BtlTypes.Types.Bool, true),
                 BtlTypes.Create(BtlTypes.Types.Bool, false));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
@@ -31,7 +31,7 @@ public static class OperatorTests
                 BtlTypes.Create(BtlTypes.Types.Bool, true),
                 BtlTypes.Create(BtlTypes.Types.Bool, false));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
@@ -44,7 +44,7 @@ public static class OperatorTests
                 null,
                 BtlTypes.Create(BtlTypes.Types.Bool, false));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
@@ -58,7 +58,7 @@ public static class OperatorTests
                 value,
                 value);
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
@@ -71,7 +71,7 @@ public static class OperatorTests
                 BtlTypes.Create(BtlTypes.Types.Int, 5),
                 BtlTypes.Create(BtlTypes.Types.Int, 5));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
@@ -84,7 +84,7 @@ public static class OperatorTests
                 BtlTypes.Create(BtlTypes.Types.Int, 5),
                 BtlTypes.Create(BtlTypes.Types.Int, 5));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
@@ -98,7 +98,7 @@ public static class OperatorTests
                 value,
                 value);
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
         
         [Test]
@@ -111,7 +111,7 @@ public static class OperatorTests
                 BtlTypes.Create(BtlTypes.Types.String, new StringVariable("sd")),
                 BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdf")));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
@@ -124,7 +124,7 @@ public static class OperatorTests
                 BtlTypes.Create(BtlTypes.Types.String, new StringVariable("fa")),
                 BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdf")));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
@@ -137,7 +137,7 @@ public static class OperatorTests
                 BtlTypes.Create(BtlTypes.Types.String, new StringVariable("fa")),
                 BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdf")));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
@@ -150,7 +150,7 @@ public static class OperatorTests
                 BtlTypes.Create(BtlTypes.Types.String, new StringVariable("sd")),
                 BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdf")));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
         
         [Test]
@@ -166,7 +166,7 @@ public static class OperatorTests
                     new NumericVariable(1),
                     new NumericVariable(2)])));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
         
         [Test]
@@ -182,7 +182,7 @@ public static class OperatorTests
                     new NumericVariable(1),
                     new NumericVariable(2)])));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
         
         [Test]
@@ -198,7 +198,7 @@ public static class OperatorTests
                     new NumericVariable(1),
                     new NumericVariable(2)])));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
         
         [Test]
@@ -214,7 +214,7 @@ public static class OperatorTests
                     new NumericVariable(1),
                     new NumericVariable(2)])));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
         
         [Test]
@@ -231,7 +231,7 @@ public static class OperatorTests
                     { 2, new NumericVariable(2) }
                 })));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
         
         [Test]
@@ -248,7 +248,7 @@ public static class OperatorTests
                     { 2, new NumericVariable(2) }
                 })));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
         
         [Test]
@@ -265,7 +265,7 @@ public static class OperatorTests
                     { "qwer", new NumericVariable(2) }
                 })));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
         
         [Test]
@@ -282,7 +282,7 @@ public static class OperatorTests
                     { "zxcv", new NumericVariable(2) }
                 })));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
         
         [Test]
@@ -299,7 +299,7 @@ public static class OperatorTests
                     { 2, new NumericVariable(2) }
                 })));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
         
         [Test]
@@ -316,7 +316,7 @@ public static class OperatorTests
                     { 2, new NumericVariable(2) }
                 })));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
         
         [Test]
@@ -333,7 +333,7 @@ public static class OperatorTests
                     { "qwer", new NumericVariable(2) }
                 })));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
         
         [Test]
@@ -350,7 +350,7 @@ public static class OperatorTests
                     { "zxcv", new NumericVariable(2) }
                 })));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
-            Assertions.AssertVariablesEqual(result, expected);
+            Assert.That(result, Is.EqualTo(expected));
         }
     }
 
@@ -373,7 +373,7 @@ public static class OperatorTests
                 "+",
                 x,
                 new StringVariable("asdf"));
-            Assertions.AssertVariablesEqual(result, BtlTypes.Create(BtlTypes.Types.Int, 5));
+            Assert.That(result, Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 5)));
         }
 
         [Test]
@@ -392,7 +392,7 @@ public static class OperatorTests
                 "+",
                 new StringVariable("asdf"),
                 x);
-            Assertions.AssertVariablesEqual(result, BtlTypes.Create(BtlTypes.Types.Int, 5));
+            Assert.That(result, Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 5)));
         }
 
         [Test]
@@ -411,7 +411,7 @@ public static class OperatorTests
                 "-",
                 null,
                 x);
-            Assertions.AssertVariablesEqual(result, BtlTypes.Create(BtlTypes.Types.Int, 5));
+            Assert.That(result, Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 5)));
         }
 
         [Test]
@@ -434,7 +434,7 @@ public static class OperatorTests
                 "-",
                 new StringVariable("asdf"),
                 x);
-            Assertions.AssertVariablesEqual(result, BtlTypes.Create(BtlTypes.Types.Int, 10));
+            Assert.That(result, Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 10)));
         }
     }
 
@@ -446,7 +446,7 @@ public static class OperatorTests
         {
             var (callStack, closure) = Runner.Run("");
             Operator.Assign(callStack, closure, "=", new VariableInstruction("x"), new NumericInstruction(8));
-            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, 8));
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 8)));
         }
 
         [Test]
@@ -458,7 +458,7 @@ public static class OperatorTests
                 "+=",
                 new VariableInstruction("x"),
                 new NumericInstruction(5));
-            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, 11));
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 11)));
         }
 
         [Test]
@@ -487,7 +487,7 @@ public static class OperatorTests
                 new NumericInstruction(3));
             var result = closure.GetVariable(callStack, "x");
             Assert.That(BtlTypes.Is(BtlTypes.Types.Int, result), Is.True);
-            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, 3));
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 3)));
         }
     }
 
@@ -499,7 +499,7 @@ public static class OperatorTests
          {
              var (callStack, closure) = Runner.Run("");
              var result = Operator.Operate(callStack, closure, "+", new NumericVariable(5), new NumericVariable(10));
-             Assertions.AssertVariablesEqual(result, new NumericVariable(15));
+             Assert.That(result, Is.EqualTo(new NumericVariable(15)));
          }
 
          [Test]
@@ -507,7 +507,7 @@ public static class OperatorTests
          {
              var (callStack, closure) = Runner.Run("");
              var result = Operator.Operate(callStack, closure, ">=", new NumericVariable(5), new NumericVariable(2));
-             Assertions.AssertVariablesEqual(result, new NumericVariable(1));
+             Assert.That(result, Is.EqualTo(new NumericVariable(1)));
          }
 
          [Test]
@@ -515,7 +515,7 @@ public static class OperatorTests
          {
              var (callStack, closure) = Runner.Run("");
              var result = Operator.Operate(callStack, closure, "-", null, new NumericVariable(5));
-             Assertions.AssertVariablesEqual(result, new NumericVariable(-5));
+             Assert.That(result, Is.EqualTo(new NumericVariable(-5)));
          }
     }
 
@@ -536,13 +536,13 @@ public static class OperatorTests
                  new NumericVariable(6)
              ]);
              var result = Operator.Operate(callStack, closure, "+", seq1, seq2);
-             Assertions.AssertVariablesEqual(result, new SequenceVariable([
+             Assert.That(result, Is.EqualTo(new SequenceVariable([
                  new NumericVariable(1),
                  new NumericVariable(2),
                  new NumericVariable(3),
                  new NumericVariable(4),
                  new NumericVariable(5),
-                 new NumericVariable(6)]));
+                 new NumericVariable(6)])));
          }
 
          [Test]
@@ -554,7 +554,7 @@ public static class OperatorTests
                  new NumericVariable(2),
                  new NumericVariable(3)]);
              var result = Operator.Operate(callStack, closure, "*", seq, new NumericVariable(3));
-             Assertions.AssertVariablesEqual(result, new SequenceVariable([
+             Assert.That(result, Is.EqualTo(new SequenceVariable([
                  new NumericVariable(1),
                  new NumericVariable(2),
                  new NumericVariable(3),
@@ -563,7 +563,7 @@ public static class OperatorTests
                  new NumericVariable(3),
                  new NumericVariable(1),
                  new NumericVariable(2),
-                 new NumericVariable(3)]));
+                 new NumericVariable(3)])));
          }
 
          [Test]
@@ -579,7 +579,7 @@ public static class OperatorTests
                  new NumericVariable(2),
                  new NumericVariable(3)]);
              var result = Operator.Operate(callStack, closure, "==", seq1, seq2);
-             Assertions.AssertVariablesEqual(result, new NumericVariable(1));
+             Assert.That(result, Is.EqualTo(new NumericVariable(1)));
          }
 
          [Test]
@@ -595,7 +595,7 @@ public static class OperatorTests
                  new NumericVariable(2),
                  new NumericVariable(4)]);
              var result = Operator.Operate(callStack, closure, "==", seq1, seq2);
-             Assertions.AssertVariablesEqual(result, new NumericVariable(0));
+             Assert.That(result, Is.EqualTo(new NumericVariable(0)));
          }
 
          [Test]
@@ -611,7 +611,7 @@ public static class OperatorTests
                  new NumericVariable(2),
                  new NumericVariable(4)]);
              var result = Operator.Operate(callStack, closure, "!=", seq1, seq2);
-             Assertions.AssertVariablesEqual(result, new NumericVariable(1));
+             Assert.That(result, Is.EqualTo(new NumericVariable(1)));
          }
 
          [Test]
@@ -627,7 +627,7 @@ public static class OperatorTests
                  new NumericVariable(2),
                  new NumericVariable(3)]);
              var result = Operator.Operate(callStack, closure, "!=", seq1, seq2);
-             Assertions.AssertVariablesEqual(result, new NumericVariable(0));
+             Assert.That(result, Is.EqualTo(new NumericVariable(0)));
          }
 
          [Test]
@@ -643,7 +643,7 @@ public static class OperatorTests
                  null,
                  new NumericVariable(3)]);
              var result = Operator.Operate(callStack, closure, "==", seq1, seq2);
-             Assertions.AssertVariablesEqual(result, new NumericVariable(1));
+             Assert.That(result, Is.EqualTo(new NumericVariable(1)));
          }
 
          [Test]
@@ -659,7 +659,7 @@ public static class OperatorTests
                  new NumericVariable(2),
                  new NumericVariable(3)]);
              var result = Operator.Operate(callStack, closure, "==", seq1, seq2);
-             Assertions.AssertVariablesEqual(result, new NumericVariable(0));
+             Assert.That(result, Is.EqualTo(new NumericVariable(0)));
          }
 
          [Test]
@@ -675,7 +675,7 @@ public static class OperatorTests
                  null,
                  new NumericVariable(3)]);
              var result = Operator.Operate(callStack, closure, "==", seq1, seq2);
-             Assertions.AssertVariablesEqual(result, new NumericVariable(0));
+             Assert.That(result, Is.EqualTo(new NumericVariable(0)));
          }
     }
     
@@ -689,7 +689,7 @@ public static class OperatorTests
              var string1 = new StringVariable("asdf");
              var string2 = new StringVariable("qwer");
              var result = Operator.Operate(callStack, closure, "+", string1, string2);
-             Assertions.AssertVariablesEqual(result, new StringVariable("asdfqwer"));
+             Assert.That(result, Is.EqualTo(new StringVariable("asdfqwer")));
          }
 
          [Test]
@@ -698,7 +698,7 @@ public static class OperatorTests
              var (callStack, closure) = Runner.Run("");
              var string1 = new StringVariable("asdf");
              var result = Operator.Operate(callStack, closure, "*", string1, new NumericVariable(3));
-             Assertions.AssertVariablesEqual(result, new StringVariable("asdfasdfasdf"));
+             Assert.That(result, Is.EqualTo(new StringVariable("asdfasdfasdf")));
          }
 
          [Test]
@@ -708,7 +708,7 @@ public static class OperatorTests
              var string1 = new StringVariable("asdf");
              var string2 = new StringVariable("asdf");
              var result = Operator.Operate(callStack, closure, "==", string1, string2);
-             Assertions.AssertVariablesEqual(result, new NumericVariable(1));
+             Assert.That(result, Is.EqualTo(new NumericVariable(1)));
          }
 
          [Test]
@@ -718,7 +718,7 @@ public static class OperatorTests
              var string1 = new StringVariable("asdf");
              var string2 = new StringVariable("qwer");
              var result = Operator.Operate(callStack, closure, "==", string1, string2);
-             Assertions.AssertVariablesEqual(result, new NumericVariable(0));
+             Assert.That(result, Is.EqualTo(new NumericVariable(0)));
          }
 
          [Test]
@@ -728,7 +728,7 @@ public static class OperatorTests
              var string1 = new StringVariable("asdf");
              var numeric = new NumericVariable(6);
              var result = Operator.Operate(callStack, closure, "+", string1, numeric);
-             Assertions.AssertVariablesEqual(result, new StringVariable("asdf6"));
+             Assert.That(result, Is.EqualTo(new StringVariable("asdf6")));
          }
 
          [Test]
@@ -738,7 +738,7 @@ public static class OperatorTests
              var numeric = new NumericVariable(5);
              var string1 = new StringVariable("asdf");
              var result = Operator.Operate(callStack, closure, "+", numeric, string1);
-             Assertions.AssertVariablesEqual(result, new StringVariable("5asdf"));
+             Assert.That(result, Is.EqualTo(new StringVariable("5asdf")));
          }
     }
 }

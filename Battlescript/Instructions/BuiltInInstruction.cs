@@ -4,9 +4,9 @@ using Newtonsoft.Json.Converters;
 
 namespace Battlescript;
 
-public class BuiltInInstruction : Instruction
+public class BuiltInInstruction : Instruction, IEquatable<BuiltInInstruction>
 {
-    public string Name { get; set; } 
+    public string Name { get; set; }
     public List<Instruction> Arguments { get; set; }
     
     public BuiltInInstruction(List<Token> tokens) : base(tokens)
@@ -56,17 +56,22 @@ public class BuiltInInstruction : Instruction
         return new ConstantVariable();
     }
     
-    // All the code below is to override equality
-    public override bool Equals(object? obj) => Equals(obj as BuiltInInstruction);
-    public bool Equals(BuiltInInstruction? inst)
-    {
-        if (inst is null) return false;
-        if (ReferenceEquals(this, inst)) return true;
-        if (GetType() != inst.GetType()) return false;
-        
-        var argumentsEqual = Arguments.SequenceEqual(inst.Arguments);
-        return argumentsEqual && Name == inst.Name && Equals(Next, inst.Next);
-    }
-    
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is BuiltInInstruction inst && Equals(inst);
+
+    public bool Equals(BuiltInInstruction? other) =>
+        other is not null &&
+        Arguments.SequenceEqual(other.Arguments) &&
+        Name == other.Name &&
+        Equals(Next, other.Next);
+
     public override int GetHashCode() => HashCode.Combine(Arguments, Name, Next);
+
+    public static bool operator ==(BuiltInInstruction? left, BuiltInInstruction? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(BuiltInInstruction? left, BuiltInInstruction? right) => !(left == right);
+
+    #endregion
 }

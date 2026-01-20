@@ -187,16 +187,21 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         return (start, stop, step);
     }
 
-    // All the code below is to override equality
-    public override bool Equals(object obj) => Equals(obj as SequenceVariable);
-    public bool Equals(SequenceVariable? variable)
-    {
-        if (variable is null) return false;
-        if (ReferenceEquals(this, variable)) return true;
-        if (GetType() != variable.GetType()) return false;
-        
-        return Values.SequenceEqual(variable.Values);
-    }
-    
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is SequenceVariable variable && Equals(variable);
+
+    public bool Equals(SequenceVariable? other) =>
+        other is not null && Values.SequenceEqual(other.Values);
+
+    public override bool Equals(Variable? other) => other is SequenceVariable variable && Equals(variable);
+
     public override int GetHashCode() => HashCode.Combine(Values);
+
+    public static bool operator ==(SequenceVariable? left, SequenceVariable? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(SequenceVariable? left, SequenceVariable? right) => !(left == right);
+
+    #endregion
 }

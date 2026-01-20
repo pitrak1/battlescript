@@ -14,12 +14,13 @@ public class ParserTests
             var expected = new List<Instruction>
             {
                 new AssignmentInstruction(
-                    operation: "=", 
+                    operation: "=",
                     left: new VariableInstruction("x"),
                     right: new NumericInstruction(5)
                 )
             };
-            Assertions.AssertInputProducesParserOutput("x = 5", expected);
+            var result = Runner.Parse("x = 5");
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
@@ -34,9 +35,9 @@ public class ParserTests
                 new IfInstruction(
                     condition: new OperationInstruction(
                        operation: "<",
-                       left: new NumericInstruction(5), 
+                       left: new NumericInstruction(5),
                        right: new NumericInstruction(6)
-                    ), 
+                    ),
                     instructions: [
                         new AssignmentInstruction(
                             operation: "=",
@@ -46,10 +47,11 @@ public class ParserTests
                     ]
                 )
             };
-            
-            Assertions.AssertInputProducesParserOutput(input, expected);
+
+            var result = Runner.Parse(input);
+            Assert.That(result, Is.EqualTo(expected));
         }
-        
+
         [Test]
         public void InstructionsBeforeConditionalInstructionBlock()
         {
@@ -68,9 +70,9 @@ public class ParserTests
                 new IfInstruction(
                     condition: new OperationInstruction(
                         operation: "<",
-                        left: new NumericInstruction(5), 
+                        left: new NumericInstruction(5),
                         right: new NumericInstruction(6)
-                    ), 
+                    ),
                     instructions: [
                         new AssignmentInstruction(
                             operation: "=",
@@ -80,10 +82,11 @@ public class ParserTests
                     ]
                 )
             };
-            
-            Assertions.AssertInputProducesParserOutput(input, expected);
+
+            var result = Runner.Parse(input);
+            Assert.That(result, Is.EqualTo(expected));
         }
-        
+
         [Test]
         public void InstructionsAfterConditionalInstructionBlock()
         {
@@ -97,7 +100,7 @@ public class ParserTests
                 new IfInstruction(
                     condition: new OperationInstruction(
                         operation: "<",
-                        left: new NumericInstruction(5), 
+                        left: new NumericInstruction(5),
                         right: new NumericInstruction(6)
                     ),
                     instructions: [
@@ -114,10 +117,11 @@ public class ParserTests
                     right: new NumericInstruction(7)
                 )
             };
-            
-            Assertions.AssertInputProducesParserOutput(input, expected);
+
+            var result = Runner.Parse(input);
+            Assert.That(result, Is.EqualTo(expected));
         }
-        
+
         [Test]
         public void MultipleLevelReductions()
         {
@@ -132,14 +136,14 @@ public class ParserTests
                 new IfInstruction(
                     condition: new OperationInstruction(
                         operation: "<",
-                        left: new NumericInstruction(5), 
+                        left: new NumericInstruction(5),
                         right: new NumericInstruction(6)
                     ),
                     instructions: [
                         new IfInstruction(
                             condition: new OperationInstruction(
                                 operation: "<",
-                                left: new NumericInstruction(5), 
+                                left: new NumericInstruction(5),
                                 right: new NumericInstruction(6)
                             ),
                             instructions: [
@@ -158,8 +162,9 @@ public class ParserTests
                     right: new NumericInstruction(7)
                 )
             };
-            
-            Assertions.AssertInputProducesParserOutput(input, expected);
+
+            var result = Runner.Parse(input);
+            Assert.That(result, Is.EqualTo(expected));
         }
     }
 
@@ -194,7 +199,7 @@ public class ParserTests
                 new IfInstruction(
                     condition: new OperationInstruction(
                         operation: "<",
-                        left: new NumericInstruction(5), 
+                        left: new NumericInstruction(5),
                         right: new NumericInstruction(6)
                     ),
                     instructions: [
@@ -215,9 +220,10 @@ public class ParserTests
                     )
                 )
             };
-            Assertions.AssertInputProducesParserOutput(input, expected);
+            var result = Runner.Parse(input);
+            Assert.That(result, Is.EqualTo(expected));
         }
-        
+
         [Test]
         public void JoinsElifsInstructions()
         {
@@ -234,7 +240,7 @@ public class ParserTests
                 new IfInstruction(
                     condition: new OperationInstruction(
                         operation: "<",
-                        left: new NumericInstruction(5), 
+                        left: new NumericInstruction(5),
                         right: new NumericInstruction(6)
                     ),
                     instructions: [
@@ -247,7 +253,7 @@ public class ParserTests
                     next: new ElseInstruction(
                         condition: new OperationInstruction(
                             operation: "<",
-                            left: new NumericInstruction(6), 
+                            left: new NumericInstruction(6),
                             right: new NumericInstruction(7)
                         ),
                         instructions: [
@@ -269,10 +275,11 @@ public class ParserTests
                     )
                 )
             };
-            Assertions.AssertInputProducesParserOutput(input, expected);
+            var result = Runner.Parse(input);
+            Assert.That(result, Is.EqualTo(expected));
         }
     }
-    
+
     [TestFixture]
     public class TryExceptElseFinally
     {
@@ -309,9 +316,10 @@ public class ParserTests
                     ]
                 )
             };
-            Assertions.AssertInputProducesParserOutput(input, expected);
+            var result = Runner.Parse(input);
+            Assert.That(result, Is.EqualTo(expected));
         }
-        
+
         [Test]
         public void SupportsExceptVariable()
         {
@@ -346,9 +354,10 @@ public class ParserTests
                     ]
                 )
             };
-            Assertions.AssertInputProducesParserOutput(input, expected);
+            var result = Runner.Parse(input);
+            Assert.That(result, Is.EqualTo(expected));
         }
-        
+
         [Test]
         public void SupportsSeveralExcepts()
         {
@@ -406,9 +415,10 @@ public class ParserTests
                     ]
                 )
             };
-            Assertions.AssertInputProducesParserOutput(input, expected);
+            var result = Runner.Parse(input);
+            Assert.That(result, Is.EqualTo(expected));
         }
-        
+
         [Test]
         public void SupportsElseBlock()
         {
@@ -449,13 +459,14 @@ public class ParserTests
                                 left: new VariableInstruction("x"),
                                 right: new NumericInstruction(7)
                             )
-                        ]        
+                        ]
                     )
                 )
             };
-            Assertions.AssertInputProducesParserOutput(input, expected);
+            var result = Runner.Parse(input);
+            Assert.That(result, Is.EqualTo(expected));
         }
-        
+
         [Test]
         public void SupportsFinallyBlock()
         {
@@ -498,7 +509,7 @@ public class ParserTests
                                 left: new VariableInstruction("x"),
                                 right: new NumericInstruction(7)
                             )
-                        ]        
+                        ]
                     ),
                     finallyInstruction: new FinallyInstruction(
                         instructions: [
@@ -511,7 +522,8 @@ public class ParserTests
                     )
                 )
             };
-            Assertions.AssertInputProducesParserOutput(input, expected);
+            var result = Runner.Parse(input);
+            Assert.That(result, Is.EqualTo(expected));
         }
     }
 }

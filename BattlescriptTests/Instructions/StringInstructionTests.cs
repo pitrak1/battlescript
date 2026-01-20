@@ -12,10 +12,11 @@ public static class StringInstructionTests
         public void SingleQuoteStrings()
         {
             var expected = new StringInstruction("asdf");
-            Assertions.AssertInputProducesParserOutput("'asdf'", expected);
+            var result = Runner.Parse("'asdf'");
+            Assert.That(result[0], Is.EqualTo(expected));
         }
     }
-    
+
     [TestFixture]
     public class Interpret
     {
@@ -23,7 +24,7 @@ public static class StringInstructionTests
         public void SingleQuoteStrings()
         {
             var (callStack, closure) = Runner.Run("x = 'asdf'");
-            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.String, "asdf"));
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.String, "asdf")));
         }
     }
 }

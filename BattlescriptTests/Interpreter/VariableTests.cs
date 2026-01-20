@@ -16,7 +16,7 @@ public static class VariableTests
                                     y = x[1]
                                     """);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 2);
-            Assertions.AssertVariable(callStack, closure, "y", expected);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
         }
 
         [Test]
@@ -27,7 +27,7 @@ public static class VariableTests
                                     y = x[1]
                                     """);
             var expected = BtlTypes.Create(BtlTypes.Types.String, "asdf");
-            Assertions.AssertVariable(callStack, closure, "y", expected);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
         }
 
         [Test]
@@ -38,7 +38,7 @@ public static class VariableTests
                                     y = x["zxcv"]
                                     """);
             var expected = BtlTypes.Create(BtlTypes.Types.String, "qwer");
-            Assertions.AssertVariable(callStack, closure, "y", expected);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
         }
 
         [Test]
@@ -55,7 +55,7 @@ public static class VariableTests
                                     y = x[1]
                                     """);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 6);
-            Assertions.AssertVariable(callStack, closure, "y", expected);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
         }
     }
 
@@ -71,7 +71,7 @@ public static class VariableTests
                                     y = x[1]
                                     """);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 4);
-            Assertions.AssertVariable(callStack, closure, "y", expected);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
         }
 
         [Test]
@@ -83,7 +83,7 @@ public static class VariableTests
                                     y = x[1]
                                     """);
             var expected = BtlTypes.Create(BtlTypes.Types.String, "zxcv");
-            Assertions.AssertVariable(callStack, closure, "y", expected);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
         }
 
         [Test]
@@ -95,7 +95,7 @@ public static class VariableTests
                                     y = x["zxcv"]
                                     """);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 2);
-            Assertions.AssertVariable(callStack, closure, "y", expected);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
         }
 
         [Test]
@@ -116,7 +116,7 @@ public static class VariableTests
                                     y = x.i
                                     """);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 9);
-            Assertions.AssertVariable(callStack, closure, "y", expected);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
         }
     }
 
@@ -134,7 +134,7 @@ public static class VariableTests
                                     y = x.i
                                     """);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
-            Assertions.AssertVariable(callStack, closure, "y", expected);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
         }
 
         [Test]
@@ -147,7 +147,7 @@ public static class VariableTests
                                     y = asdf.i
                                     """);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
-            Assertions.AssertVariable(callStack, closure, "y", expected);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
         }
     }
 
@@ -166,7 +166,7 @@ public static class VariableTests
                                     y = x.i
                                     """);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 9);
-            Assertions.AssertVariable(callStack, closure, "y", expected);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
         }
     }
 }

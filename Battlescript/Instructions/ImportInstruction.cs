@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class ImportInstruction : Instruction
+public class ImportInstruction : Instruction, IEquatable<ImportInstruction>
 {
     public string FilePath { get; set; }
     
@@ -117,17 +117,22 @@ public class ImportInstruction : Instruction
         return newClosure.Scopes[^1].Values.ToDictionary();
     }
     
-    // All the code below is to override equality
-    public override bool Equals(object? obj) => Equals(obj as ImportInstruction);
-    public bool Equals(ImportInstruction? inst)
-    {
-        if (inst is null) return false;
-        if (ReferenceEquals(this, inst)) return true;
-        if (GetType() != inst.GetType()) return false;
-        
-        var importNamesEqual = ImportNames.SequenceEqual(inst.ImportNames);
-        return importNamesEqual && FilePath == inst.FilePath && FileName == inst.FileName;
-    }
-    
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is ImportInstruction inst && Equals(inst);
+
+    public bool Equals(ImportInstruction? other) =>
+        other is not null &&
+        ImportNames.SequenceEqual(other.ImportNames) &&
+        FilePath == other.FilePath &&
+        FileName == other.FileName;
+
     public override int GetHashCode() => HashCode.Combine(ImportNames, FilePath, FileName);
+
+    public static bool operator ==(ImportInstruction? left, ImportInstruction? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ImportInstruction? left, ImportInstruction? right) => !(left == right);
+
+    #endregion
 }

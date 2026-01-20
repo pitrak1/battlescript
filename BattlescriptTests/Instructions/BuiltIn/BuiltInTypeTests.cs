@@ -16,7 +16,7 @@ public class BuiltInTypeTests
                     """;
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.String, "<class 'function'>");
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -30,7 +30,7 @@ public class BuiltInTypeTests
                     """;
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.String, "<class 'type'>");
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -42,7 +42,7 @@ public class BuiltInTypeTests
                     """;
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.String, "<class '__btl_string__'>");
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -54,7 +54,7 @@ public class BuiltInTypeTests
                     """;
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.String, "<class 'int'>");
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
 
     [Test]
@@ -69,6 +69,6 @@ public class BuiltInTypeTests
                     """;
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.String, "<class 'y'>");
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
 }

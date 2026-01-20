@@ -53,7 +53,7 @@ public static class ClassInstructionTests
             {
                 { "x", BtlTypes.Create(BtlTypes.Types.Int, 1) }
             }, closure);
-            Assertions.AssertVariable(callStack, closure, "MyClass", expected);
+            Assert.That(closure.GetVariable(callStack, "MyClass"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -77,8 +77,8 @@ public static class ClassInstructionTests
                 { "y", BtlTypes.Create(BtlTypes.Types.Int, 2) }
             }, closure, [asdf]);
 
-            Assertions.AssertVariable(callStack, closure, "asdf", asdf);
-            Assertions.AssertVariable(callStack, closure, "qwer", qwer);
+            Assert.That(closure.GetVariable(callStack, "asdf"), Is.EqualTo(asdf));
+            Assert.That(closure.GetVariable(callStack, "qwer"), Is.EqualTo(qwer));
         }
         
         [Test]
@@ -111,9 +111,9 @@ public static class ClassInstructionTests
                 { "z", BtlTypes.Create(BtlTypes.Types.Int, 3) }
             }, closure, [asdf, qwer]);
             
-            Assertions.AssertVariable(callStack, closure, "asdf", asdf);
-            Assertions.AssertVariable(callStack, closure, "qwer", qwer);
-            Assertions.AssertVariable(callStack, closure, "zxcv", zxcv);
+            Assert.That(closure.GetVariable(callStack, "asdf"), Is.EqualTo(asdf));
+            Assert.That(closure.GetVariable(callStack, "qwer"), Is.EqualTo(qwer));
+            Assert.That(closure.GetVariable(callStack, "zxcv"), Is.EqualTo(zxcv));
         }
     }
 }

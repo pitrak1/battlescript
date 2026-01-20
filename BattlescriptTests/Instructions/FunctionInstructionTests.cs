@@ -19,14 +19,14 @@ public static class FunctionInstructionTests
             var result = Runner.Parse(input, false);
             Assert.That(result[0], Is.EqualTo(expected));
         }
-        
+
         [Test]
         public void MultipleArguments()
         {
             var input = "def func(asdf, qwer):";
             var expected = new FunctionInstruction(
                 name: "func",
-                parameters: 
+                parameters:
                 new ParameterSet([
                     new VariableInstruction("asdf"),
                     new VariableInstruction("qwer")
@@ -35,14 +35,14 @@ public static class FunctionInstructionTests
             var result = Runner.Parse(input, false);
             Assert.That(result[0], Is.EqualTo(expected));
         }
-        
+
         [Test]
         public void DefaultArguments()
         {
             var input = "def func(asdf, qwer=1234):";
             var expected = new FunctionInstruction(
                 name: "func",
-                parameters: 
+                parameters:
                 new ParameterSet([
                     new VariableInstruction("asdf"),
                     new AssignmentInstruction("=", new VariableInstruction("qwer"), new NumericInstruction(1234))
@@ -51,11 +51,11 @@ public static class FunctionInstructionTests
             var result = Runner.Parse(input, false);
             Assert.That(result[0], Is.EqualTo(expected));
         }
-        
+
         [Test]
         public void ThrowsErrorIfDefaultArgumentIsBeforeRequiredArgument()
         {
-            Assert.Throws<InterpreterRequiredParamFollowsDefaultParamException>(() => Assertions.AssertInputProducesParserOutput("def func(qwer=1234, asdf):", new NumericInstruction(1234)));
+            Assert.Throws<InterpreterRequiredParamFollowsDefaultParamException>(() => Runner.Parse("def func(qwer=1234, asdf):"));
         }
     }
 
@@ -66,11 +66,11 @@ public static class FunctionInstructionTests
         public void ReturnsNewFunctionVariable()
         {
             var (callStack, closure) = Runner.Run("def func(asdf, qwer):\n\treturn asdf + qwer");
-            
+
             var functionVariable = new FunctionVariable(
                 "func",
                 closure,
-                parameters: 
+                parameters:
                 new ParameterSet([
                     new VariableInstruction("asdf"),
                     new VariableInstruction("qwer")
@@ -78,13 +78,13 @@ public static class FunctionInstructionTests
                 instructions: [
                     new ReturnInstruction(
                         new OperationInstruction(
-                            "+", 
-                            new VariableInstruction("asdf"), 
+                            "+",
+                            new VariableInstruction("asdf"),
                             new VariableInstruction("qwer")))
                 ]
             );
-            Assertions.AssertVariable(callStack, closure, "func", functionVariable);
+            Assert.That(closure.GetVariable(callStack, "func"), Is.EqualTo(functionVariable));
         }
-        
+
     }
 }

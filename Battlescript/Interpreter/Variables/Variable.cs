@@ -1,11 +1,11 @@
 namespace Battlescript;
 
-public abstract class Variable
+public abstract class Variable : IEquatable<Variable>
 {
     public void SetItem(
         CallStack callStack,
         Closure closure,
-        Variable value, 
+        Variable value,
         ArrayInstruction index,
         ObjectVariable? objectContext = null)
     {
@@ -23,11 +23,11 @@ public abstract class Variable
     {
         throw new InterpreterInvalidIndexException(this);
     }
-    
+
     public void SetMember(
         CallStack callStack,
         Closure closure,
-        Variable value, 
+        Variable value,
         MemberInstruction member,
         ObjectVariable? objectContext = null)
     {
@@ -67,12 +67,12 @@ public abstract class Variable
             return result;
         }
     }
-    
+
     public virtual Variable? GetItemDirectly(CallStack callStack, Closure closure, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
         throw new InterpreterInvalidIndexException(this);
     }
-    
+
     public Variable? GetMember(
         CallStack callStack,
         Closure closure,
@@ -98,4 +98,14 @@ public abstract class Variable
     {
         throw new InterpreterInvalidIndexException(this);
     }
+
+    #region Equality
+
+    public abstract override bool Equals(object? obj);
+
+    public abstract bool Equals(Variable? other);
+
+    public abstract override int GetHashCode();
+
+    #endregion
 }

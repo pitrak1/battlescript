@@ -15,7 +15,7 @@ public class BuiltInIsSubclassTests
                                 y = issubclass(asdf, asdf)
                                 """);
         var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
-        Assertions.AssertVariable(callStack, closure, "y", expected);
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -31,7 +31,7 @@ public class BuiltInIsSubclassTests
                                 y = issubclass(qwer, asdf)
                                 """);
         var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
-        Assertions.AssertVariable(callStack, closure, "y", expected);
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -47,6 +47,6 @@ public class BuiltInIsSubclassTests
                                 y = issubclass(asdf, qwer)
                                 """);
         var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
-        Assertions.AssertVariable(callStack, closure, "y", expected);
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
     }
 }

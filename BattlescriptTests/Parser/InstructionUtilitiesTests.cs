@@ -181,7 +181,7 @@ public static class InstructionUtilitiesTests
             var parsed =
                 InstructionUtilities.ParseEntriesBetweenDelimiters(tokens, []);
             var expected = new NumericInstruction(1);
-            Assertions.AssertInstructionsEqual(parsed[0], expected);
+            Assert.That(parsed[0], Is.EqualTo(expected));
         }
 
         [Test]
@@ -197,7 +197,7 @@ public static class InstructionUtilitiesTests
                 new NumericInstruction(1),
                 new NumericInstruction(2)
             };
-            Assertions.AssertInstructionListsEqual(parsed, expected);
+            Assert.That(parsed, Is.EquivalentTo(expected));
         }
 
         [Test]
@@ -214,7 +214,7 @@ public static class InstructionUtilitiesTests
                 new ArrayInstruction([new NumericInstruction(2)], ArrayInstruction.BracketTypes.SquareBrackets)
             };
 
-            Assertions.AssertInstructionListsEqual(parsed, expected);
+            Assert.That(parsed, Is.EquivalentTo(expected));
         }
     }
 }

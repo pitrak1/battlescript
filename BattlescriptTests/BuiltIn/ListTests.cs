@@ -12,9 +12,9 @@ public class ListTests
                                 x = []
                                 y = x.__btl_value
                                 """);
-        Assertions.AssertVariable(callStack, closure, "y", new SequenceVariable());
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(new SequenceVariable()));
     }
-    
+
     [Test]
     public void ConstructorSetsValue()
     {
@@ -22,13 +22,13 @@ public class ListTests
                                 x = [1, 2, 3]
                                 y = x.__btl_value
                                 """);
-        Assertions.AssertVariable(callStack, closure, "y", new SequenceVariable([
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(new SequenceVariable([
             BtlTypes.Create(BtlTypes.Types.Int, 1),
             BtlTypes.Create(BtlTypes.Types.Int, 2),
             BtlTypes.Create(BtlTypes.Types.Int, 3),
-        ]));
+        ])));
     }
-    
+
     [Test]
     public void CanGetItem()
     {
@@ -36,7 +36,7 @@ public class ListTests
                                 x = [1, 2, 3]
                                 y = x[1]
                                 """);
-        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Int, 2));
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 2)));
     }
 
     [Test]
@@ -47,6 +47,6 @@ public class ListTests
                                 x[1] = 4
                                 y = x[1]
                                 """);
-        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Int, 4));
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 4)));
     }
 }

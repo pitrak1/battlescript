@@ -50,7 +50,7 @@ public static class ForInstructionTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 10); // 0 + 1 + 2 + 3 + 4 = 10
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
 
         [Test]
@@ -63,7 +63,7 @@ public static class ForInstructionTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 30); // 5 + 10 + 15 = 30
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
 
         [Test]
@@ -77,7 +77,7 @@ public static class ForInstructionTests
             var (callStack, closure) = Runner.Run(input);
             // After loop, x should be 3 (last value assigned)
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 3);
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -90,7 +90,7 @@ public static class ForInstructionTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 5); // Loop body never executes
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
 
         [Test]
@@ -103,7 +103,7 @@ public static class ForInstructionTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 42);
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
 
         [Test]
@@ -119,7 +119,7 @@ public static class ForInstructionTests
             var (callStack, closure) = Runner.Run(input);
             // 0 + 1 + 3 + 4 = 8 (skips 2)
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 8);
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
 
         [Test]
@@ -135,7 +135,7 @@ public static class ForInstructionTests
             var (callStack, closure) = Runner.Run(input);
             // 0 + 1 + 2 = 3 (stops at i == 3)
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 3);
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
 
         [Test]
@@ -150,7 +150,7 @@ public static class ForInstructionTests
             var (callStack, closure) = Runner.Run(input);
             // (1+10) + (1+20) + (2+10) + (2+20) = 11 + 21 + 12 + 22 = 66
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 66);
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
     }
 }

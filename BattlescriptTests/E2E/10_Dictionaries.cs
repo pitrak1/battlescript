@@ -17,7 +17,7 @@ public class DictionariesOld
                 {"qwer", BtlTypes.Create(BtlTypes.Types.String, "5")}
             }
         ));
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
 
     [Test]
@@ -27,6 +27,6 @@ public class DictionariesOld
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.String, "5");
         
-        Assertions.AssertVariable(callStack, closure, "y", expected);
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
     }
 }

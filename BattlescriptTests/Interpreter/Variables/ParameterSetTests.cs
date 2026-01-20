@@ -20,7 +20,7 @@ public class ParameterSetTests
             { "asdf", null },
             { "qwer", null }
         };
-        Assertions.AssertVariableDictionariesEqual(result, expected);
+        Assert.That(result, Is.EquivalentTo(expected));
     }
     
     [Test]
@@ -39,7 +39,7 @@ public class ParameterSetTests
             { "asdf", BtlTypes.Create(BtlTypes.Types.Int, 1234) },
             { "qwer", BtlTypes.Create(BtlTypes.Types.Int, 5678) }
         };
-        Assertions.AssertVariableDictionariesEqual(result, expected);
+        Assert.That(result, Is.EquivalentTo(expected));
     }
     
     [Test]
@@ -58,7 +58,7 @@ public class ParameterSetTests
             { "asdf", null },
             { "qwer", BtlTypes.Create(BtlTypes.Types.Int, 5678) }
         };
-        Assertions.AssertVariableDictionariesEqual(result, expected);
+        Assert.That(result, Is.EquivalentTo(expected));
     }
     
     [Test]

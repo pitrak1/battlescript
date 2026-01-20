@@ -43,7 +43,7 @@ public static class AssignmentInstructionTests
         {
             var (callStack, closure) = Runner.Run("x = 6");
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 6);
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -51,7 +51,7 @@ public static class AssignmentInstructionTests
         {
             var (callStack, closure) = Runner.Run("x = 6\nx += 2");
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 8);
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
     }
 }

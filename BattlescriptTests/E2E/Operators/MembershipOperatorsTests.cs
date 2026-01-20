@@ -13,8 +13,8 @@ public class MembershipOperatorsTests
                     """;
         var (callStack, closure) = Runner.Run(input);
 
-        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
-        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.False);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.True));
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.False));
     }
         
     [Test]
@@ -26,8 +26,8 @@ public class MembershipOperatorsTests
                     """;
         var (callStack, closure) = Runner.Run(input);
         
-        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.False);
-        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.True);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.False));
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.True));
     }
     
     [Test]
@@ -39,8 +39,8 @@ public class MembershipOperatorsTests
                     """;
         var (callStack, closure) = Runner.Run(input);
         
-        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
-        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.False);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.True));
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.False));
     }
     
     [Test]
@@ -52,8 +52,8 @@ public class MembershipOperatorsTests
                     """;
         var (callStack, closure) = Runner.Run(input);
         
-        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.False);
-        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.True);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.False));
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.True));
     }
     
     [Test]
@@ -65,8 +65,8 @@ public class MembershipOperatorsTests
                     """;
         var (callStack, closure) = Runner.Run(input);
         
-        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
-        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.False);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.True));
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.False));
     }
         
     [Test]
@@ -78,8 +78,8 @@ public class MembershipOperatorsTests
                     """;
         var (callStack, closure) = Runner.Run(input);
         
-        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.False);
-        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.True);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.False));
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.True));
     }
     
     [Test]
@@ -91,8 +91,8 @@ public class MembershipOperatorsTests
                     """;
         var (callStack, closure) = Runner.Run(input);
         
-        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
-        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.False);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.True));
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.False));
     }
         
     [Test]
@@ -104,7 +104,7 @@ public class MembershipOperatorsTests
                     """;
         var (callStack, closure) = Runner.Run(input);
         
-        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.False);
-        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.True);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.False));
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.True));
     }
 }

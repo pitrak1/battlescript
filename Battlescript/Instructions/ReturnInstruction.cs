@@ -1,8 +1,6 @@
-using System.Diagnostics;
-
 namespace Battlescript;
 
-public class ReturnInstruction : Instruction
+public class ReturnInstruction : Instruction, IEquatable<ReturnInstruction>
 {
     public Instruction? Value { get; set; }
 
@@ -15,8 +13,8 @@ public class ReturnInstruction : Instruction
     }
 
     public ReturnInstruction(
-        Instruction? value, 
-        int? line = null, 
+        Instruction? value,
+        int? line = null,
         string? expression = null) : base(line, expression)
     {
         Value = value;
@@ -29,17 +27,20 @@ public class ReturnInstruction : Instruction
         var returnValue = Value?.Interpret(callStack, closure);
         throw new InternalReturnException(returnValue);
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object? obj) => Equals(obj as ReturnInstruction);
-    public bool Equals(ReturnInstruction? inst)
-    {
-        if (inst is null) return false;
-        if (ReferenceEquals(this, inst)) return true;
-        if (GetType() != inst.GetType()) return false;
-        
-        return Equals(Value, inst.Value);
-    }
-    
-    public override int GetHashCode() => Value?.GetHashCode() * 81 ?? 36;
+
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is ReturnInstruction inst && Equals(inst);
+
+    public bool Equals(ReturnInstruction? other) =>
+        other is not null && Equals(Value, other.Value);
+
+    public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+
+    public static bool operator ==(ReturnInstruction? left, ReturnInstruction? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ReturnInstruction? left, ReturnInstruction? right) => !(left == right);
+
+    #endregion
 }

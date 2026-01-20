@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class ConversionTypeInstruction : Instruction
+public class ConversionTypeInstruction : Instruction, IEquatable<ConversionTypeInstruction>
 {
     public string Value { get; set; }
     public List<Instruction> Parameters { get; set; } = [];
@@ -163,17 +163,19 @@ public class ConversionTypeInstruction : Instruction
         return value.Contains(".") ? double.Parse(value) : int.Parse(value);
     }
     
-    // All the code below is to override equality
-    public override bool Equals(object? obj) => Equals(obj as ConversionTypeInstruction);
-    public bool Equals(ConversionTypeInstruction? inst)
-    {
-        if (inst is null) return false;
-        if (ReferenceEquals(this, inst)) return true;
-        if (GetType() != inst.GetType()) return false;
-        
-        var parametersEqual = Parameters.SequenceEqual(inst.Parameters);
-        return parametersEqual && Value == inst.Value;
-    }
-    
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is ConversionTypeInstruction inst && Equals(inst);
+
+    public bool Equals(ConversionTypeInstruction? other) =>
+        other is not null && Parameters.SequenceEqual(other.Parameters) && Value == other.Value;
+
     public override int GetHashCode() => HashCode.Combine(Parameters, Value);
+
+    public static bool operator ==(ConversionTypeInstruction? left, ConversionTypeInstruction? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ConversionTypeInstruction? left, ConversionTypeInstruction? right) => !(left == right);
+
+    #endregion
 }

@@ -12,7 +12,8 @@ public static class VariableInstructionTests
         public void SimpleName()
         {
             var expected = new VariableInstruction("asdf");
-            Assertions.AssertInputProducesParserOutput("asdf", expected);
+            var result = Runner.Parse("asdf");
+            Assert.That(result[0], Is.EqualTo(expected));
         }
     }
 }

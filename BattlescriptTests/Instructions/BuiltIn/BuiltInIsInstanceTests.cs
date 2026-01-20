@@ -16,7 +16,7 @@ public class BuiltInIsInstanceTests
                                 y = isinstance(x, asdf)
                                 """);
         var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
-        Assertions.AssertVariable(callStack, closure, "y", expected);
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -33,7 +33,7 @@ public class BuiltInIsInstanceTests
                                 y = isinstance(x, asdf)
                                 """);
         var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
-        Assertions.AssertVariable(callStack, closure, "y", expected);
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
     }
 
     [Test]
@@ -50,7 +50,7 @@ public class BuiltInIsInstanceTests
                                 y = isinstance(x, asdf)
                                 """);
         var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
-        Assertions.AssertVariable(callStack, closure, "y", expected);
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
     }
 
     [Test]
@@ -61,7 +61,7 @@ public class BuiltInIsInstanceTests
                                               y = isinstance(x, __btl_numeric__)
                                               """);
         var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
-        Assertions.AssertVariable(callStack, closure, "y", expected);
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -72,6 +72,6 @@ public class BuiltInIsInstanceTests
                                               y = isinstance(x, __btl_string__)
                                               """);
         var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
-        Assertions.AssertVariable(callStack, closure, "y", expected);
+        Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
     }
 }

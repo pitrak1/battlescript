@@ -47,7 +47,7 @@ public static class ConversionTypeInstructionTests
         {
             var (callStack, closure) = Runner.Run("x = __btl_numeric__");
             var expected = new NumericVariable(0);
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -55,7 +55,7 @@ public static class ConversionTypeInstructionTests
         {
             var (callStack, closure) = Runner.Run("x = __btl_sequence__");
             var expected = new SequenceVariable();
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -63,7 +63,7 @@ public static class ConversionTypeInstructionTests
         {
             var (callStack, closure) = Runner.Run("x = __btl_mapping__");
             var expected = new MappingVariable();
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
         
         [Test]
@@ -71,7 +71,7 @@ public static class ConversionTypeInstructionTests
         {
             var (callStack, closure) = Runner.Run("x = __btl_string__");
             var expected = new StringVariable("");
-            Assertions.AssertVariable(callStack, closure, "x", expected);
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
 
         [TestFixture]
@@ -82,7 +82,7 @@ public static class ConversionTypeInstructionTests
             {
                 var (callStack, closure) = Runner.Run("x = __btl_numeric__()");
                 var expected = new NumericVariable(0);
-                Assertions.AssertVariable(callStack, closure, "x", expected);
+                Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
             }
 
             [Test]
@@ -90,7 +90,7 @@ public static class ConversionTypeInstructionTests
             {
                 var (callStack, closure) = Runner.Run("x = __btl_numeric__('4')");
                 var expected = new NumericVariable(4);
-                Assertions.AssertVariable(callStack, closure, "x", expected);
+                Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
             }
             
             [Test]
@@ -98,7 +98,7 @@ public static class ConversionTypeInstructionTests
             {
                 var (callStack, closure) = Runner.Run("x = __btl_numeric__('4.6')");
                 var expected = new NumericVariable(4.6);
-                Assertions.AssertVariable(callStack, closure, "x", expected);
+                Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
             }
 
             [Test]
@@ -106,7 +106,7 @@ public static class ConversionTypeInstructionTests
             {
                 var (callStack, closure) = Runner.Run("y = 5\nx = __btl_numeric__(y)");
                 var expected = new NumericVariable(5);
-                Assertions.AssertVariable(callStack, closure, "x", expected);
+                Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
             }
             
             [Test]
@@ -114,7 +114,7 @@ public static class ConversionTypeInstructionTests
             {
                 var (callStack, closure) = Runner.Run("x = __btl_numeric__(4.6, True)");
                 var expected = new NumericVariable(4);
-                Assertions.AssertVariable(callStack, closure, "x", expected);
+                Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
             }
         }
 
@@ -126,7 +126,7 @@ public static class ConversionTypeInstructionTests
             {
                 var (callStack, closure) = Runner.Run("x = __btl_string__()");
                 var expected = new StringVariable("");
-                Assertions.AssertVariable(callStack, closure, "x", expected);
+                Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
             }
 
             [Test]
@@ -134,7 +134,7 @@ public static class ConversionTypeInstructionTests
             {
                 var (callStack, closure) = Runner.Run("x = __btl_string__(4)");
                 var expected = new StringVariable("4");
-                Assertions.AssertVariable(callStack, closure, "x", expected);
+                Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
             }
             
             [Test]
@@ -142,7 +142,7 @@ public static class ConversionTypeInstructionTests
             {
                 var (callStack, closure) = Runner.Run("x = __btl_string__(4.6)");
                 var expected = new StringVariable("4.6");
-                Assertions.AssertVariable(callStack, closure, "x", expected);
+                Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
             }
         }
     }

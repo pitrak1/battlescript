@@ -11,7 +11,7 @@ public class OperatorPrecedenceTests
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(27));
 
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -21,7 +21,7 @@ public class OperatorPrecedenceTests
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(-8));
 
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -31,7 +31,7 @@ public class OperatorPrecedenceTests
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(6));
 
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -41,7 +41,7 @@ public class OperatorPrecedenceTests
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(8));
 
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -51,7 +51,7 @@ public class OperatorPrecedenceTests
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1));
 
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -61,7 +61,7 @@ public class OperatorPrecedenceTests
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0));
 
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
 
     [Test]
@@ -71,6 +71,6 @@ public class OperatorPrecedenceTests
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(3));
         
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
 }

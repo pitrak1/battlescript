@@ -10,7 +10,7 @@ public class VariableTypesTests
         var input = "x = 'asdf'";
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.String, "asdf");
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -20,7 +20,7 @@ public class VariableTypesTests
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.Float, 5.5);
         
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -30,7 +30,7 @@ public class VariableTypesTests
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
         
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
 
     [Test]
@@ -41,7 +41,7 @@ public class VariableTypesTests
         var expected = BtlTypes.Create(BtlTypes.Types.Bool, 1);
         
         
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -51,7 +51,7 @@ public class VariableTypesTests
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>());
         
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -61,7 +61,7 @@ public class VariableTypesTests
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable([]));
         
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -73,7 +73,7 @@ public class VariableTypesTests
         {
             {"y", BtlTypes.Create(BtlTypes.Types.Int, 3)}
         }, closure);
-        Assertions.AssertVariable(callStack, closure, "asdf", expected);
+        Assert.That(closure.GetVariable(callStack, "asdf"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -88,6 +88,6 @@ public class VariableTypesTests
         var expected = new ObjectVariable(classValues, new ClassVariable("asdf", classValues, closure));
         
         
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
 }

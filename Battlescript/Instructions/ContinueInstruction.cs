@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class ContinueInstruction() : Instruction([])
+public class ContinueInstruction() : Instruction([]), IEquatable<ContinueInstruction>
 {
     public override Variable? Interpret(CallStack callStack,
         Closure closure,
@@ -8,17 +8,19 @@ public class ContinueInstruction() : Instruction([])
     {
         throw new InternalContinueException();
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object? obj) => Equals(obj as ContinueInstruction);
-    public bool Equals(ContinueInstruction? inst)
-    {
-        if (inst is null) return false;
-        if (ReferenceEquals(this, inst)) return true;
-        if (GetType() != inst.GetType()) return false;
 
-        return true;
-    }
-    
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is ContinueInstruction inst && Equals(inst);
+
+    public bool Equals(ContinueInstruction? other) => other is not null;
+
     public override int GetHashCode() => 66;
+
+    public static bool operator ==(ContinueInstruction? left, ContinueInstruction? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ContinueInstruction? left, ContinueInstruction? right) => !(left == right);
+
+    #endregion
 }

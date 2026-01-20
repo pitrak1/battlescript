@@ -18,6 +18,6 @@ public class MemoryTests
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.Int, 10);
             
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
 }

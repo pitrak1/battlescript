@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public abstract class Instruction
+public abstract class Instruction : IEquatable<Instruction>
 {
     public int Line { get; set; }
     public string Expression { get; set; }
@@ -51,4 +51,22 @@ public abstract class Instruction
             }
         }
     }
+    
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is Instruction inst && Equals(inst);
+
+    public bool Equals(Instruction? other) =>
+        other is not null &&
+        Instructions.SequenceEqual(other.Instructions) &&
+        Equals(Next, other.Next);
+
+    public override int GetHashCode() => HashCode.Combine(Instructions, Next);
+
+    public static bool operator ==(Instruction? left, Instruction? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(Instruction? left, Instruction? right) => !(left == right);
+
+    #endregion
 }

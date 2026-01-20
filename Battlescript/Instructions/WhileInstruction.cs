@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class WhileInstruction : Instruction
+public class WhileInstruction : Instruction, IEquatable<WhileInstruction>
 {
     public Instruction Condition { get; set; }
 
@@ -55,17 +55,21 @@ public class WhileInstruction : Instruction
         return null;
     }
     
-    // All the code below is to override equality
-    public override bool Equals(object? obj) => Equals(obj as WhileInstruction);
-    public bool Equals(WhileInstruction? inst)
-    {
-        if (inst is null) return false;
-        if (ReferenceEquals(this, inst)) return true;
-        if (GetType() != inst.GetType()) return false;
-        
-        var instructionsEqual = Instructions.SequenceEqual(inst.Instructions);
-        return instructionsEqual && Condition.Equals(inst.Condition);
-    }
-    
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is WhileInstruction inst && Equals(inst);
+
+    public bool Equals(WhileInstruction? other) =>
+        other is not null &&
+        Instructions.SequenceEqual(other.Instructions) &&
+        Equals(Condition, other.Condition);
+
     public override int GetHashCode() => HashCode.Combine(Instructions, Condition);
+
+    public static bool operator ==(WhileInstruction? left, WhileInstruction? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(WhileInstruction? left, WhileInstruction? right) => !(left == right);
+
+    #endregion
 }

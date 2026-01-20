@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class ListComprehensionInstruction : Instruction
+public class ListComprehensionInstruction : Instruction, IEquatable<ListComprehensionInstruction>
 {
     // For reference, basic list comprehensions are made of [<expression> for <variable> in <list> if <condition>]
     public ListComprehensionInstruction(List<Token> tokens) : base(tokens)
@@ -150,27 +150,25 @@ public class ListComprehensionInstruction : Instruction
         return closure.GetVariable(callStack, "lstcmp");
     }
     
-    // All the code below is to override equality
-    public override bool Equals(object? obj) => Equals(obj as ListComprehensionInstruction);
-    public bool Equals(ListComprehensionInstruction? inst)
-    {
-        if (inst is null) return false;
-        if (ReferenceEquals(this, inst)) return true;
-        if (GetType() != inst.GetType()) return false;
-        
-        var instructionsEqual = Instructions.SequenceEqual(inst.Instructions);
-        return instructionsEqual;
-    }
-    
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is ListComprehensionInstruction inst && Equals(inst);
+
+    public bool Equals(ListComprehensionInstruction? other) =>
+        other is not null && Instructions.SequenceEqual(other.Instructions);
+
     public override int GetHashCode()
     {
-        int hash = 37;
-
-        for (int i = 0; i < Instructions.Count; i++)
-        {
-            hash += Instructions[i].GetHashCode() * 20 * (i + 1);
-        }
-
-        return hash;
+        var hash = new HashCode();
+        foreach (var inst in Instructions)
+            hash.Add(inst);
+        return hash.ToHashCode();
     }
+
+    public static bool operator ==(ListComprehensionInstruction? left, ListComprehensionInstruction? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ListComprehensionInstruction? left, ListComprehensionInstruction? right) => !(left == right);
+
+    #endregion
 }

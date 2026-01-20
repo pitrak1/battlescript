@@ -12,7 +12,7 @@ public class BuiltInLenTests
                                 x = len("")
                                 """);
         var expected = BtlTypes.Create(BtlTypes.Types.Int, 0);
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
 
     [Test]
@@ -22,7 +22,7 @@ public class BuiltInLenTests
                                 x = len("asdf")
                                 """);
         var expected = BtlTypes.Create(BtlTypes.Types.Int, 4);
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
 
     [Test]
@@ -32,7 +32,7 @@ public class BuiltInLenTests
                                 x = len("asdf") + 1
                                 """);
         var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -42,6 +42,6 @@ public class BuiltInLenTests
                                 x = 1 + len("asdf")
                                 """);
         var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
 }

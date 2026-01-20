@@ -1,8 +1,9 @@
 namespace Battlescript;
 
-public class AssertInstruction : Instruction
+public class AssertInstruction : Instruction, IEquatable<AssertInstruction>
 {
     public Instruction Condition { get; set; }
+
     public AssertInstruction(List<Token> tokens) : base(tokens)
     {
         var tokensAfterAssertKeyword = tokens.GetRange(1, tokens.Count - 1);
@@ -10,19 +11,19 @@ public class AssertInstruction : Instruction
     }
 
     public AssertInstruction(
-        Instruction condition, 
-        int? line = null, 
+        Instruction condition,
+        int? line = null,
         string? expression = null) : base(line, expression)
     {
         Condition = condition;
     }
-    
+
     public override Variable? Interpret(CallStack callStack,
         Closure closure,
         Variable? instructionContext = null)
     {
         var condition = Condition.Interpret(callStack, closure);
-        
+
         if (!Truthiness.IsTruthy(callStack, closure, condition!, this))
         {
             throw new InternalRaiseException(BtlTypes.Types.AssertionError, "");
@@ -30,17 +31,20 @@ public class AssertInstruction : Instruction
 
         return null;
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object? obj) => Equals(obj as AssertInstruction);
-    public bool Equals(AssertInstruction? inst)
-    {
-        if (inst is null) return false;
-        if (ReferenceEquals(this, inst)) return true;
-        if (GetType() != inst.GetType()) return false;
-        
-        return Condition.Equals(inst.Condition);
-    }
-    
-    public override int GetHashCode() => 93 * Condition.GetHashCode();
+
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is AssertInstruction inst && Equals(inst);
+
+    public bool Equals(AssertInstruction? other) =>
+        other is not null && Equals(Condition, other.Condition);
+
+    public override int GetHashCode() => Condition.GetHashCode();
+
+    public static bool operator ==(AssertInstruction? left, AssertInstruction? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(AssertInstruction? left, AssertInstruction? right) => !(left == right);
+
+    #endregion
 }

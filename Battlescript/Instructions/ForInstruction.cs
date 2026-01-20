@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class ForInstruction : Instruction
+public class ForInstruction : Instruction, IEquatable<ForInstruction>
 {
     public VariableInstruction BlockVariable { get; set; }
     public Instruction Range { get; set; }
@@ -71,20 +71,23 @@ public class ForInstruction : Instruction
         return null;
     }
 
-    // All the code below is to override equality
-    public override bool Equals(object? obj) => Equals(obj as ForInstruction);
-    public bool Equals(ForInstruction? inst)
-    {
-        if (inst is null) return false;
-        if (ReferenceEquals(this, inst)) return true;
-        if (GetType() != inst.GetType()) return false;
-        
-        var instructionsEqual = Instructions.SequenceEqual(inst.Instructions);
-        return instructionsEqual && 
-               BlockVariable.Equals(inst.BlockVariable) && 
-               Range.Equals(inst.Range) && 
-               Equals(Next, inst.Next);
-    }
-    
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is ForInstruction inst && Equals(inst);
+
+    public bool Equals(ForInstruction? other) =>
+        other is not null &&
+        Instructions.SequenceEqual(other.Instructions) &&
+        Equals(BlockVariable, other.BlockVariable) &&
+        Equals(Range, other.Range) &&
+        Equals(Next, other.Next);
+
     public override int GetHashCode() => HashCode.Combine(Instructions, BlockVariable, Range, Next);
+
+    public static bool operator ==(ForInstruction? left, ForInstruction? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ForInstruction? left, ForInstruction? right) => !(left == right);
+
+    #endregion
 }

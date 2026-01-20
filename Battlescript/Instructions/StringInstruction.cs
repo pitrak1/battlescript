@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class StringInstruction : Instruction
+public class StringInstruction : Instruction, IEquatable<StringInstruction>
 {
     public string Value { get; set; }
     public bool IsFormatted { get; set; }
@@ -12,15 +12,15 @@ public class StringInstruction : Instruction
     }
 
     public StringInstruction(
-        string value, 
-        bool isFormatted = false, 
-        int? line = null, 
+        string value,
+        bool isFormatted = false,
+        int? line = null,
         string? expression = null) : base(line, expression)
     {
         Value = value;
         IsFormatted = isFormatted;
     }
-    
+
     public override Variable? Interpret(CallStack callStack,
         Closure closure,
         Variable? instructionContext = null)
@@ -32,17 +32,20 @@ public class StringInstruction : Instruction
         }
         return BtlTypes.Create(BtlTypes.Types.String, value);
     }
-    
-    // All the code below is to override equality
-    public override bool Equals(object? obj) => Equals(obj as StringInstruction);
-    public bool Equals(StringInstruction? inst)
-    {
-        if (inst is null) return false;
-        if (ReferenceEquals(this, inst)) return true;
-        if (GetType() != inst.GetType()) return false;
-        
-        return Value == inst.Value && IsFormatted == inst.IsFormatted;
-    }
-    
+
+    #region Equality
+
+    public override bool Equals(object? obj) => obj is StringInstruction inst && Equals(inst);
+
+    public bool Equals(StringInstruction? other) =>
+        other is not null && Value == other.Value && IsFormatted == other.IsFormatted;
+
     public override int GetHashCode() => HashCode.Combine(Value, IsFormatted);
+
+    public static bool operator ==(StringInstruction? left, StringInstruction? right) =>
+        left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(StringInstruction? left, StringInstruction? right) => !(left == right);
+
+    #endregion
 }

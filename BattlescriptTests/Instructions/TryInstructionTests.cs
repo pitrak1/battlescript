@@ -18,7 +18,8 @@ public static class TryInstructionTests
             var expected = new List<Instruction>() {new TryInstruction([
                 new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(1))
             ])};
-            Assertions.AssertInputProducesParserOutput(input, expected);
+            var result = Runner.Parse(input);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
@@ -35,12 +36,13 @@ public static class TryInstructionTests
             ], new List<ExceptInstruction>()
             {
                 new ExceptInstruction(
-                    new VariableInstruction("TypeError"), 
+                    new VariableInstruction("TypeError"),
                     [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(2))])
             })};
-            Assertions.AssertInputProducesParserOutput(input, expected);
+            var result = Runner.Parse(input);
+            Assert.That(result, Is.EqualTo(expected));
         }
-        
+
         [Test]
         public void ProperlyParsesTryExceptWithMultipleExcepts()
         {
@@ -57,13 +59,14 @@ public static class TryInstructionTests
             ], new List<ExceptInstruction>()
             {
                 new ExceptInstruction(
-                    new VariableInstruction("TypeError"), 
+                    new VariableInstruction("TypeError"),
                     [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(2))]),
                 new ExceptInstruction(
-                    new VariableInstruction("AssertionError"), 
+                    new VariableInstruction("AssertionError"),
                     [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(3))])
             })};
-            Assertions.AssertInputProducesParserOutput(input, expected);
+            var result = Runner.Parse(input);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
@@ -84,15 +87,16 @@ public static class TryInstructionTests
             ], new List<ExceptInstruction>()
             {
                 new ExceptInstruction(
-                    new VariableInstruction("TypeError"), 
+                    new VariableInstruction("TypeError"),
                     [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(2))]),
                 new ExceptInstruction(
-                    new VariableInstruction("AssertionError"), 
+                    new VariableInstruction("AssertionError"),
                     [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(3))])
             }, new ElseInstruction(null, null, new List<Instruction>() { new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(4))}))};
-            Assertions.AssertInputProducesParserOutput(input, expected);
+            var result = Runner.Parse(input);
+            Assert.That(result, Is.EqualTo(expected));
         }
-        
+
         [Test]
         public void ProperlyParsesTryExceptElseFinally()
         {
@@ -109,21 +113,22 @@ public static class TryInstructionTests
                             x = 5
                         """;
             var expected = new List<Instruction>() {new TryInstruction(
-            [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(1))], 
+            [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(1))],
             new List<ExceptInstruction>()
             {
                 new ExceptInstruction(
-                    new VariableInstruction("TypeError"), 
+                    new VariableInstruction("TypeError"),
                     [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(2))]),
                 new ExceptInstruction(
-                    new VariableInstruction("AssertionError"), 
+                    new VariableInstruction("AssertionError"),
                     [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(3))])
-            }, 
+            },
             new ElseInstruction(null, null, new List<Instruction>() { new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(4))}),
             new FinallyInstruction(new List<Instruction>() { new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(5))}))};
-            Assertions.AssertInputProducesParserOutput(input, expected);
+            var result = Runner.Parse(input);
+            Assert.That(result, Is.EqualTo(expected));
         }
-        
+
         [Test]
         public void ProperlyParsesTryExceptWithAs()
         {
@@ -138,11 +143,12 @@ public static class TryInstructionTests
             ], new List<ExceptInstruction>()
             {
                 new ExceptInstruction(
-                    new VariableInstruction("TypeError"), 
+                    new VariableInstruction("TypeError"),
                     [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(2))],
                     new VariableInstruction("f"))
             })};
-            Assertions.AssertInputProducesParserOutput(input, expected);
+            var result = Runner.Parse(input);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
@@ -170,10 +176,11 @@ public static class TryInstructionTests
             ], new List<ExceptInstruction>()
             {
                 new ExceptInstruction(
-                    new VariableInstruction("TypeError"), 
+                    new VariableInstruction("TypeError"),
                     [new AssignmentInstruction("=", new VariableInstruction("x"), new NumericInstruction(2))])
             })};
-            Assertions.AssertInputProducesParserOutput(input, expected);
+            var result = Runner.Parse(input);
+            Assert.That(result, Is.EqualTo(expected));
         }
     }
 }

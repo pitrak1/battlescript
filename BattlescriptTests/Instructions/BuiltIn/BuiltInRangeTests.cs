@@ -17,7 +17,7 @@ public class BuiltInRangeTests
             BtlTypes.Create(BtlTypes.Types.Int, 3),
             BtlTypes.Create(BtlTypes.Types.Int, 4),
         });
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -30,7 +30,7 @@ public class BuiltInRangeTests
             BtlTypes.Create(BtlTypes.Types.Int, 3),
             BtlTypes.Create(BtlTypes.Types.Int, 4),
         });
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -44,7 +44,7 @@ public class BuiltInRangeTests
             BtlTypes.Create(BtlTypes.Types.Int, 6),
             BtlTypes.Create(BtlTypes.Types.Int, 8),
         });
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -56,7 +56,7 @@ public class BuiltInRangeTests
             BtlTypes.Create(BtlTypes.Types.Int, 2),
             BtlTypes.Create(BtlTypes.Types.Int, 4),
         });
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -70,7 +70,7 @@ public class BuiltInRangeTests
             BtlTypes.Create(BtlTypes.Types.Int, -2),
             BtlTypes.Create(BtlTypes.Types.Int, -4),
         });
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
     
     [Test]
@@ -80,6 +80,6 @@ public class BuiltInRangeTests
         var (callStack, closure) = Runner.Run(input);
         var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>());
         
-        Assertions.AssertVariable(callStack, closure, "x", expected);
+        Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
     }
 }
