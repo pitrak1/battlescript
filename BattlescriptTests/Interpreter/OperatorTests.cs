@@ -364,7 +364,7 @@ public static class OperatorTests
                                     class asdf:
                                         def __add__(self, other):
                                             return 5
-                                            
+
                                     x = asdf()
                                     """);
             var x = closure.GetVariable(callStack, "x");
@@ -375,7 +375,7 @@ public static class OperatorTests
                 new StringVariable("asdf"));
             Assertions.AssertVariablesEqual(result, BsTypes.Create(BsTypes.Types.Int, 5));
         }
-        
+
         [Test]
         public void HandlesObjectOperationsIfOverrideIsPresentOnRightObject()
         {
@@ -383,7 +383,7 @@ public static class OperatorTests
                                     class asdf:
                                         def __add__(self, other):
                                             return 5
-                                            
+
                                     x = asdf()
                                     """);
             var x = closure.GetVariable(callStack, "x");
@@ -394,7 +394,7 @@ public static class OperatorTests
                 x);
             Assertions.AssertVariablesEqual(result, BsTypes.Create(BsTypes.Types.Int, 5));
         }
-        
+
         [Test]
         public void HandlesUnaryObjectOperationsIfOverrideIsPresent()
         {
@@ -402,7 +402,7 @@ public static class OperatorTests
                                     class asdf:
                                         def __neg__(self):
                                             return 5
-                                            
+
                                     x = asdf()
                                     """);
             var x = closure.GetVariable(callStack, "x");
@@ -413,7 +413,7 @@ public static class OperatorTests
                 x);
             Assertions.AssertVariablesEqual(result, BsTypes.Create(BsTypes.Types.Int, 5));
         }
-        
+
         [Test]
         public void UsesReversedMethodIfNonCommutativeOperatorAndRightHasOverride()
         {
@@ -421,15 +421,15 @@ public static class OperatorTests
                                     class asdf:
                                         def __sub__(self, other):
                                             return 5
-                                            
+
                                         def __rsub__(self, other):
                                             return 10
-                                            
+
                                     x = asdf()
                                     """);
             var x = closure.GetVariable(callStack, "x");
             var result = Operator.Operate(
-                callStack, 
+                callStack,
                 closure,
                 "-",
                 new StringVariable("asdf"),
@@ -448,17 +448,46 @@ public static class OperatorTests
             Operator.Assign(callStack, closure, "=", new VariableInstruction("x"), new NumericInstruction(8));
             Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 8));
         }
-        
+
         [Test]
         public void HandlesNonStandardAssignmentOperator()
         {
             var (callStack, closure) = Runner.Run("x = 6");
             Operator.Assign(
-                callStack, closure, 
-                "+=", 
-                new VariableInstruction("x"), 
+                callStack, closure,
+                "+=",
+                new VariableInstruction("x"),
                 new NumericInstruction(5));
             Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 11));
+        }
+
+        [Test]
+        public void HandlesTrueDivisionAssignmentConvertsIntToFloat()
+        {
+            var (callStack, closure) = Runner.Run("x = 10");
+            Operator.Assign(
+                callStack, closure,
+                "/=",
+                new VariableInstruction("x"),
+                new NumericInstruction(3));
+            var result = closure.GetVariable(callStack, "x");
+            Assert.That(BsTypes.Is(BsTypes.Types.Float, result), Is.True);
+            var floatValue = BsTypes.GetFloatValue(result);
+            Assert.That(floatValue, Is.EqualTo(10.0 / 3.0).Within(0.0001));
+        }
+
+        [Test]
+        public void HandlesFloorDivisionAssignmentConvertsFloatToInt()
+        {
+            var (callStack, closure) = Runner.Run("x = 10.5");
+            Operator.Assign(
+                callStack, closure,
+                "//=",
+                new VariableInstruction("x"),
+                new NumericInstruction(3));
+            var result = closure.GetVariable(callStack, "x");
+            Assert.That(BsTypes.Is(BsTypes.Types.Int, result), Is.True);
+            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 3));
         }
     }
 
@@ -472,7 +501,7 @@ public static class OperatorTests
              var result = Operator.Operate(callStack, closure, "+", new NumericVariable(5), new NumericVariable(10));
              Assertions.AssertVariablesEqual(result, new NumericVariable(15));
          }
-         
+
          [Test]
          public void HandlesComparisonOperators()
          {
@@ -480,7 +509,7 @@ public static class OperatorTests
              var result = Operator.Operate(callStack, closure, ">=", new NumericVariable(5), new NumericVariable(2));
              Assertions.AssertVariablesEqual(result, new NumericVariable(1));
          }
-         
+
          [Test]
          public void HandlesUnaryNumericOperators()
          {
@@ -498,8 +527,8 @@ public static class OperatorTests
          {
              var (callStack, closure) = Runner.Run("");
              var seq1 = new SequenceVariable([
-                 new NumericVariable(1), 
-                 new NumericVariable(2), 
+                 new NumericVariable(1),
+                 new NumericVariable(2),
                  new NumericVariable(3)]);
              var seq2 = new SequenceVariable([
                  new NumericVariable(4),
@@ -508,63 +537,143 @@ public static class OperatorTests
              ]);
              var result = Operator.Operate(callStack, closure, "+", seq1, seq2);
              Assertions.AssertVariablesEqual(result, new SequenceVariable([
-                 new NumericVariable(1), 
-                 new NumericVariable(2), 
+                 new NumericVariable(1),
+                 new NumericVariable(2),
                  new NumericVariable(3),
                  new NumericVariable(4),
                  new NumericVariable(5),
                  new NumericVariable(6)]));
          }
-         
+
          [Test]
          public void HandlesMultiplyOperator()
          {
              var (callStack, closure) = Runner.Run("");
              var seq = new SequenceVariable([
-                 new NumericVariable(1), 
-                 new NumericVariable(2), 
+                 new NumericVariable(1),
+                 new NumericVariable(2),
                  new NumericVariable(3)]);
              var result = Operator.Operate(callStack, closure, "*", seq, new NumericVariable(3));
              Assertions.AssertVariablesEqual(result, new SequenceVariable([
-                 new NumericVariable(1), 
-                 new NumericVariable(2), 
+                 new NumericVariable(1),
+                 new NumericVariable(2),
                  new NumericVariable(3),
-                 new NumericVariable(1), 
-                 new NumericVariable(2), 
+                 new NumericVariable(1),
+                 new NumericVariable(2),
                  new NumericVariable(3),
                  new NumericVariable(1),
                  new NumericVariable(2),
                  new NumericVariable(3)]));
          }
-         
+
          [Test]
          public void HandlesTrueEqualityOperator()
          {
              var (callStack, closure) = Runner.Run("");
              var seq1 = new SequenceVariable([
-                 new NumericVariable(1), 
-                 new NumericVariable(2), 
+                 new NumericVariable(1),
+                 new NumericVariable(2),
                  new NumericVariable(3)]);
              var seq2 = new SequenceVariable([
-                 new NumericVariable(1), 
-                 new NumericVariable(2), 
+                 new NumericVariable(1),
+                 new NumericVariable(2),
                  new NumericVariable(3)]);
              var result = Operator.Operate(callStack, closure, "==", seq1, seq2);
              Assertions.AssertVariablesEqual(result, new NumericVariable(1));
          }
-         
+
          [Test]
          public void HandlesFalseEqualityOperator()
          {
              var (callStack, closure) = Runner.Run("");
              var seq1 = new SequenceVariable([
-                 new NumericVariable(1), 
-                 new NumericVariable(2), 
+                 new NumericVariable(1),
+                 new NumericVariable(2),
                  new NumericVariable(3)]);
              var seq2 = new SequenceVariable([
-                 new NumericVariable(1), 
-                 new NumericVariable(2), 
+                 new NumericVariable(1),
+                 new NumericVariable(2),
                  new NumericVariable(4)]);
+             var result = Operator.Operate(callStack, closure, "==", seq1, seq2);
+             Assertions.AssertVariablesEqual(result, new NumericVariable(0));
+         }
+
+         [Test]
+         public void HandlesTrueInequalityOperator()
+         {
+             var (callStack, closure) = Runner.Run("");
+             var seq1 = new SequenceVariable([
+                 new NumericVariable(1),
+                 new NumericVariable(2),
+                 new NumericVariable(3)]);
+             var seq2 = new SequenceVariable([
+                 new NumericVariable(1),
+                 new NumericVariable(2),
+                 new NumericVariable(4)]);
+             var result = Operator.Operate(callStack, closure, "!=", seq1, seq2);
+             Assertions.AssertVariablesEqual(result, new NumericVariable(1));
+         }
+
+         [Test]
+         public void HandlesFalseInequalityOperator()
+         {
+             var (callStack, closure) = Runner.Run("");
+             var seq1 = new SequenceVariable([
+                 new NumericVariable(1),
+                 new NumericVariable(2),
+                 new NumericVariable(3)]);
+             var seq2 = new SequenceVariable([
+                 new NumericVariable(1),
+                 new NumericVariable(2),
+                 new NumericVariable(3)]);
+             var result = Operator.Operate(callStack, closure, "!=", seq1, seq2);
+             Assertions.AssertVariablesEqual(result, new NumericVariable(0));
+         }
+
+         [Test]
+         public void HandlesEqualityWithNullElements()
+         {
+             var (callStack, closure) = Runner.Run("");
+             var seq1 = new SequenceVariable([
+                 new NumericVariable(1),
+                 null,
+                 new NumericVariable(3)]);
+             var seq2 = new SequenceVariable([
+                 new NumericVariable(1),
+                 null,
+                 new NumericVariable(3)]);
+             var result = Operator.Operate(callStack, closure, "==", seq1, seq2);
+             Assertions.AssertVariablesEqual(result, new NumericVariable(1));
+         }
+
+         [Test]
+         public void HandlesInequalityWithOneNull()
+         {
+             var (callStack, closure) = Runner.Run("");
+             var seq1 = new SequenceVariable([
+                 new NumericVariable(1),
+                 null,
+                 new NumericVariable(3)]);
+             var seq2 = new SequenceVariable([
+                 new NumericVariable(1),
+                 new NumericVariable(2),
+                 new NumericVariable(3)]);
+             var result = Operator.Operate(callStack, closure, "==", seq1, seq2);
+             Assertions.AssertVariablesEqual(result, new NumericVariable(0));
+         }
+
+         [Test]
+         public void HandlesInequalityWithNullsInDifferentPositions()
+         {
+             var (callStack, closure) = Runner.Run("");
+             var seq1 = new SequenceVariable([
+                 null,
+                 new NumericVariable(2),
+                 new NumericVariable(3)]);
+             var seq2 = new SequenceVariable([
+                 new NumericVariable(1),
+                 null,
+                 new NumericVariable(3)]);
              var result = Operator.Operate(callStack, closure, "==", seq1, seq2);
              Assertions.AssertVariablesEqual(result, new NumericVariable(0));
          }
@@ -582,7 +691,7 @@ public static class OperatorTests
              var result = Operator.Operate(callStack, closure, "+", string1, string2);
              Assertions.AssertVariablesEqual(result, new StringVariable("asdfqwer"));
          }
-         
+
          [Test]
          public void HandlesMultiplyOperator()
          {
@@ -591,7 +700,7 @@ public static class OperatorTests
              var result = Operator.Operate(callStack, closure, "*", string1, new NumericVariable(3));
              Assertions.AssertVariablesEqual(result, new StringVariable("asdfasdfasdf"));
          }
-         
+
          [Test]
          public void HandlesTrueEqualityOperator()
          {
@@ -601,7 +710,7 @@ public static class OperatorTests
              var result = Operator.Operate(callStack, closure, "==", string1, string2);
              Assertions.AssertVariablesEqual(result, new NumericVariable(1));
          }
-         
+
          [Test]
          public void HandlesFalseEqualityOperator()
          {
@@ -620,6 +729,16 @@ public static class OperatorTests
              var numeric = new NumericVariable(6);
              var result = Operator.Operate(callStack, closure, "+", string1, numeric);
              Assertions.AssertVariablesEqual(result, new StringVariable("asdf6"));
+         }
+
+         [Test]
+         public void ConvertsNumericToStringForAdditionReversed()
+         {
+             var (callStack, closure) = Runner.Run("");
+             var numeric = new NumericVariable(5);
+             var string1 = new StringVariable("asdf");
+             var result = Operator.Operate(callStack, closure, "+", numeric, string1);
+             Assertions.AssertVariablesEqual(result, new StringVariable("5asdf"));
          }
     }
 }

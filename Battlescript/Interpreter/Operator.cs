@@ -5,6 +5,7 @@ public static class Operator
     public static void Assign(CallStack callStack, Closure closure, string operation, VariableInstruction left, Instruction? right, Instruction? originalInstruction = null)
     {
         var rightVariable = right?.Interpret(callStack, closure);
+
         if (operation == "=")
         {
             closure.SetVariable(callStack, left, rightVariable!);
@@ -13,70 +14,82 @@ public static class Operator
 
         var leftVariable = left.Interpret(callStack, closure);
         var result = Operate(callStack, closure, operation, leftVariable, rightVariable, originalInstruction);
+        
+        // Unfortunately, these conversions cannot be done anywhere else.  Because we're modifying an existing variable,
+        // we can't just change the value of the numeric like we do for other operations. We need to create a new
+        // variable of the proper type.
+        var finalResult = ApplyTypeConversionForAssignment(operation, result);
+        closure.SetVariable(callStack, left, finalResult);
+    }
+
+    private static Variable ApplyTypeConversionForAssignment(string operation, Variable result)
+    {
         if (operation == "/=" && BsTypes.Is(BsTypes.Types.Int, result))
         {
-            closure.SetVariable(callStack, left, ConvertToBsFloat(result));
-        } else if (operation == "//=" && BsTypes.Is(BsTypes.Types.Float, result))
-        {
-            closure.SetVariable(callStack, left, ConvertToBsInt(result));
+            return ConvertToBsFloat(result);
         }
-        else
+
+        if (operation == "//=" && BsTypes.Is(BsTypes.Types.Float, result))
         {
-            closure.SetVariable(callStack, left, result);
+            return ConvertToBsInt(result);
         }
+
+        return result;
     }
 
     private static ObjectVariable ConvertToBsFloat(Variable variable)
     {
-        var objectResult = variable as ObjectVariable;
-        var doubleResult = (objectResult.Values["__btl_value"] as NumericVariable).Value;
-        return BsTypes.Create(BsTypes.Types.Float, doubleResult);
+        var objectResult = (ObjectVariable)variable;
+        var numericValue = ((NumericVariable)objectResult.Values["__btl_value"]).Value;
+        return BsTypes.Create(BsTypes.Types.Float, numericValue);
     }
 
     private static ObjectVariable ConvertToBsInt(Variable variable)
     {
-        var objectResult = variable as ObjectVariable;
-        var intResult = (objectResult.Values["__btl_value"] as NumericVariable).Value;
-        return BsTypes.Create(BsTypes.Types.Int, intResult);
+        var objectResult = (ObjectVariable)variable;
+        var numericValue = ((NumericVariable)objectResult.Values["__btl_value"]).Value;
+        return BsTypes.Create(BsTypes.Types.Int, numericValue);
     }
-    
+
+    private static NumericVariable CreateBoolNumeric(bool value) => new(value ? 1 : 0);
+
     private static readonly Dictionary<string, string> OperationToOverrideMap = new()
     {
-        {"+", "__add__"},
-        {"-", "__sub__"},
-        {"*", "__mul__"},
-        {"/", "__truediv__"},
-        {"//", "__floordiv__"},
-        {"%", "__mod__"},
-        {"**", "__pow__"},
-        {"==", "__eq__"},
-        {"!=", "__ne__"},
-        {"<", "__lt__"},
-        {"<=", "__le__"},
-        {">", "__gt__"},
-        {">=", "__ge__"},
-        {"+=", "__iadd__"},
-        {"-=", "__isub__"},
-        {"*=", "__imul__"},
-        {"/=", "__itruediv__"},
-        {"//=", "__ifloordiv__"},
-        {"%=", "__imod__"},
-        {"**=", "__ipow__"},
+        { "+", "__add__" },
+        { "-", "__sub__" },
+        { "*", "__mul__" },
+        { "/", "__truediv__" },
+        { "//", "__floordiv__" },
+        { "%", "__mod__" },
+        { "**", "__pow__" },
+        { "==", "__eq__" },
+        { "!=", "__ne__" },
+        { "<", "__lt__" },
+        { "<=", "__le__" },
+        { ">", "__gt__" },
+        { ">=", "__ge__" },
+        { "+=", "__iadd__" },
+        { "-=", "__isub__" },
+        { "*=", "__imul__" },
+        { "/=", "__itruediv__" },
+        { "//=", "__ifloordiv__" },
+        { "%=", "__imod__" },
+        { "**=", "__ipow__" },
     };
-    
+
     private static readonly Dictionary<string, string> ReversedOperationToOverrideMap = new()
     {
-        {"-", "__rsub__"},
-        {"/", "__rtruediv__"},
-        {"//", "__rfloordiv__"},
-        {"%", "__rmod__"},
-        {"**", "__rpow__"},
-        {"<", "__rlt__"},
-        {"<=", "__rle__"},
-        {">", "__rgt__"},
-        {">=", "__rge__"},
+        { "-", "__rsub__" },
+        { "/", "__rtruediv__" },
+        { "//", "__rfloordiv__" },
+        { "%", "__rmod__" },
+        { "**", "__rpow__" },
+        { "<", "__rlt__" },
+        { "<=", "__rle__" },
+        { ">", "__rgt__" },
+        { ">=", "__rge__" },
     };
-    
+
     private static readonly Dictionary<string, string> UnaryOperationToOverrideMap = new()
     {
         { "+", "__pos__" },
@@ -89,96 +102,108 @@ public static class Operator
         {
             return ConductBooleanOperation(callStack, closure, operation, left, right, originalInstruction);
         }
-        else if (left is ObjectVariable || right is ObjectVariable)
+
+        if (left is ObjectVariable || right is ObjectVariable)
         {
             return ConductObjectOperation(callStack, closure, operation, left, right, originalInstruction);
         }
-        else if (left is StringVariable || right is StringVariable)
+
+        if (left is StringVariable || right is StringVariable)
         {
             return ConductStringOperation(callStack, operation, left, right);
         }
-        else if (left is NumericVariable leftNumeric && right is NumericVariable rightNumeric)
+
+        if (left is NumericVariable leftNumeric && right is NumericVariable rightNumeric)
         {
             return ConductBinaryNumericOperation(operation, leftNumeric, rightNumeric);
-        } else if (left is null && right is NumericVariable rightUnaryNumeric)
+        }
+
+        if (left is null && right is NumericVariable rightUnaryNumeric)
         {
             return ConductUnaryNumericOperation(operation, rightUnaryNumeric);
         }
-        else if (left is SequenceVariable leftSequence && right is SequenceVariable rightSequence)
+
+        if (left is SequenceVariable leftSequence && right is SequenceVariable rightSequence)
         {
             return ConductBinarySequenceOperation(operation, leftSequence, rightSequence);
         }
-        else if (left is SequenceVariable leftSequence2 && right is NumericVariable rightNumeric2)
+
+        if (left is SequenceVariable leftSeq && right is NumericVariable rightNum)
         {
-            return ConductNumericSequenceOperation(operation, leftSequence2, rightNumeric2);
+            return ConductNumericSequenceOperation(operation, leftSeq, rightNum);
         }
-        else if (left is NumericVariable leftNumeric2 && right is SequenceVariable rightSequence2)
+
+        if (left is NumericVariable leftNum && right is SequenceVariable rightSeq)
         {
-            return ConductNumericSequenceOperation(operation, rightSequence2, leftNumeric2);
+            return ConductNumericSequenceOperation(operation, rightSeq, leftNum);
         }
-        else
-        {
-            throw new InterpreterInvalidOperationException(operation, left, right);
-        }
+
+        throw new InterpreterInvalidOperationException(operation, left, right);
     }
     
     private static Variable ConductBinarySequenceOperation(string operation, SequenceVariable leftSequence, SequenceVariable rightSequence)
     {
-        switch (operation)
+        return operation switch
         {
-            case "+":
-                return new SequenceVariable(leftSequence.Values.Concat(rightSequence.Values).ToList());
-            case "==":
-                return CompareSequences(leftSequence, rightSequence) ? new NumericVariable(1) : new NumericVariable(0);
-            case "!=":
-                return CompareSequences(leftSequence, rightSequence) ? new NumericVariable(0) : new NumericVariable(1);
-            default:
-                throw new InterpreterInvalidOperationException(operation, leftSequence, rightSequence);
+            "+" => new SequenceVariable(leftSequence.Values.Concat(rightSequence.Values).ToList()),
+            "==" => CreateBoolNumeric(SequencesAreEqual(leftSequence, rightSequence)),
+            "!=" => CreateBoolNumeric(!SequencesAreEqual(leftSequence, rightSequence)),
+            _ => throw new InterpreterInvalidOperationException(operation, leftSequence, rightSequence)
+        };
+    }
+
+    private static bool SequencesAreEqual(SequenceVariable sequence1, SequenceVariable sequence2)
+    {
+        if (sequence1.Values.Count != sequence2.Values.Count)
+        {
+            return false;
         }
-        
-        bool CompareSequences(SequenceVariable sequence1, SequenceVariable sequence2)
+
+        for (var i = 0; i < sequence1.Values.Count; i++)
         {
-            if (sequence1.Values.Count != sequence2.Values.Count)
+            var value1 = sequence1.Values[i];
+            var value2 = sequence2.Values[i];
+
+            if (value1 is null && value2 is null)
+            {
+                continue;
+            }
+
+            if (value1 is null || value2 is null)
             {
                 return false;
             }
-        
-            for (var i = 0; i < sequence1.Values.Count; i++)
-            {
-                if (!sequence1.Values[i].Equals(sequence2.Values[i]))
-                {
-                    return false;
-                }
-            }
 
-            return true;
+            if (!value1.Equals(value2))
+            {
+                return false;
+            }
         }
+
+        return true;
     }
 
     private static Variable ConductNumericSequenceOperation(string operation, SequenceVariable sequence, NumericVariable numeric)
     {
-        switch (operation)
+        return operation switch
         {
-            case "*":
-                return MultiplySequence();
-            case "==":
-                return new NumericVariable(0);
-            default:
-                throw new InterpreterInvalidOperationException(operation, sequence, numeric);
-        }
-        
-        Variable MultiplySequence()
+            "*" => MultiplySequence(sequence, numeric),
+            "==" => new NumericVariable(0),
+            _ => throw new InterpreterInvalidOperationException(operation, sequence, numeric)
+        };
+    }
+
+    private static SequenceVariable MultiplySequence(SequenceVariable sequence, NumericVariable numeric)
+    {
+        var count = (int)numeric.Value;
+        var values = new List<Variable?>(capacity: sequence.Values.Count * count);
+
+        for (var i = 0; i < count; i++)
         {
-            var values = new List<Variable>();
-            for (var i = 0; i < numeric.Value; i++)
-            {
-                foreach (var value in sequence.Values)
-                {
-                    values.Add(value);
-                }
-            }
-            return new SequenceVariable(values);
+            values.AddRange(sequence.Values);
         }
+
+        return new SequenceVariable(values);
     }
 
 
@@ -188,25 +213,17 @@ public static class Operator
         var leftTruthiness = Truthiness.IsTruthy(callStack, closure, left!, originalInstruction);
         var rightTruthiness = Truthiness.IsTruthy(callStack, closure, right!, originalInstruction);
 
-        switch (operation)
+        return operation switch
         {
-            case "or":
-                return BsTypes.Create(BsTypes.Types.Bool, leftTruthiness || rightTruthiness);
-            case "and":
-                return BsTypes.Create(BsTypes.Types.Bool, leftTruthiness && rightTruthiness);
-            case "not":
-                return BsTypes.Create(BsTypes.Types.Bool, !rightTruthiness);
-            case "is":
-                return BsTypes.Create(BsTypes.Types.Bool, ReferenceEquals(left, right));
-            case "is not":
-                return BsTypes.Create(BsTypes.Types.Bool, !ReferenceEquals(left, right));
-            case "in":
-                return BsTypes.Create(BsTypes.Types.Bool, ConductInOperation(operation, left, right));
-            case "not in":
-                return BsTypes.Create(BsTypes.Types.Bool, !ConductInOperation(operation, left, right));
-            default:
-                throw new Exception("Won't get here");
-        }
+            "or" => BsTypes.Create(BsTypes.Types.Bool, leftTruthiness || rightTruthiness),
+            "and" => BsTypes.Create(BsTypes.Types.Bool, leftTruthiness && rightTruthiness),
+            "not" => BsTypes.Create(BsTypes.Types.Bool, !rightTruthiness),
+            "is" => BsTypes.Create(BsTypes.Types.Bool, ReferenceEquals(left, right)),
+            "is not" => BsTypes.Create(BsTypes.Types.Bool, !ReferenceEquals(left, right)),
+            "in" => BsTypes.Create(BsTypes.Types.Bool, ConductInOperation(operation, left, right)),
+            "not in" => BsTypes.Create(BsTypes.Types.Bool, !ConductInOperation(operation, left, right)),
+            _ => throw new InterpreterInvalidOperationException(operation, left, right)
+        };
     }
 
     private static bool ConductInOperation(string operation, Variable? left, Variable? right)
@@ -214,28 +231,20 @@ public static class Operator
         if (BsTypes.Is(BsTypes.Types.String, left) && BsTypes.Is(BsTypes.Types.String, right))
         {
             return BsTypes.GetStringValue(right).Contains(BsTypes.GetStringValue(left));
-        } else if (BsTypes.Is(BsTypes.Types.List, right))
+        }
+
+        if (BsTypes.Is(BsTypes.Types.List, right))
         {
             var listValue = BsTypes.GetListValue(right);
             return listValue.Values.Any(x => x.Equals(left));
-        } else if (IsValidDictionaryInExpression(left, right))
-        {
-            var dictValue = BsTypes.GetDictValue(right);
-            if (BsTypes.Is(BsTypes.Types.Int, left))
-            {
-                var intValue = BsTypes.GetIntValue(left);
-                return dictValue.IntValues.Any(x => x.Key.Equals(intValue));
-            }
-            else
-            {
-                var stringValue = BsTypes.GetStringValue(left);
-                return dictValue.StringValues.Any(x => x.Key.Equals(stringValue));
-            }
         }
-        else
+
+        if (IsValidDictionaryInExpression(left, right))
         {
-            throw new InterpreterInvalidOperationException(operation, left, right);
+            return CheckDictionaryContainsKey(left, right);
         }
+
+        throw new InterpreterInvalidOperationException(operation, left, right);
     }
 
     private static bool IsValidDictionaryInExpression(Variable? left, Variable? right)
@@ -244,247 +253,187 @@ public static class Operator
         return BsTypes.Is(BsTypes.Types.Dictionary, right) && isLeftStringOrInt;
     }
 
-    private static FunctionVariable? GetOperationOverrideFromObject(CallStack callStack, Closure closure,
-        string overrideName, ObjectVariable objectVariable) => objectVariable.GetMember(callStack, closure, new MemberInstruction(overrideName)) as FunctionVariable;
-    
+    private static bool CheckDictionaryContainsKey(Variable? left, Variable? right)
+    {
+        var dictValue = BsTypes.GetDictValue(right);
+
+        if (BsTypes.Is(BsTypes.Types.Int, left))
+        {
+            var intValue = BsTypes.GetIntValue(left);
+            return dictValue.IntValues.Any(x => x.Key.Equals(intValue));
+        }
+
+        var stringValue = BsTypes.GetStringValue(left);
+        return dictValue.StringValues.Any(x => x.Key.Equals(stringValue));
+    }
+
     private static Variable ConductObjectOperation(CallStack callStack, Closure closure, string operation, Variable? left, Variable? right, Instruction? originalInstruction = null)
     {
-        
-        
-        var (leftOverride, rightOverride) = GetOverride();
-
-        // If left operand is an object and has an override, use that one.  Otherwise, if right operand is an object
-        // and has an override, use that one.
+        var leftOverride = GetLeftOperatorOverride(callStack, closure, operation, left, right);
         if (leftOverride is not null)
         {
-            if (right is null)
-            {
-                return leftOverride.RunFunction(callStack, closure, new ArgumentSet([]), originalInstruction);
-            }
-            else
-            {
-                return leftOverride.RunFunction(callStack, closure, new ArgumentSet([right]), originalInstruction);
-            }
-        } else if (rightOverride is not null)
+            var args = new ArgumentSet(right is null ? [] : [right]);
+            return leftOverride.RunFunction(callStack, closure, args, originalInstruction);
+        }
+
+        var rightOverride = GetRightOperatorOverride(callStack, closure, operation, left, right);
+        if (rightOverride is not null)
         {
-            if (left is null)
-            {
-                return rightOverride.RunFunction(callStack, closure, new ArgumentSet([]), originalInstruction);
-            }
-            else
-            {
-                return rightOverride.RunFunction(callStack, closure, new ArgumentSet([left]), originalInstruction);
-            }
+            var args = new ArgumentSet(left is null ? [] : [left]);
+            return rightOverride.RunFunction(callStack, closure, args, originalInstruction);
+        }
+
+        throw new InterpreterInvalidOperationException(operation, left, right);
+    }
+
+    private static FunctionVariable? GetLeftOperatorOverride(
+        CallStack callStack, Closure closure, string operation, Variable? left, Variable? right)
+    {
+        if (left is not ObjectVariable leftObject)
+        {
+            return null;
+        }
+
+        var isUnary = right is null;
+        var overrideName = GetOverrideName(operation, isUnary, isReversed: false)
+            ?? throw new InterpreterInvalidOperationException(operation, left, right);
+
+        return leftObject.GetMember(callStack, closure, new MemberInstruction(overrideName)) as FunctionVariable;
+    }
+
+    private static FunctionVariable? GetRightOperatorOverride(
+        CallStack callStack, Closure closure, string operation, Variable? left, Variable? right)
+    {
+        if (right is not ObjectVariable rightObject)
+        {
+            return null;
+        }
+
+        var isUnary = left is null;
+        var isReversed = left is not null && ReversedOperationToOverrideMap.ContainsKey(operation);
+        var overrideName = GetOverrideName(operation, isUnary, isReversed)
+            ?? throw new InterpreterInvalidOperationException(operation, left, right);
+
+        return rightObject.GetMember(callStack, closure, new MemberInstruction(overrideName)) as FunctionVariable;
+    }
+
+    private static string? GetOverrideName(string operation, bool isUnary, bool isReversed)
+    {
+        string? overrideName;
+
+        if (isUnary)
+        {
+            UnaryOperationToOverrideMap.TryGetValue(operation, out overrideName);
+        }
+        else if (isReversed)
+        {
+            ReversedOperationToOverrideMap.TryGetValue(operation, out overrideName);
         }
         else
         {
-            throw new InterpreterInvalidOperationException(operation, left, right);
-            
+            OperationToOverrideMap.TryGetValue(operation, out overrideName);
         }
 
-        (FunctionVariable? Left, FunctionVariable? Right) GetOverride()
-        {
-            FunctionVariable? leftFunc = null;
-            if (left is ObjectVariable leftObject)
-            {
-                string overrideName;
-                if (right is null)
-                {
-                    UnaryOperationToOverrideMap.TryGetValue(operation, out overrideName);
-                }
-                else
-                {
-                    OperationToOverrideMap.TryGetValue(operation, out overrideName);
-                }
-                
-                if (overrideName is null)
-                {
-                    throw new InterpreterInvalidOperationException(operation, left, right);
-                }
-                
-                leftFunc = leftObject.GetMember(callStack, closure, new MemberInstruction(overrideName)) as FunctionVariable;
-            }
-        
-            FunctionVariable? rightFunc = null;
-            if (right is ObjectVariable rightObject)
-            {
-                string overrideName;
-                if (left is null)
-                {
-                    UnaryOperationToOverrideMap.TryGetValue(operation, out overrideName);
-                }
-                else if (ReversedOperationToOverrideMap.Keys.Contains(operation))
-                {
-                    ReversedOperationToOverrideMap.TryGetValue(operation, out overrideName);
-                } 
-                else
-                {
-                    OperationToOverrideMap.TryGetValue(operation, out overrideName);
-                }
-                
-                if (overrideName is null)
-                {
-                    throw new InterpreterInvalidOperationException(operation, left, right);
-                }
-                
-                rightFunc = rightObject.GetMember(callStack, closure, new MemberInstruction(overrideName)) as FunctionVariable;
-            }
-            
-            return (leftFunc, rightFunc);
-        }
+        return overrideName;
     }
         
     private static Variable ConductStringOperation(CallStack callStack, string operation, Variable? left, Variable? right)
     {
-        switch (operation)
+        return operation switch
         {
-            case "+":
-                var leftString = ConvertToString(left);
-                var rightString = ConvertToString(right);
-                return new StringVariable(leftString + rightString);
-            case "==":
-                if (left is StringVariable leftEqualsString && right is StringVariable rightEqualsString)
-                {
-                    return new NumericVariable(leftEqualsString.Value == rightEqualsString.Value ? 1 : 0);
-                }
-                else
-                {
-                    throw new InterpreterInvalidOperationException(operation, left, right);
-                }
-            case "!=":
-                if (left is StringVariable leftNotEqualsString && right is StringVariable rightNotEqualsString)
-                {
-                    return new NumericVariable(leftNotEqualsString.Value != rightNotEqualsString.Value ? 1 : 0);
-                }
-                else
-                {
-                    throw new InterpreterInvalidOperationException(operation, left, right);
-                }
-            case "*":
-                if (left is StringVariable leftStringVariable && right is NumericVariable rightNumericVariable)
-                {
-                    return MultiplyString(leftStringVariable, rightNumericVariable);
-                }
-                else if (left is NumericVariable leftNumericVariable &&
-                         right is StringVariable rightStringVariable)
-                {
-                    return MultiplyString(rightStringVariable, leftNumericVariable);
-                }
-                else
-                {
-                    throw new InterpreterInvalidOperationException(operation, left, right);
-                }
-            default:
-                throw new InterpreterInvalidOperationException(operation, left, right);
-        }
-        
-        
-        
-        string ConvertToString(Variable variable)
+            "+" => ConcatenateStrings(operation, left, right),
+            "==" => CompareStringsForEquality(operation, left, right, expectEqual: true),
+            "!=" => CompareStringsForEquality(operation, left, right, expectEqual: false),
+            "*" => MultiplyString(operation, left, right),
+            _ => throw new InterpreterInvalidOperationException(operation, left, right)
+        };
+    }
+
+    private static Variable ConcatenateStrings(string operation, Variable? left, Variable? right)
+    {
+        var leftString = ConvertVariableToString(operation, left, right);
+        var rightString = ConvertVariableToString(operation, right, left);
+        return new StringVariable(leftString + rightString);
+    }
+
+    private static Variable CompareStringsForEquality(string operation, Variable? left, Variable? right, bool expectEqual)
+    {
+        if (left is StringVariable leftString && right is StringVariable rightString)
         {
-            if (variable is StringVariable stringVariable)
-            {
-                return stringVariable.Value;
-            }
-            else if (variable is NumericVariable numericVariable)
-            {
-                return numericVariable.Value.ToString();
-            }
-            else
-            {
-                throw new InterpreterInvalidOperationException(operation, left, right);
-            }
+            var isEqual = leftString.Value == rightString.Value;
+            return CreateBoolNumeric(expectEqual ? isEqual : !isEqual);
         }
 
-        Variable MultiplyString(StringVariable stringVariable, NumericVariable numericVariable)
+        throw new InterpreterInvalidOperationException(operation, left, right);
+    }
+
+    private static Variable MultiplyString(string operation, Variable? left, Variable? right)
+    {
+        return (left, right) switch
         {
-            var stringValue = stringVariable.Value;
-            var numericValue = numericVariable.Value;
-            var result = "";
-            for (var i = 0; i < numericValue; i++)
-            {
-                result += stringValue;
-            }
-            return new StringVariable(result);
-        }
+            (StringVariable stringVar, NumericVariable numericVar) => RepeatString(stringVar, numericVar),
+            (NumericVariable numericVar, StringVariable stringVar) => RepeatString(stringVar, numericVar),
+            _ => throw new InterpreterInvalidOperationException(operation, left, right)
+        };
+    }
+
+    private static Variable RepeatString(StringVariable stringVariable, NumericVariable numericVariable)
+    {
+        var result = string.Concat(Enumerable.Repeat(stringVariable.Value, (int)numericVariable.Value));
+        return new StringVariable(result);
+    }
+
+    private static string ConvertVariableToString(string operation, Variable? variable, Variable? otherVariable)
+    {
+        return variable switch
+        {
+            StringVariable stringVar => stringVar.Value,
+            NumericVariable numericVar => numericVar.Value.ToString(),
+            _ => throw new InterpreterInvalidOperationException(operation, variable, otherVariable)
+        };
     }
         
     private static Variable ConductBinaryNumericOperation(string operation, NumericVariable leftNumeric, NumericVariable rightNumeric)
     {
-        switch (operation)
+        return operation switch
         {
-            case "**":
-                return new NumericVariable(Math.Pow(leftNumeric.Value, rightNumeric.Value));
-            case "*":
-                return new NumericVariable(leftNumeric.Value * rightNumeric.Value);
-            case "/":
-                return new NumericVariable((double)leftNumeric.Value / (double)rightNumeric.Value);
-            case "//":
-                return new NumericVariable(Math.Floor((double)leftNumeric.Value / (double)rightNumeric.Value));
-            case "%":
-                return new NumericVariable(leftNumeric.Value % rightNumeric.Value);
-            case "+":
-                return new NumericVariable(leftNumeric.Value + rightNumeric.Value);
-            case "-":
-                return new NumericVariable(leftNumeric.Value - rightNumeric.Value);
-            case "==":
-                return new NumericVariable(Math.Abs(leftNumeric.Value - rightNumeric.Value) <
-                                           Consts.FloatingPointTolerance
-                    ? 1
-                    : 0);
-            case "!=":
-                return new NumericVariable(Math.Abs(leftNumeric.Value - rightNumeric.Value) >
-                                           Consts.FloatingPointTolerance
-                    ? 1
-                    : 0);
-            case ">":
-                var gValue = leftNumeric.Value > rightNumeric.Value;
-                return new NumericVariable(gValue ? 1 : 0);
-            case ">=":
-                var geValue = leftNumeric.Value >= rightNumeric.Value;
-                return new NumericVariable(geValue ? 1 : 0);
-            case "<":
-                var lValue = leftNumeric.Value < rightNumeric.Value;
-                return new NumericVariable(lValue ? 1 : 0);
-            case "<=":
-                var leValue = leftNumeric.Value <= rightNumeric.Value;
-                return new NumericVariable(leValue ? 1 : 0);
-            case "+=":
-                leftNumeric.Value += rightNumeric.Value;
-                return new ConstantVariable();
-            case "-=":
-                leftNumeric.Value -= rightNumeric.Value;
-                return new ConstantVariable();
-            case "*=":
-                leftNumeric.Value *= rightNumeric.Value;
-                return new ConstantVariable();
-            case "/=":
-                leftNumeric.Value /= (double)rightNumeric.Value;
-                return new ConstantVariable();
-            case "//=":
-                leftNumeric.Value = Math.Floor((double)leftNumeric.Value / (double)rightNumeric.Value);
-                return new ConstantVariable();
-            case "%=":
-                leftNumeric.Value %= rightNumeric.Value;
-                return new ConstantVariable();
-            case "**=":
-                leftNumeric.Value = Math.Pow(leftNumeric.Value, rightNumeric.Value);
-                return new ConstantVariable();
-            default:
-                throw new InterpreterInvalidOperationException(operation, leftNumeric, rightNumeric);
-        }
+            "**" => new NumericVariable(Math.Pow(leftNumeric.Value, rightNumeric.Value)),
+            "*" => new NumericVariable(leftNumeric.Value * rightNumeric.Value),
+            "/" => new NumericVariable((double)leftNumeric.Value / (double)rightNumeric.Value),
+            "//" => new NumericVariable(Math.Floor((double)leftNumeric.Value / (double)rightNumeric.Value)),
+            "%" => new NumericVariable(leftNumeric.Value % rightNumeric.Value),
+            "+" => new NumericVariable(leftNumeric.Value + rightNumeric.Value),
+            "-" => new NumericVariable(leftNumeric.Value - rightNumeric.Value),
+            "==" => CreateBoolNumeric(Math.Abs(leftNumeric.Value - rightNumeric.Value) < Consts.FloatingPointTolerance),
+            "!=" => CreateBoolNumeric(Math.Abs(leftNumeric.Value - rightNumeric.Value) > Consts.FloatingPointTolerance),
+            ">" => CreateBoolNumeric(leftNumeric.Value > rightNumeric.Value),
+            ">=" => CreateBoolNumeric(leftNumeric.Value >= rightNumeric.Value),
+            "<" => CreateBoolNumeric(leftNumeric.Value < rightNumeric.Value),
+            "<=" => CreateBoolNumeric(leftNumeric.Value <= rightNumeric.Value),
+            "+=" => ApplyCompoundAssignment(leftNumeric, rightNumeric, (l, r) => l + r),
+            "-=" => ApplyCompoundAssignment(leftNumeric, rightNumeric, (l, r) => l - r),
+            "*=" => ApplyCompoundAssignment(leftNumeric, rightNumeric, (l, r) => l * r),
+            "/=" => ApplyCompoundAssignment(leftNumeric, rightNumeric, (l, r) => l / (double)r),
+            "//=" => ApplyCompoundAssignment(leftNumeric, rightNumeric, (l, r) => Math.Floor((double)l / (double)r)),
+            "%=" => ApplyCompoundAssignment(leftNumeric, rightNumeric, (l, r) => l % r),
+            "**=" => ApplyCompoundAssignment(leftNumeric, rightNumeric, (l, r) => Math.Pow(l, r)),
+            _ => throw new InterpreterInvalidOperationException(operation, leftNumeric, rightNumeric)
+        };
+    }
+
+    private static ConstantVariable ApplyCompoundAssignment(NumericVariable leftNumeric, NumericVariable rightNumeric, Func<double, double, double> operation)
+    {
+        leftNumeric.Value = operation(leftNumeric.Value, rightNumeric.Value);
+        return new ConstantVariable();
     }
     
     private static Variable ConductUnaryNumericOperation(string operation, NumericVariable numeric)
     {
-        switch (operation)
+        return operation switch
         {
-            case "-":
-                return new NumericVariable(-numeric.Value);
-            case "+":
-                return new NumericVariable(numeric.Value);
-            default:
-                throw new InterpreterInvalidOperationException(operation, null, numeric);
-        }
+            "-" => new NumericVariable(-numeric.Value),
+            "+" => new NumericVariable(numeric.Value),
+            _ => throw new InterpreterInvalidOperationException(operation, null, numeric)
+        };
     }
 }
