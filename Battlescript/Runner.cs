@@ -27,19 +27,19 @@ public static class Runner
 
     private static void LoadBuiltIns(CallStack callStack, Closure closure)
     {
-        for (int i = 0; i < BsTypes.TypeStrings.Length; i++)
+        for (int i = 0; i < BtlTypes.TypeStrings.Length; i++)
         {
-            var builtInName = BsTypes.TypeStrings[i];
+            var builtInName = BtlTypes.TypeStrings[i];
             var fileName = $"/Users/nickpitrak/Desktop/Battlescript/Battlescript/BuiltIn/{builtInName}.bs";
             var expression = $"import {builtInName} from \"{fileName}\"";
             var importInstruction = new ImportInstruction(fileName, [builtInName], i, expression);
             
             var interpreter = new Interpreter([importInstruction]);
             interpreter.Run(callStack, closure);
-            BsTypes.PopulateBsTypeReference(callStack, closure, builtInName);
+            BtlTypes.PopulateBtlTypeReference(callStack, closure, builtInName);
         }
 
-        BsTypes.PopulateBsTypeConstants(callStack, closure);
+        BtlTypes.PopulateBtlTypeConstants(callStack, closure);
 
     }
 
@@ -60,11 +60,11 @@ public static class Runner
         }
         catch (InternalReturnException)
         {
-            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "'return' outside function");
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "'return' outside function");
         }
         catch (InternalBreakException)
         {
-            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "'break' outside loop");
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "'break' outside loop");
         }
         catch (InternalRaiseException e)
         {

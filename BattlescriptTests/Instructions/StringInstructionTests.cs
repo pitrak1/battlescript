@@ -9,7 +9,7 @@ public static class StringInstructionTests
     public class Parse
     {
         [Test]
-        public void HandlesSingleQuoteStrings()
+        public void SingleQuoteStrings()
         {
             var expected = new StringInstruction("asdf");
             Assertions.AssertInputProducesParserOutput("'asdf'", expected);
@@ -20,10 +20,10 @@ public static class StringInstructionTests
     public class Interpret
     {
         [Test]
-        public void HandlesSingleQuoteStrings()
+        public void SingleQuoteStrings()
         {
             var (callStack, closure) = Runner.Run("x = 'asdf'");
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.String, "asdf"));
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.String, "asdf"));
         }
     }
 }

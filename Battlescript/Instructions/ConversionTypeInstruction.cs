@@ -72,17 +72,17 @@ public class ConversionTypeInstruction : Instruction
             {
                 return new StringVariable(numericVariable.Value.ToString());
             }
-            else if (BsTypes.Is(BsTypes.Types.String, parameter))
+            else if (BtlTypes.Is(BtlTypes.Types.String, parameter))
             {
-                return new StringVariable(BsTypes.GetStringValue(parameter));
+                return new StringVariable(BtlTypes.GetStringValue(parameter));
             }
-            else if (BsTypes.Is(BsTypes.Types.Int, parameter))
+            else if (BtlTypes.Is(BtlTypes.Types.Int, parameter))
             {
-                return new StringVariable(BsTypes.GetIntValue(parameter).ToString());
+                return new StringVariable(BtlTypes.GetIntValue(parameter).ToString());
             }
-            else if (BsTypes.Is(BsTypes.Types.Float, parameter))
+            else if (BtlTypes.Is(BtlTypes.Types.Float, parameter))
             {
-                return new StringVariable(BsTypes.GetFloatValue(parameter).ToString());
+                return new StringVariable(BtlTypes.GetFloatValue(parameter).ToString());
             }
         }
         return new StringVariable();
@@ -140,17 +140,17 @@ public class ConversionTypeInstruction : Instruction
         {
             return numericVariable.Value;
         }
-        else if (BsTypes.Is(BsTypes.Types.String, variable!))
+        else if (BtlTypes.Is(BtlTypes.Types.String, variable!))
         {
-            return ConvertStringToIntOrDouble(BsTypes.GetStringValue(variable!));
+            return ConvertStringToIntOrDouble(BtlTypes.GetStringValue(variable!));
         }
-        else if (BsTypes.Is(BsTypes.Types.Int, variable!))
+        else if (BtlTypes.Is(BtlTypes.Types.Int, variable!))
         {
-            return BsTypes.GetIntValue(variable!);
+            return BtlTypes.GetIntValue(variable!);
         }
-        else if (BsTypes.Is(BsTypes.Types.Float, variable!))
+        else if (BtlTypes.Is(BtlTypes.Types.Float, variable!))
         {
-            return BsTypes.GetFloatValue(variable!);
+            return BtlTypes.GetFloatValue(variable!);
         }
         else
         {

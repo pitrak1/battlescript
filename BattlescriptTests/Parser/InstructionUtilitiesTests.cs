@@ -125,7 +125,7 @@ public static class InstructionUtilitiesTests
     public class ParseLeftAndRightAroundIndex
     {
         [Test]
-        public void HandlesNoTokens()
+        public void NoTokens()
         {
             var result = InstructionUtilities.ParseLeftAndRightAroundIndex([], 0);
             Assert.That(result.Left, Is.Null);
@@ -133,7 +133,7 @@ public static class InstructionUtilitiesTests
         }
         
         [Test]
-        public void HandlesDivisionAtFirstEntry()
+        public void DivisionAtFirstEntry()
         {
             var lexer = new Lexer("x = 5 + 6");
             var lexerResult = lexer.Run();
@@ -142,7 +142,7 @@ public static class InstructionUtilitiesTests
         }
         
         [Test]
-        public void HandlesDivisionAtLastEntry()
+        public void DivisionAtLastEntry()
         {
             var lexer = new Lexer("x = 5 + 6");
             var lexerResult = lexer.Run();
@@ -151,7 +151,7 @@ public static class InstructionUtilitiesTests
         }
         
         [Test]
-        public void HandlesStandardDivision()
+        public void StandardDivision()
         {
             var lexer = new Lexer("x = 5");
             var lexerResult = lexer.Run();

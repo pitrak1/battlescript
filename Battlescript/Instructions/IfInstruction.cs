@@ -14,7 +14,7 @@ public class IfInstruction : Instruction
     {
         if (tokens[^1].Value != ":")
         {
-            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "invalid syntax");
         }
     }
 

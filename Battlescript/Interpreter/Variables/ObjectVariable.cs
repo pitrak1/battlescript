@@ -20,7 +20,7 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
         var setItemOverride = GetMember(callStack, closure, new MemberInstruction("__setitem__"));
         if (setItemOverride is FunctionVariable functionVariable)
         {
-            var indexArgument = BsTypes.Create(BsTypes.Types.List, indexVariable);
+            var indexArgument = BtlTypes.Create(BtlTypes.Types.List, indexVariable);
             return functionVariable.RunFunction(callStack, closure, new ArgumentSet([indexArgument, valueVariable]), index);
         }
         else
@@ -52,7 +52,7 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
     public override Variable? GetItemDirectly(CallStack callStack, Closure closure, ArrayInstruction index, ObjectVariable? objectContext = null)
     {
         var indexVariables = index.Values.Select(x => x?.Interpret(callStack, closure) ?? null).ToList();
-        var indexList = BsTypes.Create(BsTypes.Types.List, indexVariables);
+        var indexList = BtlTypes.Create(BtlTypes.Types.List, indexVariables);
 
         var getItemOverride = GetMember(callStack, closure, new MemberInstruction("__getitem__"));
         if (getItemOverride is FunctionVariable functionVariable)

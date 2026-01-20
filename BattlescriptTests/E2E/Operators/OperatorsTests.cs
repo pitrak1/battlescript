@@ -18,10 +18,10 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "a", BsTypes.True);
-            Assertions.AssertVariable(callStack, closure, "b", BsTypes.False);
-            Assertions.AssertVariable(callStack, closure, "c", BsTypes.False);
-            Assertions.AssertVariable(callStack, closure, "d", BsTypes.False);
+            Assertions.AssertVariable(callStack, closure, "a", BtlTypes.True);
+            Assertions.AssertVariable(callStack, closure, "b", BtlTypes.False);
+            Assertions.AssertVariable(callStack, closure, "c", BtlTypes.False);
+            Assertions.AssertVariable(callStack, closure, "d", BtlTypes.False);
         }
         
         [Test]
@@ -35,10 +35,10 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "a", BsTypes.True);
-            Assertions.AssertVariable(callStack, closure, "b", BsTypes.True);
-            Assertions.AssertVariable(callStack, closure, "c", BsTypes.True);
-            Assertions.AssertVariable(callStack, closure, "d", BsTypes.False);
+            Assertions.AssertVariable(callStack, closure, "a", BtlTypes.True);
+            Assertions.AssertVariable(callStack, closure, "b", BtlTypes.True);
+            Assertions.AssertVariable(callStack, closure, "c", BtlTypes.True);
+            Assertions.AssertVariable(callStack, closure, "d", BtlTypes.False);
         }
         
         [Test]
@@ -50,8 +50,8 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "a", BsTypes.True);
-            Assertions.AssertVariable(callStack, closure, "b", BsTypes.False);
+            Assertions.AssertVariable(callStack, closure, "a", BtlTypes.True);
+            Assertions.AssertVariable(callStack, closure, "b", BtlTypes.False);
         }
     }
 
@@ -74,8 +74,8 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "d", BsTypes.False);
-            Assertions.AssertVariable(callStack, closure, "e", BsTypes.True);
+            Assertions.AssertVariable(callStack, closure, "d", BtlTypes.False);
+            Assertions.AssertVariable(callStack, closure, "e", BtlTypes.True);
         }
         
         [Test]
@@ -94,8 +94,8 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "d", BsTypes.True);
-            Assertions.AssertVariable(callStack, closure, "e", BsTypes.False);
+            Assertions.AssertVariable(callStack, closure, "d", BtlTypes.True);
+            Assertions.AssertVariable(callStack, closure, "e", BtlTypes.False);
         }
     }
 
@@ -107,7 +107,7 @@ public class OperatorsTests
         {
             var input = "x = 2 ** 3";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 8);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 8);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -117,7 +117,7 @@ public class OperatorsTests
         {
             var input = "x = 2 * 3";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 6);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 6);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -127,7 +127,7 @@ public class OperatorsTests
         {
             var input = "x = 2 / 5";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Float, 0.4);
+            var expected = BtlTypes.Create(BtlTypes.Types.Float, 0.4);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -137,7 +137,7 @@ public class OperatorsTests
         {
             var input = "x = 7 // 5";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 1);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 1);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -147,7 +147,7 @@ public class OperatorsTests
         {
             var input = "x = 7 % 5";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 2);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 2);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -157,7 +157,7 @@ public class OperatorsTests
         {
             var input = "x = 7 + 5";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 12);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 12);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -167,7 +167,7 @@ public class OperatorsTests
         {
             var input = "x = 7 - 5";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 2);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 2);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -181,7 +181,7 @@ public class OperatorsTests
         {
             var input = "x = +5";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -191,7 +191,7 @@ public class OperatorsTests
         {
             var input = "x = -5";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, -5);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, -5);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -209,8 +209,8 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.True);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.False);
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.False);
         }
         
         [Test]
@@ -222,8 +222,8 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.False);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.True);
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.False);
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.True);
         }
         
         [Test]
@@ -236,9 +236,9 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.True);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.False);
-            Assertions.AssertVariable(callStack, closure, "z", BsTypes.False);
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.False);
+            Assertions.AssertVariable(callStack, closure, "z", BtlTypes.False);
         }
         
         [Test]
@@ -251,9 +251,9 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.True);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.True);
-            Assertions.AssertVariable(callStack, closure, "z", BsTypes.False);
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.True);
+            Assertions.AssertVariable(callStack, closure, "z", BtlTypes.False);
         }
         
         [Test]
@@ -266,9 +266,9 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.False);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.False);
-            Assertions.AssertVariable(callStack, closure, "z", BsTypes.True);
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.False);
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.False);
+            Assertions.AssertVariable(callStack, closure, "z", BtlTypes.True);
         }
         
         [Test]
@@ -281,9 +281,9 @@ public class OperatorsTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.False);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.True);
-            Assertions.AssertVariable(callStack, closure, "z", BsTypes.True);
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.False);
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.True);
+            Assertions.AssertVariable(callStack, closure, "z", BtlTypes.True);
         }
     }
 
@@ -295,7 +295,7 @@ public class OperatorsTests
         {
             var input = "x = 5";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -305,7 +305,7 @@ public class OperatorsTests
         {
             var input = "x = 5\nx += 5";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 10);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 10);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -315,7 +315,7 @@ public class OperatorsTests
         {
             var input = "x = 5\nx -= 5";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 0);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 0);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -325,7 +325,7 @@ public class OperatorsTests
         {
             var input = "x = 5\nx *= 5";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 25);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 25);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -335,7 +335,7 @@ public class OperatorsTests
         {
             var input = "x = 5\nx /= 2";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Float, 2.5);
+            var expected = BtlTypes.Create(BtlTypes.Types.Float, 2.5);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -345,7 +345,7 @@ public class OperatorsTests
         {
             var input = "x = 5\nx //= 2";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 2);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 2);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -355,7 +355,7 @@ public class OperatorsTests
         {
             var input = "x = 5\nx %= 2";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 1);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 1);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -365,7 +365,7 @@ public class OperatorsTests
         {
             var input = "x = 5\nx **= 2";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 25);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 25);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }

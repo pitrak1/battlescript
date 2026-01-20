@@ -42,7 +42,7 @@ public static class AssignmentInstructionTests
         public void SimpleAssignments()
         {
             var (callStack, closure) = Runner.Run("x = 6");
-            var expected = BsTypes.Create(BsTypes.Types.Int, 6);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 6);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
@@ -50,7 +50,7 @@ public static class AssignmentInstructionTests
         public void AssignmentOperators()
         {
             var (callStack, closure) = Runner.Run("x = 6\nx += 2");
-            var expected = BsTypes.Create(BsTypes.Types.Int, 8);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 8);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }

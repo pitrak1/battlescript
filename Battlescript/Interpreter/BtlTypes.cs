@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public static class BsTypes
+public static class BtlTypes
 {
     public enum Types
     {
@@ -77,13 +77,13 @@ public static class BsTypes
     public static Variable False;
     public static Variable None;
     
-    public static void PopulateBsTypeReference(CallStack callStack, Closure closure, string builtin)
+    public static void PopulateBtlTypeReference(CallStack callStack, Closure closure, string builtin)
     {
         var type = StringsToTypes[builtin];
         TypeReferences[type] = closure.GetVariable(callStack, builtin) as ClassVariable;
     }
 
-    public static void PopulateBsTypeConstants(CallStack callStack, Closure closure)
+    public static void PopulateBtlTypeConstants(CallStack callStack, Closure closure)
     {
         True = Create(Types.Bool, new NumericVariable(1));
         False = Create(Types.Bool, new NumericVariable(0));

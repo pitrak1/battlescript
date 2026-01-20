@@ -68,10 +68,10 @@ public static class ArrayInstructionTests
         public void MultipleValues()
         {
             var (callStack, closure) = Runner.Run("x = {'asdf': 3, 'qwer': 4}");
-            var expected = BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
+            var expected = BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
             {
-                {"asdf", BsTypes.Create(BsTypes.Types.Int, 3)},
-                {"qwer", BsTypes.Create(BsTypes.Types.Int, 4)},
+                {"asdf", BtlTypes.Create(BtlTypes.Types.Int, 3)},
+                {"qwer", BtlTypes.Create(BtlTypes.Types.Int, 4)},
             }));
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -80,9 +80,9 @@ public static class ArrayInstructionTests
         public void SingleValue()
         {
             var (callStack, closure) = Runner.Run("x = {'asdf': 3}");
-            var expected = BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
+            var expected = BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
             {
-                {"asdf", BsTypes.Create(BsTypes.Types.Int, 3)},
+                {"asdf", BtlTypes.Create(BtlTypes.Types.Int, 3)},
             }));
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -91,9 +91,9 @@ public static class ArrayInstructionTests
         public void StringKey()
         {
             var (callStack, closure) = Runner.Run("x = {'asdf': 3}");
-            var expected = BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
+            var expected = BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
             {
-                {"asdf", BsTypes.Create(BsTypes.Types.Int, 3)},
+                {"asdf", BtlTypes.Create(BtlTypes.Types.Int, 3)},
             }));
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -102,9 +102,9 @@ public static class ArrayInstructionTests
         public void IntegerKey()
         {
             var (callStack, closure) = Runner.Run("x = {4: 3}");
-            var expected = BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
+            var expected = BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
             {
-                {4, BsTypes.Create(BsTypes.Types.Int, 3)},
+                {4, BtlTypes.Create(BtlTypes.Types.Int, 3)},
             }));
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -113,12 +113,12 @@ public static class ArrayInstructionTests
         public void MixedKeys()
         {
             var (callStack, closure) = Runner.Run("x = {'asdf': 3, 4: 5}");
-            var expected = BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
+            var expected = BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
             {
-                {4, BsTypes.Create(BsTypes.Types.Int, 5)},
+                {4, BtlTypes.Create(BtlTypes.Types.Int, 5)},
             }, new Dictionary<string, Variable>()
             {
-                {"asdf", BsTypes.Create(BsTypes.Types.Int, 3)},
+                {"asdf", BtlTypes.Create(BtlTypes.Types.Int, 3)},
             }));
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -138,7 +138,7 @@ public static class ArrayInstructionTests
                         x = asdf(4, 5)
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 9);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 9);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
@@ -168,15 +168,15 @@ public static class ArrayInstructionTests
                 ]);
             var classVariable = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
-                { "i", BsTypes.Create(BsTypes.Types.Int, 4) },
-                { "j", BsTypes.Create(BsTypes.Types.Int, 5) },
+                { "i", BtlTypes.Create(BtlTypes.Types.Int, 4) },
+                { "j", BtlTypes.Create(BtlTypes.Types.Int, 5) },
                 { "asdf", methodVariable }
             }, closure);
             var expected = new ObjectVariable(
                 new Dictionary<string, Variable>()
                 {
-                    {"i", BsTypes.Create(BsTypes.Types.Int, 4) },
-                    {"j", BsTypes.Create(BsTypes.Types.Int, 5)}
+                    {"i", BtlTypes.Create(BtlTypes.Types.Int, 4) },
+                    {"j", BtlTypes.Create(BtlTypes.Types.Int, 5)}
                 },
                 classVariable);
             Assertions.AssertVariable(callStack, closure, "x", expected);
@@ -196,7 +196,7 @@ public static class ArrayInstructionTests
                         x = y.i
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 9);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 9);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
 
@@ -205,7 +205,7 @@ public static class ArrayInstructionTests
         {
             var input = "x = ((4 - 2) * 3) >= (2 * (5 + 5))";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }
@@ -217,10 +217,10 @@ public static class ArrayInstructionTests
         public void ListCreation()
         {
             var (callStack, closure) = Runner.Run("x = [9, 8, 7]");
-            var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>() {
-                BsTypes.Create(BsTypes.Types.Int, 9),
-                BsTypes.Create(BsTypes.Types.Int, 8),
-                BsTypes.Create(BsTypes.Types.Int, 7)});
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>() {
+                BtlTypes.Create(BtlTypes.Types.Int, 9),
+                BtlTypes.Create(BtlTypes.Types.Int, 8),
+                BtlTypes.Create(BtlTypes.Types.Int, 7)});
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
@@ -232,7 +232,7 @@ public static class ArrayInstructionTests
                         x = y[1]
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 8);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 8);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
@@ -244,9 +244,9 @@ public static class ArrayInstructionTests
                         x = y[1:3]
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.List, new SequenceVariable([
-                BsTypes.Create(BsTypes.Types.Int, 8),
-                BsTypes.Create(BsTypes.Types.Int, 7)
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
+                BtlTypes.Create(BtlTypes.Types.Int, 8),
+                BtlTypes.Create(BtlTypes.Types.Int, 7)
             ]));
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }

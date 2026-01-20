@@ -21,11 +21,11 @@ public class ConstantInstruction : Instruction
         switch (Value)
         {
             case "True":
-                return BsTypes.True;
+                return BtlTypes.True;
             case "False":
-                return BsTypes.False;
+                return BtlTypes.False;
             default:
-                return BsTypes.None;
+                return BtlTypes.None;
         }
     }
     

@@ -31,8 +31,8 @@ public class ArgumentSetTests
             var result = new ArgumentSet(callStack, closure, input);
             var expected = new List<Variable>()
             {
-                BsTypes.Create(BsTypes.Types.Int, 1234),
-                BsTypes.Create(BsTypes.Types.String, "asdf")
+                BtlTypes.Create(BtlTypes.Types.Int, 1234),
+                BtlTypes.Create(BtlTypes.Types.String, "asdf")
             };
             Assertions.AssertVariableListsEqual(result.Positionals, expected);
         }
@@ -49,8 +49,8 @@ public class ArgumentSetTests
             var result = new ArgumentSet(callStack, closure, input);
             var expected = new Dictionary<string, Variable>()
             {
-                {"asdf", BsTypes.Create(BsTypes.Types.Int, 1234)},
-                {"qwer", BsTypes.Create(BsTypes.Types.String, "asdf")}
+                {"asdf", BtlTypes.Create(BtlTypes.Types.Int, 1234)},
+                {"qwer", BtlTypes.Create(BtlTypes.Types.String, "asdf")}
             };
             Assertions.AssertVariableDictionariesEqual(result.Keywords, expected);
         }
@@ -65,10 +65,10 @@ public class ArgumentSetTests
                 new AssignmentInstruction("=", new VariableInstruction("qwer"), new StringInstruction("asdf"))
             };
             var result = new ArgumentSet(callStack, closure, input);
-            var expectedPositionals = new List<Variable>() { BsTypes.Create(BsTypes.Types.Int, 1234) };
+            var expectedPositionals = new List<Variable>() { BtlTypes.Create(BtlTypes.Types.Int, 1234) };
             var expectedKeywords = new Dictionary<string, Variable>()
             {
-                {"qwer", BsTypes.Create(BsTypes.Types.String, "asdf")}
+                {"qwer", BtlTypes.Create(BtlTypes.Types.String, "asdf")}
             };
             Assertions.AssertVariableListsEqual(result.Positionals, expectedPositionals);
             Assertions.AssertVariableDictionariesEqual(result.Keywords, expectedKeywords);

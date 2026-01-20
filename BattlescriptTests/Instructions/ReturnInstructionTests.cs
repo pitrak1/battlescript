@@ -20,7 +20,7 @@ public static class ReturnInstructionTests
     public class Interpret
     {
         [Test]
-        public void HandlesExpressions()
+        public void Expressions()
         {
             var (callStack, closure) = Runner.Run("def func(asdf):\n\treturn asdf + 5\nx = func(4)");
 
@@ -36,7 +36,7 @@ public static class ReturnInstructionTests
                             new NumericInstruction(5)))
                 ]);
             Assertions.AssertVariable(callStack, closure, "func", funcVariable);
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 9));
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, 9));
         }
     }
 }

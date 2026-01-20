@@ -15,7 +15,7 @@ public class BuiltInIsInstanceTests
                                 x = asdf()
                                 y = isinstance(x, asdf)
                                 """);
-        var expected = BsTypes.Create(BsTypes.Types.Bool, true);
+        var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
         Assertions.AssertVariable(callStack, closure, "y", expected);
     }
     
@@ -32,7 +32,7 @@ public class BuiltInIsInstanceTests
                                 x = qwer()
                                 y = isinstance(x, asdf)
                                 """);
-        var expected = BsTypes.Create(BsTypes.Types.Bool, true);
+        var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
         Assertions.AssertVariable(callStack, closure, "y", expected);
     }
 
@@ -49,7 +49,7 @@ public class BuiltInIsInstanceTests
                                 x = qwer()
                                 y = isinstance(x, asdf)
                                 """);
-        var expected = BsTypes.Create(BsTypes.Types.Bool, false);
+        var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
         Assertions.AssertVariable(callStack, closure, "y", expected);
     }
 
@@ -60,7 +60,7 @@ public class BuiltInIsInstanceTests
                                               x = __btl_numeric__(5)
                                               y = isinstance(x, __btl_numeric__)
                                               """);
-        var expected = BsTypes.Create(BsTypes.Types.Bool, true);
+        var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
         Assertions.AssertVariable(callStack, closure, "y", expected);
     }
     
@@ -71,7 +71,7 @@ public class BuiltInIsInstanceTests
                                               x = __btl_numeric__(5)
                                               y = isinstance(x, __btl_string__)
                                               """);
-        var expected = BsTypes.Create(BsTypes.Types.Bool, false);
+        var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
         Assertions.AssertVariable(callStack, closure, "y", expected);
     }
 }

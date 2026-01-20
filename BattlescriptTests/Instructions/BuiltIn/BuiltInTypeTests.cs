@@ -15,7 +15,7 @@ public class BuiltInTypeTests
                     x = type(y)
                     """;
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.String, "<class 'function'>");
+        var expected = BtlTypes.Create(BtlTypes.Types.String, "<class 'function'>");
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
     
@@ -29,7 +29,7 @@ public class BuiltInTypeTests
                     x = type(y)
                     """;
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.String, "<class 'type'>");
+        var expected = BtlTypes.Create(BtlTypes.Types.String, "<class 'type'>");
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
     
@@ -41,7 +41,7 @@ public class BuiltInTypeTests
                     x = type(y)
                     """;
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.String, "<class '__btl_string__'>");
+        var expected = BtlTypes.Create(BtlTypes.Types.String, "<class '__btl_string__'>");
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
     
@@ -53,7 +53,7 @@ public class BuiltInTypeTests
                     x = type(y)
                     """;
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.String, "<class 'int'>");
+        var expected = BtlTypes.Create(BtlTypes.Types.String, "<class 'int'>");
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
 
@@ -68,7 +68,7 @@ public class BuiltInTypeTests
                     x = type(z)
                     """;
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.String, "<class 'y'>");
+        var expected = BtlTypes.Create(BtlTypes.Types.String, "<class 'y'>");
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
 }

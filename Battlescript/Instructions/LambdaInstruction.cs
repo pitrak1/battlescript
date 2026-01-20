@@ -26,7 +26,7 @@ public class LambdaInstruction : Instruction
         // Missing colon or missing expression
         if (colonIndex == -1 || colonIndex == tokens.Count - 1)
         {
-            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "invalid syntax");
         }
     }
 

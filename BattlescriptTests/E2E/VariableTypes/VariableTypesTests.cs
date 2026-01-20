@@ -9,7 +9,7 @@ public class VariableTypesTests
     {
         var input = "x = 'asdf'";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.String, "asdf");
+        var expected = BtlTypes.Create(BtlTypes.Types.String, "asdf");
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
     
@@ -18,7 +18,7 @@ public class VariableTypesTests
     {
         var input = "x = 5.5";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.Float, 5.5);
+        var expected = BtlTypes.Create(BtlTypes.Types.Float, 5.5);
         
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
@@ -28,7 +28,7 @@ public class VariableTypesTests
     {
         var input = "x = 5";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.Int, 5);
+        var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
         
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
@@ -38,7 +38,7 @@ public class VariableTypesTests
     {
         var input = "x = True";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.Bool, 1);
+        var expected = BtlTypes.Create(BtlTypes.Types.Bool, 1);
         
         
         Assertions.AssertVariable(callStack, closure, "x", expected);
@@ -49,7 +49,7 @@ public class VariableTypesTests
     {
         var input = "x = []";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>());
+        var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>());
         
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
@@ -59,7 +59,7 @@ public class VariableTypesTests
     {
         var input = "x = {}";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable([]));
+        var expected = BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable([]));
         
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
@@ -71,7 +71,7 @@ public class VariableTypesTests
         var (callStack, closure) = Runner.Run(input);
         var expected = new ClassVariable("asdf", new Dictionary<string, Variable>
         {
-            {"y", BsTypes.Create(BsTypes.Types.Int, 3)}
+            {"y", BtlTypes.Create(BtlTypes.Types.Int, 3)}
         }, closure);
         Assertions.AssertVariable(callStack, closure, "asdf", expected);
     }
@@ -83,7 +83,7 @@ public class VariableTypesTests
         var (callStack, closure) = Runner.Run(input);
         var classValues = new Dictionary<string, Variable>
         {
-            { "y", BsTypes.Create(BsTypes.Types.Int, 3) }
+            { "y", BtlTypes.Create(BtlTypes.Types.Int, 3) }
         };
         var expected = new ObjectVariable(classValues, new ClassVariable("asdf", classValues, closure));
         

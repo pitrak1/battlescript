@@ -16,7 +16,7 @@ public class ForInstruction : Instruction
     {
         if (tokens[^1].Value != ":")
         {
-            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "invalid syntax");
         }
 
         if (tokens[2].Value != "in")
@@ -43,12 +43,12 @@ public class ForInstruction : Instruction
     {
         var range = Range.Interpret(callStack, closure) as ObjectVariable;
 
-        if (!BsTypes.Is(BsTypes.Types.List, range!))
+        if (!BtlTypes.Is(BtlTypes.Types.List, range!))
         {
             throw new Exception("Invalid iterator for loop, fix this later");
         }
         
-        var values = BsTypes.GetListValue(range!).Values;
+        var values = BtlTypes.GetListValue(range!).Values;
         foreach (var t in values)
         {
             closure.SetVariable(callStack, BlockVariable, t!);

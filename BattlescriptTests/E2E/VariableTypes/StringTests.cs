@@ -9,7 +9,7 @@ public class StringTests
     {
         var input = "x = 'asdf'";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.String, "asdf");
+        var expected = BtlTypes.Create(BtlTypes.Types.String, "asdf");
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
     
@@ -18,7 +18,7 @@ public class StringTests
     {
         var input = "x = \"asdf\"";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.String, "asdf");
+        var expected = BtlTypes.Create(BtlTypes.Types.String, "asdf");
         
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
@@ -28,7 +28,7 @@ public class StringTests
     {
         var input = "x = 'asdf' + 'qwer'";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.String, "asdfqwer");
+        var expected = BtlTypes.Create(BtlTypes.Types.String, "asdfqwer");
         
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
@@ -38,7 +38,7 @@ public class StringTests
     {
         var input = "x = 'asdf' + 'qwer' + 'zxcv'";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.String, "asdfqwerzxcv");
+        var expected = BtlTypes.Create(BtlTypes.Types.String, "asdfqwerzxcv");
         
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
@@ -47,46 +47,46 @@ public class StringTests
     public class StringInterpolation
     {
         [Test]
-        public void HandlesInsertedVariable()
+        public void InsertedVariable()
         {
             var input = """
                         x = 5
                         y = f"asdf{x}qwer"
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.String, "asdf5qwer");
+            var expected = BtlTypes.Create(BtlTypes.Types.String, "asdf5qwer");
             
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
         
         [Test]
-        public void HandlesInsertedVariableAtStart()
+        public void InsertedVariableAtStart()
         {
             var input = """
                         x = 5
                         y = f"{x}qwer"
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.String, "5qwer");
+            var expected = BtlTypes.Create(BtlTypes.Types.String, "5qwer");
             
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
             
         [Test]
-        public void HandlesInsertedVariableAtEnd()
+        public void InsertedVariableAtEnd()
         {
             var input = """
                         x = 5
                         y = f"asdf{x}"
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.String, "asdf5");
+            var expected = BtlTypes.Create(BtlTypes.Types.String, "asdf5");
             
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
             
         [Test]
-        public void HandlesMultipleInsertedVariables()
+        public void MultipleInsertedVariables()
         {
             var input = """
                         x = 5
@@ -94,13 +94,13 @@ public class StringTests
                         z = f"asdf{x}x{y}qwer"
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.String, "asdf5x10qwer");
+            var expected = BtlTypes.Create(BtlTypes.Types.String, "asdf5x10qwer");
             
             Assertions.AssertVariable(callStack, closure, "z", expected);
         }
             
         [Test]
-        public void HandlesInsertedExpressions()
+        public void InsertedExpressions()
         {
             var input = """
                         x = 5
@@ -108,7 +108,7 @@ public class StringTests
                         z = f"asdf{x + y}qwer"
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.String, "asdf15qwer");
+            var expected = BtlTypes.Create(BtlTypes.Types.String, "asdf15qwer");
             
             Assertions.AssertVariable(callStack, closure, "z", expected);
         }

@@ -14,9 +14,9 @@ public class TruthinessTests
                     """;
         var (callStack, closure) = Runner.Run(input);
             
-        Assertions.AssertVariable(callStack, closure, "x", BsTypes.True);
-        Assertions.AssertVariable(callStack, closure, "y", BsTypes.False);
-        Assertions.AssertVariable(callStack, closure, "z", BsTypes.False);
+        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
+        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.False);
+        Assertions.AssertVariable(callStack, closure, "z", BtlTypes.False);
     }
     
     [Test]
@@ -28,8 +28,8 @@ public class TruthinessTests
                     """;
         var (callStack, closure) = Runner.Run(input);
             
-        Assertions.AssertVariable(callStack, closure, "x", BsTypes.True);
-        Assertions.AssertVariable(callStack, closure, "y", BsTypes.False);
+        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
+        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.False);
     }
     
     [Test]
@@ -41,8 +41,8 @@ public class TruthinessTests
                     """;
         var (callStack, closure) = Runner.Run(input);
             
-        Assertions.AssertVariable(callStack, closure, "x", BsTypes.True);
-        Assertions.AssertVariable(callStack, closure, "y", BsTypes.False);
+        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
+        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.False);
     }
     
     [Test]
@@ -54,8 +54,8 @@ public class TruthinessTests
                     """;
         var (callStack, closure) = Runner.Run(input);
             
-        Assertions.AssertVariable(callStack, closure, "x", BsTypes.True);
-        Assertions.AssertVariable(callStack, closure, "y", BsTypes.False);
+        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
+        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.False);
     }
     
     [Test]
@@ -67,8 +67,8 @@ public class TruthinessTests
                     """;
         var (callStack, closure) = Runner.Run(input);
             
-        Assertions.AssertVariable(callStack, closure, "x", BsTypes.True);
-        Assertions.AssertVariable(callStack, closure, "y", BsTypes.False);
+        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
+        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.False);
     }
     
     [Test]
@@ -80,8 +80,8 @@ public class TruthinessTests
                     """;
         var (callStack, closure) = Runner.Run(input);
             
-        Assertions.AssertVariable(callStack, closure, "x", BsTypes.True);
-        Assertions.AssertVariable(callStack, closure, "y", BsTypes.False);
+        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
+        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.False);
     }
 
     [Test]
@@ -95,7 +95,7 @@ public class TruthinessTests
                     """;
         var (callStack, closure) = Runner.Run(input);
             
-        Assertions.AssertVariable(callStack, closure, "x", BsTypes.True);
+        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
     }
     
     [Test]
@@ -109,7 +109,7 @@ public class TruthinessTests
                     """;
         var (callStack, closure) = Runner.Run(input);
             
-        Assertions.AssertVariable(callStack, closure, "x", BsTypes.True);
+        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
     }
     
     [Test]
@@ -124,6 +124,6 @@ public class TruthinessTests
                     """;
         var (callStack, closure) = Runner.Run(input);
             
-        Assertions.AssertVariable(callStack, closure, "x", BsTypes.True);
+        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
     }
 }

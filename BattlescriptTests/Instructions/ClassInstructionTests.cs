@@ -51,7 +51,7 @@ public static class ClassInstructionTests
             var (callStack, closure) = Runner.Run("class MyClass:\n\tx = 1");
             var expected = new ClassVariable("MyClass", new Dictionary<string, Variable>()
             {
-                { "x", BsTypes.Create(BsTypes.Types.Int, 1) }
+                { "x", BtlTypes.Create(BtlTypes.Types.Int, 1) }
             }, closure);
             Assertions.AssertVariable(callStack, closure, "MyClass", expected);
         }
@@ -69,12 +69,12 @@ public static class ClassInstructionTests
                                     """);
             var asdf = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
-                { "x", BsTypes.Create(BsTypes.Types.Int, 1) }
+                { "x", BtlTypes.Create(BtlTypes.Types.Int, 1) }
             }, closure);
 
             var qwer = new ClassVariable("qwer", new Dictionary<string, Variable>()
             {
-                { "y", BsTypes.Create(BsTypes.Types.Int, 2) }
+                { "y", BtlTypes.Create(BtlTypes.Types.Int, 2) }
             }, closure, [asdf]);
 
             Assertions.AssertVariable(callStack, closure, "asdf", asdf);
@@ -98,17 +98,17 @@ public static class ClassInstructionTests
             
             var asdf = new ClassVariable("asdf", new Dictionary<string, Variable>()
             {
-                { "x", BsTypes.Create(BsTypes.Types.Int, 1) }
+                { "x", BtlTypes.Create(BtlTypes.Types.Int, 1) }
             }, closure);
 
             var qwer = new ClassVariable("qwer", new Dictionary<string, Variable>()
             {
-                { "y", BsTypes.Create(BsTypes.Types.Int, 2) }
+                { "y", BtlTypes.Create(BtlTypes.Types.Int, 2) }
             }, closure);
 
             var zxcv = new ClassVariable("zxcv", new Dictionary<string, Variable>()
             {
-                { "z", BsTypes.Create(BsTypes.Types.Int, 3) }
+                { "z", BtlTypes.Create(BtlTypes.Types.Int, 3) }
             }, closure, [asdf, qwer]);
             
             Assertions.AssertVariable(callStack, closure, "asdf", asdf);

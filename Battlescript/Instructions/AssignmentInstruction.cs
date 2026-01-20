@@ -42,11 +42,11 @@ public class AssignmentInstruction : Instruction
         }
         else if (Left is ConstantInstruction or NumericInstruction or StringInstruction)
         {
-            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "cannot assign to literal");
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "cannot assign to literal");
         }
         else if (Left is FunctionInstruction or LambdaInstruction or BuiltInInstruction)
         {
-            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "cannot assign to function call");
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "cannot assign to function call");
         }
         return null;
     }

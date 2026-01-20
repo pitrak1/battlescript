@@ -46,7 +46,7 @@ public class Closure
             }
         }
         
-        throw new InternalRaiseException(BsTypes.Types.NameError, $"name '{variableInstruction.Name}' is not defined");
+        throw new InternalRaiseException(BtlTypes.Types.NameError, $"name '{variableInstruction.Name}' is not defined");
     }
     
     public void SetVariable(CallStack callStack, VariableInstruction variableInstruction, Variable valueVariable)
@@ -102,7 +102,7 @@ public class Closure
         }
         else if (variableInstruction.Next is ArrayInstruction { Bracket: ArrayInstruction.BracketTypes.Parentheses })
         {
-            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "cannot assign to function call");
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "cannot assign to function call");
         }
         else
         {

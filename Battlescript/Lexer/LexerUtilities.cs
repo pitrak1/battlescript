@@ -54,7 +54,7 @@ public static class LexerUtilities
         
         if (index + result.Length + 1 >= input.Length)
         {
-            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "EOL while scanning string literal");
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "EOL while scanning string literal");
         }
 
         return result;

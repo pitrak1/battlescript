@@ -30,7 +30,7 @@ public static class IfInstructionTests
                             x = 5
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
@@ -43,7 +43,7 @@ public static class IfInstructionTests
                             x = 5
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 3);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 3);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
 
@@ -58,7 +58,7 @@ public static class IfInstructionTests
                             x = 7
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 7);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 7);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
 
@@ -75,7 +75,7 @@ public static class IfInstructionTests
                             x = 7
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 6);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 6);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
@@ -92,7 +92,7 @@ public static class IfInstructionTests
                             x = 7
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 7);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 7);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
@@ -111,7 +111,7 @@ public static class IfInstructionTests
                             x = 8
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 6);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 6);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }

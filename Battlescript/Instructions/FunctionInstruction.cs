@@ -18,17 +18,17 @@ public class FunctionInstruction : Instruction
     {
         if (tokens[^1].Value is not ":")
         {
-            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "invalid syntax");
         }
 
         if (tokens[^2].Value is not ")" || tokens[2].Value is not "(")
         {
-            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "invalid syntax");
         }
         
         if (tokens[1].Type != Consts.TokenTypes.Identifier)
         {
-            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "invalid syntax");
         }
     }
 

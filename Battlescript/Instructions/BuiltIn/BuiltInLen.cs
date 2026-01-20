@@ -8,15 +8,15 @@ public static class BuiltInLen
         var firstExpression = arguments[0].Interpret(callStack, closure);
         if (firstExpression is StringVariable stringVariable)
         {
-            return BsTypes.Create(BsTypes.Types.Int, stringVariable.Value.Length);
+            return BtlTypes.Create(BtlTypes.Types.Int, stringVariable.Value.Length);
         }
         else if (firstExpression is SequenceVariable sequenceVariable)
         {
-            return BsTypes.Create(BsTypes.Types.Int, sequenceVariable.Values.Count);
+            return BtlTypes.Create(BtlTypes.Types.Int, sequenceVariable.Values.Count);
         }
         else if (firstExpression is MappingVariable mappingVariable)
         {
-            return BsTypes.Create(BsTypes.Types.Int,
+            return BtlTypes.Create(BtlTypes.Types.Int,
                 mappingVariable.IntValues.Count + mappingVariable.StringValues.Count > 0);
         }
         else if (firstExpression is ObjectVariable objectVariable)

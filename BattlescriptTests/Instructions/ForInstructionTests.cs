@@ -49,7 +49,7 @@ public static class ForInstructionTests
                             x = x + i
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 10); // 0 + 1 + 2 + 3 + 4 = 10
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 10); // 0 + 1 + 2 + 3 + 4 = 10
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
 
@@ -62,7 +62,7 @@ public static class ForInstructionTests
                             x = x + i
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 30); // 5 + 10 + 15 = 30
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 30); // 5 + 10 + 15 = 30
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
 
@@ -76,12 +76,12 @@ public static class ForInstructionTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             // After loop, x should be 3 (last value assigned)
-            var expected = BsTypes.Create(BsTypes.Types.Int, 3);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 3);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
         [Test]
-        public void HandlesEmptyList()
+        public void EmptyList()
         {
             var input = """
                         x = 5
@@ -89,12 +89,12 @@ public static class ForInstructionTests
                             x = x + 1
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 5); // Loop body never executes
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 5); // Loop body never executes
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
 
         [Test]
-        public void HandlesSingleElementList()
+        public void SingleElementList()
         {
             var input = """
                         x = 0
@@ -102,7 +102,7 @@ public static class ForInstructionTests
                             x = i
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 42);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 42);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
 
@@ -118,7 +118,7 @@ public static class ForInstructionTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             // 0 + 1 + 3 + 4 = 8 (skips 2)
-            var expected = BsTypes.Create(BsTypes.Types.Int, 8);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 8);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
 
@@ -134,7 +134,7 @@ public static class ForInstructionTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             // 0 + 1 + 2 = 3 (stops at i == 3)
-            var expected = BsTypes.Create(BsTypes.Types.Int, 3);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 3);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
 
@@ -149,7 +149,7 @@ public static class ForInstructionTests
                         """;
             var (callStack, closure) = Runner.Run(input);
             // (1+10) + (1+20) + (2+10) + (2+20) = 11 + 21 + 12 + 22 = 66
-            var expected = BsTypes.Create(BsTypes.Types.Int, 66);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 66);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }

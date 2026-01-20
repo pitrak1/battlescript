@@ -16,7 +16,7 @@ public class MemoryTests
                     x = test.test
                     """;
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.Int, 10);
+        var expected = BtlTypes.Create(BtlTypes.Types.Int, 10);
             
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }

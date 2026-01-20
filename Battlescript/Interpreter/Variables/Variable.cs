@@ -12,7 +12,7 @@ public abstract class Variable
         var result = SetItemDirectly(callStack, closure, value, index, objectContext);
         if (index.Next is ArrayInstruction { Bracket: ArrayInstruction.BracketTypes.Parentheses })
         {
-            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "cannot assign to function call");
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "cannot assign to function call");
         } else if (index.Next is ArrayInstruction arrayInstruction)
         {
             result.SetItemDirectly(callStack, closure, value, arrayInstruction, objectContext);
@@ -34,7 +34,7 @@ public abstract class Variable
         var result = SetMemberDirectly(callStack, closure, value, member, objectContext);
         if (member.Next is ArrayInstruction { Bracket: ArrayInstruction.BracketTypes.Parentheses })
         {
-            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "cannot assign to function call");
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "cannot assign to function call");
         }
         else if (member.Next is ArrayInstruction arrayInstruction)
         {

@@ -12,7 +12,7 @@ public class ListsTests
         {
             var input = "x = [5, '5']\ny = x[1]";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.String, "5");
+            var expected = BtlTypes.Create(BtlTypes.Types.String, "5");
             
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
@@ -22,12 +22,12 @@ public class ListsTests
         {
             var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[1:4]";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.List,
+            var expected = BtlTypes.Create(BtlTypes.Types.List,
                 new List<Variable>
                 {
-                    BsTypes.Create(BsTypes.Types.Int, 1),
-                    BsTypes.Create(BsTypes.Types.Int, 2),
-                    BsTypes.Create(BsTypes.Types.Int, 3),
+                    BtlTypes.Create(BtlTypes.Types.Int, 1),
+                    BtlTypes.Create(BtlTypes.Types.Int, 2),
+                    BtlTypes.Create(BtlTypes.Types.Int, 3),
                 }
             );
             Assertions.AssertVariable(callStack, closure, "y", expected);
@@ -38,11 +38,11 @@ public class ListsTests
         {
             var input = "x = [5, '5']\nx[1] = 0";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.List,
+            var expected = BtlTypes.Create(BtlTypes.Types.List,
                 new List<Variable>
                 {
-                    BsTypes.Create(BsTypes.Types.Int, 5),
-                    BsTypes.Create(BsTypes.Types.Int, 0),
+                    BtlTypes.Create(BtlTypes.Types.Int, 5),
+                    BtlTypes.Create(BtlTypes.Types.Int, 0),
                 }
             );
             
@@ -54,15 +54,15 @@ public class ListsTests
         {
             var input = "x = [0, 1, 2, 3, 4, 5]\nx[1:3] = [6, 7]";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.List,
+            var expected = BtlTypes.Create(BtlTypes.Types.List,
                 new List<Variable>
                 {
-                    BsTypes.Create(BsTypes.Types.Int, 0),
-                    BsTypes.Create(BsTypes.Types.Int, 6),
-                    BsTypes.Create(BsTypes.Types.Int, 7),
-                    BsTypes.Create(BsTypes.Types.Int, 3),
-                    BsTypes.Create(BsTypes.Types.Int, 4),
-                    BsTypes.Create(BsTypes.Types.Int, 5),
+                    BtlTypes.Create(BtlTypes.Types.Int, 0),
+                    BtlTypes.Create(BtlTypes.Types.Int, 6),
+                    BtlTypes.Create(BtlTypes.Types.Int, 7),
+                    BtlTypes.Create(BtlTypes.Types.Int, 3),
+                    BtlTypes.Create(BtlTypes.Types.Int, 4),
+                    BtlTypes.Create(BtlTypes.Types.Int, 5),
                 }
             );
             Assertions.AssertVariable(callStack, closure, "x", expected);
@@ -76,13 +76,13 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[:4]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 0),
-                        BsTypes.Create(BsTypes.Types.Int, 1),
-                        BsTypes.Create(BsTypes.Types.Int, 2),
-                        BsTypes.Create(BsTypes.Types.Int, 3),
+                        BtlTypes.Create(BtlTypes.Types.Int, 0),
+                        BtlTypes.Create(BtlTypes.Types.Int, 1),
+                        BtlTypes.Create(BtlTypes.Types.Int, 2),
+                        BtlTypes.Create(BtlTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "y", expected);
@@ -93,13 +93,13 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[2:]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 2),
-                        BsTypes.Create(BsTypes.Types.Int, 3),
-                        BsTypes.Create(BsTypes.Types.Int, 4),
-                        BsTypes.Create(BsTypes.Types.Int, 5),
+                        BtlTypes.Create(BtlTypes.Types.Int, 2),
+                        BtlTypes.Create(BtlTypes.Types.Int, 3),
+                        BtlTypes.Create(BtlTypes.Types.Int, 4),
+                        BtlTypes.Create(BtlTypes.Types.Int, 5),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "y", expected);
@@ -110,12 +110,12 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2]\ny = x[:]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 0),
-                        BsTypes.Create(BsTypes.Types.Int, 1),
-                        BsTypes.Create(BsTypes.Types.Int, 2),
+                        BtlTypes.Create(BtlTypes.Types.Int, 0),
+                        BtlTypes.Create(BtlTypes.Types.Int, 1),
+                        BtlTypes.Create(BtlTypes.Types.Int, 2),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "y", expected);
@@ -126,7 +126,7 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2]\ny = x[4:2]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>()
                 );
                 Assertions.AssertVariable(callStack, closure, "y", expected);
@@ -137,11 +137,11 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[-4:4]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 2),
-                        BsTypes.Create(BsTypes.Types.Int, 3),
+                        BtlTypes.Create(BtlTypes.Types.Int, 2),
+                        BtlTypes.Create(BtlTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "y", expected);
@@ -152,13 +152,13 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[1:-1]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 1),
-                        BsTypes.Create(BsTypes.Types.Int, 2),
-                        BsTypes.Create(BsTypes.Types.Int, 3),
-                        BsTypes.Create(BsTypes.Types.Int, 4),
+                        BtlTypes.Create(BtlTypes.Types.Int, 1),
+                        BtlTypes.Create(BtlTypes.Types.Int, 2),
+                        BtlTypes.Create(BtlTypes.Types.Int, 3),
+                        BtlTypes.Create(BtlTypes.Types.Int, 4),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "y", expected);
@@ -169,12 +169,12 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[-5:-2]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 1),
-                        BsTypes.Create(BsTypes.Types.Int, 2),
-                        BsTypes.Create(BsTypes.Types.Int, 3),
+                        BtlTypes.Create(BtlTypes.Types.Int, 1),
+                        BtlTypes.Create(BtlTypes.Types.Int, 2),
+                        BtlTypes.Create(BtlTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "y", expected);
@@ -185,7 +185,7 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[-2:-5]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>()
                 );
                 Assertions.AssertVariable(callStack, closure, "y", expected);
@@ -196,14 +196,14 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[-8:-1]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 0),
-                        BsTypes.Create(BsTypes.Types.Int, 1),
-                        BsTypes.Create(BsTypes.Types.Int, 2),
-                        BsTypes.Create(BsTypes.Types.Int, 3),
-                        BsTypes.Create(BsTypes.Types.Int, 4),
+                        BtlTypes.Create(BtlTypes.Types.Int, 0),
+                        BtlTypes.Create(BtlTypes.Types.Int, 1),
+                        BtlTypes.Create(BtlTypes.Types.Int, 2),
+                        BtlTypes.Create(BtlTypes.Types.Int, 3),
+                        BtlTypes.Create(BtlTypes.Types.Int, 4),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "y", expected);
@@ -214,7 +214,7 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[8:6]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>()
                 );
                 Assertions.AssertVariable(callStack, closure, "y", expected);
@@ -225,7 +225,7 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[0:-9]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>()
                 );
                 Assertions.AssertVariable(callStack, closure, "y", expected);
@@ -236,15 +236,15 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[0:9]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>()
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 0),
-                        BsTypes.Create(BsTypes.Types.Int, 1),
-                        BsTypes.Create(BsTypes.Types.Int, 2),
-                        BsTypes.Create(BsTypes.Types.Int, 3),
-                        BsTypes.Create(BsTypes.Types.Int, 4),
-                        BsTypes.Create(BsTypes.Types.Int, 5),
+                        BtlTypes.Create(BtlTypes.Types.Int, 0),
+                        BtlTypes.Create(BtlTypes.Types.Int, 1),
+                        BtlTypes.Create(BtlTypes.Types.Int, 2),
+                        BtlTypes.Create(BtlTypes.Types.Int, 3),
+                        BtlTypes.Create(BtlTypes.Types.Int, 4),
+                        BtlTypes.Create(BtlTypes.Types.Int, 5),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "y", expected);
@@ -259,11 +259,11 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[1:5:2]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 1),
-                        BsTypes.Create(BsTypes.Types.Int, 3),
+                        BtlTypes.Create(BtlTypes.Types.Int, 1),
+                        BtlTypes.Create(BtlTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "y", expected);
@@ -274,11 +274,11 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[5:1:-2]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 5),
-                        BsTypes.Create(BsTypes.Types.Int, 3),
+                        BtlTypes.Create(BtlTypes.Types.Int, 5),
+                        BtlTypes.Create(BtlTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "y", expected);
@@ -289,10 +289,10 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[1:5:8]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 1),
+                        BtlTypes.Create(BtlTypes.Types.Int, 1),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "y", expected);
@@ -303,10 +303,10 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3, 4, 5]\ny = x[5:1:-8]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 5),
+                        BtlTypes.Create(BtlTypes.Types.Int, 5),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "y", expected);
@@ -321,15 +321,15 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[1:3] = [4, 5, 6, 7]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 0),
-                        BsTypes.Create(BsTypes.Types.Int, 4),
-                        BsTypes.Create(BsTypes.Types.Int, 5),
-                        BsTypes.Create(BsTypes.Types.Int, 6),
-                        BsTypes.Create(BsTypes.Types.Int, 7),
-                        BsTypes.Create(BsTypes.Types.Int, 3),
+                        BtlTypes.Create(BtlTypes.Types.Int, 0),
+                        BtlTypes.Create(BtlTypes.Types.Int, 4),
+                        BtlTypes.Create(BtlTypes.Types.Int, 5),
+                        BtlTypes.Create(BtlTypes.Types.Int, 6),
+                        BtlTypes.Create(BtlTypes.Types.Int, 7),
+                        BtlTypes.Create(BtlTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "x", expected);
@@ -340,12 +340,12 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[1:3] = [4]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 0),
-                        BsTypes.Create(BsTypes.Types.Int, 4),
-                        BsTypes.Create(BsTypes.Types.Int, 3),
+                        BtlTypes.Create(BtlTypes.Types.Int, 0),
+                        BtlTypes.Create(BtlTypes.Types.Int, 4),
+                        BtlTypes.Create(BtlTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "x", expected);
@@ -356,11 +356,11 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[1:3] = []";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 0),
-                        BsTypes.Create(BsTypes.Types.Int, 3),
+                        BtlTypes.Create(BtlTypes.Types.Int, 0),
+                        BtlTypes.Create(BtlTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "x", expected);
@@ -371,17 +371,17 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[2:2] = [4, 5, 6, 7]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 0),
-                        BsTypes.Create(BsTypes.Types.Int, 1),
-                        BsTypes.Create(BsTypes.Types.Int, 4),
-                        BsTypes.Create(BsTypes.Types.Int, 5),
-                        BsTypes.Create(BsTypes.Types.Int, 6),
-                        BsTypes.Create(BsTypes.Types.Int, 7),
-                        BsTypes.Create(BsTypes.Types.Int, 2),
-                        BsTypes.Create(BsTypes.Types.Int, 3),
+                        BtlTypes.Create(BtlTypes.Types.Int, 0),
+                        BtlTypes.Create(BtlTypes.Types.Int, 1),
+                        BtlTypes.Create(BtlTypes.Types.Int, 4),
+                        BtlTypes.Create(BtlTypes.Types.Int, 5),
+                        BtlTypes.Create(BtlTypes.Types.Int, 6),
+                        BtlTypes.Create(BtlTypes.Types.Int, 7),
+                        BtlTypes.Create(BtlTypes.Types.Int, 2),
+                        BtlTypes.Create(BtlTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "x", expected);
@@ -392,15 +392,15 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[-3:3] = [4, 5, 6, 7]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 0),
-                        BsTypes.Create(BsTypes.Types.Int, 4),
-                        BsTypes.Create(BsTypes.Types.Int, 5),
-                        BsTypes.Create(BsTypes.Types.Int, 6),
-                        BsTypes.Create(BsTypes.Types.Int, 7),
-                        BsTypes.Create(BsTypes.Types.Int, 3),
+                        BtlTypes.Create(BtlTypes.Types.Int, 0),
+                        BtlTypes.Create(BtlTypes.Types.Int, 4),
+                        BtlTypes.Create(BtlTypes.Types.Int, 5),
+                        BtlTypes.Create(BtlTypes.Types.Int, 6),
+                        BtlTypes.Create(BtlTypes.Types.Int, 7),
+                        BtlTypes.Create(BtlTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "x", expected);
@@ -411,15 +411,15 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[1:-1] = [4, 5, 6, 7]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 0),
-                        BsTypes.Create(BsTypes.Types.Int, 4),
-                        BsTypes.Create(BsTypes.Types.Int, 5),
-                        BsTypes.Create(BsTypes.Types.Int, 6),
-                        BsTypes.Create(BsTypes.Types.Int, 7),
-                        BsTypes.Create(BsTypes.Types.Int, 3),
+                        BtlTypes.Create(BtlTypes.Types.Int, 0),
+                        BtlTypes.Create(BtlTypes.Types.Int, 4),
+                        BtlTypes.Create(BtlTypes.Types.Int, 5),
+                        BtlTypes.Create(BtlTypes.Types.Int, 6),
+                        BtlTypes.Create(BtlTypes.Types.Int, 7),
+                        BtlTypes.Create(BtlTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "x", expected);
@@ -430,15 +430,15 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[-3:-1] = [4, 5, 6, 7]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 0),
-                        BsTypes.Create(BsTypes.Types.Int, 4),
-                        BsTypes.Create(BsTypes.Types.Int, 5),
-                        BsTypes.Create(BsTypes.Types.Int, 6),
-                        BsTypes.Create(BsTypes.Types.Int, 7),
-                        BsTypes.Create(BsTypes.Types.Int, 3),
+                        BtlTypes.Create(BtlTypes.Types.Int, 0),
+                        BtlTypes.Create(BtlTypes.Types.Int, 4),
+                        BtlTypes.Create(BtlTypes.Types.Int, 5),
+                        BtlTypes.Create(BtlTypes.Types.Int, 6),
+                        BtlTypes.Create(BtlTypes.Types.Int, 7),
+                        BtlTypes.Create(BtlTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "x", expected);
@@ -453,13 +453,13 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[::2] = [4, 5]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 4),
-                        BsTypes.Create(BsTypes.Types.Int, 1),
-                        BsTypes.Create(BsTypes.Types.Int, 5),
-                        BsTypes.Create(BsTypes.Types.Int, 3),
+                        BtlTypes.Create(BtlTypes.Types.Int, 4),
+                        BtlTypes.Create(BtlTypes.Types.Int, 1),
+                        BtlTypes.Create(BtlTypes.Types.Int, 5),
+                        BtlTypes.Create(BtlTypes.Types.Int, 3),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "x", expected);
@@ -470,13 +470,13 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[::-2] = [4, 5]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 0),
-                        BsTypes.Create(BsTypes.Types.Int, 5),
-                        BsTypes.Create(BsTypes.Types.Int, 2),
-                        BsTypes.Create(BsTypes.Types.Int, 4),
+                        BtlTypes.Create(BtlTypes.Types.Int, 0),
+                        BtlTypes.Create(BtlTypes.Types.Int, 5),
+                        BtlTypes.Create(BtlTypes.Types.Int, 2),
+                        BtlTypes.Create(BtlTypes.Types.Int, 4),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "x", expected);
@@ -491,14 +491,14 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[4:] = [4]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 0),
-                        BsTypes.Create(BsTypes.Types.Int, 1),
-                        BsTypes.Create(BsTypes.Types.Int, 2),
-                        BsTypes.Create(BsTypes.Types.Int, 3),
-                        BsTypes.Create(BsTypes.Types.Int, 4),
+                        BtlTypes.Create(BtlTypes.Types.Int, 0),
+                        BtlTypes.Create(BtlTypes.Types.Int, 1),
+                        BtlTypes.Create(BtlTypes.Types.Int, 2),
+                        BtlTypes.Create(BtlTypes.Types.Int, 3),
+                        BtlTypes.Create(BtlTypes.Types.Int, 4),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "x", expected);
@@ -509,15 +509,15 @@ public class ListsTests
             {
                 var input = "x = [0, 1, 2, 3]\nx[2:] = [4, 5, 6, 7]";
                 var (callStack, closure) = Runner.Run(input);
-                var expected = BsTypes.Create(BsTypes.Types.List,
+                var expected = BtlTypes.Create(BtlTypes.Types.List,
                     new List<Variable>
                     {
-                        BsTypes.Create(BsTypes.Types.Int, 0),
-                        BsTypes.Create(BsTypes.Types.Int, 1),
-                        BsTypes.Create(BsTypes.Types.Int, 4),
-                        BsTypes.Create(BsTypes.Types.Int, 5),
-                        BsTypes.Create(BsTypes.Types.Int, 6),
-                        BsTypes.Create(BsTypes.Types.Int, 7),
+                        BtlTypes.Create(BtlTypes.Types.Int, 0),
+                        BtlTypes.Create(BtlTypes.Types.Int, 1),
+                        BtlTypes.Create(BtlTypes.Types.Int, 4),
+                        BtlTypes.Create(BtlTypes.Types.Int, 5),
+                        BtlTypes.Create(BtlTypes.Types.Int, 6),
+                        BtlTypes.Create(BtlTypes.Types.Int, 7),
                     }
                 );
                 Assertions.AssertVariable(callStack, closure, "x", expected);
@@ -536,7 +536,7 @@ public class ListsTests
                         x = 2 in y
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -549,7 +549,7 @@ public class ListsTests
                         x = 4 in y
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -562,7 +562,7 @@ public class ListsTests
                         x = 4 not in y
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -575,7 +575,7 @@ public class ListsTests
                         x = 2 not in y
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -593,7 +593,7 @@ public class ListsTests
                         x = y is z
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -607,7 +607,7 @@ public class ListsTests
                         x = y is z
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -621,7 +621,7 @@ public class ListsTests
                         x = y is not z
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -635,7 +635,7 @@ public class ListsTests
                         x = y is not z
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -653,14 +653,14 @@ public class ListsTests
                         x = y + z
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>()
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>()
             {
-                BsTypes.Create(BsTypes.Types.Int, 1),
-                BsTypes.Create(BsTypes.Types.Int, 2),
-                BsTypes.Create(BsTypes.Types.Int, 3),
-                BsTypes.Create(BsTypes.Types.Int, 4),
-                BsTypes.Create(BsTypes.Types.Int, 5),
-                BsTypes.Create(BsTypes.Types.Int, 6)
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+                BtlTypes.Create(BtlTypes.Types.Int, 4),
+                BtlTypes.Create(BtlTypes.Types.Int, 5),
+                BtlTypes.Create(BtlTypes.Types.Int, 6)
             });
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -673,17 +673,17 @@ public class ListsTests
                         x = y * 3
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>()
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>()
             {
-                BsTypes.Create(BsTypes.Types.Int, 1),
-                BsTypes.Create(BsTypes.Types.Int, 2),
-                BsTypes.Create(BsTypes.Types.Int, 3),
-                BsTypes.Create(BsTypes.Types.Int, 1),
-                BsTypes.Create(BsTypes.Types.Int, 2),
-                BsTypes.Create(BsTypes.Types.Int, 3),
-                BsTypes.Create(BsTypes.Types.Int, 1),
-                BsTypes.Create(BsTypes.Types.Int, 2),
-                BsTypes.Create(BsTypes.Types.Int, 3),
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
             });
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -700,33 +700,33 @@ public class ListsTests
                         y = [x * 2 for x in z]
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>()
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>()
             {
-                BsTypes.Create(BsTypes.Types.Int, 2),
-                BsTypes.Create(BsTypes.Types.Int, 4),
-                BsTypes.Create(BsTypes.Types.Int, 6),
-                BsTypes.Create(BsTypes.Types.Int, 8),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 4),
+                BtlTypes.Create(BtlTypes.Types.Int, 6),
+                BtlTypes.Create(BtlTypes.Types.Int, 8),
             });
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
         
         [Test]
-        public void HandlesForWithIf()
+        public void ForWithIf()
         {
             var input = """
                         z = [1, 2, 3, 4]
                         y = [x * 2 for x in z if x == 3]
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>()
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>()
             {
-                BsTypes.Create(BsTypes.Types.Int, 6),
+                BtlTypes.Create(BtlTypes.Types.Int, 6),
             });
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
         
         [Test]
-        public void HandlesMultipleFors()
+        public void MultipleFors()
         {
             var input = """
                         a = [1, 2]
@@ -734,18 +734,18 @@ public class ListsTests
                         z = [x + y for x in a for y in b]
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>()
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>()
             {
-                BsTypes.Create(BsTypes.Types.Int, 5), // 1 + 4
-                BsTypes.Create(BsTypes.Types.Int, 9), // 1 + 8
-                BsTypes.Create(BsTypes.Types.Int, 6), // 2 + 4
-                BsTypes.Create(BsTypes.Types.Int, 10), // 2 + 8
+                BtlTypes.Create(BtlTypes.Types.Int, 5), // 1 + 4
+                BtlTypes.Create(BtlTypes.Types.Int, 9), // 1 + 8
+                BtlTypes.Create(BtlTypes.Types.Int, 6), // 2 + 4
+                BtlTypes.Create(BtlTypes.Types.Int, 10), // 2 + 8
             });
             Assertions.AssertVariable(callStack, closure, "z", expected);
         }
         
         [Test]
-        public void HandlesMultipleForsAndIfs()
+        public void MultipleForsAndIfs()
         {
             var input = """
                         a = [1, 2]
@@ -753,9 +753,9 @@ public class ListsTests
                         z = [x + y for x in a if x == 2 for y in b if y == 4]
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.List, new List<Variable>()
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>()
             {
-                BsTypes.Create(BsTypes.Types.Int, 6), // 2 + 4
+                BtlTypes.Create(BtlTypes.Types.Int, 6), // 2 + 4
             });
             Assertions.AssertVariable(callStack, closure, "z", expected);
         }

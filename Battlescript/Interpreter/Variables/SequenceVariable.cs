@@ -17,7 +17,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         // commas then by colons.  Because we don't expect any commas, we need to only take the first index and convert
         // to an array of Variables.
         var indexValuesList = index.Values[0].Interpret(callStack, closure) as ObjectVariable;
-        var indexValuesSequence = BsTypes.GetListValue(indexValuesList);
+        var indexValuesSequence = BtlTypes.GetListValue(indexValuesList);
 
         if (indexValuesSequence.Values.Count > 1)
         {
@@ -26,7 +26,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
                 if (valueVariable is SequenceVariable sequenceVariable)
                 {
                     SetRangeIndex(callStack, sequenceVariable, indexValuesSequence.Values);
-                } else if (BsTypes.Is(BsTypes.Types.List, valueVariable))
+                } else if (BtlTypes.Is(BtlTypes.Types.List, valueVariable))
                 {
                     SetRangeIndex(callStack, (valueVariable as ObjectVariable).Values["__btl_value"] as SequenceVariable, indexValuesSequence.Values);
                 }
@@ -43,7 +43,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         } 
         else 
         {
-            var indexInt = BsTypes.GetIntValue(indexValuesSequence.Values[0]);
+            var indexInt = BtlTypes.GetIntValue(indexValuesSequence.Values[0]);
             if (index.Next is null)
             {
                 Values[indexInt] = valueVariable;
@@ -67,7 +67,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         {
             if (indices.Count != valueVariable.Values.Count)
             {
-                throw new InternalRaiseException(BsTypes.Types.ValueError, $"attempt to assign sequence of size {valueVariable.Values.Count} to extended slice of size {indices.Count}");
+                throw new InternalRaiseException(BtlTypes.Types.ValueError, $"attempt to assign sequence of size {valueVariable.Values.Count} to extended slice of size {indices.Count}");
             }
 
             for (var i = 0; i < indices.Count; i++)
@@ -91,7 +91,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         }
         else
         {
-            var indexInt = BsTypes.GetIntValue(indexSequence.Values[0]);
+            var indexInt = BtlTypes.GetIntValue(indexSequence.Values[0]);
             return Values[indexInt];
         }
     }
@@ -116,7 +116,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         List<int> indices = [];
         if (step == 0)
         {
-            throw new InternalRaiseException(BsTypes.Types.ValueError, "slice step cannot be zero");
+            throw new InternalRaiseException(BtlTypes.Types.ValueError, "slice step cannot be zero");
         }
         else if (step < 0)
         {
@@ -148,7 +148,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         {
             if (argVariable[2] is not null && argVariable[2] is not ConstantVariable { Value: Consts.Constants.None} )
             {
-                step = BsTypes.GetIntValue(argVariable[2]!);
+                step = BtlTypes.GetIntValue(argVariable[2]!);
                 
                 if (step < 0)
                 {
@@ -162,7 +162,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         {
             if (argVariable[1] is not null && argVariable[1] is not ConstantVariable { Value: Consts.Constants.None})
             {
-                var rawInt = BsTypes.GetIntValue(argVariable[1]!);
+                var rawInt = BtlTypes.GetIntValue(argVariable[1]!);
                 stop = Math.Clamp(rawInt, -Values.Count, Values.Count);
                 if (stop < 0)
                 {
@@ -175,7 +175,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         {
             if (argVariable[0] is not null && argVariable[0] is not ConstantVariable { Value: Consts.Constants.None})
             {
-                var rawInt = BsTypes.GetIntValue(argVariable[0]!);
+                var rawInt = BtlTypes.GetIntValue(argVariable[0]!);
                 start = Math.Clamp(rawInt, -Values.Count, Values.Count);
                 if (start < 0)
                 {

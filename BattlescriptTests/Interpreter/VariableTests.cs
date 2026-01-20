@@ -15,7 +15,7 @@ public static class VariableTests
                                     x = [1, 2, 3]
                                     y = x[1]
                                     """);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 2);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 2);
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
 
@@ -26,7 +26,7 @@ public static class VariableTests
                                     x = {1: "asdf", 2: "qwer"}
                                     y = x[1]
                                     """);
-            var expected = BsTypes.Create(BsTypes.Types.String, "asdf");
+            var expected = BtlTypes.Create(BtlTypes.Types.String, "asdf");
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
 
@@ -37,7 +37,7 @@ public static class VariableTests
                                     x = {1: "asdf", "zxcv": "qwer"}
                                     y = x["zxcv"]
                                     """);
-            var expected = BsTypes.Create(BsTypes.Types.String, "qwer");
+            var expected = BtlTypes.Create(BtlTypes.Types.String, "qwer");
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
 
@@ -54,7 +54,7 @@ public static class VariableTests
                                     x = asdf()
                                     y = x[1]
                                     """);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 6);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 6);
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
     }
@@ -70,7 +70,7 @@ public static class VariableTests
                                     x[1] = 4
                                     y = x[1]
                                     """);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 4);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 4);
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
 
@@ -82,7 +82,7 @@ public static class VariableTests
                                     x[1] = "zxcv"
                                     y = x[1]
                                     """);
-            var expected = BsTypes.Create(BsTypes.Types.String, "zxcv");
+            var expected = BtlTypes.Create(BtlTypes.Types.String, "zxcv");
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
 
@@ -94,7 +94,7 @@ public static class VariableTests
                                     x["zxcv"] = 2
                                     y = x["zxcv"]
                                     """);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 2);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 2);
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
 
@@ -115,7 +115,7 @@ public static class VariableTests
                                     x[1] = 9
                                     y = x.i
                                     """);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 9);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 9);
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
     }
@@ -133,7 +133,7 @@ public static class VariableTests
                                     x = asdf()
                                     y = x.i
                                     """);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
 
@@ -146,7 +146,7 @@ public static class VariableTests
                                         
                                     y = asdf.i
                                     """);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
     }
@@ -165,7 +165,7 @@ public static class VariableTests
                                     x.i = 9
                                     y = x.i
                                     """);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 9);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 9);
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
     }

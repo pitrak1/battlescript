@@ -9,7 +9,7 @@ public class ParserTests
     public class GenericNesting
     {
         [Test]
-        public void HandlesSingleInstruction()
+        public void SingleInstruction()
         {
             var expected = new List<Instruction>
             {
@@ -23,7 +23,7 @@ public class ParserTests
         }
 
         [Test]
-        public void HandlesConditionalInstructionBlocks()
+        public void ConditionalInstructionBlocks()
         {
             var input = """
                         if 5 < 6:
@@ -51,7 +51,7 @@ public class ParserTests
         }
         
         [Test]
-        public void HandlesInstructionsBeforeConditionalInstructionBlock()
+        public void InstructionsBeforeConditionalInstructionBlock()
         {
             var input = """
                         y = 7
@@ -85,7 +85,7 @@ public class ParserTests
         }
         
         [Test]
-        public void HandlesInstructionsAfterConditionalInstructionBlock()
+        public void InstructionsAfterConditionalInstructionBlock()
         {
             var input = """
                         if 5 < 6:
@@ -119,7 +119,7 @@ public class ParserTests
         }
         
         [Test]
-        public void HandlesMultipleLevelReductions()
+        public void MultipleLevelReductions()
         {
             var input = """
                         if 5 < 6:

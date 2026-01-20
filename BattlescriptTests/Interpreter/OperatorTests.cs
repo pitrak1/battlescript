@@ -9,347 +9,347 @@ public static class OperatorTests
     public class CommonOperations
     {
         [Test]
-        public void HandlesAndOperations()
+        public void AndOperations()
         {
             var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                callStack, closure, 
-                "and", 
-                BsTypes.Create(BsTypes.Types.Bool, true), 
-                BsTypes.Create(BsTypes.Types.Bool, false));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
-            Assertions.AssertVariablesEqual(result, expected);
-        }
-        
-        [Test]
-        public void HandlesOrOperations()
-        {
-            var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
-                callStack, closure, 
-                "or", 
-                BsTypes.Create(BsTypes.Types.Bool, true), 
-                BsTypes.Create(BsTypes.Types.Bool, false));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
-            Assertions.AssertVariablesEqual(result, expected);
-        }
-        
-        [Test]
-        public void HandlesNotOperations()
-        {
-            var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
-                callStack, closure, 
-                "not", 
-                null, 
-                BsTypes.Create(BsTypes.Types.Bool, false));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
+                callStack, closure,
+                "and",
+                BtlTypes.Create(BtlTypes.Types.Bool, true),
+                BtlTypes.Create(BtlTypes.Types.Bool, false));
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
 
         [Test]
-        public void HandlesTrueIsOperations()
+        public void OrOperations()
         {
             var (callStack, closure) = Runner.Run("");
-            var value = BsTypes.Create(BsTypes.Types.Int, 5);
             var result = Operator.Operate(
-                callStack, closure, 
-                "is", 
-                value, 
+                callStack, closure,
+                "or",
+                BtlTypes.Create(BtlTypes.Types.Bool, true),
+                BtlTypes.Create(BtlTypes.Types.Bool, false));
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
+            Assertions.AssertVariablesEqual(result, expected);
+        }
+
+        [Test]
+        public void NotOperations()
+        {
+            var (callStack, closure) = Runner.Run("");
+            var result = Operator.Operate(
+                callStack, closure,
+                "not",
+                null,
+                BtlTypes.Create(BtlTypes.Types.Bool, false));
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
+            Assertions.AssertVariablesEqual(result, expected);
+        }
+
+        [Test]
+        public void TrueIsOperationWithSameReference()
+        {
+            var (callStack, closure) = Runner.Run("");
+            var value = BtlTypes.Create(BtlTypes.Types.Int, 5);
+            var result = Operator.Operate(
+                callStack, closure,
+                "is",
+                value,
                 value);
-            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
 
         [Test]
-        public void HandlesFalseIsOperations()
+        public void FalseIsOperationWithDifferentReferences()
         {
             var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                callStack, closure, 
-                "is", 
-                BsTypes.Create(BsTypes.Types.Int, 5), 
-                BsTypes.Create(BsTypes.Types.Int, 5));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
-            Assertions.AssertVariablesEqual(result, expected);
-        }
-        
-        [Test]
-        public void HandlesTrueIsNotOperations()
-        {
-            var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
-                callStack, closure, 
-                "is not", 
-                BsTypes.Create(BsTypes.Types.Int, 5), 
-                BsTypes.Create(BsTypes.Types.Int, 5));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
+                callStack, closure,
+                "is",
+                BtlTypes.Create(BtlTypes.Types.Int, 5),
+                BtlTypes.Create(BtlTypes.Types.Int, 5));
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
 
         [Test]
-        public void HandlesFalseIsNotOperations()
+        public void TrueIsNotOperationWithDifferentReferences()
         {
             var (callStack, closure) = Runner.Run("");
-            var value = BsTypes.Create(BsTypes.Types.Int, 5);
             var result = Operator.Operate(
-                callStack, closure, 
-                "is not", 
-                value, 
+                callStack, closure,
+                "is not",
+                BtlTypes.Create(BtlTypes.Types.Int, 5),
+                BtlTypes.Create(BtlTypes.Types.Int, 5));
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
+            Assertions.AssertVariablesEqual(result, expected);
+        }
+
+        [Test]
+        public void FalseIsNotOperationWithSameReference()
+        {
+            var (callStack, closure) = Runner.Run("");
+            var value = BtlTypes.Create(BtlTypes.Types.Int, 5);
+            var result = Operator.Operate(
+                callStack, closure,
+                "is not",
+                value,
                 value);
-            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
-        public void HandlesTrueInOperationWithString()
+        public void TrueInOperationWithSubstringInString()
         {
             var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
                 callStack, closure,
                 "in",
-                BsTypes.Create(BsTypes.Types.String, new StringVariable("sd")),
-                BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
+                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("sd")),
+                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdf")));
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
-        
+
         [Test]
-        public void HandlesFalseInOperationWithString()
+        public void FalseInOperationWithMissingSubstring()
         {
             var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                callStack, closure, 
-                "in", 
-                BsTypes.Create(BsTypes.Types.String, new StringVariable("fa")),
-                BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
+                callStack, closure,
+                "in",
+                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("fa")),
+                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdf")));
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
-        
+
         [Test]
-        public void HandlesTrueNotInOperationWithString()
+        public void TrueNotInOperationWithMissingSubstring()
         {
             var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                callStack, closure, 
-                "not in", 
-                BsTypes.Create(BsTypes.Types.String, new StringVariable("fa")),
-                BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
+                callStack, closure,
+                "not in",
+                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("fa")),
+                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdf")));
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
-        
+
         [Test]
-        public void HandlesFalseNotInOperationWithString()
+        public void FalseNotInOperationWithSubstringInString()
         {
             var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
-                callStack, closure, 
-                "not in", 
-                BsTypes.Create(BsTypes.Types.String, new StringVariable("sd")),
-                BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
+                callStack, closure,
+                "not in",
+                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("sd")),
+                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdf")));
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
-        public void HandlesTrueInOperationWithList()
+        public void TrueInOperationWithList()
         {
             var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
                 callStack, closure, 
                 "in", 
                 new NumericVariable(1), 
-                BsTypes.Create(BsTypes.Types.List, new SequenceVariable([
+                BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
                     new StringVariable("asdf"),
                     new NumericVariable(1),
                     new NumericVariable(2)])));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
-        public void HandlesFalseInOperationWithList()
+        public void FalseInOperationWithList()
         {
             var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
                 callStack, closure, 
                 "in", 
                 new NumericVariable(3), 
-                BsTypes.Create(BsTypes.Types.List, new SequenceVariable([
+                BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
                     new StringVariable("asdf"),
                     new NumericVariable(1),
                     new NumericVariable(2)])));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
-        public void HandlesTrueNotInOperationWithList()
+        public void TrueNotInOperationWithList()
         {
             var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
                 callStack, closure, 
                 "not in", 
                 new NumericVariable(3), 
-                BsTypes.Create(BsTypes.Types.List, new SequenceVariable([
+                BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
                     new StringVariable("asdf"),
                     new NumericVariable(1),
                     new NumericVariable(2)])));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
-        public void HandlesFalseNotInOperationWithList()
+        public void FalseNotInOperationWithList()
         {
             var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
                 callStack, closure, 
                 "not in", 
                 new NumericVariable(1), 
-                BsTypes.Create(BsTypes.Types.List, new SequenceVariable([
+                BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
                     new StringVariable("asdf"),
                     new NumericVariable(1),
                     new NumericVariable(2)])));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
-        public void HandlesTrueInOperationWithIntAndDictionary()
+        public void TrueInOperationWithIntAndDictionary()
         {
             var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
                 callStack, closure,
                 "in",
-                BsTypes.Create(BsTypes.Types.Int, 1),
-                BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
                 {
                     { 1, new NumericVariable(1) },
                     { 2, new NumericVariable(2) }
                 })));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
-        public void HandlesFalseInOperationWithIntAndDictionary()
+        public void FalseInOperationWithIntAndDictionary()
         {
             var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
                 callStack, closure,
                 "in",
-                BsTypes.Create(BsTypes.Types.Int, 3),
-                BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+                BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
                 {
                     { 1, new NumericVariable(1) },
                     { 2, new NumericVariable(2) }
                 })));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
-        public void HandlesTrueInOperationWithStringAndDictionary()
+        public void TrueInOperationWithStringAndDictionary()
         {
             var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
                 callStack, closure,
                 "in",
-                BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")),
-                BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
+                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdf")),
+                BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
                 {
                     { "asdf", new NumericVariable(1) },
                     { "qwer", new NumericVariable(2) }
                 })));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
-        public void HandlesFalseInOperationWithStringAndDictionary()
+        public void FalseInOperationWithStringAndDictionary()
         {
             var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
                 callStack, closure,
                 "in",
-                BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")),
-                BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
+                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdf")),
+                BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
                 {
                     { "qwer", new NumericVariable(1) },
                     { "zxcv", new NumericVariable(2) }
                 })));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
-        public void HandlesTrueNotInOperationWithIntAndDictionary()
+        public void TrueNotInOperationWithIntAndDictionary()
         {
             var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
                 callStack, closure,
                 "not in",
-                BsTypes.Create(BsTypes.Types.Int, 3),
-                BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+                BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
                 {
                     { 1, new NumericVariable(1) },
                     { 2, new NumericVariable(2) }
                 })));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
-        public void HandlesFalseNotInOperationWithIntAndDictionary()
+        public void FalseNotInOperationWithIntAndDictionary()
         {
             var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
                 callStack, closure,
                 "not in",
-                BsTypes.Create(BsTypes.Types.Int, 1),
-                BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
                 {
                     { 1, new NumericVariable(1) },
                     { 2, new NumericVariable(2) }
                 })));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
-        public void HandlesTrueNotInOperationWithStringAndDictionary()
+        public void TrueNotInOperationWithStringAndDictionary()
         {
             var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
                 callStack, closure,
                 "not in",
-                BsTypes.Create(BsTypes.Types.String, new StringVariable("zxcv")),
-                BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
+                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("zxcv")),
+                BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
                 {
                     { "asdf", new NumericVariable(1) },
                     { "qwer", new NumericVariable(2) }
                 })));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, true);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assertions.AssertVariablesEqual(result, expected);
         }
         
         [Test]
-        public void HandlesFalseNotInOperationWithStringAndDictionary()
+        public void FalseNotInOperationWithStringAndDictionary()
         {
             var (callStack, closure) = Runner.Run("");
             var result = Operator.Operate(
                 callStack, closure,
                 "not in",
-                BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf")),
-                BsTypes.Create(BsTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
+                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdf")),
+                BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
                 {
                     { "asdf", new NumericVariable(1) },
                     { "zxcv", new NumericVariable(2) }
                 })));
-            var expected = BsTypes.Create(BsTypes.Types.Bool, false);
+            var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assertions.AssertVariablesEqual(result, expected);
         }
     }
@@ -358,7 +358,7 @@ public static class OperatorTests
     public class ObjectOperations
     {
         [Test]
-        public void HandlesObjectOperationsIfOverrideIsPresentOnLeftObject()
+        public void ObjectOperationsWithOverrideOnLeftObject()
         {
             var (callStack, closure) = Runner.Run("""
                                     class asdf:
@@ -373,11 +373,11 @@ public static class OperatorTests
                 "+",
                 x,
                 new StringVariable("asdf"));
-            Assertions.AssertVariablesEqual(result, BsTypes.Create(BsTypes.Types.Int, 5));
+            Assertions.AssertVariablesEqual(result, BtlTypes.Create(BtlTypes.Types.Int, 5));
         }
 
         [Test]
-        public void HandlesObjectOperationsIfOverrideIsPresentOnRightObject()
+        public void ObjectOperationsWithOverrideOnRightObject()
         {
             var (callStack, closure) = Runner.Run("""
                                     class asdf:
@@ -392,11 +392,11 @@ public static class OperatorTests
                 "+",
                 new StringVariable("asdf"),
                 x);
-            Assertions.AssertVariablesEqual(result, BsTypes.Create(BsTypes.Types.Int, 5));
+            Assertions.AssertVariablesEqual(result, BtlTypes.Create(BtlTypes.Types.Int, 5));
         }
 
         [Test]
-        public void HandlesUnaryObjectOperationsIfOverrideIsPresent()
+        public void UnaryObjectOperationsWithOverride()
         {
             var (callStack, closure) = Runner.Run("""
                                     class asdf:
@@ -411,7 +411,7 @@ public static class OperatorTests
                 "-",
                 null,
                 x);
-            Assertions.AssertVariablesEqual(result, BsTypes.Create(BsTypes.Types.Int, 5));
+            Assertions.AssertVariablesEqual(result, BtlTypes.Create(BtlTypes.Types.Int, 5));
         }
 
         [Test]
@@ -434,7 +434,7 @@ public static class OperatorTests
                 "-",
                 new StringVariable("asdf"),
                 x);
-            Assertions.AssertVariablesEqual(result, BsTypes.Create(BsTypes.Types.Int, 10));
+            Assertions.AssertVariablesEqual(result, BtlTypes.Create(BtlTypes.Types.Int, 10));
         }
     }
 
@@ -442,15 +442,15 @@ public static class OperatorTests
     public class AssignmentOperations
     {
         [Test]
-        public void HandlesStandardAssignmentOperator()
+        public void StandardAssignmentOperator()
         {
             var (callStack, closure) = Runner.Run("");
             Operator.Assign(callStack, closure, "=", new VariableInstruction("x"), new NumericInstruction(8));
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 8));
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, 8));
         }
 
         [Test]
-        public void HandlesNonStandardAssignmentOperator()
+        public void NonStandardAssignmentOperator()
         {
             var (callStack, closure) = Runner.Run("x = 6");
             Operator.Assign(
@@ -458,11 +458,11 @@ public static class OperatorTests
                 "+=",
                 new VariableInstruction("x"),
                 new NumericInstruction(5));
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 11));
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, 11));
         }
 
         [Test]
-        public void HandlesTrueDivisionAssignmentConvertsIntToFloat()
+        public void TrueDivisionAssignmentConvertsIntToFloat()
         {
             var (callStack, closure) = Runner.Run("x = 10");
             Operator.Assign(
@@ -471,13 +471,13 @@ public static class OperatorTests
                 new VariableInstruction("x"),
                 new NumericInstruction(3));
             var result = closure.GetVariable(callStack, "x");
-            Assert.That(BsTypes.Is(BsTypes.Types.Float, result), Is.True);
-            var floatValue = BsTypes.GetFloatValue(result);
+            Assert.That(BtlTypes.Is(BtlTypes.Types.Float, result), Is.True);
+            var floatValue = BtlTypes.GetFloatValue(result);
             Assert.That(floatValue, Is.EqualTo(10.0 / 3.0).Within(0.0001));
         }
 
         [Test]
-        public void HandlesFloorDivisionAssignmentConvertsFloatToInt()
+        public void FloorDivisionAssignmentConvertsFloatToInt()
         {
             var (callStack, closure) = Runner.Run("x = 10.5");
             Operator.Assign(
@@ -486,8 +486,8 @@ public static class OperatorTests
                 new VariableInstruction("x"),
                 new NumericInstruction(3));
             var result = closure.GetVariable(callStack, "x");
-            Assert.That(BsTypes.Is(BsTypes.Types.Int, result), Is.True);
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, 3));
+            Assert.That(BtlTypes.Is(BtlTypes.Types.Int, result), Is.True);
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, 3));
         }
     }
 
@@ -495,7 +495,7 @@ public static class OperatorTests
     public class NumericOperations
     {
          [Test]
-         public void HandlesNumericOperators()
+         public void NumericOperators()
          {
              var (callStack, closure) = Runner.Run("");
              var result = Operator.Operate(callStack, closure, "+", new NumericVariable(5), new NumericVariable(10));
@@ -503,7 +503,7 @@ public static class OperatorTests
          }
 
          [Test]
-         public void HandlesComparisonOperators()
+         public void ComparisonOperators()
          {
              var (callStack, closure) = Runner.Run("");
              var result = Operator.Operate(callStack, closure, ">=", new NumericVariable(5), new NumericVariable(2));
@@ -511,7 +511,7 @@ public static class OperatorTests
          }
 
          [Test]
-         public void HandlesUnaryNumericOperators()
+         public void UnaryNumericOperators()
          {
              var (callStack, closure) = Runner.Run("");
              var result = Operator.Operate(callStack, closure, "-", null, new NumericVariable(5));
@@ -523,7 +523,7 @@ public static class OperatorTests
     public class SequenceOperations
     {
          [Test]
-         public void HandlesAdditionOperator()
+         public void AdditionOperator()
          {
              var (callStack, closure) = Runner.Run("");
              var seq1 = new SequenceVariable([
@@ -546,7 +546,7 @@ public static class OperatorTests
          }
 
          [Test]
-         public void HandlesMultiplyOperator()
+         public void MultiplyOperator()
          {
              var (callStack, closure) = Runner.Run("");
              var seq = new SequenceVariable([
@@ -567,7 +567,7 @@ public static class OperatorTests
          }
 
          [Test]
-         public void HandlesTrueEqualityOperator()
+         public void TrueEqualityOperator()
          {
              var (callStack, closure) = Runner.Run("");
              var seq1 = new SequenceVariable([
@@ -583,7 +583,7 @@ public static class OperatorTests
          }
 
          [Test]
-         public void HandlesFalseEqualityOperator()
+         public void FalseEqualityOperator()
          {
              var (callStack, closure) = Runner.Run("");
              var seq1 = new SequenceVariable([
@@ -599,7 +599,7 @@ public static class OperatorTests
          }
 
          [Test]
-         public void HandlesTrueInequalityOperator()
+         public void TrueInequalityOperator()
          {
              var (callStack, closure) = Runner.Run("");
              var seq1 = new SequenceVariable([
@@ -615,7 +615,7 @@ public static class OperatorTests
          }
 
          [Test]
-         public void HandlesFalseInequalityOperator()
+         public void FalseInequalityOperator()
          {
              var (callStack, closure) = Runner.Run("");
              var seq1 = new SequenceVariable([
@@ -631,7 +631,7 @@ public static class OperatorTests
          }
 
          [Test]
-         public void HandlesEqualityWithNullElements()
+         public void EqualityWithNullElements()
          {
              var (callStack, closure) = Runner.Run("");
              var seq1 = new SequenceVariable([
@@ -647,7 +647,7 @@ public static class OperatorTests
          }
 
          [Test]
-         public void HandlesInequalityWithOneNull()
+         public void InequalityWithOneNull()
          {
              var (callStack, closure) = Runner.Run("");
              var seq1 = new SequenceVariable([
@@ -663,7 +663,7 @@ public static class OperatorTests
          }
 
          [Test]
-         public void HandlesInequalityWithNullsInDifferentPositions()
+         public void InequalityWithNullsInDifferentPositions()
          {
              var (callStack, closure) = Runner.Run("");
              var seq1 = new SequenceVariable([
@@ -683,7 +683,7 @@ public static class OperatorTests
     public class StringOperations
     {
          [Test]
-         public void HandlesAdditionOperator()
+         public void AdditionOperator()
          {
              var (callStack, closure) = Runner.Run("");
              var string1 = new StringVariable("asdf");
@@ -693,7 +693,7 @@ public static class OperatorTests
          }
 
          [Test]
-         public void HandlesMultiplyOperator()
+         public void MultiplyOperator()
          {
              var (callStack, closure) = Runner.Run("");
              var string1 = new StringVariable("asdf");
@@ -702,7 +702,7 @@ public static class OperatorTests
          }
 
          [Test]
-         public void HandlesTrueEqualityOperator()
+         public void TrueEqualityOperator()
          {
              var (callStack, closure) = Runner.Run("");
              var string1 = new StringVariable("asdf");
@@ -712,7 +712,7 @@ public static class OperatorTests
          }
 
          [Test]
-         public void HandlesFalseEqualityOperator()
+         public void FalseEqualityOperator()
          {
              var (callStack, closure) = Runner.Run("");
              var string1 = new StringVariable("asdf");

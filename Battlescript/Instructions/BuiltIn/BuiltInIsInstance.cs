@@ -12,12 +12,12 @@ public static class BuiltInIsInstance
             switch (conversionTypeInstruction.Value)
             {
                 case "__btl_numeric__":
-                    return BsTypes.Create(BsTypes.Types.Bool,
+                    return BtlTypes.Create(BtlTypes.Types.Bool,
                         objectExpression is NumericVariable);
                 case "__btl_sequence__":
-                    return BsTypes.Create(BsTypes.Types.Bool, objectExpression is SequenceVariable);
+                    return BtlTypes.Create(BtlTypes.Types.Bool, objectExpression is SequenceVariable);
                 default:
-                    return BsTypes.Create(BsTypes.Types.Bool, false);
+                    return BtlTypes.Create(BtlTypes.Types.Bool, false);
             }
         }
         else
@@ -26,9 +26,9 @@ public static class BuiltInIsInstance
         
             if (objectExpression is ObjectVariable objectVariable && classExpression is ClassVariable classVariable)
             {
-                return BsTypes.Create(BsTypes.Types.Bool, objectVariable.IsInstance(classVariable));
+                return BtlTypes.Create(BtlTypes.Types.Bool, objectVariable.IsInstance(classVariable));
             } 
-            return BsTypes.Create(BsTypes.Types.Bool, false);
+            return BtlTypes.Create(BtlTypes.Types.Bool, false);
         }
     }
 

@@ -9,7 +9,7 @@ public class FunctionsTestsOld
     public class BasicFunctionDefinitions
     {
         [Test]
-        public void HandlesFunctionDefinitionWithNoArguments()
+        public void FunctionDefinitionWithNoArguments()
         {
             var input = """
                         def func():
@@ -30,7 +30,7 @@ public class FunctionsTestsOld
         }
     
         [Test]
-        public void HandlesFunctionDefinitionWithOneArgument()
+        public void FunctionDefinitionWithOneArgument()
         {
             var input = """
                         def func(asdf):
@@ -52,7 +52,7 @@ public class FunctionsTestsOld
         }
         
         [Test]
-        public void HandlesFunctionDefinitionWithMultipleArguments()
+        public void FunctionDefinitionWithMultipleArguments()
         {
             var input = """
                         def func(asdf, qwer):
@@ -80,7 +80,7 @@ public class FunctionsTestsOld
     public class BasicFunctionCalls
     {
         [Test]
-        public void HandlesFunctionCallWithNoArguments()
+        public void FunctionCallWithNoArguments()
         {
             var input = """
                         x = 6
@@ -89,12 +89,12 @@ public class FunctionsTestsOld
                         x = func()
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
         [Test]
-        public void HandlesFunctionCallWithArguments()
+        public void FunctionCallWithArguments()
         {
             var input = """
                         x = 6
@@ -103,7 +103,7 @@ public class FunctionsTestsOld
                         x = func(2, 3)
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }
@@ -112,7 +112,7 @@ public class FunctionsTestsOld
     public class ReturnValues
     {
         [Test]
-        public void HandlesBasicValues()
+        public void BasicValues()
         {
             var input = """
                         def func():
@@ -120,12 +120,12 @@ public class FunctionsTestsOld
                         x = func()
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 15);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 15);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
         [Test]
-        public void HandlesExpressions()
+        public void Expressions()
         {
             var input = """
                         def func(y, z):
@@ -133,7 +133,7 @@ public class FunctionsTestsOld
                         x = func(4, 8)
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 12);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 12);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
@@ -150,7 +150,7 @@ public class FunctionsTestsOld
                         x = func()
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }
@@ -167,7 +167,7 @@ public class FunctionsTestsOld
                         x = func(6)
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 6);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 6);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
@@ -180,7 +180,7 @@ public class FunctionsTestsOld
                         x = func()
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     
@@ -207,7 +207,7 @@ public class FunctionsTestsOld
                         x = func(y = 6)
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 6);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 6);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
@@ -220,7 +220,7 @@ public class FunctionsTestsOld
                         x = func(4, y = 6)
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 10);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 10);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         

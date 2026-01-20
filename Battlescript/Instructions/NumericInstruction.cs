@@ -23,7 +23,7 @@ public class NumericInstruction : Instruction
     {
         if (tokens.Count > 1)
         {
-            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "invalid syntax");
         }
 
         if (tokens[0].Value.Contains('.'))
@@ -47,11 +47,11 @@ public class NumericInstruction : Instruction
     {
         if (Value is double)
         {
-            return BsTypes.Create(BsTypes.Types.Float, Value);
+            return BtlTypes.Create(BtlTypes.Types.Float, Value);
         }
         else
         {
-            return BsTypes.Create(BsTypes.Types.Int, Value);
+            return BtlTypes.Create(BtlTypes.Types.Int, Value);
         }
     }
     

@@ -24,31 +24,31 @@ public static class Operator
 
     private static Variable ApplyTypeConversionForAssignment(string operation, Variable result)
     {
-        if (operation == "/=" && BsTypes.Is(BsTypes.Types.Int, result))
+        if (operation == "/=" && BtlTypes.Is(BtlTypes.Types.Int, result))
         {
-            return ConvertToBsFloat(result);
+            return ConvertToBtlFloat(result);
         }
 
-        if (operation == "//=" && BsTypes.Is(BsTypes.Types.Float, result))
+        if (operation == "//=" && BtlTypes.Is(BtlTypes.Types.Float, result))
         {
-            return ConvertToBsInt(result);
+            return ConvertToBtlInt(result);
         }
 
         return result;
     }
 
-    private static ObjectVariable ConvertToBsFloat(Variable variable)
+    private static ObjectVariable ConvertToBtlFloat(Variable variable)
     {
         var objectResult = (ObjectVariable)variable;
         var numericValue = ((NumericVariable)objectResult.Values["__btl_value"]).Value;
-        return BsTypes.Create(BsTypes.Types.Float, numericValue);
+        return BtlTypes.Create(BtlTypes.Types.Float, numericValue);
     }
 
-    private static ObjectVariable ConvertToBsInt(Variable variable)
+    private static ObjectVariable ConvertToBtlInt(Variable variable)
     {
         var objectResult = (ObjectVariable)variable;
         var numericValue = ((NumericVariable)objectResult.Values["__btl_value"]).Value;
-        return BsTypes.Create(BsTypes.Types.Int, numericValue);
+        return BtlTypes.Create(BtlTypes.Types.Int, numericValue);
     }
 
     private static NumericVariable CreateBoolNumeric(bool value) => new(value ? 1 : 0);
@@ -215,27 +215,27 @@ public static class Operator
 
         return operation switch
         {
-            "or" => BsTypes.Create(BsTypes.Types.Bool, leftTruthiness || rightTruthiness),
-            "and" => BsTypes.Create(BsTypes.Types.Bool, leftTruthiness && rightTruthiness),
-            "not" => BsTypes.Create(BsTypes.Types.Bool, !rightTruthiness),
-            "is" => BsTypes.Create(BsTypes.Types.Bool, ReferenceEquals(left, right)),
-            "is not" => BsTypes.Create(BsTypes.Types.Bool, !ReferenceEquals(left, right)),
-            "in" => BsTypes.Create(BsTypes.Types.Bool, ConductInOperation(operation, left, right)),
-            "not in" => BsTypes.Create(BsTypes.Types.Bool, !ConductInOperation(operation, left, right)),
+            "or" => BtlTypes.Create(BtlTypes.Types.Bool, leftTruthiness || rightTruthiness),
+            "and" => BtlTypes.Create(BtlTypes.Types.Bool, leftTruthiness && rightTruthiness),
+            "not" => BtlTypes.Create(BtlTypes.Types.Bool, !rightTruthiness),
+            "is" => BtlTypes.Create(BtlTypes.Types.Bool, ReferenceEquals(left, right)),
+            "is not" => BtlTypes.Create(BtlTypes.Types.Bool, !ReferenceEquals(left, right)),
+            "in" => BtlTypes.Create(BtlTypes.Types.Bool, ConductInOperation(operation, left, right)),
+            "not in" => BtlTypes.Create(BtlTypes.Types.Bool, !ConductInOperation(operation, left, right)),
             _ => throw new InterpreterInvalidOperationException(operation, left, right)
         };
     }
 
     private static bool ConductInOperation(string operation, Variable? left, Variable? right)
     {
-        if (BsTypes.Is(BsTypes.Types.String, left) && BsTypes.Is(BsTypes.Types.String, right))
+        if (BtlTypes.Is(BtlTypes.Types.String, left) && BtlTypes.Is(BtlTypes.Types.String, right))
         {
-            return BsTypes.GetStringValue(right).Contains(BsTypes.GetStringValue(left));
+            return BtlTypes.GetStringValue(right).Contains(BtlTypes.GetStringValue(left));
         }
 
-        if (BsTypes.Is(BsTypes.Types.List, right))
+        if (BtlTypes.Is(BtlTypes.Types.List, right))
         {
-            var listValue = BsTypes.GetListValue(right);
+            var listValue = BtlTypes.GetListValue(right);
             return listValue.Values.Any(x => x.Equals(left));
         }
 
@@ -249,21 +249,21 @@ public static class Operator
 
     private static bool IsValidDictionaryInExpression(Variable? left, Variable? right)
     {
-        var isLeftStringOrInt = BsTypes.Is(BsTypes.Types.String, left) || BsTypes.Is(BsTypes.Types.Int, left);
-        return BsTypes.Is(BsTypes.Types.Dictionary, right) && isLeftStringOrInt;
+        var isLeftStringOrInt = BtlTypes.Is(BtlTypes.Types.String, left) || BtlTypes.Is(BtlTypes.Types.Int, left);
+        return BtlTypes.Is(BtlTypes.Types.Dictionary, right) && isLeftStringOrInt;
     }
 
     private static bool CheckDictionaryContainsKey(Variable? left, Variable? right)
     {
-        var dictValue = BsTypes.GetDictValue(right);
+        var dictValue = BtlTypes.GetDictValue(right);
 
-        if (BsTypes.Is(BsTypes.Types.Int, left))
+        if (BtlTypes.Is(BtlTypes.Types.Int, left))
         {
-            var intValue = BsTypes.GetIntValue(left);
+            var intValue = BtlTypes.GetIntValue(left);
             return dictValue.IntValues.Any(x => x.Key.Equals(intValue));
         }
 
-        var stringValue = BsTypes.GetStringValue(left);
+        var stringValue = BtlTypes.GetStringValue(left);
         return dictValue.StringValues.Any(x => x.Key.Equals(stringValue));
     }
 

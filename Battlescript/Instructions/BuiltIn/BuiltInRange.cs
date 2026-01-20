@@ -12,17 +12,17 @@ public static class BuiltInRange
         {
             case 1:
                 // Treat only argument as the ending value, use defaults for others
-                endingValue = BsTypes.GetIntValue(arguments[0].Interpret(callStack, closure));
+                endingValue = BtlTypes.GetIntValue(arguments[0].Interpret(callStack, closure));
                 break;
             case 2:
                 // Treat two arguments as start and end, use default for step
-                startingValue = BsTypes.GetIntValue(arguments[0].Interpret(callStack, closure));
-                endingValue = BsTypes.GetIntValue(arguments[1].Interpret(callStack, closure));
+                startingValue = BtlTypes.GetIntValue(arguments[0].Interpret(callStack, closure));
+                endingValue = BtlTypes.GetIntValue(arguments[1].Interpret(callStack, closure));
                 break;
             case 3:
-                startingValue = BsTypes.GetIntValue(arguments[0].Interpret(callStack, closure));
-                endingValue = BsTypes.GetIntValue(arguments[1].Interpret(callStack, closure));
-                step = BsTypes.GetIntValue(arguments[2].Interpret(callStack, closure));
+                startingValue = BtlTypes.GetIntValue(arguments[0].Interpret(callStack, closure));
+                endingValue = BtlTypes.GetIntValue(arguments[1].Interpret(callStack, closure));
+                step = BtlTypes.GetIntValue(arguments[2].Interpret(callStack, closure));
                 break;
             default:
                 throw new Exception("Bad arguments, clean this up later");
@@ -36,11 +36,11 @@ public static class BuiltInRange
             {
                 for (var i = startingValue; i < endingValue; i += step)
                 {
-                    values.Add(BsTypes.Create(BsTypes.Types.Int, i));
+                    values.Add(BtlTypes.Create(BtlTypes.Types.Int, i));
                 }
             }
             
-            return BsTypes.Create(BsTypes.Types.List, values);
+            return BtlTypes.Create(BtlTypes.Types.List, values);
         }
         else
         {
@@ -48,10 +48,10 @@ public static class BuiltInRange
             {
                 for (var i = startingValue; i > endingValue; i += step)
                 {
-                    values.Add(BsTypes.Create(BsTypes.Types.Int, i));
+                    values.Add(BtlTypes.Create(BtlTypes.Types.Int, i));
                 }
             }
-            return BsTypes.Create(BsTypes.Types.List, values);
+            return BtlTypes.Create(BtlTypes.Types.List, values);
         }
     }
 }

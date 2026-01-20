@@ -90,11 +90,11 @@ public class Lexer(string input, string? fileName = null)
             }
             else if (nextCharacters[0] == '\t')
             {
-                throw new InternalRaiseException(BsTypes.Types.SyntaxError, "unexpected indent");
+                throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "unexpected indent");
             }
             else
             {
-                throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
+                throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "invalid syntax");
             }
         }
         

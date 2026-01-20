@@ -33,7 +33,7 @@ public static class BuiltInInstructionTests
         }
         
         [Test]
-        public void HandlesTokensAfterArguments()
+        public void TokensAfterArguments()
         {
             var input = "super(x, y).asdf";
             var expected = new BuiltInInstruction(

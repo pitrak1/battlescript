@@ -51,7 +51,7 @@ public class TryInstruction : Instruction
                     
                     if (except.ExceptionVariable is not null)
                     {
-                        var exceptionVariable = BsTypes.CreateException(callStack, closure, e.Type, e.Message);
+                        var exceptionVariable = BtlTypes.CreateException(callStack, closure, e.Type, e.Message);
                         closure.SetVariable(callStack, except.ExceptionVariable, exceptionVariable);
                     }
                     

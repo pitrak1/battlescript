@@ -25,7 +25,7 @@ public class AssertInstruction : Instruction
         
         if (!Truthiness.IsTruthy(callStack, closure, condition!, this))
         {
-            throw new InternalRaiseException(BsTypes.Types.AssertionError, "");
+            throw new InternalRaiseException(BtlTypes.Types.AssertionError, "");
         }
 
         return null;

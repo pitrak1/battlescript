@@ -16,7 +16,7 @@ public class LoopsAndConditionalsTests
                             x = 6
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 6);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 6);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -30,7 +30,7 @@ public class LoopsAndConditionalsTests
                             x = 6
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
@@ -45,7 +45,7 @@ public class LoopsAndConditionalsTests
                             x = 7
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 7);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 7);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     
@@ -62,7 +62,7 @@ public class LoopsAndConditionalsTests
                             x = 7
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 9);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 9);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
@@ -77,7 +77,7 @@ public class LoopsAndConditionalsTests
                             x = 9
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 9);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 9);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
@@ -92,7 +92,7 @@ public class LoopsAndConditionalsTests
                             x = 9
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 9);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 9);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
 
@@ -108,7 +108,7 @@ public class LoopsAndConditionalsTests
                             y = 6
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 6);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 6);
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
         
@@ -124,7 +124,7 @@ public class LoopsAndConditionalsTests
                             y = 6
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
     }
@@ -141,7 +141,7 @@ public class LoopsAndConditionalsTests
                             x += 1
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 10);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 10);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
@@ -154,7 +154,7 @@ public class LoopsAndConditionalsTests
                             x = 10
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }
@@ -171,7 +171,7 @@ public class LoopsAndConditionalsTests
                             x = x + y
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 8);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 8);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
@@ -184,7 +184,7 @@ public class LoopsAndConditionalsTests
                             x = x + y
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 9);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 9);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }
@@ -203,7 +203,7 @@ public class LoopsAndConditionalsTests
                             x = x + y
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 9);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 9);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     
@@ -220,7 +220,7 @@ public class LoopsAndConditionalsTests
                             x = x + y
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 13);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 13);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }
@@ -239,7 +239,7 @@ public class LoopsAndConditionalsTests
                             x = x + y
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 6);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 6);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     
@@ -256,7 +256,7 @@ public class LoopsAndConditionalsTests
                             x = x + y
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 6);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 6);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }
@@ -273,7 +273,7 @@ public class LoopsAndConditionalsTests
                             pass
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }

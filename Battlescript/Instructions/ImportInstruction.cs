@@ -19,12 +19,12 @@ public class ImportInstruction : Instruction
     {
         if (tokens[1].Type != Consts.TokenTypes.String)
         {
-            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "expected file path to be a string");
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "expected file path to be a string");
         }
         
         if (tokens[2].Value != "import")
         {
-            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "expected 'import' keyword");
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "expected 'import' keyword");
         }
     }
     
@@ -93,7 +93,7 @@ public class ImportInstruction : Instruction
         {
             if (name == "*")
             {
-                closure.SetVariable(callStack, new VariableInstruction(FileName), BsTypes.Create(BsTypes.Types.Dictionary, starImportConversionType));
+                closure.SetVariable(callStack, new VariableInstruction(FileName), BtlTypes.Create(BtlTypes.Types.Dictionary, starImportConversionType));
             }
             else if (importedScope.TryGetValue(name, out var value))
             {

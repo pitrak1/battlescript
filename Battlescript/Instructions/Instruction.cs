@@ -47,7 +47,7 @@ public abstract class Instruction
             // Next can only be a function call (), an index [], or a member .
             if (Next is not ArrayInstruction && Next is not MemberInstruction)
             {
-                throw new InternalRaiseException(BsTypes.Types.SyntaxError, "invalid syntax");
+                throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "invalid syntax");
             }
         }
     }

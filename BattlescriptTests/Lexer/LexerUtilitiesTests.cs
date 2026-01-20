@@ -57,7 +57,7 @@ public static class LexerUtilitiesTests
         }
 
         [Test]
-        public void HandlesEscapedCharacters()
+        public void EscapedCharacters()
         {
             var (length, result) = LexerUtilities.GetNextCharactersInCollection(
                 @"as\.df.",
@@ -121,7 +121,7 @@ public static class LexerUtilitiesTests
         }
         
         [Test]
-        public void HandlesEmptyString()
+        public void EmptyString()
         {
             var (length, result) = LexerUtilities.GetIndentValue("", 0);
             Assert.That(result, Is.EqualTo("0"));

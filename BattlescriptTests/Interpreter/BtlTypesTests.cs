@@ -4,7 +4,7 @@ using Battlescript;
 namespace BattlescriptTests.InterpreterTests;
 
 [TestFixture]
-public class BsTypesTests
+public class BtlTypesTests
 {
     [TestFixture]
     public class IsTests
@@ -18,22 +18,22 @@ public class BsTypesTests
         [Test]
         public void ReturnsTrueForMatchingType()
         {
-            var intVar = BsTypes.Create(BsTypes.Types.Int, 42);
-            Assert.That(BsTypes.Is(BsTypes.Types.Int, intVar), Is.True);
+            var intVar = BtlTypes.Create(BtlTypes.Types.Int, 42);
+            Assert.That(BtlTypes.Is(BtlTypes.Types.Int, intVar), Is.True);
         }
 
         [Test]
         public void ReturnsFalseForNonMatchingType()
         {
-            var intVar = BsTypes.Create(BsTypes.Types.Int, 42);
-            Assert.That(BsTypes.Is(BsTypes.Types.Float, intVar), Is.False);
+            var intVar = BtlTypes.Create(BtlTypes.Types.Int, 42);
+            Assert.That(BtlTypes.Is(BtlTypes.Types.Float, intVar), Is.False);
         }
 
         [Test]
         public void ReturnsFalseForNonObjectVariable()
         {
             var numericVar = new NumericVariable(42);
-            Assert.That(BsTypes.Is(BsTypes.Types.Int, numericVar), Is.False);
+            Assert.That(BtlTypes.Is(BtlTypes.Types.Int, numericVar), Is.False);
         }
     }
 
@@ -49,37 +49,37 @@ public class BsTypesTests
         [Test]
         public void CreatesIntFromIntValue()
         {
-            var result = BsTypes.Create(BsTypes.Types.Int, 42);
+            var result = BtlTypes.Create(BtlTypes.Types.Int, 42);
             
-            Assert.That(BsTypes.Is(BsTypes.Types.Int, result), Is.True);
-            Assert.That(BsTypes.GetIntValue(result), Is.EqualTo(42));
+            Assert.That(BtlTypes.Is(BtlTypes.Types.Int, result), Is.True);
+            Assert.That(BtlTypes.GetIntValue(result), Is.EqualTo(42));
         }
 
         [Test]
         public void CreatesFloatFromDoubleValue()
         {
-            var result = BsTypes.Create(BsTypes.Types.Float, 3.14);
+            var result = BtlTypes.Create(BtlTypes.Types.Float, 3.14);
             
-            Assert.That(BsTypes.Is(BsTypes.Types.Float, result), Is.True);
-            Assert.That(BsTypes.GetFloatValue(result), Is.EqualTo(3.14));
+            Assert.That(BtlTypes.Is(BtlTypes.Types.Float, result), Is.True);
+            Assert.That(BtlTypes.GetFloatValue(result), Is.EqualTo(3.14));
         }
 
         [Test]
         public void CreatesBoolFromTrue()
         {
-            var result = BsTypes.Create(BsTypes.Types.Bool, true);
+            var result = BtlTypes.Create(BtlTypes.Types.Bool, true);
             
-            Assert.That(BsTypes.Is(BsTypes.Types.Bool, result), Is.True);
-            Assert.That(BsTypes.GetBoolValue(result), Is.True);
+            Assert.That(BtlTypes.Is(BtlTypes.Types.Bool, result), Is.True);
+            Assert.That(BtlTypes.GetBoolValue(result), Is.True);
         }
 
         [Test]
         public void CreatesBoolFromFalse()
         {
-            var result = BsTypes.Create(BsTypes.Types.Bool, false);
+            var result = BtlTypes.Create(BtlTypes.Types.Bool, false);
             
-            Assert.That(BsTypes.Is(BsTypes.Types.Bool, result), Is.True);
-            Assert.That(BsTypes.GetBoolValue(result), Is.False);
+            Assert.That(BtlTypes.Is(BtlTypes.Types.Bool, result), Is.True);
+            Assert.That(BtlTypes.GetBoolValue(result), Is.False);
         }
 
         [Test]
@@ -87,24 +87,24 @@ public class BsTypesTests
         {
             var listValues = new List<Variable>
             {
-                BsTypes.Create(BsTypes.Types.Int, 1),
-                BsTypes.Create(BsTypes.Types.Int, 2),
-                BsTypes.Create(BsTypes.Types.Int, 3)
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 3)
             };
-            var result = BsTypes.Create(BsTypes.Types.List, listValues);
+            var result = BtlTypes.Create(BtlTypes.Types.List, listValues);
             
-            Assert.That(BsTypes.Is(BsTypes.Types.List, result), Is.True);
-            var listValue = BsTypes.GetListValue(result);
+            Assert.That(BtlTypes.Is(BtlTypes.Types.List, result), Is.True);
+            var listValue = BtlTypes.GetListValue(result);
             Assert.That(listValue.Values.Count, Is.EqualTo(3));
         }
 
         [Test]
         public void CreatesStringFromStringValue()
         {
-            var result = BsTypes.Create(BsTypes.Types.String, "hello");
+            var result = BtlTypes.Create(BtlTypes.Types.String, "hello");
             
-            Assert.That(BsTypes.Is(BsTypes.Types.String, result), Is.True);
-            Assert.That(BsTypes.GetStringValue(result), Is.EqualTo("hello"));
+            Assert.That(BtlTypes.Is(BtlTypes.Types.String, result), Is.True);
+            Assert.That(BtlTypes.GetStringValue(result), Is.EqualTo("hello"));
         }
     }
 
@@ -123,10 +123,10 @@ public class BsTypesTests
         [Test]
         public void CreatesExceptionWithMessage()
         {
-            var result = BsTypes.CreateException(_callStack, _closure, "ValueError", "Test error message");
+            var result = BtlTypes.CreateException(_callStack, _closure, "ValueError", "Test error message");
             
             Assert.That(result, Is.InstanceOf<ObjectVariable>());
-            Assert.That(BsTypes.GetErrorMessage(result), Is.EqualTo("Test error message"));
+            Assert.That(BtlTypes.GetErrorMessage(result), Is.EqualTo("Test error message"));
         }
 
         [Test]
@@ -136,7 +136,7 @@ public class BsTypesTests
             _closure.SetVariable(_callStack, new VariableInstruction("InvalidType"), nonExistentVar);
             
             Assert.Throws<Exception>(() => 
-                BsTypes.CreateException(_callStack, _closure, "InvalidType", "message"));
+                BtlTypes.CreateException(_callStack, _closure, "InvalidType", "message"));
         }
     }
 
@@ -152,17 +152,17 @@ public class BsTypesTests
         [Test]
         public void ReturnsIntValueForIntVariable()
         {
-            var intVar = BsTypes.Create(BsTypes.Types.Int, 42);
+            var intVar = BtlTypes.Create(BtlTypes.Types.Int, 42);
             
-            Assert.That(BsTypes.GetIntValue(intVar), Is.EqualTo(42));
+            Assert.That(BtlTypes.GetIntValue(intVar), Is.EqualTo(42));
         }
 
         [Test]
         public void ThrowsExceptionForNonIntVariable()
         {
-            var floatVar = BsTypes.Create(BsTypes.Types.Float, 3.14);
+            var floatVar = BtlTypes.Create(BtlTypes.Types.Float, 3.14);
             
-            Assert.Throws<Exception>(() => BsTypes.GetIntValue(floatVar));
+            Assert.Throws<Exception>(() => BtlTypes.GetIntValue(floatVar));
         }
 
         [Test]
@@ -170,7 +170,7 @@ public class BsTypesTests
         {
             var numericVar = new NumericVariable(42);
             
-            Assert.Throws<Exception>(() => BsTypes.GetIntValue(numericVar));
+            Assert.Throws<Exception>(() => BtlTypes.GetIntValue(numericVar));
         }
     }
 
@@ -186,17 +186,17 @@ public class BsTypesTests
         [Test]
         public void ReturnsFloatValueForFloatVariable()
         {
-            var floatVar = BsTypes.Create(BsTypes.Types.Float, 3.14);
+            var floatVar = BtlTypes.Create(BtlTypes.Types.Float, 3.14);
             
-            Assert.That(BsTypes.GetFloatValue(floatVar), Is.EqualTo(3.14));
+            Assert.That(BtlTypes.GetFloatValue(floatVar), Is.EqualTo(3.14));
         }
 
         [Test]
         public void ThrowsExceptionForNonFloatVariable()
         {
-            var intVar = BsTypes.Create(BsTypes.Types.Int, 42);
+            var intVar = BtlTypes.Create(BtlTypes.Types.Int, 42);
             
-            Assert.Throws<Exception>(() => BsTypes.GetFloatValue(intVar));
+            Assert.Throws<Exception>(() => BtlTypes.GetFloatValue(intVar));
         }
 
         [Test]
@@ -204,7 +204,7 @@ public class BsTypesTests
         {
             var numericVar = new NumericVariable(3.14);
             
-            Assert.Throws<Exception>(() => BsTypes.GetFloatValue(numericVar));
+            Assert.Throws<Exception>(() => BtlTypes.GetFloatValue(numericVar));
         }
     }
 
@@ -220,25 +220,25 @@ public class BsTypesTests
         [Test]
         public void ReturnsTrueForTrueBoolVariable()
         {
-            var boolVar = BsTypes.Create(BsTypes.Types.Bool, true);
+            var boolVar = BtlTypes.Create(BtlTypes.Types.Bool, true);
             
-            Assert.That(BsTypes.GetBoolValue(boolVar), Is.True);
+            Assert.That(BtlTypes.GetBoolValue(boolVar), Is.True);
         }
 
         [Test]
         public void ReturnsFalseForFalseBoolVariable()
         {
-            var boolVar = BsTypes.Create(BsTypes.Types.Bool, false);
+            var boolVar = BtlTypes.Create(BtlTypes.Types.Bool, false);
             
-            Assert.That(BsTypes.GetBoolValue(boolVar), Is.False);
+            Assert.That(BtlTypes.GetBoolValue(boolVar), Is.False);
         }
 
         [Test]
         public void ThrowsExceptionForNonBoolVariable()
         {
-            var intVar = BsTypes.Create(BsTypes.Types.Int, 42);
+            var intVar = BtlTypes.Create(BtlTypes.Types.Int, 42);
             
-            Assert.Throws<Exception>(() => BsTypes.GetBoolValue(intVar));
+            Assert.Throws<Exception>(() => BtlTypes.GetBoolValue(intVar));
         }
 
         [Test]
@@ -246,7 +246,7 @@ public class BsTypesTests
         {
             var numericVar = new NumericVariable(1);
             
-            Assert.Throws<Exception>(() => BsTypes.GetBoolValue(numericVar));
+            Assert.Throws<Exception>(() => BtlTypes.GetBoolValue(numericVar));
         }
     }
 
@@ -264,12 +264,12 @@ public class BsTypesTests
         {
             var listValues = new List<Variable>
             {
-                BsTypes.Create(BsTypes.Types.Int, 1),
-                BsTypes.Create(BsTypes.Types.Int, 2)
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Int, 2)
             };
-            var listVar = BsTypes.Create(BsTypes.Types.List, listValues);
+            var listVar = BtlTypes.Create(BtlTypes.Types.List, listValues);
             
-            var result = BsTypes.GetListValue(listVar);
+            var result = BtlTypes.GetListValue(listVar);
             
             Assert.That(result, Is.InstanceOf<SequenceVariable>());
             Assert.That(result.Values.Count, Is.EqualTo(2));
@@ -278,9 +278,9 @@ public class BsTypesTests
         [Test]
         public void ThrowsExceptionForNonListVariable()
         {
-            var intVar = BsTypes.Create(BsTypes.Types.Int, 42);
+            var intVar = BtlTypes.Create(BtlTypes.Types.Int, 42);
             
-            Assert.Throws<Exception>(() => BsTypes.GetListValue(intVar));
+            Assert.Throws<Exception>(() => BtlTypes.GetListValue(intVar));
         }
 
         [Test]
@@ -288,7 +288,7 @@ public class BsTypesTests
         {
             var seqVar = new SequenceVariable();
             
-            Assert.Throws<Exception>(() => BsTypes.GetListValue(seqVar));
+            Assert.Throws<Exception>(() => BtlTypes.GetListValue(seqVar));
         }
     }
 
@@ -306,18 +306,18 @@ public class BsTypesTests
         {
             var dictIntValues = new Dictionary<int, Variable>
             {
-                {1, BsTypes.Create(BsTypes.Types.Int, 1)},
-                {2, BsTypes.Create(BsTypes.Types.Int, 2)}
+                {1, BtlTypes.Create(BtlTypes.Types.Int, 1)},
+                {2, BtlTypes.Create(BtlTypes.Types.Int, 2)}
             };
             var dictStringValues = new Dictionary<string, Variable>
             {
-                {"asdf", BsTypes.Create(BsTypes.Types.Int, 1)},
-                {"qwer", BsTypes.Create(BsTypes.Types.Int, 2)}
+                {"asdf", BtlTypes.Create(BtlTypes.Types.Int, 1)},
+                {"qwer", BtlTypes.Create(BtlTypes.Types.Int, 2)}
             };
             var dictValues = new MappingVariable(dictIntValues, dictStringValues);
-            var dictVar = BsTypes.Create(BsTypes.Types.Dictionary, dictValues);
+            var dictVar = BtlTypes.Create(BtlTypes.Types.Dictionary, dictValues);
             
-            var result = BsTypes.GetDictValue(dictVar);
+            var result = BtlTypes.GetDictValue(dictVar);
             
             Assert.That(result, Is.InstanceOf<MappingVariable>());
             Assert.That(result.IntValues, Is.EquivalentTo(dictIntValues));
@@ -327,9 +327,9 @@ public class BsTypesTests
         [Test]
         public void ThrowsExceptionForNonDictVariable()
         {
-            var intVar = BsTypes.Create(BsTypes.Types.Int, 42);
+            var intVar = BtlTypes.Create(BtlTypes.Types.Int, 42);
             
-            Assert.Throws<Exception>(() => BsTypes.GetDictValue(intVar));
+            Assert.Throws<Exception>(() => BtlTypes.GetDictValue(intVar));
         }
 
         [Test]
@@ -337,7 +337,7 @@ public class BsTypesTests
         {
             var mappingVar = new MappingVariable();
             
-            Assert.Throws<Exception>(() => BsTypes.GetDictValue(mappingVar));
+            Assert.Throws<Exception>(() => BtlTypes.GetDictValue(mappingVar));
         }
     }
 
@@ -353,17 +353,17 @@ public class BsTypesTests
         [Test]
         public void ReturnsStringValueForStringVariable()
         {
-            var stringVar = BsTypes.Create(BsTypes.Types.String, "hello world");
+            var stringVar = BtlTypes.Create(BtlTypes.Types.String, "hello world");
             
-            Assert.That(BsTypes.GetStringValue(stringVar), Is.EqualTo("hello world"));
+            Assert.That(BtlTypes.GetStringValue(stringVar), Is.EqualTo("hello world"));
         }
 
         [Test]
         public void ThrowsExceptionForNonStringVariable()
         {
-            var intVar = BsTypes.Create(BsTypes.Types.Int, 42);
+            var intVar = BtlTypes.Create(BtlTypes.Types.Int, 42);
             
-            Assert.Throws<Exception>(() => BsTypes.GetStringValue(intVar));
+            Assert.Throws<Exception>(() => BtlTypes.GetStringValue(intVar));
         }
 
         [Test]
@@ -371,7 +371,7 @@ public class BsTypesTests
         {
             var stringVar = new StringVariable("test");
             
-            Assert.Throws<Exception>(() => BsTypes.GetStringValue(stringVar));
+            Assert.Throws<Exception>(() => BtlTypes.GetStringValue(stringVar));
         }
     }
 
@@ -390,17 +390,17 @@ public class BsTypesTests
         [Test]
         public void ReturnsErrorMessageForException()
         {
-            var exception = BsTypes.CreateException(_callStack, _closure, "ValueError", "Test error");
+            var exception = BtlTypes.CreateException(_callStack, _closure, "ValueError", "Test error");
             
-            Assert.That(BsTypes.GetErrorMessage(exception), Is.EqualTo("Test error"));
+            Assert.That(BtlTypes.GetErrorMessage(exception), Is.EqualTo("Test error"));
         }
 
         [Test]
         public void ThrowsExceptionForNonExceptionVariable()
         {
-            var intVar = BsTypes.Create(BsTypes.Types.Int, 42);
+            var intVar = BtlTypes.Create(BtlTypes.Types.Int, 42);
             
-            Assert.Throws<Exception>(() => BsTypes.GetErrorMessage(intVar));
+            Assert.Throws<Exception>(() => BtlTypes.GetErrorMessage(intVar));
         }
 
         [Test]
@@ -408,7 +408,7 @@ public class BsTypesTests
         {
             var numericVar = new NumericVariable(42);
             
-            Assert.Throws<Exception>(() => BsTypes.GetErrorMessage(numericVar));
+            Assert.Throws<Exception>(() => BtlTypes.GetErrorMessage(numericVar));
         }
     }
 
@@ -427,26 +427,26 @@ public class BsTypesTests
         [Test]
         public void ReturnsTrueForExceptionVariable()
         {
-            var exception = BsTypes.CreateException(_callStack, _closure, "ValueError", "Test");
+            var exception = BtlTypes.CreateException(_callStack, _closure, "ValueError", "Test");
             
-            Assert.That(BsTypes.IsException(exception), Is.True);
+            Assert.That(BtlTypes.IsException(exception), Is.True);
         }
 
         [Test]
         public void ReturnsTrueForSubclassException()
         {
-            var exception = BsTypes.CreateException(_callStack, _closure, "ValueError", "Test");
+            var exception = BtlTypes.CreateException(_callStack, _closure, "ValueError", "Test");
             
             // ValueError is a subclass of Exception
-            Assert.That(BsTypes.IsException(exception), Is.True);
+            Assert.That(BtlTypes.IsException(exception), Is.True);
         }
 
         [Test]
         public void ReturnsFalseForNonExceptionVariable()
         {
-            var intVar = BsTypes.Create(BsTypes.Types.Int, 42);
+            var intVar = BtlTypes.Create(BtlTypes.Types.Int, 42);
             
-            Assert.That(BsTypes.IsException(intVar), Is.False);
+            Assert.That(BtlTypes.IsException(intVar), Is.False);
         }
 
         [Test]
@@ -454,13 +454,13 @@ public class BsTypesTests
         {
             var numericVar = new NumericVariable(42);
             
-            Assert.That(BsTypes.IsException(numericVar), Is.False);
+            Assert.That(BtlTypes.IsException(numericVar), Is.False);
         }
 
         [Test]
         public void ReturnsFalseForNullVariable()
         {
-            Assert.That(BsTypes.IsException(null!), Is.False);
+            Assert.That(BtlTypes.IsException(null!), Is.False);
         }
     }
 }

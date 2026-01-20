@@ -30,7 +30,7 @@ public class StringInstruction : Instruction
         {
             value = StringUtilities.GetFormattedStringValue(callStack, closure, value);
         }
-        return BsTypes.Create(BsTypes.Types.String, value);
+        return BtlTypes.Create(BtlTypes.Types.String, value);
     }
     
     // All the code below is to override equality

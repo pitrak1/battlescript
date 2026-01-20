@@ -9,7 +9,7 @@ public class StringUtilitiesTests
     public class GetVariableAsString
     {
         [Test]
-        public void HandlesInternalStrings()
+        public void InternalStrings()
         {
             var (callStack, closure) = Runner.Run("");
             var input = new StringVariable("asdf");
@@ -17,43 +17,43 @@ public class StringUtilitiesTests
         }
     
         [Test]
-        public void HandlesStrings()
+        public void Strings()
         {
             var (callStack, closure) = Runner.Run("");
-            var input = BsTypes.Create(BsTypes.Types.String, new StringVariable("asdf"));
+            var input = BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdf"));
             Assert.That(StringUtilities.GetVariableAsString(callStack, closure, input), Is.EqualTo("asdf"));
         }
         
         [Test]
-        public void HandlesInts()
+        public void Ints()
         {
             var (callStack, closure) = Runner.Run("");
-            var input = BsTypes.Create(BsTypes.Types.Int, new NumericVariable(1));
+            var input = BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(1));
             Assert.That(StringUtilities.GetVariableAsString(callStack, closure, input), Is.EqualTo("1"));
         }
         
         
         [Test]
-        public void HandlesFloats()
+        public void Floats()
         {
             var (callStack, closure) = Runner.Run("");
-            var input = BsTypes.Create(BsTypes.Types.Float, new NumericVariable(1.45));
+            var input = BtlTypes.Create(BtlTypes.Types.Float, new NumericVariable(1.45));
             Assert.That(StringUtilities.GetVariableAsString(callStack, closure, input), Is.EqualTo("1.45"));
         }
         
         [Test]
-        public void HandlesTrue()
+        public void True()
         {
             var (callStack, closure) = Runner.Run("");
-            var input = BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1));
+            var input = BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1));
             Assert.That(StringUtilities.GetVariableAsString(callStack, closure, input), Is.EqualTo("True"));
         }
     
         [Test]
-        public void HandlesFalse()
+        public void False()
         {
             var (callStack, closure) = Runner.Run("");
-            var input = BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0));
+            var input = BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0));
             Assert.That(StringUtilities.GetVariableAsString(callStack, closure, input), Is.EqualTo("False"));
         }
     }
@@ -62,42 +62,42 @@ public class StringUtilitiesTests
     public class GetFormattedStringValue
     {
         [Test]
-        public void HandlesSimpleString()
+        public void SimpleString()
         {
             var (callStack, closure) = Runner.Run("");
             Assert.That(StringUtilities.GetFormattedStringValue(callStack, closure, "asdf"), Is.EqualTo("asdf"));
         }
         
         [Test]
-        public void HandlesInsertedVariable()
+        public void InsertedVariable()
         {
             var (callStack, closure) = Runner.Run("x = 5");
             Assert.That(StringUtilities.GetFormattedStringValue(callStack, closure, "asdf{x}qwer"), Is.EqualTo("asdf5qwer"));
         }
         
         [Test]
-        public void HandlesInsertedVariableAtStart()
+        public void InsertedVariableAtStart()
         {
             var (callStack, closure) = Runner.Run("x = 5");
             Assert.That(StringUtilities.GetFormattedStringValue(callStack, closure, "{x}qwer"), Is.EqualTo("5qwer"));
         }
         
         [Test]
-        public void HandlesInsertedVariableAtEnd()
+        public void InsertedVariableAtEnd()
         {
             var (callStack, closure) = Runner.Run("x = 5");
             Assert.That(StringUtilities.GetFormattedStringValue(callStack, closure, "asdf{x}"), Is.EqualTo("asdf5"));
         }
         
         [Test]
-        public void HandlesMultipleInsertedVariables()
+        public void MultipleInsertedVariables()
         {
             var (callStack, closure) = Runner.Run("x = 5\ny = 10");
             Assert.That(StringUtilities.GetFormattedStringValue(callStack, closure, "asdf{x}x{y}qwer"), Is.EqualTo("asdf5x10qwer"));
         }
         
         [Test]
-        public void HandlesInsertedExpressions()
+        public void InsertedExpressions()
         {
             var (callStack, closure) = Runner.Run("x = 5\ny = 10");
             Assert.That(StringUtilities.GetFormattedStringValue(callStack, closure, "asdf{x + y}qwer"), Is.EqualTo("asdf15qwer"));

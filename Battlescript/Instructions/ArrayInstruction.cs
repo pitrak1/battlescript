@@ -114,7 +114,7 @@ public class ArrayInstruction : Instruction
             InterpretAndAddKvp(callStack, closure, values, this);
         }
     
-        return BsTypes.Create(BsTypes.Types.Dictionary, values);
+        return BtlTypes.Create(BtlTypes.Types.Dictionary, values);
     }
     
     private void InterpretAndAddKvp(CallStack callStack, Closure closure, MappingVariable values, Instruction? instruction)
@@ -125,13 +125,13 @@ public class ArrayInstruction : Instruction
         
         var value = kvp!.Values[1]!.Interpret(callStack, closure);
         var key = kvp.Values[0]!.Interpret(callStack, closure);
-        if (BsTypes.Is(BsTypes.Types.Int, key!))
+        if (BtlTypes.Is(BtlTypes.Types.Int, key!))
         {
-            values.IntValues.Add(BsTypes.GetIntValue(key!), value!);
+            values.IntValues.Add(BtlTypes.GetIntValue(key!), value!);
         }
         else
         {
-            values.StringValues.Add(BsTypes.GetStringValue(key!), value!);
+            values.StringValues.Add(BtlTypes.GetStringValue(key!), value!);
         }
     }
 
@@ -183,7 +183,7 @@ public class ArrayInstruction : Instruction
             return value.Interpret(callStack, closure);
         });
         
-        return BsTypes.Create(BsTypes.Types.List, interpretedValues.ToList());
+        return BtlTypes.Create(BtlTypes.Types.List, interpretedValues.ToList());
     }
     
     // All the code below is to override equality

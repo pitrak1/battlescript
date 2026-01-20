@@ -9,13 +9,13 @@ public class ListOperatorsTests
     {
         var input = "x = [1, 2, 3] + [4, 5, 6]";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.List, new SequenceVariable([
-            BsTypes.Create(BsTypes.Types.Int, 1),
-            BsTypes.Create(BsTypes.Types.Int, 2),
-            BsTypes.Create(BsTypes.Types.Int, 3),
-            BsTypes.Create(BsTypes.Types.Int, 4),
-            BsTypes.Create(BsTypes.Types.Int, 5),
-            BsTypes.Create(BsTypes.Types.Int, 6)
+        var expected = BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
+            BtlTypes.Create(BtlTypes.Types.Int, 1),
+            BtlTypes.Create(BtlTypes.Types.Int, 2),
+            BtlTypes.Create(BtlTypes.Types.Int, 3),
+            BtlTypes.Create(BtlTypes.Types.Int, 4),
+            BtlTypes.Create(BtlTypes.Types.Int, 5),
+            BtlTypes.Create(BtlTypes.Types.Int, 6)
         ]));
         
         Assertions.AssertVariable(callStack, closure, "x", expected);
@@ -26,13 +26,13 @@ public class ListOperatorsTests
     {
         var input = "x = [1, 2, 3]\nx += [4, 5, 6]";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.List, new SequenceVariable([
-            BsTypes.Create(BsTypes.Types.Int, 1),
-            BsTypes.Create(BsTypes.Types.Int, 2),
-            BsTypes.Create(BsTypes.Types.Int, 3),
-            BsTypes.Create(BsTypes.Types.Int, 4),
-            BsTypes.Create(BsTypes.Types.Int, 5),
-            BsTypes.Create(BsTypes.Types.Int, 6)
+        var expected = BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
+            BtlTypes.Create(BtlTypes.Types.Int, 1),
+            BtlTypes.Create(BtlTypes.Types.Int, 2),
+            BtlTypes.Create(BtlTypes.Types.Int, 3),
+            BtlTypes.Create(BtlTypes.Types.Int, 4),
+            BtlTypes.Create(BtlTypes.Types.Int, 5),
+            BtlTypes.Create(BtlTypes.Types.Int, 6)
         ]));
         
         Assertions.AssertVariable(callStack, closure, "x", expected);
@@ -46,13 +46,13 @@ public class ListOperatorsTests
                     y = 3 * [1, 2]
                     """;
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.List, new SequenceVariable([
-            BsTypes.Create(BsTypes.Types.Int, 1),
-            BsTypes.Create(BsTypes.Types.Int, 2),
-            BsTypes.Create(BsTypes.Types.Int, 1),
-            BsTypes.Create(BsTypes.Types.Int, 2),
-            BsTypes.Create(BsTypes.Types.Int, 1),
-            BsTypes.Create(BsTypes.Types.Int, 2)
+        var expected = BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
+            BtlTypes.Create(BtlTypes.Types.Int, 1),
+            BtlTypes.Create(BtlTypes.Types.Int, 2),
+            BtlTypes.Create(BtlTypes.Types.Int, 1),
+            BtlTypes.Create(BtlTypes.Types.Int, 2),
+            BtlTypes.Create(BtlTypes.Types.Int, 1),
+            BtlTypes.Create(BtlTypes.Types.Int, 2)
         ]));
         
         Assertions.AssertVariable(callStack, closure, "x", expected);
@@ -64,13 +64,13 @@ public class ListOperatorsTests
     {
         var input = "x = [1, 2]\nx *= 3";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.List, new SequenceVariable([
-            BsTypes.Create(BsTypes.Types.Int, 1),
-            BsTypes.Create(BsTypes.Types.Int, 2),
-            BsTypes.Create(BsTypes.Types.Int, 1),
-            BsTypes.Create(BsTypes.Types.Int, 2),
-            BsTypes.Create(BsTypes.Types.Int, 1),
-            BsTypes.Create(BsTypes.Types.Int, 2)
+        var expected = BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
+            BtlTypes.Create(BtlTypes.Types.Int, 1),
+            BtlTypes.Create(BtlTypes.Types.Int, 2),
+            BtlTypes.Create(BtlTypes.Types.Int, 1),
+            BtlTypes.Create(BtlTypes.Types.Int, 2),
+            BtlTypes.Create(BtlTypes.Types.Int, 1),
+            BtlTypes.Create(BtlTypes.Types.Int, 2)
         ]));
         
         Assertions.AssertVariable(callStack, closure, "x", expected);
@@ -85,8 +85,8 @@ public class ListOperatorsTests
                     """;
         var (callStack, closure) = Runner.Run(input);
         
-        Assertions.AssertVariable(callStack, closure, "x", BsTypes.True);
-        Assertions.AssertVariable(callStack, closure, "y", BsTypes.False);
+        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
+        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.False);
     }
     
     [Test]
@@ -98,7 +98,7 @@ public class ListOperatorsTests
                     """;
         var (callStack, closure) = Runner.Run(input);
         
-        Assertions.AssertVariable(callStack, closure, "x", BsTypes.False);
-        Assertions.AssertVariable(callStack, closure, "y", BsTypes.True);
+        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.False);
+        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.True);
     }
 }

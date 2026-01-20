@@ -114,7 +114,7 @@ public class TruthinessTests
         public void NonZeroIntReturnsTrue()
         {
             var (callStack, closure) = Runner.Run("");
-            var variable = BsTypes.Create(BsTypes.Types.Int, 4);
+            var variable = BtlTypes.Create(BtlTypes.Types.Int, 4);
             var result = Truthiness.IsTruthy(callStack, closure, variable);
             Assert.IsTrue(result);
         }
@@ -123,7 +123,7 @@ public class TruthinessTests
         public void ZeroIntReturnsFalse()
         {
             var (callStack, closure) = Runner.Run("");
-            var variable = BsTypes.Create(BsTypes.Types.Int, 0);
+            var variable = BtlTypes.Create(BtlTypes.Types.Int, 0);
             var result = Truthiness.IsTruthy(callStack, closure, variable);
             Assert.IsFalse(result);
         }
@@ -132,7 +132,7 @@ public class TruthinessTests
         public void NonZeroFloatReturnsTrue()
         {
             var (callStack, closure) = Runner.Run("");
-            var variable = BsTypes.Create(BsTypes.Types.Float, 4.5);
+            var variable = BtlTypes.Create(BtlTypes.Types.Float, 4.5);
             var result = Truthiness.IsTruthy(callStack, closure, variable);
             Assert.IsTrue(result);
         }
@@ -141,7 +141,7 @@ public class TruthinessTests
         public void ZeroFloatReturnsFalse()
         {
             var (callStack, closure) = Runner.Run("");
-            var variable = BsTypes.Create(BsTypes.Types.Float, 0.0);
+            var variable = BtlTypes.Create(BtlTypes.Types.Float, 0.0);
             var result = Truthiness.IsTruthy(callStack, closure, variable);
             Assert.IsFalse(result);
         }
@@ -150,7 +150,7 @@ public class TruthinessTests
         public void TrueBoolReturnsTrue()
         {
             var (callStack, closure) = Runner.Run("");
-            var variable = BsTypes.Create(BsTypes.Types.Bool, true);
+            var variable = BtlTypes.Create(BtlTypes.Types.Bool, true);
             var result = Truthiness.IsTruthy(callStack, closure, variable);
             Assert.IsTrue(result);
         }
@@ -159,7 +159,7 @@ public class TruthinessTests
         public void FalseBoolReturnsFalse()
         {
             var (callStack, closure) = Runner.Run("");
-            var variable = BsTypes.Create(BsTypes.Types.Bool, false);
+            var variable = BtlTypes.Create(BtlTypes.Types.Bool, false);
             var result = Truthiness.IsTruthy(callStack, closure, variable);
             Assert.IsFalse(result);
         }
@@ -168,7 +168,7 @@ public class TruthinessTests
         public void NonEmptyListReturnsTrue()
         {
             var (callStack, closure) = Runner.Run("");
-            var variable = BsTypes.Create(BsTypes.Types.List, new SequenceVariable(new List<Variable?>()
+            var variable = BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable(new List<Variable?>()
             {
                 new NumericVariable(1)
             }));
@@ -180,7 +180,7 @@ public class TruthinessTests
         public void EmptyListReturnsFalse()
         {
             var (callStack, closure) = Runner.Run("");
-            var variable = BsTypes.Create(BsTypes.Types.List, new SequenceVariable(new List<Variable?>()));
+            var variable = BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable(new List<Variable?>()));
             var result = Truthiness.IsTruthy(callStack, closure, variable);
             Assert.IsFalse(result);
         }
@@ -189,7 +189,7 @@ public class TruthinessTests
         public void NonEmptyStringReturnsTrue()
         {
             var (callStack, closure) = Runner.Run("");
-            var variable = BsTypes.Create(BsTypes.Types.String, new StringVariable("Hello"));
+            var variable = BtlTypes.Create(BtlTypes.Types.String, new StringVariable("Hello"));
             var result = Truthiness.IsTruthy(callStack, closure, variable);
             Assert.IsTrue(result);
         }
@@ -198,7 +198,7 @@ public class TruthinessTests
         public void EmptyStringReturnsFalse()
         {
             var (callStack, closure) = Runner.Run("");
-            var variable = BsTypes.Create(BsTypes.Types.String, new StringVariable(""));
+            var variable = BtlTypes.Create(BtlTypes.Types.String, new StringVariable(""));
             var result = Truthiness.IsTruthy(callStack, closure, variable);
             Assert.IsFalse(result);
         }

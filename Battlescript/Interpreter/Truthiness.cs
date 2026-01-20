@@ -25,7 +25,7 @@ public static class Truthiness
                 if (boolFunc is FunctionVariable funcVariable)
                 {
                     var result = funcVariable.RunFunction(callStack, closure, new ArgumentSet([]), inst);
-                    return BsTypes.Is(BsTypes.Types.Bool, result) && BsTypes.GetBoolValue(result);
+                    return BtlTypes.Is(BtlTypes.Types.Bool, result) && BtlTypes.GetBoolValue(result);
                 }
                 return true;
             default:

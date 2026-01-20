@@ -32,49 +32,49 @@ public class IntTests
         public void Add()
         {
             var (callStack, closure) = Runner.Run("x = 5 + 3");
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(8)));
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(8)));
         }
     
         [Test]
         public void Subtract()
         {
             var (callStack, closure) = Runner.Run("x = 5 - 3");
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(2)));
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(2)));
         }
     
         [Test]
         public void Multiply()
         {
             var (callStack, closure) = Runner.Run("x = 5 * 3");
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(15)));
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(15)));
         }
 
         [Test]
         public void TrueDivide()
         {
             var (callStack, closure) = Runner.Run("x = 6 / 3");
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(2.0)));
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Float, new NumericVariable(2.0)));
         }
         
         [Test]
         public void FloorDivide()
         {
             var (callStack, closure) = Runner.Run("x = 9 // 2");
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(4)));
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(4)));
         }
         
         [Test]
         public void Modulo()
         {
             var (callStack, closure) = Runner.Run("x = 9 % 2");
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(1)));
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(1)));
         }
         
         [Test]
         public void Power()
         {
             var (callStack, closure) = Runner.Run("x = 2 ** 3");
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(8)));
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(8)));
         }
         
         [Test]
@@ -84,7 +84,7 @@ public class IntTests
                                     x = 5
                                     y = -x
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(-5)));
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(-5)));
         }
 
         [Test]
@@ -94,7 +94,7 @@ public class IntTests
                                     x = 5
                                     y = +x
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(5)));
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(5)));
         }
 
         [Test]
@@ -104,8 +104,8 @@ public class IntTests
                                     a = 5 == 5
                                     b = 5 == 6
                                     """);
-            Assertions.AssertVariable(callStack, closure, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
-            Assertions.AssertVariable(callStack, closure, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(callStack, closure, "a", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(callStack, closure, "b", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0)));
         }
         
         [Test]
@@ -115,8 +115,8 @@ public class IntTests
                                     a = 5 != 5
                                     b = 5 != 6
                                     """);
-            Assertions.AssertVariable(callStack, closure, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
-            Assertions.AssertVariable(callStack, closure, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(callStack, closure, "a", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(callStack, closure, "b", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1)));
         }
         
         [Test]
@@ -127,9 +127,9 @@ public class IntTests
                                     b = 5 < 5
                                     c = 5 < 6
                                     """);
-            Assertions.AssertVariable(callStack, closure, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
-            Assertions.AssertVariable(callStack, closure, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
-            Assertions.AssertVariable(callStack, closure, "c", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(callStack, closure, "a", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(callStack, closure, "b", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(callStack, closure, "c", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1)));
         }
 
         [Test]
@@ -140,9 +140,9 @@ public class IntTests
                                     b = 5 <= 5
                                     c = 5 <= 6
                                     """);
-            Assertions.AssertVariable(callStack, closure, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
-            Assertions.AssertVariable(callStack, closure, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
-            Assertions.AssertVariable(callStack, closure, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(callStack, closure, "a", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(callStack, closure, "b", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(callStack, closure, "b", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1)));
         }
         
         [Test]
@@ -153,9 +153,9 @@ public class IntTests
                                     b = 5 > 5
                                     c = 5 > 6
                                     """);
-            Assertions.AssertVariable(callStack, closure, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
-            Assertions.AssertVariable(callStack, closure, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
-            Assertions.AssertVariable(callStack, closure, "c", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(callStack, closure, "a", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(callStack, closure, "b", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(callStack, closure, "c", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0)));
         }
         [Test]
         public void GreaterThanOrEqual()
@@ -165,9 +165,9 @@ public class IntTests
                                     b = 5 >= 5
                                     c = 5 >= 6
                                     """);
-            Assertions.AssertVariable(callStack, closure, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
-            Assertions.AssertVariable(callStack, closure, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
-            Assertions.AssertVariable(callStack, closure, "c", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(callStack, closure, "a", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(callStack, closure, "b", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(callStack, closure, "c", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0)));
         }
         
         [Test]
@@ -177,7 +177,7 @@ public class IntTests
                                     x = 5
                                     x += 3
                                     """);
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(8)));
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(8)));
         }
         
         [Test]
@@ -187,7 +187,7 @@ public class IntTests
                                     x = 5
                                     x -= 3
                                     """);
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(2)));
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(2)));
         }
         
         [Test]
@@ -197,7 +197,7 @@ public class IntTests
                                     x = 5
                                     x *= 3
                                     """);
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(15)));
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(15)));
         }
         
         [Test]
@@ -207,7 +207,7 @@ public class IntTests
                                     x = 6
                                     x /= 3
                                     """);
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Float, new NumericVariable(2.0)));
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Float, new NumericVariable(2.0)));
         }
         
         [Test]
@@ -217,7 +217,7 @@ public class IntTests
                                     x = 9
                                     x //= 2
                                     """);
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(4)));
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(4)));
         }
         
         [Test]
@@ -227,7 +227,7 @@ public class IntTests
                                     x = 9
                                     x %= 2
                                     """);
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(1)));
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(1)));
         }
         
         [Test]
@@ -237,7 +237,7 @@ public class IntTests
                                     x = 2
                                     x **= 3
                                     """);
-            Assertions.AssertVariable(callStack, closure, "x", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(8)));
+            Assertions.AssertVariable(callStack, closure, "x", BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(8)));
         }
     }
 
@@ -250,7 +250,7 @@ public class IntTests
                                     x = 5
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1)));
         }
 
         [Test]
@@ -260,7 +260,7 @@ public class IntTests
                                     x = 0
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0)));
         }
     }
     
@@ -273,7 +273,7 @@ public class IntTests
                                     x = __btl_string__("1")
                                     y = int(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(1)));
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(1)));
         }
 
         [Test]
@@ -283,7 +283,7 @@ public class IntTests
                                     x = "5"
                                     y = int(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(5)));
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(5)));
         }
         
         [Test]
@@ -293,7 +293,7 @@ public class IntTests
                                     x = __btl_numeric__(4)
                                     y = int(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(4)));
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(4)));
         }
         
         [Test]
@@ -303,7 +303,7 @@ public class IntTests
                                     x = 5.98
                                     y = int(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Int, new NumericVariable(5)));
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(5)));
         }
     }
 }

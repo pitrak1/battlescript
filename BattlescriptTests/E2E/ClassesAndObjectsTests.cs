@@ -17,7 +17,7 @@ public static class ClassesAndObjectsTests
             var expected = new ClassVariable("asdf",
                 new Dictionary<string, Variable>()
                 {
-                    {"i", BsTypes.Create(BsTypes.Types.Int, 1234)}
+                    {"i", BtlTypes.Create(BtlTypes.Types.Int, 1234)}
                 }, closure);
             
             Assertions.AssertVariable(callStack, closure, "asdf", expected);
@@ -30,7 +30,7 @@ public static class ClassesAndObjectsTests
             var (callStack, closure) = Runner.Run(input);
             var values = new Dictionary<string, Variable>()
             {
-                { "i", BsTypes.Create(BsTypes.Types.Int, 1234) }
+                { "i", BtlTypes.Create(BtlTypes.Types.Int, 1234) }
             };
             var expected = new ObjectVariable(
                 values,
@@ -53,12 +53,12 @@ public static class ClassesAndObjectsTests
             var (callStack, closure) = Runner.Run(input);
             var classValues = new Dictionary<string, Variable>()
             {
-                { "i", BsTypes.Create(BsTypes.Types.Int, 1234) },
+                { "i", BtlTypes.Create(BtlTypes.Types.Int, 1234) },
                 { "j", new FunctionVariable("j", closure, new ParameterSet(), [new ReturnInstruction(new NumericInstruction(5))])}
             };
             var objectValues = new Dictionary<string, Variable>()
             {
-                { "i", BsTypes.Create(BsTypes.Types.Int, 1234) }
+                { "i", BtlTypes.Create(BtlTypes.Types.Int, 1234) }
             };
             
             var expected = new ObjectVariable(
@@ -73,7 +73,7 @@ public static class ClassesAndObjectsTests
         {
             var input = "class asdf:\n\ti = 1234\nx = asdf()\ny = x.i";
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 1234);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 1234);
             
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
@@ -86,7 +86,7 @@ public static class ClassesAndObjectsTests
             var expected = new ClassVariable("asdf",
                 new Dictionary<string, Variable>()
                 {
-                    { "i", BsTypes.Create(BsTypes.Types.Int, 1234) }
+                    { "i", BtlTypes.Create(BtlTypes.Types.Int, 1234) }
                 },
                 closure
             );
@@ -109,7 +109,7 @@ public static class ClassesAndObjectsTests
 
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 2345);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 2345);
             Assertions.AssertVariable(callStack, closure, "y", expected);
         }
     }
@@ -127,7 +127,7 @@ public static class ClassesAndObjectsTests
                         x = z.y
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 5);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 5);
             
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
@@ -145,7 +145,7 @@ public static class ClassesAndObjectsTests
                         x = z.y
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 6);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 6);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
@@ -162,7 +162,7 @@ public static class ClassesAndObjectsTests
                         x = z.y
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 9);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 9);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
@@ -180,12 +180,12 @@ public static class ClassesAndObjectsTests
             var superclass = new ClassVariable(
                 "asdf", new Dictionary<string, Variable>()
                 {
-                    { "i", BsTypes.Create(BsTypes.Types.Int, 1234) }
+                    { "i", BtlTypes.Create(BtlTypes.Types.Int, 1234) }
                 }, closure);
             var expected = new ClassVariable("qwer",
                 new Dictionary<string, Variable>()
                 {
-                    { "j", BsTypes.Create(BsTypes.Types.Int, 2345) }
+                    { "j", BtlTypes.Create(BtlTypes.Types.Int, 2345) }
                 }, closure, [superclass]);
             Assertions.AssertVariable(callStack, closure, "qwer", expected);
         }
@@ -205,7 +205,7 @@ public static class ClassesAndObjectsTests
                         x = z.y
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 9);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 9);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
     }
@@ -228,7 +228,7 @@ public static class ClassesAndObjectsTests
                         x = z + y
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, 10);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, 10);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
@@ -246,7 +246,7 @@ public static class ClassesAndObjectsTests
                         x = -z
                         """;
             var (callStack, closure) = Runner.Run(input);
-            var expected = BsTypes.Create(BsTypes.Types.Int, -5);
+            var expected = BtlTypes.Create(BtlTypes.Types.Int, -5);
             Assertions.AssertVariable(callStack, closure, "x", expected);
         }
         
@@ -268,7 +268,7 @@ public static class ClassesAndObjectsTests
 //                           x = z.i
 //                           """;
 //               var callStack = Runner.Run(input);
-//               var expected = BuiltInTypeHelper.Create(callStack, BsTypes.Types.Int, 10);
+//               var expected = BuiltInTypeHelper.Create(callStack, BtlTypes.Types.Int, 10);
 //               Assert.That(callStack.Scopes[0], Contains.Key("x"));
 //               Assert.That(callStack.Scopes[0]["x"], Is.EqualTo(expected));
 //           }

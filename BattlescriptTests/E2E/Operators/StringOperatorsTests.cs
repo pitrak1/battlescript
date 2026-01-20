@@ -9,7 +9,7 @@ public class StringOperatorsTests
     {
         var input = "x = 'asdf' + 'qwer'";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.String, new StringVariable("asdfqwer"));
+        var expected = BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdfqwer"));
         
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
@@ -19,7 +19,7 @@ public class StringOperatorsTests
     {
         var input = "x = 'asdf'\nx += 'qwer'";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.String, new StringVariable("asdfqwer"));
+        var expected = BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdfqwer"));
         
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
@@ -32,7 +32,7 @@ public class StringOperatorsTests
                     y = 3 * 'asdf'
                     """;
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.String, new StringVariable("asdfasdfasdf"));
+        var expected = BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdfasdfasdf"));
         
         Assertions.AssertVariable(callStack, closure, "x", expected);
         Assertions.AssertVariable(callStack, closure, "y", expected);
@@ -43,7 +43,7 @@ public class StringOperatorsTests
     {
         var input = "x = 'asdf'\nx *= 3";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.String, new StringVariable("asdfasdfasdf"));
+        var expected = BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdfasdfasdf"));
         
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
@@ -57,8 +57,8 @@ public class StringOperatorsTests
                     """;
         var (callStack, closure) = Runner.Run(input);
 
-        Assertions.AssertVariable(callStack, closure, "x", BsTypes.True);
-        Assertions.AssertVariable(callStack, closure, "y", BsTypes.False);
+        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.True);
+        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.False);
     }
     
     [Test]
@@ -70,7 +70,7 @@ public class StringOperatorsTests
                     """;
         var (callStack, closure) = Runner.Run(input);
 
-        Assertions.AssertVariable(callStack, closure, "x", BsTypes.False);
-        Assertions.AssertVariable(callStack, closure, "y", BsTypes.True);
+        Assertions.AssertVariable(callStack, closure, "x", BtlTypes.False);
+        Assertions.AssertVariable(callStack, closure, "y", BtlTypes.True);
     }
 }

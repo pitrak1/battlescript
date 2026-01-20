@@ -6,7 +6,7 @@ namespace BattlescriptTests.ParserTests;
 public class InstructionFactoryTests
 {
     [Test]
-    public void HandlesNoTokens()
+    public void NoTokens()
     {
         Assert.That(InstructionFactory.Create([]), Is.Null);
     }

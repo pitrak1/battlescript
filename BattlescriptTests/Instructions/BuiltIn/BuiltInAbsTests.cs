@@ -11,7 +11,7 @@ public class BuiltInAbsTests
     {
         var input = "x = abs(5)";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.Int, new NumericVariable(5));
+        var expected = BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(5));
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
     
@@ -20,7 +20,7 @@ public class BuiltInAbsTests
     {
         var input = "x = abs(-5)";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.Int, new NumericVariable(5));
+        var expected = BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(5));
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
     
@@ -29,7 +29,7 @@ public class BuiltInAbsTests
     {
         var input = "x = abs(5.5)";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.Float, new NumericVariable(5.5));
+        var expected = BtlTypes.Create(BtlTypes.Types.Float, new NumericVariable(5.5));
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
     
@@ -38,7 +38,7 @@ public class BuiltInAbsTests
     {
         var input = "x = abs(-5.5)";
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.Float, new NumericVariable(5.5));
+        var expected = BtlTypes.Create(BtlTypes.Types.Float, new NumericVariable(5.5));
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
 
@@ -54,7 +54,7 @@ public class BuiltInAbsTests
                     x = abs(z)
                     """;
         var (callStack, closure) = Runner.Run(input);
-        var expected = BsTypes.Create(BsTypes.Types.Int, new NumericVariable(5));
+        var expected = BtlTypes.Create(BtlTypes.Types.Int, new NumericVariable(5));
         Assertions.AssertVariable(callStack, closure, "x", expected);
     }
 

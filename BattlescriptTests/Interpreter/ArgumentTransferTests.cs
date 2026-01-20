@@ -23,8 +23,8 @@ public class ArgumentTransferTests
             var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
             var expected = new Dictionary<string, Variable>()
             {
-                { "asdf", BsTypes.Create(BsTypes.Types.Int, 1234) },
-                { "qwer", BsTypes.Create(BsTypes.Types.String, "asdf") }
+                { "asdf", BtlTypes.Create(BtlTypes.Types.Int, 1234) },
+                { "qwer", BtlTypes.Create(BtlTypes.Types.String, "asdf") }
             };
             Assertions.AssertVariableDictionariesEqual(result, expected);
         }
@@ -46,8 +46,8 @@ public class ArgumentTransferTests
             var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
             var expected = new Dictionary<string, Variable>()
             {
-                { "asdf", BsTypes.Create(BsTypes.Types.Int, 1234) },
-                { "qwer", BsTypes.Create(BsTypes.Types.String, "asdf") }
+                { "asdf", BtlTypes.Create(BtlTypes.Types.Int, 1234) },
+                { "qwer", BtlTypes.Create(BtlTypes.Types.String, "asdf") }
             };
             Assertions.AssertVariableDictionariesEqual(result, expected);
         }
@@ -69,8 +69,8 @@ public class ArgumentTransferTests
             var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
             var expected = new Dictionary<string, Variable>()
             {
-                { "asdf", BsTypes.Create(BsTypes.Types.Int, 1234) },
-                { "qwer", BsTypes.Create(BsTypes.Types.String, "asdf") }
+                { "asdf", BtlTypes.Create(BtlTypes.Types.Int, 1234) },
+                { "qwer", BtlTypes.Create(BtlTypes.Types.String, "asdf") }
             };
             Assertions.AssertVariableDictionariesEqual(result, expected);
         }
@@ -91,8 +91,8 @@ public class ArgumentTransferTests
             var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
             var expected = new Dictionary<string, Variable>()
             {
-                { "asdf", BsTypes.Create(BsTypes.Types.Int, 1234) },
-                { "qwer", BsTypes.Create(BsTypes.Types.String, "asdf") }
+                { "asdf", BtlTypes.Create(BtlTypes.Types.Int, 1234) },
+                { "qwer", BtlTypes.Create(BtlTypes.Types.String, "asdf") }
             };
             Assertions.AssertVariableDictionariesEqual(result, expected);
         }
@@ -114,8 +114,8 @@ public class ArgumentTransferTests
             var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
             var expected = new Dictionary<string, Variable>()
             {
-                { "asdf", BsTypes.Create(BsTypes.Types.Int, 1234) },
-                { "qwer", BsTypes.Create(BsTypes.Types.Int, 5678) }
+                { "asdf", BtlTypes.Create(BtlTypes.Types.Int, 1234) },
+                { "qwer", BtlTypes.Create(BtlTypes.Types.Int, 5678) }
             };
             Assertions.AssertVariableDictionariesEqual(result, expected);
         }

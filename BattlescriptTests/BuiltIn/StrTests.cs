@@ -15,8 +15,8 @@ public class StrTests
                                     a = "asdf" == "asdf"
                                     b = "asdf" == "qwer"
                                     """);
-            Assertions.AssertVariable(callStack, closure, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
-            Assertions.AssertVariable(callStack, closure, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(callStack, closure, "a", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(callStack, closure, "b", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0)));
         }
 
         [Test]
@@ -26,8 +26,8 @@ public class StrTests
                                     a = "asdf" != "asdf"
                                     b = "asdf" != "qwer"
                                     """);
-            Assertions.AssertVariable(callStack, closure, "a", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
-            Assertions.AssertVariable(callStack, closure, "b", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(callStack, closure, "a", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(callStack, closure, "b", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1)));
         }
 
         [Test]
@@ -35,7 +35,7 @@ public class StrTests
         {
             var (callStack, closure) = Runner.Run("x = 'asdf' + 'qwer'");
             Assertions.AssertVariable(callStack, closure, "x",
-                BsTypes.Create(BsTypes.Types.String, new StringVariable("asdfqwer")));
+                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdfqwer")));
         }
 
         [Test]
@@ -46,9 +46,9 @@ public class StrTests
                                     y = 3 * 'asdf'
                                     """);
             Assertions.AssertVariable(callStack, closure, "x",
-                BsTypes.Create(BsTypes.Types.String, new StringVariable("asdfasdf")));
+                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdfasdf")));
             Assertions.AssertVariable(callStack, closure, "y",
-                BsTypes.Create(BsTypes.Types.String, new StringVariable("asdfasdfasdf")));
+                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdfasdfasdf")));
         }
     }
 
@@ -62,7 +62,7 @@ public class StrTests
                                     x = "asdf"
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(1)));
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(1)));
         }
         
         [Test]
@@ -72,7 +72,7 @@ public class StrTests
                                     x = ""
                                     y = bool(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.Bool, new NumericVariable(0)));
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.Bool, new NumericVariable(0)));
         }
     }
 
@@ -86,7 +86,7 @@ public class StrTests
                                     x = __btl_string__("hello")
                                     y = str(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("hello")));
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.String, new StringVariable("hello")));
         }
 
         [Test]
@@ -96,7 +96,7 @@ public class StrTests
                                     x = "hello"
                                     y = str(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("hello")));
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.String, new StringVariable("hello")));
         }
         
         [Test]
@@ -106,7 +106,7 @@ public class StrTests
                                     x = __btl_numeric__(1)
                                     y = str(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("1")));
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.String, new StringVariable("1")));
         }
         
         [Test]
@@ -116,7 +116,7 @@ public class StrTests
                                     x = 1
                                     y = str(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("1")));
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.String, new StringVariable("1")));
         }
         
         [Test]
@@ -126,7 +126,7 @@ public class StrTests
                                     x = 1.5
                                     y = str(x)
                                     """);
-            Assertions.AssertVariable(callStack, closure, "y", BsTypes.Create(BsTypes.Types.String, new StringVariable("1.5")));
+            Assertions.AssertVariable(callStack, closure, "y", BtlTypes.Create(BtlTypes.Types.String, new StringVariable("1.5")));
         }
     }
 }

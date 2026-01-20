@@ -9,7 +9,7 @@ public static class VariableInstructionTests
     public class Parse
     {
         [Test]
-        public void HandlesSimpleName()
+        public void SimpleName()
         {
             var expected = new VariableInstruction("asdf");
             Assertions.AssertInputProducesParserOutput("asdf", expected);

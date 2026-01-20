@@ -56,7 +56,7 @@ public static class Postlexer
             if (IsBuiltInToken() && IsNextTokenNotCloseParens())
             {
                 throw new InternalRaiseException(
-                    BsTypes.Types.SyntaxError, 
+                    BtlTypes.Types.SyntaxError, 
                     $"Missing parentheses in call to '{tokens[i].Value}'");
             }
             i++;
@@ -87,7 +87,7 @@ public static class Postlexer
                 if (bracketStack.Count == 0)
                 {
                     var message = "closing parenthesis '" + token.Value + "' has no matching opening parenthesis";
-                    throw new InternalRaiseException(BsTypes.Types.SyntaxError, message);
+                    throw new InternalRaiseException(BtlTypes.Types.SyntaxError, message);
                 } else if (MatchesPreviousOpeningBracket(token))
                 {
                     bracketStack.RemoveAt(bracketStack.Count - 1);
@@ -95,14 +95,14 @@ public static class Postlexer
                 else
                 {
                     var message = "closing parenthesis '" + token.Value + "' does not match opening parenthesis '" + bracketStack[^1] + "'";
-                    throw new InternalRaiseException(BsTypes.Types.SyntaxError, message);
+                    throw new InternalRaiseException(BtlTypes.Types.SyntaxError, message);
                 }
             }
         }
 
         if (bracketStack.Count != 0)
         {
-            throw new InternalRaiseException(BsTypes.Types.SyntaxError, "unexpected EOF while parsing");
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "unexpected EOF while parsing");
         }
 
         return;
