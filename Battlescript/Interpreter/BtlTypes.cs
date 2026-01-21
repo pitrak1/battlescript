@@ -19,59 +19,34 @@ public static class BtlTypes
         NameError,
         NoneType,
     }
-    
-    public static readonly string[] TypeStrings = [
-        "numeric", 
-        "int", 
-        "float", 
-        "bool", 
-        "list", 
-        "dict", 
-        "str", 
-        "Exception", 
-        "SyntaxError",
-        "AssertionError",
-        "ValueError",
-        "TypeError",
-        "NameError",
-        "NoneType",
+
+    // Load order matters for built-in initialization
+    private static readonly (string Name, Types Type)[] TypeMappings = [
+        ("numeric", Types.Numeric),
+        ("int", Types.Int),
+        ("float", Types.Float),
+        ("bool", Types.Bool),
+        ("list", Types.List),
+        ("dict", Types.Dictionary),
+        ("str", Types.String),
+        ("Exception", Types.Exception),
+        ("SyntaxError", Types.SyntaxError),
+        ("AssertionError", Types.AssertionError),
+        ("ValueError", Types.ValueError),
+        ("TypeError", Types.TypeError),
+        ("NameError", Types.NameError),
+        ("NoneType", Types.NoneType),
     ];
-    
-    public static readonly Dictionary<string, Types> StringsToTypes = new() {
-        {"int", Types.Int},
-        {"float", Types.Float},
-        {"bool", Types.Bool},
-        {"list", Types.List},
-        {"Exception", Types.Exception},
-        {"dict", Types.Dictionary},
-        {"str", Types.String},
-        {"numeric", Types.Numeric},
-        {"SyntaxError", Types.SyntaxError},
-        {"AssertionError", Types.AssertionError},
-        {"ValueError", Types.ValueError},
-        {"TypeError", Types.TypeError},
-        {"NameError", Types.NameError},
-        {"NoneType", Types.NoneType},
-    };
-    
-    public static readonly Dictionary<Types, string> TypesToStrings = new() {
-        {Types.Int, "int"},
-        {Types.Float, "float"},
-        {Types.Bool, "bool"},
-        {Types.List, "list"},
-        {Types.Exception, "Exception"},
-        {Types.Dictionary, "dict"},
-        {Types.String, "str"},
-        {Types.Numeric, "numeric"},
-        {Types.SyntaxError, "SyntaxError"},
-        {Types.AssertionError, "AssertionError"},
-        {Types.ValueError, "ValueError"},
-        {Types.TypeError, "TypeError"},
-        {Types.NameError, "NameError"},
-        {Types.NoneType, "NoneType"},
-    };
-    
-    public static Dictionary<Types, ClassVariable> TypeReferences = [];
+
+    public static readonly string[] TypeStrings = TypeMappings.Select(t => t.Name).ToArray();
+
+    public static readonly Dictionary<string, Types> StringsToTypes =
+        TypeMappings.ToDictionary(t => t.Name, t => t.Type);
+
+    public static readonly Dictionary<Types, string> TypesToStrings =
+        TypeMappings.ToDictionary(t => t.Type, t => t.Name);
+
+    private static readonly Dictionary<Types, ClassVariable> TypeReferences = [];
 
     public static Variable True;
     public static Variable False;
@@ -101,139 +76,63 @@ public static class BtlTypes
         var builtInClass = TypeReferences[type];
         var objectVariable = builtInClass.CreateObject();
 
-        if (value is int || value is double)
+        objectVariable.Values["__btl_value"] = value switch
         {
-            objectVariable.Values["__btl_value"] = new NumericVariable(value);
-            return objectVariable;
-        } else if (value is bool)
-        {
-            objectVariable.Values["__btl_value"] = new NumericVariable(value ? 1 : 0);
-            return objectVariable;
-        } else if (value is List<Variable>)
-        {
-            objectVariable.Values["__btl_value"] = new SequenceVariable(value);
-            return objectVariable;
-        } else if (value is string)
-        {
-            objectVariable.Values["__btl_value"] = new StringVariable(value);
-            return objectVariable;
-        }
-        
-        objectVariable.Values["__btl_value"] = value;
+            int i => new NumericVariable(i),
+            double d => new NumericVariable(d),
+            bool b => new NumericVariable(b ? 1 : 0),
+            List<Variable> list => new SequenceVariable(list),
+            string s => new StringVariable(s),
+            _ => value
+        };
+
         return objectVariable;
     }
 
     public static Variable CreateException(CallStack callStack, Closure closure, string type, string message)
     {
-        var exceptionType = closure.GetVariable(callStack, type);
-        if (exceptionType is ClassVariable classVariable)
-        {
-            var objectVariable = classVariable.CreateObject();
-            objectVariable.Values["message"] = Create(Types.String, message);
-            return objectVariable;
-        }
-        else {
+        if (closure.GetVariable(callStack, type) is not ClassVariable classVariable)
             throw new Exception("Invalid exception type");
-        }
-    }
-    
-    public static int GetIntValue(Variable variable)
-    {
-        if (Is(Types.Int, variable) && variable is ObjectVariable objectVariable)
-        {
-            var valueVariable = objectVariable.Values["__btl_value"];
-            return ((NumericVariable)valueVariable).Value;
-        }
-        else
-        {
-            throw new Exception("Variable is not an int");
-        }
-    }
-    
-    public static double GetFloatValue(Variable variable)
-    {
-        if (Is(Types.Float, variable) && variable is ObjectVariable objectVariable)
-        {
-            var valueVariable = objectVariable.Values["__btl_value"];
-            return ((NumericVariable)valueVariable).Value;
-        }
-        else
-        {
-            throw new Exception("Variable is not a float");
-        }
-    }
-    
-    public static bool GetBoolValue(Variable variable)
-    {
-        if (Is(Types.Bool, variable) && variable is ObjectVariable objectVariable)
-        {
-            var valueVariable = objectVariable.Values["__btl_value"];
-            return ((NumericVariable)valueVariable).Value != 0;
-        }
-        else
-        {
-            throw new Exception("Variable is not a bool");
-        }
+
+        var objectVariable = classVariable.CreateObject();
+        objectVariable.Values["message"] = Create(Types.String, message);
+        return objectVariable;
     }
 
-    public static SequenceVariable GetListValue(Variable variable)
-    {
-        if (Is(Types.List, variable) && variable is ObjectVariable objectVariable)
-        {
-            var valueVariable = objectVariable.Values["__btl_value"] as SequenceVariable;
-            return valueVariable!;
-        }
-        else
-        {
-            throw new Exception("Variable is not a list");
-        }
-    }
-    
-    public static MappingVariable GetDictValue(Variable variable)
-    {
-        if (Is(Types.Dictionary, variable) && variable is ObjectVariable objectVariable)
-        {
-            var valueVariable = objectVariable.Values["__btl_value"] as MappingVariable;
-            return valueVariable!;
-        }
-        else
-        {
-            throw new Exception("Variable is not a dict");
-        }
-    }
-    
-    public static string GetStringValue(Variable variable)
-    {
-        if (Is(Types.String, variable) && variable is ObjectVariable objectVariable)
-        {
-            var valueVariable = objectVariable.Values["__btl_value"] as StringVariable;
-            return valueVariable!.Value;
-        }
-        else
-        {
-            throw new Exception("Variable is not a str");
-        }
-    }
-    
+    public static int GetIntValue(Variable variable) =>
+        GetInnerValue<NumericVariable>(Types.Int, variable).Value;
+
+    public static double GetFloatValue(Variable variable) =>
+        GetInnerValue<NumericVariable>(Types.Float, variable).Value;
+
+    public static bool GetBoolValue(Variable variable) =>
+        GetInnerValue<NumericVariable>(Types.Bool, variable).Value != 0;
+
+    public static SequenceVariable GetListValue(Variable variable) =>
+        GetInnerValue<SequenceVariable>(Types.List, variable);
+
+    public static MappingVariable GetDictValue(Variable variable) =>
+        GetInnerValue<MappingVariable>(Types.Dictionary, variable);
+
+    public static string GetStringValue(Variable variable) =>
+        GetInnerValue<StringVariable>(Types.String, variable).Value;
+
     public static string GetErrorMessage(Variable variable)
     {
-        if (IsException(variable) && variable is ObjectVariable objectVariable)
-        {
-            var messageVariable = objectVariable.Values["message"] as ObjectVariable;
-            return GetStringValue(messageVariable);
-        }
-        else
-        {
+        if (!IsException(variable) || variable is not ObjectVariable objectVariable)
             throw new Exception("Variable is not an exception");
-        }
+
+        return GetStringValue((ObjectVariable)objectVariable.Values["message"]);
     }
 
-    public static bool IsException(Variable variable)
+    public static bool IsException(Variable variable) =>
+        variable is ObjectVariable obj && obj.IsInstance(TypeReferences[Types.Exception]);
+
+    private static T GetInnerValue<T>(Types type, Variable variable) where T : Variable
     {
-        if (variable is ObjectVariable objectVariable)
-        {
-            return objectVariable.IsInstance(TypeReferences[Types.Exception]);
-        }
-        return false;
+        if (!Is(type, variable) || variable is not ObjectVariable objectVariable)
+            throw new Exception($"Variable is not a {TypesToStrings[type]}");
+
+        return (T)objectVariable.Values["__btl_value"];
     }
 }
