@@ -8,7 +8,7 @@ public class OperationInstruction : Instruction, IEquatable<OperationInstruction
 
     public OperationInstruction(List<Token> tokens) : base(tokens)
     {
-        var operatorIndex = InstructionUtilities.GetOperatorIndex(tokens);
+        var operatorIndex = InstructionUtilities.GetLowestPriorityOperatorIndex(tokens);
         var operatorToken = tokens[operatorIndex];
         var result = InstructionUtilities.ParseLeftAndRightAroundIndex(tokens, operatorIndex);
 

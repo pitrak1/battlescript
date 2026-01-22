@@ -15,7 +15,7 @@ public static class InstructionFactory
         );
         var colonIndex = InstructionUtilities.GetTokenIndex(tokens, [":"]);
         var commaIndex = InstructionUtilities.GetTokenIndex(tokens, [","]);
-        var operatorIndex = InstructionUtilities.GetOperatorIndex(tokens);
+        var operatorIndex = InstructionUtilities.GetLowestPriorityOperatorIndex(tokens);
         
         if (assignmentIndex != -1)
         {
