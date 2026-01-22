@@ -78,9 +78,13 @@ public static class InstructionUtilities
         int index)
     {
         var effectiveOperator = IsUnaryOperator(tokens, index) ? operatorValue + "1" : operatorValue;
-        var priority = Array.FindIndex(Consts.OperatorPriority, op => op == effectiveOperator);
 
-        return (priority != -1 && priority < current.Priority) ? (priority, index) : current;
+        if (!Consts.OperatorPriority.TryGetValue(effectiveOperator, out var priority))
+        {
+            return current;
+        }
+
+        return priority < current.Priority ? (priority, index) : current;
     }
     
     private static bool IsUnaryOperator(List<Token> tokens, int index)

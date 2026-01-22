@@ -1,32 +1,23 @@
 namespace Battlescript;
 
-// Inclusive would be a search that continues until a character is not in the collection, whereas
-// an Exclusive would continue until a character is in the collection
-public enum CollectionType
-{
-    Inclusive,
-    Exclusive
-}
-
 public static class LexerUtilities
 {
-    public static (int Length, string Result) GetNextCharactersInCollection(
-        string input, 
-        int index, 
-        char[] collection, 
-        CollectionType type = CollectionType.Inclusive,
-        bool includeEscapes = false)
+    public static (int Length, string Result) GetNextCharactersWhile(
+        string input,
+        int index,
+        Func<char, bool> predicate,
+        bool allowEscapes = false)
     {
         var startingIndex = index;
         var result = "";
         while (index < input.Length)
         {
-            if (includeEscapes && input[index] == '\\')
+            if (allowEscapes && input[index] == '\\')
             {
                 result += input[index + 1].ToString();
                 index += 2;
             }
-            else if (BreakingCharacterFound(input[index]))
+            else if (!predicate(input[index]))
             {
                 break;
             }
@@ -38,20 +29,13 @@ public static class LexerUtilities
         }
 
         return (index - startingIndex, result);
-        
-        bool BreakingCharacterFound(char current)
-        {
-            // If collection type is Exclusive and the current character is in the collection or if
-            // collection type is Inclusive and the current character is not in the collection
-            return collection.Contains(current) == (type == CollectionType.Exclusive);
-        }
     }
 
     public static (int Length, string Result) GetStringWithEscapes(string input, int index)
     {
-        // This is searching for a quote character matching the character at index
-        var result = GetNextCharactersInCollection(input, index + 1, [input[index]], CollectionType.Exclusive, true);
-        
+        var quoteChar = input[index];
+        var result = GetNextCharactersWhile(input, index + 1, c => c != quoteChar, allowEscapes: true);
+
         if (index + result.Length + 1 >= input.Length)
         {
             throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "EOL while scanning string literal");
@@ -62,10 +46,10 @@ public static class LexerUtilities
     
     public static (int Length, string Result) GetIndentValue(string input, int index)
     {
-        var indentString = GetNextCharactersInCollection(
-            input, 
+        var indentString = GetNextCharactersWhile(
+            input,
             index,
-            Consts.Indentations
+            Consts.IsIndentation
         );
         
         var totalSpaces = 0;

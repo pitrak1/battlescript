@@ -6,86 +6,121 @@ namespace BattlescriptTests.LexerTests;
 public static class LexerUtilitiesTests
 {
     [TestFixture]
-    public class GetNextCharactersInCollection
+    public class GetNextCharactersWhile
     {
         [Test]
-        public void SimpleInclusiveSearch()
+        public void SimpleSearch()
         {
-            var (length, result) = LexerUtilities.GetNextCharactersInCollection(
+            var (length, result) = LexerUtilities.GetNextCharactersWhile(
                 "asdf.",
                 0,
-                Consts.Letters
+                char.IsAsciiLetter
             );
             Assert.That(result, Is.EqualTo("asdf"));
+            Assert.That(length, Is.EqualTo(4));
         }
-        
-        [Test]
-        public void SimpleExclusiveSearch()
-        {
-            var (length, result) = LexerUtilities.GetNextCharactersInCollection(
-                "asdf.",
-                0,
-                ['.'],
-                CollectionType.Exclusive
-            );
 
-            Assert.That(result, Is.EqualTo("asdf"));
-        }
-        
         [Test]
         public void RespectsIndex()
         {
-            var (length, result) = LexerUtilities.GetNextCharactersInCollection(
+            var (length, result) = LexerUtilities.GetNextCharactersWhile(
                 "asdf.",
                 2,
-                Consts.Letters
+                char.IsAsciiLetter
             );
-
             Assert.That(result, Is.EqualTo("df"));
-        }
-        
-        [Test]
-        public void DoesNotHandleEscapedCharacters()
-        {
-            var (length, result) = LexerUtilities.GetNextCharactersInCollection(
-                @"as\.df.",
-                0,
-                Consts.Letters
-            );
-
-            Assert.That(result, Is.EqualTo("as"));
+            Assert.That(length, Is.EqualTo(2));
         }
 
         [Test]
-        public void EscapedCharacters()
+        public void StopsAtNonMatchingCharacter()
         {
-            var (length, result) = LexerUtilities.GetNextCharactersInCollection(
-                @"as\.df.",
+            var (length, result) = LexerUtilities.GetNextCharactersWhile(
+                "abc123def",
                 0,
-                Consts.Letters,
-                CollectionType.Inclusive,
-                true
+                char.IsAsciiLetter
             );
-
-            Assert.That(result, Is.EqualTo("as.df"));
+            Assert.That(result, Is.EqualTo("abc"));
+            Assert.That(length, Is.EqualTo(3));
         }
-        
-        [Test]
-        public void LengthIsNumberOfCharactersIncludingSlashes()
-        {
-            var (length, result) = LexerUtilities.GetNextCharactersInCollection(
-                @"as\.df\.\'",
-                0,
-                Consts.Letters,
-                CollectionType.Inclusive,
-                true
-            );
 
-            Assert.That(result, Is.EqualTo("as.df.'"));
-            Assert.That(length, Is.EqualTo(10));
+        [Test]
+        public void EmptyResultWhenFirstCharDoesNotMatch()
+        {
+            var (length, result) = LexerUtilities.GetNextCharactersWhile(
+                "123abc",
+                0,
+                char.IsAsciiLetter
+            );
+            Assert.That(result, Is.EqualTo(""));
+            Assert.That(length, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void WithEscapesHandlesEscapedCharacters()
+        {
+            var (length, result) = LexerUtilities.GetNextCharactersWhile(
+                @"hello\'world'end",
+                0,
+                c => c != '\'',
+                allowEscapes: true
+            );
+            Assert.That(result, Is.EqualTo("hello'world"));
+            Assert.That(length, Is.EqualTo(12));
+        }
+
+        [Test]
+        public void WithEscapesHandlesMultipleEscapes()
+        {
+            var (length, result) = LexerUtilities.GetNextCharactersWhile(
+                @"a\'b\'c'",
+                0,
+                c => c != '\'',
+                allowEscapes: true
+            );
+            Assert.That(result, Is.EqualTo("a'b'c"));
+            Assert.That(length, Is.EqualTo(7));
+        }
+
+        [Test]
+        public void WithEscapesHandlesEscapedBackslash()
+        {
+            var (length, result) = LexerUtilities.GetNextCharactersWhile(
+                @"a\\b'",
+                0,
+                c => c != '\'',
+                allowEscapes: true
+            );
+            Assert.That(result, Is.EqualTo(@"a\b"));
+            Assert.That(length, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void WithoutEscapesDoesNotHandleEscapedCharacters()
+        {
+            var (length, result) = LexerUtilities.GetNextCharactersWhile(
+                @"hello\'world",
+                0,
+                char.IsAsciiLetter
+            );
+            Assert.That(result, Is.EqualTo("hello"));
+            Assert.That(length, Is.EqualTo(5));
+        }
+
+        [Test]
+        public void WithEscapesHandlesEscapedBackslashAtEndOfString()
+        {
+            var (length, result) = LexerUtilities.GetNextCharactersWhile(
+                @"abc\\",
+                0,
+                c => c != '\'',
+                allowEscapes: true
+            );
+            Assert.That(result, Is.EqualTo(@"abc\"));
+            Assert.That(length, Is.EqualTo(5));
         }
     }
-    
+
     [TestFixture]
     public class GetIndentValue
     {
@@ -103,7 +138,7 @@ public static class LexerUtilitiesTests
             var (length, result) = LexerUtilities.GetIndentValue("        ", 0);
             Assert.That(result, Is.EqualTo("2"));
         }
-        
+
         [Test]
         public void DetectsCombinationsOfTabsAndSpaces()
         {
@@ -111,7 +146,7 @@ public static class LexerUtilitiesTests
             var (length, result) = LexerUtilities.GetIndentValue("  \t \t  \t   ", 0);
             Assert.That(result, Is.EqualTo("5"));
         }
-        
+
         [Test]
         public void ExtraSpacesAreRoundedDown()
         {
@@ -119,14 +154,14 @@ public static class LexerUtilitiesTests
             var (length, result) = LexerUtilities.GetIndentValue("      ", 0);
             Assert.That(result, Is.EqualTo("1"));
         }
-        
+
         [Test]
         public void EmptyString()
         {
             var (length, result) = LexerUtilities.GetIndentValue("", 0);
             Assert.That(result, Is.EqualTo("0"));
         }
-        
+
         [Test]
         public void RespectsIndex()
         {

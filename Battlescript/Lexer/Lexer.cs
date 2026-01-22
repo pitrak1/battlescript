@@ -38,23 +38,23 @@ public class Lexer(string input, string? fileName = null)
             } 
             else if (IsNumber(nextCharacters))
             {
-                var numberCharacters = LexerUtilities.GetNextCharactersInCollection(
-                    input, 
-                    _index, 
-                    Consts.NumberCharacters
+                var numberCharacters = LexerUtilities.GetNextCharactersWhile(
+                    input,
+                    _index,
+                    Consts.IsNumberChar
                 );
                 AddTokenAndMoveIndex(Consts.TokenTypes.Numeric, numberCharacters.Result);
             }
-            else if (Consts.Quotes.Contains(nextCharacters[0]))
+            else if (Consts.IsQuote(nextCharacters[0]))
             {
                 var (stringLength, stringContents) = LexerUtilities.GetStringWithEscapes(input, _index);
                 AddTokenAndMoveIndex(Consts.TokenTypes.String, stringContents, stringLength + 2);
             }
-            else if (Consts.Brackets.Contains(nextCharacters[0]))
+            else if (Consts.IsBracket(nextCharacters[0]))
             {
                 AddTokenAndMoveIndex(Consts.TokenTypes.Bracket, nextCharacters[0].ToString());
             }
-            else if (Consts.Delimiters.Contains(nextCharacters[0]))
+            else if (Consts.IsDelimiter(nextCharacters[0]))
             {
                 AddTokenAndMoveIndex(Consts.TokenTypes.Delimiter, nextCharacters[0].ToString());
             }
@@ -62,12 +62,12 @@ public class Lexer(string input, string? fileName = null)
             {
                 AddTokenAndMoveIndex(Consts.TokenTypes.Period, nextCharacters[0].ToString());
             }
-            else if (Consts.StartingWordCharacters.Contains(nextCharacters[0]))
+            else if (Consts.IsWordStartChar(nextCharacters[0]))
             {
-                var word = LexerUtilities.GetNextCharactersInCollection(
-                    input, 
-                    _index, 
-                    Consts.WordCharacters
+                var word = LexerUtilities.GetNextCharactersWhile(
+                    input,
+                    _index,
+                    Consts.IsWordChar
                 );
                 var type = GetTokenTypeFromWord(word.Result);
                 AddTokenAndMoveIndex(type, word.Result);
@@ -79,14 +79,12 @@ public class Lexer(string input, string? fileName = null)
             }
             else if (nextCharacters[0] == '#')
             {
-                var charactersUntilNewline = LexerUtilities.GetNextCharactersInCollection(
-                    input, 
+                var charactersUntilNewline = LexerUtilities.GetNextCharactersWhile(
+                    input,
                     _index,
-                    ['\n'], 
-                    CollectionType.Exclusive
+                    c => c != '\n'
                 );
                 _index += charactersUntilNewline.Length;
-                
             }
             else if (nextCharacters[0] == '\t')
             {
@@ -149,8 +147,8 @@ public class Lexer(string input, string? fileName = null)
     
     private bool IsNumber(string nextCharacters)
     {
-        var isNumberStartingWithDecimalPoint = nextCharacters.Length > 1 && nextCharacters[0] == '.' && Consts.Digits.Contains(nextCharacters[1]);
-        var isNumberStartingWithDigit = nextCharacters.Length > 0 && Consts.Digits.Contains(nextCharacters[0]);
+        var isNumberStartingWithDecimalPoint = nextCharacters.Length > 1 && nextCharacters[0] == '.' && Consts.IsDigit(nextCharacters[1]);
+        var isNumberStartingWithDigit = nextCharacters.Length > 0 && Consts.IsDigit(nextCharacters[0]);
         return isNumberStartingWithDecimalPoint || isNumberStartingWithDigit;
     }
     

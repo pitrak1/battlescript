@@ -1,38 +1,22 @@
+using System.Collections.Frozen;
+
 namespace Battlescript;
 
 public static class Consts
 {
-    public static readonly double FloatingPointTolerance = 0.000001;
-    public static readonly char[] NumberCharacters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
-    public static readonly char[] Digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    public static readonly char[] Letters = [
-        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-        'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
-    ];
-    public static readonly char[] StartingWordCharacters = [
-        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-        'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-        '_'
-    ];
-    public static readonly char[] WordCharacters = [
-        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-        'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-        '_',
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
-    ];
-    public static readonly char[] Indentations = [' ', '\t'];
-    public static readonly char[] Quotes = ['\'', '"'];
+    public const double FloatingPointTolerance = 0.000001;
 
-    public static readonly char[] Delimiters = [',', ':'];
-    public static readonly char[] Brackets = ['(', ')', '{', '}', '[', ']'];
-    public static readonly string[] OpeningBrackets = ["(", "{", "["];
-    public static readonly string[] ClosingBrackets = [")", "}", "]"];
+    public static bool IsDigit(char c) => char.IsAsciiDigit(c);
+    public static bool IsNumberChar(char c) => char.IsAsciiDigit(c) || c == '.';
+    public static bool IsWordStartChar(char c) => char.IsAsciiLetter(c) || c == '_';
+    public static bool IsWordChar(char c) => char.IsAsciiLetterOrDigit(c) || c == '_';
+    public static bool IsIndentation(char c) => c is ' ' or '\t';
+    public static bool IsQuote(char c) => c is '\'' or '"';
+    public static bool IsDelimiter(char c) => c is ',' or ':';
+    public static bool IsBracket(char c) => c is '(' or ')' or '{' or '}' or '[' or ']';
+
+    public static readonly FrozenSet<string> OpeningBrackets = FrozenSet.ToFrozenSet(["(", "{", "["]);
+    public static readonly FrozenSet<string> ClosingBrackets = FrozenSet.ToFrozenSet([")", "}", "]"]);
     
     public const string SquareBrackets = "[";
     public const string CurlyBraces = "{";
@@ -42,15 +26,17 @@ public static class Consts
     public const string Colon = ":";
     public const string Wildcard = "*";
 
-    public static readonly Dictionary<string, string> MatchingBracketsMap = new() {
-        {"(", ")"},
-        {"{", "}"},
-        {"[", "]"},
-        {")", "("},
-        {"}", "{"},
-        {"]", "["}
-    };
-    public static readonly string[] Keywords = [
+    public static readonly FrozenDictionary<string, string> MatchingBracketsMap = new Dictionary<string, string>
+    {
+        { "(", ")" },
+        { "{", "}" },
+        { "[", "]" },
+        { ")", "(" },
+        { "}", "{" },
+        { "]", "[" }
+    }.ToFrozenDictionary();
+
+    public static readonly FrozenSet<string> Keywords = FrozenSet.ToFrozenSet([
         "None",
         "as",
         "assert",
@@ -79,17 +65,16 @@ public static class Consts
         "try",
         "while",
         "with",
-        "yield", // NOT SUPPORTED IN V1
-    ];
+        "yield" // NOT SUPPORTED IN V1
+    ]);
 
-    public static readonly string[] BuiltInFunctions =
-    [
+    public static readonly FrozenSet<string> BuiltInFunctions = FrozenSet.ToFrozenSet([
         "abs",
         "aiter", // NOT SUPPORTED IN V1
         "all",
         "anext", // NOT SUPPORTED IN V1
         "any",
-        "ascii", 
+        "ascii",
         "bin", // NOT SUPPORTED IN V1
         "breakpoint",
         "bytearray", // NOT SUPPORTED IN V1
@@ -148,9 +133,9 @@ public static class Consts
         "type",
         "vars",
         "zip"
-    ];
+    ]);
 
-    public static readonly string[] Operators = [
+    public static readonly FrozenSet<string> Operators = FrozenSet.ToFrozenSet([
         "**",
         "~", // NOT SUPPORTED IN V1
         "*",
@@ -159,11 +144,11 @@ public static class Consts
         "%",
         "+",
         "-",
-        "<<", //NOT SUPPORTED IN V1
-        ">>", //NOT SUPPORTED IN V1
-        "&", //NOT SUPPORTED IN V1
-        "^", //NOT SUPPORTED IN V1
-        "|", //NOT SUPPORTED IN V1
+        "<<", // NOT SUPPORTED IN V1
+        ">>", // NOT SUPPORTED IN V1
+        "&", // NOT SUPPORTED IN V1
+        "^", // NOT SUPPORTED IN V1
+        "|", // NOT SUPPORTED IN V1
         "==",
         "!=",
         ">",
@@ -177,52 +162,38 @@ public static class Consts
         "not",
         "and",
         "or"
-    ];
-    
-    public static readonly string[] OperatorPriority = [
-        "or",
-        "and",
-        "not",
-        "not in",
-        "in",
-        "is not",
-        "is",
-        "<=",
-        "<",
-        ">=",
-        ">",
-        "!=",
-        "==",
-        "-",
-        "+",
-        "%",
-        "//",
-        "/",
-        "*",
-        "-1",
-        "+1",
-        "**"
-    ];
-    
-    public static readonly string[] BooleanOperators = ["and", "or", "not", "is", "is not", "in", "not in"];
-    
-    public static readonly string[] NumericalOperators = [
-        "**",
-        "*",
-        "/",
-        "//",
-        "%",
-        "+",
-        "-",
-        "==",
-        "!=",
-        ">",
-        ">=",
-        "<",
-        "<=",
-    ];
-    
-    public static readonly string[] Assignments = [
+    ]);
+
+    public static readonly FrozenDictionary<string, int> OperatorPriority = new Dictionary<string, int>
+    {
+        { "or", 0 },
+        { "and", 1 },
+        { "not", 2 },
+        { "not in", 3 },
+        { "in", 4 },
+        { "is not", 5 },
+        { "is", 6 },
+        { "<=", 7 },
+        { "<", 8 },
+        { ">=", 9 },
+        { ">", 10 },
+        { "!=", 11 },
+        { "==", 12 },
+        { "-", 13 },
+        { "+", 14 },
+        { "%", 15 },
+        { "//", 16 },
+        { "/", 17 },
+        { "*", 18 },
+        { "-1", 19 },
+        { "+1", 20 },
+        { "**", 21 }
+    }.ToFrozenDictionary();
+
+    public static readonly FrozenSet<string> BooleanOperators =
+        FrozenSet.ToFrozenSet(["and", "or", "not", "is", "is not", "in", "not in"]);
+
+    public static readonly FrozenSet<string> Assignments = FrozenSet.ToFrozenSet([
         "=",
         "+=",
         "-=",
@@ -231,15 +202,16 @@ public static class Consts
         "%=",
         "//=",
         "**=",
-        "&=",//NOT SUPPORTED IN V1
-        "|=",//NOT SUPPORTED IN V1
-        "^=",//NOT SUPPORTED IN V1
-        ">>=",//NOT SUPPORTED IN V1
-        "<<=",//NOT SUPPORTED IN V1
-        ":=" //NOT SUPPORTED IN V1
-    ];
-    
-    public static readonly string[] ConstantStrings = ["None", "True", "False"];
+        "&=", // NOT SUPPORTED IN V1
+        "|=", // NOT SUPPORTED IN V1
+        "^=", // NOT SUPPORTED IN V1
+        ">>=", // NOT SUPPORTED IN V1
+        "<<=", // NOT SUPPORTED IN V1
+        ":=" // NOT SUPPORTED IN V1
+    ]);
+
+    public static readonly FrozenSet<string> ConstantStrings =
+        FrozenSet.ToFrozenSet(["None", "True", "False"]);
     public enum Constants{
         None,
     }
