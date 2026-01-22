@@ -26,9 +26,18 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
                 if (valueVariable is SequenceVariable sequenceVariable)
                 {
                     SetRangeIndex(callStack, sequenceVariable, indexValuesSequence.Values);
-                } else if (BtlTypes.Is(BtlTypes.Types.List, valueVariable))
+                }
+                else if (BtlTypes.Is(BtlTypes.Types.List, valueVariable))
                 {
                     SetRangeIndex(callStack, (valueVariable as ObjectVariable).Values["__btl_value"] as SequenceVariable, indexValuesSequence.Values);
+                }
+                else if (valueVariable is StringVariable stringVariable)
+                {
+                    SetRangeIndex(callStack, stringVariable.ToSequence(), indexValuesSequence.Values);
+                }
+                else if (BtlTypes.Is(BtlTypes.Types.String, valueVariable))
+                {
+                    SetRangeIndex(callStack, ((valueVariable as ObjectVariable).Values["__btl_value"] as StringVariable).ToBtlSequence(), indexValuesSequence.Values);
                 }
                 else
                 {

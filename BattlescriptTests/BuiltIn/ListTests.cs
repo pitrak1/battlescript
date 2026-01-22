@@ -328,23 +328,23 @@ public class ListTests
         }
 
         // Will come back and uncomment this once a string variable is a proper sequence
-        // [Test]
-        // public void ExtendsWithString()
-        // {
-        //     var (callStack, closure) = Runner.Run("""
-        //                             x = [1, 2]
-        //                             x.extend("abc")
-        //                             """);
-        //     var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
-        //     {
-        //         BtlTypes.Create(BtlTypes.Types.Int, 1),
-        //         BtlTypes.Create(BtlTypes.Types.Int, 2),
-        //         BtlTypes.Create(BtlTypes.Types.String, "a"),
-        //         BtlTypes.Create(BtlTypes.Types.String, "b"),
-        //         BtlTypes.Create(BtlTypes.Types.String, "c"),
-        //     });
-        //     Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
-        // }
+        [Test]
+        public void ExtendsWithString()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2]
+                                    x.extend("abc")
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.String, "a"),
+                BtlTypes.Create(BtlTypes.Types.String, "b"),
+                BtlTypes.Create(BtlTypes.Types.String, "c"),
+            });
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
 
         [Test]
         public void ExtendsWithRange()

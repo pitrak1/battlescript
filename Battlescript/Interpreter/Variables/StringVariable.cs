@@ -9,6 +9,12 @@ public class StringVariable : Variable, IEquatable<StringVariable>
         Value = value ?? "";
     }
 
+    public SequenceVariable ToSequence() =>
+        new SequenceVariable(Value.Select(c => new StringVariable(c.ToString())).Cast<Variable>().ToList());
+    
+    public SequenceVariable ToBtlSequence() =>
+        new SequenceVariable(Value.Select(c => BtlTypes.Create(BtlTypes.Types.String, c.ToString())).ToList());
+
     #region Equality
 
     public override bool Equals(object? obj) => obj is StringVariable variable && Equals(variable);
