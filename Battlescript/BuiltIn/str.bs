@@ -2,8 +2,6 @@ class str:
     __btl_value = __btl_string__()
 
     def __init__(self, value):
-        print('got here')
-        print(value)
         if isinstance(value, str):
             self.__btl_value = value.__btl_value
         else:

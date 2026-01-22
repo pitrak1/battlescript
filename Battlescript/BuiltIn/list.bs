@@ -39,10 +39,6 @@ class list:
             return self
         return NotImplemented
 
-    def append(self, value):
-        length = len(self.__btl_value)
-        self[length:] = [value]
-
     def __bool__(self):
         return 0 < len(self.__btl_value)
 
@@ -51,3 +47,13 @@ class list:
 
     def __ne__(self, other):
         return bool(self.__btl_value != other.__btl_value)
+    
+    def __len__(self):
+        return len(self.__btl_value)
+    
+    def append(self, value):
+        length = len(self)
+        self[length:] = [value]
+    
+    def extend(self, iterable):
+        self[len(self):] = iterable
