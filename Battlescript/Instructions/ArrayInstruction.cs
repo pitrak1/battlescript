@@ -41,8 +41,8 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
 
     private void InitializeDelimiter(List<Token> tokens)
     {
-        var commaIndex = InstructionUtilities.GetTokenIndex(tokens, [Consts.Comma]);
-        var colonIndex = InstructionUtilities.GetTokenIndex(tokens, [Consts.Colon]);
+        var commaIndex = InstructionUtilities.GetTokenIndex(tokens, [","]);
+        var colonIndex = InstructionUtilities.GetTokenIndex(tokens, [":"]);
 
         // Prioritize grouping by commas over grouping by colons (ex: {3: 4, 5: 6})
         if (commaIndex != -1)

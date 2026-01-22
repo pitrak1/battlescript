@@ -8,7 +8,7 @@ public static class Truthiness
         {
             case null:
                 return false;
-            case ConstantVariable:
+            case NoneVariable:
                 return false;
             case NumericVariable numVariable:
                 return numVariable.Value != 0;

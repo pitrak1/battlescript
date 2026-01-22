@@ -1,3 +1,5 @@
+using System.Collections.Frozen;
+
 namespace Battlescript;
 
 public class Lexer(string input, string? fileName = null)
@@ -74,7 +76,7 @@ public class Lexer(string input, string? fileName = null)
             }
             else if (GetMatchingOperatorOrAssignment(nextCharacters) is { } operatorOrAssignmentValue)
             {
-                var tokenType = Consts.Operators.Contains(operatorOrAssignmentValue) ? Consts.TokenTypes.Operator : Consts.TokenTypes.Assignment;
+                var tokenType = Operators.Contains(operatorOrAssignmentValue) ? Consts.TokenTypes.Operator : Consts.TokenTypes.Assignment;
                 AddTokenAndMoveIndex(tokenType, operatorOrAssignmentValue);
             }
             else if (nextCharacters[0] == '#')
@@ -115,7 +117,7 @@ public class Lexer(string input, string? fileName = null)
     {
         if (nextCharacters.Length == 3)
         {
-            if (Consts.Operators.Contains(nextCharacters) || Consts.Assignments.Contains(nextCharacters))
+            if (Operators.Contains(nextCharacters) || Assignments.Contains(nextCharacters))
             {
                 return nextCharacters;
             }
@@ -124,7 +126,7 @@ public class Lexer(string input, string? fileName = null)
         if (nextCharacters.Length >= 2)
         {
             var firstTwoCharacters = nextCharacters[..2];
-            if (Consts.Operators.Contains(firstTwoCharacters) || Consts.Assignments.Contains(firstTwoCharacters))
+            if (Operators.Contains(firstTwoCharacters) || Assignments.Contains(firstTwoCharacters))
             {
                 return firstTwoCharacters;
             }
@@ -133,7 +135,7 @@ public class Lexer(string input, string? fileName = null)
         if (nextCharacters.Length >= 1)
         {
             var firstCharacterOnly = nextCharacters[0].ToString();
-            if (Consts.Operators.Contains(firstCharacterOnly) || Consts.Assignments.Contains(firstCharacterOnly))
+            if (Operators.Contains(firstCharacterOnly) || Assignments.Contains(firstCharacterOnly))
             {
                 return firstCharacterOnly;
             }
@@ -166,23 +168,23 @@ public class Lexer(string input, string? fileName = null)
     
     private Consts.TokenTypes GetTokenTypeFromWord(string word)
     {
-        if (Consts.Keywords.Contains(word))
+        if (Keywords.Contains(word))
         {
             return Consts.TokenTypes.Keyword;
         }
-        else if (Consts.ConstantStrings.Contains(word))
+        else if (ConstantStrings.Contains(word))
         {
             return Consts.TokenTypes.Constant;
         }
-        else if (Consts.Operators.Contains(word))
+        else if (Operators.Contains(word))
         {
             return Consts.TokenTypes.Operator;
         }
-        else if (Consts.BuiltInFunctions.Contains(word))
+        else if (BuiltInFunctions.Contains(word))
         {
             return Consts.TokenTypes.BuiltIn;
         }
-        else if (Consts.ConversionTypes.Contains(word))
+        else if (ConversionTypes.Contains(word))
         {
             return Consts.TokenTypes.ConversionType;
         }
@@ -196,4 +198,164 @@ public class Lexer(string input, string? fileName = null)
     {
         return inputString.Substring(index, Math.Min(inputString.Length - index, 3));
     }
+    
+    #region Constants
+    
+    private static readonly FrozenSet<string> Operators = FrozenSet.ToFrozenSet([
+        "**",
+        "~", // NOT SUPPORTED IN V1
+        "*",
+        "/",
+        "//",
+        "%",
+        "+",
+        "-",
+        "<<", // NOT SUPPORTED IN V1
+        ">>", // NOT SUPPORTED IN V1
+        "&", // NOT SUPPORTED IN V1
+        "^", // NOT SUPPORTED IN V1
+        "|", // NOT SUPPORTED IN V1
+        "==",
+        "!=",
+        ">",
+        ">=",
+        "<",
+        "<=",
+        "is",
+        "is not",
+        "in",
+        "not in",
+        "not",
+        "and",
+        "or"
+    ]);
+    
+    private static readonly FrozenSet<string> Assignments = FrozenSet.ToFrozenSet([
+        "=",
+        "+=",
+        "-=",
+        "*=",
+        "/=",
+        "%=",
+        "//=",
+        "**=",
+        "&=", // NOT SUPPORTED IN V1
+        "|=", // NOT SUPPORTED IN V1
+        "^=", // NOT SUPPORTED IN V1
+        ">>=", // NOT SUPPORTED IN V1
+        "<<=", // NOT SUPPORTED IN V1
+        ":=" // NOT SUPPORTED IN V1
+    ]);
+    
+    private static readonly FrozenSet<string> Keywords = FrozenSet.ToFrozenSet([
+        "None",
+        "as",
+        "assert",
+        "async", // NOT SUPPORTED IN V1
+        "await", // NOT SUPPORTED IN V1
+        "break",
+        "class",
+        "continue",
+        "def",
+        "del",
+        "elif",
+        "else",
+        "except",
+        "finally",
+        "for",
+        "from",
+        "global",
+        "if",
+        "import",
+        "lambda",
+        "match", // NOT SUPPORTED IN V1
+        "nonlocal",
+        "pass",
+        "raise",
+        "return",
+        "try",
+        "while",
+        "with", // NOT SUPPORTED IN V1
+        "yield" // NOT SUPPORTED IN V1
+    ]);
+
+    private static readonly FrozenSet<string> BuiltInFunctions = FrozenSet.ToFrozenSet([
+        "abs",
+        "aiter", // NOT SUPPORTED IN V1
+        "all",
+        "anext", // NOT SUPPORTED IN V1
+        "any",
+        "ascii",
+        "bin", // NOT SUPPORTED IN V1
+        "breakpoint",
+        "bytearray", // NOT SUPPORTED IN V1
+        "bytes", // NOT SUPPORTED IN V1
+        "callable",
+        "chr", // NOT SUPPORTED IN V1
+        "classmethod",
+        "compile", // NOT SUPPORTED IN V1
+        "complex", // NOT SUPPORTED IN V1
+        "delattr",
+        "dir",
+        "divmod",
+        "enumerate",
+        "eval", // NOT SUPPORTED IN V1
+        "exec", // NOT SUPPORTED IN V1
+        "filter",
+        "format",
+        "frozenset",
+        "getattr",
+        "globals",
+        "hasattr",
+        "hash",
+        "help", // NOT SUPPORTED IN V1
+        "hex", // NOT SUPPORTED IN V1
+        "id",
+        "input",
+        "isinstance",
+        "issubclass",
+        "iter",
+        "len",
+        "locals",
+        "map",
+        "max",
+        "memoryview",
+        "min",
+        "next",
+        "object", // NOT SUPPORTED IN V1
+        "oct", // NOT SUPPORTED IN V1
+        "open", // NOT SUPPORTED IN V1
+        "ord", // NOT SUPPORTED IN V1
+        "pow",
+        "print",
+        "property",
+        "range",
+        "repr",
+        "reversed",
+        "round",
+        "set", // Can do, but might be post v1
+        "setattr",
+        "slice",
+        "sorted",
+        "staticmethod",
+        "sum",
+        "super",
+        "tuple", // Can do, but might be post v1
+        "type",
+        "vars",
+        "zip"
+    ]);
+    
+    private static readonly FrozenSet<string> ConstantStrings =
+        FrozenSet.ToFrozenSet(["None", "True", "False"]);
+    
+    private static readonly string[] ConversionTypes =
+    [
+        "__btl_numeric__",
+        "__btl_sequence__",
+        "__btl_mapping__",
+        "__btl_string__",
+    ];
+    
+    #endregion
 }

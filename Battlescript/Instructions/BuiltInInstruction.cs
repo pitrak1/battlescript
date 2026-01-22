@@ -53,7 +53,7 @@ public class BuiltInInstruction : Instruction, IEquatable<BuiltInInstruction>
                 return BuiltInLen.Run(callStack, closure, Arguments);
         }
         // TODO
-        return new ConstantVariable();
+        return new NoneVariable();
     }
     
     #region Equality

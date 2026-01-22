@@ -40,9 +40,9 @@ public static class StringUtilities
                 new JsonConverter[] {new StringEnumConverter()});
             return jsonString;
         }
-        else if (variable is ConstantVariable constantVariable)
+        else if (variable is NoneVariable)
         {
-            return constantVariable.Value.ToString();
+            return "None";
         }
         else if (variable is NumericVariable numericVariable)
         {

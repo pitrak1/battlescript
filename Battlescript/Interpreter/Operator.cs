@@ -1,3 +1,5 @@
+using System.Collections.Frozen;
+
 namespace Battlescript;
 
 public static class Operator
@@ -52,53 +54,10 @@ public static class Operator
     }
 
     private static NumericVariable CreateBoolNumeric(bool value) => new(value ? 1 : 0);
-
-    private static readonly Dictionary<string, string> OperationToOverrideMap = new()
-    {
-        { "+", "__add__" },
-        { "-", "__sub__" },
-        { "*", "__mul__" },
-        { "/", "__truediv__" },
-        { "//", "__floordiv__" },
-        { "%", "__mod__" },
-        { "**", "__pow__" },
-        { "==", "__eq__" },
-        { "!=", "__ne__" },
-        { "<", "__lt__" },
-        { "<=", "__le__" },
-        { ">", "__gt__" },
-        { ">=", "__ge__" },
-        { "+=", "__iadd__" },
-        { "-=", "__isub__" },
-        { "*=", "__imul__" },
-        { "/=", "__itruediv__" },
-        { "//=", "__ifloordiv__" },
-        { "%=", "__imod__" },
-        { "**=", "__ipow__" },
-    };
-
-    private static readonly Dictionary<string, string> ReversedOperationToOverrideMap = new()
-    {
-        { "-", "__rsub__" },
-        { "/", "__rtruediv__" },
-        { "//", "__rfloordiv__" },
-        { "%", "__rmod__" },
-        { "**", "__rpow__" },
-        { "<", "__rlt__" },
-        { "<=", "__rle__" },
-        { ">", "__rgt__" },
-        { ">=", "__rge__" },
-    };
-
-    private static readonly Dictionary<string, string> UnaryOperationToOverrideMap = new()
-    {
-        { "+", "__pos__" },
-        { "-", "__neg__" },
-    };
     
     public static Variable Operate(CallStack callStack, Closure closure, string operation, Variable? left, Variable? right, Instruction? originalInstruction = null)
     {
-        if (Consts.BooleanOperators.Contains(operation))
+        if (BooleanOperators.Contains(operation))
         {
             return ConductBooleanOperation(callStack, closure, operation, left, right, originalInstruction);
         }
@@ -421,10 +380,10 @@ public static class Operator
         };
     }
 
-    private static ConstantVariable ApplyCompoundAssignment(NumericVariable leftNumeric, NumericVariable rightNumeric, Func<double, double, double> operation)
+    private static NoneVariable ApplyCompoundAssignment(NumericVariable leftNumeric, NumericVariable rightNumeric, Func<double, double, double> operation)
     {
         leftNumeric.Value = operation(leftNumeric.Value, rightNumeric.Value);
-        return new ConstantVariable();
+        return new NoneVariable();
     }
     
     private static Variable ConductUnaryNumericOperation(string operation, NumericVariable numeric)
@@ -436,4 +395,54 @@ public static class Operator
             _ => throw new InterpreterInvalidOperationException(operation, null, numeric)
         };
     }
+    
+    #region Constants
+    
+    private static readonly Dictionary<string, string> OperationToOverrideMap = new()
+    {
+        { "+", "__add__" },
+        { "-", "__sub__" },
+        { "*", "__mul__" },
+        { "/", "__truediv__" },
+        { "//", "__floordiv__" },
+        { "%", "__mod__" },
+        { "**", "__pow__" },
+        { "==", "__eq__" },
+        { "!=", "__ne__" },
+        { "<", "__lt__" },
+        { "<=", "__le__" },
+        { ">", "__gt__" },
+        { ">=", "__ge__" },
+        { "+=", "__iadd__" },
+        { "-=", "__isub__" },
+        { "*=", "__imul__" },
+        { "/=", "__itruediv__" },
+        { "//=", "__ifloordiv__" },
+        { "%=", "__imod__" },
+        { "**=", "__ipow__" },
+    };
+
+    private static readonly Dictionary<string, string> ReversedOperationToOverrideMap = new()
+    {
+        { "-", "__rsub__" },
+        { "/", "__rtruediv__" },
+        { "//", "__rfloordiv__" },
+        { "%", "__rmod__" },
+        { "**", "__rpow__" },
+        { "<", "__rlt__" },
+        { "<=", "__rle__" },
+        { ">", "__rgt__" },
+        { ">=", "__rge__" },
+    };
+
+    private static readonly Dictionary<string, string> UnaryOperationToOverrideMap = new()
+    {
+        { "+", "__pos__" },
+        { "-", "__neg__" },
+    };
+    
+    private static readonly FrozenSet<string> BooleanOperators =
+        FrozenSet.ToFrozenSet(["and", "or", "not", "is", "is not", "in", "not in"]);
+    
+    #endregion
 }

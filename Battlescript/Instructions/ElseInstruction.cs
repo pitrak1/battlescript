@@ -56,7 +56,7 @@ public class ElseInstruction : Instruction, IEquatable<ElseInstruction>
             }
         }
         
-        return new ConstantVariable();
+        return new NoneVariable();
     }
     
     #region Equality

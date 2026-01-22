@@ -26,7 +26,7 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
         ArgumentTransfer.Execute(callStack, newClosure, arguments, Parameters);
         var returnValue = RunInstructions(callStack, newClosure);
         callStack.RemoveFrame();
-        return returnValue ?? new ConstantVariable();
+        return returnValue ?? new NoneVariable();
     }
     
     protected Variable? RunInstructions(CallStack callStack, Closure closure)
@@ -43,7 +43,7 @@ public class FunctionVariable : Variable, IEquatable<FunctionVariable>
             return e.Value;
         }
         
-        return new ConstantVariable();
+        return new NoneVariable();
     }
     
     #region Equality

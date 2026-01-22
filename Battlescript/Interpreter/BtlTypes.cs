@@ -62,7 +62,7 @@ public static class BtlTypes
     {
         True = Create(Types.Bool, new NumericVariable(1));
         False = Create(Types.Bool, new NumericVariable(0));
-        None = Create(Types.NoneType, new ConstantVariable());
+        None = new NoneVariable();
     }
     
     public static bool Is(Types type, Variable variable)

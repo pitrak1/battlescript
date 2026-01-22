@@ -146,7 +146,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
 
         if (argVariable.Count >= 3)
         {
-            if (argVariable[2] is not null && argVariable[2] is not ConstantVariable { Value: Consts.Constants.None} )
+            if (argVariable[2] is not null && argVariable[2] is not NoneVariable )
             {
                 step = BtlTypes.GetIntValue(argVariable[2]!);
                 
@@ -160,7 +160,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         
         if (argVariable.Count >= 2)
         {
-            if (argVariable[1] is not null && argVariable[1] is not ConstantVariable { Value: Consts.Constants.None})
+            if (argVariable[1] is not null && argVariable[1] is not NoneVariable)
             {
                 var rawInt = BtlTypes.GetIntValue(argVariable[1]!);
                 stop = Math.Clamp(rawInt, -Values.Count, Values.Count);
@@ -173,7 +173,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         
         if (argVariable.Count >= 1)
         {
-            if (argVariable[0] is not null && argVariable[0] is not ConstantVariable { Value: Consts.Constants.None})
+            if (argVariable[0] is not null && argVariable[0] is not NoneVariable)
             {
                 var rawInt = BtlTypes.GetIntValue(argVariable[0]!);
                 start = Math.Clamp(rawInt, -Values.Count, Values.Count);

@@ -86,11 +86,11 @@ public static class InstructionFactory
         {
             return new OperationInstruction(tokens);
         }
-        else if (tokens[0].Value == Consts.Period)
+        else if (tokens[0].Value == ".")
         {
             return new MemberInstruction(tokens);
         }
-        else if (tokens[0].Value == Consts.Wildcard)
+        else if (tokens[0].Value == "*")
         {
             return new ConstantInstruction("*");
         }

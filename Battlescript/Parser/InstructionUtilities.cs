@@ -1,7 +1,35 @@
+using System.Collections.Frozen;
+
 namespace Battlescript;
 
 public static class InstructionUtilities
 {
+    private static readonly FrozenDictionary<string, int> OperatorPriority = new Dictionary<string, int>
+    {
+        { "or", 0 },
+        { "and", 1 },
+        { "not", 2 },
+        { "not in", 3 },
+        { "in", 4 },
+        { "is not", 5 },
+        { "is", 6 },
+        { "<=", 7 },
+        { "<", 8 },
+        { ">=", 9 },
+        { ">", 10 },
+        { "!=", 11 },
+        { "==", 12 },
+        { "-", 13 },
+        { "+", 14 },
+        { "%", 15 },
+        { "//", 16 },
+        { "/", 17 },
+        { "*", 18 },
+        { "-1", 19 },
+        { "+1", 20 },
+        { "**", 21 }
+    }.ToFrozenDictionary();
+    
     private static readonly HashSet<Consts.TokenTypes> BinaryPrecedingTypes =
     [
         Consts.TokenTypes.String,
@@ -79,7 +107,7 @@ public static class InstructionUtilities
     {
         var effectiveOperator = IsUnaryOperator(tokens, index) ? operatorValue + "1" : operatorValue;
 
-        if (!Consts.OperatorPriority.TryGetValue(effectiveOperator, out var priority))
+        if (!OperatorPriority.TryGetValue(effectiveOperator, out var priority))
         {
             return current;
         }
