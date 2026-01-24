@@ -1,4 +1,5 @@
 using System.Collections.Frozen;
+using System.Diagnostics;
 
 namespace Battlescript;
 
@@ -13,92 +14,199 @@ public class Lexer(string input, string? fileName = null)
     public List<Token> Run()
     {
         _expressionForStacktrace = GetLineContents();
-        
+
         while (_index < input.Length)
         {
-            var nextCharacters = GetNextThreeCharactersOrUntilEndOfString(input, _index);
-            
-            if (nextCharacters[0] == '\n')
-            {
-                var (indentLength, indentValue) = LexerUtilities.GetIndentValue(input, _index + 1);
-                
-                _index += indentLength + 1;
-                // We want to update these before we create the token because we want any errors to be associated to
-                // the indents on the second line, not the return on the first
-                _line++;
-                _expressionForStacktrace = GetLineContents();
-                
-                AddTokenAndMoveIndex(Consts.TokenTypes.Newline, indentValue, 0);
-            }
-            else if (IsBackslashFollowedByReturn(nextCharacters))
-            {
-                _index += 2;
-            }
-            else if (nextCharacters[0] == ' ')
-            {
-                _index++;
-            } 
-            else if (IsNumber(nextCharacters))
-            {
-                var numberCharacters = LexerUtilities.GetNextCharactersWhile(
-                    input,
-                    _index,
-                    Consts.IsNumberChar
-                );
-                AddTokenAndMoveIndex(Consts.TokenTypes.Numeric, numberCharacters.Result);
-            }
-            else if (Consts.IsQuote(nextCharacters[0]))
-            {
-                var (stringLength, stringContents) = LexerUtilities.GetStringWithEscapes(input, _index);
-                AddTokenAndMoveIndex(Consts.TokenTypes.String, stringContents, stringLength + 2);
-            }
-            else if (Consts.IsBracket(nextCharacters[0]))
-            {
-                AddTokenAndMoveIndex(Consts.TokenTypes.Bracket, nextCharacters[0].ToString());
-            }
-            else if (Consts.IsDelimiter(nextCharacters[0]))
-            {
-                AddTokenAndMoveIndex(Consts.TokenTypes.Delimiter, nextCharacters[0].ToString());
-            }
-            else if (nextCharacters[0] == '.')
-            {
-                AddTokenAndMoveIndex(Consts.TokenTypes.Period, nextCharacters[0].ToString());
-            }
-            else if (Consts.IsWordStartChar(nextCharacters[0]))
-            {
-                var word = LexerUtilities.GetNextCharactersWhile(
-                    input,
-                    _index,
-                    Consts.IsWordChar
-                );
-                var type = GetTokenTypeFromWord(word.Result);
-                AddTokenAndMoveIndex(type, word.Result);
-            }
-            else if (GetMatchingOperatorOrAssignment(nextCharacters) is { } operatorOrAssignmentValue)
-            {
-                var tokenType = Operators.Contains(operatorOrAssignmentValue) ? Consts.TokenTypes.Operator : Consts.TokenTypes.Assignment;
-                AddTokenAndMoveIndex(tokenType, operatorOrAssignmentValue);
-            }
-            else if (nextCharacters[0] == '#')
-            {
-                var charactersUntilNewline = LexerUtilities.GetNextCharactersWhile(
-                    input,
-                    _index,
-                    c => c != '\n'
-                );
-                _index += charactersUntilNewline.Length;
-            }
-            else if (nextCharacters[0] == '\t')
-            {
-                throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "unexpected indent");
-            }
-            else
-            {
-                throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "invalid syntax");
-            }
+            var nextCharacters = GetLookaheadCharacters(input, _index);
+
+            if (TryHandleNewline(nextCharacters)) continue;
+            if (TryHandleLineContinuation(nextCharacters)) continue;
+            if (TryHandleWhitespace(nextCharacters)) continue;
+            if (TryHandleNumber(nextCharacters)) continue;
+            if (TryHandleString(nextCharacters)) continue;
+            if (TryHandleBracket(nextCharacters)) continue;
+            if (TryHandleDelimiter(nextCharacters)) continue;
+            if (TryHandlePeriod(nextCharacters)) continue;
+            if (TryHandleWord(nextCharacters)) continue;
+            if (TryHandleOperatorOrAssignment(nextCharacters)) continue;
+            if (TryHandleComment(nextCharacters)) continue;
+
+            HandleUnexpectedCharacter(nextCharacters);
         }
-        
+
         return _tokens;
+    }
+
+    private bool TryHandleNewline(string nextCharacters)
+    {
+        if (nextCharacters[0] != '\n') return false;
+
+        var (indentLength, indentValue) = LexerUtilities.GetIndentValue(input, _index + 1);
+
+        _index += indentLength + 1;
+        // We want to update these before we create the token because we want any errors to be associated to
+        // the indents on the second line, not the return on the first
+        _line++;
+        _expressionForStacktrace = GetLineContents();
+
+        AddTokenAndMoveIndex(Consts.TokenTypes.Newline, indentValue, 0);
+        return true;
+    }
+
+    private bool TryHandleLineContinuation(string nextCharacters)
+    {
+        bool isBackslashFollowedByReturn = nextCharacters.Length >= 2 && nextCharacters[..2] == "\\\n";
+        if (!isBackslashFollowedByReturn) return false;
+
+        _index += 2;
+        return true;
+    }
+
+    private bool TryHandleWhitespace(string nextCharacters)
+    {
+        if (nextCharacters[0] != ' ') return false;
+
+        _index++;
+        return true;
+    }
+
+    private bool TryHandleNumber(string nextCharacters)
+    {
+        var isNumberStartingWithDecimalPoint = nextCharacters.Length > 1 && nextCharacters[0] == '.' && Consts.IsDigit(nextCharacters[1]);
+        var isNumberStartingWithDigit = nextCharacters.Length > 0 && Consts.IsDigit(nextCharacters[0]);
+        var isNumber = isNumberStartingWithDecimalPoint || isNumberStartingWithDigit;
+
+        if (!isNumber) return false;
+
+        var numberCharacters = LexerUtilities.GetNextCharactersWhile(
+            input,
+            _index,
+            Consts.IsNumberChar
+        );
+        AddTokenAndMoveIndex(Consts.TokenTypes.Numeric, numberCharacters.Result);
+        return true;
+    }
+
+    private bool TryHandleString(string nextCharacters)
+    {
+        if (!Consts.IsQuote(nextCharacters[0])) return false;
+
+        var (stringLength, stringContents) = LexerUtilities.GetStringWithEscapes(input, _index);
+        const int quoteCharacterCount = 2;
+        AddTokenAndMoveIndex(Consts.TokenTypes.String, stringContents, stringLength + quoteCharacterCount);
+        return true;
+    }
+
+    private bool TryHandleBracket(string nextCharacters)
+    {
+        if (!Consts.IsBracket(nextCharacters[0])) return false;
+
+        AddTokenAndMoveIndex(Consts.TokenTypes.Bracket, nextCharacters[0].ToString());
+        return true;
+    }
+
+    private bool TryHandleDelimiter(string nextCharacters)
+    {
+        if (!Consts.IsDelimiter(nextCharacters[0])) return false;
+
+        AddTokenAndMoveIndex(Consts.TokenTypes.Delimiter, nextCharacters[0].ToString());
+        return true;
+    }
+
+    private bool TryHandlePeriod(string nextCharacters)
+    {
+        if (nextCharacters[0] != '.') return false;
+
+        AddTokenAndMoveIndex(Consts.TokenTypes.Period, nextCharacters[0].ToString());
+        return true;
+    }
+
+    private bool TryHandleWord(string nextCharacters)
+    {
+        Consts.TokenTypes GetTokenTypeFromWord(string word)
+        {
+            if (Keywords.Contains(word))
+                return Consts.TokenTypes.Keyword;
+            if (ConstantStrings.Contains(word))
+                return Consts.TokenTypes.Constant;
+            if (Operators.Contains(word))
+                return Consts.TokenTypes.Operator;
+            if (BuiltInFunctions.Contains(word))
+                return Consts.TokenTypes.BuiltIn;
+            if (ConversionTypes.Contains(word))
+                return Consts.TokenTypes.ConversionType;
+            return Consts.TokenTypes.Identifier;
+        }
+
+        if (!Consts.IsWordStartChar(nextCharacters[0])) return false;
+
+        var word = LexerUtilities.GetNextCharactersWhile(
+            input,
+            _index,
+            Consts.IsWordChar
+        );
+        var type = GetTokenTypeFromWord(word.Result);
+        AddTokenAndMoveIndex(type, word.Result);
+        return true;
+    }
+
+    private bool TryHandleOperatorOrAssignment(string nextCharacters)
+    {
+        string? GetMatchingOperatorOrAssignment()
+        {
+            if (nextCharacters.Length == 3)
+            {
+                if (Operators.Contains(nextCharacters) || Assignments.Contains(nextCharacters))
+                    return nextCharacters;
+            }
+
+            if (nextCharacters.Length >= 2)
+            {
+                var firstTwoCharacters = nextCharacters[..2];
+                if (Operators.Contains(firstTwoCharacters) || Assignments.Contains(firstTwoCharacters))
+                    return firstTwoCharacters;
+            }
+
+            if (nextCharacters.Length >= 1)
+            {
+                var firstCharacterOnly = nextCharacters[0].ToString();
+                if (Operators.Contains(firstCharacterOnly) || Assignments.Contains(firstCharacterOnly))
+                    return firstCharacterOnly;
+            }
+
+            return null;
+        }
+
+        if (GetMatchingOperatorOrAssignment() is not { } operatorOrAssignmentValue) return false;
+
+        var tokenType = Operators.Contains(operatorOrAssignmentValue)
+            ? Consts.TokenTypes.Operator
+            : Consts.TokenTypes.Assignment;
+        AddTokenAndMoveIndex(tokenType, operatorOrAssignmentValue);
+        return true;
+    }
+
+    private bool TryHandleComment(string nextCharacters)
+    {
+        if (nextCharacters[0] != '#') return false;
+
+        var charactersUntilNewline = LexerUtilities.GetNextCharactersWhile(
+            input,
+            _index,
+            c => c != '\n'
+        );
+        _index += charactersUntilNewline.Length;
+        return true;
+    }
+
+    private static void HandleUnexpectedCharacter(string nextCharacters)
+    {
+        if (nextCharacters[0] == '\t')
+        {
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "unexpected indent");
+        }
+
+        throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "invalid syntax");
     }
     
     private void AddTokenAndMoveIndex(Consts.TokenTypes type, string value, int? length = null)
@@ -113,90 +221,18 @@ public class Lexer(string input, string? fileName = null)
         _index += length ?? value.Length;
     }
     
-    private string? GetMatchingOperatorOrAssignment(string nextCharacters)
-    {
-        if (nextCharacters.Length == 3)
-        {
-            if (Operators.Contains(nextCharacters) || Assignments.Contains(nextCharacters))
-            {
-                return nextCharacters;
-            }
-        }
-        
-        if (nextCharacters.Length >= 2)
-        {
-            var firstTwoCharacters = nextCharacters[..2];
-            if (Operators.Contains(firstTwoCharacters) || Assignments.Contains(firstTwoCharacters))
-            {
-                return firstTwoCharacters;
-            }
-        }
-        
-        if (nextCharacters.Length >= 1)
-        {
-            var firstCharacterOnly = nextCharacters[0].ToString();
-            if (Operators.Contains(firstCharacterOnly) || Assignments.Contains(firstCharacterOnly))
-            {
-                return firstCharacterOnly;
-            }
-        }
-
-        return null;
-    }
-    
-    private bool IsBackslashFollowedByReturn(string nextCharacters) =>
-        nextCharacters.Length >= 2 && nextCharacters[..2] == "\\\n";
-    
-    private bool IsNumber(string nextCharacters)
-    {
-        var isNumberStartingWithDecimalPoint = nextCharacters.Length > 1 && nextCharacters[0] == '.' && Consts.IsDigit(nextCharacters[1]);
-        var isNumberStartingWithDigit = nextCharacters.Length > 0 && Consts.IsDigit(nextCharacters[0]);
-        return isNumberStartingWithDecimalPoint || isNumberStartingWithDigit;
-    }
-    
     private string GetLineContents()
     {
-        if (input.IndexOf('\n', _index) != -1)
-        {
-            return input[_index..input.IndexOf('\n', _index)];
-        }
-        else
-        {
-            return input[_index..];
-        }
+        var newlineIndex = input.IndexOf('\n', _index);
+        return newlineIndex != -1
+            ? input[_index..newlineIndex]
+            : input[_index..];
     }
     
-    private Consts.TokenTypes GetTokenTypeFromWord(string word)
+    private string GetLookaheadCharacters(string inputString, int index)
     {
-        if (Keywords.Contains(word))
-        {
-            return Consts.TokenTypes.Keyword;
-        }
-        else if (ConstantStrings.Contains(word))
-        {
-            return Consts.TokenTypes.Constant;
-        }
-        else if (Operators.Contains(word))
-        {
-            return Consts.TokenTypes.Operator;
-        }
-        else if (BuiltInFunctions.Contains(word))
-        {
-            return Consts.TokenTypes.BuiltIn;
-        }
-        else if (ConversionTypes.Contains(word))
-        {
-            return Consts.TokenTypes.ConversionType;
-        }
-        else
-        {
-            return Consts.TokenTypes.Identifier;
-        }
-    }
-    
-    private string GetNextThreeCharactersOrUntilEndOfString(string inputString, int index)
-    {
-        return inputString.Substring(index, Math.Min(inputString.Length - index, 3));
+        const int maxLengthOfOperators = 3;
+        return inputString.Substring(index, Math.Min(inputString.Length - index, maxLengthOfOperators));
     }
     
     #region Constants
@@ -248,7 +284,6 @@ public class Lexer(string input, string? fileName = null)
     ]);
     
     private static readonly FrozenSet<string> Keywords = FrozenSet.ToFrozenSet([
-        "None",
         "as",
         "assert",
         "async", // NOT SUPPORTED IN V1

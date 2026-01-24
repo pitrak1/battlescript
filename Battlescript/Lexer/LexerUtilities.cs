@@ -1,7 +1,10 @@
+using System.Text;
+
 namespace Battlescript;
 
 public static class LexerUtilities
 {
+    private const int TabWidthInSpaces = 4;
     public static (int Length, string Result) GetNextCharactersWhile(
         string input,
         int index,
@@ -9,12 +12,12 @@ public static class LexerUtilities
         bool allowEscapes = false)
     {
         var startingIndex = index;
-        var result = "";
+        var result = new StringBuilder();
         while (index < input.Length)
         {
             if (allowEscapes && input[index] == '\\')
             {
-                result += input[index + 1].ToString();
+                result.Append(input[index + 1]);
                 index += 2;
             }
             else if (!predicate(input[index]))
@@ -23,12 +26,12 @@ public static class LexerUtilities
             }
             else
             {
-                result += input[index].ToString();
+                result.Append(input[index]);
                 index++;
             }
         }
 
-        return (index - startingIndex, result);
+        return (index - startingIndex, result.ToString());
     }
 
     public static (int Length, string Result) GetStringWithEscapes(string input, int index)
@@ -61,11 +64,11 @@ public static class LexerUtilities
                     totalSpaces++;
                     break;
                 case '\t':
-                    totalSpaces += 4;
+                    totalSpaces += TabWidthInSpaces;
                     break;
             }
         }
-        var result =  ((int)MathF.Floor(totalSpaces / 4f)).ToString();
+        var result = ((int)MathF.Floor(totalSpaces / (float)TabWidthInSpaces)).ToString();
         return (indentString.Length, result);
     }
 }
