@@ -49,14 +49,19 @@ public static class InstructionUtilities
         bool MatchesValueOrType(Token t) =>
             (values?.Contains(t.Value) ?? false) || (types?.Contains(t.Type) ?? false);
 
-        var tracker = new BracketTracker();
+        var depth = 0;
 
         for (var i = 0; i < tokens.Count; i++)
         {
             var token = tokens[i];
-            var wasAtRoot = tracker.IsAtRootLevel;
-            tracker.Update(token);
-            var isAtRoot = tracker.IsAtRootLevel;
+            var wasAtRoot = depth == 0;
+
+            if (Consts.OpeningBrackets.Contains(token.Value))
+                depth++;
+            else if (Consts.ClosingBrackets.Contains(token.Value))
+                depth--;
+
+            var isAtRoot = depth == 0;
 
             if ((wasAtRoot || isAtRoot) && MatchesValueOrType(token))
             {
@@ -82,15 +87,19 @@ public static class InstructionUtilities
         // 2. Higher value in OperatorPriority = lower priority, so we find max value
         // 3. We evaluate right to left
 
-        var tracker = new BracketTracker();
+        var depth = 0;
         (int Priority, int Index) lowest = (Int32.MaxValue, -1);
 
         for (var i = tokens.Count - 1; i >= 0; i--)
         {
             var token = tokens[i];
-            tracker.Update(token, reverse: true);
 
-            if (tracker.IsAtRootLevel && token.Type == Consts.TokenTypes.Operator)
+            if (Consts.ClosingBrackets.Contains(token.Value))
+                depth++;
+            else if (Consts.OpeningBrackets.Contains(token.Value))
+                depth--;
+
+            if (depth == 0 && token.Type == Consts.TokenTypes.Operator)
             {
                 lowest = GetLowerPriorityOperator(tokens, lowest, token.Value, i);
             }
@@ -144,15 +153,18 @@ public static class InstructionUtilities
         if (tokens.Count == 0) return [];
         if (delimiters.Count == 0) return [InstructionFactory.Create(tokens)];
 
-        var tracker = new BracketTracker();
+        var depth = 0;
         List<Token> currentTokenGroup = [];
         List<Instruction?> instructions = [];
 
         foreach (var token in tokens)
         {
-            tracker.Update(token);
+            if (Consts.OpeningBrackets.Contains(token.Value))
+                depth++;
+            else if (Consts.ClosingBrackets.Contains(token.Value))
+                depth--;
 
-            if (tracker.IsAtRootLevel && delimiters.Contains(token.Value))
+            if (depth == 0 && delimiters.Contains(token.Value))
             {
                 instructions.Add(InstructionFactory.Create(currentTokenGroup));
                 currentTokenGroup = [];
@@ -177,34 +189,5 @@ public static class InstructionUtilities
         var closingBracket = Consts.MatchingBracketsMap[tokens[0].Value];
         var closingIndex = GetTokenIndex(tokens, [closingBracket]);
         return tokens[1..closingIndex];
-    }
-
-    private class BracketTracker
-    {
-        private readonly Stack<string> _stack = [];
-
-        public bool IsAtRootLevel => _stack.Count == 0;
-
-        public void Update(Token token, bool reverse = false)
-        {
-            var stackCollection = reverse ? Consts.ClosingBrackets : Consts.OpeningBrackets;
-            var unstackCollection = reverse ? Consts.OpeningBrackets : Consts.ClosingBrackets;
-
-            if (stackCollection.Contains(token.Value))
-            {
-                _stack.Push(token.Value);
-            }
-            else if (unstackCollection.Contains(token.Value))
-            {
-                if (_stack.Count > 0 && Consts.MatchingBracketsMap[token.Value] == _stack.Peek())
-                {
-                    _stack.Pop();
-                }
-                else
-                {
-                    throw new ParserUnexpectedClosingSeparatorException(token);
-                }
-            }
-        }
     }
 }

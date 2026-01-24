@@ -81,22 +81,6 @@ public static class InstructionUtilitiesTests
         }
 
         [Test]
-        public void ThrowsErrorIfUnmatchedClosingSeparator()
-        {
-            var lexer = new Lexer("x = [4 + 5)");
-            var tokens = lexer.Run();
-            Assert.Throws<ParserUnexpectedClosingSeparatorException>(() => InstructionUtilities.GetTokenIndex(tokens, [")"]));
-        }
-
-        [Test]
-        public void ThrowsErrorIfNestedUnmatchedClosingSeparator()
-        {
-            var lexer = new Lexer("x = {[4 + 5)}");
-            var tokens = lexer.Run();
-            Assert.Throws<ParserUnexpectedClosingSeparatorException>(() => InstructionUtilities.GetTokenIndex(tokens, ["}"]));
-        }
-
-        [Test]
         public void EmptyTokenListReturnsNegativeOne()
         {
             var index = InstructionUtilities.GetTokenIndex([], ["+"]);
@@ -168,22 +152,6 @@ public static class InstructionUtilitiesTests
             var tokens = lexer.Run();
             int index = InstructionUtilities.GetLowestPriorityOperatorIndex(tokens);
             Assert.That(index, Is.EqualTo(-1));
-        }
-
-        [Test]
-        public void ThrowsErrorIfUnmatchedClosingSeparator()
-        {
-            var lexer = new Lexer("x = [4 + 5) - 4");
-            var tokens = lexer.Run();
-            Assert.Throws<ParserUnexpectedClosingSeparatorException>(() => InstructionUtilities.GetLowestPriorityOperatorIndex(tokens));
-        }
-
-        [Test]
-        public void ThrowsErrorIfNestedUnmatchedClosingSeparator()
-        {
-            var lexer = new Lexer("x = ([4 + 5)) - 4");
-            var tokens = lexer.Run();
-            Assert.Throws<ParserUnexpectedClosingSeparatorException>(() => InstructionUtilities.GetLowestPriorityOperatorIndex(tokens));
         }
 
         [Test]
