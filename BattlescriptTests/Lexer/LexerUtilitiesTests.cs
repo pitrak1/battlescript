@@ -57,46 +57,7 @@ public static class LexerUtilitiesTests
         }
 
         [Test]
-        public void WithEscapesHandlesEscapedCharacters()
-        {
-            var (length, result) = LexerUtilities.GetNextCharactersWhile(
-                @"hello\'world'end",
-                0,
-                c => c != '\'',
-                allowEscapes: true
-            );
-            Assert.That(result, Is.EqualTo("hello'world"));
-            Assert.That(length, Is.EqualTo(12));
-        }
-
-        [Test]
-        public void WithEscapesHandlesMultipleEscapes()
-        {
-            var (length, result) = LexerUtilities.GetNextCharactersWhile(
-                @"a\'b\'c'",
-                0,
-                c => c != '\'',
-                allowEscapes: true
-            );
-            Assert.That(result, Is.EqualTo("a'b'c"));
-            Assert.That(length, Is.EqualTo(7));
-        }
-
-        [Test]
-        public void WithEscapesHandlesEscapedBackslash()
-        {
-            var (length, result) = LexerUtilities.GetNextCharactersWhile(
-                @"a\\b'",
-                0,
-                c => c != '\'',
-                allowEscapes: true
-            );
-            Assert.That(result, Is.EqualTo(@"a\b"));
-            Assert.That(length, Is.EqualTo(4));
-        }
-
-        [Test]
-        public void WithoutEscapesDoesNotHandleEscapedCharacters()
+        public void DoesNotHandleEscapedCharactersByDefault()
         {
             var (length, result) = LexerUtilities.GetNextCharactersWhile(
                 @"hello\'world",
@@ -107,17 +68,60 @@ public static class LexerUtilitiesTests
             Assert.That(length, Is.EqualTo(5));
         }
 
-        [Test]
-        public void WithEscapesHandlesEscapedBackslashAtEndOfString()
+        [TestFixture]
+        public class WithEscapes
         {
-            var (length, result) = LexerUtilities.GetNextCharactersWhile(
-                @"abc\\",
-                0,
-                c => c != '\'',
-                allowEscapes: true
-            );
-            Assert.That(result, Is.EqualTo(@"abc\"));
-            Assert.That(length, Is.EqualTo(5));
+            [Test]
+            public void EscapedCharacters()
+            {
+                var (length, result) = LexerUtilities.GetNextCharactersWhile(
+                    @"hello\'world'end",
+                    0,
+                    c => c != '\'',
+                    allowEscapes: true
+                );
+                Assert.That(result, Is.EqualTo("hello'world"));
+                Assert.That(length, Is.EqualTo(12));
+            }
+
+            [Test]
+            public void MultipleEscapes()
+            {
+                var (length, result) = LexerUtilities.GetNextCharactersWhile(
+                    @"a\'b\'c'",
+                    0,
+                    c => c != '\'',
+                    allowEscapes: true
+                );
+                Assert.That(result, Is.EqualTo("a'b'c"));
+                Assert.That(length, Is.EqualTo(7));
+            }
+
+            [Test]
+            public void EscapedBackslash()
+            {
+                var (length, result) = LexerUtilities.GetNextCharactersWhile(
+                    @"a\\b'",
+                    0,
+                    c => c != '\'',
+                    allowEscapes: true
+                );
+                Assert.That(result, Is.EqualTo(@"a\b"));
+                Assert.That(length, Is.EqualTo(4));
+            }
+
+            [Test]
+            public void EscapedBackslashAtEndOfString()
+            {
+                var (length, result) = LexerUtilities.GetNextCharactersWhile(
+                    @"abc\\",
+                    0,
+                    c => c != '\'',
+                    allowEscapes: true
+                );
+                Assert.That(result, Is.EqualTo(@"abc\"));
+                Assert.That(length, Is.EqualTo(5));
+            }
         }
     }
 
