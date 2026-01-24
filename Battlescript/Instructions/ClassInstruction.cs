@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class ClassInstruction : Instruction, IEquatable<ClassInstruction>
+public class ClassInstruction : Instruction, IBlockInstruction, IEquatable<ClassInstruction>
 {
     public string Name { get; set; }
     public List<Instruction> Superclasses { get; set; }

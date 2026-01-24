@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class ForInstruction : Instruction, IEquatable<ForInstruction>
+public class ForInstruction : Instruction, IBlockInstruction, IEquatable<ForInstruction>
 {
     public VariableInstruction BlockVariable { get; set; }
     public Instruction Range { get; set; }

@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class TryInstruction : Instruction
+public class TryInstruction : Instruction, IBlockInstruction
 {
     public List<ExceptInstruction> Excepts { get; set; } = [];
     public ElseInstruction? Else { get; set; }

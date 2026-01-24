@@ -1,5 +1,7 @@
 namespace Battlescript;
 
+public interface IBlockInstruction;
+
 public abstract class Instruction : IEquatable<Instruction>
 {
     public int Line { get; set; }

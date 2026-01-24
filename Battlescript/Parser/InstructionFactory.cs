@@ -18,14 +18,12 @@ public static class InstructionFactory
         var operatorIndex = InstructionUtilities.GetLowestPriorityOperatorIndex(tokens);
         
         if (assignmentIndex != -1)
-        {
             return new AssignmentInstruction(tokens);
-        }
-        else if (IsListComprehension(tokens))
-        {
+
+        if (IsListComprehension(tokens))
             return new ListComprehensionInstruction(tokens);
-        }
-        else if (tokens[0].Type == Consts.TokenTypes.Keyword)
+
+        if (tokens[0].Type == Consts.TokenTypes.Keyword)
         {
             switch (tokens[0].Value)
             {
@@ -74,69 +72,54 @@ public static class InstructionFactory
                     throw new ParserUnexpectedTokenException(tokens[0]);
             }
         }
-        else if (tokens[0].Type == Consts.TokenTypes.ConversionType)
-        {
+
+        if (tokens[0].Type == Consts.TokenTypes.ConversionType)
             return new ConversionTypeInstruction(tokens);
-        }
-        else if (commaIndex != -1 || colonIndex != -1)
-        {
+
+        if (commaIndex != -1 || colonIndex != -1)
             return new ArrayInstruction(tokens);
-        }
-        else if (operatorIndex != -1)
-        {
+
+        if (operatorIndex != -1)
             return new OperationInstruction(tokens);
-        }
-        else if (tokens[0].Value == ".")
-        {
+
+        if (tokens[0].Value == ".")
             return new MemberInstruction(tokens);
-        }
-        else if (tokens[0].Value == "*")
-        {
+
+        if (tokens[0].Value == "*")
             return new ConstantInstruction("*");
-        }
-        else if (tokens[0].Type == Consts.TokenTypes.Bracket)
-        {
+
+        if (tokens[0].Type == Consts.TokenTypes.Bracket)
             return new ArrayInstruction(tokens);
-        }
-        else if (tokens[0].Type == Consts.TokenTypes.Identifier)
-        {
+
+        if (tokens[0].Type == Consts.TokenTypes.Identifier)
             return new VariableInstruction(tokens);
-        }
-        else if (tokens[0].Type == Consts.TokenTypes.String || tokens[0].Type == Consts.TokenTypes.FormattedString)
-        {
+
+        if (tokens[0].Type is Consts.TokenTypes.String or Consts.TokenTypes.FormattedString)
             return new StringInstruction(tokens);
-        }
-        else if (tokens[0].Type == Consts.TokenTypes.Constant)
-        {
+
+        if (tokens[0].Type == Consts.TokenTypes.Constant)
             return new ConstantInstruction(tokens);
-        }
-        else if (tokens[0].Type == Consts.TokenTypes.Numeric)
-        {
+
+        if (tokens[0].Type == Consts.TokenTypes.Numeric)
             return new NumericInstruction(tokens);
-        }
-        else if (tokens[0].Type == Consts.TokenTypes.BuiltIn)
-        {
+
+        if (tokens[0].Type == Consts.TokenTypes.BuiltIn)
             return new BuiltInInstruction(tokens);
-        }
-        else
-        {
-            throw new ParserUnexpectedTokenException(tokens[0]);
-        }
+
+        throw new ParserUnexpectedTokenException(tokens[0]);
     }
     
+    // Checks if the list of tokens is wrapped in square brackets and a "for" exists inside
     private static bool IsListComprehension(List<Token> tokens)
     {
-        // This effectively checks if the list of tokens is wrapped in square brackets and a "for" exists inside
-        if (tokens.Count > 2)
-        {
-            var closingBracketIndex = InstructionUtilities.GetTokenIndex(tokens, ["]"]);
-            if (closingBracketIndex != -1)
-            {
-                var forIndex = InstructionUtilities.GetTokenIndex(tokens.GetRange(1, closingBracketIndex - 1), ["for"]);
-                return forIndex != -1;
-            }
-        }
+        if (tokens.Count <= 2)
+            return false;
 
-        return false;
+        var closingBracketIndex = InstructionUtilities.GetTokenIndex(tokens, ["]"]);
+        if (closingBracketIndex == -1)
+            return false;
+
+        var forIndex = InstructionUtilities.GetTokenIndex(tokens.GetRange(1, closingBracketIndex - 1), ["for"]);
+        return forIndex != -1;
     }
 }

@@ -8,19 +8,6 @@ public class Parser
     // This is to track where the currently parsed instruction goes.  The base scope should always be entry 0, but
     // this will keep references to the set of different code blocks we are in (fors, ifs, functions, whatever)
     private readonly List<List<Instruction>> _scopes;
-    
-    private static readonly string[] InstructionTypesExpectingIndent =
-    [
-        "FunctionInstruction",
-        "ClassInstruction",
-        "ElseInstruction",
-        "ExceptInstruction",
-        "FinallyInstruction",
-        "ForInstruction",
-        "TryInstruction",
-        "WhileInstruction",
-        "IfInstruction",
-    ];
 
     public Parser(List<Token> tokens)
     {
@@ -40,32 +27,7 @@ public class Parser
                 ParseInstructionAndAddToCurrentScope();
                 
                 var newIndentValue = int.Parse(token.Value);
-                var indentDiff = newIndentValue - currentIndentValue;
-                
-                // If we are at the start of a code block
-                if (indentDiff == 1)
-                {
-                    if (IsLastScopeEmpty() || !IsInstructionExpectingIndent(_scopes[^1][^1]))
-                    {
-                        throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "unexpected indent");
-                    }
-                    
-                    // Add the last instruction of the current scope to the stack of scopes so that new instructions
-                    // within the block are added there
-                    _scopes.Add(_scopes[^1][^1].Instructions);
-                }
-                // If we are at the end of a code block
-                else if (indentDiff < 0)
-                {
-                    // Pop off the last scope so that new instructions are instead added to the next
-                    // largest containing scope
-                    CloseCodeBlocks(-indentDiff);
-                }
-                else if (indentDiff > 1)
-                {
-                    throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "unindent does not match any outer indentation level");
-                }
-                
+                HandleIndentChange(newIndentValue - currentIndentValue);
                 currentIndentValue = newIndentValue;
             }
             else
@@ -83,10 +45,28 @@ public class Parser
         return _instructions;
     }
 
-    private bool IsLastScopeEmpty() => _scopes[^1].Count == 0;
+    private void HandleIndentChange(int indentDiff)
+    {
+        if (indentDiff == 1)
+        {
+            if (IsScopeEmpty(_scopes[^1]) || _scopes[^1][^1] is not IBlockInstruction)
+            {
+                throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "unexpected indent");
+            }
 
-    public static bool IsInstructionExpectingIndent(Instruction instruction) =>
-        InstructionTypesExpectingIndent.Contains(instruction.GetType().Name);
+            _scopes.Add(_scopes[^1][^1].Instructions);
+        }
+        else if (indentDiff < 0)
+        {
+            CloseCodeBlocks(-indentDiff);
+        }
+        else if (indentDiff > 1)
+        {
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "unindent does not match any outer indentation level");
+        }
+    }
+
+    private static bool IsScopeEmpty(List<Instruction> scope) => scope.Count == 0;
 
     private void CloseCodeBlocks(int count)
     {

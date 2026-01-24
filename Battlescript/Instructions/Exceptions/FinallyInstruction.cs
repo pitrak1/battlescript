@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class FinallyInstruction : Instruction
+public class FinallyInstruction : Instruction, IBlockInstruction
 {
     public FinallyInstruction(List<Token> tokens) : base(tokens) {}
 

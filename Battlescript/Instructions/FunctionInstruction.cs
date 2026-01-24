@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class FunctionInstruction : Instruction, IEquatable<FunctionInstruction>
+public class FunctionInstruction : Instruction, IBlockInstruction, IEquatable<FunctionInstruction>
 {
     public string Name { get; set; }
     public ParameterSet Parameters { get; set; }

@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class WhileInstruction : Instruction, IEquatable<WhileInstruction>
+public class WhileInstruction : Instruction, IBlockInstruction, IEquatable<WhileInstruction>
 {
     public Instruction Condition { get; set; }
 

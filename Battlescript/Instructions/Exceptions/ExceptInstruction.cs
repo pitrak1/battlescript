@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Battlescript;
 
-public class ExceptInstruction : Instruction
+public class ExceptInstruction : Instruction, IBlockInstruction
 {
     public VariableInstruction? ExceptionType { get; set; }
     public VariableInstruction? ExceptionVariable { get; set; }

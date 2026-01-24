@@ -1,6 +1,6 @@
 namespace Battlescript;
 
-public class IfInstruction : Instruction, IEquatable<IfInstruction>
+public class IfInstruction : Instruction, IBlockInstruction, IEquatable<IfInstruction>
 {
     public Instruction Condition { get; set; }
 

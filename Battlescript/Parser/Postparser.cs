@@ -13,7 +13,7 @@ public static class Postparser
     {
         foreach (var t in instructions)
         {
-            if (Parser.IsInstructionExpectingIndent(t) && t.Instructions.Count == 0)
+            if (t is IBlockInstruction && t.Instructions.Count == 0)
             {
                 throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "expected an indented block");
             }
@@ -44,18 +44,9 @@ public static class Postparser
             
             JoinIfElse(currentInstruction.Instructions);
         }
-
-        return;
-
-        ElseInstruction? GetElseInstructionIfPresent(int index)
-        {
-            if (index < instructions.Count && instructions[index] is ElseInstruction elseInstruction)
-            {
-                return elseInstruction;
-            }
-
-            return null;
-        }
+        
+        ElseInstruction? GetElseInstructionIfPresent(int index) =>
+            index < instructions.Count && instructions[index] is ElseInstruction e ? e : null;
     }
     
     private static void JoinTryExceptElseFinally(List<Instruction> instructions)
