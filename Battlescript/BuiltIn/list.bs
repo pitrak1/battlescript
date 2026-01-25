@@ -60,3 +60,15 @@ class list:
 
     def insert(self, index, value):
         self[index:index] = [value]
+
+    def index(self, value):
+        i = 0
+        while i < len(self):
+            if self[i] == value:
+                return i
+            i = i + 1
+        raise ValueError("value not in list")
+
+    def remove(self, value):
+        i = self.index(value)
+        self[i:i + 1] = []

@@ -517,4 +517,163 @@ public class ListTests
             Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
         }
     }
+
+    [TestFixture]
+    public class Remove
+    {
+        [Test]
+        public void RemovesFirstOccurrence()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 3, 2, 4]
+                                    x.remove(2)
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 4),
+            });
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void RemovesOnlyElement()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1]
+                                    x.remove(1)
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>());
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void RemovesFromBeginning()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 3]
+                                    x.remove(1)
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+            });
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void RemovesFromEnd()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 3]
+                                    x.remove(3)
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+            });
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ReturnsNone()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 3]
+                                    y = x.remove(2)
+                                    """);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.None));
+        }
+
+        [Test]
+        public void ModifiesListInPlace()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 3]
+                                    y = x
+                                    x.remove(2)
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+            });
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ThrowsValueErrorWhenNotFound()
+        {
+            Assert.Throws<InternalRaiseException>(() => Runner.Run("""
+                                    x = [1, 2, 3]
+                                    x.remove(4)
+                                    """));
+        }
+    }
+
+    [TestFixture]
+    public class Index
+    {
+        [Test]
+        public void FindsFirstOccurrence()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 3, 2, 4]
+                                    y = x.index(2)
+                                    """);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 1)));
+        }
+
+        [Test]
+        public void FindsAtBeginning()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 3]
+                                    y = x.index(1)
+                                    """);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 0)));
+        }
+
+        [Test]
+        public void FindsAtEnd()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 3]
+                                    y = x.index(3)
+                                    """);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 2)));
+        }
+
+        [Test]
+        public void FindsInSingleElementList()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [42]
+                                    y = x.index(42)
+                                    """);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 0)));
+        }
+
+        [Test]
+        public void ThrowsValueErrorWhenNotFound()
+        {
+            Assert.Throws<InternalRaiseException>(() => Runner.Run("""
+                                    x = [1, 2, 3]
+                                    x.index(4)
+                                    """));
+        }
+
+        [Test]
+        public void ThrowsValueErrorOnEmptyList()
+        {
+            Assert.Throws<InternalRaiseException>(() => Runner.Run("""
+                                    x = []
+                                    x.index(1)
+                                    """));
+        }
+    }
 }
