@@ -957,4 +957,183 @@ public class ListTests
             Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
     }
+
+    [TestFixture]
+    public class Sort
+    {
+        [Test]
+        public void SortsIntegersAscending()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [3, 1, 4, 1, 5, 9, 2, 6]
+                                    x.sort()
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+                BtlTypes.Create(BtlTypes.Types.Int, 4),
+                BtlTypes.Create(BtlTypes.Types.Int, 5),
+                BtlTypes.Create(BtlTypes.Types.Int, 6),
+                BtlTypes.Create(BtlTypes.Types.Int, 9),
+            });
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void SortsAlreadySortedList()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 3, 4]
+                                    x.sort()
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+                BtlTypes.Create(BtlTypes.Types.Int, 4),
+            });
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void SortsReverseSortedList()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [5, 4, 3, 2, 1]
+                                    x.sort()
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+                BtlTypes.Create(BtlTypes.Types.Int, 4),
+                BtlTypes.Create(BtlTypes.Types.Int, 5),
+            });
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void SortsSingleElement()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [42]
+                                    x.sort()
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 42),
+            });
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void SortsEmptyList()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = []
+                                    x.sort()
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>());
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ReturnsNone()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [3, 1, 2]
+                                    y = x.sort()
+                                    """);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.None));
+        }
+
+        [Test]
+        public void ModifiesListInPlace()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [3, 1, 2]
+                                    y = x
+                                    x.sort()
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+            });
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void SortsWithLambdaKey()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [3, -1, 4, -5, 2]
+                                    square = lambda v: v * v
+                                    x.sort(key=square)
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, -1),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+                BtlTypes.Create(BtlTypes.Types.Int, 4),
+                BtlTypes.Create(BtlTypes.Types.Int, -5),
+            });
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void SortsWithNegatingLambdaForDescending()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 3, 2, 5, 4]
+                                    negate = lambda v: -v
+                                    x.sort(key=negate)
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 5),
+                BtlTypes.Create(BtlTypes.Types.Int, 4),
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+            });
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void SortsWithLenAsKey()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [[1, 2, 3], [1], [1, 2]]
+                                    length = lambda v: len(v)
+                                    x.sort(key=length)
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+                {
+                    BtlTypes.Create(BtlTypes.Types.Int, 1),
+                }),
+                BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+                {
+                    BtlTypes.Create(BtlTypes.Types.Int, 1),
+                    BtlTypes.Create(BtlTypes.Types.Int, 2),
+                }),
+                BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+                {
+                    BtlTypes.Create(BtlTypes.Types.Int, 1),
+                    BtlTypes.Create(BtlTypes.Types.Int, 2),
+                    BtlTypes.Create(BtlTypes.Types.Int, 3),
+                }),
+            });
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+    }
 }
