@@ -87,3 +87,14 @@ class list:
             if item == value:
                 c = c + 1
         return c
+
+    def reverse(self):
+        left = 0
+        right = len(self) - 1
+        while left < right:
+            temp = self[left]
+            self[left] = self[right]
+            self[right] = temp
+            
+            left = left + 1
+            right = right - 1

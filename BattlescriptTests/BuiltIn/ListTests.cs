@@ -866,4 +866,95 @@ public class ListTests
             Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 0)));
         }
     }
+
+    [TestFixture]
+    public class Reverse
+    {
+        [Test]
+        public void ReversesMultipleElements()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 3, 4]
+                                    x.reverse()
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 4),
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+            });
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ReversesSingleElement()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [42]
+                                    x.reverse()
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 42),
+            });
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ReversesEmptyList()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = []
+                                    x.reverse()
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>());
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ReturnsNone()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 3]
+                                    y = x.reverse()
+                                    """);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.None));
+        }
+
+        [Test]
+        public void ModifiesListInPlace()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 3]
+                                    y = x
+                                    x.reverse()
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+            });
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ReversesOddNumberOfElements()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 3, 4, 5]
+                                    x.reverse()
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 5),
+                BtlTypes.Create(BtlTypes.Types.Int, 4),
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+            });
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+    }
 }
