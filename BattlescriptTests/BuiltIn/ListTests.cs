@@ -419,4 +419,102 @@ public class ListTests
             Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
     }
+
+    [TestFixture]
+    public class Insert
+    {
+        [Test]
+        public void InsertsAtBeginning()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [2, 3, 4]
+                                    x.insert(0, 1)
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+                BtlTypes.Create(BtlTypes.Types.Int, 4),
+            });
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void InsertsAtMiddle()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 4, 5]
+                                    x.insert(2, 3)
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+                BtlTypes.Create(BtlTypes.Types.Int, 4),
+                BtlTypes.Create(BtlTypes.Types.Int, 5),
+            });
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void InsertsAtEnd()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 3]
+                                    x.insert(3, 4)
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+                BtlTypes.Create(BtlTypes.Types.Int, 4),
+            });
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void InsertsIntoEmptyList()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = []
+                                    x.insert(0, 1)
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+            });
+            Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ReturnsNone()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 3]
+                                    y = x.insert(1, 10)
+                                    """);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.None));
+        }
+
+        [Test]
+        public void ModifiesListInPlace()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 3]
+                                    y = x
+                                    x.insert(1, 10)
+                                    """);
+            var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
+            {
+                BtlTypes.Create(BtlTypes.Types.Int, 1),
+                BtlTypes.Create(BtlTypes.Types.Int, 10),
+                BtlTypes.Create(BtlTypes.Types.Int, 2),
+                BtlTypes.Create(BtlTypes.Types.Int, 3),
+            });
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
+        }
+    }
 }

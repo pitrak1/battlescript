@@ -57,3 +57,6 @@ class list:
     
     def extend(self, iterable):
         self[len(self):] = iterable
+
+    def insert(self, index, value):
+        self[index:index] = [value]
