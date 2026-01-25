@@ -822,4 +822,48 @@ public class ListTests
             Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(expected));
         }
     }
+
+    [TestFixture]
+    public class Count
+    {
+        [Test]
+        public void CountsMultipleOccurrences()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 2, 3, 2, 4]
+                                    y = x.count(2)
+                                    """);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 3)));
+        }
+
+        [Test]
+        public void CountsSingleOccurrence()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 3, 4]
+                                    y = x.count(3)
+                                    """);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 1)));
+        }
+
+        [Test]
+        public void CountsZeroOccurrences()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = [1, 2, 3]
+                                    y = x.count(5)
+                                    """);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 0)));
+        }
+
+        [Test]
+        public void CountsInEmptyList()
+        {
+            var (callStack, closure) = Runner.Run("""
+                                    x = []
+                                    y = x.count(1)
+                                    """);
+            Assert.That(closure.GetVariable(callStack, "y"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 0)));
+        }
+    }
 }

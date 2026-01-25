@@ -62,11 +62,9 @@ class list:
         self[index:index] = [value]
 
     def index(self, value):
-        i = 0
-        while i < len(self):
+        for i in range(len(self)):
             if self[i] == value:
                 return i
-            i = i + 1
         raise ValueError("value not in list")
 
     def remove(self, value):
@@ -82,3 +80,10 @@ class list:
 
     def clear(self):
         self[0:len(self)] = []
+
+    def count(self, value):
+        c = 0
+        for item in self:
+            if item == value:
+                c = c + 1
+        return c
