@@ -92,19 +92,25 @@ class list:
         left = 0
         right = len(self) - 1
         while left < right:
+            # swap
             temp = self[left]
             self[left] = self[right]
             self[right] = temp
+
+            # move indices toward middle
             left = left + 1
             right = right - 1
 
     def sort(self, key=None):
         for i in range(1, len(self)):
+            # get current value to insert
             current = self[i]
             if key:
                 current_key = key(current)
             else:
                 current_key = current
+
+            # shift larger values to the right
             j = i - 1
             while j >= 0:
                 if key:

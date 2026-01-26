@@ -4,10 +4,31 @@ public static class Postlexer
 {
     public static void Run(List<Token> tokens)
     {
+        CollapseConsecutiveNewlines(tokens);
         JoinIsNotAndNotIn(tokens);
         CheckForParenthesesWithBuiltInFunctionCalls(tokens);
         CheckForMatchingBrackets(tokens);
         CheckForFormattedStrings(tokens);
+    }
+
+    private static void CollapseConsecutiveNewlines(List<Token> tokens)
+    {
+        // Collapse consecutive Newline tokens into a single one, keeping the last.
+        // This handles blank lines - we only care about the indent of the next
+        // line with actual content, not intermediate blank lines.
+        var i = 0;
+        while (i < tokens.Count - 1)
+        {
+            if (tokens[i].Type == Consts.TokenTypes.Newline &&
+                tokens[i + 1].Type == Consts.TokenTypes.Newline)
+            {
+                tokens.RemoveAt(i);
+            }
+            else
+            {
+                i++;
+            }
+        }
     }
 
     private static void JoinIsNotAndNotIn(List<Token> tokens)
