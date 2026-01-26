@@ -1093,8 +1093,7 @@ public class ListTests
         {
             var (callStack, closure) = Runner.Run("""
                                     x = [1, 3, 2, 5, 4]
-                                    negate = lambda v: -v
-                                    x.sort(key=negate)
+                                    x.sort(key=lambda v: -v)
                                     """);
             var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
             {

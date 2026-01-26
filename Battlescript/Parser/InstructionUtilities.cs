@@ -44,12 +44,14 @@ public static class InstructionUtilities
     public static int GetTokenIndex(
         List<Token> tokens,
         List<string>? values = null,
-        List<Consts.TokenTypes>? types = null)
+        List<Consts.TokenTypes>? types = null,
+        bool respectLambda = true)
     {
         bool MatchesValueOrType(Token t) =>
             (values?.Contains(t.Value) ?? false) || (types?.Contains(t.Type) ?? false);
 
         var depth = 0;
+        var lambdaDepth = 0;
 
         for (var i = 0; i < tokens.Count; i++)
         {
@@ -61,9 +63,20 @@ public static class InstructionUtilities
             else if (Consts.ClosingBrackets.Contains(token.Value))
                 depth--;
 
+            // Track lambda context - when we see "lambda", the next colon belongs to it
+            if (respectLambda && token is { Type: Consts.TokenTypes.Keyword, Value: "lambda" })
+                lambdaDepth++;
+
+            // Colon after lambda ends the parameter list but is part of the lambda
+            if (respectLambda && lambdaDepth > 0 && token.Value == ":")
+            {
+                lambdaDepth--;
+                continue;  // Don't match this colon
+            }
+
             var isAtRoot = depth == 0;
 
-            if ((wasAtRoot || isAtRoot) && MatchesValueOrType(token))
+            if ((wasAtRoot || isAtRoot) && lambdaDepth == 0 && MatchesValueOrType(token))
             {
                 return i;
             }
@@ -154,6 +167,7 @@ public static class InstructionUtilities
         if (delimiters.Count == 0) return [InstructionFactory.Create(tokens)];
 
         var depth = 0;
+        var lambdaDepth = 0;
         List<Token> currentTokenGroup = [];
         List<Instruction?> instructions = [];
 
@@ -164,7 +178,19 @@ public static class InstructionUtilities
             else if (Consts.ClosingBrackets.Contains(token.Value))
                 depth--;
 
-            if (depth == 0 && delimiters.Contains(token.Value))
+            // Track lambda context - when we see "lambda", the next colon belongs to it
+            if (token is { Type: Consts.TokenTypes.Keyword, Value: "lambda" })
+                lambdaDepth++;
+
+            // If we're in a lambda context and see a colon, it ends the lambda parameters
+            if (lambdaDepth > 0 && token.Value == ":")
+            {
+                lambdaDepth--;
+                currentTokenGroup.Add(token);
+                continue;
+            }
+
+            if (depth == 0 && lambdaDepth == 0 && delimiters.Contains(token.Value))
             {
                 instructions.Add(InstructionFactory.Create(currentTokenGroup));
                 currentTokenGroup = [];

@@ -7,21 +7,21 @@ public class LambdaInstruction : Instruction, IEquatable<LambdaInstruction>
     public LambdaInstruction(List<Token> tokens) : base(tokens)
     {
         CheckTokenValidity(tokens);
-        
-        var colonIndex = InstructionUtilities.GetTokenIndex(tokens, [":"]);
+
+        var colonIndex = InstructionUtilities.GetTokenIndex(tokens, [":"], respectLambda: false);
         var parametersTokens = tokens.GetRange(1, colonIndex - 1);
         var parameters = InstructionUtilities.ParseEntriesBetweenDelimiters(parametersTokens, [","]);
 
         var expressionTokens = tokens.GetRange(colonIndex + 1, tokens.Count - colonIndex - 1);
         var instruction = new ReturnInstruction(InstructionFactory.Create(expressionTokens));
-        
+
         Parameters = new ParameterSet(parameters!);
         Instructions = [instruction];
     }
 
     private void CheckTokenValidity(List<Token> tokens)
     {
-        var colonIndex = InstructionUtilities.GetTokenIndex(tokens, [":"]);
+        var colonIndex = InstructionUtilities.GetTokenIndex(tokens, [":"], respectLambda: false);
 
         // Missing colon or missing expression
         if (colonIndex == -1 || colonIndex == tokens.Count - 1)
