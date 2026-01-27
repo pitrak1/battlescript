@@ -57,7 +57,7 @@ public static class Consts
         // "frozenset",
         // "getattr",
         // "globals",
-        // "hasattr",
+        "hasattr",
         // "hash",
         // "help", // NOT SUPPORTED IN V1
         // "hex", // NOT SUPPORTED IN V1
@@ -80,7 +80,7 @@ public static class Consts
         // "pow",
         // "print",
         // "property",
-        "range",
+        // "range",
         // "repr",
         // "reversed",
         // "round",
@@ -110,9 +110,9 @@ public static class Consts
         Operator,
         Assignment,
         Breakpoint,
-        ConversionType,
         Numeric,
         FormattedString,
-        BuiltIn
+        BuiltIn,
+        Binding
     }
 }

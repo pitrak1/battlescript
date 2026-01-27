@@ -36,8 +36,6 @@ public class BuiltInInstruction : Instruction, IEquatable<BuiltInInstruction>
     {
         switch (Name)
         {
-            case "abs":
-                return BuiltInAbs.Run(callStack, closure, Arguments);
             case "range":
                 return BuiltInRange.Run(callStack, closure, Arguments);
             case "isinstance":

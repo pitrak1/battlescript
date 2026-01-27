@@ -53,7 +53,8 @@ public static class ArgumentTransfer
         var extraPositionalCount = arguments.Positionals.Count - parameters.Names.Count;
         if (extraPositionalCount > 0)
         {
-            throw new InterpreterUnknownPositionalArgumentException(extraPositionalCount);
+            throw new InternalRaiseException(BtlTypes.Types.TypeError,
+                $"Too many positional arguments: {extraPositionalCount} extra");
         }
 
         var unusedKeywords = arguments.Keywords.Keys.Except(usedKeywords).ToList();

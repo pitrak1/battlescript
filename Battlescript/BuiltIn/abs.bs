@@ -1,2 +1,4 @@
 def abs(value):
+    if not hasattr(value, "__abs__"):
+        raise TypeError("bad operand type for abs(): '{}'".format(type(value).__name__))
     return value.__abs__()

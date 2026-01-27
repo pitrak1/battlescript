@@ -88,12 +88,12 @@ public class ImportInstruction : Instruction, IEquatable<ImportInstruction>
     {
         var importedScope = InterpretFileInNewClosureScope(callStack, closure);
         
-        var starImportConversionType = new MappingVariable(null, importedScope);
+        var starImport = new MappingVariable(null, importedScope);
         foreach (var name in ImportNames)
         {
             if (name == "*")
             {
-                closure.SetVariable(callStack, new VariableInstruction(FileName), BtlTypes.Create(BtlTypes.Types.Dictionary, starImportConversionType));
+                closure.SetVariable(callStack, new VariableInstruction(FileName), BtlTypes.Create(BtlTypes.Types.Dictionary, starImport));
             }
             else if (importedScope.TryGetValue(name, out var value))
             {

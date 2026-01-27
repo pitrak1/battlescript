@@ -36,11 +36,11 @@ public static class Runner
 
         BtlTypes.PopulateBtlTypeConstants(callStack, closure);
 
-        // for (var i = 0; i < Consts.BuiltInFunctions.Length; i++)
-        // {
-        //     var builtInName = Consts.BuiltInFunctions[i];
-        //     ImportBuiltInByName(callStack, closure, builtInName, i + BtlTypes.TypeStrings.Length);
-        // }
+        for (var i = 0; i < Consts.BuiltInFunctions.Length; i++)
+        {
+            var builtInName = Consts.BuiltInFunctions[i];
+            ImportBuiltInByName(callStack, closure, builtInName, i + BtlTypes.TypeStrings.Length);
+        }
     }
 
     private static void ImportBuiltInByName(CallStack callStack, Closure closure, string name, int line)

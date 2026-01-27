@@ -133,8 +133,8 @@ public class Lexer(string input, string? fileName = null)
                 return Consts.TokenTypes.Operator;
             if (BuiltInFunctions.Contains(word))
                 return Consts.TokenTypes.BuiltIn;
-            if (ConversionTypes.Contains(word))
-                return Consts.TokenTypes.ConversionType;
+            if (Bindings.Contains(word))
+                return Consts.TokenTypes.Binding;
             return Consts.TokenTypes.Identifier;
         }
 
@@ -315,7 +315,7 @@ public class Lexer(string input, string? fileName = null)
     ]);
 
     private static readonly FrozenSet<string> BuiltInFunctions = FrozenSet.ToFrozenSet([
-        "abs",
+        // "abs",
         "aiter", // NOT SUPPORTED IN V1
         "all",
         "anext", // NOT SUPPORTED IN V1
@@ -341,7 +341,7 @@ public class Lexer(string input, string? fileName = null)
         "frozenset",
         "getattr",
         "globals",
-        "hasattr",
+        // "hasattr",
         "hash",
         "help", // NOT SUPPORTED IN V1
         "hex", // NOT SUPPORTED IN V1
@@ -357,7 +357,6 @@ public class Lexer(string input, string? fileName = null)
         "memoryview",
         "min",
         "next",
-        "object", // NOT SUPPORTED IN V1
         "oct", // NOT SUPPORTED IN V1
         "open", // NOT SUPPORTED IN V1
         "ord", // NOT SUPPORTED IN V1
@@ -384,12 +383,13 @@ public class Lexer(string input, string? fileName = null)
     private static readonly FrozenSet<string> ConstantStrings =
         FrozenSet.ToFrozenSet(["None", "True", "False"]);
     
-    private static readonly string[] ConversionTypes =
+    private static readonly string[] Bindings =
     [
         "__btl_numeric__",
         "__btl_sequence__",
         "__btl_mapping__",
         "__btl_string__",
+        "__btl_getattr__",
     ];
     
     #endregion

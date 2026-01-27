@@ -135,7 +135,7 @@ public class ArgumentTransferTests
                 new VariableInstruction("asdf"),
                 new VariableInstruction("qwer")
             });
-            Assert.Throws<InterpreterUnknownPositionalArgumentException>(() => ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters));
+            Assert.Throws<InternalRaiseException>(() => ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters));
         }
 
         [Test]

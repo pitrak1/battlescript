@@ -1,11 +1,11 @@
 namespace Battlescript;
 
-public class ConversionTypeInstruction : Instruction, IEquatable<ConversionTypeInstruction>
+public class BindingInstruction : Instruction, IEquatable<BindingInstruction>
 {
     public string Value { get; set; }
     public List<Instruction> Parameters { get; set; } = [];
 
-    public ConversionTypeInstruction(List<Token> tokens) : base(tokens)
+    public BindingInstruction(List<Token> tokens) : base(tokens)
     {
         ParseArguments(tokens);
         Value = tokens[0].Value;
@@ -31,7 +31,7 @@ public class ConversionTypeInstruction : Instruction, IEquatable<ConversionTypeI
         }
     }
 
-    public ConversionTypeInstruction(
+    public BindingInstruction(
         string value, 
         List<Instruction>? parameters = null, 
         int? line = null, 
@@ -55,6 +55,8 @@ public class ConversionTypeInstruction : Instruction, IEquatable<ConversionTypeI
                 return new MappingVariable();
             case "__btl_string__":
                 return InterpretString(callStack, closure, instructionContext);
+            case "__btl_getattr__":
+                return InterpretGetAttr(callStack, closure, instructionContext);
         }
         return null;
     }
@@ -162,20 +164,40 @@ public class ConversionTypeInstruction : Instruction, IEquatable<ConversionTypeI
     {
         return value.Contains(".") ? double.Parse(value) : int.Parse(value);
     }
+
+    private Variable? InterpretGetAttr(CallStack callStack, Closure closure, Variable? instructionContext = null)
+    {
+        if (Parameters.Count != 2)
+        {
+            throw new Exception("wrong number of arguments");
+        }
+        
+        var objectToSearch = Parameters[0].Interpret(callStack, closure) as ObjectVariable;
+        var attrNameObjectVariable = Parameters[1].Interpret(callStack, closure, instructionContext);
+        var name = BtlTypes.GetStringValue(attrNameObjectVariable);
+        var result = objectToSearch.GetMember(callStack, closure, new MemberInstruction(name), objectToSearch);
+
+        if (result is null)
+        {
+            throw new InternalRaiseException(BtlTypes.Types.AttributeError, $"cannot find attribute {name}");
+        }
+
+        return result;
+    }
     
     #region Equality
 
-    public override bool Equals(object? obj) => obj is ConversionTypeInstruction inst && Equals(inst);
+    public override bool Equals(object? obj) => obj is BindingInstruction inst && Equals(inst);
 
-    public bool Equals(ConversionTypeInstruction? other) =>
+    public bool Equals(BindingInstruction? other) =>
         other is not null && Parameters.SequenceEqual(other.Parameters) && Value == other.Value;
 
     public override int GetHashCode() => HashCode.Combine(Parameters, Value);
 
-    public static bool operator ==(ConversionTypeInstruction? left, ConversionTypeInstruction? right) =>
+    public static bool operator ==(BindingInstruction? left, BindingInstruction? right) =>
         left?.Equals(right) ?? right is null;
 
-    public static bool operator !=(ConversionTypeInstruction? left, ConversionTypeInstruction? right) => !(left == right);
+    public static bool operator !=(BindingInstruction? left, BindingInstruction? right) => !(left == right);
 
     #endregion
 }

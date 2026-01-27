@@ -39,4 +39,5 @@ Battlescript is a Python-like language interpreter that is simple input/output i
 ### TODO
 - Could use support for built in functions being passed as functions (ex: look at Builtin/ListTests.SortsWithLenAsKey)
     Update: to do this, the builtins have to exist in memory.  We can't pass them around by reference otherwise.  This would mean that if we wrote them in Battlescript, we could do this, but we would possibly need "ConversionFunctions" (much like our "ConversionTypes") to play nice with C# for stuff we can't do in Btl.  We have to start somewhere, and it's hard to start any earlier than things like `len` and `isinstance`.
+- (5).__abs__()
 

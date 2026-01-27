@@ -1,0 +1,6 @@
+def hasattr(object, name):
+    try:
+        __btl_getattr__(object, name)
+        return True
+    except AttributeError:
+        return False

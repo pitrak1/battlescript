@@ -73,8 +73,8 @@ public static class InstructionFactory
             }
         }
 
-        if (tokens[0].Type == Consts.TokenTypes.ConversionType)
-            return new ConversionTypeInstruction(tokens);
+        if (tokens[0].Type == Consts.TokenTypes.Binding)
+            return new BindingInstruction(tokens);
 
         if (commaIndex != -1 || colonIndex != -1)
             return new ArrayInstruction(tokens);

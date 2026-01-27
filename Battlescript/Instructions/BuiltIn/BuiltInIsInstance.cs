@@ -7,9 +7,9 @@ public static class BuiltInIsInstance
         CheckArguments(arguments);
         
         var objectExpression = arguments[0].Interpret(callStack, closure);
-        if (arguments[1] is ConversionTypeInstruction conversionTypeInstruction)
+        if (arguments[1] is BindingInstruction bindingInstruction)
         {
-            switch (conversionTypeInstruction.Value)
+            switch (bindingInstruction.Value)
             {
                 case "__btl_numeric__":
                     return BtlTypes.Create(BtlTypes.Types.Bool,

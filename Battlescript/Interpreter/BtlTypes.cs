@@ -18,6 +18,7 @@ public static class BtlTypes
         TypeError,
         NameError,
         NoneType,
+        AttributeError,
     }
 
     // Load order matters for built-in initialization
@@ -36,6 +37,7 @@ public static class BtlTypes
         ("TypeError", Types.TypeError),
         ("NameError", Types.NameError),
         ("NoneType", Types.NoneType),
+        ("AttributeError", Types.AttributeError),
     ];
 
     public static readonly string[] TypeStrings = TypeMappings.Select(t => t.Name).ToArray();

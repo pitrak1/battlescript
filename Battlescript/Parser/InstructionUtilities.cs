@@ -207,6 +207,11 @@ public static class InstructionUtilities
 
     public static List<Token> GetGroupedTokensAtStart(List<Token> tokens)
     {
+        if (tokens.Count == 0)
+        {
+            Console.Write("asdfasdf");
+        }
+        
         if (!Consts.OpeningBrackets.Contains(tokens[0].Value))
         {
             return [];
