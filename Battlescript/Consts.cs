@@ -1,4 +1,5 @@
 using System.Collections.Frozen;
+using System.Collections.Immutable;
 
 namespace Battlescript;
 
@@ -28,6 +29,74 @@ public static class Consts
         { "]", "[" }
     }.ToFrozenDictionary();
     
+    public static readonly ImmutableArray<string> BuiltInFunctions =
+    [
+        "abs",
+        // "aiter", // NOT SUPPORTED IN V1
+        // "all",
+        // "anext", // NOT SUPPORTED IN V1
+        // "any",
+        // "ascii",
+        // "bin", // NOT SUPPORTED IN V1
+        // "breakpoint",
+        // "bytearray", // NOT SUPPORTED IN V1
+        // "bytes", // NOT SUPPORTED IN V1
+        // "callable",
+        // "chr", // NOT SUPPORTED IN V1
+        // "classmethod",
+        // "compile", // NOT SUPPORTED IN V1
+        // "complex", // NOT SUPPORTED IN V1
+        // "delattr",
+        // "dir",
+        // "divmod",
+        // "enumerate",
+        // "eval", // NOT SUPPORTED IN V1
+        // "exec", // NOT SUPPORTED IN V1
+        // "filter",
+        // "format",
+        // "frozenset",
+        // "getattr",
+        // "globals",
+        // "hasattr",
+        // "hash",
+        // "help", // NOT SUPPORTED IN V1
+        // "hex", // NOT SUPPORTED IN V1
+        // "id",
+        // "input",
+        // "isinstance",
+        // "issubclass",
+        // "iter",
+        // "len",
+        // "locals",
+        // "map",
+        // "max",
+        // "memoryview",
+        // "min",
+        // "next",
+        // "object", // NOT SUPPORTED IN V1
+        // "oct", // NOT SUPPORTED IN V1
+        // "open", // NOT SUPPORTED IN V1
+        // "ord", // NOT SUPPORTED IN V1
+        // "pow",
+        // "print",
+        // "property",
+        "range",
+        // "repr",
+        // "reversed",
+        // "round",
+        // "set", // Can do, but might be post v1
+        // "setattr",
+        // "slice",
+        // "sorted",
+        // "staticmethod",
+        // "sum",
+        // "super",
+        // "tuple", // Can do, but might be post v1
+        // "type",
+        // "vars",
+        // "zip"
+    ];
+    
     public enum TokenTypes
     {
         String,
@@ -40,10 +109,10 @@ public static class Consts
         Period,
         Operator,
         Assignment,
-        BuiltIn,
         Breakpoint,
         ConversionType,
         Numeric,
-        FormattedString
+        FormattedString,
+        BuiltIn
     }
 }

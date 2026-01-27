@@ -27,20 +27,29 @@ public static class Runner
 
     private static void LoadBuiltIns(CallStack callStack, Closure closure)
     {
-        for (int i = 0; i < BtlTypes.TypeStrings.Length; i++)
+        for (var i = 0; i < BtlTypes.TypeStrings.Length; i++)
         {
             var builtInName = BtlTypes.TypeStrings[i];
-            var fileName = $"/Users/nickpitrak/Desktop/Battlescript/Battlescript/BuiltIn/{builtInName}.bs";
-            var expression = $"import {builtInName} from \"{fileName}\"";
-            var importInstruction = new ImportInstruction(fileName, [builtInName], i, expression);
-            
-            var interpreter = new Interpreter([importInstruction]);
-            interpreter.Run(callStack, closure);
+            ImportBuiltInByName(callStack, closure, builtInName, i);
             BtlTypes.PopulateBtlTypeReference(callStack, closure, builtInName);
         }
 
         BtlTypes.PopulateBtlTypeConstants(callStack, closure);
 
+        // for (var i = 0; i < Consts.BuiltInFunctions.Length; i++)
+        // {
+        //     var builtInName = Consts.BuiltInFunctions[i];
+        //     ImportBuiltInByName(callStack, closure, builtInName, i + BtlTypes.TypeStrings.Length);
+        // }
+    }
+
+    private static void ImportBuiltInByName(CallStack callStack, Closure closure, string name, int line)
+    {
+        var fileName = $"/Users/nickpitrak/Desktop/Battlescript/Battlescript/BuiltIn/{name}.bs";
+        var expression = $"import {name} from \"{fileName}\"";
+        var importInstruction = new ImportInstruction(fileName, [name], line, expression);
+        var interpreter = new Interpreter([importInstruction]);
+        interpreter.Run(callStack, closure);
     }
 
     private static string ReadFile(string path)

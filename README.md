@@ -37,8 +37,6 @@ Battlescript is a Python-like language interpreter that is simple input/output i
 
 
 ### TODO
-- consider making a new Token field.  For newline, we store the indent value as a string.  That's kind of weird, but introducing a whole new class and field for just that one use case feels like overkill.
-- Start going down the list of list methods
-- Inline lambda as keyword arguments is not supported (ex: `sort(key=lambda v: ...)`)
 - Could use support for built in functions being passed as functions (ex: look at Builtin/ListTests.SortsWithLenAsKey)
+    Update: to do this, the builtins have to exist in memory.  We can't pass them around by reference otherwise.  This would mean that if we wrote them in Battlescript, we could do this, but we would possibly need "ConversionFunctions" (much like our "ConversionTypes") to play nice with C# for stuff we can't do in Btl.  We have to start somewhere, and it's hard to start any earlier than things like `len` and `isinstance`.
 

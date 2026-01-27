@@ -6,7 +6,6 @@ public static class Postlexer
     {
         CollapseConsecutiveNewlines(tokens);
         JoinIsNotAndNotIn(tokens);
-        CheckForParenthesesWithBuiltInFunctionCalls(tokens);
         CheckForMatchingBrackets(tokens);
         CheckForFormattedStrings(tokens);
     }
@@ -66,31 +65,6 @@ public static class Postlexer
         bool IsNextTokenInKeyword()
         {
             return i < tokens.Count - 1 && tokens[i + 1] is { Type: Consts.TokenTypes.Operator, Value: "in" };
-        }
-    }
-
-    private static void CheckForParenthesesWithBuiltInFunctionCalls(List<Token> tokens)
-    {
-        var i = 0;
-        while (i < tokens.Count)
-        {
-            if (IsBuiltInToken() && IsNextTokenNotCloseParens())
-            {
-                throw new InternalRaiseException(
-                    BtlTypes.Types.SyntaxError, 
-                    $"Missing parentheses in call to '{tokens[i].Value}'");
-            }
-            i++;
-        }
-
-        bool IsBuiltInToken()
-        {
-            return tokens[i] is { Type: Consts.TokenTypes.BuiltIn };
-        }
-    
-        bool IsNextTokenNotCloseParens()
-        {
-            return i >= tokens.Count - 1 || tokens[i + 1] is not { Type: Consts.TokenTypes.Bracket, Value: "(" };
         }
     }
 

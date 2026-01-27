@@ -5,14 +5,6 @@ namespace BattlescriptTests.Errors.SyntaxErrors;
 public class MissingOrUnmatchedSeparatorsTests
 {
     [Test]
-    public void MissingParenthesesInBuiltInFunctionCall()
-    {
-        var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("print 'Hello, world'"));
-        Assert.That(ex.Message, Is.EqualTo("Missing parentheses in call to 'print'"));
-        Assert.That(ex.Type, Is.EqualTo("SyntaxError"));
-    }
-
-    [Test]
     public void UnmatchedParentheses()
     {
         var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run("result = 2 * (3 + 4"));

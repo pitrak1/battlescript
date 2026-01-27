@@ -1,0 +1,21 @@
+def range(start, stop=None, step=1):
+    if stop == None:
+        stop = start
+        start = 0
+
+    result = []
+
+    if start < stop:
+        if step > 0:
+            i = start
+            while i < stop:
+                result.append(i)
+                i += step
+    else:
+        if step < 0:
+            i = start
+            while i > stop:
+                result.append(i)
+                i += step
+
+    return result

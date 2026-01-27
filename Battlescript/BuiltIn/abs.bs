@@ -1,0 +1,2 @@
+def abs(value):
+    return value.__abs__()
