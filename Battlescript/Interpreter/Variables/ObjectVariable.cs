@@ -110,6 +110,16 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
             functionVariable.RunFunction(callStack, closure, arguments, inst);
         }
     }
+
+    public override Variable Copy()
+    {
+        if (BtlTypes.IsValueType(Class))
+        {
+            var newValues = Values.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Copy());
+            return new ObjectVariable(newValues, Class);
+        }
+        return this;
+    }
     
     #region Equality
 

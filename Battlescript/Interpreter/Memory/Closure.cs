@@ -30,7 +30,8 @@ public class Closure
         {
             if (Scopes[i].IsFunctionScope() && Scopes[i].Values.ContainsKey(variableInstruction.Name))
             {
-                var foundVariable = Scopes[i].Values[variableInstruction.Name];
+
+                var foundVariable = Scopes[i].Values[variableInstruction.Name].Copy();
                 if (variableInstruction.Next is ArrayInstruction { Bracket: ArrayInstruction.BracketTypes.SquareBrackets } squareBracketsInstruction)
                 {
                     return foundVariable.GetItem(callStack, this, squareBracketsInstruction);

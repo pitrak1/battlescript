@@ -14,6 +14,8 @@ public class StringVariable : Variable, IEquatable<StringVariable>
     
     public SequenceVariable ToBtlSequence() =>
         new SequenceVariable(Value.Select(c => BtlTypes.Create(BtlTypes.Types.String, c.ToString())).ToList());
+    
+    public override Variable Copy() => new StringVariable(Value);
 
     #region Equality
 

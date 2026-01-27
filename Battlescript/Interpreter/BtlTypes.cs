@@ -66,6 +66,14 @@ public static class BtlTypes
         False = Create(Types.Bool, new NumericVariable(0));
         None = new NoneVariable();
     }
+
+    public static bool IsValueType(ClassVariable classVariable)
+    {
+        return classVariable == TypeReferences[Types.Int]
+               || classVariable == TypeReferences[Types.Float]
+               || classVariable == TypeReferences[Types.String]
+               || classVariable == TypeReferences[Types.Bool];
+    }
     
     public static bool Is(Types type, Variable variable)
     {

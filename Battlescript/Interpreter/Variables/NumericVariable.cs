@@ -24,6 +24,11 @@ public class NumericVariable : Variable, IEquatable<NumericVariable>
         _value = value;
     }
 
+    public override Variable Copy()
+    {
+        return new NumericVariable(_value);
+    }
+
     #region Equality
 
     public override bool Equals(object? obj) => obj is NumericVariable variable && Equals(variable);

@@ -99,6 +99,11 @@ public abstract class Variable : IEquatable<Variable>
         throw new InterpreterInvalidIndexException(this);
     }
 
+    public virtual Variable Copy()
+    {
+        return this;
+    }
+
     #region Equality
 
     public abstract override bool Equals(object? obj);
