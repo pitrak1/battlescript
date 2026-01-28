@@ -62,6 +62,19 @@ public static class Operator
             return ConductBooleanOperation(callStack, closure, operation, left, right, originalInstruction);
         }
 
+        // Handle None comparisons directly without dispatching to __eq__/__ne__
+        if (left is NoneVariable || right is NoneVariable)
+        {
+            if (operation == "==")
+            {
+                return BtlTypes.Create(BtlTypes.Types.Bool, left is NoneVariable && right is NoneVariable);
+            }
+            if (operation == "!=")
+            {
+                return BtlTypes.Create(BtlTypes.Types.Bool, !(left is NoneVariable && right is NoneVariable));
+            }
+        }
+
         if (left is ObjectVariable || right is ObjectVariable)
         {
             return ConductObjectOperation(callStack, closure, operation, left, right, originalInstruction);
@@ -164,7 +177,6 @@ public static class Operator
 
         return new SequenceVariable(values);
     }
-
 
     private static Variable ConductBooleanOperation(CallStack callStack, Closure closure, string operation,
         Variable? left, Variable? right, Instruction originalInstruction)

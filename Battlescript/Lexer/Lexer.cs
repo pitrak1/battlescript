@@ -363,7 +363,7 @@ public class Lexer(string input, string? fileName = null)
         "pow",
         "print",
         "property",
-        "range",
+        // "range",
         "repr",
         "reversed",
         "round",

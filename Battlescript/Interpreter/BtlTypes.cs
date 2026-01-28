@@ -17,7 +17,6 @@ public static class BtlTypes
         ValueError,
         TypeError,
         NameError,
-        NoneType,
         AttributeError,
     }
 
@@ -36,7 +35,6 @@ public static class BtlTypes
         ("ValueError", Types.ValueError),
         ("TypeError", Types.TypeError),
         ("NameError", Types.NameError),
-        ("NoneType", Types.NoneType),
         ("AttributeError", Types.AttributeError),
     ];
 

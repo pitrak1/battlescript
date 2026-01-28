@@ -80,7 +80,7 @@ public static class Consts
         // "pow",
         // "print",
         // "property",
-        // "range",
+        "range",
         // "repr",
         // "reversed",
         // "round",

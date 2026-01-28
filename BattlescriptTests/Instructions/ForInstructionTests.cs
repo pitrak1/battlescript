@@ -14,7 +14,7 @@ public static class ForInstructionTests
             var input = "for x in range(5):";
             var expected = new ForInstruction(
                 new VariableInstruction("x"),
-                new BuiltInInstruction("range", [new NumericInstruction(5)])
+                new VariableInstruction("range", new ArrayInstruction([new NumericInstruction(5)], ArrayInstruction.BracketTypes.Parentheses))
             );
             var result = Runner.Parse(input, false);
             Assert.That(result[0], Is.EqualTo(expected));
