@@ -1,0 +1,2 @@
+def callable(obj):
+    return __btl_callable__(obj)

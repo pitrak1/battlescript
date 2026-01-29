@@ -36,12 +36,12 @@ public static class Consts
         "all",
         // "anext", // NOT SUPPORTED IN V1
         "any",
-        // "ascii",
+        // "ascii", // NOT SUPPORTED IN V1
         // "bin", // NOT SUPPORTED IN V1
         // "breakpoint",
         // "bytearray", // NOT SUPPORTED IN V1
         // "bytes", // NOT SUPPORTED IN V1
-        // "callable",
+        "callable",
         // "chr", // NOT SUPPORTED IN V1
         // "classmethod",
         // "compile", // NOT SUPPORTED IN V1
