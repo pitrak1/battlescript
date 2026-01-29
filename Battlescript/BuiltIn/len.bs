@@ -1,0 +1,2 @@
+def len(obj):
+    return __btl_len__(obj)

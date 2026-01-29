@@ -131,8 +131,6 @@ public class Lexer(string input, string? fileName = null)
                 return Consts.TokenTypes.Constant;
             if (Operators.Contains(word))
                 return Consts.TokenTypes.Operator;
-            if (BuiltInFunctions.Contains(word))
-                return Consts.TokenTypes.BuiltIn;
             if (Bindings.Contains(word))
                 return Consts.TokenTypes.Binding;
             return Consts.TokenTypes.Identifier;
@@ -314,67 +312,6 @@ public class Lexer(string input, string? fileName = null)
         "yield" // NOT SUPPORTED IN V1
     ]);
 
-    private static readonly FrozenSet<string> BuiltInFunctions = FrozenSet.ToFrozenSet([
-        "aiter", // NOT SUPPORTED IN V1
-        "all",
-        "anext", // NOT SUPPORTED IN V1
-        "any",
-        "ascii",
-        "bin", // NOT SUPPORTED IN V1
-        "breakpoint",
-        "bytearray", // NOT SUPPORTED IN V1
-        "bytes", // NOT SUPPORTED IN V1
-        "callable",
-        "chr", // NOT SUPPORTED IN V1
-        "classmethod",
-        "compile", // NOT SUPPORTED IN V1
-        "complex", // NOT SUPPORTED IN V1
-        "delattr",
-        "dir",
-        "divmod",
-        "enumerate",
-        "eval", // NOT SUPPORTED IN V1
-        "exec", // NOT SUPPORTED IN V1
-        "filter",
-        "format",
-        "frozenset",
-        "getattr",
-        "globals",
-        "hash",
-        "help", // NOT SUPPORTED IN V1
-        "hex", // NOT SUPPORTED IN V1
-        "id",
-        "input",
-        "iter",
-        "len",
-        "locals",
-        "map",
-        "max",
-        "memoryview",
-        "min",
-        "next",
-        "oct", // NOT SUPPORTED IN V1
-        "open", // NOT SUPPORTED IN V1
-        "ord", // NOT SUPPORTED IN V1
-        "pow",
-        "print",
-        "property",
-        "repr",
-        "reversed",
-        "round",
-        "set", // Can do, but might be post v1
-        "setattr",
-        "slice",
-        "sorted",
-        "staticmethod",
-        "sum",
-        "super",
-        "tuple", // Can do, but might be post v1
-        "type",
-        "vars",
-        "zip"
-    ]);
-    
     private static readonly FrozenSet<string> ConstantStrings =
         FrozenSet.ToFrozenSet(["None", "True", "False"]);
     
@@ -387,6 +324,9 @@ public class Lexer(string input, string? fileName = null)
         "__btl_getattr__",
         "__btl_isinstance__",
         "__btl_issubclass__",
+        "__btl_len__",
+        "__btl_print__",
+        "__btl_type__",
     ];
     
     #endregion

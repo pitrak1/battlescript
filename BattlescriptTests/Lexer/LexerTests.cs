@@ -127,19 +127,6 @@ public class LexerTests
             var result = Runner.Tokenize("asdf");
             Assert.That(result, Is.EquivalentTo(expected));
         }
-
-        [Test]
-        public void BuiltIns()
-        {
-            var expected = new List<Token>
-            {
-                new(Consts.TokenTypes.BuiltIn, "super"),
-                new(Consts.TokenTypes.Bracket, "("),
-                new(Consts.TokenTypes.Bracket, ")")
-            };
-            var result = Runner.Tokenize("super()");
-            Assert.That(result, Is.EquivalentTo(expected));
-        }
     }
 
     [TestFixture]

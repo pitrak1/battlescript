@@ -1,0 +1,2 @@
+def type(obj):
+    return __btl_type__(obj)

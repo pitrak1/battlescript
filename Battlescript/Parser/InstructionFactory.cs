@@ -103,9 +103,6 @@ public static class InstructionFactory
         if (tokens[0].Type == Consts.TokenTypes.Numeric)
             return new NumericInstruction(tokens);
 
-        if (tokens[0].Type == Consts.TokenTypes.BuiltIn)
-            return new BuiltInInstruction(tokens);
-
         throw new ParserUnexpectedTokenException(tokens[0]);
     }
     

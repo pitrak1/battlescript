@@ -1,3 +1,5 @@
+using Battlescript.BuiltIn;
+
 namespace Battlescript;
 
 public class BindingInstruction : Instruction, IEquatable<BindingInstruction>
@@ -70,6 +72,13 @@ public class BindingInstruction : Instruction, IEquatable<BindingInstruction>
                 return BuiltInIsInstance.Run(callStack, closure, Parameters);
             case "__btl_issubclass__":
                 return BuiltInIsSubclass.Run(callStack, closure, Parameters);
+            case "__btl_len__":
+                return BuiltInLen.Run(callStack, closure, Parameters);
+            case "__btl_print__":
+                BuiltInPrint.Run(callStack, closure, Parameters);
+                return null;
+            case "__btl_type__":
+                return BuiltInType.Run(callStack, closure, Parameters);
         }
         return null;
     }

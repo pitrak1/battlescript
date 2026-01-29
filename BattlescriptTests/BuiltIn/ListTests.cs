@@ -1111,8 +1111,7 @@ public class ListTests
         {
             var (callStack, closure) = Runner.Run("""
                                     x = [[1, 2, 3], [1], [1, 2]]
-                                    length = lambda v: len(v)
-                                    x.sort(key=length)
+                                    x.sort(key=len)
                                     """);
             var expected = BtlTypes.Create(BtlTypes.Types.List, new List<Variable>
             {

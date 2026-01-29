@@ -66,7 +66,7 @@ public static class Consts
         "isinstance",
         "issubclass",
         // "iter",
-        // "len",
+        "len",
         // "locals",
         // "map",
         // "max",
@@ -78,7 +78,7 @@ public static class Consts
         // "open", // NOT SUPPORTED IN V1
         // "ord", // NOT SUPPORTED IN V1
         // "pow",
-        // "print",
+        "print",
         // "property",
         "range",
         // "repr",
@@ -92,7 +92,7 @@ public static class Consts
         // "sum",
         // "super",
         // "tuple", // Can do, but might be post v1
-        // "type",
+        "type",
         // "vars",
         // "zip"
     ];
@@ -112,7 +112,6 @@ public static class Consts
         Breakpoint,
         Numeric,
         FormattedString,
-        BuiltIn,
         Binding
     }
 }

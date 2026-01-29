@@ -1,0 +1,2 @@
+def print(value):
+    __btl_print__(value)
