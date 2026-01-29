@@ -35,7 +35,7 @@ public static class Consts
         // "aiter", // NOT SUPPORTED IN V1
         "all",
         // "anext", // NOT SUPPORTED IN V1
-        // "any",
+        "any",
         // "ascii",
         // "bin", // NOT SUPPORTED IN V1
         // "breakpoint",
