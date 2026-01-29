@@ -347,7 +347,7 @@ public class Lexer(string input, string? fileName = null)
         "hex", // NOT SUPPORTED IN V1
         "id",
         "input",
-        "isinstance",
+        // "isinstance",
         "issubclass",
         "iter",
         "len",
@@ -390,6 +390,7 @@ public class Lexer(string input, string? fileName = null)
         "__btl_mapping__",
         "__btl_string__",
         "__btl_getattr__",
+        "__btl_isinstance__",
     ];
     
     #endregion

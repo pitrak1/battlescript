@@ -66,6 +66,8 @@ public class BindingInstruction : Instruction, IEquatable<BindingInstruction>
                 return InterpretString(callStack, closure, instructionContext);
             case "__btl_getattr__":
                 return InterpretGetAttr(callStack, closure, instructionContext);
+            case "__btl_isinstance__":
+                return InterpretIsInstance(callStack, closure, instructionContext);
         }
         return null;
     }
@@ -192,6 +194,38 @@ public class BindingInstruction : Instruction, IEquatable<BindingInstruction>
         }
 
         return result;
+    }
+
+    private Variable InterpretIsInstance(CallStack callStack, Closure closure, Variable? instructionContext = null)
+    {
+        if (Parameters.Count != 2)
+        {
+            throw new Exception("wrong number of arguments");
+        }
+        
+        var objectExpression = Parameters[0].Interpret(callStack, closure);
+        var classExpression = Parameters[1].Interpret(callStack, closure);
+        
+        if (classExpression is BindingVariable bindingClass)
+        {
+            var boolValue = bindingClass.Value switch
+            {
+                "__btl_numeric__" => objectExpression is NumericVariable,
+                "__btl_sequence__" => objectExpression is SequenceVariable,
+                "__btl_mapping__" => objectExpression is MappingVariable,
+                "__btl_string__" => objectExpression is StringVariable,
+                _ => false
+            };
+            return BtlTypes.Create(BtlTypes.Types.Bool, boolValue);
+        }
+        else
+        {
+            if (objectExpression is ObjectVariable objectVariable && classExpression is ClassVariable classVariable)
+            {
+                return BtlTypes.Create(BtlTypes.Types.Bool, objectVariable.IsInstance(classVariable));
+            } 
+            return BtlTypes.Create(BtlTypes.Types.Bool, false);
+        }
     }
     
     #region Equality

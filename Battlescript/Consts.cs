@@ -63,7 +63,7 @@ public static class Consts
         // "hex", // NOT SUPPORTED IN V1
         // "id",
         // "input",
-        // "isinstance",
+        "isinstance",
         // "issubclass",
         // "iter",
         // "len",
