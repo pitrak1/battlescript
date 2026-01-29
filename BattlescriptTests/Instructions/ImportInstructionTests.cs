@@ -11,32 +11,32 @@ public static class ImportInstructionTests
         [Test]
         public void SingleVariable()
         {
-            var expected = new ImportInstruction("/test/x.bs", ["x"]);
-            var result = Runner.Parse("from '/test/x.bs' import x");
+            var expected = new ImportInstruction("/test/x.btl", ["x"]);
+            var result = Runner.Parse("from '/test/x.btl' import x");
             Assert.That(result[0], Is.EqualTo(expected));
         }
 
         [Test]
         public void ListsOfVariables()
         {
-            var expected = new ImportInstruction("/test/x.bs", ["x", "y", "z"]);
-            var result = Runner.Parse("from '/test/x.bs' import x, y, z");
+            var expected = new ImportInstruction("/test/x.btl", ["x", "y", "z"]);
+            var result = Runner.Parse("from '/test/x.btl' import x, y, z");
             Assert.That(result[0], Is.EqualTo(expected));
         }
 
         [Test]
         public void Module()
         {
-            var expected = new ImportInstruction("/test/x.bs", ["*"]);
-            var result = Runner.Parse("from '/test/x.bs' import *");
+            var expected = new ImportInstruction("/test/x.btl", ["*"]);
+            var result = Runner.Parse("from '/test/x.btl' import *");
             Assert.That(result[0], Is.EqualTo(expected));
         }
 
         [Test]
         public void ModuleInList()
         {
-            var expected = new ImportInstruction("/test/x.bs", ["x", "y", "*"]);
-            var result = Runner.Parse("from '/test/x.bs' import x, y, *");
+            var expected = new ImportInstruction("/test/x.btl", ["x", "y", "*"]);
+            var result = Runner.Parse("from '/test/x.btl' import x, y, *");
             Assert.That(result[0], Is.EqualTo(expected));
         }
     }
@@ -47,7 +47,7 @@ public static class ImportInstructionTests
         [Test]
         public void ImportsSingleVariable()
         {
-            var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
+            var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.btl";
             var (callStack, closure) = Runner.Run($"from '{filePath}' import x");
             Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 5)));
         }
@@ -55,7 +55,7 @@ public static class ImportInstructionTests
         [Test]
         public void ImportsMultipleVariables()
         {
-            var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
+            var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.btl";
             var (callStack, closure) = Runner.Run($"from '{filePath}' import x, y, z");
 
             Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 5)));
@@ -69,7 +69,7 @@ public static class ImportInstructionTests
         [Test]
         public void ImportsModule()
         {
-            var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
+            var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.btl";
             var (callStack, closure) = Runner.Run($"from '{filePath}' import *");
             var expected = BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
             {
@@ -88,7 +88,7 @@ public static class ImportInstructionTests
         [Test]
         public void ImportsMultipleVariablesAndModule()
         {
-            var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.bs";
+            var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/import.btl";
             var (callStack, closure) = Runner.Run($"from '{filePath}' import x, y, z, *");
             var expected = BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
             {

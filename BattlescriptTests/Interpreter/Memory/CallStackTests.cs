@@ -24,7 +24,7 @@ public static class CallStackTests
          public void UpdatesPreviousScopeWithLineAndExpression()
          {
              var callStack = new CallStack();
-             callStack.AddFrame(5, "x = 5", "func", "file.bs");
+             callStack.AddFrame(5, "x = 5", "func", "file.btl");
              
              Assert.That(callStack.Frames.Count, Is.EqualTo(2));
              Assertions.AssertStackFrame(callStack.Frames[0], new StackFrame("main", 5, "x = 5", "<module>"));
@@ -34,10 +34,10 @@ public static class CallStackTests
          public void CreatesNewScopeWithoutLineOrExpression()
          {
              var callStack = new CallStack();
-             callStack.AddFrame(5, "x = 5", "func", "file.bs");
+             callStack.AddFrame(5, "x = 5", "func", "file.btl");
              
              Assert.That(callStack.Frames.Count, Is.EqualTo(2));
-             Assertions.AssertStackFrame(callStack.Frames[1], new StackFrame("file.bs", "func"));
+             Assertions.AssertStackFrame(callStack.Frames[1], new StackFrame("file.btl", "func"));
          }
      
          [Test]
@@ -163,7 +163,7 @@ public static class CallStackTests
         [Test]
         public void RespectsFileName()
         {
-            var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/stacktrace.bs";
+            var filePath = @"/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/stacktrace.btl";
             var input = $"from '{filePath}' import x";
             var callStack = new CallStack();
             var closure = new Closure();
@@ -176,9 +176,9 @@ public static class CallStackTests
             {
                 caught = true;
                 Assertions.AssertStacktrace(callStack.Frames, [
-                    new StackFrame("main", 1, "from '/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/stacktrace.bs' import x", "<module>"),
-                    new StackFrame("/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/stacktrace.bs", 5, "y = x()", "<module>"),
-                    new StackFrame("/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/stacktrace.bs", 3, "raise SyntaxError(\"asdf\")", "__init__"),
+                    new StackFrame("main", 1, "from '/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/stacktrace.btl' import x", "<module>"),
+                    new StackFrame("/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/stacktrace.btl", 5, "y = x()", "<module>"),
+                    new StackFrame("/Users/nickpitrak/Desktop/Battlescript/BattlescriptTests/TestFiles/stacktrace.btl", 3, "raise SyntaxError(\"asdf\")", "__init__"),
                 ]);
             }
             

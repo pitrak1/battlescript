@@ -45,7 +45,7 @@ public static class Runner
 
     private static void ImportBuiltInByName(CallStack callStack, Closure closure, string name, int line)
     {
-        var fileName = $"/Users/nickpitrak/Desktop/Battlescript/Battlescript/BuiltIn/{name}.bs";
+        var fileName = $"/Users/nickpitrak/Desktop/Battlescript/Battlescript/BuiltIn/{name}.btl";
         var expression = $"import {name} from \"{fileName}\"";
         var importInstruction = new ImportInstruction(fileName, [name], line, expression);
         var interpreter = new Interpreter([importInstruction]);
