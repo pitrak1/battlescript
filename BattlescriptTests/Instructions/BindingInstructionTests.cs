@@ -21,7 +21,7 @@ public static class BindingInstructionTests
         public void ParenthesesWithoutArguments()
         {
             var input = "__btl_string__()";
-            var expected = new BindingInstruction("__btl_string__");
+            var expected = new BindingInstruction("__btl_string__", new List<Instruction>());
             var result = Runner.Parse(input);
             Assert.That(result[0], Is.EqualTo(expected));
         }
@@ -45,7 +45,7 @@ public static class BindingInstructionTests
         [Test]
         public void BtlNumeric()
         {
-            var (callStack, closure) = Runner.Run("x = __btl_numeric__");
+            var (callStack, closure) = Runner.Run("x = __btl_numeric__()");
             var expected = new NumericVariable(0);
             Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
@@ -53,7 +53,7 @@ public static class BindingInstructionTests
         [Test]
         public void BtlSequence()
         {
-            var (callStack, closure) = Runner.Run("x = __btl_sequence__");
+            var (callStack, closure) = Runner.Run("x = __btl_sequence__()");
             var expected = new SequenceVariable();
             Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
@@ -61,7 +61,7 @@ public static class BindingInstructionTests
         [Test]
         public void BtlMapping()
         {
-            var (callStack, closure) = Runner.Run("x = __btl_mapping__");
+            var (callStack, closure) = Runner.Run("x = __btl_mapping__()");
             var expected = new MappingVariable();
             Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
@@ -69,7 +69,7 @@ public static class BindingInstructionTests
         [Test]
         public void BtlString()
         {
-            var (callStack, closure) = Runner.Run("x = __btl_string__");
+            var (callStack, closure) = Runner.Run("x = __btl_string__()");
             var expected = new StringVariable("");
             Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }

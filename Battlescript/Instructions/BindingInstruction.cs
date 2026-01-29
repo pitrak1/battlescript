@@ -3,11 +3,15 @@ namespace Battlescript;
 public class BindingInstruction : Instruction, IEquatable<BindingInstruction>
 {
     public string Value { get; set; }
-    public List<Instruction> Parameters { get; set; } = [];
+    public List<Instruction>? Parameters { get; set; }
 
     public BindingInstruction(List<Token> tokens) : base(tokens)
     {
-        ParseArguments(tokens);
+        if (tokens.Count > 1)
+        {
+            ParseArguments(tokens);
+        }
+
         Value = tokens[0].Value;
     }
 
@@ -38,13 +42,18 @@ public class BindingInstruction : Instruction, IEquatable<BindingInstruction>
         string? expression = null) : base(line, expression)
     {
         Value = value;
-        Parameters = parameters ?? [];
+        Parameters = parameters;
     }
     
     public override Variable? Interpret(CallStack callStack,
         Closure closure,
         Variable? instructionContext = null)
     {
+        if (Parameters is null)
+        {
+            return new BindingVariable(Value);
+        }
+        
         switch (Value)
         {
             case "__btl_numeric__":
@@ -190,7 +199,10 @@ public class BindingInstruction : Instruction, IEquatable<BindingInstruction>
     public override bool Equals(object? obj) => obj is BindingInstruction inst && Equals(inst);
 
     public bool Equals(BindingInstruction? other) =>
-        other is not null && Parameters.SequenceEqual(other.Parameters) && Value == other.Value;
+        other is not null &&
+        Value == other.Value &&
+        (Parameters is null && other.Parameters is null ||
+         Parameters is not null && other.Parameters is not null && Parameters.SequenceEqual(other.Parameters));
 
     public override int GetHashCode() => HashCode.Combine(Parameters, Value);
 
