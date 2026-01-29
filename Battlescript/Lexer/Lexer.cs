@@ -315,7 +315,6 @@ public class Lexer(string input, string? fileName = null)
     ]);
 
     private static readonly FrozenSet<string> BuiltInFunctions = FrozenSet.ToFrozenSet([
-        // "abs",
         "aiter", // NOT SUPPORTED IN V1
         "all",
         "anext", // NOT SUPPORTED IN V1
@@ -341,14 +340,11 @@ public class Lexer(string input, string? fileName = null)
         "frozenset",
         "getattr",
         "globals",
-        // "hasattr",
         "hash",
         "help", // NOT SUPPORTED IN V1
         "hex", // NOT SUPPORTED IN V1
         "id",
         "input",
-        // "isinstance",
-        "issubclass",
         "iter",
         "len",
         "locals",
@@ -363,7 +359,6 @@ public class Lexer(string input, string? fileName = null)
         "pow",
         "print",
         "property",
-        // "range",
         "repr",
         "reversed",
         "round",
@@ -391,6 +386,7 @@ public class Lexer(string input, string? fileName = null)
         "__btl_string__",
         "__btl_getattr__",
         "__btl_isinstance__",
+        "__btl_issubclass__",
     ];
     
     #endregion

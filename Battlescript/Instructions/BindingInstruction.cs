@@ -65,9 +65,11 @@ public class BindingInstruction : Instruction, IEquatable<BindingInstruction>
             case "__btl_string__":
                 return InterpretString(callStack, closure, instructionContext);
             case "__btl_getattr__":
-                return InterpretGetAttr(callStack, closure, instructionContext);
+                return BuiltInGetAttr.Run(callStack, closure, Parameters);
             case "__btl_isinstance__":
-                return InterpretIsInstance(callStack, closure, instructionContext);
+                return BuiltInIsInstance.Run(callStack, closure, Parameters);
+            case "__btl_issubclass__":
+                return BuiltInIsSubclass.Run(callStack, closure, Parameters);
         }
         return null;
     }
@@ -174,58 +176,6 @@ public class BindingInstruction : Instruction, IEquatable<BindingInstruction>
     private dynamic ConvertStringToIntOrDouble(string value)
     {
         return value.Contains(".") ? double.Parse(value) : int.Parse(value);
-    }
-
-    private Variable? InterpretGetAttr(CallStack callStack, Closure closure, Variable? instructionContext = null)
-    {
-        if (Parameters.Count != 2)
-        {
-            throw new Exception("wrong number of arguments");
-        }
-        
-        var objectToSearch = Parameters[0].Interpret(callStack, closure) as ObjectVariable;
-        var attrNameObjectVariable = Parameters[1].Interpret(callStack, closure, instructionContext);
-        var name = BtlTypes.GetStringValue(attrNameObjectVariable);
-        var result = objectToSearch.GetMember(callStack, closure, new MemberInstruction(name), objectToSearch);
-
-        if (result is null)
-        {
-            throw new InternalRaiseException(BtlTypes.Types.AttributeError, $"cannot find attribute {name}");
-        }
-
-        return result;
-    }
-
-    private Variable InterpretIsInstance(CallStack callStack, Closure closure, Variable? instructionContext = null)
-    {
-        if (Parameters.Count != 2)
-        {
-            throw new Exception("wrong number of arguments");
-        }
-        
-        var objectExpression = Parameters[0].Interpret(callStack, closure);
-        var classExpression = Parameters[1].Interpret(callStack, closure);
-        
-        if (classExpression is BindingVariable bindingClass)
-        {
-            var boolValue = bindingClass.Value switch
-            {
-                "__btl_numeric__" => objectExpression is NumericVariable,
-                "__btl_sequence__" => objectExpression is SequenceVariable,
-                "__btl_mapping__" => objectExpression is MappingVariable,
-                "__btl_string__" => objectExpression is StringVariable,
-                _ => false
-            };
-            return BtlTypes.Create(BtlTypes.Types.Bool, boolValue);
-        }
-        else
-        {
-            if (objectExpression is ObjectVariable objectVariable && classExpression is ClassVariable classVariable)
-            {
-                return BtlTypes.Create(BtlTypes.Types.Bool, objectVariable.IsInstance(classVariable));
-            } 
-            return BtlTypes.Create(BtlTypes.Types.Bool, false);
-        }
     }
     
     #region Equality

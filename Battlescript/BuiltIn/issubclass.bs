@@ -1,0 +1,2 @@
+def issubclass(obj, classinfo):
+    return __btl_issubclass__(obj, classinfo)

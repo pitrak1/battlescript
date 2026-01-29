@@ -64,7 +64,7 @@ public static class Consts
         // "id",
         // "input",
         "isinstance",
-        // "issubclass",
+        "issubclass",
         // "iter",
         // "len",
         // "locals",

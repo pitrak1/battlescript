@@ -36,8 +36,6 @@ public class BuiltInInstruction : Instruction, IEquatable<BuiltInInstruction>
     {
         switch (Name)
         {
-            case "issubclass":
-                return BuiltInIsSubclass.Run(callStack, closure, Arguments);
             case "print":
                 BuiltInPrint.Run(callStack, closure, Arguments);
                 break;

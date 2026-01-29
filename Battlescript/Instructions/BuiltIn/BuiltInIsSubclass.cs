@@ -1,4 +1,4 @@
-namespace Battlescript.BuiltIn;
+namespace Battlescript;
 
 public static class BuiltInIsSubclass
 {
