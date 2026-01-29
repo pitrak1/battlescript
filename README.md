@@ -35,7 +35,3 @@ Battlescript is a Python-like language interpreter that is simple input/output i
 - annotations of function headers and `__annotations__`
 
 
-
-### TODO
-- (5).__abs__()
-
