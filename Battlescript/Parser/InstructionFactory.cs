@@ -50,6 +50,8 @@ public static class InstructionFactory
                     return new ConstantInstruction("None");
                 case "continue":
                     return new ContinueInstruction();
+                case "del":
+                    return new DeleteInstruction(tokens);
                 case "lambda":
                     return new LambdaInstruction(tokens);
                 case "from":

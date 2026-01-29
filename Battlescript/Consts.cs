@@ -38,12 +38,12 @@ public static class Consts
         "any",
         // "ascii", // NOT SUPPORTED IN V1
         // "bin", // NOT SUPPORTED IN V1
-        // "breakpoint",
+        // "breakpoint", // Need more sophisticated debugging stuff before this
         // "bytearray", // NOT SUPPORTED IN V1
         // "bytes", // NOT SUPPORTED IN V1
         "callable",
         // "chr", // NOT SUPPORTED IN V1
-        // "classmethod",
+        // "classmethod", // Need support for *args, **kwargs first
         // "compile", // NOT SUPPORTED IN V1
         // "complex", // NOT SUPPORTED IN V1
         // "delattr",

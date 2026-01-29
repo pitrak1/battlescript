@@ -99,6 +99,58 @@ public abstract class Variable : IEquatable<Variable>
         throw new InterpreterInvalidIndexException(this);
     }
 
+    public void DeleteItem(
+        CallStack callStack,
+        Closure closure,
+        ArrayInstruction index,
+        ObjectVariable? objectContext = null)
+    {
+        var result = DeleteItemDirectly(callStack, closure, index, objectContext);
+        if (index.Next is ArrayInstruction { Bracket: ArrayInstruction.BracketTypes.Parentheses })
+        {
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "cannot delete from a function call");
+        }
+        else if (index.Next is ArrayInstruction arrayInstruction)
+        {
+            result.DeleteItem(callStack, closure, arrayInstruction, result as ObjectVariable);
+        }
+        else if (index.Next is MemberInstruction memberInstruction)
+        {
+            result.DeleteMember(callStack, closure, memberInstruction, result as ObjectVariable);
+        }
+    }
+
+    public virtual Variable? DeleteItemDirectly(CallStack callStack, Closure closure, ArrayInstruction index, ObjectVariable? objectContext = null)
+    {
+        throw new InterpreterInvalidIndexException(this);
+    }
+
+    public void DeleteMember(
+        CallStack callStack,
+        Closure closure,
+        MemberInstruction member,
+        ObjectVariable? objectContext = null)
+    {
+        var result = DeleteMemberDirectly(callStack, closure, member, objectContext);
+        if (member.Next is ArrayInstruction { Bracket: ArrayInstruction.BracketTypes.Parentheses })
+        {
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "cannot delete from a function call");
+        }
+        else if (member.Next is ArrayInstruction arrayInstruction)
+        {
+            result.DeleteItem(callStack, closure, arrayInstruction, result as ObjectVariable);
+        }
+        else if (member.Next is MemberInstruction memberInstruction)
+        {
+            result.DeleteMember(callStack, closure, memberInstruction, result as ObjectVariable);
+        }
+    }
+
+    public virtual Variable? DeleteMemberDirectly(CallStack callStack, Closure closure, MemberInstruction member, ObjectVariable? objectContext = null)
+    {
+        throw new InterpreterInvalidIndexException(this);
+    }
+
     public virtual Variable Copy()
     {
         return this;

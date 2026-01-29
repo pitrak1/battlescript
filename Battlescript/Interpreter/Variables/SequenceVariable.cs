@@ -196,6 +196,29 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         return (start, stop, step);
     }
 
+    public override Variable? DeleteItemDirectly(CallStack callStack, Closure closure, ArrayInstruction index, ObjectVariable? objectContext = null)
+    {
+        var indexVariable = index.Values[0].Interpret(callStack, closure);
+        var indexSequence = BtlTypes.GetListValue(indexVariable);
+
+        if (indexSequence.Values.Count > 1)
+        {
+            throw new InternalRaiseException(BtlTypes.Types.TypeError, "list indices must be integers, not slice");
+        }
+
+        var indexInt = BtlTypes.GetIntValue(indexSequence.Values[0]);
+
+        if (index.Next is null)
+        {
+            Values.RemoveAt(indexInt);
+            return null;
+        }
+        else
+        {
+            return Values[indexInt];
+        }
+    }
+
     #region Equality
 
     public override bool Equals(object? obj) => obj is SequenceVariable variable && Equals(variable);

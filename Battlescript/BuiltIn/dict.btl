@@ -13,5 +13,8 @@ class dict:
     def __setitem__(self, key, value):
         self.__btl_value[key] = value
 
+    def __delitem__(self, key):
+        del self.__btl_value[key]
+
     def __bool__(self):
         return 0 < len(self.__btl_value)

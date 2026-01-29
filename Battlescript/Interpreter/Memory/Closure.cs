@@ -130,4 +130,39 @@ public class Closure
             }
         }
     }
+
+    public void DeleteVariable(CallStack callStack, string name)
+    {
+        // Check current scope first
+        if (Scopes[^1].Values.ContainsKey(name))
+        {
+            Scopes[^1].Values.Remove(name);
+            return;
+        }
+
+        // Check nonlocal
+        if (Scopes[^1].Nonlocals.Contains(name))
+        {
+            for (var i = Scopes.Count - 2; i >= 0; i--)
+            {
+                if (Scopes[i].Values.ContainsKey(name))
+                {
+                    Scopes[i].Values.Remove(name);
+                    return;
+                }
+            }
+        }
+
+        // Check global
+        if (Scopes[^1].Globals.Contains(name))
+        {
+            if (Scopes[0].Values.ContainsKey(name))
+            {
+                Scopes[0].Values.Remove(name);
+                return;
+            }
+        }
+
+        throw new InternalRaiseException(BtlTypes.Types.NameError, $"name '{name}' is not defined");
+    }
 }

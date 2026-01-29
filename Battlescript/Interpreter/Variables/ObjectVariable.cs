@@ -82,11 +82,59 @@ public class ObjectVariable : Variable, IEquatable<ObjectVariable>
             {
                 return Values[memberName];
             }
-            
+
         }
         else
         {
             return Class.GetMember(callStack, closure, new MemberInstruction(memberName), this);
+        }
+    }
+
+    public override Variable? DeleteItemDirectly(CallStack callStack, Closure closure, ArrayInstruction index, ObjectVariable? objectContext = null)
+    {
+        var indexVariables = index.Values.Select(x => x?.Interpret(callStack, closure) ?? null).ToList();
+        var indexList = BtlTypes.Create(BtlTypes.Types.List, indexVariables);
+
+        var delItemOverride = GetMember(callStack, closure, new MemberInstruction("__delitem__"));
+        if (delItemOverride is FunctionVariable functionVariable)
+        {
+            if (index.Next is null)
+            {
+                functionVariable.RunFunction(callStack, closure, new ArgumentSet([indexList]), index);
+                return null;
+            }
+            else
+            {
+                return GetItemDirectly(callStack, closure, index, objectContext);
+            }
+        }
+        else
+        {
+            throw new Exception("Must define __delitem__ to delete from an object");
+        }
+    }
+
+    public override Variable? DeleteMemberDirectly(
+        CallStack callStack,
+        Closure closure,
+        MemberInstruction member,
+        ObjectVariable? objectContext = null)
+    {
+        var memberName = member.Value;
+
+        if (member.Next is null)
+        {
+            if (!Values.ContainsKey(memberName))
+            {
+                throw new InternalRaiseException(BtlTypes.Types.AttributeError, $"'{Class.Name}' object has no attribute '{memberName}'");
+            }
+
+            Values.Remove(memberName);
+            return null;
+        }
+        else
+        {
+            return GetMemberDirectly(callStack, closure, member, objectContext);
         }
     }
 

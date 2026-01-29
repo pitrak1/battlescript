@@ -77,7 +77,44 @@ public class MappingVariable : Variable, IEquatable<MappingVariable>
             return StringValues[stringValue!];
         }
     }
-    
+
+    public override Variable? DeleteItemDirectly(CallStack callStack, Closure closure, ArrayInstruction index, ObjectVariable? objectContext = null)
+    {
+        var indexValue = GetIndexValue(callStack, closure, index);
+        if (indexValue.IntValue is not null)
+        {
+            var intValue = indexValue.IntValue.Value;
+            if (index.Next is null)
+            {
+                if (!IntValues.Remove(intValue))
+                {
+                    throw new InternalRaiseException(BtlTypes.Types.NameError, intValue.ToString());
+                }
+                return null;
+            }
+            else
+            {
+                return IntValues[intValue];
+            }
+        }
+        else
+        {
+            var stringValue = indexValue.StringValue!;
+            if (index.Next is null)
+            {
+                if (!StringValues.Remove(stringValue))
+                {
+                    throw new InternalRaiseException(BtlTypes.Types.NameError, $"'{stringValue}'");
+                }
+                return null;
+            }
+            else
+            {
+                return StringValues[stringValue];
+            }
+        }
+    }
+
     #region Equality
 
     public override bool Equals(object? obj) => obj is MappingVariable variable && Equals(variable);
