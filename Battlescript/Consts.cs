@@ -33,7 +33,7 @@ public static class Consts
     [
         "abs",
         // "aiter", // NOT SUPPORTED IN V1
-        // "all",
+        "all",
         // "anext", // NOT SUPPORTED IN V1
         // "any",
         // "ascii",
