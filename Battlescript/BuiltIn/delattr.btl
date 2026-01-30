@@ -1,0 +1,2 @@
+def delattr(obj, name):
+    __btl_delattr__(obj, name)

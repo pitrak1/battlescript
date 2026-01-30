@@ -81,6 +81,9 @@ public class BindingInstruction : Instruction, IEquatable<BindingInstruction>
                 return BuiltInType.Run(callStack, closure, Parameters);
             case "__btl_callable__":
                 return BuiltInCallable.Run(callStack, closure, Parameters);
+            case "__btl_delattr__":
+                BuiltInDelAttr.Run(callStack, closure, Parameters);
+                return null;
         }
         return null;
     }

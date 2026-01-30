@@ -46,7 +46,7 @@ public static class Consts
         // "classmethod", // Need support for *args, **kwargs first
         // "compile", // NOT SUPPORTED IN V1
         // "complex", // NOT SUPPORTED IN V1
-        // "delattr",
+        "delattr",
         // "dir",
         // "divmod",
         // "enumerate",
