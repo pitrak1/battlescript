@@ -134,7 +134,7 @@ public class Lexer(string input, string? fileName = null)
             if (Bindings.Contains(word))
                 return Consts.TokenTypes.Binding;
             if (word[0] == '*')
-                return Consts.TokenTypes.SpecialParameter;
+                return Consts.TokenTypes.SpecialVariable;
             return Consts.TokenTypes.Identifier;
         }
 
@@ -155,12 +155,12 @@ public class Lexer(string input, string? fileName = null)
             AddTokenWithAsterisks();
             return true;
         } 
-        else if (nextCharacters[0] == '*' && Consts.IsWordStartChar(nextCharacters[1]))
+        else if (nextCharacters.Length > 1 && nextCharacters[0] == '*' && Consts.IsWordStartChar(nextCharacters[1]))
         {
             AddTokenWithAsterisks(1);
             return true;
         }
-        else if (nextCharacters[0] == '*' && nextCharacters[1] == '*' && Consts.IsWordStartChar(nextCharacters[2]))
+        else if (nextCharacters.Length > 2 && nextCharacters[..2] == "**" && Consts.IsWordStartChar(nextCharacters[2]))
         {
             AddTokenWithAsterisks(2);
             return true;

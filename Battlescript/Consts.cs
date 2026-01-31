@@ -113,6 +113,6 @@ public static class Consts
         Numeric,
         FormattedString,
         Binding,
-        SpecialParameter
+        SpecialVariable
     }
 }

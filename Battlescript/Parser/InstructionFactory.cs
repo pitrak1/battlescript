@@ -93,6 +93,9 @@ public static class InstructionFactory
         if (tokens[0].Type == Consts.TokenTypes.Bracket)
             return new ArrayInstruction(tokens);
 
+        if (tokens[0].Type == Consts.TokenTypes.SpecialVariable)
+            return new SpecialVariableInstruction(tokens);
+        
         if (tokens[0].Type == Consts.TokenTypes.Identifier)
             return new VariableInstruction(tokens);
 

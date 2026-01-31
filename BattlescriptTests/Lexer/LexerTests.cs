@@ -130,12 +130,12 @@ public class LexerTests
     }
 
     [TestFixture]
-    public class SpecialParameters
+    public class SpecialVariables
     {
         [Test]
         public void SingleAsteriskParameter()
         {
-            var expected = new List<Token> { new(Consts.TokenTypes.SpecialParameter, "*args") };
+            var expected = new List<Token> { new(Consts.TokenTypes.SpecialVariable, "*args") };
             var result = Runner.Tokenize("*args");
             Assert.That(result, Is.EquivalentTo(expected));
         }
@@ -143,7 +143,7 @@ public class LexerTests
         [Test]
         public void DoubleAsteriskParameter()
         {
-            var expected = new List<Token> { new(Consts.TokenTypes.SpecialParameter, "**kwargs") };
+            var expected = new List<Token> { new(Consts.TokenTypes.SpecialVariable, "**kwargs") };
             var result = Runner.Tokenize("**kwargs");
             Assert.That(result, Is.EquivalentTo(expected));
         }
