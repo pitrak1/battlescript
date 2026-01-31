@@ -130,6 +130,26 @@ public class LexerTests
     }
 
     [TestFixture]
+    public class SpecialParameters
+    {
+        [Test]
+        public void SingleAsteriskParameter()
+        {
+            var expected = new List<Token> { new(Consts.TokenTypes.SpecialParameter, "*args") };
+            var result = Runner.Tokenize("*args");
+            Assert.That(result, Is.EquivalentTo(expected));
+        }
+
+        [Test]
+        public void DoubleAsteriskParameter()
+        {
+            var expected = new List<Token> { new(Consts.TokenTypes.SpecialParameter, "**kwargs") };
+            var result = Runner.Tokenize("**kwargs");
+            Assert.That(result, Is.EquivalentTo(expected));
+        }
+    }
+
+    [TestFixture]
     public class Operators
     {
         [Test]

@@ -133,19 +133,39 @@ public class Lexer(string input, string? fileName = null)
                 return Consts.TokenTypes.Operator;
             if (Bindings.Contains(word))
                 return Consts.TokenTypes.Binding;
+            if (word[0] == '*')
+                return Consts.TokenTypes.SpecialParameter;
             return Consts.TokenTypes.Identifier;
         }
 
-        if (!Consts.IsWordStartChar(nextCharacters[0])) return false;
-
-        var word = LexerUtilities.GetNextCharactersWhile(
-            input,
-            _index,
-            Consts.IsWordChar
-        );
-        var type = GetTokenTypeFromWord(word.Result);
-        AddTokenAndMoveIndex(type, word.Result);
-        return true;
+        void AddTokenWithAsterisks(int asterisks = 0)
+        {
+            var word = LexerUtilities.GetNextCharactersWhile(
+                input,
+                _index + asterisks,
+                Consts.IsWordChar
+            );
+            var resultWithAsterisks = new string('*', asterisks) + word.Result;
+            var type = GetTokenTypeFromWord(resultWithAsterisks);
+            AddTokenAndMoveIndex(type, resultWithAsterisks);
+        }
+        
+        if (Consts.IsWordStartChar(nextCharacters[0]))
+        {
+            AddTokenWithAsterisks();
+            return true;
+        } 
+        else if (nextCharacters[0] == '*' && Consts.IsWordStartChar(nextCharacters[1]))
+        {
+            AddTokenWithAsterisks(1);
+            return true;
+        }
+        else if (nextCharacters[0] == '*' && nextCharacters[1] == '*' && Consts.IsWordStartChar(nextCharacters[2]))
+        {
+            AddTokenWithAsterisks(2);
+            return true;
+        }
+        return false;
     }
 
     private bool TryHandleOperatorOrAssignment(string nextCharacters)

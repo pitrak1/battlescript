@@ -39,7 +39,15 @@ Battlescript is a Python-like language interpreter that is simple input/output i
 - tuples followed by unpacking (ex: `first, second = tuple`)
 - enumerate, zip, and iterators
 - walrus on the wishlist
+- add dictionary insertion order tracking for keys() method
+- make sure list sorting algorithm is stable
+- make function calls with **kwargs match the order the arguments were given
+- dict.get fucntion
+- __missing__ for dict subclasses
 
 #Externals
 - itertools.zip_longest
+- itertools.islice
+- collections.defaultdict
+
 

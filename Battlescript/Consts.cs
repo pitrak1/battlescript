@@ -112,6 +112,7 @@ public static class Consts
         Breakpoint,
         Numeric,
         FormattedString,
-        Binding
+        Binding,
+        SpecialParameter
     }
 }
