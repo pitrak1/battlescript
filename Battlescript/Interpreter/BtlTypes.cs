@@ -18,6 +18,8 @@ public static class BtlTypes
         TypeError,
         NameError,
         AttributeError,
+        StopIteration,
+        IndexError,
     }
 
     // Load order matters for built-in initialization
@@ -36,6 +38,8 @@ public static class BtlTypes
         ("TypeError", Types.TypeError),
         ("NameError", Types.NameError),
         ("AttributeError", Types.AttributeError),
+        ("StopIteration", Types.StopIteration),
+        ("IndexError", Types.IndexError),
     ];
 
     public static readonly string[] TypeStrings = TypeMappings.Select(t => t.Name).ToArray();

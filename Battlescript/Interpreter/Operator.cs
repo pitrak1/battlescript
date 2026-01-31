@@ -110,6 +110,11 @@ public static class Operator
             return ConductNumericSequenceOperation(operation, rightSeq, leftNum);
         }
 
+        if (left is MappingVariable leftMapping && right is MappingVariable rightMapping)
+        {
+            return ConductBinaryMappingOperation(operation, leftMapping, rightMapping);
+        }
+
         throw new InterpreterInvalidOperationException(operation, left, right);
     }
     
@@ -163,6 +168,42 @@ public static class Operator
             "==" => new NumericVariable(0),
             _ => throw new InterpreterInvalidOperationException(operation, sequence, numeric)
         };
+    }
+
+    private static Variable ConductBinaryMappingOperation(string operation, MappingVariable leftMapping, MappingVariable rightMapping)
+    {
+        return operation switch
+        {
+            "==" => CreateBoolNumeric(MappingsAreEqual(leftMapping, rightMapping)),
+            "!=" => CreateBoolNumeric(!MappingsAreEqual(leftMapping, rightMapping)),
+            _ => throw new InterpreterInvalidOperationException(operation, leftMapping, rightMapping)
+        };
+    }
+
+    private static bool MappingsAreEqual(MappingVariable left, MappingVariable right)
+    {
+        if (left.IntValues.Count != right.IntValues.Count || left.StringValues.Count != right.StringValues.Count)
+        {
+            return false;
+        }
+
+        foreach (var kvp in left.IntValues)
+        {
+            if (!right.IntValues.TryGetValue(kvp.Key, out var rightValue) || !kvp.Value.Equals(rightValue))
+            {
+                return false;
+            }
+        }
+
+        foreach (var kvp in left.StringValues)
+        {
+            if (!right.StringValues.TryGetValue(kvp.Key, out var rightValue) || !kvp.Value.Equals(rightValue))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private static SequenceVariable MultiplySequence(SequenceVariable sequence, NumericVariable numeric)

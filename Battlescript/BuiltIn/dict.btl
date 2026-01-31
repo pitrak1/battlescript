@@ -1,3 +1,19 @@
+class dict_keyiterator:
+    def __init__(self, d):
+        self.__keys = __btl_dict_keys__(d)
+        self.__index = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.__index >= len(self.__keys):
+            raise StopIteration()
+        key = self.__keys[self.__index]
+        self.__index = self.__index + 1
+        return key
+
+
 class dict:
     __btl_value = __btl_mapping__()
 
@@ -18,3 +34,15 @@ class dict:
 
     def __bool__(self):
         return 0 < len(self.__btl_value)
+
+    def __eq__(self, other):
+        return bool(self.__btl_value == other.__btl_value)
+
+    def __ne__(self, other):
+        return bool(self.__btl_value != other.__btl_value)
+
+    def __iter__(self):
+        return dict_keyiterator(self)
+
+    def keys(self):
+        return __btl_dict_keys__(self)

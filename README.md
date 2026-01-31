@@ -35,3 +35,11 @@ Battlescript is a Python-like language interpreter that is simple input/output i
 - annotations of function headers and `__annotations__`
 
 
+#TODO
+- tuples followed by unpacking (ex: `first, second = tuple`)
+- enumerate, zip, and iterators
+- walrus on the wishlist
+
+#Externals
+- itertools.zip_longest
+

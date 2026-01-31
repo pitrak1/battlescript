@@ -17,6 +17,40 @@ public class StringVariable : Variable, IEquatable<StringVariable>
     
     public override Variable Copy() => new StringVariable(Value);
 
+    public override Variable? GetItemDirectly(CallStack callStack, Closure closure, ArrayInstruction index, ObjectVariable? objectContext = null)
+    {
+        var indexVariable = index.Values[0].Interpret(callStack, closure);
+        var indexList = indexVariable as ObjectVariable;
+        var indexSequence = indexList!.Values["__btl_value"] as SequenceVariable;
+
+        if (indexSequence!.Values.Count > 1)
+        {
+            // Slicing: s[1:3] returns a substring
+            return GetSlice(indexSequence.Values);
+        }
+        else
+        {
+            // Single index: s[0] returns a single character string
+            var indexInt = BtlTypes.GetIntValue(indexSequence.Values[0]);
+            if (indexInt < 0)
+                indexInt = Value.Length + indexInt;
+            if (indexInt < 0 || indexInt >= Value.Length)
+                throw new InternalRaiseException(BtlTypes.Types.IndexError, "string index out of range");
+            return new StringVariable(Value[indexInt].ToString());
+        }
+    }
+
+    private StringVariable GetSlice(List<Variable?> argVariable)
+    {
+        var indices = SliceHelper.GetSliceIndices(argVariable, Value.Length);
+        var result = new System.Text.StringBuilder();
+        foreach (var i in indices)
+        {
+            result.Append(Value[i]);
+        }
+        return new StringVariable(result.ToString());
+    }
+
     #region Equality
 
     public override bool Equals(object? obj) => obj is StringVariable variable && Equals(variable);

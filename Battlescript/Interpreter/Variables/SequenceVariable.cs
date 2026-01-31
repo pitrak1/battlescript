@@ -63,8 +63,8 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
     
     public void SetRangeIndex(CallStack callStack, SequenceVariable valueVariable, List<Variable> argVariable)
     {
-        var (start, stop, step) = GetSliceArgs(callStack, argVariable);
-        var indices = GetSliceIndices(callStack, argVariable);
+        var (start, stop, step) = SliceHelper.GetSliceArgs(argVariable.Cast<Variable?>().ToList(), Values.Count);
+        var indices = SliceHelper.GetSliceIndices(argVariable.Cast<Variable?>().ToList(), Values.Count);
 
         if (step == 1)
         {
@@ -107,7 +107,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
     
     public SequenceVariable GetSlice(CallStack callStack, List<Variable> argVariable)
     {
-        var indices = GetSliceIndices(callStack, argVariable);
+        var indices = SliceHelper.GetSliceIndices(argVariable.Cast<Variable?>().ToList(), Values.Count);
         SequenceVariable result = new SequenceVariable();
         foreach (var index in indices)
         {
@@ -115,85 +115,6 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         }
 
         return result;
-    }
-
-    public List<int> GetSliceIndices(CallStack callStack, List<Variable> argVariable)
-    {
-        var (start, stop, step) = GetSliceArgs(callStack, argVariable);
-
-        var index = start;
-        List<int> indices = [];
-        if (step == 0)
-        {
-            throw new InternalRaiseException(BtlTypes.Types.ValueError, "slice step cannot be zero");
-        }
-        else if (step < 0)
-        {
-            while (index > stop)
-            {
-                indices.Add(index);
-                index += step;
-            }
-        }
-        else
-        {
-            while (index < stop)
-            {
-                indices.Add(index);
-                index += step;
-            }
-        }
-
-        return indices;
-    }
-
-    public (int start, int stop, int step) GetSliceArgs(CallStack callStack, List<Variable?> argVariable)
-    {
-        int start = 0;
-        int stop = Values.Count;
-        int step = 1;
-
-        if (argVariable.Count >= 3)
-        {
-            if (argVariable[2] is not null && argVariable[2] is not NoneVariable )
-            {
-                step = BtlTypes.GetIntValue(argVariable[2]!);
-                
-                if (step < 0)
-                {
-                    start = Values.Count - 1;
-                    stop = -1;
-                }
-            }
-        }
-        
-        if (argVariable.Count >= 2)
-        {
-            if (argVariable[1] is not null && argVariable[1] is not NoneVariable)
-            {
-                var rawInt = BtlTypes.GetIntValue(argVariable[1]!);
-                stop = Math.Clamp(rawInt, -Values.Count, Values.Count);
-                if (stop < 0)
-                {
-                    stop += Values.Count;
-                }
-            }
-        }
-        
-        if (argVariable.Count >= 1)
-        {
-            if (argVariable[0] is not null && argVariable[0] is not NoneVariable)
-            {
-                var rawInt = BtlTypes.GetIntValue(argVariable[0]!);
-                start = Math.Clamp(rawInt, -Values.Count, Values.Count);
-                if (start < 0)
-                {
-                    start += Values.Count;
-                }
-            }
-        }
-        
-        return (start, stop, step);
     }
 
     public override Variable? DeleteItemDirectly(CallStack callStack, Closure closure, ArrayInstruction index, ObjectVariable? objectContext = null)

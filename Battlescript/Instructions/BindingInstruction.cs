@@ -84,6 +84,8 @@ public class BindingInstruction : Instruction, IEquatable<BindingInstruction>
             case "__btl_delattr__":
                 BuiltInDelAttr.Run(callStack, closure, Parameters);
                 return null;
+            case "__btl_dict_keys__":
+                return BuiltInDictKeys.Run(callStack, closure, Parameters);
         }
         return null;
     }

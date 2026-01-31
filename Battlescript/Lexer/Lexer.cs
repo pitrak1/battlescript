@@ -329,6 +329,7 @@ public class Lexer(string input, string? fileName = null)
         "__btl_type__",
         "__btl_callable__",
         "__btl_delattr__",
+        "__btl_dict_keys__",
     ];
     
     #endregion

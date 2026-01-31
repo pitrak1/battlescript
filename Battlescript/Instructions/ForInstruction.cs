@@ -41,17 +41,28 @@ public class ForInstruction : Instruction, IBlockInstruction, IEquatable<ForInst
         Closure closure,
         Variable? instructionContext = null)
     {
-        var range = Range.Interpret(callStack, closure) as ObjectVariable;
+        var iterable = Range.Interpret(callStack, closure) as ObjectVariable;
 
-        if (!BtlTypes.Is(BtlTypes.Types.List, range!))
+        // Get iterator by calling __iter__
+        var iterMethod = iterable!.GetMember(callStack, closure, new MemberInstruction("__iter__"), iterable);
+        var iterator = (iterMethod as FunctionVariable)!.RunFunction(callStack, closure, new ArgumentSet([]), Range);
+
+        // Get __next__ method from iterator
+        var nextMethod = (iterator as ObjectVariable)!.GetMember(callStack, closure, new MemberInstruction("__next__"), iterator as ObjectVariable) as FunctionVariable;
+
+        while (true)
         {
-            throw new Exception("Invalid iterator for loop, fix this later");
-        }
-        
-        var values = BtlTypes.GetListValue(range!).Values;
-        foreach (var t in values)
-        {
-            closure.SetVariable(callStack, BlockVariable, t!);
+            Variable? value;
+            try
+            {
+                value = nextMethod!.RunFunction(callStack, closure, new ArgumentSet([]), Range);
+            }
+            catch (InternalRaiseException ex) when (ex.Type == "StopIteration")
+            {
+                break;
+            }
+
+            closure.SetVariable(callStack, BlockVariable, value!);
 
             try
             {

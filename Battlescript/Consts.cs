@@ -47,7 +47,7 @@ public static class Consts
         // "compile", // NOT SUPPORTED IN V1
         // "complex", // NOT SUPPORTED IN V1
         "delattr",
-        // "dir",
+        // "dir", // May not be necessary, we'll see
         // "divmod",
         // "enumerate",
         // "eval", // NOT SUPPORTED IN V1
