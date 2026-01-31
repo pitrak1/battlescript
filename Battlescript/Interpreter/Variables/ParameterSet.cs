@@ -2,52 +2,121 @@ namespace Battlescript;
 
 public class ParameterSet : IEquatable<ParameterSet>
 {
-    public List<string> Names { get; set; } = [];
-    public Dictionary<string, Instruction> DefaultValues { get; set; } = [];
+    public List<string> Positional { get; } = [];
+    public List<string> Any { get; } = [];
+    public List<string> Keyword { get; } = [];
+    public Dictionary<string, Instruction> DefaultValues { get; } = [];
 
-    public ParameterSet(List<Instruction>? paramInstructions = null)
+    public string? ArgsName { get; private set; }
+    public string? KwargsName { get; private set; }
+
+    public ParameterSet(List<Instruction>? parameters = null)
     {
-        paramInstructions ??= [];
+        if (parameters is null) return;
 
-        var inDefaultArguments = false;
-        foreach (var inst in paramInstructions)
+        int? posOnlyIndex = FindNullableIndex(parameters, item => item is OperationInstruction { Operation: "/" });
+        int? kwOnlyIndex = FindNullableIndex(parameters, item => item is OperationInstruction { Operation: "*" });
+        int? argsIndex = FindNullableIndex(parameters, item => item is SpecialVariableInstruction { Asterisks: 1 });
+        int? kwargsIndex = FindNullableIndex(parameters, item => item is SpecialVariableInstruction { Asterisks: 2 });
+
+        if (kwOnlyIndex is not null && argsIndex is not null)
         {
-            if (inst is AssignmentInstruction assignmentInstruction)
-            {
-                var name = ((VariableInstruction)assignmentInstruction.Left).Name;
-                Names.Add(name);
-                DefaultValues.Add(name, assignmentInstruction.Right);
-                inDefaultArguments = true;
-            }
-            else if (inst is VariableInstruction variableInstruction)
-            {
-                if (inDefaultArguments)
-                {
-                    throw new InterpreterRequiredParamFollowsDefaultParamException();
-                }
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "* argument may appear only once");
+        }
 
-                Names.Add(variableInstruction.Name);
+        if (kwargsIndex is not null && kwargsIndex != parameters.Count - 1)
+        {
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "invalid syntax");
+        }
+
+        CheckDefaultParameterPositions(parameters, posOnlyIndex, kwOnlyIndex, argsIndex);
+
+        PopulatePosOnly(parameters, posOnlyIndex);
+        PopulateAny(parameters, posOnlyIndex, kwOnlyIndex, argsIndex);
+        PopulateKwOnly(parameters, kwOnlyIndex, argsIndex, kwargsIndex);
+
+        if (argsIndex is not null && parameters[argsIndex.Value] is SpecialVariableInstruction args)
+        {
+            ArgsName = args.Name;
+        }
+        
+        if (kwargsIndex is not null && parameters[kwargsIndex.Value] is SpecialVariableInstruction kwargs)
+        {
+            KwargsName = kwargs.Name;
+        }
+    }
+
+    private void PopulatePosOnly(List<Instruction> parameters, int? posOnlyIndex)
+    {
+        if (posOnlyIndex is not null)
+        {
+            for (var i = 0; i < posOnlyIndex; i++)
+            {
+                AddParameterAndDefaultValue(parameters[i], Positional);
             }
         }
     }
 
-    public Dictionary<string, Variable?> GetVariableDictionary(CallStack callStack, Closure closure)
+    private void PopulateAny(List<Instruction> parameters, int? posOnlyIndex, int? kwOnlyIndex, int? argsIndex)
     {
-        var parameterObject = new Dictionary<string, Variable?>();
+        var startIndex = (posOnlyIndex + 1) ?? 0;
+        var stopIndex = kwOnlyIndex ?? argsIndex ?? parameters.Count;
 
-        foreach (var name in Names)
+        for (var i = startIndex; i < stopIndex; i++)
         {
-            if (DefaultValues.ContainsKey(name))
+            AddParameterAndDefaultValue(parameters[i], Any);
+        }
+    }
+
+    private void PopulateKwOnly(List<Instruction> parameters, int? kwOnlyIndex, int? argsIndex, int? kwargsIndex)
+    {
+        // Keyword-only parameters come after * or *args
+        int? startIndex = kwOnlyIndex ?? argsIndex;
+        if (startIndex is null) return;
+
+        var stopIndex = kwargsIndex ?? parameters.Count;
+        for (var i = startIndex.Value + 1; i < stopIndex; i++)
+        {
+            AddParameterAndDefaultValue(parameters[i], Keyword);
+        }
+    }
+
+    private void AddParameterAndDefaultValue(Instruction parameter, List<string> collection)
+    {
+        if (parameter is AssignmentInstruction assignmentInstruction)
+        {
+            var name = ((VariableInstruction)assignmentInstruction.Left).Name;
+            collection.Add(name);
+            DefaultValues.Add(name, assignmentInstruction.Right);
+        }
+        else if (parameter is VariableInstruction variableInstruction)
+        {
+            collection.Add(variableInstruction.Name);
+        }
+    }
+
+    private void CheckDefaultParameterPositions(List<Instruction> parameters, int? posOnlyIndex, int? kwOnlyIndex, int? argsIndex)
+    {
+        bool inDefaultParameters = false;
+        var startIndex = (posOnlyIndex + 1) ?? 0;
+        var stopIndex = kwOnlyIndex ?? argsIndex ?? parameters.Count;
+        for (var i = startIndex; i < stopIndex; i++)
+        {
+            if (parameters[i] is VariableInstruction && inDefaultParameters)
             {
-                parameterObject.Add(name, DefaultValues[name].Interpret(callStack, closure));
+                throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "non-default argument follows default argument");
             }
-            else
+            else if (parameters[i] is AssignmentInstruction)
             {
-                parameterObject.Add(name, null);
+                inDefaultParameters = true;
             }
         }
+    }
 
-        return parameterObject;
+    private static int? FindNullableIndex(List<Instruction> parameters, Func<Instruction, bool> predicate)
+    {
+        var index = parameters.FindIndex(i => predicate(i));
+        return index >= 0 ? index : null;
     }
 
     #region Equality
@@ -56,10 +125,14 @@ public class ParameterSet : IEquatable<ParameterSet>
 
     public bool Equals(ParameterSet? other) =>
         other is not null &&
-        Names.SequenceEqual(other.Names) &&
-        DefaultValues.OrderBy(kvp => kvp.Key).SequenceEqual(other.DefaultValues.OrderBy(kvp => kvp.Key));
+        Positional.SequenceEqual(other.Positional) &&
+        Any.SequenceEqual(other.Any) &&
+        Keyword.SequenceEqual(other.Keyword) &&
+        DefaultValues.OrderBy(kvp => kvp.Key).SequenceEqual(other.DefaultValues.OrderBy(kvp => kvp.Key)) &&
+        ArgsName == other.ArgsName &&
+        KwargsName == other.KwargsName;
 
-    public override int GetHashCode() => HashCode.Combine(Names, DefaultValues);
+    public override int GetHashCode() => HashCode.Combine(Positional, Any, Keyword, DefaultValues, ArgsName, KwargsName);
 
     public static bool operator ==(ParameterSet? left, ParameterSet? right) =>
         left?.Equals(right) ?? right is null;

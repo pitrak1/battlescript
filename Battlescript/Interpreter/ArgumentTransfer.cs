@@ -21,9 +21,9 @@ public static class ArgumentTransfer
         var result = new Dictionary<string, Variable>();
         var usedKeywords = new HashSet<string>();
 
-        for (var i = 0; i < parameters.Names.Count; i++)
+        for (var i = 0; i < parameters.Positional.Count; i++)
         {
-            var parameterName = parameters.Names[i];
+            var parameterName = parameters.Positional[i];
             var hasPositionalArg = i < arguments.Positionals.Count;
             var hasKeywordArg = arguments.Keywords.ContainsKey(parameterName);
             var hasDefaultValue = parameters.DefaultValues.ContainsKey(parameterName);
@@ -50,7 +50,7 @@ public static class ArgumentTransfer
             }
         }
 
-        var extraPositionalCount = arguments.Positionals.Count - parameters.Names.Count;
+        var extraPositionalCount = arguments.Positionals.Count - parameters.Positional.Count;
         if (extraPositionalCount > 0)
         {
             throw new InternalRaiseException(BtlTypes.Types.TypeError,
