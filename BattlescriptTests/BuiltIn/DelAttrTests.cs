@@ -55,7 +55,7 @@ public class DelAttrTests
                     delattr(x)
                     """;
         // The wrapper function catches wrong number of arguments before the binding
-        Assert.Throws<InterpreterMissingRequiredArgumentException>(() => Runner.Run(input));
+        Assert.Throws<InternalRaiseException>(() => Runner.Run(input));
     }
 
     [Test]

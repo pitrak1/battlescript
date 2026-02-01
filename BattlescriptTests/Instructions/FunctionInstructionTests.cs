@@ -55,7 +55,7 @@ public static class FunctionInstructionTests
         [Test]
         public void ThrowsErrorIfDefaultArgumentIsBeforeRequiredArgument()
         {
-            Assert.Throws<InterpreterRequiredParamFollowsDefaultParamException>(() => Runner.Parse("def func(qwer=1234, asdf):"));
+            Assert.Throws<InternalRaiseException>(() => Runner.Parse("def func(qwer=1234, asdf):"));
         }
     }
 

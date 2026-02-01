@@ -13,7 +13,7 @@ public class ParameterSetTests
         return new SpecialVariableInstruction(tokens);
     }
 
-    // Helper to create / or * marker (positional-only or keyword-only separator)
+    // Helper to create / or * marker (Positionals-only or keyword-only separator)
     private static OperationInstruction CreateMarker(string marker) => new(marker);
 
     [TestFixture]
@@ -29,8 +29,8 @@ public class ParameterSetTests
             ]);
 
             Assert.That(parameters.Any, Is.EqualTo(new List<string> { "a", "b" }));
-            Assert.That(parameters.Positional, Is.Empty);
-            Assert.That(parameters.Keyword, Is.Empty);
+            Assert.That(parameters.Positionals, Is.Empty);
+            Assert.That(parameters.Keywords, Is.Empty);
             Assert.That(parameters.ArgsName, Is.Null);
             Assert.That(parameters.KwargsName, Is.Null);
         }
@@ -77,9 +77,9 @@ public class ParameterSetTests
                 CreateMarker("/")
             ]);
 
-            Assert.That(parameters.Positional, Is.EqualTo(new List<string> { "a", "b" }));
+            Assert.That(parameters.Positionals, Is.EqualTo(new List<string> { "a", "b" }));
             Assert.That(parameters.Any, Is.Empty);
-            Assert.That(parameters.Keyword, Is.Empty);
+            Assert.That(parameters.Keywords, Is.Empty);
         }
 
         [Test]
@@ -92,7 +92,7 @@ public class ParameterSetTests
                 CreateMarker("/")
             ]);
 
-            Assert.That(parameters.Positional, Is.EqualTo(new List<string> { "a", "b" }));
+            Assert.That(parameters.Positionals, Is.EqualTo(new List<string> { "a", "b" }));
             Assert.That(parameters.DefaultValues.ContainsKey("b"), Is.True);
         }
 
@@ -106,7 +106,7 @@ public class ParameterSetTests
                 new VariableInstruction("b")
             ]);
 
-            Assert.That(parameters.Positional, Is.EqualTo(new List<string> { "a" }));
+            Assert.That(parameters.Positionals, Is.EqualTo(new List<string> { "a" }));
             Assert.That(parameters.Any, Is.EqualTo(new List<string> { "b" }));
         }
     }
@@ -124,9 +124,9 @@ public class ParameterSetTests
                 new VariableInstruction("b")
             ]);
 
-            Assert.That(parameters.Positional, Is.Empty);
+            Assert.That(parameters.Positionals, Is.Empty);
             Assert.That(parameters.Any, Is.Empty);
-            Assert.That(parameters.Keyword, Is.EqualTo(new List<string> { "a", "b" }));
+            Assert.That(parameters.Keywords, Is.EqualTo(new List<string> { "a", "b" }));
         }
 
         [Test]
@@ -139,7 +139,7 @@ public class ParameterSetTests
                 new AssignmentInstruction("=", new VariableInstruction("b"), new NumericInstruction(1))
             ]);
 
-            Assert.That(parameters.Keyword, Is.EqualTo(new List<string> { "a", "b" }));
+            Assert.That(parameters.Keywords, Is.EqualTo(new List<string> { "a", "b" }));
             Assert.That(parameters.DefaultValues.ContainsKey("b"), Is.True);
         }
 
@@ -154,7 +154,7 @@ public class ParameterSetTests
             ]);
 
             Assert.That(parameters.Any, Is.EqualTo(new List<string> { "a" }));
-            Assert.That(parameters.Keyword, Is.EqualTo(new List<string> { "b" }));
+            Assert.That(parameters.Keywords, Is.EqualTo(new List<string> { "b" }));
         }
     }
 
@@ -232,7 +232,7 @@ public class ParameterSetTests
             ]);
 
             Assert.That(parameters.ArgsName, Is.EqualTo("args"));
-            Assert.That(parameters.Keyword, Is.EqualTo(new List<string> { "a", "b" }));
+            Assert.That(parameters.Keywords, Is.EqualTo(new List<string> { "a", "b" }));
         }
 
         [Test]
@@ -263,7 +263,7 @@ public class ParameterSetTests
             ]);
 
             Assert.That(parameters.ArgsName, Is.EqualTo("args"));
-            Assert.That(parameters.Keyword, Is.EqualTo(new List<string> { "a", "b" }));
+            Assert.That(parameters.Keywords, Is.EqualTo(new List<string> { "a", "b" }));
             Assert.That(parameters.KwargsName, Is.EqualTo("kwargs"));
         }
     }
@@ -282,7 +282,7 @@ public class ParameterSetTests
                 new VariableInstruction("c")
             ]);
 
-            Assert.That(parameters.Positional, Is.EqualTo(new List<string> { "a" }));
+            Assert.That(parameters.Positionals, Is.EqualTo(new List<string> { "a" }));
             Assert.That(parameters.Any, Is.EqualTo(new List<string> { "b", "c" }));
         }
 
@@ -298,9 +298,9 @@ public class ParameterSetTests
                 new VariableInstruction("c")
             ]);
 
-            Assert.That(parameters.Positional, Is.EqualTo(new List<string> { "a" }));
+            Assert.That(parameters.Positionals, Is.EqualTo(new List<string> { "a" }));
             Assert.That(parameters.Any, Is.EqualTo(new List<string> { "b" }));
-            Assert.That(parameters.Keyword, Is.EqualTo(new List<string> { "c" }));
+            Assert.That(parameters.Keywords, Is.EqualTo(new List<string> { "c" }));
         }
 
         [Test]
@@ -316,10 +316,10 @@ public class ParameterSetTests
                 CreateSpecialVariable("kwargs", 2)
             ]);
 
-            Assert.That(parameters.Positional, Is.EqualTo(new List<string> { "a" }));
+            Assert.That(parameters.Positionals, Is.EqualTo(new List<string> { "a" }));
             Assert.That(parameters.Any, Is.EqualTo(new List<string> { "b" }));
             Assert.That(parameters.ArgsName, Is.EqualTo("args"));
-            Assert.That(parameters.Keyword, Is.EqualTo(new List<string> { "c" }));
+            Assert.That(parameters.Keywords, Is.EqualTo(new List<string> { "c" }));
             Assert.That(parameters.KwargsName, Is.EqualTo("kwargs"));
         }
 
@@ -338,9 +338,9 @@ public class ParameterSetTests
                 CreateSpecialVariable("kwargs", 2)
             ]);
 
-            Assert.That(parameters.Positional, Is.EqualTo(new List<string> { "a", "b" }));
+            Assert.That(parameters.Positionals, Is.EqualTo(new List<string> { "a", "b" }));
             Assert.That(parameters.Any, Is.EqualTo(new List<string> { "c" }));
-            Assert.That(parameters.Keyword, Is.EqualTo(new List<string> { "d", "e" }));
+            Assert.That(parameters.Keywords, Is.EqualTo(new List<string> { "d", "e" }));
             Assert.That(parameters.DefaultValues.ContainsKey("b"), Is.True);
             Assert.That(parameters.DefaultValues.ContainsKey("c"), Is.True);
             Assert.That(parameters.DefaultValues.ContainsKey("e"), Is.True);
@@ -373,7 +373,7 @@ public class ParameterSetTests
             ]);
 
             Assert.That(parameters.Any, Is.EqualTo(new List<string> { "a" }));
-            Assert.That(parameters.Keyword, Is.EqualTo(new List<string> { "b" }));
+            Assert.That(parameters.Keywords, Is.EqualTo(new List<string> { "b" }));
         }
 
         [Test]
@@ -387,20 +387,20 @@ public class ParameterSetTests
             ]);
 
             Assert.That(parameters.Any, Is.EqualTo(new List<string> { "a" }));
-            Assert.That(parameters.Keyword, Is.EqualTo(new List<string> { "b" }));
+            Assert.That(parameters.Keywords, Is.EqualTo(new List<string> { "b" }));
         }
 
         [Test]
         public void DefaultBeforeRequiredInKeywordOnly()
         {
-            // def foo(*, a=1, b) - valid in Python, keyword-only params can have defaults before required
+            // def foo(*, a=1, b) - valid in Python, Keywords-only params can have defaults before required
             var parameters = new ParameterSet([
                 CreateMarker("*"),
                 new AssignmentInstruction("=", new VariableInstruction("a"), new NumericInstruction(1)),
                 new VariableInstruction("b")
             ]);
 
-            Assert.That(parameters.Keyword, Is.EqualTo(new List<string> { "a", "b" }));
+            Assert.That(parameters.Keywords, Is.EqualTo(new List<string> { "a", "b" }));
             Assert.That(parameters.DefaultValues.ContainsKey("a"), Is.True);
             Assert.That(parameters.DefaultValues.ContainsKey("b"), Is.False);
         }

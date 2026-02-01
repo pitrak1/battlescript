@@ -19,48 +19,75 @@ public static class ArgumentTransfer
         ParameterSet parameters)
     {
         var result = new Dictionary<string, Variable>();
-        var usedKeywords = new HashSet<string>();
-
-        for (var i = 0; i < parameters.Positional.Count; i++)
+        var argsSequence = new SequenceVariable();
+        var kwargsMapping = new MappingVariable();
+        var handledNames = new HashSet<string>();
+        
+        for (var i = 0; i < arguments.Positionals.Count; i++)
         {
-            var parameterName = parameters.Positional[i];
-            var hasPositionalArg = i < arguments.Positionals.Count;
-            var hasKeywordArg = arguments.Keywords.ContainsKey(parameterName);
-            var hasDefaultValue = parameters.DefaultValues.ContainsKey(parameterName);
+            var argument = arguments.Positionals[i];
+            var parameter = parameters.GetPositionalByIndex(i);
 
-            if (hasPositionalArg && hasKeywordArg)
+            if (parameter is not null)
             {
-                throw new InterpreterMultipleArgumentsForParameterException(parameterName);
-            } else if (hasPositionalArg)
-            {
-                result[parameterName] = arguments.Positionals[i];
+                result[parameter] = argument;
+                handledNames.Add(parameter);
             }
-            else if (hasKeywordArg)
+            else if (parameters.ArgsName is not null)
             {
-                result[parameterName] = arguments.Keywords[parameterName];
-                usedKeywords.Add(parameterName);
-            }
-            else if (hasDefaultValue)
-            {
-                result[parameterName] = parameters.DefaultValues[parameterName].Interpret(callStack, closure);
+                argsSequence.Values.Add(argument);
             }
             else
             {
-                throw new InterpreterMissingRequiredArgumentException(parameterName);
+                throw new InternalRaiseException(BtlTypes.Types.TypeError, "too many positional arguments, fix later");
             }
         }
 
-        var extraPositionalCount = arguments.Positionals.Count - parameters.Positional.Count;
-        if (extraPositionalCount > 0)
+        foreach (var (name, value) in arguments.Keywords)
         {
-            throw new InternalRaiseException(BtlTypes.Types.TypeError,
-                $"Too many positional arguments: {extraPositionalCount} extra");
+            if (handledNames.Contains(name))
+            {
+                throw new InternalRaiseException(BtlTypes.Types.TypeError, $"multiple values for {name}, fix later");
+            }
+
+            if (parameters.IsValidKeywordArg(name))
+            {
+                result[name] = value;
+                handledNames.Add(name);
+            }
+            else if (parameters.KwargsName is not null)
+            {
+                kwargsMapping.StringValues.Add(name, value);
+            }
+            else
+            {
+                throw new InternalRaiseException(BtlTypes.Types.TypeError, $"unknown keyword {name}, fix later");
+            }
         }
 
-        var unusedKeywords = arguments.Keywords.Keys.Except(usedKeywords).ToList();
-        if (unusedKeywords.Count > 0)
+        foreach (var (name, value) in parameters.DefaultValues)
         {
-            throw new InterpreterUnknownKeywordArgumentException(unusedKeywords);
+            if (!result.ContainsKey(name))
+            {
+                result[name] = value.Interpret(callStack, closure);
+                handledNames.Add(name);
+            }
+        }
+        
+        var missing = parameters.AllParameterNames.Except(handledNames);
+        if (missing.Any())
+        {
+            throw new InternalRaiseException(BtlTypes.Types.TypeError, $"missing parameters {string.Join(", ", missing)}, fix later");
+        }
+
+        if (parameters.ArgsName is not null)
+        {
+            result[parameters.ArgsName] = BtlTypes.Create(BtlTypes.Types.List, argsSequence);
+        }
+
+        if (parameters.KwargsName is not null)
+        {
+            result[parameters.KwargsName] = BtlTypes.Create(BtlTypes.Types.Dictionary, kwargsMapping);
         }
 
         return result;

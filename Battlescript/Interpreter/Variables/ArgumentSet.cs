@@ -38,18 +38,6 @@ public class ArgumentSet : IEquatable<ArgumentSet>
         Positionals = arguments;
     }
 
-    public Dictionary<int, Variable> GetPositionalArgumentsAsDictionary()
-    {
-        var result = new Dictionary<int, Variable>();
-
-        for (var i = 0; i < Positionals.Count; i++)
-        {
-            result.Add(i, Positionals[i]);
-        }
-
-        return result;
-    }
-
     #region Equality
 
     public override bool Equals(object? obj) => obj is ArgumentSet other && Equals(other);

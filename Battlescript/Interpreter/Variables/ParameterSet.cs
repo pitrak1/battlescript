@@ -2,9 +2,11 @@ namespace Battlescript;
 
 public class ParameterSet : IEquatable<ParameterSet>
 {
-    public List<string> Positional { get; } = [];
+    public List<string> Positionals { get; } = [];
     public List<string> Any { get; } = [];
-    public List<string> Keyword { get; } = [];
+    public List<string> Keywords { get; } = [];
+    
+    public List<string> AllParameterNames { get => Positionals.Concat(Any).Concat(Keywords).ToList(); }
     public Dictionary<string, Instruction> DefaultValues { get; } = [];
 
     public string? ArgsName { get; private set; }
@@ -52,7 +54,7 @@ public class ParameterSet : IEquatable<ParameterSet>
         {
             for (var i = 0; i < posOnlyIndex; i++)
             {
-                AddParameterAndDefaultValue(parameters[i], Positional);
+                AddParameterAndDefaultValue(parameters[i], Positionals);
             }
         }
     }
@@ -77,7 +79,7 @@ public class ParameterSet : IEquatable<ParameterSet>
         var stopIndex = kwargsIndex ?? parameters.Count;
         for (var i = startIndex.Value + 1; i < stopIndex; i++)
         {
-            AddParameterAndDefaultValue(parameters[i], Keyword);
+            AddParameterAndDefaultValue(parameters[i], Keywords);
         }
     }
 
@@ -119,20 +121,38 @@ public class ParameterSet : IEquatable<ParameterSet>
         return index >= 0 ? index : null;
     }
 
+    public string? GetPositionalByIndex(int index)
+    {
+        if (index < Positionals.Count)
+        {
+            return Positionals[index];
+        }
+        else if (index < Positionals.Count + Any.Count)
+        {
+            return Any[index];
+        }
+        return null;
+    }
+
+    public bool IsValidKeywordArg(string name)
+    {
+        return Any.Contains(name) || Keywords.Contains(name);
+    }
+    
     #region Equality
 
     public override bool Equals(object? obj) => obj is ParameterSet other && Equals(other);
 
     public bool Equals(ParameterSet? other) =>
         other is not null &&
-        Positional.SequenceEqual(other.Positional) &&
+        Positionals.SequenceEqual(other.Positionals) &&
         Any.SequenceEqual(other.Any) &&
-        Keyword.SequenceEqual(other.Keyword) &&
+        Keywords.SequenceEqual(other.Keywords) &&
         DefaultValues.OrderBy(kvp => kvp.Key).SequenceEqual(other.DefaultValues.OrderBy(kvp => kvp.Key)) &&
         ArgsName == other.ArgsName &&
         KwargsName == other.KwargsName;
 
-    public override int GetHashCode() => HashCode.Combine(Positional, Any, Keyword, DefaultValues, ArgsName, KwargsName);
+    public override int GetHashCode() => HashCode.Combine(Positionals, Any, Keywords, DefaultValues, ArgsName, KwargsName);
 
     public static bool operator ==(ParameterSet? left, ParameterSet? right) =>
         left?.Equals(right) ?? right is null;
