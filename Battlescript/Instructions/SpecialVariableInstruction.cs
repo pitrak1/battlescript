@@ -1,21 +1,23 @@
 namespace Battlescript;
 
-public class SpecialVariableInstruction : Instruction, IEquatable<SpecialVariableInstruction>
+public class SpecialVariableInstruction : VariableInstruction, IEquatable<SpecialVariableInstruction>
 {
-    public string Name { get; set; }
     public int Asterisks { get; set; }
-    
-    public SpecialVariableInstruction(List<Token> tokens) : base(tokens)
+
+    public SpecialVariableInstruction(List<Token> tokens) : base(ParseName(tokens))
     {
         if (tokens.Count != 1)
         {
             throw new Exception($"Invalid number of arguments for SpecialVariableInstruction: {tokens.Count}");
         }
 
-        var firstNonAsteriskIndex = tokens[0].Value.Length - tokens[0].Value.TrimStart('*').Length;
+        Asterisks = tokens[0].Value.Length - tokens[0].Value.TrimStart('*').Length;
+    }
 
-        Asterisks = firstNonAsteriskIndex;
-        Name = tokens[0].Value[firstNonAsteriskIndex..];
+    private static string ParseName(List<Token> tokens)
+    {
+        var firstNonAsteriskIndex = tokens[0].Value.Length - tokens[0].Value.TrimStart('*').Length;
+        return tokens[0].Value[firstNonAsteriskIndex..];
     }
 
     #region Equality

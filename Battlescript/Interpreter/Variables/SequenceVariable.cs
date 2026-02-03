@@ -101,6 +101,7 @@ public class SequenceVariable : Variable, IEquatable<SequenceVariable>
         else
         {
             var indexInt = BtlTypes.GetIntValue(indexSequence.Values[0]);
+            indexInt = indexInt < 0 ? indexInt + Values.Count : indexInt;
             return Values[indexInt];
         }
     }

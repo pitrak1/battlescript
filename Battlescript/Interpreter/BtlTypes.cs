@@ -8,6 +8,7 @@ public static class BtlTypes
         Float,
         Bool,
         List,
+        Tuple,
         Exception,
         Dictionary,
         String,
@@ -29,6 +30,7 @@ public static class BtlTypes
         ("float", Types.Float),
         ("bool", Types.Bool),
         ("list", Types.List),
+        ("tuple", Types.Tuple),
         ("dict", Types.Dictionary),
         ("str", Types.String),
         ("Exception", Types.Exception),
@@ -122,6 +124,9 @@ public static class BtlTypes
 
     public static SequenceVariable GetListValue(Variable variable) =>
         GetInnerValue<SequenceVariable>(Types.List, variable);
+    
+    public static SequenceVariable GetTupleValue(Variable variable) =>
+        GetInnerValue<SequenceVariable>(Types.Tuple, variable);
 
     public static MappingVariable GetDictValue(Variable variable) =>
         GetInnerValue<MappingVariable>(Types.Dictionary, variable);

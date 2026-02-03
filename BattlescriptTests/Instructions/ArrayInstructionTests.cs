@@ -223,7 +223,7 @@ public static class ArrayInstructionTests
                 BtlTypes.Create(BtlTypes.Types.Int, 7)});
             Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
-        
+
         [Test]
         public void BasicIndex()
         {
@@ -235,7 +235,7 @@ public static class ArrayInstructionTests
             var expected = BtlTypes.Create(BtlTypes.Types.Int, 8);
             Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
         }
-        
+
         [Test]
         public void RangeIndex()
         {
@@ -249,6 +249,154 @@ public static class ArrayInstructionTests
                 BtlTypes.Create(BtlTypes.Types.Int, 7)
             ]));
             Assert.That(closure.GetVariable(callStack, "x"), Is.EqualTo(expected));
+        }
+    }
+
+    [TestFixture]
+    public class ParseTuples
+    {
+        [Test]
+        public void ParsesEmptyTuple()
+        {
+            var input = "()";
+            var expected = new ArrayInstruction(
+                values: [],
+                bracket: ArrayInstruction.BracketTypes.Parentheses);
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ParsesSingleElementTupleWithTrailingComma()
+        {
+            var input = "(1,)";
+            var expected = new ArrayInstruction(
+                values: [new NumericInstruction(1)],
+                bracket: ArrayInstruction.BracketTypes.Parentheses,
+                delimiter: ArrayInstruction.DelimiterTypes.Comma);
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ParsesMultipleElementTuple()
+        {
+            var input = "(1, 2, 3)";
+            var expected = new ArrayInstruction(
+                values: [new NumericInstruction(1), new NumericInstruction(2), new NumericInstruction(3)],
+                bracket: ArrayInstruction.BracketTypes.Parentheses,
+                delimiter: ArrayInstruction.DelimiterTypes.Comma);
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ParsesNestedTuple()
+        {
+            var input = "((1, 2), (3, 4))";
+            var expected = new ArrayInstruction(
+                values: [
+                    new ArrayInstruction(
+                        values: [new NumericInstruction(1), new NumericInstruction(2)],
+                        bracket: ArrayInstruction.BracketTypes.Parentheses,
+                        delimiter: ArrayInstruction.DelimiterTypes.Comma),
+                    new ArrayInstruction(
+                        values: [new NumericInstruction(3), new NumericInstruction(4)],
+                        bracket: ArrayInstruction.BracketTypes.Parentheses,
+                        delimiter: ArrayInstruction.DelimiterTypes.Comma)
+                ],
+                bracket: ArrayInstruction.BracketTypes.Parentheses,
+                delimiter: ArrayInstruction.DelimiterTypes.Comma);
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ParsesTupleWithMixedTypes()
+        {
+            var input = "(1, 'hello', 3.14)";
+            var expected = new ArrayInstruction(
+                values: [new NumericInstruction(1), new StringInstruction("hello"), new NumericInstruction(3.14)],
+                bracket: ArrayInstruction.BracketTypes.Parentheses,
+                delimiter: ArrayInstruction.DelimiterTypes.Comma);
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ParsesTupleAsArgument()
+        {
+            var input = "foo((1, 2))";
+            var expected = new VariableInstruction(
+                "foo",
+                new ArrayInstruction(
+                    values: [
+                        new ArrayInstruction(
+                            values: [new NumericInstruction(1), new NumericInstruction(2)],
+                            bracket: ArrayInstruction.BracketTypes.Parentheses,
+                            delimiter: ArrayInstruction.DelimiterTypes.Comma)
+                    ],
+                    bracket: ArrayInstruction.BracketTypes.Parentheses));
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ParsesTupleWithIndexAccess()
+        {
+            var input = "(1, 2, 3)[0]";
+            var expected = new ArrayInstruction(
+                values: [new NumericInstruction(1), new NumericInstruction(2), new NumericInstruction(3)],
+                bracket: ArrayInstruction.BracketTypes.Parentheses,
+                delimiter: ArrayInstruction.DelimiterTypes.Comma,
+                next: new ArrayInstruction(
+                    values: [new NumericInstruction(0)],
+                    bracket: ArrayInstruction.BracketTypes.SquareBrackets));
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ParsesParenthesizedIntegerWithMethodCall()
+        {
+            var input = "(5).__abs__()";
+            var expected = new ArrayInstruction(
+                values: [new NumericInstruction(5)],
+                bracket: ArrayInstruction.BracketTypes.Parentheses,
+                next: new MemberInstruction(
+                    "__abs__",
+                    new ArrayInstruction([], ArrayInstruction.BracketTypes.Parentheses)));
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ParsesParenthesizedNegativeIntegerWithMethodCall()
+        {
+            var input = "(-5).__abs__()";
+            var expected = new ArrayInstruction(
+                values: [new OperationInstruction("-", null, new NumericInstruction(5))],
+                bracket: ArrayInstruction.BracketTypes.Parentheses,
+                next: new MemberInstruction(
+                    "__abs__",
+                    new ArrayInstruction([], ArrayInstruction.BracketTypes.Parentheses)));
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ParsesTupleWithMethodCall()
+        {
+            var input = "(1, 2, 3).__len__()";
+            var expected = new ArrayInstruction(
+                values: [new NumericInstruction(1), new NumericInstruction(2), new NumericInstruction(3)],
+                bracket: ArrayInstruction.BracketTypes.Parentheses,
+                delimiter: ArrayInstruction.DelimiterTypes.Comma,
+                next: new MemberInstruction(
+                    "__len__",
+                    new ArrayInstruction([], ArrayInstruction.BracketTypes.Parentheses)));
+            var result = Runner.Parse(input);
+            Assert.That(result[0], Is.EqualTo(expected));
         }
     }
 }

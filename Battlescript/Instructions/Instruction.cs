@@ -54,6 +54,18 @@ public abstract class Instruction : IEquatable<Instruction>
         }
     }
     
+    public Variable? InterpretNext(CallStack callStack, Closure closure, Variable? instructionContext)
+    {
+        if (instructionContext is not null && Next is not null)
+        {
+            return Next.Interpret(callStack, closure, instructionContext);
+        }
+        else
+        {
+            return instructionContext;
+        }
+    }
+    
     #region Equality
 
     public override bool Equals(object? obj) => obj is Instruction inst && Equals(inst);

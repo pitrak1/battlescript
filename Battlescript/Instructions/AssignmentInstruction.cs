@@ -40,6 +40,11 @@ public class AssignmentInstruction : Instruction, IEquatable<AssignmentInstructi
         {
             Operator.Assign(callStack, closure, Operation, left, Right, this);
         }
+        else if (Left is ArrayInstruction { Delimiter: ArrayInstruction.DelimiterTypes.Comma } leftTuple && Operation == "=")
+        {
+            var rightVariable = Right.Interpret(callStack, closure);
+            UnpackTuple(callStack, closure, leftTuple, rightVariable);
+        }
         else if (Left is ConstantInstruction or NumericInstruction or StringInstruction)
         {
             throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "cannot assign to literal");
@@ -50,7 +55,56 @@ public class AssignmentInstruction : Instruction, IEquatable<AssignmentInstructi
         }
         return null;
     }
-    
+
+    private static void UnpackTuple(CallStack callStack, Closure closure, ArrayInstruction leftTuple, Variable? rightVariable)
+    {
+        ValidateIsTuple(rightVariable);
+        var rightSequence = BtlTypes.GetTupleValue(rightVariable);
+        ValidateLengthsMatch(leftTuple, rightSequence);
+        
+        for (var i = 0; i < leftTuple.Values.Count; i++)
+        {
+            if (leftTuple.Values[i] is VariableInstruction varInst)
+            {
+                closure.SetVariable(callStack, varInst, rightSequence.Values[i]);
+            }
+            else if (leftTuple.Values[i] is ArrayInstruction arrInst)
+            {
+                UnpackTuple(callStack, closure, arrInst, rightSequence.Values[i]);
+            }
+            else
+            {
+                throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "cannot assign to literal");
+            }
+        }
+    }
+
+    private static void ValidateIsTuple(Variable? variable)
+    {
+        if (BtlTypes.Is(BtlTypes.Types.Tuple, variable)) return;
+
+        var typeName = variable switch
+        {
+            ObjectVariable obj => obj.Class.Name,
+            _ => variable?.GetType().Name ?? "None"
+        };
+        throw new InternalRaiseException(BtlTypes.Types.TypeError, $"cannot unpack non-iterable {typeName} object");
+    }
+
+    private static void ValidateLengthsMatch(ArrayInstruction leftTuple, SequenceVariable rightSequence)
+    {
+        if (rightSequence.Values.Count > leftTuple.Values.Count)
+        {
+            throw new InternalRaiseException(BtlTypes.Types.ValueError,
+                $"too many values to unpack (expected {leftTuple.Values.Count})");
+        }
+        if (rightSequence.Values.Count < leftTuple.Values.Count)
+        {
+            throw new InternalRaiseException(BtlTypes.Types.ValueError,
+                $"not enough values to unpack (expected {leftTuple.Values.Count}, got {rightSequence.Values.Count})");
+        }
+    }
+
     #region Equality
 
     public override bool Equals(object? obj) => obj is AssignmentInstruction inst && Equals(inst);

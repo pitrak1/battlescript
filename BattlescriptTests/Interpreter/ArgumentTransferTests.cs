@@ -224,7 +224,7 @@ public class ArgumentTransferTests
                 {
                     { "a", BtlTypes.Create(BtlTypes.Types.Int, 1) },
                     {
-                        "args", BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
+                        "args", BtlTypes.Create(BtlTypes.Types.Tuple, new SequenceVariable([
                             BtlTypes.Create(BtlTypes.Types.Int, 2),
                             BtlTypes.Create(BtlTypes.Types.Int, 3),
                             BtlTypes.Create(BtlTypes.Types.Int, 4)
@@ -253,7 +253,7 @@ public class ArgumentTransferTests
                 var expected = new Dictionary<string, Variable>()
                 {
                     { "a", BtlTypes.Create(BtlTypes.Types.Int, 1) },
-                    { "args", BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable()) }
+                    { "args", BtlTypes.Create(BtlTypes.Types.Tuple, new SequenceVariable()) }
                 };
                 Assert.That(result, Is.EquivalentTo(expected));
             }
@@ -278,7 +278,7 @@ public class ArgumentTransferTests
                 var expected = new Dictionary<string, Variable>()
                 {
                     {
-                        "args", BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
+                        "args", BtlTypes.Create(BtlTypes.Types.Tuple, new SequenceVariable([
                             BtlTypes.Create(BtlTypes.Types.Int, 1),
                             BtlTypes.Create(BtlTypes.Types.Int, 2),
                             BtlTypes.Create(BtlTypes.Types.Int, 3)
@@ -302,7 +302,7 @@ public class ArgumentTransferTests
                 var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
                 var expected = new Dictionary<string, Variable>()
                 {
-                    { "args", BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable()) }
+                    { "args", BtlTypes.Create(BtlTypes.Types.Tuple, new SequenceVariable()) }
                 };
                 Assert.That(result, Is.EquivalentTo(expected));
             }
@@ -447,7 +447,7 @@ public class ArgumentTransferTests
                 {
                     { "a", BtlTypes.Create(BtlTypes.Types.Int, 1) },
                     {
-                        "args", BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
+                        "args", BtlTypes.Create(BtlTypes.Types.Tuple, new SequenceVariable([
                             BtlTypes.Create(BtlTypes.Types.Int, 2),
                             BtlTypes.Create(BtlTypes.Types.Int, 3)
                         ]))
@@ -477,7 +477,7 @@ public class ArgumentTransferTests
                 var expected = new Dictionary<string, Variable>()
                 {
                     { "a", BtlTypes.Create(BtlTypes.Types.Int, 1) },
-                    { "args", BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable()) },
+                    { "args", BtlTypes.Create(BtlTypes.Types.Tuple, new SequenceVariable()) },
                     { "kwargs", BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable()) }
                 };
                 Assert.That(result, Is.EquivalentTo(expected));
@@ -510,7 +510,7 @@ public class ArgumentTransferTests
                 var expected = new Dictionary<string, Variable>()
                 {
                     {
-                        "args", BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
+                        "args", BtlTypes.Create(BtlTypes.Types.Tuple, new SequenceVariable([
                             BtlTypes.Create(BtlTypes.Types.Int, 1),
                             BtlTypes.Create(BtlTypes.Types.Int, 2)
                         ]))
@@ -535,7 +535,7 @@ public class ArgumentTransferTests
                 var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
                 var expected = new Dictionary<string, Variable>()
                 {
-                    { "args", BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable()) },
+                    { "args", BtlTypes.Create(BtlTypes.Types.Tuple, new SequenceVariable()) },
                     { "kwargs", BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable()) }
                 };
                 Assert.That(result, Is.EquivalentTo(expected));
@@ -565,7 +565,7 @@ public class ArgumentTransferTests
                 {
                     { "a", BtlTypes.Create(BtlTypes.Types.Int, 1) },
                     {
-                        "args", BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
+                        "args", BtlTypes.Create(BtlTypes.Types.Tuple, new SequenceVariable([
                             BtlTypes.Create(BtlTypes.Types.Int, 2),
                             BtlTypes.Create(BtlTypes.Types.Int, 3)
                         ]))
@@ -598,7 +598,7 @@ public class ArgumentTransferTests
                 {
                     { "a", BtlTypes.Create(BtlTypes.Types.Int, 1) },
                     {
-                        "args", BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
+                        "args", BtlTypes.Create(BtlTypes.Types.Tuple, new SequenceVariable([
                             BtlTypes.Create(BtlTypes.Types.Int, 2),
                             BtlTypes.Create(BtlTypes.Types.Int, 3)
                         ]))
@@ -652,7 +652,7 @@ public class ArgumentTransferTests
                 var expected = new Dictionary<string, Variable>()
                 {
                     {
-                        "items", BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
+                        "items", BtlTypes.Create(BtlTypes.Types.Tuple, new SequenceVariable([
                             BtlTypes.Create(BtlTypes.Types.Int, 1),
                             BtlTypes.Create(BtlTypes.Types.Int, 2),
                             BtlTypes.Create(BtlTypes.Types.Int, 3)
@@ -689,6 +689,269 @@ public class ArgumentTransferTests
                 };
                 Assert.That(result, Is.EquivalentTo(expected));
             }
+        }
+    }
+
+    [TestFixture]
+    public class ArgumentUnpacking
+    {
+        [Test]
+        public void UnpackTupleAsPositionalArguments()
+        {
+            // def foo(a, b, c): pass
+            // t = (1, 2, 3)
+            // foo(*t)
+            var input = """
+                        t = (1, 2, 3)
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
+            {
+                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*t")])
+            });
+            var parameters = new ParameterSet(new List<Instruction>()
+            {
+                new VariableInstruction("a"),
+                new VariableInstruction("b"),
+                new VariableInstruction("c")
+            });
+            var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
+            var expected = new Dictionary<string, Variable>()
+            {
+                { "a", BtlTypes.Create(BtlTypes.Types.Int, 1) },
+                { "b", BtlTypes.Create(BtlTypes.Types.Int, 2) },
+                { "c", BtlTypes.Create(BtlTypes.Types.Int, 3) }
+            };
+            Assert.That(result, Is.EquivalentTo(expected));
+        }
+
+        [Test]
+        public void UnpackListAsPositionalArguments()
+        {
+            // def foo(a, b, c): pass
+            // lst = [1, 2, 3]
+            // foo(*lst)
+            var input = """
+                        lst = [1, 2, 3]
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
+            {
+                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*lst")])
+            });
+            var parameters = new ParameterSet(new List<Instruction>()
+            {
+                new VariableInstruction("a"),
+                new VariableInstruction("b"),
+                new VariableInstruction("c")
+            });
+            var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
+            var expected = new Dictionary<string, Variable>()
+            {
+                { "a", BtlTypes.Create(BtlTypes.Types.Int, 1) },
+                { "b", BtlTypes.Create(BtlTypes.Types.Int, 2) },
+                { "c", BtlTypes.Create(BtlTypes.Types.Int, 3) }
+            };
+            Assert.That(result, Is.EquivalentTo(expected));
+        }
+
+        [Test]
+        public void UnpackDictAsKeywordArguments()
+        {
+            // def foo(a, b, c): pass
+            // d = {'a': 1, 'b': 2, 'c': 3}
+            // foo(**d)
+            var input = """
+                        d = {'a': 1, 'b': 2, 'c': 3}
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
+            {
+                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**d")])
+            });
+            var parameters = new ParameterSet(new List<Instruction>()
+            {
+                new VariableInstruction("a"),
+                new VariableInstruction("b"),
+                new VariableInstruction("c")
+            });
+            var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
+            var expected = new Dictionary<string, Variable>()
+            {
+                { "a", BtlTypes.Create(BtlTypes.Types.Int, 1) },
+                { "b", BtlTypes.Create(BtlTypes.Types.Int, 2) },
+                { "c", BtlTypes.Create(BtlTypes.Types.Int, 3) }
+            };
+            Assert.That(result, Is.EquivalentTo(expected));
+        }
+
+        [Test]
+        public void MixedPositionalAndUnpackedArgs()
+        {
+            // def foo(a, b, c, d): pass
+            // t = (2, 3)
+            // foo(1, *t, 4)
+            var input = """
+                        t = (2, 3)
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
+            {
+                new NumericInstruction(1),
+                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*t")]),
+                new NumericInstruction(4)
+            });
+            var parameters = new ParameterSet(new List<Instruction>()
+            {
+                new VariableInstruction("a"),
+                new VariableInstruction("b"),
+                new VariableInstruction("c"),
+                new VariableInstruction("d")
+            });
+            var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
+            var expected = new Dictionary<string, Variable>()
+            {
+                { "a", BtlTypes.Create(BtlTypes.Types.Int, 1) },
+                { "b", BtlTypes.Create(BtlTypes.Types.Int, 2) },
+                { "c", BtlTypes.Create(BtlTypes.Types.Int, 3) },
+                { "d", BtlTypes.Create(BtlTypes.Types.Int, 4) }
+            };
+            Assert.That(result, Is.EquivalentTo(expected));
+        }
+
+        [Test]
+        public void MixedKeywordAndUnpackedKwargs()
+        {
+            // def foo(a, b, c): pass
+            // d = {'b': 2, 'c': 3}
+            // foo(a=1, **d)
+            var input = """
+                        d = {'b': 2, 'c': 3}
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
+            {
+                new AssignmentInstruction("=", new VariableInstruction("a"), new NumericInstruction(1)),
+                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**d")])
+            });
+            var parameters = new ParameterSet(new List<Instruction>()
+            {
+                new VariableInstruction("a"),
+                new VariableInstruction("b"),
+                new VariableInstruction("c")
+            });
+            var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
+            var expected = new Dictionary<string, Variable>()
+            {
+                { "a", BtlTypes.Create(BtlTypes.Types.Int, 1) },
+                { "b", BtlTypes.Create(BtlTypes.Types.Int, 2) },
+                { "c", BtlTypes.Create(BtlTypes.Types.Int, 3) }
+            };
+            Assert.That(result, Is.EquivalentTo(expected));
+        }
+
+        [Test]
+        public void UnpackBothArgsAndKwargs()
+        {
+            // def foo(a, b, c, d): pass
+            // t = (1, 2)
+            // d = {'c': 3, 'd': 4}
+            // foo(*t, **d)
+            var input = """
+                        t = (1, 2)
+                        d = {'c': 3, 'd': 4}
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
+            {
+                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*t")]),
+                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**d")])
+            });
+            var parameters = new ParameterSet(new List<Instruction>()
+            {
+                new VariableInstruction("a"),
+                new VariableInstruction("b"),
+                new VariableInstruction("c"),
+                new VariableInstruction("d")
+            });
+            var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
+            var expected = new Dictionary<string, Variable>()
+            {
+                { "a", BtlTypes.Create(BtlTypes.Types.Int, 1) },
+                { "b", BtlTypes.Create(BtlTypes.Types.Int, 2) },
+                { "c", BtlTypes.Create(BtlTypes.Types.Int, 3) },
+                { "d", BtlTypes.Create(BtlTypes.Types.Int, 4) }
+            };
+            Assert.That(result, Is.EquivalentTo(expected));
+        }
+
+        [Test]
+        public void UnpackedArgsIntoVarargs()
+        {
+            // def foo(a, *args): pass
+            // t = (2, 3, 4)
+            // foo(1, *t)
+            var input = """
+                        t = (2, 3, 4)
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
+            {
+                new NumericInstruction(1),
+                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*t")])
+            });
+            var parameters = new ParameterSet(new List<Instruction>()
+            {
+                new VariableInstruction("a"),
+                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")])
+            });
+            var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
+            var expected = new Dictionary<string, Variable>()
+            {
+                { "a", BtlTypes.Create(BtlTypes.Types.Int, 1) },
+                {
+                    "args", BtlTypes.Create(BtlTypes.Types.Tuple, new SequenceVariable([
+                        BtlTypes.Create(BtlTypes.Types.Int, 2),
+                        BtlTypes.Create(BtlTypes.Types.Int, 3),
+                        BtlTypes.Create(BtlTypes.Types.Int, 4)
+                    ]))
+                }
+            };
+            Assert.That(result, Is.EquivalentTo(expected));
+        }
+
+        [Test]
+        public void UnpackedKwargsIntoKwargs()
+        {
+            // def foo(a, **kwargs): pass
+            // d = {'b': 2, 'c': 3}
+            // foo(a=1, **d)
+            var input = """
+                        d = {'b': 2, 'c': 3}
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
+            {
+                new AssignmentInstruction("=", new VariableInstruction("a"), new NumericInstruction(1)),
+                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**d")])
+            });
+            var parameters = new ParameterSet(new List<Instruction>()
+            {
+                new VariableInstruction("a"),
+                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**kwargs")])
+            });
+            var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
+
+            var expectedKwargsMapping = new MappingVariable();
+            expectedKwargsMapping.StringValues["b"] = BtlTypes.Create(BtlTypes.Types.Int, 2);
+            expectedKwargsMapping.StringValues["c"] = BtlTypes.Create(BtlTypes.Types.Int, 3);
+
+            var expected = new Dictionary<string, Variable>()
+            {
+                { "a", BtlTypes.Create(BtlTypes.Types.Int, 1) },
+                { "kwargs", BtlTypes.Create(BtlTypes.Types.Dictionary, expectedKwargsMapping) }
+            };
+            Assert.That(result, Is.EquivalentTo(expected));
         }
     }
 }

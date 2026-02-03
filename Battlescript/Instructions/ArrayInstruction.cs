@@ -4,29 +4,42 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
 {
     public enum BracketTypes { CurlyBraces, SquareBrackets, Parentheses, None }
     public BracketTypes Bracket { get; private set; } = BracketTypes.None;
-    private readonly Dictionary<string, BracketTypes> _stringToBracketTypesMapping = new Dictionary<string, BracketTypes>()
+
+    private static readonly Dictionary<string, BracketTypes> BracketTypesMapping = new()
     {
         { "{", BracketTypes.CurlyBraces },
         { "[", BracketTypes.SquareBrackets },
         { "(", BracketTypes.Parentheses }
     };
-    
-    
+
+    private static readonly Dictionary<BracketTypes, IBracketInterpreter> Interpreters = new()
+    {
+        { BracketTypes.CurlyBraces, new CurlyBraceInterpreter() },
+        { BracketTypes.SquareBrackets, new SquareBracketInterpreter() },
+        { BracketTypes.Parentheses, new ParenthesesInterpreter() },
+        { BracketTypes.None, new ParenthesesInterpreter() }
+    };
+
     public enum DelimiterTypes { Comma, Colon, None }
     public DelimiterTypes Delimiter { get; private set; } = DelimiterTypes.None;
-    private readonly Dictionary<DelimiterTypes, string> _delimiterTypesToStringMapping = new Dictionary<DelimiterTypes, string>()
+
+    private static readonly Dictionary<DelimiterTypes, string> DelimiterTypesToStringMapping = new()
     {
         { DelimiterTypes.Comma, "," },
-        { DelimiterTypes.Colon, ":"}
+        { DelimiterTypes.Colon, ":" }
     };
-    
+
+    public bool IsExplicitTuple { get; private set; } = false;
+
     public List<Instruction?> Values { get; private set; } = [];
 
     public ArrayInstruction(List<Token> tokens) : base(tokens)
     {
-        if (Consts.OpeningBrackets.Contains(tokens[0].Value))
+        InitializeDelimiter(tokens);
+        
+        if (Consts.OpeningBrackets.Contains(tokens[0].Value) && Delimiter == DelimiterTypes.None)
         {
-            Bracket = _stringToBracketTypesMapping[tokens[0].Value];
+            Bracket = BracketTypesMapping[tokens[0].Value];
             var tokensWithinBrackets = InstructionUtilities.GetGroupedTokensAtStart(tokens);
             InitializeDelimiter(tokensWithinBrackets);
             InitializeValues(tokensWithinBrackets);
@@ -34,7 +47,6 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
         }
         else
         {
-            InitializeDelimiter(tokens);
             InitializeValues(tokens);
         }
     }
@@ -58,8 +70,15 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
     {
         if (Delimiter != DelimiterTypes.None)
         {
-            var delimiterString = _delimiterTypesToStringMapping[Delimiter];
+            var delimiterString = DelimiterTypesToStringMapping[Delimiter];
             Values = InstructionUtilities.ParseEntriesBetweenDelimiters(tokens, [delimiterString]);
+
+            // Force parse as tuple (ex: (1,) should be tuple of length 1)
+            if (tokens[^1].Value == ",")
+            {
+                IsExplicitTuple = true;
+                Values.RemoveAt(Values.Count - 1);
+            }
         }
         else if (tokens.Count > 0)
         {
@@ -85,114 +104,10 @@ public class ArrayInstruction : Instruction, IEquatable<ArrayInstruction>
         Closure closure,
         Variable? instructionContext = null)
     {
-        switch (Bracket)
-        {
-            case BracketTypes.CurlyBraces:
-                return InterpretCurlyBraces(callStack, closure, instructionContext);
-            case BracketTypes.SquareBrackets:
-                return InterpretSquareBrackets(callStack, closure, instructionContext);
-            case BracketTypes.Parentheses:
-                return InterpretParentheses(callStack, closure, instructionContext);
-            default:
-                return null;
-        }
-    }
-    
-    private Variable? InterpretCurlyBraces(CallStack callStack,
-        Closure closure,
-        Variable? instructionContext = null)
-    {
-        var values = new MappingVariable();
-    
-        // A comma delimiter here means we have multiple kvps
-        if (Delimiter == DelimiterTypes.Comma)
-        {
-            Values.ForEach(value => InterpretAndAddKvp(callStack, closure, values, value!));
-        } 
-        else
-        {
-            InterpretAndAddKvp(callStack, closure, values, this);
-        }
-    
-        return BtlTypes.Create(BtlTypes.Types.Dictionary, values);
-    }
-    
-    private void InterpretAndAddKvp(CallStack callStack, Closure closure, MappingVariable values, Instruction? instruction)
-    {
-        if (Values.Count == 0) return;
-        if (!IsValidKvp(instruction)) throw new Exception("Invalid dictionary kv pair");
-        var kvp = instruction as ArrayInstruction;
-        
-        var value = kvp!.Values[1]!.Interpret(callStack, closure);
-        var key = kvp.Values[0]!.Interpret(callStack, closure);
-        if (BtlTypes.Is(BtlTypes.Types.Int, key!))
-        {
-            values.IntValues.Add(BtlTypes.GetIntValue(key!), value!);
-        }
-        else
-        {
-            values.StringValues.Add(BtlTypes.GetStringValue(key!), value!);
-        }
+        return Interpreters[Bracket].Interpret(callStack, closure, this, instructionContext);
     }
 
-    private bool IsValidKvp(Instruction? instruction)
-    {
-        return instruction is ArrayInstruction { Delimiter: DelimiterTypes.Colon, Values: [not null, not null] };
-    }
-        
-    private Variable? InterpretParentheses(CallStack callStack,
-        Closure closure,
-        Variable? instructionContext = null)
-    {
-        if (instructionContext is FunctionVariable functionVariable)
-        {
-            return functionVariable.RunFunction(callStack, closure, new ArgumentSet(callStack, closure, Values!), this);
-        }
-        else if (instructionContext is ClassVariable classVariable)
-        {
-            var objectVariable = classVariable.CreateObject();
-            objectVariable.RunConstructor(callStack, closure, new ArgumentSet(callStack, closure, Values!), this);
-            return objectVariable;
-        }
-        else
-        {
-            if (Values.Count > 1)
-            {
-                throw new Exception("Parens must follow a function or class");
-            }
-            else
-            {
-                return Values[0].Interpret(callStack, closure);
-            }
-            
-        }
-    }
     
-    private Variable? InterpretSquareBrackets(CallStack callStack,
-        Closure closure,
-        Variable? instructionContext = null)
-    {
-        // If square brackets follow something, it's an index.  Otherwise, it's list creation
-        if (instructionContext is not null)
-        {
-            return instructionContext.GetItem(callStack, closure, this, instructionContext as ObjectVariable);
-        }
-        else
-        {
-            return InterpretListCreation(callStack, closure);
-        }
-    }
-    
-    private Variable InterpretListCreation(CallStack callStack, Closure closure)
-    {
-        var interpretedValues = Values.Select(value =>
-        {
-            if (value is null) throw new Exception("Poorly formed list initialization");
-            return value.Interpret(callStack, closure);
-        });
-        
-        return BtlTypes.Create(BtlTypes.Types.List, interpretedValues.ToList());
-    }
     
     #region Equality
 

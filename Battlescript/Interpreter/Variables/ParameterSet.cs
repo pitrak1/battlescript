@@ -91,9 +91,9 @@ public class ParameterSet : IEquatable<ParameterSet>
             collection.Add(name);
             DefaultValues.Add(name, assignmentInstruction.Right);
         }
-        else if (parameter is VariableInstruction variableInstruction)
+        else if (parameter is VariableInstruction and not SpecialVariableInstruction)
         {
-            collection.Add(variableInstruction.Name);
+            collection.Add(((VariableInstruction)parameter).Name);
         }
     }
 
@@ -104,7 +104,7 @@ public class ParameterSet : IEquatable<ParameterSet>
         var stopIndex = kwOnlyIndex ?? argsIndex ?? parameters.Count;
         for (var i = startIndex; i < stopIndex; i++)
         {
-            if (parameters[i] is VariableInstruction && inDefaultParameters)
+            if (parameters[i] is VariableInstruction and not SpecialVariableInstruction && inDefaultParameters)
             {
                 throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "non-default argument follows default argument");
             }
