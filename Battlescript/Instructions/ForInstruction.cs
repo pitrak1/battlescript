@@ -41,21 +41,17 @@ public class ForInstruction : Instruction, IBlockInstruction, IEquatable<ForInst
         Closure closure,
         Variable? instructionContext = null)
     {
-        var iterable = Range.Interpret(callStack, closure) as ObjectVariable;
-
-        // Get iterator by calling __iter__
-        var iterMethod = iterable!.GetMember(callStack, closure, new MemberInstruction("__iter__"), iterable);
-        var iterator = (iterMethod as FunctionVariable)!.RunFunction(callStack, closure, new ArgumentSet([]), Range);
+        var iterable = Range.Interpret(callStack, closure)!;
 
         // Get __next__ method from iterator
-        var nextMethod = (iterator as ObjectVariable)!.GetMember(callStack, closure, new MemberInstruction("__next__"), iterator as ObjectVariable) as FunctionVariable;
+        var nextMethod = BtlTypes.GetIteratorNext(callStack, closure, iterable, Range);
 
         while (true)
         {
             Variable? value;
             try
             {
-                value = nextMethod!.RunFunction(callStack, closure, new ArgumentSet([]), Range);
+                value = nextMethod.RunFunction(callStack, closure, new ArgumentSet([]), Range);
             }
             catch (InternalRaiseException ex) when (ex.Type == "StopIteration")
             {

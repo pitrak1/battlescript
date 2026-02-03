@@ -67,20 +67,31 @@ public class ArgumentSet : IEquatable<ArgumentSet>
     {
         var args = special.Interpret(callStack, closure);
 
-        if (!BtlTypes.Is(BtlTypes.Types.Tuple, args) && !BtlTypes.Is(BtlTypes.Types.List, args))
+        // Get __next__ method from iterator
+        FunctionVariable nextMethod;
+        try
+        {
+            nextMethod = BtlTypes.GetIteratorNext(callStack, closure, args, special);
+        }
+        catch (InternalRaiseException ex) when (ex.Type == "TypeError")
         {
             var typeName = args is ObjectVariable obj ? obj.Class.Name : "unknown";
             throw new InternalRaiseException(BtlTypes.Types.TypeError,
                 $"argument after * must be an iterable, not {typeName}");
         }
 
-        var sequence = BtlTypes.Is(BtlTypes.Types.Tuple, args)
-            ? BtlTypes.GetTupleValue(args)
-            : BtlTypes.GetListValue(args);
-
-        foreach (var value in sequence.Values)
+        // Iterate over all values
+        while (true)
         {
-            Positionals.Add(value);
+            try
+            {
+                var value = nextMethod.RunFunction(callStack, closure, new ArgumentSet([]), special);
+                Positionals.Add(value);
+            }
+            catch (InternalRaiseException ex) when (ex.Type == "StopIteration")
+            {
+                break;
+            }
         }
     }
 

@@ -58,50 +58,64 @@ public class AssignmentInstruction : Instruction, IEquatable<AssignmentInstructi
 
     private static void UnpackTuple(CallStack callStack, Closure closure, ArrayInstruction leftTuple, Variable? rightVariable)
     {
-        ValidateIsTuple(rightVariable);
-        var rightSequence = BtlTypes.GetTupleValue(rightVariable);
-        ValidateLengthsMatch(leftTuple, rightSequence);
-        
+        // Get iterator from the right-hand side
+        FunctionVariable nextMethod;
+        try
+        {
+            nextMethod = BtlTypes.GetIteratorNext(callStack, closure, rightVariable!, new VariableInstruction("temp"));
+        }
+        catch (InternalRaiseException ex) when (ex.Type == "TypeError")
+        {
+            var typeName = rightVariable switch
+            {
+                ObjectVariable obj => obj.Class.Name,
+                _ => rightVariable?.GetType().Name ?? "None"
+            };
+            throw new InternalRaiseException(BtlTypes.Types.TypeError, $"cannot unpack non-iterable {typeName} object");
+        }
+
+        // Collect values from iterator
+        var values = new List<Variable>();
+        while (true)
+        {
+            try
+            {
+                var value = nextMethod.RunFunction(callStack, closure, new ArgumentSet([]), new VariableInstruction("temp"));
+                values.Add(value);
+            }
+            catch (InternalRaiseException ex) when (ex.Type == "StopIteration")
+            {
+                break;
+            }
+        }
+
+        // Validate we got the right number of values
+        if (values.Count > leftTuple.Values.Count)
+        {
+            throw new InternalRaiseException(BtlTypes.Types.ValueError,
+                $"too many values to unpack (expected {leftTuple.Values.Count})");
+        }
+        if (values.Count < leftTuple.Values.Count)
+        {
+            throw new InternalRaiseException(BtlTypes.Types.ValueError,
+                $"not enough values to unpack (expected {leftTuple.Values.Count}, got {values.Count})");
+        }
+
+        // Assign values to variables
         for (var i = 0; i < leftTuple.Values.Count; i++)
         {
             if (leftTuple.Values[i] is VariableInstruction varInst)
             {
-                closure.SetVariable(callStack, varInst, rightSequence.Values[i]);
+                closure.SetVariable(callStack, varInst, values[i]);
             }
             else if (leftTuple.Values[i] is ArrayInstruction arrInst)
             {
-                UnpackTuple(callStack, closure, arrInst, rightSequence.Values[i]);
+                UnpackTuple(callStack, closure, arrInst, values[i]);
             }
             else
             {
                 throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "cannot assign to literal");
             }
-        }
-    }
-
-    private static void ValidateIsTuple(Variable? variable)
-    {
-        if (BtlTypes.Is(BtlTypes.Types.Tuple, variable)) return;
-
-        var typeName = variable switch
-        {
-            ObjectVariable obj => obj.Class.Name,
-            _ => variable?.GetType().Name ?? "None"
-        };
-        throw new InternalRaiseException(BtlTypes.Types.TypeError, $"cannot unpack non-iterable {typeName} object");
-    }
-
-    private static void ValidateLengthsMatch(ArrayInstruction leftTuple, SequenceVariable rightSequence)
-    {
-        if (rightSequence.Values.Count > leftTuple.Values.Count)
-        {
-            throw new InternalRaiseException(BtlTypes.Types.ValueError,
-                $"too many values to unpack (expected {leftTuple.Values.Count})");
-        }
-        if (rightSequence.Values.Count < leftTuple.Values.Count)
-        {
-            throw new InternalRaiseException(BtlTypes.Types.ValueError,
-                $"not enough values to unpack (expected {leftTuple.Values.Count}, got {rightSequence.Values.Count})");
         }
     }
 

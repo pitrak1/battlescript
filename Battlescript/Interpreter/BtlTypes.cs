@@ -145,6 +145,29 @@ public static class BtlTypes
     public static bool IsException(Variable variable) =>
         variable is ObjectVariable obj && obj.IsInstance(TypeReferences[Types.Exception]);
 
+    public static FunctionVariable GetIteratorNext(CallStack callStack, Closure closure, Variable variable, Instruction instruction)
+    {
+        if (variable is not ObjectVariable objectVariable)
+            throw new InternalRaiseException(Types.TypeError, $"'{variable.GetType().Name}' object is not iterable");
+
+        // Get iterator by calling __iter__
+        var iterMethod = objectVariable.GetMember(callStack, closure, new MemberInstruction("__iter__"), objectVariable);
+        if (iterMethod is not FunctionVariable iterFunction)
+            throw new InternalRaiseException(Types.TypeError, $"'{objectVariable.Class.Name}' object is not iterable");
+
+        var iterator = iterFunction.RunFunction(callStack, closure, new ArgumentSet([]), instruction);
+
+        // Get __next__ method from iterator
+        if (iterator is not ObjectVariable iteratorObject)
+            throw new InternalRaiseException(Types.TypeError, $"iter() returned non-iterator of type '{iterator.GetType().Name}'");
+
+        var nextMethod = iteratorObject.GetMember(callStack, closure, new MemberInstruction("__next__"), iteratorObject);
+        if (nextMethod is not FunctionVariable nextFunction)
+            throw new InternalRaiseException(Types.TypeError, $"iter() returned non-iterator of type '{iteratorObject.Class.Name}'");
+
+        return nextFunction;
+    }
+
     private static T GetInnerValue<T>(Types type, Variable variable) where T : Variable
     {
         if (!Is(type, variable) || variable is not ObjectVariable objectVariable)

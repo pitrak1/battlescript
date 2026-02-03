@@ -203,5 +203,156 @@ public class IteratorTests
             // 0 + 1 + 2 + 3 + 4 = 10
             Assert.That(total, Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 10)));
         }
+
+        [Test]
+        public void UnpackCustomIterable()
+        {
+            var input = """
+                        class ThreeValues:
+                            def __iter__(self):
+                                return ThreeValuesIterator()
+
+                        class ThreeValuesIterator:
+                            def __init__(self):
+                                self.count = 0
+
+                            def __iter__(self):
+                                return self
+
+                            def __next__(self):
+                                if self.count >= 3:
+                                    raise StopIteration()
+                                self.count = self.count + 1
+                                return self.count * 10
+
+                        a, b, c = ThreeValues()
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            Assert.That(closure.GetVariable(callStack, "a"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 10)));
+            Assert.That(closure.GetVariable(callStack, "b"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 20)));
+            Assert.That(closure.GetVariable(callStack, "c"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 30)));
+        }
+
+        [Test]
+        public void UnpackStringIterable()
+        {
+            var input = """
+                        a, b, c = "xyz"
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            Assert.That(closure.GetVariable(callStack, "a"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.String, "x")));
+            Assert.That(closure.GetVariable(callStack, "b"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.String, "y")));
+            Assert.That(closure.GetVariable(callStack, "c"), Is.EqualTo(BtlTypes.Create(BtlTypes.Types.String, "z")));
+        }
+
+        [Test]
+        public void ArgsUnpackingWithCustomIterable()
+        {
+            var input = """
+                        class ThreeValues:
+                            def __iter__(self):
+                                return ThreeValuesIterator()
+
+                        class ThreeValuesIterator:
+                            def __init__(self):
+                                self.count = 0
+
+                            def __iter__(self):
+                                return self
+
+                            def __next__(self):
+                                if self.count >= 3:
+                                    raise StopIteration()
+                                self.count = self.count + 1
+                                return self.count * 10
+
+                        def sum_all(*args):
+                            total = 0
+                            for arg in args:
+                                total = total + arg
+                            return total
+
+                        values = ThreeValues()
+                        result = sum_all(*values)
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var result = closure.GetVariable(callStack, "result");
+            // 10 + 20 + 30 = 60
+            Assert.That(result, Is.EqualTo(BtlTypes.Create(BtlTypes.Types.Int, 60)));
+        }
+
+        [Test]
+        public void ArgsUnpackingWithString()
+        {
+            var input = """
+                        def concat_all(*args):
+                            result = ""
+                            for arg in args:
+                                result = result + arg
+                            return result
+
+                        s = "abc"
+                        result = concat_all(*s)
+                        """;
+            var (callStack, closure) = Runner.Run(input);
+            var result = closure.GetVariable(callStack, "result");
+            Assert.That(result, Is.EqualTo(BtlTypes.Create(BtlTypes.Types.String, "abc")));
+        }
+
+        [Test]
+        public void UnpackTooFewValuesFromCustomIterable()
+        {
+            var input = """
+                        class TwoValues:
+                            def __iter__(self):
+                                return TwoValuesIterator()
+
+                        class TwoValuesIterator:
+                            def __init__(self):
+                                self.count = 0
+
+                            def __iter__(self):
+                                return self
+
+                            def __next__(self):
+                                if self.count >= 2:
+                                    raise StopIteration()
+                                self.count = self.count + 1
+                                return self.count
+
+                        a, b, c = TwoValues()
+                        """;
+            var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run(input));
+            Assert.That(ex.Type, Is.EqualTo("ValueError"));
+            Assert.That(ex.Message, Does.Contain("not enough values to unpack"));
+        }
+
+        [Test]
+        public void UnpackTooManyValuesFromCustomIterable()
+        {
+            var input = """
+                        class FourValues:
+                            def __iter__(self):
+                                return FourValuesIterator()
+
+                        class FourValuesIterator:
+                            def __init__(self):
+                                self.count = 0
+
+                            def __iter__(self):
+                                return self
+
+                            def __next__(self):
+                                if self.count >= 4:
+                                    raise StopIteration()
+                                self.count = self.count + 1
+                                return self.count
+
+                        a, b = FourValues()
+                        """;
+            var ex = Assert.Throws<InternalRaiseException>(() => Runner.Run(input));
+            Assert.That(ex.Type, Is.EqualTo("ValueError"));
+            Assert.That(ex.Message, Does.Contain("too many values to unpack"));
+        }
     }
 }
