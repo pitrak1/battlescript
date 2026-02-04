@@ -2,31 +2,30 @@ namespace Battlescript;
 
 public class ForInstruction : Instruction, IBlockInstruction, IEquatable<ForInstruction>
 {
-    public VariableInstruction BlockVariable { get; set; }
+    public Instruction BlockVariable { get; set; }
     public Instruction Range { get; set; }
 
     public ForInstruction(List<Token> tokens) : base(tokens)
-    {
-        CheckTokenValidity(tokens);
-        BlockVariable = new VariableInstruction(tokens[1].Value);
-        Range = InstructionFactory.Create(tokens.GetRange(3, tokens.Count - 4));
-    }
-
-    private void CheckTokenValidity(List<Token> tokens)
     {
         if (tokens[^1].Value != ":")
         {
             throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "invalid syntax");
         }
+        
+        var inIndex = InstructionUtilities.GetTokenIndex(tokens, ["in"]);
 
-        if (tokens[2].Value != "in")
+        if (inIndex == -1)
         {
             throw new ParserMissingExpectedTokenException(tokens[2], "in");
         }
-    }
 
+        BlockVariable = InstructionFactory.Create(tokens[1..inIndex]);
+        var tokensInIterableExpression = tokens.GetRange(inIndex + 1, tokens.Count - inIndex - 2);
+        Range = InstructionFactory.Create(tokensInIterableExpression);
+    }
+    
     public ForInstruction(
-        VariableInstruction blockVariable, 
+        Instruction blockVariable, 
         Instruction range, 
         List<Instruction>? instructions = null, 
         int? line = null, 

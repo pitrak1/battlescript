@@ -78,6 +78,36 @@ public class Closure
         }
     }
 
+    public void SetVariable(CallStack callStack, ArrayInstruction variableInstruction, Variable valueVariable)
+    {
+        // Handle tuple unpacking for assignments like: a, b = (1, 2) or for i, val in enumerate(...)
+        if (variableInstruction.Delimiter == ArrayInstruction.DelimiterTypes.Comma)
+        {
+            TupleUnpacker.UnpackTuple(callStack, this, variableInstruction, valueVariable);
+        }
+        else
+        {
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "invalid assignment target");
+        }
+    }
+
+    public void SetVariable(CallStack callStack, Instruction variableInstruction, Variable valueVariable)
+    {
+        // Dispatch to the appropriate SetVariable overload based on instruction type
+        if (variableInstruction is VariableInstruction varInst)
+        {
+            SetVariable(callStack, varInst, valueVariable);
+        }
+        else if (variableInstruction is ArrayInstruction arrInst)
+        {
+            SetVariable(callStack, arrInst, valueVariable);
+        }
+        else
+        {
+            throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "cannot assign to this expression");
+        }
+    }
+
     private void SetVariableInScope(
         CallStack callStack, 
         Closure closure, 

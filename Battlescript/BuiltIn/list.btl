@@ -84,8 +84,8 @@ class list:
         self[index:index] = [value]
 
     def index(self, value):
-        for i in range(len(self)):
-            if self[i] == value:
+        for i, item in enumerate(self):
+            if item == value:
                 return i
         raise ValueError("value not in list")
 
@@ -124,9 +124,8 @@ class list:
             right = right - 1
 
     def sort(self, key=None):
-        for i in range(1, len(self)):
+        for i, current in enumerate(self[1:], 1):
             # get current value to insert
-            current = self[i]
             if key:
                 current_key = key(current)
             else:

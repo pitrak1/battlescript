@@ -49,7 +49,7 @@ public static class Consts
         "delattr",
         // "dir", // May not be necessary, we'll see
         // "divmod",
-        // "enumerate",
+        "enumerate",
         // "eval", // NOT SUPPORTED IN V1
         // "exec", // NOT SUPPORTED IN V1
         // "filter",

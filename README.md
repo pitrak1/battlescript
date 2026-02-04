@@ -36,7 +36,6 @@ Battlescript is a Python-like language interpreter that is simple input/output i
 
 
 #TODO
-- allow * and ** to be function calls, indices, or members
 - enumerate, zip, and iterators
 - walrus on the wishlist
 - add dictionary insertion order tracking for keys() method
