@@ -18,8 +18,8 @@ public class ParameterSet : IEquatable<ParameterSet>
 
         int? posOnlyIndex = FindNullableIndex(parameters, item => item is OperationInstruction { Operation: "/" });
         int? kwOnlyIndex = FindNullableIndex(parameters, item => item is OperationInstruction { Operation: "*" });
-        int? argsIndex = FindNullableIndex(parameters, item => item is SpecialVariableInstruction { Asterisks: 1 });
-        int? kwargsIndex = FindNullableIndex(parameters, item => item is SpecialVariableInstruction { Asterisks: 2 });
+        int? argsIndex = FindNullableIndex(parameters, item => item is VariableInstruction { Asterisks: 1 });
+        int? kwargsIndex = FindNullableIndex(parameters, item => item is VariableInstruction { Asterisks: 2 });
 
         if (kwOnlyIndex is not null && argsIndex is not null)
         {
@@ -37,12 +37,12 @@ public class ParameterSet : IEquatable<ParameterSet>
         PopulateAny(parameters, posOnlyIndex, kwOnlyIndex, argsIndex);
         PopulateKwOnly(parameters, kwOnlyIndex, argsIndex, kwargsIndex);
 
-        if (argsIndex is not null && parameters[argsIndex.Value] is SpecialVariableInstruction args)
+        if (argsIndex is not null && parameters[argsIndex.Value] is VariableInstruction args)
         {
             ArgsName = args.Name;
         }
-        
-        if (kwargsIndex is not null && parameters[kwargsIndex.Value] is SpecialVariableInstruction kwargs)
+
+        if (kwargsIndex is not null && parameters[kwargsIndex.Value] is VariableInstruction kwargs)
         {
             KwargsName = kwargs.Name;
         }
@@ -91,7 +91,7 @@ public class ParameterSet : IEquatable<ParameterSet>
             collection.Add(name);
             DefaultValues.Add(name, assignmentInstruction.Right);
         }
-        else if (parameter is VariableInstruction and not SpecialVariableInstruction)
+        else if (parameter is VariableInstruction { Asterisks: 0 })
         {
             collection.Add(((VariableInstruction)parameter).Name);
         }
@@ -104,7 +104,7 @@ public class ParameterSet : IEquatable<ParameterSet>
         var stopIndex = kwOnlyIndex ?? argsIndex ?? parameters.Count;
         for (var i = startIndex; i < stopIndex; i++)
         {
-            if (parameters[i] is VariableInstruction and not SpecialVariableInstruction && inDefaultParameters)
+            if (parameters[i] is VariableInstruction { Asterisks: 0 } && inDefaultParameters)
             {
                 throw new InternalRaiseException(BtlTypes.Types.SyntaxError, "non-default argument follows default argument");
             }

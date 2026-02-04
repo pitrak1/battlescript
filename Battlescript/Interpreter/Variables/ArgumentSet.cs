@@ -31,9 +31,7 @@ public class ArgumentSet : IEquatable<ArgumentSet>
             case AssignmentInstruction assignment:
                 ProcessKeywordArgument(callStack, closure, assignment);
                 break;
-            // Note: SpecialVariableInstruction must be checked before VariableInstruction
-            // since SpecialVariableInstruction inherits from VariableInstruction
-            case SpecialVariableInstruction special:
+            case VariableInstruction { Asterisks: > 0 } special:
                 ProcessSpecialVariable(callStack, closure, special);
                 break;
             default:
@@ -48,7 +46,7 @@ public class ArgumentSet : IEquatable<ArgumentSet>
         Keywords[keywordName] = assignment.Right.Interpret(callStack, closure);
     }
 
-    private void ProcessSpecialVariable(CallStack callStack, Closure closure, SpecialVariableInstruction special)
+    private void ProcessSpecialVariable(CallStack callStack, Closure closure, VariableInstruction special)
     {
         switch (special.Asterisks)
         {
@@ -63,7 +61,7 @@ public class ArgumentSet : IEquatable<ArgumentSet>
         }
     }
 
-    private void UnpackArgsVariable(CallStack callStack, Closure closure, SpecialVariableInstruction special)
+    private void UnpackArgsVariable(CallStack callStack, Closure closure, VariableInstruction special)
     {
         var args = special.Interpret(callStack, closure);
 
@@ -95,7 +93,7 @@ public class ArgumentSet : IEquatable<ArgumentSet>
         }
     }
 
-    private void UnpackKwargsVariable(CallStack callStack, Closure closure, SpecialVariableInstruction special)
+    private void UnpackKwargsVariable(CallStack callStack, Closure closure, VariableInstruction special)
     {
         var kwargs = special.Interpret(callStack, closure);
 

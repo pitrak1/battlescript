@@ -6,11 +6,11 @@ namespace BattlescriptTests.InterpreterTests.Variables;
 public class ParameterSetTests
 {
     // Helper to create *args or **kwargs instructions
-    private static SpecialVariableInstruction CreateSpecialVariable(string name, int asterisks)
+    private static VariableInstruction CreateSpecialVariable(string name, int asterisks)
     {
         var prefix = new string('*', asterisks);
         var tokens = new List<Token> { new(Consts.TokenTypes.SpecialVariable, prefix + name) };
-        return new SpecialVariableInstruction(tokens);
+        return new VariableInstruction(tokens);
     }
 
     // Helper to create / or * marker (Positionals-only or keyword-only separator)

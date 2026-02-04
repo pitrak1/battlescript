@@ -217,7 +217,7 @@ public class ArgumentTransferTests
                 var parameters = new ParameterSet(new List<Instruction>()
                 {
                     new VariableInstruction("a"),
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")])
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")])
                 });
                 var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
                 var expected = new Dictionary<string, Variable>()
@@ -247,7 +247,7 @@ public class ArgumentTransferTests
                 var parameters = new ParameterSet(new List<Instruction>()
                 {
                     new VariableInstruction("a"),
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")])
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")])
                 });
                 var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
                 var expected = new Dictionary<string, Variable>()
@@ -272,7 +272,7 @@ public class ArgumentTransferTests
                 });
                 var parameters = new ParameterSet(new List<Instruction>()
                 {
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")])
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")])
                 });
                 var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
                 var expected = new Dictionary<string, Variable>()
@@ -297,7 +297,7 @@ public class ArgumentTransferTests
                 var arguments = new ArgumentSet(callStack, closure, new List<Instruction>());
                 var parameters = new ParameterSet(new List<Instruction>()
                 {
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")])
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")])
                 });
                 var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
                 var expected = new Dictionary<string, Variable>()
@@ -326,7 +326,7 @@ public class ArgumentTransferTests
                 var parameters = new ParameterSet(new List<Instruction>()
                 {
                     new VariableInstruction("a"),
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**kwargs")])
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**kwargs")])
                 });
                 var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
 
@@ -355,7 +355,7 @@ public class ArgumentTransferTests
                 var parameters = new ParameterSet(new List<Instruction>()
                 {
                     new VariableInstruction("a"),
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**kwargs")])
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**kwargs")])
                 });
                 var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
                 var expected = new Dictionary<string, Variable>()
@@ -379,7 +379,7 @@ public class ArgumentTransferTests
                 });
                 var parameters = new ParameterSet(new List<Instruction>()
                 {
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**kwargs")])
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**kwargs")])
                 });
                 var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
 
@@ -403,7 +403,7 @@ public class ArgumentTransferTests
                 var arguments = new ArgumentSet(callStack, closure, new List<Instruction>());
                 var parameters = new ParameterSet(new List<Instruction>()
                 {
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**kwargs")])
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**kwargs")])
                 });
                 var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
                 var expected = new Dictionary<string, Variable>()
@@ -434,8 +434,8 @@ public class ArgumentTransferTests
                 var parameters = new ParameterSet(new List<Instruction>()
                 {
                     new VariableInstruction("a"),
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")]),
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**kwargs")])
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")]),
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**kwargs")])
                 });
                 var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
 
@@ -470,8 +470,8 @@ public class ArgumentTransferTests
                 var parameters = new ParameterSet(new List<Instruction>()
                 {
                     new VariableInstruction("a"),
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")]),
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**kwargs")])
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")]),
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**kwargs")])
                 });
                 var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
                 var expected = new Dictionary<string, Variable>()
@@ -498,8 +498,8 @@ public class ArgumentTransferTests
                 });
                 var parameters = new ParameterSet(new List<Instruction>()
                 {
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")]),
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**kwargs")])
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")]),
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**kwargs")])
                 });
                 var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
 
@@ -529,8 +529,8 @@ public class ArgumentTransferTests
                 var arguments = new ArgumentSet(callStack, closure, new List<Instruction>());
                 var parameters = new ParameterSet(new List<Instruction>()
                 {
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")]),
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**kwargs")])
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")]),
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**kwargs")])
                 });
                 var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
                 var expected = new Dictionary<string, Variable>()
@@ -557,7 +557,7 @@ public class ArgumentTransferTests
                 var parameters = new ParameterSet(new List<Instruction>()
                 {
                     new VariableInstruction("a"),
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")]),
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")]),
                     new VariableInstruction("b")
                 });
                 var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
@@ -590,7 +590,7 @@ public class ArgumentTransferTests
                 var parameters = new ParameterSet(new List<Instruction>()
                 {
                     new VariableInstruction("a"),
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")]),
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")]),
                     new AssignmentInstruction("=", new VariableInstruction("b"), new NumericInstruction(10))
                 });
                 var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
@@ -623,7 +623,7 @@ public class ArgumentTransferTests
                 var parameters = new ParameterSet(new List<Instruction>()
                 {
                     new VariableInstruction("a"),
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")]),
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")]),
                     new VariableInstruction("b")
                 });
                 Assert.Throws<InternalRaiseException>(() =>
@@ -646,7 +646,7 @@ public class ArgumentTransferTests
                 });
                 var parameters = new ParameterSet(new List<Instruction>()
                 {
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*items")])
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*items")])
                 });
                 var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
                 var expected = new Dictionary<string, Variable>()
@@ -675,7 +675,7 @@ public class ArgumentTransferTests
                 });
                 var parameters = new ParameterSet(new List<Instruction>()
                 {
-                    new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**options")])
+                    new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**options")])
                 });
                 var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
 
@@ -707,7 +707,7 @@ public class ArgumentTransferTests
             var (callStack, closure) = Runner.Run(input);
             var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
             {
-                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*t")])
+                new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*t")])
             });
             var parameters = new ParameterSet(new List<Instruction>()
             {
@@ -737,7 +737,7 @@ public class ArgumentTransferTests
             var (callStack, closure) = Runner.Run(input);
             var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
             {
-                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*lst")])
+                new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*lst")])
             });
             var parameters = new ParameterSet(new List<Instruction>()
             {
@@ -767,7 +767,7 @@ public class ArgumentTransferTests
             var (callStack, closure) = Runner.Run(input);
             var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
             {
-                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**d")])
+                new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**d")])
             });
             var parameters = new ParameterSet(new List<Instruction>()
             {
@@ -798,7 +798,7 @@ public class ArgumentTransferTests
             var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
             {
                 new NumericInstruction(1),
-                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*t")]),
+                new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*t")]),
                 new NumericInstruction(4)
             });
             var parameters = new ParameterSet(new List<Instruction>()
@@ -832,7 +832,7 @@ public class ArgumentTransferTests
             var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
             {
                 new AssignmentInstruction("=", new VariableInstruction("a"), new NumericInstruction(1)),
-                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**d")])
+                new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**d")])
             });
             var parameters = new ParameterSet(new List<Instruction>()
             {
@@ -864,8 +864,8 @@ public class ArgumentTransferTests
             var (callStack, closure) = Runner.Run(input);
             var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
             {
-                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*t")]),
-                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**d")])
+                new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*t")]),
+                new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**d")])
             });
             var parameters = new ParameterSet(new List<Instruction>()
             {
@@ -898,12 +898,12 @@ public class ArgumentTransferTests
             var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
             {
                 new NumericInstruction(1),
-                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*t")])
+                new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*t")])
             });
             var parameters = new ParameterSet(new List<Instruction>()
             {
                 new VariableInstruction("a"),
-                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")])
+                new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "*args")])
             });
             var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
             var expected = new Dictionary<string, Variable>()
@@ -933,12 +933,12 @@ public class ArgumentTransferTests
             var arguments = new ArgumentSet(callStack, closure, new List<Instruction>()
             {
                 new AssignmentInstruction("=", new VariableInstruction("a"), new NumericInstruction(1)),
-                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**d")])
+                new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**d")])
             });
             var parameters = new ParameterSet(new List<Instruction>()
             {
                 new VariableInstruction("a"),
-                new SpecialVariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**kwargs")])
+                new VariableInstruction([new Token(Consts.TokenTypes.SpecialVariable, "**kwargs")])
             });
             var result = ArgumentTransfer.GetVariableTransferDictionary(callStack, closure, arguments, parameters);
 

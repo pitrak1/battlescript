@@ -3,10 +3,17 @@ namespace Battlescript;
 public class VariableInstruction : Instruction, IEquatable<VariableInstruction>
 {
     public string Name { get; set; }
+    public int Asterisks { get; set; }
 
     public VariableInstruction(List<Token> tokens) : base(tokens)
     {
-        Name = tokens[0].Value;
+        if (tokens.Count == 0)
+        {
+            throw new Exception($"Invalid number of arguments for VariableInstruction: {tokens.Count}");
+        }
+
+        Asterisks = tokens[0].Value.Length - tokens[0].Value.TrimStart('*').Length;
+        Name = Asterisks > 0 ? tokens[0].Value[Asterisks..] : tokens[0].Value;
         ParseNext(tokens, 1);
     }
 
@@ -14,10 +21,12 @@ public class VariableInstruction : Instruction, IEquatable<VariableInstruction>
         string name,
         Instruction? next = null,
         int? line = null,
-        string? expression = null) : base(line, expression)
+        string? expression = null,
+        int asterisks = 0) : base(line, expression)
     {
         Name = name;
         Next = next;
+        Asterisks = asterisks;
     }
 
     public override Variable? Interpret(CallStack callStack,
@@ -38,9 +47,9 @@ public class VariableInstruction : Instruction, IEquatable<VariableInstruction>
     public override bool Equals(object? obj) => obj is VariableInstruction inst && Equals(inst);
 
     public bool Equals(VariableInstruction? other) =>
-        other is not null && Name == other.Name;
+        other is not null && Name == other.Name && Asterisks == other.Asterisks;
 
-    public override int GetHashCode() => Name.GetHashCode();
+    public override int GetHashCode() => HashCode.Combine(Name, Asterisks);
 
     public static bool operator ==(VariableInstruction? left, VariableInstruction? right) =>
         left?.Equals(right) ?? right is null;

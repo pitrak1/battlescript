@@ -94,8 +94,8 @@ public static class InstructionFactory
             return new ArrayInstruction(tokens);
 
         if (tokens[0].Type == Consts.TokenTypes.SpecialVariable)
-            return new SpecialVariableInstruction(tokens);
-        
+            return new VariableInstruction(tokens);
+
         if (tokens[0].Type == Consts.TokenTypes.Identifier)
             return new VariableInstruction(tokens);
 
