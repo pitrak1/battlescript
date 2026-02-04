@@ -1,9 +1,9 @@
 class tuple(list):
     def __init__(self, value):
-        if isinstance(value, tuple):
-            self.__btl_value = value.__btl_value
-        else:
-            self.__btl_value = value
+        result = []
+        for item in value:
+            result.append(item)
+        self.__btl_value = result.__btl_value
 
     def __setitem__(self, key, value):
         raise TypeError("tuple object does not support item assignment")

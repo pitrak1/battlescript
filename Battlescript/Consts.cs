@@ -94,7 +94,7 @@ public static class Consts
         // "tuple", // Can do, but might be post v1
         "type",
         // "vars",
-        // "zip"
+        "zip"
     ];
     
     public enum TokenTypes

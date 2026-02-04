@@ -1,0 +1,21 @@
+def zip(*iterables):
+    if len(iterables) == 0:
+        return []
+
+    result = []
+    min_length = 1000
+
+    # Find the length of the shortest iterable
+    for iterable in iterables:
+        length = len(iterable)
+        if length < min_length:
+            min_length = length
+
+    # Zip elements at each index
+    for i in range(min_length):
+        tuple_items = []
+        for iterable in iterables:
+            tuple_items.append(iterable[i])
+        result.append(tuple(tuple_items))
+
+    return result

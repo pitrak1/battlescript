@@ -37,6 +37,7 @@ Battlescript is a Python-like language interpreter that is simple input/output i
 
 #TODO
 - enumerate, zip, and iterators
+- short circuit evaluation (go back and fix zip.btl to not have arbitrarily high start value)
 - walrus on the wishlist
 - add dictionary insertion order tracking for keys() method
 - make sure list sorting algorithm is stable
