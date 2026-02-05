@@ -6,17 +6,17 @@ namespace BattlescriptTests.InterpreterTests;
 public static class OperatorTests
 {
     [TestFixture]
-    public class CommonOperations
+    public class BooleanOperate
     {
         [Test]
         public void AndOperations()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure,
                 "and",
-                BtlTypes.Create(BtlTypes.Types.Bool, true),
-                BtlTypes.Create(BtlTypes.Types.Bool, false));
+                new ConstantInstruction("True"),
+                new ConstantInstruction("False"));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -25,11 +25,11 @@ public static class OperatorTests
         public void OrOperations()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure,
                 "or",
-                BtlTypes.Create(BtlTypes.Types.Bool, true),
-                BtlTypes.Create(BtlTypes.Types.Bool, false));
+                new ConstantInstruction("True"),
+                new ConstantInstruction("False"));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -38,11 +38,11 @@ public static class OperatorTests
         public void NotOperations()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure,
                 "not",
                 null,
-                BtlTypes.Create(BtlTypes.Types.Bool, false));
+                new ConstantInstruction("False"));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -51,12 +51,13 @@ public static class OperatorTests
         public void TrueIsOperationWithSameReference()
         {
             var (callStack, closure) = Runner.Run("");
-            var value = BtlTypes.Create(BtlTypes.Types.Int, 5);
-            var result = Operator.Operate(
+            var value = BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([BtlTypes.Create(BtlTypes.Types.Int, 5)]));
+            closure.SetVariable(callStack, new VariableInstruction("x"), value);
+            var result = Operator.BooleanOperate(
                 callStack, closure,
                 "is",
-                value,
-                value);
+                new VariableInstruction("x"),
+                new VariableInstruction("x"));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -65,11 +66,11 @@ public static class OperatorTests
         public void FalseIsOperationWithDifferentReferences()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure,
                 "is",
-                BtlTypes.Create(BtlTypes.Types.Int, 5),
-                BtlTypes.Create(BtlTypes.Types.Int, 5));
+                Runner.Parse("[5]")[0],
+                Runner.Parse("[5]")[0]);
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -78,11 +79,11 @@ public static class OperatorTests
         public void TrueIsNotOperationWithDifferentReferences()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure,
                 "is not",
-                BtlTypes.Create(BtlTypes.Types.Int, 5),
-                BtlTypes.Create(BtlTypes.Types.Int, 5));
+                Runner.Parse("[5]")[0],
+                Runner.Parse("[5]")[0]);
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -91,12 +92,13 @@ public static class OperatorTests
         public void FalseIsNotOperationWithSameReference()
         {
             var (callStack, closure) = Runner.Run("");
-            var value = BtlTypes.Create(BtlTypes.Types.Int, 5);
-            var result = Operator.Operate(
+            var value = BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([BtlTypes.Create(BtlTypes.Types.Int, 5)]));
+            closure.SetVariable(callStack, new VariableInstruction("x"), value);
+            var result = Operator.BooleanOperate(
                 callStack, closure,
                 "is not",
-                value,
-                value);
+                new VariableInstruction("x"),
+                new VariableInstruction("x"));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -105,11 +107,11 @@ public static class OperatorTests
         public void TrueInOperationWithSubstringInString()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure,
                 "in",
-                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("sd")),
-                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdf")));
+                new StringInstruction("sd"),
+                new StringInstruction("asdf"));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -118,11 +120,11 @@ public static class OperatorTests
         public void FalseInOperationWithMissingSubstring()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure,
                 "in",
-                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("fa")),
-                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdf")));
+                new StringInstruction("fa"),
+                new StringInstruction("asdf"));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -131,11 +133,11 @@ public static class OperatorTests
         public void TrueNotInOperationWithMissingSubstring()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure,
                 "not in",
-                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("fa")),
-                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdf")));
+                new StringInstruction("fa"),
+                new StringInstruction("asdf"));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -144,11 +146,11 @@ public static class OperatorTests
         public void FalseNotInOperationWithSubstringInString()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure,
                 "not in",
-                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("sd")),
-                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdf")));
+                new StringInstruction("sd"),
+                new StringInstruction("asdf"));
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -157,14 +159,11 @@ public static class OperatorTests
         public void TrueInOperationWithList()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
-                callStack, closure, 
-                "in", 
-                new NumericVariable(1), 
-                BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
-                    new StringVariable("asdf"),
-                    new NumericVariable(1),
-                    new NumericVariable(2)])));
+            var result = Operator.BooleanOperate(
+                callStack, closure,
+                "in",
+                new NumericInstruction(1),
+                Runner.Parse("['asdf', 1, 2]")[0]);
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -173,14 +172,11 @@ public static class OperatorTests
         public void FalseInOperationWithList()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure, 
                 "in", 
-                new NumericVariable(3), 
-                BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
-                    new StringVariable("asdf"),
-                    new NumericVariable(1),
-                    new NumericVariable(2)])));
+                new NumericInstruction(3), 
+                Runner.Parse("['asdf', 1, 2]")[0]);
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -189,14 +185,11 @@ public static class OperatorTests
         public void TrueNotInOperationWithList()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure, 
                 "not in", 
-                new NumericVariable(3), 
-                BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
-                    new StringVariable("asdf"),
-                    new NumericVariable(1),
-                    new NumericVariable(2)])));
+                new NumericInstruction(3), 
+                Runner.Parse("['asdf', 1, 2]")[0]);
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -205,14 +198,11 @@ public static class OperatorTests
         public void FalseNotInOperationWithList()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure, 
                 "not in", 
-                new NumericVariable(1), 
-                BtlTypes.Create(BtlTypes.Types.List, new SequenceVariable([
-                    new StringVariable("asdf"),
-                    new NumericVariable(1),
-                    new NumericVariable(2)])));
+                new NumericInstruction(1), 
+                Runner.Parse("['asdf', 1, 2]")[0]);
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -221,15 +211,11 @@ public static class OperatorTests
         public void TrueInOperationWithIntAndDictionary()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure,
                 "in",
-                BtlTypes.Create(BtlTypes.Types.Int, 1),
-                BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
-                {
-                    { 1, new NumericVariable(1) },
-                    { 2, new NumericVariable(2) }
-                })));
+                new NumericInstruction(1),
+                Runner.Parse("{1: 1, 2: 2}")[0]);
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -238,15 +224,11 @@ public static class OperatorTests
         public void FalseInOperationWithIntAndDictionary()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure,
                 "in",
-                BtlTypes.Create(BtlTypes.Types.Int, 3),
-                BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
-                {
-                    { 1, new NumericVariable(1) },
-                    { 2, new NumericVariable(2) }
-                })));
+                new NumericInstruction(3),
+                Runner.Parse("{1: 1, 2: 2}")[0]);
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -255,15 +237,11 @@ public static class OperatorTests
         public void TrueInOperationWithStringAndDictionary()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure,
                 "in",
-                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdf")),
-                BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
-                {
-                    { "asdf", new NumericVariable(1) },
-                    { "qwer", new NumericVariable(2) }
-                })));
+                new StringInstruction("asdf"),
+                Runner.Parse("{'asdf': 1, 'qwer': 2}")[0]);
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -272,15 +250,11 @@ public static class OperatorTests
         public void FalseInOperationWithStringAndDictionary()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure,
                 "in",
-                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdf")),
-                BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
-                {
-                    { "qwer", new NumericVariable(1) },
-                    { "zxcv", new NumericVariable(2) }
-                })));
+                new StringInstruction("asdf"),
+                Runner.Parse("{'qwer': 1, 'zxcv': 2}")[0]);
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -289,15 +263,11 @@ public static class OperatorTests
         public void TrueNotInOperationWithIntAndDictionary()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure,
                 "not in",
-                BtlTypes.Create(BtlTypes.Types.Int, 3),
-                BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
-                {
-                    { 1, new NumericVariable(1) },
-                    { 2, new NumericVariable(2) }
-                })));
+                new NumericInstruction(3),
+                Runner.Parse("{1: 1, 2: 2}")[0]);
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -306,15 +276,11 @@ public static class OperatorTests
         public void FalseNotInOperationWithIntAndDictionary()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure,
                 "not in",
-                BtlTypes.Create(BtlTypes.Types.Int, 1),
-                BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(new Dictionary<int, Variable>()
-                {
-                    { 1, new NumericVariable(1) },
-                    { 2, new NumericVariable(2) }
-                })));
+                new NumericInstruction(1),
+                Runner.Parse("{1: 1, 2: 2}")[0]);
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -323,15 +289,11 @@ public static class OperatorTests
         public void TrueNotInOperationWithStringAndDictionary()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure,
                 "not in",
-                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("zxcv")),
-                BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
-                {
-                    { "asdf", new NumericVariable(1) },
-                    { "qwer", new NumericVariable(2) }
-                })));
+                new StringInstruction("zxcv"),
+                Runner.Parse("{'asdf': 1, 'qwer': 2}")[0]);
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, true);
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -340,15 +302,11 @@ public static class OperatorTests
         public void FalseNotInOperationWithStringAndDictionary()
         {
             var (callStack, closure) = Runner.Run("");
-            var result = Operator.Operate(
+            var result = Operator.BooleanOperate(
                 callStack, closure,
                 "not in",
-                BtlTypes.Create(BtlTypes.Types.String, new StringVariable("asdf")),
-                BtlTypes.Create(BtlTypes.Types.Dictionary, new MappingVariable(null, new Dictionary<string, Variable>()
-                {
-                    { "asdf", new NumericVariable(1) },
-                    { "zxcv", new NumericVariable(2) }
-                })));
+                new StringInstruction("asdf"),
+                Runner.Parse("{'asdf': 1, 'zxcv': 2}")[0]);
             var expected = BtlTypes.Create(BtlTypes.Types.Bool, false);
             Assert.That(result, Is.EqualTo(expected));
         }

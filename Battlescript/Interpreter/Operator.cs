@@ -7,14 +7,14 @@ public static class Operator
     public static void Assign(CallStack callStack, Closure closure, string operation, VariableInstruction left, Instruction? right, Instruction? originalInstruction = null)
     {
         var rightVariable = right?.Interpret(callStack, closure);
-
+        
         if (operation == "=")
         {
             closure.SetVariable(callStack, left, rightVariable!);
             return;
         }
 
-        var leftVariable = left.Interpret(callStack, closure);
+        var leftVariable = left?.Interpret(callStack, closure);
         var result = Operate(callStack, closure, operation, leftVariable, rightVariable, originalInstruction);
         
         // Unfortunately, these conversions cannot be done anywhere else.  Because we're modifying an existing variable,
@@ -54,14 +54,41 @@ public static class Operator
     }
 
     private static NumericVariable CreateBoolNumeric(bool value) => new(value ? 1 : 0);
+
+    public static Variable BooleanOperate(CallStack callStack, Closure closure, string operation, Instruction? left,
+        Instruction? right, Instruction? originalInstruction = null)
+    {
+        var leftVariable = left?.Interpret(callStack, closure);
+        switch (operation)
+        {
+            case "or":
+                return IsTruthy(leftVariable) ? leftVariable : right?.Interpret(callStack, closure);
+            case "and":
+                return !IsTruthy(leftVariable) ? leftVariable : right?.Interpret(callStack, closure);
+            case "not":
+                return BtlTypes.Create(BtlTypes.Types.Bool, !IsTruthy(right?.Interpret(callStack, closure)));
+            case "is":
+                var leftValue = left?.Interpret(callStack, closure);
+                var rightValue = right?.Interpret(callStack, closure);
+                return BtlTypes.Create(BtlTypes.Types.Bool, ReferenceEquals(left?.Interpret(callStack, closure), right?.Interpret(callStack, closure)));
+            case "is not":
+                return BtlTypes.Create(BtlTypes.Types.Bool, !ReferenceEquals(left?.Interpret(callStack, closure), right?.Interpret(callStack, closure)));
+            case "in":
+                return BtlTypes.Create(BtlTypes.Types.Bool, ConductInOperation(operation, left?.Interpret(callStack, closure), right?.Interpret(callStack, closure)));
+            case "not in":
+                return BtlTypes.Create(BtlTypes.Types.Bool, !ConductInOperation(operation, left?.Interpret(callStack, closure), right?.Interpret(callStack, closure)));
+            default:
+                throw new InterpreterInvalidOperationException(operation, left?.Interpret(callStack, closure), right?.Interpret(callStack, closure));
+        }
+
+        bool IsTruthy(Variable? variable)
+        {
+            return Truthiness.IsTruthy(callStack, closure, variable, originalInstruction);
+        }
+    }
     
     public static Variable Operate(CallStack callStack, Closure closure, string operation, Variable? left, Variable? right, Instruction? originalInstruction = null)
     {
-        if (BooleanOperators.Contains(operation))
-        {
-            return ConductBooleanOperation(callStack, closure, operation, left, right, originalInstruction);
-        }
-
         // Handle None comparisons directly without dispatching to __eq__/__ne__
         if (left is NoneVariable || right is NoneVariable)
         {
@@ -218,26 +245,7 @@ public static class Operator
 
         return new SequenceVariable(values);
     }
-
-    private static Variable ConductBooleanOperation(CallStack callStack, Closure closure, string operation,
-        Variable? left, Variable? right, Instruction originalInstruction)
-    {
-        var leftTruthiness = Truthiness.IsTruthy(callStack, closure, left!, originalInstruction);
-        var rightTruthiness = Truthiness.IsTruthy(callStack, closure, right!, originalInstruction);
-
-        return operation switch
-        {
-            "or" => BtlTypes.Create(BtlTypes.Types.Bool, leftTruthiness || rightTruthiness),
-            "and" => BtlTypes.Create(BtlTypes.Types.Bool, leftTruthiness && rightTruthiness),
-            "not" => BtlTypes.Create(BtlTypes.Types.Bool, !rightTruthiness),
-            "is" => BtlTypes.Create(BtlTypes.Types.Bool, ReferenceEquals(left, right)),
-            "is not" => BtlTypes.Create(BtlTypes.Types.Bool, !ReferenceEquals(left, right)),
-            "in" => BtlTypes.Create(BtlTypes.Types.Bool, ConductInOperation(operation, left, right)),
-            "not in" => BtlTypes.Create(BtlTypes.Types.Bool, !ConductInOperation(operation, left, right)),
-            _ => throw new InterpreterInvalidOperationException(operation, left, right)
-        };
-    }
-
+    
     private static bool ConductInOperation(string operation, Variable? left, Variable? right)
     {
         if (BtlTypes.Is(BtlTypes.Types.String, left) && BtlTypes.Is(BtlTypes.Types.String, right))

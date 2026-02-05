@@ -1,3 +1,5 @@
+using System.Collections.Frozen;
+
 namespace Battlescript;
 
 public class OperationInstruction : Instruction, IEquatable<OperationInstruction>
@@ -45,10 +47,17 @@ public class OperationInstruction : Instruction, IEquatable<OperationInstruction
         Closure closure,
         Variable? instructionContext = null)
     {
-        var left = Left?.Interpret(callStack, closure);
-        var right = Right?.Interpret(callStack, closure);
+        if (BooleanOperators.Contains(Operation))
+        {
+            return Operator.BooleanOperate(callStack, closure, Operation, Left, Right);
+        }
+        var left = Left?.Interpret(callStack, closure, instructionContext);
+        var right = Right?.Interpret(callStack, closure, instructionContext);
         return Operator.Operate(callStack, closure, Operation, left, right);
     }
+    
+    private static readonly FrozenSet<string> BooleanOperators =
+        FrozenSet.ToFrozenSet(["and", "or", "not", "is", "is not", "in", "not in"]);
 
     #region Equality
 
